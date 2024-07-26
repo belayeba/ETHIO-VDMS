@@ -345,8 +345,11 @@
                                     <img src="assets/images/users/avatar-1.jpg" alt="user-image" width="32" class="rounded-circle">
                                 </span>
                                 <span class="d-lg-block d-none">
-                                    <h5 class="my-0 fw-normal">Thomson <i
-                                            class="ri-arrow-down-s-line d-none d-sm-inline-block align-middle"></i></h5>
+                                    @auth
+                                        <h5 class="my-0 fw-normal">{{ Auth::user()->first_name }}<i class="ri-arrow-down-s-line d-none d-sm-inline-block align-middle"></i></h5>
+                                    @else
+                                        <h5 class="my-0 fw-normal">Guest<i class="ri-arrow-down-s-line d-none d-sm-inline-block align-middle"></i></h5>
+                                    @endauth
                                 </span>
                             </a>
                             <div class="dropdown-menu dropdown-menu-end dropdown-menu-animated profile-dropdown">

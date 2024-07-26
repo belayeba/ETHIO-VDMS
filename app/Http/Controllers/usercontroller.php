@@ -38,7 +38,7 @@ class usercontroller extends Controller
     try{
         $currentUser = auth()->user();
         $data = $request->all();
-        $data['id'] = Str::uuid();
+       
         $data['password'] = Hash::make($data['password']);
         $data['username']=$request->input('username') ?? null;
         $data['first_name'] = $request->input('first_name');

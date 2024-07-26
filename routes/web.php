@@ -24,7 +24,7 @@ Route::get('/logout', 'LoginController@logout')->name('logout.logout');
 
 Route::controller(usercontroller::class)->group(function()
 {
-    Route::get('/users', 'create');
+    Route::get('/users', 'create')->name('users');
     Route::get('/users/store', 'store')->name('users.store');
 });
 
