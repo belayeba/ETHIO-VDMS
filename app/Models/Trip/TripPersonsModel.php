@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Models\Vehicle;
+namespace App\Models\Trip;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class vehicle_request extends Model
+class TripPersonsModel extends Model
 {
     use HasFactory;
 }

@@ -246,6 +246,7 @@ class CreateAllTablesWithUuid extends Migration
             $table->foreign('driver_id')->references('driver_id')->on('drivers');
             $table->timestamps();
         });
+    
          // Giving back Permanent Vehicle Request 
          Schema::create('giving_back_vehicle_parmanently', function (Blueprint $table) {
             $table->uuid('request_id')->primary();
@@ -271,6 +272,15 @@ class CreateAllTablesWithUuid extends Migration
             $table->foreign('employee_id')->references('id')->on('users');
             $table->timestamps();
         });
+          // Vehicle Detail
+          Schema::create('trip_material', function (Blueprint $table) {
+            $table->uuid('trip_material_id')->primary();
+            $table->string('material_name', 1000);
+            $table->float('measurement');
+            $table->uuid('request_id');
+            $table->foreign('request_id')->references('request_id')->on('vehicle_requests_temporary');
+            $table->timestamps();
+        });
         // driver change
         Schema::create('driver_change', function (Blueprint $table) {
             $table->uuid('driver_change_id')->primary();
@@ -294,12 +304,12 @@ class CreateAllTablesWithUuid extends Migration
         Schema::dropIfExists('gps_tracking');
         Schema::dropIfExists('driver_logs');
         Schema::dropIfExists('vehicle_requests_temporary');
-       
         Schema::dropIfExists('notifications');
         Schema::dropIfExists('driver_communications');
         Schema::dropIfExists('service_employee');
         Schema::dropIfExists('departments');
         Schema::dropIfExists('driver_change');
+        Schema::dropIfExists('trip_material');
         Schema::dropIfExists('daily_km_calculation');
         Schema::dropIfExists('vehicle_requests_parmanently');
         Schema::dropIfExists('vehicle_detail');
