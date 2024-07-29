@@ -12,6 +12,8 @@ class CreateAllTablesWithUuid extends Migration
          Schema::create('clusters', function (Blueprint $table) {
             $table->uuid('cluster_id')->primary();
             $table->string('name', 255);
+            $table->uuid('created_by');
+            $table->foreign('created_by')->references('id')->on('users');
             $table->timestamps();
         });
         Schema::create('departments', function (Blueprint $table) {
@@ -19,9 +21,10 @@ class CreateAllTablesWithUuid extends Migration
             $table->string('name', 255);
             $table->uuid('cluster_id');
             $table->foreign('cluster_id')->references('cluster_id')->on('clusters');
+            $table->uuid('created_by');
+            $table->foreign('created_by')->references('id')->on('users');
             $table->timestamps();
         });
-        
            // Drivers Table
            Schema::create('drivers', function (Blueprint $table) {
             $table->uuid('driver_id')->primary();
@@ -51,6 +54,8 @@ class CreateAllTablesWithUuid extends Migration
             $table->decimal('fuel_amount', 10, 2);
             $table->date('last_service')->nullable();
             $table->date('next_service')->nullable();
+            $table->uuid('registered_by')->nullable();
+            $table->foreign('registered_by')->references('id')->on('users');
             $table->uuid('driver_id')->nullable();
             $table->foreign('driver_id')->references('driver_id')->on('drivers');
             $table->string('fuel_type', 255);
@@ -159,8 +164,8 @@ class CreateAllTablesWithUuid extends Migration
             $table->foreign('approved_by')->references('id')->on('users');
             $table->uuid('assigned_by')->nullable();
             $table->foreign('assigned_by')->references('id')->on('users');
-            $table->string('start_location_id', 255);
-            $table->string('end_location_id', 255);
+            $table->string('start_location', 255);
+            $table->string('end_locations', 255);
             $table->decimal('allowed_distance_after_destination', 10, 2)->nullable();
             $table->text('notes')->nullable();
             $table->string('comment', 255)->nullable();
@@ -233,7 +238,7 @@ class CreateAllTablesWithUuid extends Migration
             $table->timestamps();
         });
           // Vehicle Detail
-          Schema::create('vehicle_detail', function (Blueprint $table) {
+          Schema::create('vehicles_detail', function (Blueprint $table) {
             $table->uuid('detail_id')->primary();
             $table->string('damage', 1000)->default('Unread');
             $table->uuid('register_by');
@@ -246,6 +251,7 @@ class CreateAllTablesWithUuid extends Migration
             $table->foreign('driver_id')->references('driver_id')->on('drivers');
             $table->timestamps();
         });
+    
          // Giving back Permanent Vehicle Request 
          Schema::create('giving_back_vehicle_parmanently', function (Blueprint $table) {
             $table->uuid('request_id')->primary();
@@ -271,6 +277,15 @@ class CreateAllTablesWithUuid extends Migration
             $table->foreign('employee_id')->references('id')->on('users');
             $table->timestamps();
         });
+          // Vehicle Detail
+          Schema::create('trip_material', function (Blueprint $table) {
+            $table->uuid('trip_material_id')->primary();
+            $table->string('material_name', 1000);
+            $table->float('measurement');
+            $table->uuid('request_id');
+            $table->foreign('request_id')->references('request_id')->on('vehicle_requests_temporary');
+            $table->timestamps();
+        });
         // driver change
         Schema::create('driver_change', function (Blueprint $table) {
             $table->uuid('driver_change_id')->primary();
@@ -294,12 +309,12 @@ class CreateAllTablesWithUuid extends Migration
         Schema::dropIfExists('gps_tracking');
         Schema::dropIfExists('driver_logs');
         Schema::dropIfExists('vehicle_requests_temporary');
-       
         Schema::dropIfExists('notifications');
         Schema::dropIfExists('driver_communications');
         Schema::dropIfExists('service_employee');
         Schema::dropIfExists('departments');
         Schema::dropIfExists('driver_change');
+        Schema::dropIfExists('trip_material');
         Schema::dropIfExists('daily_km_calculation');
         Schema::dropIfExists('vehicle_requests_parmanently');
         Schema::dropIfExists('vehicle_detail');

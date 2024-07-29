@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\tempController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\usercontroller;
+use App\Http\Controllers\LoginController;
 
 Route::get('/', function () {
     return view('templates.index');
@@ -13,10 +14,11 @@ Auth::routes();
 
 Route::group(['middleware' => ['auth']], function() {
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/homess', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 });
 
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 Route::resource('roles', RoleController::class);
 Route::get('/logout', 'LoginController@logout')->name('logout.logout');
@@ -27,7 +29,10 @@ Route::controller(usercontroller::class)->group(function()
     Route::get('/users', 'create')->name('users');
     Route::get('/users/store', 'store')->name('users.store');
 });
-
+Route::controller(LoginController::class)->group(function()
+{
+    Route::post('/login_manual', 'authenticate')->name('login_manual');
+});
 
 Route::controller(tempController::class)->group(function()
 {
