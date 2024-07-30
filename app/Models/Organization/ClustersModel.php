@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Organization;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class ClusClustersModelter extends Model
+class ClustersModel extends Model
 {
     use SoftDeletes;
 

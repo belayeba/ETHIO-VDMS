@@ -5,6 +5,7 @@ use App\Http\Controllers\tempController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\usercontroller;
 use App\Http\Controllers\LoginController;
+use App\Http\Controllers\ClusterController;
 
 Route::get('/', function () {
     return view('templates.index');
@@ -122,3 +123,7 @@ Route::controller(tempController::class)->group(function()
     Route::get('/temp76', 'temp76');
 
 });
+
+// cluster route
+
+Route::resource('clusters', ClusterController::class);
