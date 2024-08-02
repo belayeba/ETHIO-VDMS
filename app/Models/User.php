@@ -2,63 +2,77 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\Communication\DriverCommunicationModel;
+use App\Models\Driver\DriversModel;
+use App\Models\Notification\NotificationModel;
+use App\Models\Vehicle\VehicleTemporaryRequestModel;
+use App\Models\Vehicle\MaintenancesModel;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
 use Illuminate\Notifications\Notifiable;
-use Spatie\Permission\Traits\HasRoles;
-use Spatie\Permission\Traits\HasPermissions;
-use Illuminate\Database\Eloquent\Concerns\HasUuids;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class User extends Authenticatable
 {
-    use HasFactory, Notifiable, HasRoles, HasPermissions, HasUuids;
+    use Notifiable, SoftDeletes;
 
-
-
-     // Define that the primary key is not incrementing
-     public $incrementing = false;
-
-     // Define the primary key type as string
-     protected $keyType = 'string';
-
-      // Define the primary key field
+    protected $table = 'users'; // Specify the table name
     protected $primaryKey = 'id';
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
-     */
+    public $incrementing = false;
+    protected $keyType = 'uuid';
+
     protected $fillable = [
-   
-        'username',
+        'name',
         'email',
         'password',
-        'first_name',
-        'last_name',
+        'created_at',
+        'updated_at'
     ];
 
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var array<int, string>
-     */
     protected $hidden = [
         'password',
         'remember_token',
     ];
 
-    /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
-    protected function casts(): array
+    public function drivers(): HasMany
     {
-        return [
-            'email_verified_at' => 'datetime',
-            'password' => 'hashed',
-        ];
+        return $this->hasMany(DriversModel::class, 'user_id');
     }
+
+    public function notifications(): HasMany
+    {
+        return $this->hasMany(NotificationModel::class, 'user_id');
+    }
+
+    public function driverCommunications(): HasMany
+    {
+        return $this->hasMany(DriverCommunicationModel::class, 'user_id');
+    }
+
+    public function requestedVehicleRequests(): HasMany
+    {
+        return $this->hasMany(VehicleTemporaryRequestModel::class, 'requested_by_id');
+    }
+
+    public function approvedVehicleRequests(): HasMany
+    {
+        return $this->hasMany(VehicleTemporaryRequestModel::class, 'approved_by');
+    }
+
+    public function assignedVehicleRequests(): HasMany
+    {
+        return $this->hasMany(VehicleTemporaryRequestModel::class, 'assigned_by');
+    }
+
+    public function registeredDrivers(): HasMany
+    {
+        return $this->hasMany(DriversModel::class, 'register_by');
+    }
+
+    public function maintainedVehicles(): HasMany
+    {
+        return $this->hasMany(MaintenancesModel::class, 'maintained_by');
+    }
+
 }

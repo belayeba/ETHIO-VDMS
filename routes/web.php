@@ -6,7 +6,8 @@ use App\Http\Controllers\RoleController;
 use App\Http\Controllers\usercontroller;
 use App\Http\Controllers\vehicle\VehicleTemporaryRequestController;
 
-Route::get('/', function () {
+Route::get('/', function () 
+{
     return view('templates.index');
 });
 
@@ -23,6 +24,22 @@ Route::group(['middleware' => ['auth']], function() {
 Route::resource('roles', RoleController::class);
 Route::get('/logout', 'LoginController@logout')->name('logout.logout');
 
+    // Vehicle Temprory Request
+Route::controller(VehicleTemporaryRequestController::class)->group(function()
+    {
+        Route::get('/temp_request_page', 'displayRequestPage');
+        Route::post('/user_post_request', 'RequestVehicleTemp');
+        Route::post('/user_delete_request', 'deleteRequest');
+        Route::post('/user_update_info', 'update');
+        Route::get('/director_approve_page', 'DirectorApprovalPage');
+        Route::post('/director_approve_request', 'DirectorApproveRequest');
+        Route::post('/director_reject_request', 'DirectorApproveRequest');
+        Route::get('/simirit_approve_page', 'VehicleDirector');
+        Route::post('/simirit_approve_request', 'VehicleDirectorApproveRequest');
+        Route::post('/simirit_fill_start_km', ' VehicleDirectorFillstartKm');
+        Route::post('/simirit_reject_request', 'VehicleDirectorRejectRequest');
+        Route::post('/simirit_returns_vehicle', 'Returning_temporary_vehicle');
+    });
 
 Route::controller(usercontroller::class)->group(function()
 {
@@ -50,6 +67,10 @@ Route::controller(VehicleTemporaryRequestController::class)->group(function()
     Route::post('/simirit_returns_vehicle', 'Returning_temporary_vehicle');
 });
 
+Route::controller(LoginController::class)->group(function()
+    {
+        Route::post('/login_manual', 'authenticate')->name('login_manual');
+    });
 
 Route::controller(tempController::class)->group(function()
 {

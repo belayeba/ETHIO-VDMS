@@ -18,7 +18,7 @@ class UserSeeder extends Seeder
         User::create([
             'id' => Str::uuid(),
             'first_name' => 'Admin User',
-            'email' => 'Admin@gmail.com',
+            'email' => 'other@gmail.com',
             'password' => '12345678',
             'last_name' => 'testlast',
             'username' => 'superUser'
