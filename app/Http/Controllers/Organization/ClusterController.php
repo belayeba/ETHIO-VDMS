@@ -4,9 +4,10 @@ namespace App\Http\Controllers\Organization;
 
 use App\Http\Controllers\Controller;
 use App\Models\Organization\ClustersModel;
+use App\Models\User;
 use Illuminate\Http\Request;
 
-class ClustersController extends Controller
+class ClusterController extends Controller
 {
     // Display a listing of the resource.
     public function index()
@@ -26,9 +27,9 @@ class ClustersController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:255',
-            'description' => 'nullable|string',
+            'created_by' => 'required', // Ensure a valid user ID is used
         ]);
-
+        // dd($request);
         ClustersModel::create($request->all());
 
         return redirect()->route('clusters.index')->with('success', 'Cluster created successfully.');

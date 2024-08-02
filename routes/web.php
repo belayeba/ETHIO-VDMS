@@ -5,7 +5,7 @@ use App\Http\Controllers\tempController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\usercontroller;
 use App\Http\Controllers\LoginController;
-use App\Http\Controllers\ClusterController;
+use App\Http\Controllers\Organization\ClusterController;
 
 Route::get('/', function () {
     return view('templates.index');

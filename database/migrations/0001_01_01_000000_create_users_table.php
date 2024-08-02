@@ -27,6 +27,8 @@ return new class extends Migration
             // $table->foreign('department_id')->references('department_id')->on('departments');
             $table->rememberToken();
             $table->timestamps();
+            $table->softDeletes();
+
         });
 
         Schema::create('password_reset_tokens', function (Blueprint $table) {
