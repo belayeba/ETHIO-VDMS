@@ -6,13 +6,25 @@ use Illuminate\Http\Request;
 use Spatie\Permission\Models\Role;
 use Illuminate\Support\Fecades\Auth;
 use App\Models\User;
+use DataTables;
 use Illuminate\Support\Str;
 use Hash;
 
 class usercontroller extends Controller
 {
 
+    public function list()
+    {
+        return  view ('users.list');
+    }
 
+
+    public function list_show(Request $request)
+    {
+        // dd($request);
+        $data = User::query();
+        return Datatables::of($data)->make(true);
+    }
     /**
      * Show the form for creating a new user.
      *

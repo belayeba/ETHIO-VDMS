@@ -1,18 +1,6 @@
-<!DOCTYPE html>
-<html lang="en" data-sidenav-size="compact">
-@include('layouts.main-link')
-@include('layouts.header')
-@include('layouts.sidebar')
-@include('layouts.setting')
+@extends('layouts.navigation')
 
-
-<body>
-    <!-- Begin page -->
-    <div class="wrapper">
-
-<!-- ============================================================== -->
-<!-- Start Page Content here -->
-<!-- ============================================================== -->
+@section('content')
 
 <div class="content-page">
     <div class="content">
@@ -30,7 +18,7 @@
                                         <div class="position-relative mb-3">
                                             <label class="form-label" for="validationTooltip01">First name</label>
                                             <input type="text" class="form-control" name="first_name" id="validationTooltip01"
-                                                placeholder="First name" value="Mark" required>
+                                                placeholder="First name"  required>
                                             <div class="valid-tooltip">
                                                 Looks good!
                                             </div>
@@ -41,7 +29,7 @@
                                         <div class="position-relative mb-3">
                                             <label class="form-label" for="validationTooltip02">Last name</label>
                                             <input type="text" class="form-control" name="last_name" id="validationTooltip02"
-                                                placeholder="Last name" value="Otto" required>
+                                                placeholder="Last name"  required>
                                             <div class="valid-tooltip">
                                                 Looks good!
                                             </div>
@@ -65,7 +53,7 @@
                                         </div>
 
                                         <div class="position-relative mb-3">
-                                            <label class="form-label" for="validationTooltipUsername">Username</label>
+                                            <label class="form-label" for="validationTooltipUsername">Email</label>
                                             <div class="input-group">
                                                 <span class="input-group-text"
                                                     id="validationTooltipUsernamePrepend">@</span>
@@ -98,24 +86,5 @@
                                 </div> <!-- end card-body-->
                             </div> <!-- end card-->
                         </div> <!-- end col-->
-                    </div>
-                </div>
 
-<!-- ============================================================== -->
-<!-- End Page content -->
-<!-- ============================================================== -->
-
-</div>
-<!-- END wrapper -->
-
-<!-- Vendor js -->
-<script src="assets/js/vendor.min.js"></script>
-
-<!-- App js -->
-<script src="assets/js/app.min.js"></script>
-
-</body>
-
-
-<!-- Mirrored from techzaa.getappui.com/velonic/layouts/form-validation.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 30 Oct 2023 02:30:18 GMT -->
-</html>
+@endsection
