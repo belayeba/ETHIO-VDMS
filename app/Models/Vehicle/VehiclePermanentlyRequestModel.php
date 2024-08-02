@@ -20,7 +20,10 @@ class VehiclePermanentlyRequestModel extends Model
     protected $fillable = [
         'vehicle_id',
         'requested_by',
+        'position_letter',
+        'purpose',
         'approved_by',
+        'given_by',
         'status',
         'created_at',
         'updated_at'
