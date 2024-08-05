@@ -4,37 +4,73 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\tempController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\usercontroller;
-use App\Http\Controllers\LoginController;
-use App\Http\Controllers\Organization\ClusterController;
-use App\Http\Controllers\Organization\DepartmentController;
+use App\Http\Controllers\vehicle\VehicleTemporaryRequestController;
 
-Route::get('/', function () {
+Route::get('/', function () 
+{
     return view('templates.index');
 });
+
+
+
+
+// Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
 
 Auth::routes();
 
 Route::group(['middleware' => ['auth']], function() {
 
-Route::get('/homess', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-
-});
-
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-
 Route::resource('roles', RoleController::class);
 Route::get('/logout', 'LoginController@logout')->name('logout.logout');
 
+    // Vehicle Temprory Request
+Route::controller(VehicleTemporaryRequestController::class)->group(function()
+    {
+        Route::get('/temp_request_page', 'displayRequestPage');
+        Route::post('/user_post_request', 'RequestVehicleTemp');
+        Route::post('/user_delete_request', 'deleteRequest');
+        Route::post('/user_update_info', 'update');
+        Route::get('/director_approve_page', 'DirectorApprovalPage');
+        Route::post('/director_approve_request', 'DirectorApproveRequest');
+        Route::post('/director_reject_request', 'DirectorApproveRequest');
+        Route::get('/simirit_approve_page', 'VehicleDirector');
+        Route::post('/simirit_approve_request', 'VehicleDirectorApproveRequest');
+        Route::post('/simirit_fill_start_km', ' VehicleDirectorFillstartKm');
+        Route::post('/simirit_reject_request', 'VehicleDirectorRejectRequest');
+        Route::post('/simirit_returns_vehicle', 'Returning_temporary_vehicle');
+    });
 
 Route::controller(usercontroller::class)->group(function()
 {
-    Route::get('/users', 'create')->name('users');
+    Route::get('/users', 'list')->name('user_list');
+    Route::get('/users/list', 'list_show')->name('users.list.show');
+    Route::get('/users/create','create')->name('user_create');
     Route::get('/users/store', 'store')->name('users.store');
 });
-Route::controller(LoginController::class)->group(function()
+
+
+// Vehicle Temprory Request
+Route::controller(VehicleTemporaryRequestController::class)->group(function()
 {
-    Route::post('/login_manual', 'authenticate')->name('login_manual');
+    Route::get('/temp_request_page', 'displayRequestPage')->name('displayRequestPage');
+    Route::post('/user_post_request', 'RequestVehiclePerm');
+    Route::post('/user_delete_request', 'deleteRequest');
+    Route::post('/user_update_info', 'update');
+    Route::get('/director_approve_page', 'DirectorApprovalPage');
+    Route::post('/director_approve_request', 'DirectorApproveRequest');
+    Route::post('/director_reject_request', 'DirectorApproveRequest');
+    Route::get('/simirit_approve_page', 'VehicleDirector');
+    Route::post('/simirit_approve_request', 'VehicleDirectorApproveRequest');
+    Route::post('/simirit_fill_start_km', ' VehicleDirectorFillstartKm');
+    Route::post('/simirit_reject_request', 'VehicleDirectorRejectRequest');
+    Route::post('/simirit_returns_vehicle', 'Returning_temporary_vehicle');
 });
+
+Route::controller(LoginController::class)->group(function()
+    {
+        Route::post('/login_manual', 'authenticate')->name('login_manual');
+    });
 
 Route::controller(tempController::class)->group(function()
 {
@@ -71,7 +107,7 @@ Route::controller(tempController::class)->group(function()
     Route::get('/temp27', 'temp27');
     Route::get('/temp28', 'temp28');
     Route::group(['middleware' => ['role:admin']], function () {
-        // Routes accessible to admin role
+
         Route::get('/temp29', 'temp29');
     });
     
@@ -125,8 +161,15 @@ Route::controller(tempController::class)->group(function()
 
 });
 
-// cluster route
-Route::resource('clusters', ClusterController::class);
+
+
+
+
+
+    Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+    
+    });
+    Route::resource('clusters', ClusterController::class);
 
 //departmests route
 Route::resource('departments', DepartmentController::class);

@@ -162,8 +162,10 @@ class CreateAllTablesWithUuid extends Migration
             $table->foreign('assigned_vehicle_id')->references('vehicle_id')->on('vehicles');
             $table->uuid('approved_by')->nullable();
             $table->foreign('approved_by')->references('id')->on('users');
+            $table->string('director_reject_reason', 1000);
             $table->uuid('assigned_by')->nullable();
             $table->foreign('assigned_by')->references('id')->on('users');
+            $table->string('vec_director_reject_reason', 1000);
             $table->string('start_location', 255);
             $table->string('end_locations', 255);
             $table->decimal('allowed_distance_after_destination', 10, 2)->nullable();
@@ -226,10 +228,14 @@ class CreateAllTablesWithUuid extends Migration
             $table->uuid('request_id')->primary();
             $table->uuid('requested_by');
             $table->foreign('requested_by')->references('id')->on('users');
+            $table->string('position_letter');
+            $table->string('purpose');
             $table->uuid('approved_by')->nullable();
             $table->foreign('approved_by')->references('id')->on('users');
+            $table->string('director_reject_reason', 1000);
             $table->uuid('given_by')->nullable();
             $table->foreign('given_by')->references('id')->on('users');
+            $table->string('vec_director_reject_reason', 1000);
             $table->date('given_date')->nullable();
             $table->uuid('vehicle_id')->nullable();
             $table->foreign('vehicle_id')->references('vehicle_id')->on('vehicles');
@@ -262,8 +268,10 @@ class CreateAllTablesWithUuid extends Migration
             $table->uuid('accepted_by')->nullable();
             $table->foreign('accepted_by')->references('id')->on('users');
             $table->date('returned_date')->nullable();
+            $table->uuid('vehicle_request_id')->nullable();
+            $table->foreign('vehicle_request_id')->references('request_id')->on('vehicle_requests_parmanently');
             $table->uuid('vehicle_detail_id')->nullable();
-            $table->foreign('vehicle_detail_id')->references('detail_id')->on('vehicle_detail');
+            $table->foreign('vehicle_detail_id')->references('detail_id')->on('vehicles_detail');
             $table->integer('mileage')->nullable();
             $table->integer('status')->nullable();
             $table->timestamps();
@@ -317,7 +325,7 @@ class CreateAllTablesWithUuid extends Migration
         Schema::dropIfExists('trip_material');
         Schema::dropIfExists('daily_km_calculation');
         Schema::dropIfExists('vehicle_requests_parmanently');
-        Schema::dropIfExists('vehicle_detail');
+        Schema::dropIfExists('vehicles_detail');
         Schema::dropIfExists('giving_back_vehicle_parmanently');
         Schema::dropIfExists('trip_person');
 

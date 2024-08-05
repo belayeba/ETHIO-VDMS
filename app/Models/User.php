@@ -8,6 +8,7 @@ use App\Models\Notification\NotificationModel;
 use App\Models\Vehicle\VehicleTemporaryRequestModel;
 use App\Models\Vehicle\MaintenancesModel;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;

@@ -13,7 +13,7 @@ class LoginController extends Controller
      */
     public function authenticate(Request $request): RedirectResponse
     {
-        // dd($request);
+        dd($request);
         $credentials = $request->validate([
             'email' => ['required', 'email'],
             'password' => ['required'],
@@ -21,8 +21,8 @@ class LoginController extends Controller
  
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
-            // dd("coming");
-            return redirect()->intended('home');
+ 
+            return redirect()->intended('dashboard');
         }
  
         return back()->withErrors([
