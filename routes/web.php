@@ -6,6 +6,7 @@ use App\Http\Controllers\RoleController;
 use App\Http\Controllers\usercontroller;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\Organization\ClusterController;
+use App\Http\Controllers\Organization\DepartmentController;
 
 Route::get('/', function () {
     return view('templates.index');
@@ -125,5 +126,7 @@ Route::controller(tempController::class)->group(function()
 });
 
 // cluster route
-
 Route::resource('clusters', ClusterController::class);
+
+//departmests route
+Route::resource('departments', DepartmentController::class);
