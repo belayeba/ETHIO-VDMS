@@ -74,7 +74,7 @@ class DepartmentController extends Controller
             'description' => 'nullable|string',
         ]);
         $user = auth()->user()->id; // Get the authenticated user's ID
-        $request->merge(['updated_by' => $user]); // Add the user's ID to the request data
+        $request->merge(['created_by' => $user]); // Add the user's ID to the request data
         // Update the department
         $department->update($request->all());
         // Redirect to the index page with a success message
