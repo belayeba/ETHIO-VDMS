@@ -14,7 +14,9 @@ class DepartmentController extends Controller
     {
         //
         $departments = DepartmentsModel::all(); // Get all departments
-        return view('departments.index', compact('departments')); // Pass the departments to the view
+        $clusers = ClustersModel::all(); // Get all clusters
+        // Pass the departments and clusters to the view
+        return view('departments.index', compact('departments', 'clusters'));
     }
 
     /**
