@@ -18,8 +18,8 @@ class VehicleTemporaryRequestController extends Controller
     public function displayRequestPage()
         {
             $id = Auth::id();
-            $Requested = VehicleTemporaryRequestModel::where('requested_by_id',$id)->get();
-            return view("Request.TemporaryRequestPage",compact('Requested'));
+            // $Requested = VehicleTemporaryRequestModel::where('requested_by_id',$id)->get();
+            return view("Request.TemporaryRequestPage");
         }
     // Send Vehicle Request Temporary
     public function RequestVehicleTemp(Request $request) 
