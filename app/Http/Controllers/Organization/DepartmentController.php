@@ -35,7 +35,9 @@ class DepartmentController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'cluster_id' => 'required', // Ensure a valid cluster ID is used
-        ]); 
+        ]);
+        $user = auth()->user()->id; // Get the authenticated user's ID
+        $request->merge(['created_by' => $user]); // Add the user's ID to the request data
         // Create the department
         DepartmentsModel::create($request->all());
         // Redirect to the index page with a success message
@@ -71,6 +73,8 @@ class DepartmentController extends Controller
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
         ]);
+        $user = auth()->user()->id; // Get the authenticated user's ID
+        $request->merge(['updated_by' => $user]); // Add the user's ID to the request data
         // Update the department
         $department->update($request->all());
         // Redirect to the index page with a success message

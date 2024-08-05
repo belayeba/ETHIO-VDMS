@@ -29,10 +29,11 @@ class ClusterController extends Controller
             'name' => 'required|string|max:255',
             'created_by' => 'required', // Ensure a valid user ID is used
         ]);
-        // dd($request);
+        $user = auth()->user()->id; // Get the authenticated user's ID
+        $request->merge(['created_by' => $user]); // Add the user's ID to the request data
         ClustersModel::create($request->all());
-
         return redirect()->route('clusters.index')->with('success', 'Cluster created successfully.');
+    
     }
 
     // Display the specified resource.
@@ -54,7 +55,9 @@ class ClusterController extends Controller
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
         ]);
-
+        
+        $user = auth()->user()->id; // Get the authenticated user's ID
+        $request->merge(['created_by' => $user]); // Add the user's ID to the request data
         $cluster->update($request->all());
 
         return redirect()->route('clusters.index')->with('success', 'Cluster updated successfully.');
