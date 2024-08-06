@@ -2,6 +2,8 @@
 
 namespace App\Models\Vehicle;
 
+use App\Models\User;
+use App\Models\VehiclesModel;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -11,7 +13,7 @@ class GivingBackVehiclePermanently extends Model
 {
     use SoftDeletes;
 
-    protected $table = 'giving_back_vehicle_permanently'; // Specify the table name
+    protected $table = 'giving_back_vehicles_parmanently'; // Specify the table name
     protected $primaryKey = 'giving_back_vehicle_id';
     public $incrementing = false;
     protected $keyType = 'uuid';
@@ -19,8 +21,12 @@ class GivingBackVehiclePermanently extends Model
     protected $fillable = [
         'giving_back_vehicle_id',
         'vehicle_id',
-        'returned_by',
+        'approved_by',
+        'requested_by',
         'received_by',
+        'returned_date',
+        'vehicle_request_id',
+        'vehicle_detail_id',
         'status',
         'created_at',
         'updated_at'
@@ -37,7 +43,7 @@ class GivingBackVehiclePermanently extends Model
     }
     public function vehicle(): BelongsTo
     {
-        return $this->belongsTo(Vehicle::class, 'vehicle_id');
+        return $this->belongsTo(VehiclesModel::class, 'vehicle_id');
     }
 
     public function returnedBy(): BelongsTo

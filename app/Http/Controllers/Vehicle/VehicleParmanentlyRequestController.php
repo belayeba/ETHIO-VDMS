@@ -60,7 +60,7 @@ class VehicleParmanentlyRequestController extends Controller
                         ]);
                     }
         }
-    public function update(Request $request) 
+    public function update_perm_request(Request $request) 
         {
             // Validate the request
             $validator = Validator::make($request->all(), [
@@ -271,7 +271,7 @@ class VehicleParmanentlyRequestController extends Controller
                 }
         }
     // Vehicle Director Page
-    public function VehicleDirector() 
+    public function VehicleDirector_page() 
         {    
                 $id = Auth::id();
                 $Vehicle_Request = VehiclePermanentlyRequestModel::all();
@@ -343,44 +343,5 @@ class VehicleParmanentlyRequestController extends Controller
                 'success' =>true,
                 'message' => 'You have successfully Rejected the Request',
             ]);
-        }
-    // VEHICLE DIRECTOR APPROVE THE REQUESTS
-    public function Returning_temporary_vehicle(Request $request)
-        {
-                $validation = Validator::make($request->all(),[
-                    'request_id'=>'required|vehicle_requests_temporary,request_id',
-                ]);
-                // Check validation error
-                if ($validation->fails()) 
-                    {
-                        return response()->json([
-                            'success' => false,
-                            'message' => $validation->errors(),
-                        ]);
-                    }
-                // Check if it is not approved before
-                $id = $request->input('request_id');
-                $end_km = $request->input('end_km');
-                $user_id = Auth::id();
-            try
-                {
-                    $Vehicle_Request = VehiclePermanentlyRequestModel::findOrFail($id);
-                    $Vehicle_Request->assigned_by = $user_id;
-                    $Vehicle_Request->end_km = $end_km;
-                    $Vehicle_Request->save();
-                    return response()->json([
-                        'success' => true,
-                        'message' => 'The Vehicle Successfully Returned',
-                    ]);
-                }
-            catch (Exception $e) 
-                {
-                    // Handle the case when the vehicle request is not found
-                    return response()->json([
-                        'success' => false,
-                        'message' => 'Sorry, Something went wrong',
-                    ]);
-                }
-
         }
 }

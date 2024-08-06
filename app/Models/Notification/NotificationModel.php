@@ -25,17 +25,17 @@ class NotificationModel extends Model
         'updated_at'
     ];
     protected static function boot()
-    {
-        parent::boot();
+        {
+            parent::boot();
 
-        static::creating(function ($model) {
-            if (empty($model->{$model->getKeyName()})) {
-                $model->{$model->getKeyName()} = (string) Str::uuid();
-            }
-        });
-    }
+            static::creating(function ($model) {
+                if (empty($model->{$model->getKeyName()})) {
+                    $model->{$model->getKeyName()} = (string) Str::uuid();
+                }
+            });
+        }
     public function user(): BelongsTo
-    {
-        return $this->belongsTo(User::class, 'user_id');
-    }
+        {
+            return $this->belongsTo(User::class, 'user_id');
+        }
 }

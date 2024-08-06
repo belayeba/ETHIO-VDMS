@@ -23,20 +23,23 @@ class FuelsModel extends Model
         'approved_by',
         'service_given_by',
         'location_id',
-        'amount',
+        'fuel_amount',
+        'fuel_cost',
+        'fuiling_date',
+        'notes',
         'created_at',
         'updated_at'
     ];
     protected static function boot()
-    {
-        parent::boot();
+        {
+            parent::boot();
 
-        static::creating(function ($model) {
-            if (empty($model->{$model->getKeyName()})) {
-                $model->{$model->getKeyName()} = (string) Str::uuid();
-            }
-        });
-    }
+            static::creating(function ($model) {
+                if (empty($model->{$model->getKeyName()})) {
+                    $model->{$model->getKeyName()} = (string) Str::uuid();
+                }
+            });
+        }
     public function vehicle(): BelongsTo
     {
         return $this->belongsTo(VehiclesModel::class, 'vehicle_id');

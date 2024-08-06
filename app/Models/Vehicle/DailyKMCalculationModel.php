@@ -22,8 +22,9 @@ class DailyKMCalculationModel extends Model
         'vehicle_id',
         'driver_id',
         'date',
-        'start_km',
-        'end_km',
+        'morning_km',
+        'afternoon_km',
+        'register_by',
         'created_at',
         'updated_at'
     ];

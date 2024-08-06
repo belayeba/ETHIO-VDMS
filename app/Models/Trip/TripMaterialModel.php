@@ -20,20 +20,20 @@ class TripMaterialModel extends Model
     protected $fillable = [
         'request_id',
         'material_name',
-        'material_weight',
+        'weight',
         'created_at',
         'updated_at'
     ];
     protected static function boot()
-    {
-        parent::boot();
+        {
+            parent::boot();
 
-        static::creating(function ($model) {
-            if (empty($model->{$model->getKeyName()})) {
-                $model->{$model->getKeyName()} = (string) Str::uuid();
-            }
-        });
-    }
+            static::creating(function ($model) {
+                if (empty($model->{$model->getKeyName()})) {
+                    $model->{$model->getKeyName()} = (string) Str::uuid();
+                }
+            });
+        }
     public function vehicleRequestTemporary(): BelongsTo
         {
             return $this->belongsTo(VehicleTemporaryRequestModel::class, 'request_id');

@@ -17,10 +17,12 @@ class VehicleDetailModel extends Model
     protected $keyType = 'uuid';
     
     protected $fillable = [
-        'detail_id',
         'vehicle_id',
-        'detail_type',
-        'detail_value',
+        'detail',
+        'register_by',
+        'date',
+        'driver_id',
+        'mileage',
         'created_at',
         'updated_at'
     ];

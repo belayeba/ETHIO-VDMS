@@ -24,7 +24,11 @@ class VehiclePermanentlyRequestModel extends Model
         'position_letter',
         'purpose',
         'approved_by',
+        'director_reject_reason',
         'given_by',
+        'vec_director_reject_reason',
+        'given_date',
+        'mileage',
         'status',
         'created_at',
         'updated_at'

@@ -22,29 +22,30 @@ class DriversModel extends Model
         'user_id',
         'register_by',
         'license_number',
-        'name',
-        'contact',
-        'address',
+        'license_expiry_date',
+        'status',
+        'phone_number',
+        'register_by',
+        'notes',
         'created_at',
         'updated_at'
     ];
     protected static function boot()
-    {
-        parent::boot();
+        {
+            parent::boot();
 
-        static::creating(function ($model) {
-            if (empty($model->{$model->getKeyName()})) {
-                $model->{$model->getKeyName()} = (string) Str::uuid();
-            }
-        });
-    }
+            static::creating(function ($model) {
+                if (empty($model->{$model->getKeyName()})) {
+                    $model->{$model->getKeyName()} = (string) Str::uuid();
+                }
+            });
+        }
     public function user(): BelongsTo
-    {
-        return $this->belongsTo(User::class, 'user_id');
-    }
-
+        {
+            return $this->belongsTo(User::class, 'user_id');
+        }
     public function registeredBy(): BelongsTo
-    {
-        return $this->belongsTo(User::class, 'register_by');
-    }
+        {
+            return $this->belongsTo(User::class, 'register_by');
+        }
 }
