@@ -6,6 +6,7 @@ use App\Models\Vehicle\VehicleTemporaryRequestModel;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Str;
 
 class TripMaterialModel extends Model
 {
@@ -23,7 +24,16 @@ class TripMaterialModel extends Model
         'created_at',
         'updated_at'
     ];
+    protected static function boot()
+    {
+        parent::boot();
 
+        static::creating(function ($model) {
+            if (empty($model->{$model->getKeyName()})) {
+                $model->{$model->getKeyName()} = (string) Str::uuid();
+            }
+        });
+    }
     public function vehicleRequestTemporary(): BelongsTo
         {
             return $this->belongsTo(VehicleTemporaryRequestModel::class, 'request_id');

@@ -14,7 +14,8 @@ class ClusClustersModelter extends Model
     protected $primaryKey = 'cluster_id';
     public $incrementing = false;
     protected $keyType = 'uuid';
-    
+    use Illuminate\Support\Str;
+
     protected $fillable = [
         'cluster_id',
         'name',
@@ -22,7 +23,16 @@ class ClusClustersModelter extends Model
         'created_at',
         'updated_at'
     ];
+    protected static function boot()
+    {
+        parent::boot();
 
+        static::creating(function ($model) {
+            if (empty($model->{$model->getKeyName()})) {
+                $model->{$model->getKeyName()} = (string) Str::uuid();
+            }
+        });
+    }
     public function departments(): HasMany
     {
         return $this->hasMany(Department::class, 'cluster_id');

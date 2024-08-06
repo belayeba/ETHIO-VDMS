@@ -15,6 +15,7 @@ class CreateAllTablesWithUuid extends Migration
             $table->uuid('created_by');
             $table->foreign('created_by')->references('id')->on('users');
             $table->timestamps();
+            $table->softDeletes();
         });
         Schema::create('departments', function (Blueprint $table) {
             $table->uuid('department_id')->primary();
@@ -24,6 +25,7 @@ class CreateAllTablesWithUuid extends Migration
             $table->uuid('created_by');
             $table->foreign('created_by')->references('id')->on('users');
             $table->timestamps();
+            $table->softDeletes();
         });
            // Drivers Table
            Schema::create('drivers', function (Blueprint $table) {
@@ -38,6 +40,7 @@ class CreateAllTablesWithUuid extends Migration
             $table->foreign('register_by')->references('id')->on('users');
             $table->text('notes')->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
         // Vehicles Table
         Schema::create('vehicles', function (Blueprint $table) {
@@ -62,6 +65,7 @@ class CreateAllTablesWithUuid extends Migration
             $table->string('status', 255);
             $table->text('notes')->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
 
 
@@ -74,6 +78,7 @@ class CreateAllTablesWithUuid extends Migration
             $table->decimal('longitude', 11, 8);
             $table->text('notes')->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
 
         // Maintenance Table
@@ -95,6 +100,7 @@ class CreateAllTablesWithUuid extends Migration
             $table->text('parts_used')->nullable();
             $table->text('notes')->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
 
         // Fueling Table
@@ -116,6 +122,7 @@ class CreateAllTablesWithUuid extends Migration
             $table->foreign('location_id')->references('location_id')->on('locations');
             $table->text('notes')->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
 
         // GPS Tracking Table
@@ -129,6 +136,7 @@ class CreateAllTablesWithUuid extends Migration
             $table->decimal('speed', 10, 2)->nullable();
             $table->decimal('altitude', 10, 2)->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
 
         // Driver Logs Table
@@ -142,6 +150,7 @@ class CreateAllTablesWithUuid extends Migration
             $table->integer('mileage');
             $table->text('notes')->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
 
         // Vehicle Requests Temporary Table
@@ -175,6 +184,7 @@ class CreateAllTablesWithUuid extends Migration
             $table->uuid('driver_accepted_by')->nullable();
             $table->foreign('driver_accepted_by')->references('id')->on('users');
             $table->timestamps();
+            $table->softDeletes();
         });
 
         // Notifications Table
@@ -185,6 +195,7 @@ class CreateAllTablesWithUuid extends Migration
             $table->text('message');
             $table->string('status', 255)->default('Unread');
             $table->timestamps();
+            $table->softDeletes();
         });
 
         // Driver Communications Table
@@ -197,6 +208,7 @@ class CreateAllTablesWithUuid extends Migration
             $table->text('message');
             $table->string('status', 255)->default('Sent');
             $table->timestamps();
+            $table->softDeletes();
         });
 
         // Service Employee Table
@@ -206,6 +218,7 @@ class CreateAllTablesWithUuid extends Migration
             $table->string('email', 255)->unique();
             $table->string('phone_number', 255)->unique();
             $table->timestamps();
+            $table->softDeletes();
         });
 
 
@@ -222,6 +235,7 @@ class CreateAllTablesWithUuid extends Migration
             $table->foreign('register_by')->references('id')->on('users');
             $table->date('date');
             $table->timestamps();
+            $table->softDeletes();
         });
          // Driver Logs Table
          Schema::create('vehicle_requests_parmanently', function (Blueprint $table) {
@@ -242,6 +256,7 @@ class CreateAllTablesWithUuid extends Migration
             $table->integer('mileage')->nullable();
             $table->integer('status')->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
           // Vehicle Detail
           Schema::create('vehicles_detail', function (Blueprint $table) {
@@ -256,6 +271,7 @@ class CreateAllTablesWithUuid extends Migration
             $table->uuid('driver_id');
             $table->foreign('driver_id')->references('driver_id')->on('drivers');
             $table->timestamps();
+            $table->softDeletes();
         });
     
          // Giving back Permanent Vehicle Request 
@@ -275,6 +291,7 @@ class CreateAllTablesWithUuid extends Migration
             $table->integer('mileage')->nullable();
             $table->integer('status')->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
           // trip person
           Schema::create('trip_person', function (Blueprint $table) {
@@ -284,6 +301,7 @@ class CreateAllTablesWithUuid extends Migration
             $table->uuid('employee_id');
             $table->foreign('employee_id')->references('id')->on('users');
             $table->timestamps();
+            $table->softDeletes();
         });
           // Vehicle Detail
           Schema::create('trip_material', function (Blueprint $table) {
@@ -293,6 +311,7 @@ class CreateAllTablesWithUuid extends Migration
             $table->uuid('request_id');
             $table->foreign('request_id')->references('request_id')->on('vehicle_requests_temporary');
             $table->timestamps();
+            $table->softDeletes();
         });
         // driver change
         Schema::create('driver_change', function (Blueprint $table) {
@@ -304,6 +323,7 @@ class CreateAllTablesWithUuid extends Migration
             $table->uuid('old_driver_id');
             $table->foreign('old_driver_id')->references('id')->on('users');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

@@ -5,6 +5,7 @@ use App\Http\Controllers\tempController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\usercontroller;
 use App\Http\Controllers\vehicle\VehicleTemporaryRequestController;
+use Illuminate\Support\Facades\Auth;
 
 Route::get('/', function () 
 {
@@ -110,7 +111,6 @@ Route::controller(tempController::class)->group(function()
 
         Route::get('/temp29', 'temp29');
     });
-    
     Route::get('/temp30', 'temp30');
     Route::get('/temp31', 'temp31');
     Route::get('/temp32', 'temp32');
