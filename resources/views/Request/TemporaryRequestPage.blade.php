@@ -25,7 +25,7 @@
                         <h4 class="header-title">Request Vehicle</h4>
                     </div>
                     <div class="card-body"> 
-                        <form method="POST" action="/user_post_request">
+                        <form method="POST" action="{{route('temp_request_post')}}">
                             @csrf
 
                             <div id="progressbarwizard">
@@ -94,7 +94,7 @@
                                         <div class="position-relative mb-3">
                                             <div class="mb-6 position-relative" id="datepicker1">
                                                 <label class="form-label">Start Date</label>
-                                                <input type="text" class="form-control" name="start_date" placeholder="Enter Date of departure"
+                                                <input type="date" class="form-control" name="start_date" placeholder="Enter Date of departure"
                                                     data-provide="datepicker" data-date-today-highlight="true"
                                                     data-date-container="#datepicker1">
                                             </div>
@@ -103,7 +103,7 @@
                                         <div class="position-relative mb-3">
                                             <div class="mb-6 position-relative" id="datepicker1">
                                                 <label class="form-label">Start Time</label>
-                                                <input type="text" class="form-control" name="start_time" placeholder="Enter Time of departure"
+                                                <input type="time" class="form-control" name="start_time" placeholder="Enter Time of departure"
                                                     data-provide="datepicker" data-date-today-highlight="true"
                                                     data-date-container="#datepicker1">
                                             </div>
@@ -112,7 +112,7 @@
                                         <div class="position-relative mb-3">
                                             <div class="mb-6 position-relative" id="datepicker1">
                                                 <label class="form-label">Return Date</label>
-                                                <input type="text" class="form-control" name="return_date" placeholder="Enter Date of arrival"
+                                                <input type="date" class="form-control" name="return_date" placeholder="Enter Date of arrival"
                                                     data-provide="datepicker" data-date-today-highlight="true"
                                                     data-date-container="#datepicker1">
                                             </div>
@@ -121,7 +121,7 @@
                                         <div class="position-relative mb-3">
                                             <div class="mb-6 position-relative" id="datepicker1">
                                                 <label class="form-label">Return Time</label>
-                                                <input type="text" class="form-control" name="return_time" placeholder="Enter Time of arrival"
+                                                <input type="time" class="form-control" name="return_time" placeholder="Enter Time of arrival"
                                                     data-provide="datepicker" data-date-today-highlight="true"
                                                     data-date-container="#datepicker1">
                                             </div>
@@ -168,14 +168,7 @@
                                 </div>   
                                 <div class="tab-pane" id="finish-3">
                                     <div class="row">
-                                    <div class="position-relative mb-3">
-                                            <div class="mb-6 position-relative" >
-                                                <label class="form-label">Travelers</label>
-                                                <input type="number" class="form-control" name="end_location" placeholder="Enter travelers quantity">
-                                                </div>
-                                            </div>
-                                        </div> <!-- end card-body-->
-                                    <div class="col-lg-">
+
                                         <p class="mb-1 fw-bold text-muted">Select People</p>
                                         <select id="multiSelect" name="people_id[]" class="select2 form-control select2-multiple" data-toggle="select2"
                                             multiple="multiple" data-placeholder="Select People ...">
@@ -336,12 +329,12 @@
                     `;
                     const nameInput = document.createElement('input');
                     nameInput.type = 'hidden';
-                    nameInput.name = 'itemNames[]';
+                    nameInput.name = 'material_name[]';
                     nameInput.value = itemName.value;
 
                     const weightInput = document.createElement('input');
                     weightInput.type = 'hidden';
-                    weightInput.name = 'itemWeights[]';
+                    weightInput.name = 'weight[]';
                     weightInput.value = itemWeight.value;
 
                     itemDiv.appendChild(nameInput);

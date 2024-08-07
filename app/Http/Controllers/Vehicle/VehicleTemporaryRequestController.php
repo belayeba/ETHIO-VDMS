@@ -19,12 +19,13 @@ class VehicleTemporaryRequestController extends Controller
         {
             $id = Auth::id();
             $users = user::get();
-            $Requested = VehicleTemporaryRequestModel::where('requested_by_id',$id)->get();
-            return view("Request.TemporaryRequestPage",compact('Requested'));
+            // $Requested = VehicleTemporaryRequestModel::where('requested_by_id',$id)->get();
+            return view("Request.TemporaryRequestPage",compact('users'));
         }
     // Send Vehicle Request Temporary
     public function RequestVehicleTemp(Request $request) 
         {
+            // dd($request);
             // Custom validation rule to check equal number of material_name and weight entries
             Validator::extend('equal_count', function ($attribute, $value, $parameters, $validator) use ($request) {
                 $countMaterialName = count($request->input('material_name', []));
@@ -41,12 +42,12 @@ class VehicleTemporaryRequestController extends Controller
                 'return_time' => 'required|date_format:H:i',
                 'start_location' => 'required|string|max:255',
                 'end_location' => 'required|string|max:255',
-                'material_name.*' => 'nullable|string|max:255',
+                'itemNames.*' => 'nullable|string|max:255',
                 'people_id' => 'nullable|array',
                 'people_id.*' => 'exists:users,id',
-                'weight.*' => 'nullable|numeric|min:0',
-                'material_name' => 'nullable|equal_count',
-                'weight' => 'nullable|equal_count',
+                'itemWeights.*' => 'nullable|numeric|min:0',
+                'itemNames' => 'nullable|equal_count',
+                'itemWeights' => 'nullable|equal_count',
             ]);
             // If validation fails, return an error response
             if ($validator->fails()) 
@@ -59,21 +60,22 @@ class VehicleTemporaryRequestController extends Controller
                 try {
                     DB::beginTransaction();
                     $id = Auth::id();
+                    // dd($request->return_time);
                     // Create the vehicle request
                     $Vehicle_Request = VehicleTemporaryRequestModel::create([
                         'purpose' => $request->purpose,
                         'vehicle_type' => $request->vehicle_type,
-                        'requested_by'=> $id,
+                        'requested_by_id'=> $id,
                         'start_location' => $request->start_location,
-                        'end_location' => $request->end_location,
+                        'end_locations' => $request->end_location,
                         'start_date' => $request->start_date,
                         'start_time' => $request->start_time,
                         'end_date' => $request->return_date,
                         'end_time' => $request->return_time,
                     ]);
                     // Handle optional material_name and weight fields
-                    $materialNames = $request->input('material_name', []);
-                    $weights = $request->input('weight', []);
+                    $materialNames = $request->input('itemWeights', []);
+                    $weights = $request->input('itemWeights', []);
                 
                     foreach ($materialNames as $index => $materialName) 
                         {
@@ -87,7 +89,7 @@ class VehicleTemporaryRequestController extends Controller
                 
                     foreach ($peopleIds as $personId) {
                         $Vehicle_Request->peoples()->create([
-                            'person_id' => $personId,
+                            'employee_id' => $personId,
                         ]);
                     }
                 
@@ -115,7 +117,7 @@ class VehicleTemporaryRequestController extends Controller
                 }
         }
     // User can update Request
-     public function update_temp_request(Request $request) 
+     public function update(Request $request) 
         {
              // Validate the request
              $validator = Validator::make($request->all(), [

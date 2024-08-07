@@ -30,7 +30,7 @@ class VehicleTemporaryRequestModel extends Model
         'purpose',
         'vec_director_reject_reason',
         'start_location',
-        'end_location',
+        'end_locations',
         'start_date',
         'start_time',
         'end_date',
