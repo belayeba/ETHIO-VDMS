@@ -22,6 +22,7 @@ class VehicleTemporaryRequestModel extends Model
     protected $fillable = [
         'requested_by_id',
         'assigned_vehicle_id',
+        'requested_by',
         'approved_by',
         'vehicle_type',
         'director_reject_reason',

@@ -25,20 +25,20 @@ Route::group(['middleware' => ['auth']], function()
                 // Vehicle Temprory Request
             Route::controller(VehicleTemporaryRequestController::class)->group(function()
                 {
-                        Route::get('displayRequestPage', 'displayRequestPage')->name('displayRequestPage');
-                        Route::post('/user_post_request', 'RequestVehicleTemp');
-                        Route::post('/user_delete_request', 'deleteRequest');
-                        Route::post('/user_update_info', 'update_temp_request');
-                        Route::get('/director_approve_page', 'DirectorApprovalPage');
-                        Route::post('/director_approve_request', 'DirectorApproveRequest');
-                        Route::post('/director_reject_request', 'DirectorApproveRequest');
-                        Route::get('/simirit_approve_page', 'VehicleDirector');
-                        Route::post('/simirit_approve_request', 'VehicleDirectorApproveRequest');
-                        Route::post('/simirit_fill_start_km', ' VehicleDirectorFillstartKm');
-                        Route::post('/simirit_reject_request', 'VehicleDirectorRejectRequest');
-                        Route::post('/simirit_returns_vehicle', 'Returning_temporary_vehicle');
+                        Route::get('temp_request_page', 'displayRequestPage')->name('displayRequestPage');
+                        Route::post('/user_post_request', 'RequestVehicleTemp')->name('temp_request_post');
+                        Route::post('/user_delete_request', 'deleteRequest')->name('temp_delete_request');
+                        Route::post('/user_update_info', 'update_temp_request')->name('temp_update_request');
+                        Route::get('/director_approve_page', 'DirectorApprovalPage')->name('director_approve_page');
+                        Route::post('/director_approve_request', 'DirectorApproveRequest')->name('director_approve_request');
+                        Route::post('/director_reject_request', 'DirectorApproveRequest')->name('director_reject_request');
+                        Route::get('/simirit_approve_page', 'VehicleDirector')->name('simirit_page');
+                        Route::post('/simirit_approve_request', 'VehicleDirectorApproveRequest')->name('simirit_approve');
+                        Route::post('/simirit_fill_start_km', ' VehicleDirectorFillstartKm')->name('simirit_fill_start_km');
+                        Route::post('/simirit_reject_request', 'VehicleDirectorRejectRequest')->name('simirit_reject');
+                        Route::post('/simirit_returns_vehicle', 'Returning_temporary_vehicle')->name('simirit_return_vehicle');
                 });
-                
+
             Route::controller(usercontroller::class)->group(function()
                 {
                     Route::get('/users', 'list')->name('user_list');
@@ -49,16 +49,16 @@ Route::group(['middleware' => ['auth']], function()
             // Vehicle Permanent Request
             Route::controller(VehicleParmanentlyRequestController::class)->group(function()
                 {
-                    Route::get('/perm_request_page', 'displayPermRequestPage');
-                    Route::post('/user_post_request', 'RequestVehiclePerm');
-                    Route::post('/user_delete_request', 'deleteRequest');
-                    Route::post('/user_update_info', 'update_perm_request');
-                    Route::get('/director_approve_page', 'DirectorApprovalPage');
-                    Route::post('/director_approve_request', 'DirectorApproveRequest');
-                    Route::post('/director_reject_request', 'DirectorRejectRequest');
-                    Route::get('/simirit_approve_page', 'VehicleDirector_page');
-                    Route::post('/simirit_approve_request', 'VehicleDirectorApproveRequest');
-                    Route::post('/simirit_reject_request', 'VehicleDirectorRejectRequest');
+                    Route::get('/perm_request_page', 'displayPermRequestPage')->name('vec_perm_request');
+                    Route::post('/perm_user_post_request', 'RequestVehiclePerm')->name('vec_perm_request_post');
+                    Route::post('/Perm_user_delete_request', 'deleteRequest')->name('user_perm_delet');
+                    Route::post('/perm_user_update_info', 'update_perm_request')->name('perm_vec_update');
+                    Route::get('/director_approve_page', 'DirectorApprovalPage')->name('perm_vec_director_page');
+                    Route::post('/perm_director_approve_request', 'DirectorApproveRequest')->name('perm_vec_director_approve');
+                    Route::post('/perm_director_reject_request', 'DirectorRejectRequest')->name('perm_vec_direct_reject');
+                    Route::get('/perm_simirit_approve_page', 'VehicleDirector_page')->name('perm_vec_simirit_page');
+                    Route::post('/perm_simirit_approve_request', 'VehicleDirectorApproveRequest')->name('perm_vec_simirit_approve');
+                    Route::post('/perm_simirit_reject_request', 'VehicleDirectorRejectRequest')->name('perm_vec_simirit_reject');
                 });
 
             Route::controller(tempController::class)->group(function()

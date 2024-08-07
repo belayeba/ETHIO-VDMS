@@ -115,7 +115,11 @@ class CreateAllTablesWithUuid extends Migration
             $table->foreign('driver_id')->references('driver_id')->on('drivers');
             $table->uuid('approved_by')->nullable();
             $table->foreign('approved_by')->references('id')->on('users');
+            $table->string('direct_reject_reason')->nullable();
             $table->date('fuiling_date')->nullable();
+            $table->uuid('vec_director_id')->nullable();
+            $table->foreign('vec_director_id')->references('id')->on('users');
+            $table->string('vec_direct_reject_reason')->nullable();
             $table->uuid('service_given_by')->nullable();
             $table->foreign('service_given_by')->references('id')->on('users');
             $table->integer('mileage')->nullable();
@@ -334,8 +338,8 @@ class CreateAllTablesWithUuid extends Migration
             Schema::dropIfExists('vehicles');
             Schema::dropIfExists('drivers');
             Schema::dropIfExists('locations');
-            Schema::dropIfExists('maintenance');
-            Schema::dropIfExists('fueling');
+            Schema::dropIfExists('maintenances');
+            Schema::dropIfExists('fuelings');
             Schema::dropIfExists('gps_tracking');
             Schema::dropIfExists('driver_logs');
             Schema::dropIfExists('vehicle_requests_temporary');
