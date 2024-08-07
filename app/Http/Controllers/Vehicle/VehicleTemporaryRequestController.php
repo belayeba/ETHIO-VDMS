@@ -83,7 +83,7 @@ class VehicleTemporaryRequestController extends Controller
                             ]);
                         }   
                     // Handle optional people IDs
-                    $peopleIds = $request->input('people', []);
+                    $peopleIds = $request->input('people_id', []);
                 
                     foreach ($peopleIds as $personId) {
                         $Vehicle_Request->peoples()->create([

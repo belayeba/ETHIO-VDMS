@@ -68,7 +68,21 @@ class CreateAllTablesWithUuid extends Migration
             $table->softDeletes();
         });
 
-
+          // Vehicle Detail
+          Schema::create('vehicles_detail', function (Blueprint $table) {
+            $table->uuid('detail_id')->primary();
+            $table->string('detail', 2000)->default('Unread');
+            $table->uuid('register_by');
+            $table->foreign('register_by')->references('id')->on('users');
+            $table->date('date');
+            $table->uuid('vehicle_id');
+            $table->foreign('vehicle_id')->references('vehicle_id')->on('vehicles');
+            $table->integer('mileage');
+            $table->uuid('driver_id');
+            $table->foreign('driver_id')->references('driver_id')->on('drivers');
+            $table->timestamps();
+            $table->softDeletes();
+        });
         // Locations Table
         Schema::create('locations', function (Blueprint $table) {
             $table->uuid('location_id')->primary();
@@ -97,7 +111,7 @@ class CreateAllTablesWithUuid extends Migration
             $table->foreign('maintained_by')->references('id')->on('users');
             $table->text('description')->nullable();
             $table->date('date')->nullable();
-            $table->integer('vehicle_detail_id')->nullable();
+            $table->uuid('vehicle_detail_id')->nullable();
             $table->foreign('vehicle_detail_id')->references('detail_id')->on('vehicles_detail');
             $table->decimal('cost', 10, 2)->nullable();
             $table->text('parts_used')->nullable();
@@ -265,21 +279,6 @@ class CreateAllTablesWithUuid extends Migration
             $table->timestamps();
             $table->softDeletes();
         });
-          // Vehicle Detail
-          Schema::create('vehicles_detail', function (Blueprint $table) {
-            $table->uuid('detail_id')->primary();
-            $table->string('detail', 2000)->default('Unread');
-            $table->uuid('register_by');
-            $table->foreign('register_by')->references('id')->on('users');
-            $table->date('date');
-            $table->uuid('vehicle_id');
-            $table->foreign('vehicle_id')->references('vehicle_id')->on('vehicles');
-            $table->integer('mileage');
-            $table->uuid('driver_id');
-            $table->foreign('driver_id')->references('driver_id')->on('drivers');
-            $table->timestamps();
-            $table->softDeletes();
-        });
     
          // Giving back Permanent Vehicle Request 
          Schema::create('giving_back_vehicles_parmanently', function (Blueprint $table) {
@@ -292,7 +291,7 @@ class CreateAllTablesWithUuid extends Migration
             $table->foreign('received_by')->references('id')->on('users');
             $table->date('returned_date')->nullable();
             $table->uuid('vehicle_request_id')->nullable();
-            $table->foreign('vehicle_request_id')->references('request_id')->on('vehicle_requests_parmanently');
+            $table->foreign('vehicle_request_id')->references('vehicle_request_permanent_id')->on('vehicle_requests_parmanently');
             $table->uuid('vehicle_detail_id')->nullable();
             $table->foreign('vehicle_detail_id')->references('detail_id')->on('vehicles_detail');
             $table->integer('status')->nullable();
