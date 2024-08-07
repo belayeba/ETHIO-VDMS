@@ -70,8 +70,8 @@ class VehicleTemporaryRequestController extends Controller
                         'end_location' => $request->end_location,
                         'start_date' => $request->start_date,
                         'start_time' => $request->start_time,
-                        'return_date' => $request->return_date ?? '07/08/2024',
-                        'return_time' => $request->return_time ?? '08:00' ,
+                        'end_date' => $request->return_date,
+                        'end_time' => $request->return_time,
                     ]);
                     // Handle optional material_name and weight fields
                     $materialNames = $request->input('material_name', []);

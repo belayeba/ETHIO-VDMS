@@ -43,7 +43,6 @@ Route::group(['middleware' => ['auth']], function()
                         Route::post('/simirit_reject_request', 'VehicleDirectorRejectRequest')->name('simirit_reject');
                         Route::post('/simirit_returns_vehicle', 'Returning_temporary_vehicle')->name('simirit_return_vehicle');
                 });
-
             Route::controller(usercontroller::class)->group(function()
                 {
                     Route::get('/users', 'list')->name('user_list');
@@ -65,42 +64,41 @@ Route::group(['middleware' => ['auth']], function()
                     Route::post('/perm_simirit_approve_request', 'VehicleDirectorApproveRequest')->name('perm_vec_simirit_approve');
                     Route::post('/perm_simirit_reject_request', 'VehicleDirectorRejectRequest')->name('perm_vec_simirit_reject');
                 });
-
-        Route::controller(tempController::class)->group(function()
-            {
-                Route::group(['middleware' => ['can:edit posts']], function () {
-                    // Routes accessible only to users with the 'create user' permission
-                    Route::get('/temp1', 'temp1');
-                    Route::get('/temp2', 'temp2');
-                });
-                
-                Route::get('/temp3', 'temp3')->middleware('can:create posts');
-                Route::get('/temp4', 'temp4');
-                Route::get('/temp5', 'temp5');
-                Route::get('/temp6', 'temp6');
-                Route::get('/temp7', 'temp7');
-                Route::get('/temp8', 'temp8');
-                Route::get('/temp9', 'temp9');
-                Route::get('/temp10', 'temp10');
-                Route::get('/temp11', 'temp11');
-                Route::get('/temp12', 'temp12');
-                Route::get('/temp13', 'temp13');
-                Route::get('/temp14', 'temp14');
-                Route::get('/temp15', 'temp15');
-                Route::get('/temp16', 'temp16');
-                Route::get('/temp17', 'temp17');
-                Route::get('/temp18', 'temp18');
-                Route::get('/temp19', 'temp19');
-                Route::get('/temp20', 'temp20');
-                Route::get('/temp21', 'temp21');
-                Route::get('/temp22', 'temp22');
-                Route::get('/temp23', 'temp23');
-                Route::get('/temp24', 'temp24');
-                Route::get('/temp25', 'temp25');
-                Route::get('/temp26', 'temp26');
-                Route::get('/temp27', 'temp27');
-                Route::get('/temp28', 'temp28');
-                Route::group(['middleware' => ['role:admin']], function () {
+            Route::controller(tempController::class)->group(function()
+                {
+                    Route::group(['middleware' => ['can:edit posts']], function () {
+                        // Routes accessible only to users with the 'create user' permission
+                        Route::get('/temp1', 'temp1');
+                        Route::get('/temp2', 'temp2');
+                    });
+                    
+                    Route::get('/temp3', 'temp3')->middleware('can:create posts');
+                    Route::get('/temp4', 'temp4');
+                    Route::get('/temp5', 'temp5');
+                    Route::get('/temp6', 'temp6');
+                    Route::get('/temp7', 'temp7');
+                    Route::get('/temp8', 'temp8');
+                    Route::get('/temp9', 'temp9');
+                    Route::get('/temp10', 'temp10');
+                    Route::get('/temp11', 'temp11');
+                    Route::get('/temp12', 'temp12');
+                    Route::get('/temp13', 'temp13');
+                    Route::get('/temp14', 'temp14');
+                    Route::get('/temp15', 'temp15');
+                    Route::get('/temp16', 'temp16');
+                    Route::get('/temp17', 'temp17');
+                    Route::get('/temp18', 'temp18');
+                    Route::get('/temp19', 'temp19');
+                    Route::get('/temp20', 'temp20');
+                    Route::get('/temp21', 'temp21');
+                    Route::get('/temp22', 'temp22');
+                    Route::get('/temp23', 'temp23');
+                    Route::get('/temp24', 'temp24');
+                    Route::get('/temp25', 'temp25');
+                    Route::get('/temp26', 'temp26');
+                    Route::get('/temp27', 'temp27');
+                    Route::get('/temp28', 'temp28');
+                    Route::group(['middleware' => ['role:admin']], function () {
 
                     Route::get('/temp29', 'temp29');
                 });
@@ -152,8 +150,6 @@ Route::group(['middleware' => ['auth']], function()
                 Route::get('/temp75', 'temp75');
                 Route::get('/temp76', 'temp76');
 
-            });
-
-        Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-            
-});
+                });
+            Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');           
+    });
