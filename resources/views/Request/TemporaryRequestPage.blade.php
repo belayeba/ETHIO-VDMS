@@ -25,7 +25,7 @@
                         <h4 class="header-title">Request Vehicle</h4>
                     </div>
                     <div class="card-body"> 
-                        <form method="POST" action="/user_post_requestin">
+                        <form method="POST" action="{{route('temp_request_post')}}">
                             @csrf
 
                             <div id="progressbarwizard">

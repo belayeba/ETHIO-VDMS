@@ -25,6 +25,7 @@ class VehicleTemporaryRequestController extends Controller
     // Send Vehicle Request Temporary
     public function RequestVehicleTemp(Request $request) 
         {
+            // dd($request);
             // Custom validation rule to check equal number of material_name and weight entries
             Validator::extend('equal_count', function ($attribute, $value, $parameters, $validator) use ($request) {
                 $countMaterialName = count($request->input('material_name', []));
@@ -59,6 +60,7 @@ class VehicleTemporaryRequestController extends Controller
                 try {
                     DB::beginTransaction();
                     $id = Auth::id();
+                    // dd($request->return_time);
                     // Create the vehicle request
                     $Vehicle_Request = VehicleTemporaryRequestModel::create([
                         'purpose' => $request->purpose,
@@ -68,8 +70,8 @@ class VehicleTemporaryRequestController extends Controller
                         'end_location' => $request->end_location,
                         'start_date' => $request->start_date,
                         'start_time' => $request->start_time,
-                        'return_date' => $request->return_date,
-                        'return_time' => $request->return_time,
+                        'return_date' => $request->return_date ?? '07/08/2024',
+                        'return_time' => $request->return_time ?? '08:00' ,
                     ]);
                     // Handle optional material_name and weight fields
                     $materialNames = $request->input('material_name', []);
