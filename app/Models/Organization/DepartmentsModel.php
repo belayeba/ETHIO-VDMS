@@ -26,6 +26,6 @@ class DepartmentsModel extends Model
 
     public function cluster(): BelongsTo
     {
-        return $this->belongsTo(Cluster::class, 'cluster_id');
+        return $this->belongsTo(ClustersModel::class, 'cluster_id');
     }
 }

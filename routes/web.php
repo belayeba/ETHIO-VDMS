@@ -5,7 +5,13 @@ use App\Http\Controllers\tempController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\usercontroller;
 use App\Http\Controllers\LoginController;
-use App\Http\Controllers\vehicle\VehicleTemporaryRequestController;
+use App\Http\Controllers\Organization\ClusterController;
+// use App\Http\Controllers\Organization\ClustersController;
+use App\Http\Controllers\vehicle\VehicleTemporaryRequestController as VehicleVehicleTemporaryRequestController;
+use App\Http\Controllers\VehicleTemporaryRequestController;
+use FontLib\Table\Type\name;
+use Illuminate\Support\Facades\Auth;
+
 Route::get('/', function () {
     return view('templates.index');
 });
@@ -24,7 +30,7 @@ Route::resource('roles', RoleController::class);
 Route::get('/logout', 'LoginController@logout')->name('logout.logout');
 
 // Vehicle Temprory Request
-Route::controller(VehicleTemporaryRequestController::class)->group(function()
+Route::controller(VehicleVehicleTemporaryRequestController::class)->group(function()
 {
     Route::get('/temp_request_page', 'displayRequestPage');
     Route::post('/user_post_request', 'RequestVehiclePerm');
@@ -138,3 +144,15 @@ Route::controller(tempController::class)->group(function()
     Route::get('/temp76', 'temp76');
 
 });
+
+// cluster route
+Route::resource('cluster',ClusterController::class);
+
+// Route::get('/cluster',[ClusterController::class,'index'])->name('cluster.index');
+// Route::get('/create',[ClusterController::class,'create'])->name('cluster.create');
+// Route::post('/', [ClusterController::class,'store'])->name('cluster.store');
+// Route::get('/view',[ClusterController::class,'show'])->name('cluster.show');
+Route::get('/display',[ClusterController::class,'display'])->name('department.display');
+Route::get('/maintenance',[ClusterController::class,'request'])->name('maintenance.request');
+Route::get('/fuel',[ClusterController::class,'fuel'])->name('fuel.request');
+Route::get('/vehicle',[ClusterController::class,'vehicle'])->name('vehicle.registration');
