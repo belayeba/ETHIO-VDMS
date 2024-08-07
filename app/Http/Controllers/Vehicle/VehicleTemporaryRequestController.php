@@ -19,8 +19,8 @@ class VehicleTemporaryRequestController extends Controller
         {
             $id = Auth::id();
             $users = user::get();
-            $Requested = VehicleTemporaryRequestModel::where('requested_by_id',$id)->get();
-            return view("Request.TemporaryRequestPage",compact('Requested'));
+            // $Requested = VehicleTemporaryRequestModel::where('requested_by_id',$id)->get();
+            return view("Request.TemporaryRequestPage",compact('users'));
         }
     // Send Vehicle Request Temporary
     public function RequestVehicleTemp(Request $request) 
@@ -115,7 +115,7 @@ class VehicleTemporaryRequestController extends Controller
                 }
         }
     // User can update Request
-     public function update_temp_request(Request $request) 
+     public function update(Request $request) 
         {
              // Validate the request
              $validator = Validator::make($request->all(), [

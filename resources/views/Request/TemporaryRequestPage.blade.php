@@ -25,7 +25,7 @@
                         <h4 class="header-title">Request Vehicle</h4>
                     </div>
                     <div class="card-body"> 
-                        <form method="POST" action="/user_post_request">
+                        <form method="POST" action="/user_post_requestin">
                             @csrf
 
                             <div id="progressbarwizard">
@@ -168,14 +168,7 @@
                                 </div>   
                                 <div class="tab-pane" id="finish-3">
                                     <div class="row">
-                                    <div class="position-relative mb-3">
-                                            <div class="mb-6 position-relative" >
-                                                <label class="form-label">Travelers</label>
-                                                <input type="number" class="form-control" name="end_location" placeholder="Enter travelers quantity">
-                                                </div>
-                                            </div>
-                                        </div> <!-- end card-body-->
-                                    <div class="col-lg-">
+
                                         <p class="mb-1 fw-bold text-muted">Select People</p>
                                         <select id="multiSelect" name="people_id[]" class="select2 form-control select2-multiple" data-toggle="select2"
                                             multiple="multiple" data-placeholder="Select People ...">
