@@ -13,7 +13,7 @@ class TripPersonsModel extends Model
 {
     use SoftDeletes;
 
-    protected $table = 'trip_people'; // Specify the table name
+    protected $table = 'trip_person'; // Specify the table name
     protected $primaryKey = 'trip_person_id';
     public $incrementing = false;
     protected $keyType = 'uuid';
