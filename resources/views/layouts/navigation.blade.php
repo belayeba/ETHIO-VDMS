@@ -32,7 +32,7 @@
                     <ul class="side-nav">
 
                     <li class="side-nav-title">Main</li>
-
+                    @can('user-create')
                     <li class="side-nav-item">
                         <a data-bs-toggle="collapse" href="#sidebarPages" aria-expanded="false" aria-controls="sidebarPages" class="side-nav-link">
                             <i class="ri-pages-line"></i>
@@ -41,11 +41,11 @@
                         </a>
                         <div class="collapse" id="sidebarPages">
                             <ul class="side-nav-second-level">
-                            @can('edit posts')
+
                             <li>
                                 <a href="/temp45">Starter Page</a>
                             </li>
-                            @endcan
+                           
                                 <li>
                                     <a href="/temp39">Contact List</a>
                                 </li>
@@ -79,22 +79,79 @@
                             </ul>
                         </div>
                     </li>
+                    @endcan
 
                     <li class="side-nav-item">
-                        <a data-bs-toggle="collapse" href="#sidebarPagesAuth" aria-expanded="false" aria-controls="sidebarPagesAuth" class="side-nav-link">
-                            <i class="ri-user-add-line"></i>
-                            <span> Users </span>
+                       <a data-bs-toggle="collapse" href="#sidebarRequest" aria-expanded="false" aria-controls="sidebarRequest" class="side-nav-link">
+                            <i class=" ri-questionnaire-line"></i>
+                            <span>Request Management</span>
                             <span class="menu-arrow"></span>
                         </a>
-                        <div class="collapse" id="sidebarPagesAuth">
+                        <div class="collapse" id="sidebarRequest">
                             <ul class="side-nav-second-level">
                                 <li>
-                                    <a href="{{route('users')}}">User LIst</a>
+                                    <a href="{{route('displayRequestPage')}}">Temporary vehicle request</a>
+                                </li>
+                                <li>
+                                    <a href="#">Permanent vehicle request</a>
+                                </li>
+                                
+                            </ul>
+                        </div>
+                    </li>
+                    
+                    <li class="side-nav-item">
+                        <a data-bs-toggle="collapse" href="#sidebarUser" aria-expanded="false" aria-controls="sidebarUser" class="side-nav-link">
+                            <i class="  ri-user-fill"></i>
+                            <span>User Management</span>
+                            <span class="menu-arrow"></span>
+                        </a>
+                        <div class="collapse" id="sidebarUser">
+                            <ul class="side-nav-second-level">
+                                <li>
+                                    <a href="{{route('user_list')}}">Create users</a>
+                                </li>
+                                <!-- <li>
+                                    <a href="#">Tests</a>
+                                </li> -->
+                                
+                            </ul>
+                        </div>
+                    </li>
+
+                    <li class="side-nav-item">
+                        <a data-bs-toggle="collapse" href="#sidebarOrganization" aria-expanded="false" aria-controls="sidebarOrganization" class="side-nav-link">
+                            <i class="ri-share-line"></i>
+                            <span> Organization </span>
+                            <span class="menu-arrow"></span>
+                        </a>
+                        <div class="collapse" id="sidebarOrganization">
+                            <ul class="side-nav-second-level">
+                                <li>
+                                    <a href="/cluster">Cluster</a>
+                                </li>
+                                <li>
+                                    <a href="/department">Department</a>
                                 </li>
                             </ul>
                         </div>
                     </li>
 
+                    <li class="side-nav-item">
+                        <a data-bs-toggle="collapse" href="#sidebarRole" aria-expanded="false" aria-controls="sidebarRole" class="side-nav-link">
+                            <i class="ri-shield-cross-fill"></i>
+                            <span>Role Management</span>
+                            <span class="menu-arrow"></span>
+                        </a>
+                        <div class="collapse" id="sidebarRole">
+                            <ul class="side-nav-second-level">
+                                <li>
+                                    <a href="{{ route('roles.index') }}">Roles</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                    
                 </div>
         </div>   
         </br></br>
@@ -108,7 +165,7 @@
  <!-- App js --> 
  <script src="{{ asset('assets/js/vendor.min.js') }}"></script>
  <script src="{{ asset('assets/js/app.min.js') }}"></script>
- @stack('scripts')
+ 
 
 </body>
 

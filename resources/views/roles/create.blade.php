@@ -1,20 +1,6 @@
-<!DOCTYPE html>
-<html lang="en">
+@extends('layouts.navigation')
 
-@include('layouts.main-link')
-@include('layouts.header')
-@include('layouts.sidebar')
-@include('layouts.setting')
-
-
-<body>
-    <!-- Begin page -->
-    <div class="wrapper">
-
-        <!-- ============================================================== -->
-        <!-- Start Page Content here -->
-        <!-- ============================================================== -->
-
+@section('content')
         <div class="content-page">
             <div class="content">
 
@@ -48,7 +34,7 @@
 
                         <div class="btn-group btn-group-sm pull-right" role="group">
                                 <a href="{{ route('roles.index') }}" class="btn btn-primary" style="border-radius: 25px;" title="role list">
-                                <i class="fas fa-list"></i>
+                                <i class="fas fa-list"></i>Lists
                                 </a>
                             </div>
                          
@@ -70,17 +56,15 @@
 <div class="row">
     <div class="col-xs-12 col-sm-12 col-lg-4">
         <div class="form-group">
-            <strong><h5 style="color:#215467; font-weight: bold; font-family:serif;">ስም</h5></strong>
-            <input class="form-control" name="name" type="text" id="name" value="" minlength="1" maxlength="255" placeholder="ስም ያስገቡ...">
-            
+            <strong><h5 style="color:#215467; font-weight: bold; font-family:serif;">Name</h5></strong>
+            <input class="form-control" name="name" type="text" id="name" value="" minlength="1" maxlength="255" placeholder="Enter name...">    
         </div>
     </div>
+</br></br></br></br>
     <div class="col-xs-12 col-sm-12 col-lg-12">
         <div class="form-group">
-            <strong><h5 style="color:#215467; font-weight: bold; font-family:serif;">ፍቃዶች</h5></strong>
-            
-          
-</br>
+            <strong><h5 style="color:#215467; font-weight: bold; font-family:serif;">Permmision</h5></strong>
+
             @php
     $counter = 0; // Counter variable to keep track of iterations
     @endphp
@@ -129,27 +113,6 @@
                         </div><!-- end col -->
 </div> <!-- content -->
 
-<!-- Footer Start -->
-<footer class="footer">
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-12 text-center">
-                <script>document.write(new Date().getFullYear())</script> © developed by <b>EAII</b>
-            </div>
-        </div>
-    </div>
-</footer>
-<!-- end Footer -->
-
-</div>
-
-<!-- ============================================================== -->
-<!-- End Page content -->
-<!-- ============================================================== -->
-
-</div>
-<!-- END wrapper -->
-
  <script src="assets/js/vendor.min.js"></script>
 
     <!-- App js -->
@@ -180,6 +143,4 @@
 </script>
 </body>
 
-
-<!-- Mirrored from techzaa.getappui.com/velonic/layouts/tables-datatable.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 30 Oct 2023 02:30:52 GMT -->
-</html>
+@endsection

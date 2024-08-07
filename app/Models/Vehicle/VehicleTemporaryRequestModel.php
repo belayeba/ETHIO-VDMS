@@ -8,6 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Models\User;
+use Illuminate\Support\Str;
+
 class VehicleTemporaryRequestModel extends Model
 {
     use SoftDeletes;
@@ -20,18 +22,44 @@ class VehicleTemporaryRequestModel extends Model
     protected $fillable = [
         'requested_by_id',
         'assigned_vehicle_id',
+        'requested_by',
         'approved_by',
+        'vehicle_type',
         'director_reject_reason',
         'assigned_by',
+        'purpose',
         'vec_director_reject_reason',
-        'start_location_id',
-        'end_location_id',
+        'start_location',
+        'end_locations',
+        'start_date',
+        'start_time',
+        'end_date',
+        'end_time',
+        'start_km',
+        'end_km',
+        'dir_approved_by',
+        'director_reject_reason',
+        'sim_approved_by',
+        'vec_director_reject_reason',
         'driver_accepted_by',
+        'vehicle_id',
+        'allowed_distance_after_destination',
+        'notes',
+        'comment',
         'status',
         'created_at',
         'updated_at'
     ];
+    protected static function boot()
+    {
+        parent::boot();
 
+        static::creating(function ($model) {
+            if (empty($model->{$model->getKeyName()})) {
+                $model->{$model->getKeyName()} = (string) Str::uuid();
+            }
+        });
+    }
     public function requestedBy(): BelongsTo
     {
         return $this->belongsTo(User::class, 'requested_by_id');

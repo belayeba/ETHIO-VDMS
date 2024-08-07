@@ -11,20 +11,29 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Str;
+use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
 {
-    use Notifiable, SoftDeletes;
+    use Notifiable, SoftDeletes,HasRoles;
 
     protected $table = 'users'; // Specify the table name
     protected $primaryKey = 'id';
-    public $incrementing = true;
-    protected $keyType = 'int';
+    public $incrementing = false;
+    protected $keyType = 'uuid';
 
     protected $fillable = [
-        'name',
+        'first_name',
+        'last_name',
+        'middle_name',
+        'photo',
         'email',
         'password',
+        'username',
+        'phone_number',
+        'email_verified_at',
+        'department_id',
         'created_at',
         'updated_at'
     ];
@@ -33,6 +42,17 @@ class User extends Authenticatable
         'password',
         'remember_token',
     ];
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($model) {
+            if (empty($model->{$model->getKeyName()})) {
+                $model->{$model->getKeyName()} = (string) Str::uuid();
+            }
+        });
+    }
 
     public function drivers(): HasMany
     {
@@ -73,5 +93,4 @@ class User extends Authenticatable
     {
         return $this->hasMany(MaintenancesModel::class, 'maintained_by');
     }
-
 }
