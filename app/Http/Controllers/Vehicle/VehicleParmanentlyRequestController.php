@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Validator;
 class VehicleParmanentlyRequestController extends Controller
 {
         // Display Request Page
-    public function displayRequestPage()
+    public function displayPermRequestPage()
         {
             $id = Auth::id();
             $Requested = VehiclePermanentlyRequestModel::where('requested_by_id',$id)->get();
