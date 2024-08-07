@@ -3,10 +3,12 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Str;
 
-class ClusClustersModelter extends Model
+class ClustersModel extends Model
 {
     use SoftDeletes;
 
@@ -14,17 +16,30 @@ class ClusClustersModelter extends Model
     protected $primaryKey = 'cluster_id';
     public $incrementing = false;
     protected $keyType = 'uuid';
-    
+
     protected $fillable = [
-        'cluster_id',
         'name',
+        'created_by',
         'description',
         'created_at',
         'updated_at'
     ];
+    protected static function boot()
+        {
+            parent::boot();
 
+            static::creating(function ($model) {
+                if (empty($model->{$model->getKeyName()})) {
+                    $model->{$model->getKeyName()} = (string) Str::uuid();
+                }
+            });
+        }
     public function departments(): HasMany
-    {
-        return $this->hasMany(Department::class, 'cluster_id');
-    }
+        {
+            return $this->hasMany(DepartmentsModel::class, 'cluster_id');
+        }
+    public function Registered_by(): BelongsTo
+        {
+            return $this->belongsTo(User::class,'created_by','user_id');
+        }
 }

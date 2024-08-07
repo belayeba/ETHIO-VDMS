@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Str;
 
 class VehiclesModel extends Model
 {
@@ -23,6 +24,16 @@ class VehiclesModel extends Model
         'vehicle_category', 'fuel_amount', 'last_service', 
         'next_service', 'driver_id', 'fuel_type', 'status', 'notes'
     ];
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($model) {
+            if (empty($model->{$model->getKeyName()})) {
+                $model->{$model->getKeyName()} = (string) Str::uuid();
+            }
+        });
+    }
     public function maintenances(): HasMany
     {
         return $this->hasMany(MaintenancesModel::class, 'vehicle_id');

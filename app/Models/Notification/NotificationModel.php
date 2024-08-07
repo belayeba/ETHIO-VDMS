@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Models\User;
+use Illuminate\Support\Str;
+
 class NotificationModel extends Model
 {
     use SoftDeletes;
@@ -22,9 +24,18 @@ class NotificationModel extends Model
         'created_at',
         'updated_at'
     ];
+    protected static function boot()
+        {
+            parent::boot();
 
+            static::creating(function ($model) {
+                if (empty($model->{$model->getKeyName()})) {
+                    $model->{$model->getKeyName()} = (string) Str::uuid();
+                }
+            });
+        }
     public function user(): BelongsTo
-    {
-        return $this->belongsTo(User::class, 'user_id');
-    }
+        {
+            return $this->belongsTo(User::class, 'user_id');
+        }
 }

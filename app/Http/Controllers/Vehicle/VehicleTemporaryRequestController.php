@@ -115,7 +115,7 @@ class VehicleTemporaryRequestController extends Controller
                 }
         }
     // User can update Request
-     public function update(Request $request) 
+     public function update_temp_request(Request $request) 
         {
              // Validate the request
              $validator = Validator::make($request->all(), [
