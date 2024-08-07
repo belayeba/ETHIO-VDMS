@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Fuel;
 
 use App\Http\Controllers\Controller;
 use App\Models\FuelsModel;
+use App\Models\User;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -46,7 +47,7 @@ public function RequestFuel(Request $request)
                     // Success: Record was created
                     return response()->json([
                         'success' => true,
-                        'message' => 'Vehicle request created successfully.',
+                        'message' => 'Fuel Requested Successfully.',
                     ]);
                         
                 }
@@ -59,14 +60,14 @@ public function RequestFuel(Request $request)
                     ]);
                 }
     }
-public function update_perm_request(Request $request) 
+public function update_fuel_request(Request $request) 
     {
         // Validate the request
         $validator = Validator::make($request->all(), [
-            'request_id' => 'required|uuid|exists:users,id', // Check if UUID exists in the 'users' table
-            'purpose' => 'sometimes|string|max:255',
-            'position_letter' => 'sometimes|file|mimes:pdf,jpeg,png,jpg|max:2048', // 2MB max size for file
-        ]);
+            'request_id' => 'required|uuid|exists:fuelings,fueling_id', // Check if UUID exists in the 'users' table
+            'fuel_amount' => 'sometimes|required|number',
+            'vehicle'=>'sometimes|required|uuid|exists:vehicles,vehicle_id'
+        ]); 
         // Check if validation fails
         if ($validator->fails()) {
             return response()->json([
@@ -77,17 +78,17 @@ public function update_perm_request(Request $request)
         $id = $request->input('request_id');
         try
             {
-                $Vehicle_Request = FuelsModel::find($id); 
+                $Fuel_Request = FuelsModel::findorFail($id); 
                 $user_id = Auth::id();
-                // Check if the record was found
-                if($user_id != $Vehicle_Request->requested_by_id)
+                     // Check if the record was found
+                if($user_id != $Fuel_Request->driver_id)
                         {
                             return response()->json([
                                 'success' => false,
                                 'message' => 'Warning! You are denied the service.'
                             ]);
                         }
-                    if($Vehicle_Request->approved_by)
+                    if($Fuel_Request->approved_by)
                         {
                             return response()->json([
                                 'success' => false,
@@ -97,15 +98,15 @@ public function update_perm_request(Request $request)
                     else
                         {
                                 // Update the record with new data
-                                $Vehicle_Request->update([
-                                    'purpose' => $request->purpose,
-                                    'position_letter' => $request->position_letter,
+                                $Fuel_Request->update([
+                                    'vehicle_id' => $request->vehicle,
+                                    'fuel_amount' => $request->fuel_amount,
                                 ]);
 
                                 // Return a success response
                                 return response()->json([
                                     'success' => true,
-                                    'message' => 'Vehicle request updated successfully.',
+                                    'message' => 'Fuel request updated successfully.',
                                 ]);
                         }
             }
@@ -122,7 +123,7 @@ public function update_perm_request(Request $request)
 public function deleteRequest(Request $request)
     {
         $validation = Validator::make($request->all(),[
-            'request_id'=>'required|vehicle_requests_temporary,request_id',
+            'request_id' => 'required|uuid|exists:fuelings,fueling_id', // Check if UUID exists in the 'users' table
         ]);
         // Check validation error
         if ($validation->fails()) 
@@ -137,22 +138,22 @@ public function deleteRequest(Request $request)
         $user_id = Auth::id();
         try 
             {
-                $Vehicle_Request = FuelsModel::findOrFail($id);
-                if($Vehicle_Request->requested_by != $user_id)
+                $Fuel_Request = FuelsModel::findOrFail($id);
+                if($Fuel_Request->driver_id != $user_id)
                     {
                         return response()->json([
                             'success' => false,
                             'message' => 'Warning! You are denied the service.',
                         ]);
                     }
-                if($Vehicle_Request->approved_by)
+                if($Fuel_Request->approved_by)
                     {
                         return response()->json([
                             'success' => false,
                             'message' => 'Warning! You are denied the service.',
                         ]);
                     }
-                $Vehicle_Request->delete();
+                $Fuel_Request->delete();
                 return response()->json([
                     'success' => true,
                     'message' => 'Request Successfully deleted',
@@ -173,18 +174,16 @@ public function DirectorApprovalPage()
             $id = Auth::id();
             $directors_data = User::where('id',$id)->get('department_id');
             $dept_id = $directors_data->department_id;
-
-            $vehicle_requests = FuelsModel::whereHas('requestedBy', function ($query) use ($dept_id) {
+            $Fuel_Requests = FuelsModel::whereHas('requestedBy', function ($query) use ($dept_id) {
                 $query->where('department_id', $dept_id);
             })->get();
-
-            return view("DirectorPage", compact('vehicle_requests'));
+            return view("FeulDirectorPage", compact('Fuel_Requests'));
     }
-// DIRECTOR APPROVE THE REQUESTS
+    // DIRECTOR APPROVE THE REQUESTS
 public function DirectorApproveRequest(Request $request)
     {
             $validation = Validator::make($request->all(),[
-                'request_id'=>'required|vehicle_requests_temporary,request_id',
+                'request_id'=>'required|fuelings,request_id',
             ]);
             // Check validation error
             if ($validation->fails()) 
@@ -199,16 +198,16 @@ public function DirectorApproveRequest(Request $request)
             $user_id = Auth::id();
         try
             {
-                $Vehicle_Request = FuelsModel::findOrFail($id);
-                if($Vehicle_Request->approved_by)
+                $Fuel_Request = FuelsModel::findOrFail($id);
+                if($Fuel_Request->approved_by)
                     {
                         return response()->json([
                             'success' => false,
                             'message' => 'Warning!, You are denied the service',
                         ]);
                     }
-                $Vehicle_Request->approved_by = $user_id;
-                $Vehicle_Request->save();
+                $Fuel_Request->approved_by = $user_id;
+                $Fuel_Request->save();
                 return response()->json([
                     'success' => true,
                     'message' => 'You approved the request successfully',
@@ -223,11 +222,11 @@ public function DirectorApproveRequest(Request $request)
                 ]);
             }
     }
-// Director Reject the request
+    // Director Reject the request
 public function DirectorRejectRequest(Request $request)
     {
         $validation = Validator::make($request->all(),[
-            'request_id'=>'required|vehicle_requests_temporary,request_id',
+            'request_id'=>'required|fuelings,request_id',
             'reason'=>'required|string|max:1000'
         ]);
               // Check validation error
@@ -244,17 +243,17 @@ public function DirectorRejectRequest(Request $request)
         $user_id = Auth::id();
         try
             {
-                $Vehicle_Request = FuelsModel::findOrFail($id);
-                if($Vehicle_Request->approved_by != null)
+                $Fuel_Request = FuelsModel::findOrFail($id);
+                if($Fuel_Request->approved_by)
                     {
                         return response()->json([
                             'success' => false,
                             'message' => 'Sorry, Something went wrong',
                         ]);
                     }
-                $Vehicle_Request->approved_by = $user_id;
-                $Vehicle_Request->director_reject_reason = $reason;
-                $Vehicle_Request->save();
+                $Fuel_Request->approved_by = $user_id;
+                $Fuel_Request->direct_reject_reason = $reason;
+                $Fuel_Request->save();
                 return response()->json([
                     'success' => true,
                     'message' => 'You are successfully Rejected the Request',
@@ -269,18 +268,18 @@ public function DirectorRejectRequest(Request $request)
                 ]);
             }
     }
-// Vehicle Director Page
+   // Vehicle Director Page
 public function VehicleDirector_page() 
     {    
             $id = Auth::id();
-            $Vehicle_Request = FuelsModel::all();
-            return view("vehicle_requests", compact('vehicle_requests'));     
+            $Fuel_Request = FuelsModel::all();
+            return view("Fuel_Requests", compact('Fuel_Requests'));     
     }
     // VEHICLE DIRECTOR APPROVE THE REQUESTS
 public function VehicleDirectorApproveRequest(Request $request)
     {
             $validation = Validator::make($request->all(),[
-                'request_id'=>'required|vehicle_requests_temporary,request_id',
+               'request_id' => 'required|uuid|exists:fuelings,fueling_id',
             ]);
             // Check validation error
             if ($validation->fails()) 
@@ -293,26 +292,26 @@ public function VehicleDirectorApproveRequest(Request $request)
             // Check if it is not approved before
             $id = $request->input('request_id');
             $user_id = Auth::id();
-            $Vehicle_Request = FuelsModel::findOrFail($id);
-            if($Vehicle_Request->given_by)
+            $Fuel_Request = FuelsModel::findOrFail($id);
+            if($Fuel_Request->vec_director_id)
                 {
                     return response()->json([
                         'success' => false,
                         'message' => 'Sorry, You are denied the service',
                     ]);
                 }
-            $Vehicle_Request->given_by = $user_id;
-            $Vehicle_Request->save();
+            $Fuel_Request->vec_director_id = $user_id;
+            $Fuel_Request->save();
             return response()->json([
                 'success' => true,
                 'message' => 'The Request is successfully Approved',
             ]);
     }
-//vehicle Director Reject the request
+    //vehicle Director Reject the request
 public function VehicleDirectorRejectRequest(Request $request)
     {
         $validation = Validator::make($request->all(),[
-            'request_id'=>'required|vehicle_requests_temporary,request_id',
+            'request_id'=>'required|exists:fuelings,fueling_id',
             'reason'=>'required|string|max:1000'
         ]);
               // Check validation error
@@ -327,17 +326,97 @@ public function VehicleDirectorRejectRequest(Request $request)
         $id = $request->input('request_id');
         $reason = $request->input('reason');
         $user_id = Auth::id();
-        $Vehicle_Request = FuelsModel::findOrFail($id);
-        if($Vehicle_Request->assigned_by)
+        $Fuel_Request = FuelsModel::findOrFail($id);
+        if($Fuel_Request->vec_director_id)
             {
                 return response()->json([
                     'success' => false,
                     'message' => 'Warning! You are denied the service',
                 ]);
             }
-        $Vehicle_Request->given_by = $user_id;
-        $Vehicle_Request->vec_director_reject_reason = $reason;
-        $Vehicle_Request->save();
+        $Fuel_Request->vec_director_id = $user_id;
+        $Fuel_Request->vec_director_reject_reason = $reason;
+        $Fuel_Request->save();
+        return response()->json([
+            'success' =>true,
+            'message' => 'You have successfully Rejected the Request',
+        ]);
+    }
+    // Vehicle Director Page
+public function Fuelor_page() 
+    {    
+            $id = Auth::id();
+            $Fuel_Request = FuelsModel::all();
+            return view("Fuel_Requests", compact('Fuel_Requests'));     
+    }
+    // VEHICLE DIRECTOR APPROVE THE REQUESTS
+public function FuelorApproveRequest(Request $request)
+    {
+            $validation = Validator::make($request->all(),[
+               'request_id' => 'required|uuid|exists:fuelings,fueling_id',
+               'cost'=>'required|number',
+               'comment'=>'nullable|string|max:1000',
+            ]);
+            // Check validation error
+            if ($validation->fails()) 
+                {
+                    return response()->json([
+                        'success' => false,
+                        'message' => $validation->errors(),
+                    ]);
+                }
+            // Check if it is not approved before
+            $id = $request->input('request_id');
+            $cost = $request->input('cost');
+            $comment = $request->input('comment');
+            $user_id = Auth::id();
+            $Fuel_Request = FuelsModel::findOrFail($id);
+            if($Fuel_Request->service_given_by)
+                {
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'Sorry, You are denied the service',
+                    ]);
+                }
+            $Fuel_Request->service_given_by = $user_id;
+            $Fuel_Request->fuel_cost = $cost;
+            $Fuel_Request->notes = $comment;
+            $Fuel_Request->save();
+            return response()->json([
+                'success' => true,
+                'message' => 'The Request is successfully Approved',
+            ]);
+    }
+    //vehicle Director Reject the request
+public function FuelorRejectRequest(Request $request)
+    {
+        $validation = Validator::make($request->all(),[
+            'request_id'=>'required|exists:fuelings,fueling_id',
+            'reason'=>'required|string|max:1000'
+        ]);
+              // Check validation error
+        if ($validation->fails()) 
+            {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Sorry, Something went wrong',
+                ]);
+            }
+          // Check if it is not approved before
+        $id = $request->input('request_id');
+        $reason = $request->input('reason');
+        $user_id = Auth::id();
+        $Fuel_Request = FuelsModel::findOrFail($id);
+        if($Fuel_Request->service_given_by)
+            {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Warning! You are denied the service',
+                ]);
+            }
+        $Fuel_Request->service_given_by = $user_id;
+        $Fuel_Request->fuelor_reject = $reason;
+        $Fuel_Request->save();
         return response()->json([
             'success' =>true,
             'message' => 'You have successfully Rejected the Request',
