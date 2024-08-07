@@ -19,9 +19,7 @@ Auth::routes();
 
 Route::group(['middleware' => ['auth']], function()
     {
-
             Route::resource('roles', RoleController::class);
-
                 // Vehicle Temprory Request
             Route::controller(VehicleTemporaryRequestController::class)->group(function()
                 {
@@ -38,7 +36,6 @@ Route::group(['middleware' => ['auth']], function()
                         Route::post('/simirit_reject_request', 'VehicleDirectorRejectRequest')->name('simirit_reject');
                         Route::post('/simirit_returns_vehicle', 'Returning_temporary_vehicle')->name('simirit_return_vehicle');
                 });
-
             Route::controller(usercontroller::class)->group(function()
                 {
                     Route::get('/users', 'list')->name('user_list');
@@ -60,7 +57,6 @@ Route::group(['middleware' => ['auth']], function()
                     Route::post('/perm_simirit_approve_request', 'VehicleDirectorApproveRequest')->name('perm_vec_simirit_approve');
                     Route::post('/perm_simirit_reject_request', 'VehicleDirectorRejectRequest')->name('perm_vec_simirit_reject');
                 });
-
             Route::controller(tempController::class)->group(function()
                 {
                     Route::group(['middleware' => ['can:edit posts']], function () {
@@ -148,7 +144,5 @@ Route::group(['middleware' => ['auth']], function()
                     Route::get('/temp76', 'temp76');
 
                 });
-
-            Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-                
+            Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');           
     });
