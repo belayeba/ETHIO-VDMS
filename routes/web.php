@@ -54,7 +54,7 @@ Route::controller(usercontroller::class)->group(function()
 Route::controller(VehicleTemporaryRequestController::class)->group(function()
 {
     Route::get('/temp_request_page', 'displayRequestPage')->name('displayRequestPage');
-    Route::post('/user_post_request', 'RequestVehiclePerm');
+    Route::post('/user_post_request', 'RequestVehicleTemp');
     Route::post('/user_delete_request', 'deleteRequest');
     Route::post('/user_update_info', 'update');
     Route::get('/director_approve_page', 'DirectorApprovalPage');
