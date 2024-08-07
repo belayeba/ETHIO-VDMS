@@ -119,7 +119,7 @@ class CreateAllTablesWithUuid extends Migration
             $table->uuid('service_given_by')->nullable();
             $table->foreign('service_given_by')->references('id')->on('users');
             $table->integer('mileage')->nullable();
-            $table->decimal('fuel_amount', 10, 2)->nullable();
+            $table->decimal('fuel_amount', 10, 2);
             $table->decimal('fuel_cost', 10, 2)->nullable();
             $table->uuid('location_id')->nullable();
             $table->foreign('location_id')->references('location_id')->on('locations');
