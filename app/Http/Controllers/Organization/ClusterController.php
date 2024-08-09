@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Organization;
 
 use App\Http\Controllers\Controller;
 use App\Models\Organization\ClustersModel;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
@@ -30,17 +31,13 @@ class ClusterController extends Controller
         // dd($request);
         $request->validate([
             'name' => 'required|string|max:255',
+            'created_by' => 'required', // Ensure a valid user ID is used
         ]);
         $user = auth()->user()->id; // Get the authenticated user's ID
         $request->merge(['created_by' => $user]); // Add the user's ID to the request data
-        // ClustersModel::create($request->all());
-        // dd($user);
-        DB::table('clusters')->insert([
-            'cluster_id' => Str::uuid(),
-            'name' => $request->name,
-            'created_by' => $user,
-            ]);
-        return redirect()->route('cluster.show')->with('success', 'Cluster created successfully.');
+        ClustersModel::create($request->all());
+        return redirect()->route('clusters.index')->with('success', 'Cluster created successfully.');
+    
     }
 
     // Display the specified resource.
@@ -63,7 +60,9 @@ class ClusterController extends Controller
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
         ]);
-
+        
+        $user = auth()->user()->id; // Get the authenticated user's ID
+        $request->merge(['created_by' => $user]); // Add the user's ID to the request data
         $cluster->update($request->all());
 
         return redirect()->route('cluster.index')->with('success', 'Cluster updated successfully.');
