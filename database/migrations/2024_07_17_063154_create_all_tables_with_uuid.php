@@ -96,22 +96,6 @@ class CreateAllTablesWithUuid extends Migration
             $table->softDeletes();
         });
 
-         // Vehicle Detail
-         Schema::create('vehicles_detail', function (Blueprint $table) {
-            $table->uuid('detail_id')->primary();
-            $table->string('detail', 2000)->default('Unread');
-            $table->uuid('register_by');
-            $table->foreign('register_by')->references('id')->on('users');
-            $table->date('date');
-            $table->uuid('vehicle_id');
-            $table->foreign('vehicle_id')->references('vehicle_id')->on('vehicles');
-            $table->integer('mileage');
-            $table->uuid('driver_id');
-            $table->foreign('driver_id')->references('driver_id')->on('drivers');
-            $table->timestamps();
-            $table->softDeletes();
-        });
-
 // Maintenance Table
         Schema::create('maintenances', function (Blueprint $table) {
             $table->uuid('maintenance_id')->primary();
@@ -209,10 +193,10 @@ class CreateAllTablesWithUuid extends Migration
             $table->foreign('vehicle_id')->references('vehicle_id')->on('vehicles');
             $table->uuid('approved_by')->nullable();
             $table->foreign('approved_by')->references('id')->on('users');
-            $table->string('director_reject_reason', 1000);
+            $table->string('director_reject_reason', 1000)->nullable();
             $table->uuid('assigned_by')->nullable();
             $table->foreign('assigned_by')->references('id')->on('users');
-            $table->string('vec_director_reject_reason', 1000);
+            $table->string('vec_director_reject_reason', 1000)->nullable();
             $table->string('start_location', 255);
             $table->string('end_locations', 255);
             $table->decimal('allowed_distance_after_destination', 10, 2)->nullable();
