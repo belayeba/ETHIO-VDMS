@@ -14,8 +14,8 @@ class ClusterController extends Controller
     public function index()
     {
         $clusters = ClustersModel::all();
-        // dd($clusters);
-        return view('Cluster.show', compact('clusters'));
+        
+        return view('Cluster.index', compact('clusters'));
     }
 
     // Show the form for creating a new resource.
@@ -31,10 +31,10 @@ class ClusterController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
         ]);
-        // $user = auth()->user()->id; // Get the authenticated user's ID
-        $user = "123e4567-e89b-12d3-a456-426614174000";
+        $user = auth()->user()->id; // Get the authenticated user's ID
         $request->merge(['created_by' => $user]); // Add the user's ID to the request data
         // ClustersModel::create($request->all());
+        // dd($user);
         DB::table('clusters')->insert([
             'cluster_id' => Str::uuid(),
             'name' => $request->name,
@@ -46,7 +46,8 @@ class ClusterController extends Controller
     // Display the specified resource.
     public function show(ClustersModel $cluster)
     {
-        return view('cluster.show', compact('cluster'));
+        $clusters=ClustersModel::get();
+        return view('cluster.show', compact('clusters'));
     }
 
     // Show the form for editing the specified resource.
@@ -75,19 +76,5 @@ class ClusterController extends Controller
 
         return redirect()->route('cluster.index')->with('success', 'Cluster deleted successfully.');
     }
-    public function view(){
-        return view('Cluster.show');
-    }
-    public function display(){
-        return view('Department.index');
-    }
-    public function request(){
-        return view('Maintenance.index');
-    }
-    public function fuel(){
-        return view('Fuelling.index');
-    }
-    public function vehicle(){
-        return view('Vehicle.index');
-    }
+   
 }
