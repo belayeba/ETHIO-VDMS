@@ -26,6 +26,7 @@ class HomeController extends Controller
     
     {
         $user=auth()->user();
+        dd($user);
         return view('layouts.navigation',compact('user'));
     }
 }

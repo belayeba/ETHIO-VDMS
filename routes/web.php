@@ -3,9 +3,14 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\tempController;
 use App\Http\Controllers\RoleController;
+use App\Http\Controllers\LoginController;
 use App\Http\Controllers\usercontroller;
+use App\Http\Controllers\Organization\ClusterController;
+use App\Http\Controllers\Organization\DepartmentController;
+
+use App\Http\Controllers\Vehicle\VehicleController;
 use App\Http\Controllers\Vehicle\VehicleParmanentlyRequestController;
-use App\Http\Controllers\vehicle\VehicleTemporaryRequestController;
+use App\Http\Controllers\Vehicle\VehicleTemporaryRequestController;
 use Illuminate\Support\Facades\Auth;
 
 Route::get('/', function () 
@@ -16,7 +21,7 @@ Route::get('/', function ()
 
 
 
-// Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 
 Auth::routes();
@@ -25,7 +30,7 @@ Route::group(['middleware' => ['auth']], function()
 {
 
         Route::resource('roles', RoleController::class);
-        Route::get('/logout', 'LoginController@logout')->name('logout.logout');
+        Route::get('/logout', [LoginController::class,'logout'])->name('logout.logout');
 
     // Vehicle Temprory Request
 Route::controller(VehicleTemporaryRequestController::class)->group(function()
@@ -169,10 +174,30 @@ Route::controller(tempController::class)->group(function()
 
 
 
-    Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+    // Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
     
     });
-    Route::resource('clusters', ClusterController::class);
 
-//departmests route
+// Clusters route
+Route::resource('clusters', ClusterController::class);
+
+// Departmests route
 Route::resource('departments', DepartmentController::class);
+
+// Vehicle route
+// Route::get('/vehicle/list',[VehicleController::class,'index'])->name('vehicle.index');
+Route::get('vehicles', [VehicleController::class, 'index'])->name('vehicles.index');
+Route::get('vehicles/create', [VehicleController::class, 'create'])->name('vehicles.create');
+Route::post('vehicles/store', [VehicleController::class, 'store'])->name('vehicles.store');
+Route::get('vehicles/{vehicle}/show', [VehicleController::class, 'show'])->name('vehicles.show');
+Route::get('vehicles/{vehicle}/edit', [VehicleController::class, 'edit'])->name('vehicles.edit');
+Route::put('vehicles/{vehicle}', [VehicleController::class, 'update'])->name('vehicles.update');
+Route::delete('vehicles/{vehicle}', [VehicleController::class, 'destroy'])->name('vehicles.destroy');
+
+// Vehicle details routes
+Route::get('vehicles/{vehicle}/details', [VehicleController::class, 'showDetails'])->name('vehicles.details.index');
+Route::get('vehicles/{vehicle}/details/create', [VehicleController::class, 'createDetail'])->name('vehicles.details.create');
+Route::post('vehicles/{vehicle}/details', [VehicleController::class, 'storeDetail'])->name('vehicles.details.store');
+Route::get('vehicles/{vehicle}/details/{detail}/edit', [VehicleController::class, 'editDetail'])->name('vehicles.details.edit');
+Route::put('vehicles/{vehicle}/details/{detail}', [VehicleController::class, 'updateDetail'])->name('vehicles.details.update');
+Route::delete('vehicles/{vehicle}/details/{detail}', [VehicleController::class, 'destroyDetail'])->name('vehicles.details.destroy');

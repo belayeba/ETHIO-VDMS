@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\vehicle;
+namespace App\Http\Controllers\Vehicle;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
