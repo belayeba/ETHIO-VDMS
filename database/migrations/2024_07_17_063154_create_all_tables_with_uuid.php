@@ -22,7 +22,6 @@ class CreateAllTablesWithUuid extends Migration
             $table->uuid('department_id')->primary();
             $table->string('name', 255);
             $table->uuid('cluster_id');
-            $table->foreign('cluster_id')->references('cluster_id')->on('clusters');
             $table->uuid('created_by');
             $table->foreign('created_by')->references('id')->on('users');
             $table->timestamps();
@@ -306,7 +305,7 @@ class CreateAllTablesWithUuid extends Migration
             $table->foreign('request_id')->references('request_id')->on('vehicle_requests_temporary');
             $table->uuid('employee_id');
 
-$table->foreign('employee_id')->references('id')->on('users');
+            $table->foreign('employee_id')->references('id')->on('users');
             $table->timestamps();
             $table->softDeletes();
         });
