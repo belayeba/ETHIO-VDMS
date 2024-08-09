@@ -5,7 +5,7 @@ namespace App\Models\Organization;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-
+use Illuminate\Support\Str;
 // use Illuminate\Database\Eloquent\SoftDeletes;
 
 class DepartmentsModel extends Model
@@ -35,13 +35,7 @@ class DepartmentsModel extends Model
             });
         }
     public function cluster(): BelongsTo
-<<<<<<< HEAD
     {
         return $this->belongsTo(ClustersModel::class, 'cluster_id');
     }
-=======
-        {
-            return $this->belongsTo(ClustersModel::class, 'cluster_id');
-        }
->>>>>>> cee9449d6d7bb55a104b42c6befe73c82ccbc7ab
 }

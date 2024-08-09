@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers\Organization;
 
+use App\Http\Controllers\Controller;
 use App\Models\Organization\DepartmentsModel;
 use Illuminate\Http\Request;
+use App\Models\Organization\ClustersModel;
 
 class DepartmentController extends Controller
 {
