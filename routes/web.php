@@ -1,11 +1,13 @@
 <?php
 
+use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\tempController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\usercontroller;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\Organization\ClusterController;
+use App\Http\Controllers\Organization\DepartmentController;
 // use App\Http\Controllers\Organization\ClustersController;
 use App\Http\Controllers\vehicle\VehicleTemporaryRequestController as VehicleVehicleTemporaryRequestController;
 use App\Http\Controllers\VehicleTemporaryRequestController;
@@ -20,14 +22,12 @@ Auth::routes();
 
 Route::group(['middleware' => ['auth']], function() {
 
-Route::get('/homess', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-
 });
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 Route::resource('roles', RoleController::class);
-Route::get('/logout', 'LoginController@logout')->name('logout.logout');
+Route::get('/logout', [LoginController::class,'logout'])->name('logout.logout');
 
 // Vehicle Temprory Request
 Route::controller(VehicleVehicleTemporaryRequestController::class)->group(function()
@@ -146,12 +146,23 @@ Route::controller(tempController::class)->group(function()
 });
 
 // cluster route
-Route::resource('cluster',ClusterController::class);
+// Route::resource('cluster',ClusterController::class);
 
-Route::get('/cluster',[ClusterController::class,'index'])->name('cluster.index');
+Route::group([
+    'prefix'=>'cluster',
+], function (){
+Route::get('/',[ClusterController::class,'index'])->name('cluster.index');
 Route::get('/create',[ClusterController::class,'create'])->name('cluster.create');
-Route::post('/', [ClusterController::class,'store'])->name('cluster.store');
+Route::post('/store', [ClusterController::class,'store'])->name('cluster.store');
+Route::post('/update', [ClusterController::class,'update'])->name('cluster.update');
 Route::get('/view',[ClusterController::class,'show'])->name('cluster.show');
-Route::get('/display',[ClusterController::class,'display'])->name('department.display');
-Route::get('/maintenance',[ClusterController::class,'request'])->name('maintenance.request');
-Route::get('/fuel',[ClusterController::class,'fuel'])->name('fuel.request');
+Route::delete('/delete/{cluster}',[ClusterController::class,'destroy'])->name('cluster.destroy');
+});
+
+Route::group([
+    'prefix'=>'department',
+], function (){
+    Route::get('/',[DepartmentController::class,'index'])->name('department.index');
+    Route::get('/create',[DepartmentController::class,'create'])->name('department.create');
+    Route::post('/store',[DepartmentController::class,'store'])->name('department.store');
+});

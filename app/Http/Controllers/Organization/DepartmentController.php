@@ -16,9 +16,10 @@ class DepartmentController extends Controller
     {
         //
         $departments = DepartmentsModel::all(); // Get all departments
-        $clusers = ClustersModel::all(); // Get all clusters
+        $clusters = ClustersModel::all(); // Get all clusters
+        // dd($clusters);
         // Pass the departments and clusters to the view
-        return view('departments.index', compact('departments', 'clusters'));
+        return view('department.index', compact('departments', 'clusters'));
     }
 
     /**
@@ -26,8 +27,7 @@ class DepartmentController extends Controller
      */
     public function create()
     {
-        //
-        return view('departments.create'); // Return the create view
+        return view('department.create'); // Return the create view
     }
 
     /**
@@ -35,17 +35,19 @@ class DepartmentController extends Controller
      */
     public function store(Request $request)
     {
+        
         // Validate the request data
         $request->validate([
             'name' => 'required|string|max:255',
             'cluster_id' => 'required', // Ensure a valid cluster ID is used
         ]);
+        dd($request);
         $user = auth()->user()->id; // Get the authenticated user's ID
         $request->merge(['created_by' => $user]); // Add the user's ID to the request data
         // Create the department
         DepartmentsModel::create($request->all());
         // Redirect to the index page with a success message
-        return redirect()->route('departments.index')->with('success', 'Department created successfully.');
+        return redirect()->route('department.index')->with('success', 'Department created successfully.');
     }
 
     /**
@@ -55,7 +57,7 @@ class DepartmentController extends Controller
     {
         // Return the show view with the department data
 
-        return view('departments.show', compact('department'));
+        return view('department.show', compact('department'));
     }
 
     /**
@@ -64,7 +66,7 @@ class DepartmentController extends Controller
     public function edit(DepartmentsModel $department)
     {
         // Return the edit view with the department data
-        return view('departments.edit', compact('department'));
+        return view('department.edit', compact('department'));
     }
 
     /**
@@ -82,7 +84,7 @@ class DepartmentController extends Controller
         // Update the department
         $department->update($request->all());
         // Redirect to the index page with a success message
-        return redirect()->route('departments.index')->with('success', 'Department updated successfully.');
+        return redirect()->route('department.index')->with('success', 'Department updated successfully.');
     }
 
     /**
@@ -93,7 +95,7 @@ class DepartmentController extends Controller
         // Delete the department
         $department->delete();
         // Redirect to the index page with a success message
-        return redirect()->route('departments.index')->with('success', 'Department deleted successfully.');
+        return redirect()->route('department.index')->with('success', 'Department deleted successfully.');
     }
 
 }

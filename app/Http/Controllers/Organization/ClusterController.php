@@ -15,7 +15,7 @@ class ClusterController extends Controller
     public function index()
     {
         $clusters = ClustersModel::all();
-        
+        // dd($clusters);
         return view('Cluster.index', compact('clusters'));
     }
 
@@ -31,12 +31,13 @@ class ClusterController extends Controller
         // dd($request);
         $request->validate([
             'name' => 'required|string|max:255',
-            'created_by' => 'required', // Ensure a valid user ID is used
+            // 'created_by' => 'required', // Ensure a valid user ID is used
         ]);
         $user = auth()->user()->id; // Get the authenticated user's ID
+        // dd($user);
         $request->merge(['created_by' => $user]); // Add the user's ID to the request data
         ClustersModel::create($request->all());
-        return redirect()->route('clusters.index')->with('success', 'Cluster created successfully.');
+        return redirect()->route('cluster.index')->with('success', 'Cluster created successfully.');
     
     }
 
@@ -58,19 +59,19 @@ class ClusterController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:255',
-            'description' => 'nullable|string',
         ]);
         
         $user = auth()->user()->id; // Get the authenticated user's ID
         $request->merge(['created_by' => $user]); // Add the user's ID to the request data
         $cluster->update($request->all());
-
+        
         return redirect()->route('cluster.index')->with('success', 'Cluster updated successfully.');
     }
 
     // Remove the specified resource from storage.
     public function destroy(ClustersModel $cluster)
     {
+       
         $cluster->delete();
 
         return redirect()->route('cluster.index')->with('success', 'Cluster deleted successfully.');

@@ -40,9 +40,7 @@
                             <div class="d-flex flex-wrap justify-content-between">
                                 <h2 class="text-uppercase">Cluster</h2>
                                 <div class="bc-pages">
-                                    {{-- <a href="../dashboard.html">Dashboard</a>
-                                    <a href="#">Organization</a>
-                                    <a href="ebook.html">Cluster</a> --}}
+                                    
                                 </div>
                             </div>
                         </div>
@@ -51,14 +49,14 @@
                     <section class="admin-visitor-area up_st_admin_visitor">
                         <div class="container-fluid p-0">
                             <div class="row justify-content-center">
-                                <!-- Add New Ebook Form -->
+                                <!-- Add New Cluster Form -->
                                 <div class="col-md-4">
                                     <div class="card">
                                         <div class="card-header">
                                             <h3 class="mb-0">New Cluster</h3>
                                         </div>
                                         <div class="card-body">
-                                            <form method="POST" action="{{ route('cluster.store') }}" accept-charset="UTF-8" name="ebook-form" id="ebook-form" enctype="multipart/form-data">
+                                            <form method="POST" action="{{ route('cluster.store') }}" accept-charset="UTF-8" name="cluster-form" id="cluster-form" enctype="multipart/form-data">
                                                 @csrf
                                                 <div class="mb-3">
                                                     <label for="nameInput" class="form-label">Name <strong class="text-danger">*</strong></label>
@@ -72,7 +70,7 @@
                                     </div>
                                 </div>
                                 
-                                <!-- Ebook List -->
+                                <!-- Cluster List -->
                                 <div class="col-md-8">
                                     <div class="card">
                                         <div class="card-header">
@@ -85,7 +83,6 @@
                                                         <tr>
                                                             <th> {{' # '}} </th>
                                                             <th>{{ 'Name' }}</th>
-                                                            {{-- <th scope="col">Status</th> --}}
                                                             <th>{{ 'Action' }}</th>
                                                         </tr>
                                                     </thead>
@@ -96,10 +93,11 @@
                                                         <td>{{$loop->iteration}}</td>
                                                         <td>{{ $item->name }}</td>
                                                         <td>
-                                                            <form method="POST" action=""accept-charset="UTF-8">
+                                                            <form method="POST" action="{{ route('cluster.destroy',$item) }}"accept-charset="UTF-8">
+                                                                @method('DELETE')
                                                                 <input name="_method" value="DELETE" type="hidden">
                                                                 {{ csrf_field() }}
-                                                                  <a href=""
+                                                                  <a href="{{ route('cluster.update') }}" data-bs-toggle="modal" data-bs-target="#cluster_modal"
                                                                     class="btn btn-outline-warning btn-sm" title="Edit Cluster">
                                                                     Edit
                                                                   </a>
@@ -138,6 +136,26 @@
                                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
                                         <a id="delete_link" class="btn btn-danger">Delete</a>
                                     </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="cluster_modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-body">
+                                    <form action="{{ route('cluster.update') }}" method="POST" class="ps-3 pe-3">
+                                        @csrf <!-- Add CSRF token field -->
+                                        <div class="mb-3">
+                                            <label for="name" class="form-label">Name</label>
+                                            <input class="form-control" type="text" name="name" id="name" value="{{ $item->name }}">
+                                        </div>
+                    
+                                        <div class="mb-3 text-center">
+                                            <button class="btn btn-primary" type="submit">Update</button>
+                                            <a type="button" href="{{ route('cluster.index') }}" class="btn btn-warning">Cancel</a>
+                                        </div>
+                                    </form>
                                 </div>
                             </div>
                         </div>
