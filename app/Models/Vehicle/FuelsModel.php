@@ -6,6 +6,7 @@ use App\Models\Driver\DriversModel;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Str;
 
 class FuelsModel extends Model
 {
@@ -20,13 +21,29 @@ class FuelsModel extends Model
         'vehicle_id',
         'driver_id',
         'approved_by',
+        'vec_director_id',
+        'vec_direct_reject_reason',
+        'direct_reject_reason',
         'service_given_by',
+        'fuelor_reject',
         'location_id',
-        'amount',
+        'fuel_amount',
+        'fuel_cost',
+        'fuiling_date',
+        'notes',
         'created_at',
         'updated_at'
     ];
+    protected static function boot()
+        {
+            parent::boot();
 
+            static::creating(function ($model) {
+                if (empty($model->{$model->getKeyName()})) {
+                    $model->{$model->getKeyName()} = (string) Str::uuid();
+                }
+            });
+        }
     public function vehicle(): BelongsTo
     {
         return $this->belongsTo(VehiclesModel::class, 'vehicle_id');

@@ -4,7 +4,9 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\tempController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\usercontroller;
+use App\Http\Controllers\Vehicle\VehicleParmanentlyRequestController;
 use App\Http\Controllers\vehicle\VehicleTemporaryRequestController;
+use Illuminate\Support\Facades\Auth;
 
 Route::get('/', function () 
 {
@@ -19,10 +21,11 @@ Route::get('/', function ()
 
 Auth::routes();
 
-Route::group(['middleware' => ['auth']], function() {
+Route::group(['middleware' => ['auth']], function()
+{
 
-Route::resource('roles', RoleController::class);
-Route::get('/logout', 'LoginController@logout')->name('logout.logout');
+        Route::resource('roles', RoleController::class);
+        Route::get('/logout', 'LoginController@logout')->name('logout.logout');
 
     // Vehicle Temprory Request
 Route::controller(VehicleTemporaryRequestController::class)->group(function()

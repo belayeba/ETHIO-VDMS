@@ -8,15 +8,16 @@ use App\Models\Notification\NotificationModel;
 use App\Models\Vehicle\VehicleTemporaryRequestModel;
 use App\Models\Vehicle\MaintenancesModel;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Str;
+use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class User extends Authenticatable
 {
-    use Notifiable, SoftDeletes, HasFactory;
+    use Notifiable, SoftDeletes,HasRoles, HasFactory;
 
     protected $table = 'users'; // Specify the table name
     protected $primaryKey = 'id';
@@ -24,9 +25,16 @@ class User extends Authenticatable
     protected $keyType = 'uuid';
 
     protected $fillable = [
-        'name',
+        'first_name',
+        'last_name',
+        'middle_name',
+        'photo',
         'email',
         'password',
+        'username',
+        'phone_number',
+        'email_verified_at',
+        'department_id',
         'created_at',
         'updated_at'
     ];
@@ -35,6 +43,17 @@ class User extends Authenticatable
         'password',
         'remember_token',
     ];
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($model) {
+            if (empty($model->{$model->getKeyName()})) {
+                $model->{$model->getKeyName()} = (string) Str::uuid();
+            }
+        });
+    }
 
     public function drivers(): HasMany
     {
@@ -75,5 +94,4 @@ class User extends Authenticatable
     {
         return $this->hasMany(MaintenancesModel::class, 'maintained_by');
     }
-
 }
