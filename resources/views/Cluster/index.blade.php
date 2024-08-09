@@ -28,15 +28,9 @@
                     <span></span>
                 </div>
             </div>
-            <input type="hidden" name="demoMode" id="demoMode" value="1">
-            <input type="hidden" name="url" id="url" value="https://E-LearningPortal.com">
-            <input type="hidden" name="active_date_format" id="active_date_format" value="jS M, Y">
-            <input type="hidden" name="js_active_date_format" id="js_active_date_format" value="mm/dd/yyyy">
             <input type="hidden" name="table_name" id="table_name" value="">
             <input type="hidden" name="csrf_token" class="csrf_token" value="{{ csrf_token() }}">
-            <input type="hidden" name="currency_symbol" class="currency_symbol" value="$">
-            <input type="hidden" name="currency_show" class="currency_show" value="1">
-            <input type="hidden" name="chat_settings" id="chat_settings" value="">
+           
 
             <div class="main-wrapper" style="min-height: 600px">
                 <!-- Page Content  -->
@@ -46,9 +40,9 @@
                             <div class="d-flex flex-wrap justify-content-between">
                                 <h2 class="text-uppercase">Cluster</h2>
                                 <div class="bc-pages">
-                                    <a href="../dashboard.html">Dashboard</a>
+                                    {{-- <a href="../dashboard.html">Dashboard</a>
                                     <a href="#">Organization</a>
-                                    <a href="ebook.html">Cluster</a>
+                                    <a href="ebook.html">Cluster</a> --}}
                                 </div>
                             </div>
                         </div>
