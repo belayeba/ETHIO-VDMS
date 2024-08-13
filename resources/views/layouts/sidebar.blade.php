@@ -432,6 +432,23 @@
                 </ul>
             </div>
         </li>
+        <li class="side-nav-item">
+            <a data-bs-toggle="collapse" href="#sidebarMultiLevel" aria-expanded="false" aria-controls="sidebarMultiLevel" class="side-nav-link">
+                <i class="ri-share-line"></i>
+                <span> Organization </span>
+                <span class="menu-arrow"></span>
+            </a>
+            <div class="collapse" id="sidebarMultiLevel">
+                <ul class="side-nav-second-level">
+                    <li>
+                        <a href="/cluster">Cluster</a>
+                    </li>
+                    <li>
+                        <a href="/department">Department</a>
+                    </li>
+                </ul>
+            </div>
+        </li>
 
 
     </ul>

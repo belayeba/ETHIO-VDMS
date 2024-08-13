@@ -1,45 +1,43 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Organization;
 
+use App\Models\Organization\DepartmentsModel;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\SoftDeletes;
+// use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Str;
 
 class ClustersModel extends Model
 {
-    use SoftDeletes;
+    use HasFactory;
 
     protected $table = 'clusters'; // Specify the table name
     protected $primaryKey = 'cluster_id';
     public $incrementing = false;
     protected $keyType = 'uuid';
 
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($model) {
+            if (empty($model->cluster_id)) {
+                $model->cluster_id = (string) Str::uuid();
+            }
+        });
+    }
+    
     protected $fillable = [
+        'cluster_id',
         'name',
-        'created_by',
-        'description',
         'created_at',
         'updated_at'
     ];
-    protected static function boot()
-        {
-            parent::boot();
 
-            static::creating(function ($model) {
-                if (empty($model->{$model->getKeyName()})) {
-                    $model->{$model->getKeyName()} = (string) Str::uuid();
-                }
-            });
-        }
     public function departments(): HasMany
-        {
-            return $this->hasMany(DepartmentsModel::class, 'cluster_id');
-        }
-    public function Registered_by(): BelongsTo
-        {
-            return $this->belongsTo(User::class,'created_by','user_id');
-        }
+    {
+        return $this->hasMany(DepartmentsModel::class, 'cluster_id');
+    }
 }

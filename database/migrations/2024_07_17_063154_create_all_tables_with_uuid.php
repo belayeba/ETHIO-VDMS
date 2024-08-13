@@ -22,7 +22,6 @@ class CreateAllTablesWithUuid extends Migration
             $table->uuid('department_id')->primary();
             $table->string('name', 255);
             $table->uuid('cluster_id');
-            $table->foreign('cluster_id')->references('cluster_id')->on('clusters');
             $table->uuid('created_by');
             $table->foreign('created_by')->references('id')->on('users');
             $table->timestamps();
@@ -69,21 +68,8 @@ class CreateAllTablesWithUuid extends Migration
             $table->softDeletes();
         });
 
-
-        // Locations Table
-        Schema::create('locations', function (Blueprint $table) {
-            $table->uuid('location_id')->primary();
-            $table->string('name', 255);
-            $table->string('address', 255);
-            $table->decimal('latitude', 10, 8);
-            $table->decimal('longitude', 11, 8);
-            $table->text('notes')->nullable();
-            $table->timestamps();
-            $table->softDeletes();
-        });
-
-         // Vehicle Detail
-         Schema::create('vehicles_detail', function (Blueprint $table) {
+          // Vehicle Detail
+          Schema::create('vehicles_detail', function (Blueprint $table) {
             $table->uuid('detail_id')->primary();
             $table->string('detail', 2000)->default('Unread');
             $table->uuid('register_by');
@@ -94,6 +80,17 @@ class CreateAllTablesWithUuid extends Migration
             $table->integer('mileage');
             $table->uuid('driver_id');
             $table->foreign('driver_id')->references('driver_id')->on('drivers');
+            $table->timestamps();
+            $table->softDeletes();
+        });
+        // Locations Table
+        Schema::create('locations', function (Blueprint $table) {
+            $table->uuid('location_id')->primary();
+            $table->string('name', 255);
+            $table->string('address', 255);
+            $table->decimal('latitude', 10, 8);
+            $table->decimal('longitude', 11, 8);
+            $table->text('notes')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
@@ -195,10 +192,10 @@ class CreateAllTablesWithUuid extends Migration
             $table->foreign('vehicle_id')->references('vehicle_id')->on('vehicles');
             $table->uuid('approved_by')->nullable();
             $table->foreign('approved_by')->references('id')->on('users');
-            $table->string('director_reject_reason', 1000);
+            $table->string('director_reject_reason', 1000)->nullable();
             $table->uuid('assigned_by')->nullable();
             $table->foreign('assigned_by')->references('id')->on('users');
-            $table->string('vec_director_reject_reason', 1000);
+            $table->string('vec_director_reject_reason', 1000)->nullable();
             $table->string('start_location', 255);
             $table->string('end_locations', 255);
             $table->decimal('allowed_distance_after_destination', 10, 2)->nullable();
@@ -308,7 +305,7 @@ class CreateAllTablesWithUuid extends Migration
             $table->foreign('request_id')->references('request_id')->on('vehicle_requests_temporary');
             $table->uuid('employee_id');
 
-$table->foreign('employee_id')->references('id')->on('users');
+            $table->foreign('employee_id')->references('id')->on('users');
             $table->timestamps();
             $table->softDeletes();
         });
