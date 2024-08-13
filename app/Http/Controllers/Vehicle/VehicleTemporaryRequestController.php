@@ -19,8 +19,8 @@ class VehicleTemporaryRequestController extends Controller
         {
             $id = Auth::id();
             $users = user::get();
-            // $Requested = VehicleTemporaryRequestModel::where('requested_by_id',$id)->get();
-            return view("Request.TemporaryRequestPage",compact('users'));
+            $Requested = VehicleTemporaryRequestModel::where('requested_by_id',$id)->get();
+            return view("Request.TemporaryRequestPage",compact('users','Requested'));
         }
     // Send Vehicle Request Temporary
     public function RequestVehicleTemp(Request $request) 
@@ -239,13 +239,14 @@ class VehicleTemporaryRequestController extends Controller
     // Directors Page
     public function DirectorApprovalPage()
         {
-                $id = Auth::id();
-                $directors_data = User::where('id',$id)->get('department_id');
-                $dept_id = $directors_data->department_id;
-                $vehicle_requests = VehicleTemporaryRequestModel::whereHas('requestedBy', function ($query) use ($dept_id) {
-                    $query->where('department_id', $dept_id);
-                })->get();
-                return view("DirectorPage", compact('vehicle_requests'));
+                // $id = Auth::id();
+                // $directors_data = User::where('id',$id)->get('department_id');
+                // $dept_id = $directors_data->department_id;
+                // $vehicle_requests = VehicleTemporaryRequestModel::whereHas('requestedBy', function ($query) use ($dept_id) {
+                //     $query->where('department_id', $dept_id);
+                // })->get();
+                $vehicle_requests=VehicleTemporaryRequestModel::get();
+                return view("Request.DirectorPage", compact('vehicle_requests'));
         }
     // DIRECTOR APPROVE THE REQUESTS
     public function DirectorApproveRequest(Request $request)
