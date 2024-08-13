@@ -236,26 +236,18 @@
                             </tr>
                         </thead>
 
-
+                    @foreach($Requested as $request)
                         <tbody>
                             <tr>
-                                <td>Tiger Nixon</td>
-                                <td>System Architect</td>
-                                <td>Edinburgh</td>
-                                <td>61</td>
-                                <td>2011/04/25</td>
+                                <td>{{$loop->iteration}}</td>
+                                <td>{{$request->created_at}}</td>
+                                <td>{{$request->purpose}}</td>
+                                <td>{{$request->end_locations}}</td>
+                                <td>{{$request->status}}</td>
                                 <td><button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#standard-modal">View</button></td>
                             </tr>
-                            <tr>
-                                <td>Garrett Winters</td>
-                                <td>Accountant</td>
-                                <td>Tokyo</td>
-                                <td>63</td>
-                                <td>2011/07/25</td>
-                                <td><button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#standard-modal">View</button></td>
-                            </tr>
-                            
                         </tbody>
+                        @endforeach
                     </table>
 
                 </div> <!-- end card body-->
