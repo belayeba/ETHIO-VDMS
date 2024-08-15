@@ -17,7 +17,7 @@ class FeulController extends Controller
         {
             $id = Auth::id();
             $requested = FuelsModel::where('driver_id', $id)->latest()->get();
-            return view("Request.FuelRequstPage",compact('Requested'));
+            return view("Fuelling.index",compact('Requested'));
         }
         // Fuel Request (Post Data)
     public function RequestFuel(Request $request) 

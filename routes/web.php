@@ -55,7 +55,7 @@ Route::group(['middleware' => ['auth']], function()
                 });
             Route::controller(MentenanceController::class)->group(function()
                 {
-                        Route::get('mentaincance_request_page', 'displayMaintenanceRequestPage');
+                        Route::get('/mentaincance_request_page', 'displayMaintenanceRequestPage');
                         //Route::post('/user_post_request', 'RequestVehicleTemp')->name('temp_request_post');
                         // Route::post('/user_delete_request', 'deleteRequest')->name('temp_delete_request');
                         // Route::post('/user_update_info', 'update_temp_request')->name('temp_update_request');
@@ -70,7 +70,7 @@ Route::group(['middleware' => ['auth']], function()
                 });
             Route::controller(FeulController::class)->group(function()
                 {
-                        Route::get('fuel_request_page', 'displayFuelRequestPage');
+                        Route::get('/fuel_request_page', 'displayFuelRequestPage');
                         //Route::post('/user_post_request', 'RequestVehicleTemp')->name('temp_request_post');
                         // Route::post('/user_delete_request', 'deleteRequest')->name('temp_delete_request');
                         // Route::post('/user_update_info', 'update_temp_request')->name('temp_update_request');

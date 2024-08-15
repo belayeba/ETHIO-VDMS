@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Vehicle;
 
 use App\Http\Controllers\Controller;
 use App\Models\DailyKMCalculationModel;
+use App\Models\VehiclesModel;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Exception;
@@ -102,5 +103,11 @@ class Daily_KM_Calculation extends Controller
                             'message' => 'Sorry, Something went wrong',
                         ]);
                     }
+          }
+        public function get_vehicle_daily_km(Request $request)
+          {
+            $validator = Validator::make($request->all(), [
+                'vehicle_id'=>'required|uuid|vehicles_id',
+            ]);
           }
     }
