@@ -57,6 +57,7 @@ class ClusterController extends Controller
     // Update the specified resource in storage.
     public function update(Request $request, ClustersModel $cluster)
     {
+        // dd($cluster);
         $request->validate([
             'name' => 'required|string|max:255',
         ]);

@@ -50,23 +50,19 @@
                                             <h3 class="mb-0">New Department</h3>
                                         </div>
                                         <div class="card-body">
-                                            <form method="POST" action="{{ route('department.store') }}" accept-charset="UTF-8" name="ebook-form" id="ebook-form" enctype="multipart/form-data">
+                                            <form method="POST" action="{{ route('department.store') }}" accept-charset="UTF-8" name="department-form" id="department-form" enctype="multipart/form-data">
                                                 @csrf
                                                 {{-- <div class="card-body"> --}}
                                                     {{-- <div class="row"> --}}
-                                                        <div class="col-md-8 form-group {{ $errors->has('cluster') ? 'has-error' : '' }}">
+                                                        <div class="col-mb-3 form-group {{ $errors->has('cluster') ? 'has-error' : '' }}">
                                                             <label for="cluster" class=" control-label">Cluster</label>
                                                                 
-                                                                    <select data-placeholder = "{{ 'Select Cluster' }}" value="cluster"  class="form-control select" id="cluster" name="cluster" data-fouc required="true">
-                                                                        <option style="display: none;"> </option>
-                                                                        
-                                                                        @foreach ($clusters as $item)
-                                                                        <option value="{{ $item->id }}">
-                                                                            {{ $item->name }}
-                                                                        </option>
-                                                                    @endforeach
-                                                                </select>
-                                                        
+                                                            <select data-placeholder="Select Cluster" class="form-control select" id="cluster" name="cluster" data-fouc required="true">
+                                                                <option style="display: none;" value="">Select Cluster</option>
+                                                                @foreach ($clusters as $item)
+                                                                    <option value="{{ $item->id }}">{{ $item->name }}</option>
+                                                                @endforeach
+                                                            </select>
                                                                 
                                                                 {!! $errors->first('cluster', '<p class="help-block">:message</p>') !!}
                                                             
@@ -108,10 +104,11 @@
                                                         <td>{{ $item->name }}</td>
                                                         <td>{{ $item->cluster->name }}</td>
                                                         <td>
-                                                            <form method="POST" action=""accept-charset="UTF-8">
+                                                            <form method="POST" action="{{ route('department.destroy', $item) }}"accept-charset="UTF-8">
+                                                                @method('DELETE')
                                                                 <input name="_method" value="DELETE" type="hidden">
                                                                 {{ csrf_field() }}
-                                                                  <a href=""
+                                                                  <a href="{{ route('department.update',$item->name) }}"
                                                                     class="btn btn-outline-warning btn-sm" title="Edit Department">
                                                                     Edit
                                                                   </a>
@@ -128,7 +125,7 @@
                                                 </table>
                                             </div>
                                         </div>
-                                    </div>
+                                    </div>      
                                 </div>
                             </div>
                         </div>
