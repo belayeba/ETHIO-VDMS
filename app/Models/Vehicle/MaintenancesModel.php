@@ -24,7 +24,7 @@ class MaintenancesModel extends Model
         'approved_by',
         'director_reject_reason',
         'sim_approved_by',
-        'sim_reject_reason',
+        'simirit_reject_reason',
         'maintained_by',
         'maintenance_type',
         'description',
