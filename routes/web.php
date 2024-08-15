@@ -9,6 +9,8 @@ use App\Http\Controllers\tempController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\usercontroller;
 use App\Http\Controllers\LoginController;
+use App\Http\Controllers\Organization\ClusterController;
+use App\Http\Controllers\Organization\DepartmentController;
 // use App\Http\Controllers\Organization\ClustersController;
 use App\Http\Controllers\vehicle\VehicleTemporaryRequestController;
 // use App\Http\Controllers\VehicleTemporaryRequestController;
