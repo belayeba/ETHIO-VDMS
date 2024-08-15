@@ -35,13 +35,13 @@ class DepartmentController extends Controller
      */
     public function store(Request $request)
     {
-        
+        // dd($request);
         // Validate the request data
         $request->validate([
             'name' => 'required|string|max:255',
             'cluster_id' => 'required', // Ensure a valid cluster ID is used
         ]);
-        dd($request);
+        // dd($request);
         $user = auth()->user()->id; // Get the authenticated user's ID
         $request->merge(['created_by' => $user]); // Add the user's ID to the request data
         // Create the department
@@ -97,5 +97,11 @@ class DepartmentController extends Controller
         // Redirect to the index page with a success message
         return redirect()->route('department.index')->with('success', 'Department deleted successfully.');
     }
+    public function main() {
+        return view('Maintenance.index');
+    }
 
+    public function fuel() {
+        return view('Fuelling.index');
+    }
 }
