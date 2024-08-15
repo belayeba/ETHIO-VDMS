@@ -1,6 +1,7 @@
 <?php
 
-use App\Http\Controllers\HomeController;
+use App\Http\Controllers\Organization\ClusterController;
+use App\Http\Controllers\Organization\DepartmentController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\tempController;
 use App\Http\Controllers\RoleController;
@@ -14,20 +15,24 @@ use App\Http\Controllers\vehicle\VehicleTemporaryRequestController;
 use FontLib\Table\Type\name;
 use Illuminate\Support\Facades\Auth;
 
-Route::get('/', function () {
+Route::get('/', function () 
+{
     return view('templates.index');
 });
 
+
+
+
+// Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+
 Auth::routes();
 
-Route::group(['middleware' => ['auth']], function() {
+Route::group(['middleware' => ['auth']], function()
+{
 
-});
-
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-
-Route::resource('roles', RoleController::class);
-Route::get('/logout', [LoginController::class,'logout'])->name('logout.logout');
+        Route::resource('roles', RoleController::class);
+        Route::get('/logout', 'LoginController@logout')->name('logout.logout');
 
                 // Vehicle Temprory Request
             Route::controller(VehicleTemporaryRequestController::class)->group(function()
@@ -60,14 +65,15 @@ Route::get('/logout', [LoginController::class,'logout'])->name('logout.logout');
                     Route::post('/perm_user_post_request', 'RequestVehiclePerm')->name('vec_perm_request_post');
                     Route::post('/Perm_user_delete_request', 'deleteRequest')->name('user_perm_delet');
                     Route::post('/perm_user_update_info', 'update_perm_request')->name('perm_vec_update');
-                    Route::get('/director_approve_page2', 'DirectorApprovalPage')->name('perm_vec_director_page');
+                    Route::get('/director_approve_page', 'DirectorApprovalPage')->name('perm_vec_director_page');
                     Route::post('/perm_director_approve_request', 'DirectorApproveRequest')->name('perm_vec_director_approve');
                     Route::post('/perm_director_reject_request', 'DirectorRejectRequest')->name('perm_vec_direct_reject');
                     Route::get('/perm_simirit_approve_page', 'VehicleDirector_page')->name('perm_vec_simirit_page');
                     Route::post('/perm_simirit_approve_request', 'VehicleDirectorApproveRequest')->name('perm_vec_simirit_approve');
                     Route::post('/perm_simirit_reject_request', 'VehicleDirectorRejectRequest')->name('perm_vec_simirit_reject');
                 });
-            Route::controller(tempController::class)->group(function()
+
+Route::controller(tempController::class)->group(function()
                 {
                     Route::group(['middleware' => ['can:edit posts']], function () {
                         // Routes accessible only to users with the 'create user' permission
@@ -148,31 +154,31 @@ Route::get('/logout', [LoginController::class,'logout'])->name('logout.logout');
                 Route::get('/temp70', 'temp70');
                 Route::get('/temp71', 'temp71');
                 Route::get('/temp72', 'temp72');
-                Route::get('/temp73', 'temp73');
+
+Route::get('/temp73', 'temp73');
                 Route::get('/temp74', 'temp74');
                 Route::get('/temp75', 'temp75');
                 Route::get('/temp76', 'temp76');
 
-});
+                });
+            Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');           
 
-// cluster route
-// Route::resource('cluster',ClusterController::class);
+    Route::group([
+        'prefix'=>'cluster',
+    ], function (){
+    Route::get('/',[ClusterController::class,'index'])->name('cluster.index');
+    Route::get('/create',[ClusterController::class,'create'])->name('cluster.create');
+    Route::post('/store', [ClusterController::class,'store'])->name('cluster.store');
+    Route::post('/update', [ClusterController::class,'update'])->name('cluster.update');
+    Route::get('/view',[ClusterController::class,'show'])->name('cluster.show');
+    Route::delete('/delete/{cluster}',[ClusterController::class,'destroy'])->name('cluster.destroy');
+    });
 
-Route::group([
-    'prefix'=>'cluster',
-], function (){
-Route::get('/',[ClusterController::class,'index'])->name('cluster.index');
-Route::get('/create',[ClusterController::class,'create'])->name('cluster.create');
-Route::post('/store', [ClusterController::class,'store'])->name('cluster.store');
-Route::post('/update', [ClusterController::class,'update'])->name('cluster.update');
-Route::get('/view',[ClusterController::class,'show'])->name('cluster.show');
-Route::delete('/delete/{cluster}',[ClusterController::class,'destroy'])->name('cluster.destroy');
-});
-
-Route::group([
-    'prefix'=>'department',
-], function (){
-    Route::get('/',[DepartmentController::class,'index'])->name('department.index');
-    Route::get('/create',[DepartmentController::class,'create'])->name('department.create');
-    Route::post('/store',[DepartmentController::class,'store'])->name('department.store');
+    Route::group([
+        'prefix'=>'department',
+    ], function (){
+        Route::get('/',[DepartmentController::class,'index'])->name('department.index');
+        Route::get('/create',[DepartmentController::class,'create'])->name('department.create');
+        Route::post('/store',[DepartmentController::class,'store'])->name('department.store');
+    });
 });
