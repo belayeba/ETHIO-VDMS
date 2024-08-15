@@ -19,7 +19,7 @@ class VehicleTemporaryRequestController extends Controller
         {
             $id = Auth::id();
             $users = user::get();
-            $Requested = VehicleTemporaryRequestModel::where('requested_by_id',$id)->get();
+            $Requested = VehicleTemporaryRequestModel::with('peoples', 'materials')->where('requested_by_id', $id)->get();
             return view("Request.TemporaryRequestPage",compact('users','Requested'));
         }
     // Send Vehicle Request Temporary
@@ -116,12 +116,23 @@ class VehicleTemporaryRequestController extends Controller
                     ], 500);
                 }
         }
+    // update request page
+    public function editRequestPage($id)
+        {   
+         
+            $users = user::get();
+            $Requested = VehicleTemporaryRequestModel::with('peoples', 'materials')
+                            ->findOrFail($id);
+            return view("Request.EditTemporaryRequestPage",compact('users','Requested'));
+        }
+
     // User can update Request
      public function update(Request $request) 
         {
+            // dd($request);
              // Validate the request
              $validator = Validator::make($request->all(), [
-                 'request_id' => 'required|uuid|exists:users,id', // Check if UUID exists in the 'users' table
+                 'request_id' => 'required|uuid|exists:vehicle_requests_temporary,request_id', // Check if UUID exists in the 'users' table
                  'purpose' => 'sometimes|string|max:255',
                  'vehicle_type' => 'sometimes|string',
                  'start_date' => 'sometimes|date',
@@ -140,6 +151,7 @@ class VehicleTemporaryRequestController extends Controller
                     ]);
                 }
             $id = $request->input('request_id');
+            // dd($id);
             try
                 {
                     $Vehicle_Request = VehicleTemporaryRequestModel::findOrFail($id); 

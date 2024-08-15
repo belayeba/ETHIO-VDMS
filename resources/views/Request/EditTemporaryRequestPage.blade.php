@@ -25,7 +25,7 @@
                         <h4 class="header-title">Request Vehicle</h4>
                     </div>
                     <div class="card-body"> 
-                        <form method="POST" action="{{route('temp_request_post')}}">
+                        <form method="POST" action="{{route('temp_update_request')}}">
                             @csrf
 
                             <div id="progressbarwizard">
@@ -69,16 +69,16 @@
                                                 <label class="form-label">Reason</label>
                                                 <input type="text" name="purpose" class="form-control" placeholder="Enter purpose of Request"
                                                     data-provide="datepicker" data-date-today-highlight="true"
-                                                    data-date-container="#datepicker1">
+                                                    data-date-container="#datepicker1" value="{{$Requested->purpose}}">
                                             </div>
                                         </div>
-
+                                        <input type="hidden" name="request_id" class="form-control" value="{{$Requested->request_id}}">
                                         <div class="position-relative mb-3">
                                             <div class="mb-6 position-relative" id="datepicker1">
                                                 <label class="form-label">Vehicle type</label>
                                                 <input type="text" class="form-control" name="vehicle_type" placeholder="Select vehicle type"
                                                     data-provide="datepicker" data-date-today-highlight="true"
-                                                    data-date-container="#datepicker1">
+                                                    data-date-container="#datepicker1" value="{{$Requested->vehicle_type}}">
                                             </div>
                                         </div>
                                     </div>
@@ -96,7 +96,7 @@
                                                 <label class="form-label">Start Date</label>
                                                 <input type="date" class="form-control" name="start_date" placeholder="Enter Date of departure"
                                                     data-provide="datepicker" data-date-today-highlight="true"
-                                                    data-date-container="#datepicker1">
+                                                    data-date-container="#datepicker1" value="{{$Requested->start_date}}">
                                             </div>
                                         </div>
                             
@@ -105,7 +105,7 @@
                                                 <label class="form-label">Start Time</label>
                                                 <input type="time" class="form-control" name="start_time" placeholder="Enter Time of departure"
                                                     data-provide="datepicker" data-date-today-highlight="true"
-                                                    data-date-container="#datepicker1">
+                                                    data-date-container="#datepicker1" value="{{\Carbon\Carbon::parse($Requested->start_time)->format('H:i')}}">
                                             </div>
                                         </div>
 
@@ -114,7 +114,7 @@
                                                 <label class="form-label">Return Date</label>
                                                 <input type="date" class="form-control" name="return_date" placeholder="Enter Date of arrival"
                                                     data-provide="datepicker" data-date-today-highlight="true"
-                                                    data-date-container="#datepicker1">
+                                                    data-date-container="#datepicker1" value="{{$Requested->end_date}}">
                                             </div>
                                         </div>
 
@@ -123,7 +123,7 @@
                                                 <label class="form-label">Return Time</label>
                                                 <input type="time" class="form-control" name="return_time" placeholder="Enter Time of arrival"
                                                     data-provide="datepicker" data-date-today-highlight="true"
-                                                    data-date-container="#datepicker1">
+                                                    data-date-container="#datepicker1" value="{{\Carbon\Carbon::parse($Requested->end_time)->format('H:i')}}">
                                             </div>
                                         </div>
                                     </div> 
@@ -144,7 +144,7 @@
                                                 <label class="form-label">Location From</label>
                                                 <input type="text" class="form-control" name="start_location" placeholder="Enter starting location"
                                                     data-provide="datepicker" data-date-today-highlight="true"
-                                                    data-date-container="#datepicker1">
+                                                    data-date-container="#datepicker1" value="{{$Requested->start_location}}">
                                             </div>
                                         </div>
 
@@ -153,7 +153,7 @@
                                                 <label class="form-label">Location to</label>
                                                 <input type="text" class="form-control" name="end_location" placeholder="Enter arrival location"
                                                     data-provide="datepicker" data-date-today-highlight="true"
-                                                    data-date-container="#datepicker1">
+                                                    data-date-container="#datepicker1" value="{{$Requested->end_locations}}">
                                                 </div>
                                             </div>
                                         </div> <!-- end card-body-->
@@ -170,6 +170,7 @@
                                     <div class="row">
 
                                         <p class="mb-1 fw-bold text-muted">Select People</p>
+                                        <p class="text-danger  small">Kindly Add the passenger and materials.</p>
                                         <select id="multiSelect" name="people_id[]" class="select2 form-control select2-multiple" data-toggle="select2"
                                             multiple="multiple" data-placeholder="Select People ...">
                                             <optgroup label="Users/Employees">
@@ -223,107 +224,40 @@
 
         <div class="col-7">
             <div class="card">
+                <div class="card-header">
+                    <h4>Previous request data</h4>
+                </div>
                 <div class="card-body">
-                    <table id="basic-datatable" class="table table-striped dt-responsive nowrap w-100">
-                        <thead>
-                            <tr>
-                                <th>Roll.no</th>
-                                <th>Date</th>
-                                <th>location</th>
-                                <th>Cargo</th>
-                                <th>status</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
+                    <dl class="row mb-0">
+                        <dt class="col-sm-3">Request reason</dt>
+                        <dd class="col-sm-9">{{$Requested->purpose}}.</dd>
 
-                        @foreach($Requested as $request)
-                            <tbody>
-                                <tr>
-                                    <td>{{$loop->iteration}}</td>
-                                    <td>{{$request->start_date}}</td>
-                                    <td>From:{{$request->start_location}},</br>To:{{$request->end_locations}}</td>
-                                    <td><button type="button" class="btn btn-info rounded-pill" data-bs-toggle="modal" data-bs-target="#cargo-modal-{{ $loop->index }}"><i class=" ri-suitcase-3-line"></i></button></td>
-                                    <td>{{$request->status}}</td>
-                                    <td>
-                                        <button type="button" class="btn btn-info rounded-pill" data-bs-toggle="modal" data-bs-target="#standard-modal-{{ $loop->index }}" title="show"><i class=" ri-eye-line"></i></button>
-                                        <a href="{{route('editRequestPage', ['id' => $request->request_id])}}" class="btn btn-secondary rounded-pill" title="edit"><i class=" ri-edit-line"></i></a>
-                                    </td>
-                                </tr>
-                            </tbody>
-                            <!-- show passengers and materials modal -->
-                                <div class="modal fade" id="cargo-modal-{{ $loop->index }}" tabindex="-1" aria-labelledby="cargo-modal-label" aria-hidden="true">
-                                    <div class="modal-dialog">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h5 class="modal-title" id="cargo-modal-label">Passenger and Cargo</h5>
-                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                            </div>
-                                            <div class="modal-body">
-                                                <!-- Populate modal with associated people -->
-                                                @foreach($request->peoples as $person)
-                                                    <p>Passenger name: {{ $person->user->first_name }}&nbsp;{{ $person->user->last_name }}</p>
-                                                @endforeach
-                                                <!-- Populate modal with associated materials -->
-                                                @foreach($request->materials as $material)
-                                                    <p>Material name: {{ $material->material_name }},&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</br> Material Weight: {{ $material->weight }}</p>
-                                                @endforeach
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            <!-- end cargo-modal -->
+                        <dt class="col-sm-3">Requested vehicle</dt>
+                        <dd class="col-sm-9">
+                            <p>{{$Requested->vehicle_type}}.</p>
+                        </dd>
 
-                            <!-- show all the information about the request modal -->
-                                <div id="standard-modal-{{ $loop->index }}" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="standard-modalLabel" aria-hidden="true">
-                                    <div class="modal-dialog">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h4 class="modal-title" id="standard-modalLabel">Request Details</h4>
-                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                            </div>
-                                            <div class="modal-body">
-                                                <dl class="row mb-0">
-                                                    <dt class="col-sm-3">Request reason</dt>
-                                                    <dd class="col-sm-9">{{$request->purpose}}.</dd>
+                        <dt class="col-sm-3">Start date and Time</dt>
+                        <dd class="col-sm-9">{{$Requested->start_date}}, {{$Requested->start_time}}.</dd>
 
-                                                    <dt class="col-sm-3">Requested vehicle</dt>
-                                                    <dd class="col-sm-9">
-                                                        <p>{{$request->vehicle_type}}.</p>
-                                                    </dd>
+                        <dt class="col-sm-3">Return date and Time</dt>
+                        <dd class="col-sm-9">{{$Requested->end_date}}, {{$Requested->end_time}}.</dd>
 
-                                                    <dt class="col-sm-3">Start date and Time</dt>
-                                                    <dd class="col-sm-9">{{$request->start_date}}, {{$request->start_time}}.</dd>
+                        <dt class="col-sm-3">Location From and To</dt>
+                        <dd class="col-sm-9">{{$Requested->start_location}}, {{$Requested->end_locations}}.</dd>
 
-                                                    <dt class="col-sm-3">Return date and Time</dt>
-                                                    <dd class="col-sm-9">{{$request->end_date}}, {{$request->end_time}}.</dd>
+                        <dt class="col-sm-3 text-truncate">passenger</dt>
+                       
+                        <dd class="col-sm-9">  @foreach($Requested->peoples as $person) {{$person->user->first_name}}.</br> @endforeach</dd>
 
-                                                    <dt class="col-sm-3">Location From and To</dt>
-                                                    <dd class="col-sm-9">{{$request->start_location}}, {{$request->end_locations}}.</dd>
-
-                                                    <dt class="col-sm-3 text-truncate">passenger</dt>
-                                                
-                                                    <dd class="col-sm-9">  @foreach($request->peoples as $person) {{$person->user->first_name}}.</br> @endforeach</dd>
-
-                                                    <dt class="col-sm-3">Materials</dt>
-                                                    <dd class="col-sm-9">
-                                                        @foreach($request->materials as $material)
-                                                            <p>Material name: {{ $material->material_name }},</br> Material Weight: {{ $material->weight }}.</p>
-                                                        @endforeach</dd>
-                                                    
-                                                    </dd>
-                                                </dl>  
-                                            </div>
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
-                                                <!-- <button type="button" class="btn btn-primary">Save changes</button> -->
-                                            </div>
-                                        </div><!-- /.modal-content -->
-                                    </div><!-- /.modal-dialog -->
-                                </div>
-                            <!-- end show modal -->
-                        @endforeach
-                    </table>
-
+                        <dt class="col-sm-3">Materials</dt>
+                        <dd class="col-sm-9">
+                            @foreach($Requested->materials as $material)
+                                <p>Material name: {{ $material->material_name }},</br> Material Weight: {{ $material->weight }}</p>
+                            @endforeach.</dd>
+                         
+                        </dd>
+                    </dl>  
                 </div> <!-- end card body-->
             </div> <!-- end card -->
     </div><!-- end col-->
@@ -331,7 +265,29 @@
 </div>
 </div>
 
-    
+    <div id="standard-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="standard-modalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="standard-modalLabel">Modal Heading</h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <h5>Text in a modal</h5>
+                    <p>Duis mollis, est non commodo luctus, nisi erat porttitor ligula.</p>
+                    <hr>
+                    <h5>Overflowing text to show scroll behavior</h5>
+                    <p>Cras mattis consectetur purus sit amet fermentum. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Morbi leo risus, porta ac consectetur ac, vestibulum at eros.</p>
+                    <p>Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor.</p>
+                    <p class="mb-0">Aenean lacinia bibendum nulla sed consectetur. Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Donec sed odio dui. Donec ullamcorper nulla non metus auctor fringilla.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Save changes</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {

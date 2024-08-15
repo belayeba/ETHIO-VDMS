@@ -9,8 +9,8 @@ use App\Http\Controllers\LoginController;
 use App\Http\Controllers\Organization\ClusterController;
 use App\Http\Controllers\Organization\DepartmentController;
 // use App\Http\Controllers\Organization\ClustersController;
-use App\Http\Controllers\vehicle\VehicleTemporaryRequestController as VehicleVehicleTemporaryRequestController;
-use App\Http\Controllers\VehicleTemporaryRequestController;
+use App\Http\Controllers\vehicle\VehicleTemporaryRequestController;
+// use App\Http\Controllers\VehicleTemporaryRequestController;
 use FontLib\Table\Type\name;
 use Illuminate\Support\Facades\Auth;
 
@@ -33,9 +33,10 @@ Route::get('/logout', [LoginController::class,'logout'])->name('logout.logout');
             Route::controller(VehicleTemporaryRequestController::class)->group(function()
                 {
                         Route::get('temp_request_page', 'displayRequestPage')->name('displayRequestPage');
+                        Route::get('temp_request_page/edit/{id}', 'editRequestPage')->name('editRequestPage');
                         Route::post('/user_post_request', 'RequestVehicleTemp')->name('temp_request_post');
                         Route::post('/user_delete_request', 'deleteRequest')->name('temp_delete_request');
-                        Route::post('/user_update_info', 'update_temp_request')->name('temp_update_request');
+                        Route::post('/user_update_info', 'update')->name('temp_update_request');
                         Route::get('/director_approve_page', 'DirectorApprovalPage')->name('director');
                         Route::post('/director_approve_request', 'DirectorApproveRequest')->name('director_approve_request');
                         Route::post('/director_reject_request', 'DirectorApproveRequest')->name('director_reject_request');
