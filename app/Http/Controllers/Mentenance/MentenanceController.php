@@ -271,7 +271,7 @@ class MentenanceController extends Controller
                             ]);
                         }
                     $Maintenance_Request->approved_by = $user_id;
-                    $Maintenance_Request->direct_reject_reason = $reason;
+                    $Maintenance_Request->director_reject_reason = $reason;
                     $Maintenance_Request->save();
                     return response()->json([
                         'success' => true,
@@ -318,14 +318,14 @@ class MentenanceController extends Controller
                             'message' => 'Sorry, You are denied the service',
                         ]);
                     }
-                if($Maintenance_Request->vec_director_id)
+                if($Maintenance_Request->sim_approved_by)
                     {
                         return response()->json([
                             'success' => false,
                             'message' => 'Sorry, You are denied the service',
                         ]);
                     }
-                $Maintenance_Request->vec_director_id = $user_id;
+                $Maintenance_Request->sim_approved_by = $user_id;
                 $Maintenance_Request->save();
                 return response()->json([
                     'success' => true,
@@ -360,15 +360,15 @@ class MentenanceController extends Controller
                         'message' => 'Warning! You are denied the service',
                     ]);
                 }
-            if($Maintenance_Request->vec_director_id)
+            if($Maintenance_Request->sim_approved_by)
                 {
                     return response()->json([
                         'success' => false,
                         'message' => 'Warning! You are denied the service',
                     ]);
                 }
-            $Maintenance_Request->vec_director_id = $user_id;
-            $Maintenance_Request->vec_director_reject_reason = $reason;
+            $Maintenance_Request->sim_approved_by = $user_id;
+            $Maintenance_Request->simirit_reject_reason = $reason;
             $Maintenance_Request->save();
             return response()->json([
                 'success' =>true,
@@ -404,15 +404,15 @@ class MentenanceController extends Controller
                 $comment = $request->input('comment');
                 $user_id = Auth::id();
                 $Maintenance_Request = MaintenancesModel::findOrFail($id);
-                if($Maintenance_Request->service_given_by)
+                if($Maintenance_Request->maintained_by)
                     {
                         return response()->json([
                             'success' => false,
                             'message' => 'Sorry, You are denied the service',
                         ]);
                     }
-                $Maintenance_Request->service_given_by = $user_id;
-                $Maintenance_Request->Maintenance_cost = $cost;
+                $Maintenance_Request->maintained_by = $user_id;
+                $Maintenance_Request->cost = $cost;
                 $Maintenance_Request->notes = $comment;
                 $Maintenance_Request->save();
                 return response()->json([
@@ -440,14 +440,14 @@ class MentenanceController extends Controller
             $reason = $request->input('reason');
             $user_id = Auth::id();
             $Maintenance_Request = MaintenancesModel::findOrFail($id);
-            if($Maintenance_Request->service_given_by)
+            if($Maintenance_Request->maintained_by)
                 {
                     return response()->json([
                         'success' => false,
                         'message' => 'Warning! You are denied the service',
                     ]);
                 }
-            $Maintenance_Request->service_given_by = $user_id;
+            $Maintenance_Request->maintained_by = $user_id;
             $Maintenance_Request->Maintenanceor_reject = $reason;
             $Maintenance_Request->save();
             return response()->json([
