@@ -104,8 +104,10 @@ class CreateAllTablesWithUuid extends Migration
             $table->foreign('requested_by')->references('id')->on('users');
             $table->uuid('approved_by')->nullable();
             $table->foreign('approved_by')->references('id')->on('users');
+            $table->string('director_reject_reason',1000)->nullable();
             $table->uuid('sim_approved_by')->nullable();
             $table->foreign('sim_approved_by')->references('id')->on('users');
+            $table->string('simirit_reject_reason',1000)->nullable();
             $table->string('maintenance_type', 255);
             $table->uuid('maintained_by')->nullable();
             $table->foreign('maintained_by')->references('id')->on('users');

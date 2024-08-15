@@ -1,12 +1,5 @@
-{{-- @include('common.adminhead') --}}
-<!DOCTYPE html>
-<html lang="en">
-@include('layouts.main-link')
-@include('layouts.header')
-@include('layouts.sidebar')
-@include('layouts.setting')
-
-<body class="admin">
+@extends('layouts.navigation')
+@section('content')
     <div class="wrapper">
         <div class="content-page">
             <div class="preloader" dir="ltr">
@@ -212,5 +205,6 @@
     <script src="assets/js/vendor.min.js"></script>
     <!-- App js -->
     <script src="assets/js/app.min.js"></script>
-</body>
-</html>
+
+
+@endsection
