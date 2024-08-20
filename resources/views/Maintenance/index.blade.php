@@ -1,12 +1,7 @@
-{{-- @include('common.adminhead') --}}
-<!DOCTYPE html>
-<html lang="en">
-@include('layouts.main-link')
-@include('layouts.header')
-@include('layouts.sidebar')
-@include('layouts.setting')
+@extends('layouts.navigation')
 
-<body class="admin">
+@section('content')
+
     <div class="wrapper">
         <div class="content-page">
             <div class="preloader" dir="ltr">
@@ -28,15 +23,8 @@
                     <span></span>
                 </div>
             </div>
-            <input type="hidden" name="demoMode" id="demoMode" value="1">
-            <input type="hidden" name="url" id="url" value="https://E-LearningPortal.com">
-            <input type="hidden" name="active_date_format" id="active_date_format" value="jS M, Y">
-            <input type="hidden" name="js_active_date_format" id="js_active_date_format" value="mm/dd/yyyy">
             <input type="hidden" name="table_name" id="table_name" value="">
             <input type="hidden" name="csrf_token" class="csrf_token" value="{{ csrf_token() }}">
-            <input type="hidden" name="currency_symbol" class="currency_symbol" value="$">
-            <input type="hidden" name="currency_show" class="currency_show" value="1">
-            <input type="hidden" name="chat_settings" id="chat_settings" value="">
 
             <div class="main-wrapper" style="min-height: 600px">
                 <!-- Page Content  -->
@@ -68,17 +56,18 @@
                                                 @csrf
                                                 {{-- <div class="card-body"> --}}
                                                     {{-- <div class="row"> --}}
-                                                         {{-- <div class="col-auto">
-                                                             <div class="dropdown">
-                                                                 <button class="btn btn-light dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="width: 300px">
-                                                                    --Choose--
-                                                                 </button>
-                                                                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                                                     <a class="dropdown-item" href="#">Action</a>
-                                                                     <a class="dropdown-item" href="#">Another action</a>
-                                                                 </div>
-                                                             </div>
-                                                         </div> --}}
+                                                        <div class="col-auto">
+                                                            <div class="dropdown">
+                                                               <label for="dropdownMenuButton"> VEHICLE PLATE <strong class="text-danger">*</strong></label>
+                                                                <button class="btn btn-light dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="width: 300px">
+                                                                   --Choose--
+                                                                </button>
+                                                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                                                    <a class="dropdown-item" href="#">Action</a>
+                                                                    <a class="dropdown-item" href="#">Another action</a>
+                                                                </div>
+                                                            </div>
+                                                        </div>
                                                 <div class="mb-3">
                                                     <label for="nameInput" class="form-label">Name <strong class="text-danger">*</strong></label>
                                                     <input type="text" class="form-control" id="nameInput" name="name" placeholder="Name">
@@ -199,5 +188,4 @@
     <script src="assets/js/vendor.min.js"></script>
     <!-- App js -->
     <script src="assets/js/app.min.js"></script>
-</body>
-</html>
+@endsection

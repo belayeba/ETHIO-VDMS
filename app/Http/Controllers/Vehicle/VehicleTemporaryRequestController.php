@@ -18,14 +18,13 @@ class VehicleTemporaryRequestController extends Controller
     public function displayRequestPage()
         {
             $id = Auth::id();
-            $users = user::get();
+            $users = user::where('id',$id );
             $Requested = VehicleTemporaryRequestModel::with('peoples', 'materials')->where('requested_by_id', $id)->get();
             return view("Request.TemporaryRequestPage",compact('users','Requested'));
         }
     // Send Vehicle Request Temporary
     public function RequestVehicleTemp(Request $request) 
         {
-            // dd($request);
             // Custom validation rule to check equal number of material_name and weight entries
             Validator::extend('equal_count', function ($attribute, $value, $parameters, $validator) use ($request) {
                 $countMaterialName = count($request->input('material_name', []));
@@ -76,7 +75,7 @@ class VehicleTemporaryRequestController extends Controller
                     // Handle optional material_name and weight fields
                     $materialNames = $request->input('itemWeights', []);
                     $weights = $request->input('itemWeights', []);
-                
+                    dd($materialNames);
                     foreach ($materialNames as $index => $materialName) 
                         {
                             $Vehicle_Request->materials()->create([
@@ -125,7 +124,6 @@ class VehicleTemporaryRequestController extends Controller
                             ->findOrFail($id);
             return view("Request.EditTemporaryRequestPage",compact('users','Requested'));
         }
-
     // User can update Request
      public function update(Request $request) 
         {
@@ -191,7 +189,8 @@ class VehicleTemporaryRequestController extends Controller
                             ]);
                         }
                 }
-                catch (Exception $e) {
+            catch (Exception $e) 
+                {
                     // Handle the case when the vehicle request is not found
                     return response()->json([
                         'success' => false,
@@ -203,7 +202,7 @@ class VehicleTemporaryRequestController extends Controller
     public function deleteRequest(Request $request)
         {
                 $validation = Validator::make($request->all(),[
-                    'request_id'=>'required|vehicle_requests_temporary,request_id',
+                    'request_id'=>'required|uuid|vehicle_requests_temporary,request_id',
                 ]);
                 // Check validation error
                 if ($validation->fails()) 
@@ -251,20 +250,20 @@ class VehicleTemporaryRequestController extends Controller
     // Directors Page
     public function DirectorApprovalPage()
         {
-                // $id = Auth::id();
-                // $directors_data = User::where('id',$id)->get('department_id');
-                // $dept_id = $directors_data->department_id;
-                // $vehicle_requests = VehicleTemporaryRequestModel::whereHas('requestedBy', function ($query) use ($dept_id) {
-                //     $query->where('department_id', $dept_id);
-                // })->get();
-                $vehicle_requests=VehicleTemporaryRequestModel::get();
+                $id = Auth::id();
+                $directors_data = User::where('id',$id)->get('department_id');
+                $dept_id = $directors_data->department_id;
+                $vehicle_requests = VehicleTemporaryRequestModel::whereHas('requestedBy', function ($query) use ($dept_id) {
+                    $query->where('department_id', $dept_id);
+                })->get();
+                //$vehicle_requests=VehicleTemporaryRequestModel::get();
                 return view("Request.DirectorPage", compact('vehicle_requests'));
         }
     // DIRECTOR APPROVE THE REQUESTS
     public function DirectorApproveRequest(Request $request)
         {
                 $validation = Validator::make($request->all(),[
-                    'request_id'=>'required|vehicle_requests_temporary,request_id',
+                    'request_id'=>'required|uuid|vehicle_requests_temporary,request_id',
                 ]);
                 // Check validation error
                 if ($validation->fails()) 
@@ -350,7 +349,6 @@ class VehicleTemporaryRequestController extends Controller
     // Vehicle Director Page
     public function VehicleDirectorPage() 
         {    
-                $id = Auth::id();
                 $vehicle_requests = VehicleTemporaryRequestModel::all();
                 return view("VehicleDirectorPage", compact('vehicle_requests'));     
         }

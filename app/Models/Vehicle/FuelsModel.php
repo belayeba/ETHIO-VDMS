@@ -1,8 +1,10 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Vehicle;
 
 use App\Models\Driver\DriversModel;
+use App\Models\User;
+use App\Models\VehiclesModel;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;

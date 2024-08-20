@@ -287,7 +287,12 @@ class CreateAllTablesWithUuid extends Migration
             $table->uuid('giving_back_vehicle_id')->primary();
             $table->uuid('requested_by');
             $table->foreign('requested_by')->references('id')->on('users');
+            $table->uuid('vehicle_id');
+            $table->foreign('vehicle_id')->references('vehicle_id')->on('vehicles');
             $table->uuid('approved_by')->nullable();
+            $table->string('purpose');
+            $table->string('reject_reason_vec_dire')->nullable();
+            $table->string('reject_reason_director')->nullable();
             $table->foreign('approved_by')->references('id')->on('users');
             $table->uuid('received_by')->nullable();
             $table->foreign('received_by')->references('id')->on('users');

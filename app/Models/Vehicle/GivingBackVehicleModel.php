@@ -19,11 +19,13 @@ class GivingBackVehiclePermanently extends Model
     protected $keyType = 'uuid';
     
     protected $fillable = [
-        'giving_back_vehicle_id',
         'vehicle_id',
+        'purpose',
         'approved_by',
+        'reject_reason_director',
         'requested_by',
         'received_by',
+        'reject_reason_vec_dire',
         'returned_date',
         'vehicle_request_id',
         'vehicle_detail_id',
@@ -32,27 +34,27 @@ class GivingBackVehiclePermanently extends Model
         'updated_at'
     ];
     protected static function boot()
-    {
-        parent::boot();
+        {
+            parent::boot();
 
-        static::creating(function ($model) {
-            if (empty($model->{$model->getKeyName()})) {
-                $model->{$model->getKeyName()} = (string) Str::uuid();
-            }
-        });
-    }
+            static::creating(function ($model) {
+                if (empty($model->{$model->getKeyName()})) {
+                    $model->{$model->getKeyName()} = (string) Str::uuid();
+                }
+            });
+        }
     public function vehicle(): BelongsTo
-    {
-        return $this->belongsTo(VehiclesModel::class, 'vehicle_id');
-    }
+        {
+            return $this->belongsTo(VehiclesModel::class, 'vehicle_id');
+        }
 
     public function returnedBy(): BelongsTo
-    {
-        return $this->belongsTo(User::class, 'returned_by');
-    }
+        {
+            return $this->belongsTo(User::class, 'returned_by');
+        }
 
     public function receivedBy(): BelongsTo
-    {
-        return $this->belongsTo(User::class, 'received_by');
-    }
+        {
+            return $this->belongsTo(User::class, 'received_by');
+        }
 }
