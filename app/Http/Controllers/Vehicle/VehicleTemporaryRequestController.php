@@ -161,7 +161,7 @@ class VehicleTemporaryRequestController extends Controller
                                 'message' => 'Warning! You are denied the service.'
                             ]);
                         }
-                    if($Vehicle_Request->approved_by)
+                    if($Vehicle_Request->dir_approved_by)
                         {
                             return response()->json([
                                 'success' => false,
@@ -218,7 +218,7 @@ class VehicleTemporaryRequestController extends Controller
             try
                 {
                     $Vehicle_Request = VehicleTemporaryRequestModel::findOrFail($id);
-                    if($Vehicle_Request->requested_by != $user_id)
+                    if($Vehicle_Request->requested_by_id != $user_id)
                         {
                             return response()->json([
                                 'success' => false,
@@ -255,7 +255,7 @@ class VehicleTemporaryRequestController extends Controller
                 $dept_id = $directors_data->department_id;
                 $vehicle_requests = VehicleTemporaryRequestModel::whereHas('requestedBy', function ($query) use ($dept_id) {
                     $query->where('department_id', $dept_id);
-                })->get();
+                })->whereNull('dir_approved_by')->get();
                 //$vehicle_requests=VehicleTemporaryRequestModel::get();
                 return view("Request.DirectorPage", compact('vehicle_requests'));
         }
@@ -279,14 +279,14 @@ class VehicleTemporaryRequestController extends Controller
             try
                 {
                     $Vehicle_Request = VehicleTemporaryRequestModel::findOrFail($id);
-                    if($Vehicle_Request->approved_by)
+                    if($Vehicle_Request->dir_approved_by)
                         {
                             return response()->json([
                                 'success' => false,
                                 'message' => 'Warning! You are denied the service',
                             ]);
                         }
-                    $Vehicle_Request->approved_by = $user_id;
+                    $Vehicle_Request->dir_approved_by = $user_id;
                     return response()->json([
                         'success' => true,
                         'message' => 'The requests approved successfully',
@@ -305,7 +305,7 @@ class VehicleTemporaryRequestController extends Controller
     public function DirectorRejectRequest(Request $request)
         {
             $validation = Validator::make($request->all(),[
-                'request_id'=>'required|vehicle_requests_temporary,request_id',
+                'request_id'=>'required|uuid|vehicle_requests_temporary,request_id',
                 'reason'=>'required|string|max:1000'
             ]);
                   // Check validation error
@@ -323,14 +323,14 @@ class VehicleTemporaryRequestController extends Controller
             try
                 {
                     $Vehicle_Request = VehicleTemporaryRequestModel::findOrFail($id);
-                    if($Vehicle_Request->approved_by)
+                    if($Vehicle_Request->dir_approved_by)
                         {
                             return response()->json([
                                 'success' => false,
                                 'message' => 'Warning! You are denied the service',
                             ]);
                         }
-                    $Vehicle_Request->approved_by = $user_id;
+                    $Vehicle_Request->dir_approved_by = $user_id;
                     $Vehicle_Request->director_reject_reason = $reason;
                     return response()->json([
                         'success' => true,
@@ -349,15 +349,15 @@ class VehicleTemporaryRequestController extends Controller
     // Vehicle Director Page
     public function VehicleDirectorPage() 
         {    
-                $vehicle_requests = VehicleTemporaryRequestModel::all();
+                $vehicle_requests = VehicleTemporaryRequestModel::whereNotNull('dir_approved_by')->whereNull('vec_dir_approved_by')->latest()->get();
                 return view("VehicleDirectorPage", compact('vehicle_requests'));     
         }
         // VEHICLE DIRECTOR APPROVE THE REQUESTS
     public function VehicleDirectorApproveRequest(Request $request)
         {
                 $validation = Validator::make($request->all(),[
-                    'request_id'=>'required|vehicle_requests_temporary,request_id',
-                    'assigned_vehicle_id'=>'required|vehicles,vehicle_id',
+                    'request_id'=>'required|uuid|vehicle_requests_temporary,request_id',
+                    'assigned_vehicle_id'=>'required|uuid|vehicles,vehicle_id',
                 ]);
                 // Check validation error
                 if ($validation->fails()) 
@@ -369,7 +369,7 @@ class VehicleTemporaryRequestController extends Controller
                     }
                 // Check if it is not approved before
                 $id = $request->input('request_id');
-                $assign_vehicle = $request->input('assigned_vehicle_id');
+                $assigned_vehicle = $request->input('assigned_vehicle_id');
                 $user_id = Auth::id();
             try
                 {
@@ -382,7 +382,7 @@ class VehicleTemporaryRequestController extends Controller
                             ]);
                         }
                     $Vehicle_Request->assigned_by = $user_id;
-                    $Vehicle_Request->assigned_vehicle_id = $assign_vehicle;
+                    $Vehicle_Request->assigned_vehicle_id = $assigned_vehicle;
                     $Vehicle_Request->save();
                     return response()->json([
                         'success' => true,
@@ -402,7 +402,7 @@ class VehicleTemporaryRequestController extends Controller
     public function VehicleDirectorFillstartKm(Request $request)
         {
                 $validation = Validator::make($request->all(),[
-                    'request_id'=>'required|vehicle_requests_temporary,request_id',
+                    'request_id'=>'required|uuid|vehicle_requests_temporary,request_id',
                     'start_km'=>'required|integer',
                     'km_per_litre','required|integer'
                 ]);
@@ -424,7 +424,7 @@ class VehicleTemporaryRequestController extends Controller
                     $Vehicle_Request->km_per_litre = $km_per_litre;
                     $Vehicle_Request->save();
                     return response()->json([
-                        'success' => false,
+                        'success' => true,
                         'message' => 'You have filled the information succefully',
                     ]);
                 }
@@ -441,7 +441,7 @@ class VehicleTemporaryRequestController extends Controller
     public function VehicleDirectorRejectRequest(Request $request)
         {
             $validation = Validator::make($request->all(),[
-                'request_id'=>'required|vehicle_requests_temporary,request_id',
+                'request_id'=>'required|uuid|vehicle_requests_temporary,request_id',
                 'reason'=>'required|string|max:1000'
             ]);
                   // Check validation error
@@ -487,7 +487,7 @@ class VehicleTemporaryRequestController extends Controller
     public function Returning_temporary_vehicle(Request $request)
         {
                 $validation = Validator::make($request->all(),[
-                    'request_id'=>'required|vehicle_requests_temporary,request_id',
+                    'request_id'=>'required|uuid|vehicle_requests_temporary,request_id',
                     'end_km'=>'required|number'
                 ]);
                 // Check validation error

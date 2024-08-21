@@ -55,8 +55,8 @@ class CreateAllTablesWithUuid extends Migration
             $table->string('vehicle_type', 255);
             $table->string('vehicle_category', 255);
             $table->decimal('fuel_amount', 10, 2);
-            $table->date('last_service')->nullable();
-            $table->date('next_service')->nullable();
+            $table->integer('last_service')->nullable();
+            $table->integer('next_service')->nullable();
             $table->uuid('registered_by')->nullable();
             $table->foreign('registered_by')->references('id')->on('users');
             $table->uuid('driver_id')->nullable();

@@ -16,7 +16,7 @@ class VehicleParmanentlyRequestController extends Controller
     public function displayPermRequestPage()
         {
             $id = Auth::id();
-            $Requested = VehiclePermanentlyRequestModel::where('requested_by_id',$id)->latest()->get();
+            $Requested = VehiclePermanentlyRequestModel::where('requested_by_id',$id)->with('vehicle')->latest()->get();
             return view("Request.ParmanententRequestPage",compact('Requested'));
         }
         // Send Vehicle Request Parmananently

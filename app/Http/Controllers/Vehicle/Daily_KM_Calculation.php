@@ -124,4 +124,5 @@ class Daily_KM_Calculation extends Controller
                     'vehicle' => $vehicle,
                 ]);
           }
+        public function dele
     }
