@@ -9,6 +9,8 @@ use App\Http\Controllers\tempController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\usercontroller;
 use App\Http\Controllers\LoginController;
+use App\Http\Controllers\Organization\ClusterController;
+use App\Http\Controllers\Organization\DepartmentController;
 use App\Http\Controllers\Vehicle\VehicleParmanentlyRequestController;
 use App\Http\Controllers\vehicle\VehicleTemporaryRequestController;
 use FontLib\Table\Type\name;
@@ -190,22 +192,26 @@ Route::get('/temp73', 'temp73');
                 });
             Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');           
 
-// Route::group([
-//     'prefix'=>'cluster',
-// ], function (){
-// Route::get('/',[ClusterController::class,'index'])->name('cluster.index');
-// Route::get('/create',[ClusterController::class,'create'])->name('cluster.create');
-// Route::post('/store', [ClusterController::class,'store'])->name('cluster.store');
-// Route::post('/{clusters}/update', [ClusterController::class,'update'])->name('cluster.update');
-// Route::get('/view',[ClusterController::class,'show'])->name('cluster.show');
-// Route::delete('/delete/{cluster}',[ClusterController::class,'destroy'])->name('cluster.destroy');
-// });
+Route::group([
+    'prefix'=>'cluster',
+], function (){
+Route::get('/',[ClusterController::class,'index'])->name('cluster.index');
+Route::get('/create',[ClusterController::class,'create'])->name('cluster.create');
+Route::post('/store', [ClusterController::class,'store'])->name('cluster.store');
+Route::post('/{cluster}/update', [ClusterController::class,'update'])->name('cluster.update');
+Route::get('/view',[ClusterController::class,'show'])->name('cluster.show');
+Route::delete('/delete/{cluster}',[ClusterController::class,'destroy'])->name('cluster.destroy');
+});
 
-    // Route::group([
-    //     'prefix'=>'department',
-    // ], function (){
-    //     Route::get('/',[DepartmentController::class,'index'])->name('department.index');
-    //     Route::get('/create',[DepartmentController::class,'create'])->name('department.create');
-    //     Route::post('/store',[DepartmentController::class,'store'])->name('department.store');
-    // });
+    Route::group([
+        'prefix'=>'department',
+    ], function (){
+        Route::get('/',[DepartmentController::class,'index'])->name('department.index');
+        // Route::get('/create',[DepartmentController::class,'create'])->name('department.create');
+        Route::post('/store',[DepartmentController::class,'store'])->name('department.store');
+        Route::post('/{department}/update', [DepartmentController::class,'update'])->name('department.update');
+        Route::delete('/delete/{department}',[DepartmentController::class,'destroy'])->name('department.destroy');
+    });
+    Route::get('/vehicle',[DepartmentController::class,'vehicle'])->name('Vehicle_Registration.show');
+    Route::get('/plate',[DepartmentController::class,'plate'])->name('Vehicle_Registration.index');
 });

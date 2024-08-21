@@ -1,12 +1,6 @@
-{{-- @include('common.adminhead') --}}
-<!DOCTYPE html>
-<html lang="en">
-@include('layouts.main-link')
-@include('layouts.header')
-@include('layouts.sidebar')
-@include('layouts.setting')
+@extends('layouts.navigation')
+@section('content')
 
-<body class="admin">
     <div class="wrapper">
         <div class="content-page">
             <div class="preloader" dir="ltr">
@@ -37,12 +31,12 @@
                 <div id="main-content" class="">
                     <section class="sms-breadcrumb mb-10 white-box">
                         <div class="container-fluid p-0">
-                            <div class="d-flex flex-wrap justify-content-between">
+                            {{-- <div class="d-flex flex-wrap justify-content-between">
                                 <h2 class="text-uppercase">Cluster</h2>
                                 <div class="bc-pages">
                                     
                                 </div>
-                            </div>
+                            </div> --}}
                         </div>
                     </section>
 
@@ -100,8 +94,7 @@
                                                                 
                                                                     <button type="button" class="btn btn-primary edit-cluster-btn" 
                                                                             data-bs-toggle="modal" 
-                                                                            data-bs-target="#cluster_modal"
-                                                                            data-cluster="{{ $item }}"
+                                                                            data-bs-target="#cluster_modal_{{$loop->index}}"
                                                                             data-cluster-id="{{ $item->id }}"
                                                                             data-cluster-name="{{ $item->name }}">
                                                                         Edit
@@ -115,6 +108,30 @@
                                                           </form>
                                                          </td> 
                                                         </tr>
+                                                          <div id="cluster_modal_{{$loop->index}}" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+                                                            <div class="modal-dialog">
+                                                                <div class="modal-content">
+                                                                    <div class="modal-body">
+                                                                        <form method="POST" action="{{ route('cluster.update',$item) }}" class="ps-3 pe-3">
+                                                                            @csrf
+                                                                            @method('POST')
+                                                                            <input type="hidden" name="cluster_id" value="{{ $item->cluster_id }}">
+
+                                                                            <div class="mb-3">
+                                                                                <label for="name" class="form-label">Name</label>
+                                                                                <input class="form-control" type="text" name="name" id="name" value="{{ $item->name }}">
+                                                                            </div>
+                                                                        
+                                                                            <div class="mb-3 text-center">
+                                                                                <button class="btn btn-primary" type="submit">Update</button>
+                                                                                <a type="button" href="{{ route('cluster.index') }}" class="btn btn-warning">Cancel</a>
+                                                                            </div>
+                                                                            
+                                                                        </form>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
                                                         @endforeach
                                                     </tbody>
                                                 </table>
@@ -146,29 +163,7 @@
                             </div>
                         </div>
                     </div>
-                    <div id="cluster_modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
-                        <div class="modal-dialog">
-                            <div class="modal-content">
-                                <div class="modal-body">
-                                    <form method="POST" action="{{ route('cluster.update',$item) }}" class="ps-3 pe-3">
-                                        @csrf
-                                        @method('POST')
-                                        
-                                        <div class="mb-3">
-                                            <label for="name" class="form-label">Name</label>
-                                            <input class="form-control" type="text" name="name" id="name" value="">
-                                        </div>
-                                      
-                                        <div class="mb-3 text-center">
-                                            <button class="btn btn-primary" type="submit">Update</button>
-                                            <a type="button" href="{{ route('cluster.index') }}" class="btn btn-warning">Cancel</a>
-                                        </div>
-                                        
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                  
                     
 
                     <footer class="footer-area">
@@ -240,5 +235,5 @@
     <script src="assets/js/vendor.min.js"></script>
     <!-- App js -->
     <script src="assets/js/app.min.js"></script>
-</body>
-</html>
+
+    @endsection

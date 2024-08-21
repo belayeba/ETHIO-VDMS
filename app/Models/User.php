@@ -16,7 +16,7 @@ use Illuminate\Support\Str;
 class User extends Authenticatable
 {
     use Notifiable, SoftDeletes, HasFactory;
-
+    
     protected $table = 'users'; // Specify the table name
     protected $primaryKey = 'id';
     public $incrementing = false;

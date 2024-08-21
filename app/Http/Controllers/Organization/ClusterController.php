@@ -31,7 +31,7 @@ class ClusterController extends Controller
         // dd($request);
         $request->validate([
             'name' => 'required|string|max:255',
-            // 'created_by' => 'required', // Ensure a valid user ID is used
+            'created_by' => 'required', // Ensure a valid user ID is used
         ]);
         $user = auth()->user()->id; // Get the authenticated user's ID
         // dd($user);
@@ -57,13 +57,14 @@ class ClusterController extends Controller
     // Update the specified resource in storage.
     public function update(Request $request, ClustersModel $cluster)
     {
-        // dd($cluster);
+        // dd($request);
         $request->validate([
             'name' => 'required|string|max:255',
         ]);
         
         $user = auth()->user()->id; // Get the authenticated user's ID
-        $request->merge(['created_by' => $user]); // Add the user's ID to the request data
+        $request->merge(['created_by' => $user]); 
+        // dd($request);// Add the user's ID to the request data
         $cluster->update($request->all());
         
         return redirect()->route('cluster.index')->with('success', 'Cluster updated successfully.');
