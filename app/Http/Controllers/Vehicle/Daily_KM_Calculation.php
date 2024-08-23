@@ -124,5 +124,18 @@ class Daily_KM_Calculation extends Controller
                     'vehicle' => $vehicle,
                 ]);
           }
-        public function dele
+        public function delete_morningkm(Request $request)
+          {
+            $validator = Validator::make($request->all(), [
+                'vehicle_id'=>'required|uuid|vehicles_id',
+            ]);
+            // If validation fails, return an error response
+            if ($validator->fails()) 
+                {
+                    return response()->json([
+                        'success' => false,
+                        'message' => "Warning You are denied the service",
+                    ]);
+                }
+          }
     }

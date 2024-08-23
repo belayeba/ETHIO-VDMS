@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Mentenance;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Models\Vehicle\MaintenancesModel;
+use App\Models\VehiclesModel;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -16,8 +17,9 @@ class MentenanceController extends Controller
     public function displayMaintenanceRequestPage()
         {
             $id = Auth::id();
-            $requested = MaintenancesModel::where('requested_by', $id)->with('vehicle')->latest()->get();
-            return view("Maintenance.index",compact('requested'));
+            $vehicle = VehiclesModel::where('driver_id',$id)->latest()->get();
+            $requested = MaintenancesModel::where('requested_by', $id)->latest()->get();
+            return view("Maintenance.index",compact('requested','vehicle'));
         }
         // Maintenance Request (Post Data)
     public function RequestMaintenance(Request $request) 
