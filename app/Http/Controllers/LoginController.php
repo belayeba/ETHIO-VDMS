@@ -13,7 +13,6 @@ class LoginController extends Controller
      */
     public function authenticate(Request $request): RedirectResponse
     {
-        dd($request);
         $credentials = $request->validate([
             'email' => ['required', 'email'],
             'password' => ['required'],
@@ -28,5 +27,9 @@ class LoginController extends Controller
         return back()->withErrors([
             'email' => 'The provided credentials do not match our records.',
         ])->onlyInput('email');
+    }
+    public function logout()
+    {
+        dd("do something");
     }
 }

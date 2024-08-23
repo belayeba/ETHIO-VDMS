@@ -16,7 +16,7 @@ class Daily_KM_Calculation extends Controller
         public function displayForm()
           {
                 $today = Carbon::today()->toDateString();
-                $TodaysDate = DailyKMCalculationModel::where('date',$today)->get()->first();
+                $TodaysDate = DailyKMCalculationModel::where('date',$today)->latest()->get();
                 return view('DailKmForm',compact('TodaysDate'));
           }
         public function morning_km(Request $request)
@@ -103,4 +103,26 @@ class Daily_KM_Calculation extends Controller
                         ]);
                     }
           }
+        public function get_vehicle_daily_km(Request $request)
+          {
+                $validator = Validator::make($request->all(), [
+                    'vehicle_id'=>'required|uuid|vehicles_id',
+                ]);
+                // If validation fails, return an error response
+                if ($validator->fails()) 
+                    {
+                        return response()->json([
+                            'success' => false,
+                            'message' => "Warning You are denied the service",
+                        ]);
+                    }
+                $id = $request->input('vehicle_id');
+                $today = Carbon::today()->toDateString();
+                $vehicle = DailyKMCalculationModel::where('date',$today)->where('vehicle_id',$id)->first();
+                return response()->json([
+                    'success' => false,
+                    'vehicle' => $vehicle,
+                ]);
+          }
+        public function dele
     }

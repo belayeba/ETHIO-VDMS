@@ -57,11 +57,11 @@
                                                         <div class="col-md-8 form-group {{ $errors->has('cluster') ? 'has-error' : '' }}">
                                                             <label for="cluster" class=" control-label">Cluster</label>
                                                                 
-                                                                    <select data-placeholder = "{{ 'Select Cluster' }}" value="cluster"  class="form-control select" id="cluster" name="cluster" data-fouc required="true">
+                                                                    <select data-placeholder = "{{ 'Select Cluster' }}" value="cluster"  class="form-control select" id="cluster_id" name="cluster_id" data-fouc required="true">
                                                                         <option style="display: none;"> </option>
-                                                                        
                                                                         @foreach ($clusters as $item)
-                                                                        <option value="{{ $item->id }}">
+                                                                        
+                                                                        <option value="{{ $item->cluster_id }}">
                                                                             {{ $item->name }}
                                                                         </option>
                                                                     @endforeach

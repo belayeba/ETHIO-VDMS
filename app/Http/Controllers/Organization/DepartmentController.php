@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Organization\DepartmentsModel;
 use Illuminate\Http\Request;
 use App\Models\Organization\ClustersModel;
+use Illuminate\Support\Facades\Validator;
 
 class DepartmentController extends Controller
 {
@@ -17,9 +18,8 @@ class DepartmentController extends Controller
         //
         $departments = DepartmentsModel::all(); // Get all departments
         $clusters = ClustersModel::all(); // Get all clusters
-        // dd($clusters);
         // Pass the departments and clusters to the view
-        return view('department.index', compact('departments', 'clusters'));
+        return view('Department.index', compact('departments', 'clusters'));
     }
 
     /**
@@ -35,13 +35,19 @@ class DepartmentController extends Controller
      */
     public function store(Request $request)
     {
-        
-        // Validate the request data
-        $request->validate([
+        $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
-            'cluster_id' => 'required', // Ensure a valid cluster ID is used
+            'cluster_id' => 'required|uuid|exists:clusters,cluster_id',
         ]);
-        dd($request);
+        // If validation fails, return an error response
+        if ($validator->fails()) 
+            {
+                return response()->json([
+                    'success' => false,
+                    'message' => $validator->errors(),
+                ]);
+            }
+
         $user = auth()->user()->id; // Get the authenticated user's ID
         $request->merge(['created_by' => $user]); // Add the user's ID to the request data
         // Create the department

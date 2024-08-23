@@ -1,5 +1,10 @@
-@extends('layouts.navigation')
-@section('content')
+{{-- @include('common.adminhead') --}}
+<!DOCTYPE html>
+<html lang="en">
+@include('layouts.main-link')
+@include('layouts.header')
+@include('layouts.sidebar')
+@include('layouts.setting')
 
 <body class="admin">
     <div class="wrapper">
@@ -110,29 +115,31 @@
                                                           </form>
                                                          </td> 
                                                         </tr>
+                                                        <div id="cluster_modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-body">
+                                    <form method="POST" action="{{ route('cluster.update',$item) }}" class="ps-3 pe-3">
+                                        @csrf
+                                        @method('POST')
+                                        
+                                        <div class="mb-3">
+                                            <label for="name" class="form-label">Name</label>
+                                            <input class="form-control" type="text" name="name" id="name" value="">
+                                        </div>
+                                      
+                                        <div class="mb-3 text-center">
+                                            <button class="btn btn-primary" type="submit">Update</button>
+                                            <a type="button" href="{{ route('cluster.index') }}" class="btn btn-warning">Cancel</a>
+                                        </div>
+                                        
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                                                        @endforeach
                                                     </tbody>
-
-                                                    <div id="cluster_modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
-                                                    <div class="modal-dialog">
-                                                        <div class="modal-content">
-                                                            <div class="modal-body">
-                                                                <form action="{{ route('cluster.update') }}" method="POST" class="ps-3 pe-3">
-                                                                    @csrf <!-- Add CSRF token field -->
-                                                                    <div class="mb-3">
-                                                                        <label for="name" class="form-label">Name</label>
-                                                                        <input class="form-control" type="text" name="name" id="name" value="{{ $item->name }}">
-                                                                    </div>
-                                                
-                                                                    <div class="mb-3 text-center">
-                                                                        <button class="btn btn-primary" type="submit">Update</button>
-                                                                        <a type="button" href="{{ route('cluster.index') }}" class="btn btn-warning">Cancel</a>
-                                                                    </div>
-                                                                </form>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                    @endforeach                                                    
                                                 </table>
                                             </div>
                                         </div>
@@ -162,31 +169,7 @@
                             </div>
                         </div>
                     </div>
-                    <div id="cluster_modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
-                        <div class="modal-dialog">
-                            <div class="modal-content">
-                                <div class="modal-body">
-                                    <form method="POST" action="{{ route('cluster.update',$item)}}" class="ps-3 pe-3">
-                                        @csrf
-                                        @method('POST')
-                                        
-                                        <div class="mb-3">
-                                            <label for="name" class="form-label">Name</label>
-                                            <input class="form-control" type="text" name="name" id="name" value="">
-                                        </div>
-                                      
-                                        <div class="mb-3 text-center">
-                                            <button class="btn btn-primary" type="submit">Update</button>
-                                            <a type="button" href="{{ route('cluster.index') }}" class="btn btn-warning">Cancel</a>
-                                        </div>
-                                        
-                                    </form>
-                                    @endforeach
 
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                     
 
                     <footer class="footer-area">
@@ -258,4 +241,5 @@
     <script src="assets/js/vendor.min.js"></script>
     <!-- App js -->
     <script src="assets/js/app.min.js"></script>
-@endsection
+</body>
+</html>

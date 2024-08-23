@@ -1,12 +1,7 @@
-{{-- @include('common.adminhead') --}}
-<!DOCTYPE html>
-<html lang="en">
-@include('layouts.main-link')
-@include('layouts.header')
-@include('layouts.sidebar')
-@include('layouts.setting')
+@extends('layouts.navigation')
 
-<body class="admin">
+@section('content')
+
     <div class="wrapper">
         <div class="content-page">
             <div class="preloader" dir="ltr">
@@ -28,15 +23,9 @@
                     <span></span>
                 </div>
             </div>
-            <input type="hidden" name="demoMode" id="demoMode" value="1">
-            <input type="hidden" name="url" id="url" value="https://E-LearningPortal.com">
-            <input type="hidden" name="active_date_format" id="active_date_format" value="jS M, Y">
-            <input type="hidden" name="js_active_date_format" id="js_active_date_format" value="mm/dd/yyyy">
             <input type="hidden" name="table_name" id="table_name" value="">
             <input type="hidden" name="csrf_token" class="csrf_token" value="{{ csrf_token() }}">
-            <input type="hidden" name="currency_symbol" class="currency_symbol" value="$">
-            <input type="hidden" name="currency_show" class="currency_show" value="1">
-            <input type="hidden" name="chat_settings" id="chat_settings" value="">
+          
 
             <div class="main-wrapper" style="min-height: 600px">
                 <!-- Page Content  -->
@@ -44,11 +33,11 @@
                     <section class="sms-breadcrumb mb-10 white-box">
                         <div class="container-fluid p-0">
                             <div class="d-flex flex-wrap justify-content-between">
-                                <h2 class="text-uppercase">Fuelling</h2>
+                                <h2 class="text-uppercase">Fueling</h2>
                                 <div class="bc-pages">
                                     <a href="../dashboard.html">Dashboard</a>
                                     <a href="#">Organization</a>
-                                    <a href="ebook.html">Fuelling</a>
+                                    <a href="ebook.html">Fueling</a>
                                 </div>
                             </div>
                         </div>
@@ -61,7 +50,7 @@
                                 <div class="col-md-4">
                                     <div class="card">
                                         <div class="card-header">
-                                            <h3 class="mb-0">New Fuelling</h3>
+                                            <h3 class="mb-0">New Fueling</h3>
                                         </div>
                                         <div class="card-body">
                                             <form method="POST" action="" accept-charset="UTF-8" name="ebook-form" id="ebook-form" enctype="multipart/form-data">
@@ -196,5 +185,4 @@
     <script src="assets/js/vendor.min.js"></script>
     <!-- App js -->
     <script src="assets/js/app.min.js"></script>
-</body>
-</html>
+@endsection

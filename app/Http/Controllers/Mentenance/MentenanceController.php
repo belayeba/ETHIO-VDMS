@@ -16,8 +16,8 @@ class MentenanceController extends Controller
     public function displayMaintenanceRequestPage()
         {
             $id = Auth::id();
-            $requested = MaintenancesModel::where('driver_id', $id)->latest()->get();
-            return view("Request.MaintenanceRequstPage",compact('Requested'));
+            $requested = MaintenancesModel::where('requested_by', $id)->with('vehicle')->latest()->get();
+            return view("Maintenance.index",compact('requested'));
         }
         // Maintenance Request (Post Data)
     public function RequestMaintenance(Request $request) 
@@ -40,7 +40,7 @@ class MentenanceController extends Controller
                     {
                         // Create the user
                         MaintenancesModel::create([
-                            'driver_id'=>$id,
+                            'requested_by'=>$id,
                             'vehicle_id' => $request->vehicle,
                             'maintenance_type' => $request->maintenance_type,
                         ]);
@@ -69,12 +69,13 @@ class MentenanceController extends Controller
                 'vehicle'=>'sometimes|required|uuid|exists:vehicles,vehicle_id'
             ]); 
             // Check if validation fails
-            if ($validator->fails()) {
-                return response()->json([
-                    'success' => false,
-                    'message' => "All fields are required"
-                ], 422); // 422 Unprocessable Entity
-            }
+            if ($validator->fails()) 
+                {
+                    return response()->json([
+                        'success' => false,
+                        'message' => "All fields are required"
+                    ], 422); // 422 Unprocessable Entity
+                }
             $id = $request->input('request_id');
             try
                 {

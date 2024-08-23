@@ -55,8 +55,8 @@ class CreateAllTablesWithUuid extends Migration
             $table->string('vehicle_type', 255);
             $table->string('vehicle_category', 255);
             $table->decimal('fuel_amount', 10, 2);
-            $table->date('last_service')->nullable();
-            $table->date('next_service')->nullable();
+            $table->integer('last_service')->nullable();
+            $table->integer('next_service')->nullable();
             $table->uuid('registered_by')->nullable();
             $table->foreign('registered_by')->references('id')->on('users');
             $table->uuid('driver_id')->nullable();
@@ -287,7 +287,12 @@ class CreateAllTablesWithUuid extends Migration
             $table->uuid('giving_back_vehicle_id')->primary();
             $table->uuid('requested_by');
             $table->foreign('requested_by')->references('id')->on('users');
+            $table->uuid('vehicle_id');
+            $table->foreign('vehicle_id')->references('vehicle_id')->on('vehicles');
             $table->uuid('approved_by')->nullable();
+            $table->string('purpose');
+            $table->string('reject_reason_vec_dire')->nullable();
+            $table->string('reject_reason_director')->nullable();
             $table->foreign('approved_by')->references('id')->on('users');
             $table->uuid('received_by')->nullable();
             $table->foreign('received_by')->references('id')->on('users');

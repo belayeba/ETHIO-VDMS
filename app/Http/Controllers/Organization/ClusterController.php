@@ -16,7 +16,7 @@ class ClusterController extends Controller
     {
         $clusters = ClustersModel::all();
         // dd($clusters);
-        return view('Cluster.index', compact('clusters'));
+        return view('Cluster.index2', compact('clusters'));
     }
 
     // Show the form for creating a new resource.
@@ -60,21 +60,19 @@ class ClusterController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
         ]);
-        
         $user = auth()->user()->id; // Get the authenticated user's ID
-        $request->merge(['created_by' => $user]); // Add the user's ID to the request data
-        $cluster->update($request->all());
-        
+        $cluster->update([
+            'name'=>$request->input('name')
+        ]);
         return redirect()->route('cluster.index')->with('success', 'Cluster updated successfully.');
     }
 
     // Remove the specified resource from storage.
     public function destroy(ClustersModel $cluster)
-    {
-       
-        $cluster->delete();
+        {
+            $cluster->delete();
 
-        return redirect()->route('cluster.index')->with('success', 'Cluster deleted successfully.');
-    }
+            return redirect()->route('cluster.index')->with('success', 'Cluster deleted successfully.');
+        }
    
 }

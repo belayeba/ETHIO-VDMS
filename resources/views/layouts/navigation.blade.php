@@ -104,7 +104,12 @@
                                 <li>
                                     <a href="{{route('perm_vec_director_page')}}">Pemanent Requests</a>
                                 </li>
-                                
+                                <li>
+                                    <a href="/mentaincance_request_page">Mentencance Request</a>
+                                </li>
+                                <li>
+                                    <a href="/fuel_request_page">Fuel Request</a>
+                                </li>
                             </ul>
                         </div>
                     </li>
