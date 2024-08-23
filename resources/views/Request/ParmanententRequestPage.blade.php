@@ -56,6 +56,11 @@
                                                  <label class="form-label">Upload Position Latter</label>
                                                 <input name="position_letter" class="form-control" type="file" >
                                         </div>
+
+                                        <div class="position-relative mb-3">
+                                                 <label class="form-label">Upload Driving License</label>
+                                                <input name="Driving_license" class="form-control" type="file" >
+                                        </div>
                                     </div>
 
                                     <ul class="list-inline wizard mb-0">
@@ -97,8 +102,10 @@
                                             @csrf
                                             <input type="hidden" name="request_id" value="{{ $request->vehicle_request_permanent_id }}">
                                             <button type="button" class="btn btn-info rounded-pill" title="show"><i class=" ri-eye-line"></i></button>
+                                            @if($request->approved_by === Null && $request->director_reject_reason === Null)
                                             <a href="{{route('perm_vec_update')}}" class="btn btn-secondary rounded-pill"  data-bs-toggle="modal" data-bs-target="#standard-modal-{{ $loop->index }}" title="edit"><i class=" ri-edit-line"></i></a>
-                                            <button type="submit" class="btn btn-danger rounded-pill" title="edit"><i class="ri-close-circle-line"></i></button>
+                                            <button type="submit" class="btn btn-danger rounded-pill" title="Delete"><i class="ri-close-circle-line"></i></button>
+                                            @endif
                                         </form>
                                     </td>
                                 </tr>

@@ -13,7 +13,7 @@ use App\Http\Controllers\Vehicle\GivingBackPermanentVehicle;
 use App\Http\Controllers\Vehicle\VehicleParmanentlyRequestController;
 // use App\Http\Controllers\Organization\ClustersController;
 use App\Http\Controllers\vehicle\VehicleTemporaryRequestController;
-use App\Http\Controllers\Vehicle\VehicleParmanentlyRequestController;
+// use App\Http\Controllers\Vehicle\VehicleParmanentlyRequestController;
 use FontLib\Table\Type\name;
 use Illuminate\Support\Facades\Auth;
 
@@ -100,7 +100,7 @@ Route::group(['middleware' => ['auth']], function()
                     Route::post('/perm_user_post_request', 'RequestVehiclePerm')->name('vec_perm_request_post');
                     Route::post('/Perm_user_delete_request', 'deleteRequest')->name('user_perm_delet');
                     Route::post('/perm_user_update_info', 'update_perm_request')->name('perm_vec_update');
-                    Route::get('/director_approve_page', 'DirectorApprovalPage')->name('perm_vec_director_page');
+                    Route::get('/director_approve_page/perm', 'DirectorApprovalPage')->name('perm_vec_director_page');
                     Route::post('/perm_director_approve_request', 'DirectorApproveRequest')->name('perm_vec_director_approve');
                     Route::post('/perm_director_reject_request', 'DirectorRejectRequest')->name('perm_vec_direct_reject');
                     Route::get('/perm_simirit_approve_page', 'VehicleDirector_page')->name('perm_vec_simirit_page');
@@ -108,19 +108,19 @@ Route::group(['middleware' => ['auth']], function()
                     Route::post('/perm_simirit_reject_request', 'VehicleDirectorRejectRequest')->name('perm_vec_simirit_reject');
                 });
               // Giving Back Parmanent Vehicle 
-            Route::controller(GivingBackPermanentVehicle::class)->group(function()
-                {
-                    Route::get('/perm_request_page', 'displayPermRequestPage')->name('vec_perm_request');
-                    Route::post('/perm_user_post_request', 'RequestVehiclePerm')->name('vec_perm_request_post');
-                    Route::post('/Perm_user_delete_request', 'deleteRequest')->name('user_perm_delet');
-                    Route::post('/perm_user_update_info', 'update_perm_request')->name('perm_vec_update');
-                    Route::get('/director_approve_page', 'DirectorApprovalPage')->name('perm_vec_director_page');
-                    Route::post('/perm_director_approve_request', 'DirectorApproveRequest')->name('perm_vec_director_approve');
-                    Route::post('/perm_director_reject_request', 'DirectorRejectRequest')->name('perm_vec_direct_reject');
-                    Route::get('/perm_simirit_approve_page', 'VehicleDirector_page')->name('perm_vec_simirit_page');
-                    Route::post('/perm_simirit_approve_request', 'VehicleDirectorApproveRequest')->name('perm_vec_simirit_approve');
-                    Route::post('/perm_simirit_reject_request', 'VehicleDirectorRejectRequest')->name('perm_vec_simirit_reject');
-                });
+            // Route::controller(GivingBackPermanentVehicle::class)->group(function()
+            //     {
+            //         Route::get('/perm_request_page', 'displayPermRequestPage')->name('vec_perm_request');
+            //         Route::post('/perm_user_post_request', 'RequestVehiclePerm')->name('vec_perm_request_post');
+            //         Route::post('/Perm_user_delete_request', 'deleteRequest')->name('user_perm_delet');
+            //         Route::post('/perm_user_update_info', 'update_perm_request')->name('perm_vec_update');
+            //         Route::get('/director_approve_page', 'DirectorApprovalPage')->name('perm_vec_director_page');
+            //         Route::post('/perm_director_approve_request', 'DirectorApproveRequest')->name('perm_vec_director_approve2');
+            //         Route::post('/perm_director_reject_request', 'DirectorRejectRequest')->name('perm_vec_direct_reject');
+            //         Route::get('/perm_simirit_approve_page', 'VehicleDirector_page')->name('perm_vec_simirit_page');
+            //         Route::post('/perm_simirit_approve_request', 'VehicleDirectorApproveRequest')->name('perm_vec_simirit_approve');
+            //         Route::post('/perm_simirit_reject_request', 'VehicleDirectorRejectRequest')->name('perm_vec_simirit_reject');
+            //     });
             Route::controller(tempController::class)->group(function()
                 {
                     Route::group(['middleware' => ['can:edit posts']], function () {

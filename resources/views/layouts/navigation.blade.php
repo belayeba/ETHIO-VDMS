@@ -102,7 +102,7 @@
                                     <a href="{{route('simirit_page')}}">Dispatcher</a>
                                 </li>
                                 <li>
-                                    <a href="{{route('perm_vec_director_page')}}">Pemanent Requests</a>
+                                    <a href="/director_approve_page/perm">Pemanent Requests</a>
                                 </li>
                                 <li>
                                     <a href="/mentaincance_request_page">Mentencance Request</a>

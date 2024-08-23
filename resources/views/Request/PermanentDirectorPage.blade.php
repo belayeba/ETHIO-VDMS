@@ -41,6 +41,10 @@
                                                         </td>
                                                     </tr>
                                                 </tbody>
+                                                    <form id="approvalForm" method="POST" action="{{ route('perm_vec_director_approve') }}" style="display: none;">
+                                                        @csrf
+                                                        <input type="hidden" name="request_id" value="{{ $request->vehicle_request_permanent_id }}">
+                                                    </form>
                                                  <!-- this is for the assign  modal -->
                                                  <div class="modal fade" id="staticBackdrop-{{ $loop->index }}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                                                     <div class="modal-dialog">
@@ -49,13 +53,13 @@
                                                                 <h5 class="modal-title" id="staticBackdropLabel">Reject reason</h5>
                                                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                             </div> <!-- end modal header -->
-                                                            <form method="POST" action="{{route('director_reject_request')}}">
+                                                            <form method="POST" action="{{route('perm_vec_direct_reject')}}">
                                                                 @csrf
                                                                 <div class="modal-body">
                                                                     <div class="col-lg-6">
                                                                         <h5 class="mb-3"></h5>
                                                                         <div class="form-floating">
-                                                                        <input type="hidden" name="request_id" value="{{$request->request_id}}">
+                                                                        <input type="hidden" name="request_id" value="{{$request->vehicle_request_permanent_id}}">
                                                                         <textarea class="form-control" name="reason" style="height: 60px;" required></textarea>
                                                                         <label for="floatingTextarea">Reason</label>
                                                                         </div>
