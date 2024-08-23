@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Vehicle\FuelsModel;
 use App\Models\Vehicle\MaintenancesModel;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -25,15 +26,15 @@ class VehiclesModel extends Model
         'next_service', 'driver_id', 'fuel_type', 'status', 'notes'
     ];
     protected static function boot()
-    {
-        parent::boot();
+        {
+            parent::boot();
 
-        static::creating(function ($model) {
-            if (empty($model->{$model->getKeyName()})) {
-                $model->{$model->getKeyName()} = (string) Str::uuid();
-            }
-        });
-    }
+            static::creating(function ($model) {
+                if (empty($model->{$model->getKeyName()})) {
+                    $model->{$model->getKeyName()} = (string) Str::uuid();
+                }
+            });
+        }
     public function maintenances(): HasMany
     {
         return $this->hasMany(MaintenancesModel::class, 'vehicle_id');
@@ -46,6 +47,9 @@ class VehiclesModel extends Model
     {
         return $this->hasMany(FuelsModel::class, 'vehicle_id');
     }
-
+   public function driver():BelongsTo
+      {
+        return $this->belongsTo(User::class, 'driver_id','id');
+      }
     // Other relations
 }
