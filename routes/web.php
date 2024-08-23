@@ -13,7 +13,6 @@ use App\Http\Controllers\Vehicle\GivingBackPermanentVehicle;
 use App\Http\Controllers\Vehicle\VehicleParmanentlyRequestController;
 // use App\Http\Controllers\Organization\ClustersController;
 use App\Http\Controllers\vehicle\VehicleTemporaryRequestController;
-use App\Http\Controllers\Vehicle\VehicleParmanentlyRequestController;
 use FontLib\Table\Type\name;
 use Illuminate\Support\Facades\Auth;
 

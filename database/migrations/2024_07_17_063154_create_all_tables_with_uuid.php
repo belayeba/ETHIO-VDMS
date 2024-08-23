@@ -53,6 +53,8 @@ class CreateAllTablesWithUuid extends Migration
             $table->date('registration_date');
             $table->integer('mileage');
             $table->string('vehicle_type', 255);
+            $table->string('libre', 255)->nullable();
+            $table->string('insurance', 255)->nullable();
             $table->string('vehicle_category', 255);
             $table->decimal('fuel_amount', 10, 2);
             $table->integer('last_service')->nullable();
@@ -176,6 +178,30 @@ class CreateAllTablesWithUuid extends Migration
                 $table->timestamps();
                 $table->softDeletes();
         });
+             // Vehicle Inspection
+             Schema::create('vehicle_inspections', function (Blueprint $table) {
+                $table->uuid('inspection_id');  // Inspection session ID
+                $table->uuid('vehicle_id');
+                $table->foreign('vehicle_id')->references('vehicle_id')->on('vehicles');
+                $table->uuid('inspected_by');
+                $table->foreign('inspected_by')->references('id')->on('users');
+                $table->string('part_name');  // Each part of the vehicle
+                $table->boolean('is_damaged')->default(false);
+                $table->text('damage_description')->nullable();
+                $table->dateTime('inspection_date');  // Time of inspection
+                $table->timestamps();
+                $table->softDeletes();
+                $table->primary(['inspection_id', 'part_name']);  // Composite primary key to avoid duplication
+        });
+          // trip person
+          Schema::create('vehicle_parts', function (Blueprint $table) 
+                {
+                        $table->uuid('vehicle_parts_id')->primary();
+                        $table->uuid('name');
+                        $table->string('notes');
+                        $table->timestamps();
+                        $table->softDeletes();
+                });
             // Vehicle Inspection
         Schema::create('vehicle_inspections', function (Blueprint $table) {
                 $table->uuid('inspection_id');  // Inspection session ID
@@ -183,7 +209,8 @@ class CreateAllTablesWithUuid extends Migration
                 $table->foreign('vehicle_id')->references('vehicle_id')->on('vehicles');
                 $table->uuid('inspected_by');
                 $table->foreign('inspected_by')->references('id')->on('users');
-                $table->string('part_name');  // Each part of the vehicle
+                $table->uuid('part_name');
+                $table->foreign('part_name')->references('vehicle_parts_id')->on('vehicle_parts');
                 $table->boolean('is_damaged')->default(false);
                 $table->text('damage_description')->nullable();
                 $table->dateTime('inspection_date');  // Time of inspection
@@ -331,9 +358,11 @@ class CreateAllTablesWithUuid extends Migration
                 $table->integer('status')->nullable();
                 $table->timestamps();
                 $table->softDeletes();
-        });
-          // trip person
-          Schema::create('trip_person', function (Blueprint $table) {
+        }); 
+       
+        // trip person
+          Schema::create('trip_person', function (Blueprint $table) 
+          {
                 $table->uuid('trip_person_id')->primary();
                 $table->uuid('request_id');
                 $table->foreign('request_id')->references('request_id')->on('vehicle_requests_temporary');
@@ -343,37 +372,39 @@ class CreateAllTablesWithUuid extends Migration
                 $table->timestamps();
                 $table->softDeletes();
         });
+         
           // Vehicle Detail
-          Schema::create('trip_materials', function (Blueprint $table) {
-                $table->uuid('trip_material_id')->primary();
-                $table->string('material_name', 1000);
-                $table->float('weight');
-                $table->uuid('request_id');
-                $table->foreign('request_id')->references('request_id')->on('vehicle_requests_temporary');
+          Schema::create('trip_materials', function (Blueprint $table) 
+            {
+                    $table->uuid('trip_material_id')->primary();
+                    $table->string('material_name', 1000);
+                    $table->float('weight');
+                    $table->uuid('request_id');
+                    $table->foreign('request_id')->references('request_id')->on('vehicle_requests_temporary');
+                    $table->timestamps();
+                    $table->softDeletes();
+            });
+        // driver change
+        Schema::create('driver_changes', function (Blueprint $table) 
+            {
+                $table->uuid('driver_change_id')->primary();
+                $table->uuid('vehicle_id');
+                $table->foreign('vehicle_id')->references('vehicle_id')->on('vehicles');
+                $table->uuid('new_driver_id');
+                $table->foreign('new_driver_id')->references('id')->on('users');
+                $table->uuid('old_driver_id');
+                $table->foreign('old_driver_id')->references('id')->on('users');
+                $table->uuid('inspection_id');  // Link to the entire inspection session
+                $table->foreign('inspection_id')->references('inspection_id')->on('vehicle_inspections');
                 $table->timestamps();
                 $table->softDeletes();
-        });
-
-        
-        // driver change
-        Schema::create('driver_changes', function (Blueprint $table) {
-            $table->uuid('driver_change_id')->primary();
-            $table->uuid('vehicle_id');
-            $table->foreign('vehicle_id')->references('vehicle_id')->on('vehicles');
-            $table->uuid('new_driver_id');
-            $table->foreign('new_driver_id')->references('id')->on('users');
-            $table->uuid('old_driver_id');
-            $table->foreign('old_driver_id')->references('id')->on('users');
-            $table->uuid('inspection_id');  // Link to the entire inspection session
-            $table->foreign('inspection_id')->references('inspection_id')->on('vehicle_inspections');
-            $table->timestamps();
-            $table->softDeletes();
-        });        
+            });        
     }
     public function down()
         {
             Schema::dropIfExists('vehicles');
             Schema::dropIfExists('drivers');
+            Schema::dropIfExists('vehicle_parts');
             Schema::dropIfExists('locations');
             Schema::dropIfExists('maintenances');
             Schema::dropIfExists('fuelings');
