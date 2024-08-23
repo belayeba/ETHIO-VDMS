@@ -9,6 +9,12 @@ namespace App\Http\Controllers\Vehicle;
     
 class VehiclePartsController extends Controller
     {
+        public function InspectionPage()
+            {
+                $parts = VehiclePart::all();
+
+                return view('Inspection', compact('parts'));
+            }
         // Create a new vehicle part
         public function store(Request $request)
             {

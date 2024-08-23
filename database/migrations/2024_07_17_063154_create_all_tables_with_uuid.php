@@ -216,7 +216,7 @@ class CreateAllTablesWithUuid extends Migration
                 $table->dateTime('inspection_date');  // Time of inspection
                 $table->timestamps();
                 $table->softDeletes();
-                $table->primary(['inspection_id', 'part_name']);  // Composite primary key to avoid duplication
+                $table->primary(['inspection_id', 'part_name','inspected_by']);  // Composite primary key to avoid duplication
         });
           // Vehicle Requests Temporary Table
         Schema::create('vehicle_requests_temporary', function (Blueprint $table) {

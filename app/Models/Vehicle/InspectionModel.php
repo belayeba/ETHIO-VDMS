@@ -13,7 +13,7 @@ class InspectionModel extends Model
     use SoftDeletes;
 
     // Set the primary key as a composite key
-    protected $primaryKey = ['inspection_id', 'part_name','inspected_by'];
+    protected $primaryKey = ['inspection_id', 'part_name','vehicle_id','inspected_by'];
     public $incrementing = false;
 
     // Specify the table associated with the model

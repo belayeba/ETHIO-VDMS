@@ -210,7 +210,6 @@ Route::group(['middleware' => ['auth']], function()
                         Route::get('/temp76', 'temp76');
 
                 });
-
                 // Define routes for InspectionController
             Route::controller(InspectionController::class)->group(function ()
                  {
@@ -220,7 +219,7 @@ Route::group(['middleware' => ['auth']], function()
                     Route::put('/inspection/{inspectionId}/{partName}', 'updateInspection')->name('inspection.update'); // Update a specific inspection
                     Route::delete('/inspection/{inspectionId}', 'deleteInspection')->name('inspection.delete'); // Delete a specific inspection
                  });
-                 // Define routes for VehiclePartsController
+                // Define routes for VehiclePartsController
             Route::controller(VehiclePartsController::class)->group(function () 
                 {
                      Route::post('/vehicle-parts', 'store')->name('vehicle_parts.store'); // Create a new vehicle part
@@ -228,7 +227,7 @@ Route::group(['middleware' => ['auth']], function()
                      Route::get('/vehicle-parts', 'index')->name('vehicle_parts.index'); // List all vehicle parts
                      Route::put('/vehicle-parts/{id}', 'update')->name('vehicle_parts.update'); // Update a vehicle part
                      Route::delete('/vehicle-parts/{id}', 'destroy')->name('vehicle_parts.destroy'); // Delete a vehicle part
-                 });
+                });
                  
             Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');           
 

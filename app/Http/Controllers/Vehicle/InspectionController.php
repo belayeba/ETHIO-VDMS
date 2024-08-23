@@ -10,6 +10,15 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 class InspectionController extends Controller
 {
+    public function InspectionPage()
+        {
+            $inspections = InspectionModel::select('inspection_id','vehicle_id', 'inspected_by', 'inspection_date')
+                ->distinct()
+                ->orderBy('inspection_date', 'desc')
+                ->get();
+
+            return view('Inspection', compact('inspections'));
+        }
         //Insert Data
     public function storeInspection(Request $request)
         {
@@ -73,7 +82,8 @@ class InspectionController extends Controller
         {
             $query = InspectionModel::query();
         
-            if ($request->has('vehicle_id')) {
+            if ($request->has('vehicle_id')) 
+            {
                 $query->where('vehicle_id', $request->input('vehicle_id'));
             }
         
@@ -81,7 +91,7 @@ class InspectionController extends Controller
                 $query->where('inspected_by', $request->input('inspected_by'));
             }
         
-            $inspections = $query->get();
+            $inspections = $query->latest()->get();
         
             return response()->json(['status' => 'success', 'data' => $inspections]);
         }
