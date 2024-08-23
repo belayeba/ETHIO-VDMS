@@ -16,8 +16,8 @@ class VehicleParmanentlyRequestController extends Controller
     public function displayPermRequestPage()
         {
             $id = Auth::id();
-            $Requested = VehiclePermanentlyRequestModel::where('requested_by_id',$id)->get();
-            return view("Request.ParmanententRequestPage",compact('Requested'));
+            $Requested = VehiclePermanentlyRequestModel::where('requested_by',$id)->get();
+            return view("Request.ParmanententRequestPage", compact('Requested'));
         }
         // Send Vehicle Request Parmananently
     public function RequestVehiclePerm(Request $request) 
@@ -64,7 +64,7 @@ class VehicleParmanentlyRequestController extends Controller
         {
             // Validate the request
             $validator = Validator::make($request->all(), [
-                'request_id' => 'required|uuid|exists:users,id', // Check if UUID exists in the 'users' table
+                'request_id' => 'required|uuid|exists:vehicle_requests_parmanently,vehicle_request_permanent_id', // Check if UUID exists in the 'vehicle_requests_parmanently' table
                 'purpose' => 'sometimes|string|max:255',
                 'position_letter' => 'sometimes|file|mimes:pdf,jpeg,png,jpg|max:2048', // 2MB max size for file
             ]);
@@ -78,10 +78,10 @@ class VehicleParmanentlyRequestController extends Controller
             $id = $request->input('request_id');
             try
                 {
-                    $Vehicle_Request = VehiclePermanentlyRequestModel::find($id); 
+                    $Vehicle_Request = VehiclePermanentlyRequestModel::find($id);
                     $user_id = Auth::id();
                     // Check if the record was found
-                    if($user_id != $Vehicle_Request->requested_by_id)
+                    if($user_id != $Vehicle_Request->requested_by)
                             {
                                 return response()->json([
                                     'success' => false,
@@ -123,7 +123,7 @@ class VehicleParmanentlyRequestController extends Controller
     public function deleteRequest(Request $request)
         {
             $validation = Validator::make($request->all(),[
-                'request_id'=>'required|vehicle_requests_temporary,request_id',
+                'request_id'=>'required|exists:vehicle_requests_parmanently,vehicle_request_permanent_id',
             ]);
             // Check validation error
             if ($validation->fails()) 
@@ -172,14 +172,14 @@ class VehicleParmanentlyRequestController extends Controller
     public function DirectorApprovalPage()
         {
                 $id = Auth::id();
-                $directors_data = User::where('id',$id)->get('department_id');
-                $dept_id = $directors_data->department_id;
+                // $directors_data = User::where('id',$id)->get('department_id');
+                // $dept_id = $directors_data->department_id;
+                $vehicle_requests=VehiclePermanentlyRequestModel::get();
+                // $vehicle_requests = VehiclePermanentlyRequestModel::whereHas('requestedBy', function ($query) use ($dept_id) {
+                //     $query->where('department_id', $dept_id);
+                // })->get();
 
-                $vehicle_requests = VehiclePermanentlyRequestModel::whereHas('requestedBy', function ($query) use ($dept_id) {
-                    $query->where('department_id', $dept_id);
-                })->get();
-
-                return view("DirectorPage", compact('vehicle_requests'));
+                return view("Request.PermanentDirectorPage",compact('vehicle_requests'));
         }
     // DIRECTOR APPROVE THE REQUESTS
     public function DirectorApproveRequest(Request $request)

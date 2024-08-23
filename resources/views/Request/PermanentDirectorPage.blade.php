@@ -21,10 +21,7 @@
                                                 <tr>
                                                     <th>#</th>
                                                     <th>Requested By</th>
-                                                    <th>Vehicle Type</th>
-                                                    <th>Location From</th>
-                                                    <th>Location To</th>
-                                                    <th>Requested At</th>
+                                                    <th>Reason</th>
                                                     <th>Action</th>
                                                 </tr>
                                             </thead>
@@ -33,9 +30,7 @@
                                                     <tr>
                                                         <td>{{$loop->iteration}}</td>
                                                         <td>{{$request->requestedBy->first_name}}</td>
-                                                        <td>{{$request->vehicle_type}}</td>
-                                                        <td>{{$request->start_location}}</td>
-                                                        <td>{{$request->end_locations}}</td>
+                                                        <td>{{$request->purpose}}</td>
                                                         <td>{{$request->created_at}}</td>
                                                         <td>
                                                             <button type="button" class="btn btn-info rounded-pill" data-bs-toggle="modal" data-bs-target="#standard-modal-{{ $loop->index }}" title="Show"><i class=" ri-eye-line"></i></button>
@@ -46,59 +41,8 @@
                                                         </td>
                                                     </tr>
                                                 </tbody>
-                                                    <form id="approvalForm" method="POST" action="{{ route('director_approve_request') }}" style="display: none;">
-                                                        @csrf
-                                                        <input type="hidden" name="request_id" value="{{ $request->request_id }}">
-                                                    </form>
-                                                <!-- show all the information about the request modal -->
-                                                <div id="standard-modal-{{ $loop->index }}" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="standard-modalLabel" aria-hidden="true">
-                                                    <div class="modal-dialog">
-                                                        <div class="modal-content">
-                                                            <div class="modal-header">
-                                                                <h4 class="modal-title" id="standard-modalLabel">Request Details</h4>
-                                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                            </div>
-                                                            <div class="modal-body">
-                                                                <dl class="row mb-0">
-                                                                    <dt class="col-sm-3">Request reason</dt>
-                                                                    <dd class="col-sm-9">{{$request->purpose}}.</dd>
-
-                                                                    <dt class="col-sm-3">Requested vehicle</dt>
-                                                                    <dd class="col-sm-9">
-                                                                        <p>{{$request->vehicle_type}}.</p>
-                                                                    </dd>
-
-                                                                    <dt class="col-sm-3">Start date and Time</dt>
-                                                                    <dd class="col-sm-9">{{$request->start_date}}, {{$request->start_time}}.</dd>
-
-                                                                    <dt class="col-sm-3">Return date and Time</dt>
-                                                                    <dd class="col-sm-9">{{$request->end_date}}, {{$request->end_time}}.</dd>
-
-                                                                    <dt class="col-sm-3">Location From and To</dt>
-                                                                    <dd class="col-sm-9">{{$request->start_location}}, {{$request->end_locations}}.</dd>
-
-                                                                    <dt class="col-sm-3 text-truncate">passenger</dt>
-                                                                
-                                                                    <dd class="col-sm-9">  @foreach($request->peoples as $person) {{$person->user->first_name}}.</br> @endforeach</dd>
-
-                                                                    <dt class="col-sm-3">Materials</dt>
-                                                                    <dd class="col-sm-9">
-                                                                        @foreach($request->materials as $material)
-                                                                            <p>Material name: {{ $material->material_name }},</br> Material Weight: {{ $material->weight }}.</p>
-                                                                        @endforeach</dd>
-                                                                    
-                                                                    </dd>
-                                                                </dl>  
-                                                            </div>
-                                                            <div class="modal-footer">
-                                                                <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
-                                                            </div>
-                                                        </div><!-- /.modal-content -->
-                                                    </div><!-- /.modal-dialog -->
-                                                </div>
-                                                <!-- end show modal -->
-                                                <!-- this is for the assign  modal -->
-                                                <div class="modal fade" id="staticBackdrop-{{ $loop->index }}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                                                 <!-- this is for the assign  modal -->
+                                                 <div class="modal fade" id="staticBackdrop-{{ $loop->index }}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                                                     <div class="modal-dialog">
                                                         <div class="modal-content">
                                                             <div class="modal-header">
@@ -126,7 +70,7 @@
                                                     </div> <!-- end modal dialog-->
                                                 </div>
                                                 <!-- end assign modal -->
-                                            @endforeach
+                                            @endforeach    
                                         </table>
                                     </div>
                                     <!-- end .table-responsive-->
@@ -142,10 +86,7 @@
                                                 <tr>
                                                     <th>#</th>
                                                     <th>Requested By</th>
-                                                    <th>Vehicle Type</th>
-                                                    <th>Location From</th>
-                                                    <th>Location To</th>
-                                                    <th>Requested At</th>
+                                                    <th>Reason</th>
                                                     <th>Status</th>
                                                     <th>Action</th>
                                                 </tr>
@@ -155,9 +96,7 @@
                                                     <tr>
                                                         <td>{{$loop->iteration}}</td>
                                                         <td>{{$request->requestedBy->first_name}}</td>
-                                                        <td>{{$request->vehicle_type}}</td>
-                                                        <td>{{$request->start_location}}</td>
-                                                        <td>{{$request->end_locations}}</td>
+                                                        <td>{{$request->purpose}}</td>
                                                         <td>{{$request->created_at}}</td>
                                                         <td> @if($request->approved_by !== null && $request->director_reject_reason === null)
                                                                 <p class="btn btn-primary ">ACCEPTED</p>
@@ -170,55 +109,7 @@
                                                         </td>
                                                     </tr>
                                                 </tbody>
-                                                   
-                                                <!-- show all the information about the request modal -->
-                                                <div id="archived-modal-{{ $loop->index }}" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="standard-modalLabel" aria-hidden="true">
-                                                    <div class="modal-dialog">
-                                                        <div class="modal-content">
-                                                            <div class="modal-header">
-                                                                <h4 class="modal-title" id="standard-modalLabel">Request Details</h4>
-                                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                            </div>
-                                                            <div class="modal-body">
-                                                                <dl class="row mb-0">
-                                                                    <dt class="col-sm-3">Request reason</dt>
-                                                                    <dd class="col-sm-9">{{$request->purpose}}.</dd>
-
-                                                                    <dt class="col-sm-3">Requested vehicle</dt>
-                                                                    <dd class="col-sm-9">
-                                                                        <p>{{$request->vehicle_type}}.</p>
-                                                                    </dd>
-
-                                                                    <dt class="col-sm-3">Start date and Time</dt>
-                                                                    <dd class="col-sm-9">{{$request->start_date}}, {{$request->start_time}}.</dd>
-
-                                                                    <dt class="col-sm-3">Return date and Time</dt>
-                                                                    <dd class="col-sm-9">{{$request->end_date}}, {{$request->end_time}}.</dd>
-
-                                                                    <dt class="col-sm-3">Location From and To</dt>
-                                                                    <dd class="col-sm-9">{{$request->start_location}}, {{$request->end_locations}}.</dd>
-
-                                                                    <dt class="col-sm-3 text-truncate">passenger</dt>
-                                                                
-                                                                    <dd class="col-sm-9">  @foreach($request->peoples as $person) {{$person->user->first_name}}.</br> @endforeach</dd>
-
-                                                                    <dt class="col-sm-3">Materials</dt>
-                                                                    <dd class="col-sm-9">
-                                                                        @foreach($request->materials as $material)
-                                                                            <p>Material name: {{ $material->material_name }},</br> Material Weight: {{ $material->weight }}.</p>
-                                                                        @endforeach</dd>
-                                                                    
-                                                                    </dd>
-                                                                </dl>  
-                                                            </div>
-                                                            <div class="modal-footer">
-                                                                <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
-                                                            </div>
-                                                        </div><!-- /.modal-content -->
-                                                    </div><!-- /.modal-dialog -->
-                                                </div>
-                                                <!-- end show modal -->
-                                            @endforeach
+                                            @endforeach    
                                         </table>
                                     </div> 
                                 </div>

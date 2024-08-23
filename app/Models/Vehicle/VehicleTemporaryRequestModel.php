@@ -37,7 +37,7 @@ class VehicleTemporaryRequestModel extends Model
         'end_time',
         'start_km',
         'end_km',
-        'dir_approved_by',
+        'approved_by',
         'director_reject_reason',
         'sim_approved_by',
         'vec_director_reject_reason',

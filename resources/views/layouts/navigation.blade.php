@@ -93,10 +93,16 @@
                                     <a href="{{route('displayRequestPage')}}">Temporary vehicle request</a>
                                 </li>
                                 <li>
-                                    <a href="#">Permanent vehicle request</a>
+                                    <a href="{{route('vec_perm_request')}}">Permanent vehicle request</a>
                                 </li>
                                 <li>
-                                    <a href="/director_approve_page">Director aproval request</a>
+                                    <a href="/director_approve_page/check">Director</a>
+                                </li>
+                                <li>
+                                    <a href="{{route('simirit_page')}}">Dispatcher</a>
+                                </li>
+                                <li>
+                                    <a href="{{route('perm_vec_director_page')}}">Pemanent Requests</a>
                                 </li>
                                 
                             </ul>
@@ -165,27 +171,9 @@
     @include('layouts.setting')
 </div>
 
- <!-- App js --> 
- <script src="{{ asset('assets/js/vendor.min.js') }}"></script>
- <script src="{{ asset('assets/js/app.min.js') }}"></script>
 
-            <!-- Datatables--> 
-         <script src="{{ asset('assets/vendor/datatables.net-bs5/js/dataTables.bootstrap5.min.js') }}"></script>
-        <script src="{{ asset('assets/vendor/datatables.net-responsive/js/dataTables.responsive.min.js') }}"></script>
-        <script src="{{ asset('assets/vendor/datatables.net-responsive-bs5/js/responsive.bootstrap5.min.js') }}"></script>
-        <script src="{{ asset('assets/vendor/datatables.net-fixedcolumns-bs5/js/fixedColumns.bootstrap5.min.js') }}"></script>
-        <script src="{{ asset('assets/vendor/datatables.net-fixedheader/js/dataTables.fixedHeader.min.js') }}"></script>
-        <script src="{{ asset('assets/vendor/datatables.net-buttons/js/dataTables.buttons.min.js') }}"></script>
-        <script src="{{ asset('assets/vendor/datatables.net-buttons-bs5/js/buttons.bootstrap5.min.js') }}"></script>
-        <script src="{{ asset('assets/vendor/datatables.net-buttons/js/buttons.html5.min.js') }}"></script>
-        <script src="{{ asset('assets/vendor/datatables.net-buttons/js/buttons.flash.min.js') }}"></script>
-        <script src="{{ asset('assets/vendor/datatables.net-buttons/js/buttons.print.min.js') }}"></script>
-        <script src="{{ asset('assets/vendor/datatables.net-keytable/js/dataTables.keyTable.min.js') }}"></script>
-        <script src="{{ asset('assets/vendor/datatables.net-select/js/dataTables.select.min.js') }}"></script>
-
- 
+<!-- <script src="{{ asset('assets/js/vendor.min.js') }}"></script> -->
+<script src="{{ asset('assets/js/app.min.js') }}"></script>
 
 </body>
-
-<!-- Mirrored from techzaa.getappui.com/velonic/layouts/charts-apex.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 30 Oct 2023 02:30:37 GMT -->
 </html>

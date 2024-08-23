@@ -16,8 +16,8 @@
                         <a href="{{ route('user_create') }}" class="btn btn-primary rounded-pill">Create</a>
                     </div>
                     <div class="card-body">
-                        <table id="fixed-header-datatable"
-                               class="table user_datatable dt-responsive nowrap table-striped w-100">
+                        <table 
+                               class="user_datatable table table-centered mb-0 table-nowrap">
                             <thead>
                                 <tr>
                                     <th>Name</th>
@@ -25,18 +25,11 @@
                                     <th>Phone</th>
                                     <th>Department</th>
                                     <th>Start date</th>
+                                    <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach($users as $user)
-                                <tr>
-                                    <td>{{ $user->first_name }}</td>
-                                    <td>{{ $user->email }}</td>
-                                    <td>{{ $user->phone_number }}</td>
-                                    <td>{{ $user->department_id }}</td>
-                                    <td>{{ $user->created_at }}</td>
-                                    </tr>
-                                @endforeach
+                               
                             </tbody>
                         </table>
                     </div> <!-- end card body-->
@@ -61,14 +54,21 @@
             pageLength: 10,
             ajax: "{{ route('users.list.show') }}",
             columns: [
-                { data: 'name', name: 'name' },
+                { data: 'first_name', name: 'first_name' },
                 { data: 'email', name: 'email' },
-                { data: 'phone', name: 'phone' },
-                { data: 'department', name: 'department' },
-                { data: 'start_date', name: 'start_date' }
+                { data: 'phone_number', name: 'phone_number' },
+                { data: 'department_id', name: 'department_id' },
+                { data: 'created_at', name: 'created_at' },
+                { data: 'action', name: 'action' },
+                
             ]
         });
     });
 </script>
+
+<script src="{{ asset('assets/vendor/datatables.net/js/jquery.dataTables.min.js') }}"></script>
+<script src="{{ asset('assets/vendor/datatables.net-bs5/js/dataTables.bootstrap5.min.js') }}"></script>
+<!-- <script src="{{ asset('assets/js/vendor.min.js') }}"></script> -->
+<!-- <script src="{{ asset('assets/js/app.min.js') }}"></script> -->
 
 @endsection

@@ -2,7 +2,7 @@
 
 use App\Http\Controllers\Fuel\FeulController;
 use App\Http\Controllers\Mentenance\MentenanceController;
-use App\Http\Controllers\Organization\ClusterController;
+// use App\Http\Controllers\Organization\ClusterController;
 use App\Http\Controllers\Organization\DepartmentController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\tempController;
@@ -10,10 +10,10 @@ use App\Http\Controllers\RoleController;
 use App\Http\Controllers\usercontroller;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\Organization\ClusterController;
-use App\Http\Controllers\Organization\DepartmentController;
+// use App\Http\Controllers\Organization\DepartmentController;
 // use App\Http\Controllers\Organization\ClustersController;
 use App\Http\Controllers\vehicle\VehicleTemporaryRequestController;
-// use App\Http\Controllers\VehicleTemporaryRequestController;
+use App\Http\Controllers\Vehicle\VehicleParmanentlyRequestController;
 use FontLib\Table\Type\name;
 use Illuminate\Support\Facades\Auth;
 
@@ -23,7 +23,10 @@ Route::get('/', function ()
 });
 
 
-
+Route::get('/tabletest', function()
+{
+    return view('tables');
+});
 
 // Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
@@ -44,10 +47,10 @@ Route::group(['middleware' => ['auth']], function()
                         Route::post('/user_post_request', 'RequestVehicleTemp')->name('temp_request_post');
                         Route::post('/user_delete_request', 'deleteRequest')->name('temp_delete_request');
                         Route::post('/user_update_info', 'update')->name('temp_update_request');
-                        Route::get('/director_approve_page', 'DirectorApprovalPage')->name('director');
+                        Route::get('/director_approve_page/check', 'DirectorApprovalPage')->name('director_temp');
                         Route::post('/director_approve_request', 'DirectorApproveRequest')->name('director_approve_request');
-                        Route::post('/director_reject_request', 'DirectorApproveRequest')->name('director_reject_request');
-                        Route::get('/simirit_approve_page', 'VehicleDirector')->name('simirit_page');
+                        Route::post('/director_reject_request', 'DirectorRejectRequest')->name('director_reject_request');
+                        Route::get('/simirit_approve_page', 'VehicleDirectorPage')->name('simirit_page');
                         Route::post('/simirit_approve_request', 'VehicleDirectorApproveRequest')->name('simirit_approve');
                         Route::post('/simirit_fill_start_km', ' VehicleDirectorFillstartKm')->name('simirit_fill_start_km');
                         Route::post('/simirit_reject_request', 'VehicleDirectorRejectRequest')->name('simirit_reject');
@@ -105,7 +108,7 @@ Route::group(['middleware' => ['auth']], function()
                     Route::post('/perm_simirit_reject_request', 'VehicleDirectorRejectRequest')->name('perm_vec_simirit_reject');
                 });
 
-Route::controller(tempController::class)->group(function()
+            Route::controller(tempController::class)->group(function()
                 {
                     Route::group(['middleware' => ['can:edit posts']], function () {
                         // Routes accessible only to users with the 'create user' permission

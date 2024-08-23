@@ -23,8 +23,31 @@ class usercontroller extends Controller
 
     public function list_show(Request $request)
     {
-        $users = User::select(['first_name', 'email', 'phone_number', 'department_id', 'created_at']);
+        $users = User::get();
+        
         return DataTables::of($users)
+            ->addIndexColumn()
+            ->addColumn('first_name', function($row){
+                return $row->first_name;
+            })
+            ->addColumn('email', function($row){
+                return $row->email;
+            })
+            ->addColumn('phone_number', function($row){
+                return $row->phone_number;
+            })
+            ->addColumn('department_id', function($row){
+                return $row->department_id;
+            })
+            ->addColumn('created_at', function($row){
+                return $row->created_at;
+            })
+            ->addColumn('action', function($row){
+                return '<button id="acceptButton" type="button" class="btn btn-info rounded-pill" title="show"><i class=" ri-eye-line"></i></button>
+                        <button type="button" class="btn btn-secondary rounded-pill" title="Edit"><i class=" ri-edit-box-line"></i></button>
+                        <button type="button" class="btn btn-danger rounded-pill" title="Delete"><i class="ri-close-circle-line"></i></button>';
+            })
+            ->rawColumns(['first_name','email','phone_number','department_id','created_at','action'])
             ->make(true);
     }
     /**

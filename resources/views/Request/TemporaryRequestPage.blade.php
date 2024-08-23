@@ -22,7 +22,7 @@
         <div class="col-lg-5">
                 <div class="card">
                     <div class="card-header">
-                        <h4 class="header-title">Request Vehicle</h4>
+                        <h4 class="header-title">Request Vehicle Service</h4>
                     </div>
                     <div class="card-body"> 
                         <form method="POST" action="{{route('temp_request_post')}}">
@@ -219,7 +219,7 @@
 
                     </div> <!-- end card-->
              </div> <!-- end col-->
-            </div>
+        </div>
 
         <div class="col-7">
             <div class="card">
@@ -323,13 +323,11 @@
                             <!-- end show modal -->
                         @endforeach
                     </table>
-
                 </div> <!-- end card body-->
             </div> <!-- end card -->
     </div><!-- end col-->
 </div> 
-</div>
-</div>
+
 
     
 
@@ -406,25 +404,16 @@
         
     </script>
 
-@endsection
-<script src="assets/vendor/select2/js/select2.min.js"></script>
- <!-- Typehead Demo js -->
-<script src="assets/js/pages/typehead.init.js"></script>
-   <!-- Typehead Plugin js -->
-<script src="assets/vendor/handlebars/handlebars.min.js"></script>
-<script src="assets/vendor/typeahead.js/typeahead.bundle.min.js"></script>
+    <script src="{{ asset('assets/js/vendor.min.js') }}"></script>
 
-<script src="assets/js/pages/datatable.init.js"></script>
-<script src="assets/vendor/datatables.net/js/jquery.dataTables.min.js"></script>
-<script src="assets/vendor/datatables.net-bs5/js/dataTables.bootstrap5.min.js"></script>
-<script src="assets/vendor/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
-<script src="assets/vendor/datatables.net-responsive-bs5/js/responsive.bootstrap5.min.js"></script>
-<script src="assets/vendor/datatables.net-fixedcolumns-bs5/js/fixedColumns.bootstrap5.min.js"></script>
-<script src="assets/vendor/datatables.net-fixedheader/js/dataTables.fixedHeader.min.js"></script>
-<script src="assets/vendor/datatables.net-buttons/js/dataTables.buttons.min.js"></script>
-<script src="assets/vendor/datatables.net-buttons-bs5/js/buttons.bootstrap5.min.js"></script>
-<script src="assets/vendor/datatables.net-buttons/js/buttons.html5.min.js"></script>
-<script src="assets/vendor/datatables.net-buttons/js/buttons.flash.min.js"></script>
-<script src="assets/vendor/datatables.net-buttons/js/buttons.print.min.js"></script>
-<script src="assets/vendor/datatables.net-keytable/js/dataTables.keyTable.min.js"></script>
-<script src="assets/vendor/datatables.net-select/js/dataTables.select.min.js"></script>
+    <!-- Datatables js -->
+    <script src="{{ asset('assets/vendor/datatables.net/js/jquery.dataTables.min.js') }}"></script>
+    <script src="{{ asset('assets/vendor/datatables.net-bs5/js/dataTables.bootstrap5.min.js') }}"></script>
+    
+
+    <!-- Datatable Demo Aapp js -->
+    <script src="{{ asset('assets/js/pages/datatable.init.js') }}"></script>
+
+    <!-- App js -->
+    <script src="{{ asset('assets/js/app.min.js') }}"></script>
+@endsection
