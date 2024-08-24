@@ -48,7 +48,7 @@ class VehiclePartsController extends Controller
             {
                 $vehicleParts = VehiclePart::all();
         
-                return response()->json(['status' => 'success', 'data' => $vehicleParts]);
+                return view("Vehicle.inspectionpart",compact('vehicleParts'));
             }
     
         // Update a vehicle part

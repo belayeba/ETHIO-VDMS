@@ -224,10 +224,10 @@ Route::group(['middleware' => ['auth']], function()
             Route::controller(VehiclePartsController::class)->group(function () 
                 {
                      Route::post('/vehicle-parts', 'store')->name('vehicle_parts.store'); // Create a new vehicle part
-                     Route::get('/vehicle-parts/{id}', 'show')->name('vehicle_parts.show'); // Retrieve a specific vehicle part
+                     Route::get('/vehicle-parts-show/{id}', 'show')->name('vehicle_parts.show'); // Retrieve a specific vehicle part
                      Route::get('/vehicle-parts', 'index')->name('vehicle_parts.index'); // List all vehicle parts
-                     Route::put('/vehicle-parts/{id}', 'update')->name('vehicle_parts.update'); // Update a vehicle part
-                     Route::delete('/vehicle-parts/{id}', 'destroy')->name('vehicle_parts.destroy'); // Delete a vehicle part
+                     Route::post('/vehicle-parts-update/{id}', 'update')->name('vehicle_parts.update'); // Update a vehicle part
+                     Route::delete('/vehicle-parts-delete/{id}', 'destroy')->name('vehicle_parts.destroy'); // Delete a vehicle part
                  });
                  
             Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');           

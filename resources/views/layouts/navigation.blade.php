@@ -134,6 +134,25 @@
                     </li>
 
                     <li class="side-nav-item">
+                        <a data-bs-toggle="collapse" href="#sidebarVehicle" aria-expanded="false" aria-controls="sidebarVehicle" class="side-nav-link">
+                            <i class="  ri-user-fill"></i>
+                            <span>Vehicle Management</span>
+                            <span class="menu-arrow"></span>
+                        </a>
+                        <div class="collapse" id="sidebarVehicle">
+                            <ul class="side-nav-second-level">
+                                <li>
+                                    <a href="{{route('vehicle_parts.index')}}">Vehicle Inspection Parts</a>
+                                </li>
+                                <!-- <li>
+                                    <a href="#">Tests</a>
+                                </li> -->
+                                
+                            </ul>
+                        </div>
+                    </li>
+
+                    <li class="side-nav-item">
                         <a data-bs-toggle="collapse" href="#sidebarOrganization" aria-expanded="false" aria-controls="sidebarOrganization" class="side-nav-link">
                             <i class="ri-share-line"></i>
                             <span> Organization </span>
