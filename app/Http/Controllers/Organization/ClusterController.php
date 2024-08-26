@@ -29,13 +29,15 @@ class ClusterController extends Controller
     public function store(Request $request)
     {
         // dd($request);
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'created_by' => 'required', // Ensure a valid user ID is used
-        ]);
+        // $request->validate([
+        //     'name' => 'required|string|max:255',
+        //     'created_by' => 'required', // Ensure a valid user ID is used
+        // ]);
+        // dd($request);
         $user = auth()->user()->id; // Get the authenticated user's ID
-        // dd($user);
+        
         $request->merge(['created_by' => $user]); // Add the user's ID to the request data
+        // dd($request);
         ClustersModel::create($request->all());
         return redirect()->route('cluster.index')->with('success', 'Cluster created successfully.');
     

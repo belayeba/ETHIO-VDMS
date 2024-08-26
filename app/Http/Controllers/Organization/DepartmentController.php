@@ -119,7 +119,7 @@ class DepartmentController extends Controller
             $users = User::where('id',$id );
         return view('Vehicle_Registration.index',compact('users'));
     }
-    public function vehicle(){
-        return view('Vehicle_Registration.show');
-    }
+    // public function vehicle(){
+    //     return view('Vehicle_Registration.show');
+    // }
 }

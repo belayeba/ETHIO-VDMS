@@ -51,6 +51,8 @@ class CreateAllTablesWithUuid extends Migration
             $table->integer('year');
             $table->string('plate_number', 255);
             $table->date('registration_date');
+            $table->string('libre', 255)->nullable();
+            $table->string('insurance', 255)->nullable();
             $table->integer('mileage');
             $table->string('vehicle_type', 255);
             $table->string('vehicle_category', 255);

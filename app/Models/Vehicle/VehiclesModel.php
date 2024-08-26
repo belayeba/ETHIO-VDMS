@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Vehicle;
 
 use App\Models\Vehicle\MaintenancesModel;
 use Illuminate\Database\Eloquent\Model;
@@ -20,7 +20,7 @@ class VehiclesModel extends Model
     
     protected $fillable = [
         'vin', 'make', 'model', 'year', 'plate_number','registered_by',
-        'registration_date', 'mileage', 'vehicle_type', 
+        'registration_date', 'mileage', 'vehicle_type', 'insurance','libre',
         'vehicle_category', 'fuel_amount', 'last_service', 
         'next_service', 'driver_id', 'fuel_type', 'status', 'notes'
     ];

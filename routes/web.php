@@ -12,7 +12,9 @@ use App\Http\Controllers\LoginController;
 use App\Http\Controllers\Organization\ClusterController;
 use App\Http\Controllers\Organization\DepartmentController;
 use App\Http\Controllers\Vehicle\VehicleParmanentlyRequestController;
+use App\Http\Controllers\Vehicle\VehicleRegistrationController as VehicleVehicleRegistrationController;
 use App\Http\Controllers\vehicle\VehicleTemporaryRequestController;
+use App\Http\Controllers\VehicleRegistrationController;
 use FontLib\Table\Type\name;
 use Illuminate\Support\Facades\Auth;
 
@@ -214,4 +216,14 @@ Route::delete('/delete/{cluster}',[ClusterController::class,'destroy'])->name('c
     });
     Route::get('/vehicle',[DepartmentController::class,'vehicle'])->name('Vehicle_Registration.show');
     Route::get('/plate',[DepartmentController::class,'plate'])->name('Vehicle_Registration.index');
+
+    Route::group([
+        'prefix'=>'vehicle',
+    ], function (){
+    Route::get('/',[VehicleVehicleRegistrationController::class, 'index'])->name('vehicleRegistration.index');
+    Route::post('/store',[VehicleVehicleRegistrationController::class, 'store'])->name('vehicleRegistration.store');
+    Route::delete('/delete/{vehicle}',[VehicleVehicleRegistrationController::class,'destroy'])->name('vehicle.destroy');
+    Route::put('/update/{vehicle}', [VehicleVehicleRegistrationController::class, 'update'])->name('vehicle.update');
+
+    });
 });
