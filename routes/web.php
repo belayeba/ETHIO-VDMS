@@ -101,7 +101,7 @@ Route::group(['middleware' => ['auth']], function()
                     Route::post('/perm_user_post_request', 'RequestVehiclePerm')->name('vec_perm_request_post');
                     Route::post('/Perm_user_delete_request', 'deleteRequest')->name('user_perm_delet');
                     Route::post('/perm_user_update_info', 'update_perm_request')->name('perm_vec_update');
-                    Route::get('/director_approve_page', 'DirectorApprovalPage')->name('perm_vec_director_page');
+                    Route::get('/director_approve_page/perm', 'DirectorApprovalPage')->name('perm_vec_director_page');
                     Route::post('/perm_director_approve_request', 'DirectorApproveRequest')->name('perm_vec_director_approve');
                     Route::post('/perm_director_reject_request', 'DirectorRejectRequest')->name('perm_vec_direct_reject');
                     Route::get('/perm_simirit_approve_page', 'VehicleDirector_page')->name('perm_vec_simirit_page');
@@ -223,11 +223,11 @@ Route::group(['middleware' => ['auth']], function()
             Route::controller(VehiclePartsController::class)->group(function () 
                 {
                      Route::post('/vehicle-parts', 'store')->name('vehicle_parts.store'); // Create a new vehicle part
-                     Route::get('/vehicle-parts/{id}', 'show')->name('vehicle_parts.show'); // Retrieve a specific vehicle part
+                     Route::get('/vehicle-parts-show/{id}', 'show')->name('vehicle_parts.show'); // Retrieve a specific vehicle part
                      Route::get('/vehicle-parts', 'index')->name('vehicle_parts.index'); // List all vehicle parts
-                     Route::put('/vehicle-parts/{id}', 'update')->name('vehicle_parts.update'); // Update a vehicle part
-                     Route::delete('/vehicle-parts/{id}', 'destroy')->name('vehicle_parts.destroy'); // Delete a vehicle part
-                });
+                     Route::post('/vehicle-parts-update/{id}', 'update')->name('vehicle_parts.update'); // Update a vehicle part
+                     Route::delete('/vehicle-parts-delete/{id}', 'destroy')->name('vehicle_parts.destroy'); // Delete a vehicle part
+                 });
                  
             Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');           
 

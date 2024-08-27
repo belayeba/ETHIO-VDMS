@@ -46,9 +46,9 @@ class VehiclePartsController extends Controller
         // List all vehicle parts
         public function index()
             {
-                $parts = VehiclePart::all();
-
-                return view('Inspection', compact('parts'));
+                $vehicleParts = VehiclePart::all();
+        
+                return view("Vehicle.inspectionpart",compact('vehicleParts'));
             }
     
         // Update a vehicle part

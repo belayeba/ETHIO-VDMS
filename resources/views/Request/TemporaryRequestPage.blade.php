@@ -246,7 +246,9 @@
                                     <td>{{$request->status}}</td>
                                     <td>
                                         <button type="button" class="btn btn-info rounded-pill" data-bs-toggle="modal" data-bs-target="#standard-modal-{{ $loop->index }}" title="show"><i class=" ri-eye-line"></i></button>
+                                        @if($request->approved_by === Null && $request->director_reject_reason === Null)  
                                         <a href="{{route('editRequestPage', ['id' => $request->request_id])}}" class="btn btn-secondary rounded-pill" title="edit"><i class=" ri-edit-line"></i></a>
+                                        @endif
                                     </td>
                                 </tr>
                             </tbody>

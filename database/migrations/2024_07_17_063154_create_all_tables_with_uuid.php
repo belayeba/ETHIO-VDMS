@@ -410,7 +410,7 @@ class CreateAllTablesWithUuid extends Migration
         {
             Schema::dropIfExists('vehicles');
             Schema::dropIfExists('drivers');
-            Schema::dropIfExists('vehicle_parts');
+          
             Schema::dropIfExists('locations');
             Schema::dropIfExists('maintenances');
             Schema::dropIfExists('fuelings');
@@ -428,7 +428,7 @@ class CreateAllTablesWithUuid extends Migration
             Schema::dropIfExists('vehicles_detail');
             Schema::dropIfExists('giving_back_vehicle_parmanently');
             Schema::dropIfExists('trip_person');
-            Schema::dropIfExists('vehicle_inspections');
+           
 
 
         }

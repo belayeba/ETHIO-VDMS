@@ -102,7 +102,7 @@
                                     <a href="{{route('simirit_page')}}">Dispatcher</a>
                                 </li>
                                 <li>
-                                    <a href="{{route('perm_vec_director_page')}}">Pemanent Requests</a>
+                                    <a href="/director_approve_page/perm">Pemanent Requests</a>
                                 </li>
                                 <li>
                                     <a href="/mentaincance_request_page">Mentencance Request</a>
@@ -124,6 +124,25 @@
                             <ul class="side-nav-second-level">
                                 <li>
                                     <a href="{{route('user_list')}}">Create users</a>
+                                </li>
+                                <!-- <li>
+                                    <a href="#">Tests</a>
+                                </li> -->
+                                
+                            </ul>
+                        </div>
+                    </li>
+
+                    <li class="side-nav-item">
+                        <a data-bs-toggle="collapse" href="#sidebarVehicle" aria-expanded="false" aria-controls="sidebarVehicle" class="side-nav-link">
+                            <i class="  ri-user-fill"></i>
+                            <span>Vehicle Management</span>
+                            <span class="menu-arrow"></span>
+                        </a>
+                        <div class="collapse" id="sidebarVehicle">
+                            <ul class="side-nav-second-level">
+                                <li>
+                                    <a href="{{route('vehicle_parts.index')}}">Vehicle Inspection Parts</a>
                                 </li>
                                 <!-- <li>
                                     <a href="#">Tests</a>
