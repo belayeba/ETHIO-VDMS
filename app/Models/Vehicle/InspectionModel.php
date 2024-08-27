@@ -51,19 +51,17 @@ class InspectionModel extends Model
 
     // Relationship with the Vehicle model
     public function vehicle()
-    {
-        return $this->belongsTo(VehiclesModel::class, 'vehicle_id', 'vehicle_id');
-    }
-
+        {
+            return $this->belongsTo(VehiclesModel::class, 'vehicle_id', 'vehicle_id');
+        }
     // Relationship with the User (Inspector) model
     public function inspector()
-    {
-        return $this->belongsTo(User::class, 'inspected_by', 'id');
-    }
-
+        {
+            return $this->belongsTo(User::class, 'inspected_by', 'id');
+        }
     // Relationship with the VehiclePart model
     public function part()
-    {
-        return $this->belongsTo(VehiclePart::class, 'part_name', 'vehicle_parts_id');
-    }
+        {
+            return $this->belongsTo(VehiclePart::class, 'part_name', 'vehicle_parts_id');
+        }
 }
