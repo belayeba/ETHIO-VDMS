@@ -64,7 +64,7 @@ class CreateAllTablesWithUuid extends Migration
             $table->uuid('driver_id')->nullable();
             $table->foreign('driver_id')->references('driver_id')->on('drivers');
             $table->string('fuel_type', 255);
-            $table->string('status', 255);
+            $table->boolean('status')->default(true);
             $table->text('notes')->nullable();
             $table->timestamps();
             $table->softDeletes();
@@ -230,6 +230,7 @@ class CreateAllTablesWithUuid extends Migration
                 $table->date('end_date');
                 $table->time('end_time');
                 $table->boolean('in_out_town');
+                $table->integer('how_many_days');
                 $table->integer('start_km')->nullable();
                 $table->integer('end_km')->nullable();
                 $table->string('status', 255)->default('Pending');
@@ -238,13 +239,18 @@ class CreateAllTablesWithUuid extends Migration
                 $table->foreign('vehicle_id')->references('vehicle_id')->on('vehicles');
                 $table->uuid('dir_approved_by')->nullable();
                 $table->foreign('dir_approved_by')->references('id')->on('users');
+                $table->string('director_reject_reason', 1000)->nullable();
                 $table->uuid('div_approved_by')->nullable();
                 $table->foreign('div_approved_by')->references('id')->on('users');
+                $table->string('cluster_director_reject_reason', 1000)->nullable();
                 $table->uuid('hr_div_approved_by')->nullable();
                 $table->foreign('hr_div_approved_by')->references('id')->on('users');
-                $table->string('director_reject_reason', 1000)->nullable();
+                $table->string('hr_director_reject_reason', 1000)->nullable();
                 $table->uuid('assigned_by')->nullable();
                 $table->foreign('assigned_by')->references('id')->on('users');
+                $table->string('assigned_by_reject_reason', 1000)->nullable();
+                $table->uuid('transport_director_id')->nullable();
+                $table->foreign('transport_director_id')->references('id')->on('users');
                 $table->string('vec_director_reject_reason', 1000)->nullable();
                 $table->string('start_location', 255);
                 $table->string('end_locations', 255);

@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Models\Communication\DriverCommunicationModel;
 use App\Models\Driver\DriversModel;
 use App\Models\Notification\NotificationModel;
+use App\Models\Organization\DepartmentsModel;
 use App\Models\Vehicle\VehicleTemporaryRequestModel;
 use App\Models\Vehicle\MaintenancesModel;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -12,6 +13,7 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Str;
 class User extends Authenticatable
 {
@@ -62,11 +64,14 @@ class User extends Authenticatable
     {
         return $this->hasMany(NotificationModel::class, 'user_id');
     }
-
+    public function department(): BelongsTo
+        {
+            return $this->belongsTo(DepartmentsModel::class, 'department_id');
+        }
     public function driverCommunications(): HasMany
-    {
-        return $this->hasMany(DriverCommunicationModel::class, 'user_id');
-    }
+        {
+            return $this->hasMany(DriverCommunicationModel::class, 'user_id');
+        }
 
     public function requestedVehicleRequests(): HasMany
     {
