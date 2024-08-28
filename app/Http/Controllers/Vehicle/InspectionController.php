@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Vehicle;
 
 use App\Http\Controllers\Controller;
 use App\Models\Vehicle\InspectionModel;
+use App\Models\Vehicle\VehiclePart;
+use App\Models\Vehicle\VehiclesModel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
@@ -12,12 +14,14 @@ class InspectionController extends Controller
 {
     public function InspectionPage()
         {
+            $vehicle = VehiclesModel::all();
+            $parts = VehiclePart::all();
             $inspections = InspectionModel::select('inspection_id','vehicle_id', 'inspected_by', 'inspection_date')
                 ->distinct()
                 ->orderBy('inspection_date', 'desc')
                 ->get();
-
-            return view('Inspection', compact('inspections'));
+// dd($inspections);
+            return view('Vehicle.Inspection', compact('inspections','parts','vehicle'));
         }
         //Insert Data
     public function storeInspection(Request $request)
@@ -27,11 +31,11 @@ class InspectionController extends Controller
                 'parts' => 'required|array',
                 'parts.*' => 'required|uuid|exists:vehicle_parts,vehicle_parts_id',
                 'damaged_parts' => 'nullable|array',
-                'damaged_parts.*' => 'uuid|exists:vehicle_parts,vehicle_parts_id',
+                'damaged_parts.*' => 'required|boolean',
                 'damage_descriptions' => 'nullable|array',
                 'damage_descriptions.*' => 'string|nullable',
             ];
-        
+            // 
             $validator = Validator::make($request->all(), $rules);
         
             if ($validator->fails()) {
@@ -46,12 +50,12 @@ class InspectionController extends Controller
             $parts = $request->input('parts');
             $damagedParts = $request->input('damaged_parts', []);
             $damageDescriptions = $request->input('damage_descriptions', []);
-        
+            // dd($damageDescriptions);
             DB::transaction(function () use ($inspectionId, $vehicleId, $inspectedBy, $inspectionDate, $parts, $damagedParts, $damageDescriptions) {
-                foreach ($parts as $partName) {
-                    $isDamaged = in_array($partName, $damagedParts);
-                    $damageDescription = $isDamaged && isset($damageDescriptions[$partName]) ? $damageDescriptions[$partName] : null;
-        
+                foreach ($parts as $partId => $partName) {
+                    $isDamaged = in_array($partId, $damagedParts);
+                    $damageDescription = $isDamaged && isset($damageDescriptions[$partId]) ? $damageDescriptions[$partId] : null;
+                    // dd($damageDescription);
                     InspectionModel::create([
                         'inspection_id' => $inspectionId,
                         'vehicle_id' => $vehicleId,

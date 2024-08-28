@@ -3,6 +3,7 @@
 use App\Http\Controllers\Fuel\FeulController;
 use App\Http\Controllers\Mentenance\MentenanceController;
 use App\Http\Controllers\Organization\DepartmentController;
+use App\Http\Controllers\Vehicle\Daily_KM_Calculation;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\tempController;
 use App\Http\Controllers\RoleController;
@@ -13,6 +14,7 @@ use App\Http\Controllers\Vehicle\GivingBackPermanentVehicle;
 use App\Http\Controllers\Vehicle\VehicleParmanentlyRequestController;
 // use App\Http\Controllers\Organization\ClustersController;
 use App\Http\Controllers\vehicle\VehicleTemporaryRequestController;
+use App\Http\Controllers\Vehicle\VehicleRegistrationController as VehicleVehicleRegistrationController ;
 use FontLib\Table\Type\name;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Vehicle\InspectionController;
@@ -92,7 +94,19 @@ Route::group(['middleware' => ['auth']], function()
                     Route::get('/users', 'list')->name('user_list');
                     Route::get('/users/list', 'list_show')->name('users.list.show');
                     Route::get('/users/create','create')->name('user_create');
-                    Route::get('/users/store', 'store')->name('users.store');
+                    Route::post('/users/store', 'store')->name('users.store');
+                    Route::get('/update/{id}', 'update')->name('user.update');
+                    Route::post('/updates/store','storeupdates')->name('user.update.store');
+                });
+                // Vehicle registration 
+                Route::group([
+                    'prefix'=>'vehicle',
+                ], function (){
+                Route::get('/',[VehicleVehicleRegistrationController::class, 'index'])->name('vehicleRegistration.index');
+                Route::post('/store',[VehicleVehicleRegistrationController::class, 'store'])->name('vehicleRegistration.store');
+                Route::delete('/delete/{vehicle}',[VehicleVehicleRegistrationController::class,'destroy'])->name('vehicle.destroy');
+                Route::put('/update/{vehicle}', [VehicleVehicleRegistrationController::class, 'update'])->name('vehicle.update');
+            
                 });
             // Vehicle Permanent Request
             Route::controller(VehicleParmanentlyRequestController::class)->group(function()
@@ -210,12 +224,22 @@ Route::group(['middleware' => ['auth']], function()
                         Route::get('/temp76', 'temp76');
 
                 });
+                 // Define routes for daily_km
+            Route::controller(Daily_KM_Calculation::class)->group(function ()
+            {
+               Route::post('/daily_km/store', 'displayForm')->name('daily_km.page.store'); // Create a new inspection
+               Route::get('/daily_km/morning', 'morning_km')->name('daily_km.page.show'); // Show a specific inspection
+               Route::get('/daily_km/afternoon', 'aftern_km')->name('daily_km.page.list'); // List all inspections
+               Route::get('/daily_km/page', 'displayPage')->name('daily_km.page'); // inspection page
+               Route::delete('/daily_km/delete', 'delete_morningkm')->name('daily_km.page.delete'); // Delete a specific inspection
+            });
                 // Define routes for InspectionController
             Route::controller(InspectionController::class)->group(function ()
                  {
                     Route::post('/inspection/store', 'storeInspection')->name('inspection.store'); // Create a new inspection
                     Route::get('/inspection/{inspectionId}', 'showInspection')->name('inspection.show'); // Show a specific inspection
                     Route::get('/inspections', 'listInspections')->name('inspection.list'); // List all inspections
+                    Route::get('/inspections/page', 'InspectionPage')->name('inspection.page'); // inspection page
                     Route::put('/inspection/{inspectionId}/{partName}', 'updateInspection')->name('inspection.update'); // Update a specific inspection
                     Route::delete('/inspection/{inspectionId}', 'deleteInspection')->name('inspection.delete'); // Delete a specific inspection
                  });
