@@ -35,6 +35,8 @@ class VehicleTemporaryRequestController extends Controller
             $validator = Validator::make($request->all(), [
                 'purpose' => 'required|string|max:255',
                 'vehicle_type' => 'required|string',
+                'in_out_town'=>'required|boolean',
+                'how_many_days'=>'required|integer',
                 'start_date' => 'required|date',
                 'start_time' => 'required|date_format:H:i',
                 'return_date' => 'required|date',
@@ -64,6 +66,8 @@ class VehicleTemporaryRequestController extends Controller
                         // Create the vehicle request
                         $Vehicle_Request = VehicleTemporaryRequestModel::create([
                             'purpose' => $request->purpose,
+                            'in_out_town' =>$request->in_out_town,
+                            'how_many_days' =>$request->how_many_days,
                             'vehicle_type' => $request->vehicle_type,
                             'requested_by_id'=> $id,
                             'start_location' => $request->start_location,
