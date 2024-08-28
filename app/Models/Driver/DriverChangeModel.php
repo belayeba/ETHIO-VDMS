@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use App\Models\Driver\DriversModel;
+use App\Models\Vehicle\InspectionModel;
+use App\Models\Vehicle\VehiclesModel;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -23,6 +25,8 @@ class DriverChangeModel extends Model
         'old_driver_id',
         'new_driver_id',
         'change_date',
+        'inspection_id',
+        'driver_accepted',
         'created_at',
         'updated_at'
     ];
@@ -50,5 +54,9 @@ class DriverChangeModel extends Model
     public function newDriver(): BelongsTo
     {
         return $this->belongsTo(DriversModel::class, 'new_driver_id');
+    }
+    public function inspection(): BelongsTo
+    {
+        return $this->belongsTo(InspectionModel::class, 'inspection_id');
     }
 }

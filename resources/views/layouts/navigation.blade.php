@@ -144,9 +144,9 @@
                                 <li>
                                     <a href="{{route('vehicle_parts.index')}}">Vehicle Inspection Parts</a>
                                 </li>
-                                <!-- <li>
-                                    <a href="#">Tests</a>
-                                </li> -->
+                                <li>
+                                    <a href="{{route('vehicleRegistration.index')}}">Vehicles Registration</a>
+                                </li>
                                 
                             </ul>
                         </div>

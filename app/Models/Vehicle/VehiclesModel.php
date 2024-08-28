@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Vehicle;
 
+use App\Models\User;
 use App\Models\Vehicle\FuelsModel;
 use App\Models\Vehicle\MaintenancesModel;
 use Illuminate\Database\Eloquent\Model;

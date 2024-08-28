@@ -17,7 +17,7 @@ use FontLib\Table\Type\name;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Vehicle\InspectionController;
 use App\Http\Controllers\Vehicle\VehiclePartsController;
-
+use App\Http\Controllers\Vehicle\VehicleRegistrationController;
 Route::get('/', function () 
 {
     return view('templates.index');
@@ -219,6 +219,23 @@ Route::group(['middleware' => ['auth']], function()
                     Route::put('/inspection/{inspectionId}/{partName}', 'updateInspection')->name('inspection.update'); // Update a specific inspection
                     Route::delete('/inspection/{inspectionId}', 'deleteInspection')->name('inspection.delete'); // Delete a specific inspection
                  });
+                 // SAMIR
+                 Route::group([
+                    'prefix'=>'vehicle',
+                ], function (){
+                Route::get('/',[VehicleRegistrationController::class, 'index'])->name('vehicleRegistration.index');
+                Route::post('/store',[VehicleRegistrationController::class, 'store'])->name('vehicleRegistration.store');
+                Route::delete('/delete/{vehicle}',[VehicleRegistrationController::class,'destroy'])->name('vehicle.destroy');
+                Route::put('/update/{vehicle}', [VehicleRegistrationController::class, 'update'])->name('vehicle.update');
+            
+                });
+            // Route::controller(VehicleRegistrationController::class)->group(function () 
+            //     {
+            //          Route::get('/xx', 'index')->name('vehicleRegistration.index'); 
+            //          Route::post('/store', 'store')->name('vehicle.store'); 
+            //          Route::delete('/delete/{vehicle}', 'destroy')->name('vehicle.destroy'); 
+            //          Route::put('/update/{vehicle}', 'update')->name('vehicle.update'); 
+            //     });
                 // Define routes for VehiclePartsController
             Route::controller(VehiclePartsController::class)->group(function () 
                 {
@@ -227,7 +244,7 @@ Route::group(['middleware' => ['auth']], function()
                      Route::get('/vehicle-parts', 'index')->name('vehicle_parts.index'); // List all vehicle parts
                      Route::post('/vehicle-parts-update/{id}', 'update')->name('vehicle_parts.update'); // Update a vehicle part
                      Route::delete('/vehicle-parts-delete/{id}', 'destroy')->name('vehicle_parts.destroy'); // Delete a vehicle part
-                 });
+                });
                  
             Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');           
 
