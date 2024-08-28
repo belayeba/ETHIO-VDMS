@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Spatie\Permission\Models\Role;
 use Illuminate\Support\Fecades\Auth;
 use App\Models\User;
+use App\Models\Organization\DepartmentsModel; 
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
@@ -44,7 +45,7 @@ class usercontroller extends Controller
             })
             ->addColumn('action', function($row){
                 return '<button id="acceptButton" type="button" class="btn btn-info rounded-pill" title="show"><i class=" ri-eye-line"></i></button>
-                        <button type="button" class="btn btn-secondary rounded-pill" title="Edit"><i class=" ri-edit-box-line"></i></button>
+                         <a href="' . route('user.update', ['id' => $row->id]) . '" class="btn btn-secondary rounded-pill" title="Edit"><i class="ri-edit-box-line"></i></a>
                         <button type="button" class="btn btn-danger rounded-pill" title="Delete"><i class="ri-close-circle-line"></i></button>';
             })
             ->rawColumns(['first_name','email','phone_number','department_id','created_at','action'])
@@ -58,8 +59,8 @@ class usercontroller extends Controller
     public function create()
     {
         $roles = Role::pluck('name','name')->all();
-    
-        return view('users.create', compact('roles'));
+        $department= DepartmentsModel::get();
+        return view('users.create', compact('roles','department'));
     }
 
     /**
@@ -115,13 +116,68 @@ class usercontroller extends Controller
     }
 
     /**
-     * Display the specified user.
+     * update a specified user.
      *
      * @param int $id
      *
      * @return \Illuminate\View\View
      */
-   
+    public function update($id)
+    {
+        $users = user::findOrFail($id);
+        $roles = Role::pluck('name','name')->all();
+        $department= DepartmentsModel::get();
+        // $Requested = VehicleTemporaryRequestModel::with('peoples', 'materials')
+        //                 ->findOrFail($id);
+        // dd($users);
+        return view("users.edit",compact('users','roles','department'));
+    }
+
+    public function storeupdates(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'first_name' => 'required|string|max:50',
+            'middle_name' => 'required|string|max:50',
+            'last_name' => 'required|string|max:50',
+            'username' => 'required|string|unique:users,username',
+            'roles' => 'required|string',
+            'department' => 'required|string|max:255',
+            'email' => 'required|string|max:100|unique:users,email',
+            'password' => 'required|string|min:8',
+            'confirm' => 'required|string|min:8|same:password',
+            'phone' => 'required|string',    
+        ]);
+        // If validation fails, return an error response
+        if ($validator->fails()) 
+            {
+                $errorMessages = $validator->errors()->all();
+                $errorString = collect($errorMessages)->implode(' ');
+                return back()->with('error_message', $errorString);
+            }
+        try{
+            $currentUser = auth()->user();
+            $data = $request->all();
+        
+            $data['password'] = Hash::make($data['password']);
+            $data['username']=$request->input('username') ?? null;
+            $data['first_name'] = $request->input('first_name');
+            $data['last_name'] = $request->input('last_name');
+            $data['email'] = $request->input('email');
+            $data['department_id'] = $request->input('department');
+            $data['phone_number'] = $request->input('phone');
+            $user = User::create($data);
+            $user->assignRole($request->input('roles'));
+
+            dd('success');
+
+        }
+        catch (Exception $exception) {
+            return back()->withInput()
+                ->withErrors(['unexpected_error' => 'Unexpected error occurred while trying to process your request.']);
+        }   
+    
+    }
+
 
     /**
      * Show the form for editing the specified user.

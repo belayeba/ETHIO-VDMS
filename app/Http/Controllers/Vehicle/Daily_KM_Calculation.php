@@ -12,6 +12,13 @@ use Illuminate\Support\Facades\Validator;
 
 class Daily_KM_Calculation extends Controller
     {
+        public function displayPage()
+        {
+              $today = Carbon::today()->toDateString();
+            //   $TodaysDate = DailyKMCalculationModel::where('date',$today)->latest()->get();
+              return view('Vehicle.DailKmForm');
+        }
+
         //getting today's info
         public function displayForm()
           {

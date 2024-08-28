@@ -23,7 +23,7 @@ class VehiclesModel extends Model
     protected $fillable = [
         'vin', 'make', 'model', 'year', 'plate_number','registered_by',
         'registration_date', 'mileage', 'vehicle_type', 
-        'vehicle_category', 'fuel_amount', 'last_service', 
+        'vehicle_category', 'fuel_amount', 'last_service', 'libre','insurance',
         'next_service', 'driver_id', 'fuel_type', 'status', 'notes'
     ];
     protected static function boot()

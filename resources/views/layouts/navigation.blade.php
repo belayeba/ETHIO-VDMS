@@ -105,7 +105,7 @@
                                     <a href="/director_approve_page/perm">Pemanent Requests</a>
                                 </li>
                                 <li>
-                                    <a href="/mentaincance_request_page">Mentencance Request</a>
+                                    <a href="/mentaincance_request_page">Maintenance Request</a>
                                 </li>
                                 <li>
                                     <a href="/fuel_request_page">Fuel Request</a>
@@ -141,11 +141,17 @@
                         </a>
                         <div class="collapse" id="sidebarVehicle">
                             <ul class="side-nav-second-level">
+                                 <li>
+                                    <a href="{{route('vehicleRegistration.index')}}">Vehicle Registration </a>
+                                </li>
                                 <li>
                                     <a href="{{route('vehicle_parts.index')}}">Vehicle Inspection Parts</a>
                                 </li>
                                 <li>
-                                    <a href="{{route('vehicleRegistration.index')}}">Vehicles Registration</a>
+                                     <a href="{{route('inspection.page')}}">Vehicle Inspection</a>
+                                </li>
+                                <li>
+                                     <a href="{{route('daily_km.page')}}">Daily KM</a>
                                 </li>
                                 
                             </ul>

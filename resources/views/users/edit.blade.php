@@ -29,13 +29,13 @@
                                     <h4 class="header-title">User Create</h4>
                                 </div>
                                 <div class="card-body">
-                                    <form method="POST" class="needs-validation" action="{{ route('users.store') }}" novalidate>
+                                    <form method="POST" class="needs-validation" action="{{ route('user.update.store') }}" novalidate>
                                         @csrf
                                         <div class="row">
                                             <div class="col-lg-6">
                                                 <div class="position-relative mb-3">
                                                     <label class="form-label" for="validationTooltip01">First name</label>
-                                                    <input type="text" class="form-control" name="first_name" id="validationTooltip01"
+                                                    <input type="text" class="form-control" name="first_name" value="{{$users->first_name}}" id="validationTooltip01"
                                                         placeholder="First name"  required>
                                                     <!-- <div class="valid-tooltip">
                                                         Looks good!
@@ -49,7 +49,7 @@
                                             <div class="col-lg-6">
                                                 <div class="position-relative mb-3">
                                                     <label class="form-label" for="validationTooltip02">Middle name</label>
-                                                    <input type="text" class="form-control" name="middle_name" id="validationTooltip02"
+                                                    <input type="text" class="form-control" name="middle_name" value="{{$users->middle_name}}" id="validationTooltip02"
                                                         placeholder="Middle name"  required>
                                                     <div class="invalid-tooltip">
                                                         Please enter Middle name.
@@ -62,7 +62,7 @@
                                             <div class="col-lg-6">
                                                 <div class="position-relative mb-3">
                                                     <label class="form-label" for="validationTooltip02">Last name</label>
-                                                    <input type="text" class="form-control" name="last_name" id="validationTooltip02"
+                                                    <input type="text" class="form-control" name="last_name" value="{{$users->last_name}}" id="validationTooltip02"
                                                         placeholder="Last name"  required>
                                                     <div class="invalid-tooltip">
                                                         Please enter last name.
@@ -73,7 +73,7 @@
                                             <div class="col-lg-6">
                                                 <div class="position-relative mb-3">
                                                     <label class="form-label" for="validationTooltip04">Username</label>
-                                                    <input type="text" class="form-control" name="username" id="validationTooltip04"
+                                                    <input type="text" class="form-control" name="username" value="{{$users->username}}" id="validationTooltip04"
                                                         placeholder="username" required>
                                                     <div class="invalid-tooltip">
                                                         Please provide a valid Username.
@@ -86,7 +86,7 @@
                                             <div class="col-lg-6">
                                                 <div class="position-relative mb-3">
                                                     <label class="form-label" for="validationTooltip02">Select Role</label>
-                                                    <select class="form-control" id="role_id" name="roles">
+                                                    <select class="form-control" id="role_id" name="roles" value="{{$users->role}}">
                                                             <option value="" style="display: none;"  disabled selected>Select</option>
                                                         @foreach ($roles as $key => $role)
                                                             <option value="{{ $key }}" >
@@ -102,15 +102,15 @@
                                                 <div class="position-relative mb-3">
                                                     <label class="form-label" for="validationTooltip02">Select Department</label>
                                                     <select class="form-control" id="department_id" name="department">
-                                                            <option value=""   disabled selected>Select</option>
-                                                            @foreach ($department as $dep )
-                                                            <option value="{{$dep->department_id}}">
-                                                                {{$dep->name}}
+                                                        <option value="" disabled>Select</option>
+                                                        @foreach ($department as $dep)
+                                                            <option value="{{ $dep->department_id }}" {{ $dep->department_id == $users->department_id ? 'selected' : '' }}>
+                                                                {{ $dep->name }}
                                                             </option>
-                                                            @endforeach
+                                                        @endforeach
                                                     </select>
                                                 </div> 
-                                            </div>                                                   
+                                            </div>                                               
                                         </div> 
                                         <div class="row">
                                             <div class="col-lg-6">
@@ -121,7 +121,7 @@
                                                             id="validationTooltipUsernamePrepend">@</span>
                                                         <input type="email" class="form-control" name="email" id="validationTooltipUsername"
                                                             placeholder="Email"
-                                                            aria-describedby="validationTooltipUsernamePrepend" required>
+                                                            aria-describedby="validationTooltipUsernamePrepend" required value="{{$users->email}}">
                                                         <div class="invalid-tooltip">
                                                             Please choose a valid Email.
                                                         </div>
@@ -133,7 +133,7 @@
                                                 <div class="position-relative mb-3">
                                                     <label class="form-label" for="validationTooltip04">Phone</label>
                                                     <input type="mob" class="form-control" name="phone" id="validationTooltip04"
-                                                        placeholder=" +251" value="+251" required>
+                                                        placeholder="+251" value="{{$users->phone_number}}" required>
                                                     <div class="invalid-tooltip">
                                                         Please provide a valid phone.no.
                                                     </div>
