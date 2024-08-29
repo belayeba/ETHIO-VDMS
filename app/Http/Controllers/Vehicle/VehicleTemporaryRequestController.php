@@ -18,7 +18,7 @@ class VehicleTemporaryRequestController extends Controller
         public function displayRequestPage()
             {
                 $id = Auth::id();
-                $users = user::where('id',$id );
+                $users = user::all();
                 $Requested = VehicleTemporaryRequestModel::with('peoples', 'materials')->where('requested_by_id', $id)->get();
                 return view("Request.TemporaryRequestPage",compact('Requested','users'));
             }
@@ -35,8 +35,8 @@ class VehicleTemporaryRequestController extends Controller
                 $validator = Validator::make($request->all(), [
                     'purpose' => 'required|string|max:255',
                     'vehicle_type' => 'required|string',
-                    'in_out_town'=>'required|boolean',
-                    'how_many_days'=>'required|integer',
+                    //'in_out_town'=>'required|boolean',
+                   // 'how_many_days'=>'required|integer',
                     'start_date' => 'required|date',
                     'start_time' => 'required|date_format:H:i',
                     'return_date' => 'required|date',
@@ -66,8 +66,8 @@ class VehicleTemporaryRequestController extends Controller
                             // Create the vehicle request
                             $Vehicle_Request = VehicleTemporaryRequestModel::create([
                                 'purpose' => $request->purpose,
-                                'in_out_town' =>$request->in_out_town,
-                                'how_many_days' =>$request->how_many_days,
+                                'in_out_town' =>true,
+                                'how_many_days' =>4,
                                 'vehicle_type' => $request->vehicle_type,
                                 'requested_by_id'=> $id,
                                 'start_location' => $request->start_location,
@@ -256,7 +256,7 @@ class VehicleTemporaryRequestController extends Controller
         public function DirectorApprovalPage()
             {
                     $id = Auth::id();
-                    $directors_data = User::where('id',$id)->get('department_id');
+                    $directors_data = User::select('department_id')->where('id',$id)->first();
                     $dept_id = $directors_data->department_id;
                     $vehicle_requests = VehicleTemporaryRequestModel::whereHas('requestedBy', function ($query) use ($dept_id) {
                         $query->where('department_id', $dept_id);

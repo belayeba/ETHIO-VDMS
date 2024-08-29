@@ -296,39 +296,74 @@ class CreateAllTablesWithUuid extends Migration
 
         // Vehicle Requests Temporary Table
         Schema::create('vehicle_requests_temporary', function (Blueprint $table) {
-            $table->uuid('id')->primary();
-            $table->uuid('vehicle_id');
-            $table->foreign('vehicle_id')->references('vehicle_id')->on('vehicles');
-            $table->uuid('requested_by');
-            $table->foreign('requested_by')->references('id')->on('users');
-            $table->uuid('department_id');
-            $table->foreign('department_id')->references('department_id')->on('departments');
-            $table->dateTime('requested_at');
-            $table->string('status', 255)->default('pending');
+            $table->uuid('request_id')->primary();
+            $table->uuid('requested_by_id');
+            $table->foreign('requested_by_id')->references('id')->on('users');
+            $table->string('vehicle_type', 255);
             $table->string('purpose', 255);
+            $table->date('start_date');
+            $table->time('start_time');
+            $table->date('end_date');
+            $table->time('end_time');
+            $table->boolean('in_out_town');
+            $table->integer('how_many_days');
+            $table->integer('start_km')->nullable();
+            $table->integer('end_km')->nullable();
+            $table->string('status', 255)->default('Pending');
+            $table->boolean('with_driver')->default(1);
+            $table->uuid('vehicle_id')->nullable();
+            $table->foreign('vehicle_id')->references('vehicle_id')->on('vehicles');
+            $table->uuid('dir_approved_by')->nullable();
+            $table->foreign('dir_approved_by')->references('id')->on('users');
+            $table->string('director_reject_reason', 1000)->nullable();
+            $table->uuid('div_approved_by')->nullable();
+            $table->foreign('div_approved_by')->references('id')->on('users');
+            $table->string('cluster_director_reject_reason', 1000)->nullable();
+            $table->uuid('hr_div_approved_by')->nullable();
+            $table->foreign('hr_div_approved_by')->references('id')->on('users');
+            $table->string('hr_director_reject_reason', 1000)->nullable();
+            $table->uuid('assigned_by')->nullable();
+            $table->foreign('assigned_by')->references('id')->on('users');
+            $table->string('assigned_by_reject_reason', 1000)->nullable();
+            $table->uuid('transport_director_id')->nullable();
+            $table->foreign('transport_director_id')->references('id')->on('users');
+            $table->string('vec_director_reject_reason', 1000)->nullable();
+            $table->string('start_location', 255);
+            $table->string('end_locations', 255);
+            $table->decimal('allowed_distance_after_destination', 10, 2)->nullable();
+            $table->text('notes')->nullable();
+            $table->string('comment', 255)->nullable();
+            $table->decimal('km_per_liter', 10, 2)->nullable();
+            $table->uuid('driver_accepted_by')->nullable();
+            $table->foreign('driver_accepted_by')->references('id')->on('users');
+            $table->uuid('taking_inspection')->nullable();  // Link to the entire inspection session
+            $table->foreign('taking_inspection')->references('inspection_id')->on('vehicle_inspections');
+            $table->uuid('returning_inspection')->nullable();  // Link to the entire inspection session
+            $table->foreign('returning_inspection')->references('inspection_id')->on('vehicle_inspections');
             $table->timestamps();
             $table->softDeletes();
-        });
+    });
         Schema::create('trip_materials', function (Blueprint $table) 
         {
                 $table->uuid('trip_material_id')->primary();
                 $table->string('material_name', 1000);
                 $table->float('weight');
                 $table->uuid('request_id');
-                $table->foreign('request_id')->references('id')->on('vehicle_requests_temporary');
+                $table->foreign('request_id')->references('request_id')->on('vehicle_requests_temporary');
                 $table->timestamps();
                 $table->softDeletes();
         });
         // Trip Person Table
-        Schema::create('trip_person', function (Blueprint $table) {
-            $table->uuid('id')->primary();
-            $table->uuid('trip_id');
-            $table->foreign('trip_id')->references('trip_id')->on('trips');
-            $table->string('person_name', 255);
-            $table->string('person_phone', 255);
-            $table->text('notes')->nullable();
-            $table->timestamps();
-            $table->softDeletes();
+        Schema::create('trip_person', function (Blueprint $table) 
+        {
+              $table->uuid('trip_person_id')->primary();
+              $table->uuid('request_id');
+              $table->foreign('request_id')->references('request_id')->on('vehicle_requests_temporary');
+              $table->uuid('employee_id');
+
+              $table->foreign('employee_id')->references('id')->on('users');
+              $table->timestamps();
+              $table->softDeletes();
         });
     }
 
@@ -344,8 +379,8 @@ class CreateAllTablesWithUuid extends Migration
         Schema::dropIfExists('maintenances');
         Schema::dropIfExists('giving_back_vehicles_parmanently');
         Schema::dropIfExists('vehicle_requests_parmanently');
-        Schema::dropIfExists('vehicle_inspections');
         Schema::dropIfExists('driver_changes');
+        Schema::dropIfExists('vehicle_inspections');
         Schema::dropIfExists('vehicles_detail');
         Schema::dropIfExists('vehicle_parts');
         Schema::dropIfExists('locations');

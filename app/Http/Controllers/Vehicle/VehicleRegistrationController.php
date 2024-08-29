@@ -34,10 +34,9 @@ class VehicleRegistrationController extends Controller
 
     public function store(Request $request)
     {
+       // dd($request)
         $user = Auth::id();
         // dd($request);
-        $status= "Done";
-
         $validator = Validator::make($request->all(),[
             'vin' => 'required|string|max:255',
             'make' => 'required|string|max:255',
@@ -104,7 +103,6 @@ class VehicleRegistrationController extends Controller
                 'registered_by' => $user,
                 'driver_id' => $request->driver_id,
                 'fuel_type' => $request->fuel_type,
-                'status' => $status,
                 'notes' => $request->Notes,
                 'vehicle_type' => $request->vehicle_type,
                 'vehicle_category' => $request->vehicle_category,
@@ -131,101 +129,101 @@ class VehicleRegistrationController extends Controller
     }
 
     public function update(Request $request, $id)
-    {
-        $user = Auth::id();
-        // dd($request->fuel_amount);
-        $vehicle = VehiclesModel::findOrFail($id);
-    // dd($vehicle);
-        // Validate the request
-        $validator = Validator::make($request->all(),[
-            'vin' => 'required|string|max:255',
-            'make' => 'required|string|max:255',
-            'model' => 'required|string|max:255',
-            'year' => 'required|integer|min:1900|max:'.date('Y'),
-            'plate_number' => 'required|regex:/^[A-Z]{2}-\d{1}-\d{5}$/',
-            'registration_date' => 'required|date',
-            'mileage' => 'required|integer',
-            'fuel_amount' => 'required|integer',
-            'fuel_type' => 'required|string|max:255',
-            'last_service' => 'required|integer',
-            'next_service' => 'required|integer',
-            'notes' => 'nullable|string|max:255',
-            'vehicle_category' => 'required|string|max:255',
-            'vehicle_type' => 'required|string|max:255',
-            'libre' => 'nullable|file',
-            'insurance' => 'nullable|file',
-        ]);
-    // dd($validator);
-    if ($validator->fails()) 
-    {
-        return response()->json([
-            'success' => false,
-            'message' => $validator->errors(),
-        ]);
-    }
-        // Handle file uploads if necessary
-        if ($request->hasFile('libre')) {
-            // Store file and set the file path
-            $vehicle->libre = $request->file('libre')->store('libres');
-        }
-    
-        if ($request->hasFile('insurance')) {
-            // Store file and set the file path
-            $vehicle->insurance = $request->file('insurance')->store('insurances');
-        }
-        $filelibre='';
-        $fileinsurance='';
-        $status = 'active';
+        {
+            $user = Auth::id();
+            // dd($request->fuel_amount);
+            $vehicle = VehiclesModel::findOrFail($id);
+            // dd($vehicle);
+            // Validate the request
+            $validator = Validator::make($request->all(),[
+                'vin' => 'required|string|max:255',
+                'make' => 'required|string|max:255',
+                'model' => 'required|string|max:255',
+                'year' => 'required|integer|min:1900|max:'.date('Y'),
+                'plate_number' => 'required|regex:/^[A-Z]{2}-\d{1}-\d{5}$/',
+                'registration_date' => 'required|date',
+                'mileage' => 'required|integer',
+                'fuel_amount' => 'required|integer',
+                'fuel_type' => 'required|string|max:255',
+                'last_service' => 'required|integer',
+                'next_service' => 'required|integer',
+                'notes' => 'nullable|string|max:255',
+                'vehicle_category' => 'required|string|max:255',
+                'vehicle_type' => 'required|string|max:255',
+                'libre' => 'nullable|file',
+                'insurance' => 'nullable|file',
+            ]);
+            // dd($validator);
+            if ($validator->fails()) 
+                {
+                    return response()->json([
+                        'success' => false,
+                        'message' => $validator->errors(),
+                    ]);
+                }
+            // Handle file uploads if necessary
+            if ($request->hasFile('libre')) 
+                {
+                    // Store file and set the file path
+                    $vehicle->libre = $request->file('libre')->store('libres');
+                }
+        
+            if ($request->hasFile('insurance')) 
+                {
+                    // Store file and set the file path
+                    $vehicle->insurance = $request->file('insurance')->store('insurances');
+                }
+            $filelibre='';
+            $fileinsurance='';
+            $status = 'active';
 
-        if ($request->hasFile('libre')) {
-            $file = $request->file('libre');
-            $storagePath= storage_path('app/public/vehicles');
-            if(!file_exists($storagePath)){
-                mkdir($storagePath,0755,true);
+            if ($request->hasFile('libre')) {
+                $file = $request->file('libre');
+                $storagePath= storage_path('app/public/vehicles');
+                if(!file_exists($storagePath)){
+                    mkdir($storagePath,0755,true);
+                }
+
+                $filelibre = time() . '_' . $file->getClientOriginalName();
+                $file->move($storagePath, $filelibre);
             }
+            if ($request->hasFile('insurance')) {
+                $file = $request->file('insurance');
 
-            $filelibre = time() . '_' . $file->getClientOriginalName();
-            $file->move($storagePath, $filelibre);
-        }
-        if ($request->hasFile('insurance')) {
-            $file = $request->file('insurance');
+                $storagePath= storage_path('app/public/vehicles');
+                if(!file_exists($storagePath)){
+                    mkdir($storagePath,0755,true);
+                }
 
-            $storagePath= storage_path('app/public/vehicles');
-            if(!file_exists($storagePath)){
-                mkdir($storagePath,0755,true);
+                $fileinsurance = time() . '_' . $file->getClientOriginalName();
+                $file->move($storagePath, $fileinsurance);
             }
+        
+            // Update the vehicle with the new data
+            VehiclesModel::find($id)->update([
+                'vin'=>$request->vin,
+                'make' => $request->make,
+                'model' => $request->model,
+                'year' => $request->year,
+                'plate_number' => $request->plate_number,
+                'registration_date' => $request->registration_date,
+                'mileage' => $request->mileage,
+                'fuel_amount' => $request->fuel_amount,
+                'last_service' => $request->Last_Service,
+                'next_service' => $request->Next_Service,
+                'registered_by' => $user,
+                'driver_id' => $request->driver_id,
+                'fuel_type' => $request->fuel_type,
+                'status' => $status,
+                'notes' => $request->Notes,
+                'vehicle_type' => $request->vehicle_type,
+                'vehicle_category' => $request->vehicle_category,
+                'libre' => $filelibre,
+                'insurance' => $fileinsurance,
+            ]);
 
-            $fileinsurance = time() . '_' . $file->getClientOriginalName();
-            $file->move($storagePath, $fileinsurance);
+            return redirect()->back()->with('success', 'Vehicle updated successfully.');
         }
-    
-        // Update the vehicle with the new data
-        VehiclesModel::find($id)->update([
-            'vin'=>$request->vin,
-            'make' => $request->make,
-            'model' => $request->model,
-            'year' => $request->year,
-            'plate_number' => $request->plate_number,
-            'registration_date' => $request->registration_date,
-            'mileage' => $request->mileage,
-            'fuel_amount' => $request->fuel_amount,
-            'last_service' => $request->Last_Service,
-            'next_service' => $request->Next_Service,
-            'registered_by' => $user,
-            'driver_id' => $request->driver_id,
-            'fuel_type' => $request->fuel_type,
-            'status' => $status,
-            'notes' => $request->Notes,
-            'vehicle_type' => $request->vehicle_type,
-            'vehicle_category' => $request->vehicle_category,
-            'libre' => $filelibre,
-            'insurance' => $fileinsurance,
-        ]);
-
-        return redirect()->back()->with('success', 'Vehicle updated successfully.');
-    }
-    
-
     public function destroy(Request $request)
     {
         $validation = Validator::make($request->all(),[

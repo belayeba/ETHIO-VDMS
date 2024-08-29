@@ -37,16 +37,20 @@ class ClusterController extends Controller
         // dd($user);
         $request->merge(['created_by' => $user]); // Add the user's ID to the request data
         ClustersModel::create($request->all());
+        return response()->json([
+            'success' => true,
+            'message' => 'Cluster created successfully',
+        ]);
         return redirect()->route('cluster.index')->with('success', 'Cluster created successfully.');
     
     }
 
     // Display the specified resource.
     public function show(ClustersModel $cluster)
-    {
-        $clusters=ClustersModel::get();
-        return view('cluster.show', compact('clusters'));
-    }
+        {
+            $clusters=ClustersModel::get();
+            return view('cluster.show', compact('clusters'));
+        }
 
     // Show the form for editing the specified resource.
     public function edit(ClustersModel $cluster)
