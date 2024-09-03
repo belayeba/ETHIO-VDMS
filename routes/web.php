@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Driver\DriverRegistrationController;
 use App\Http\Controllers\Fuel\FeulController;
 use App\Http\Controllers\Mentenance\MentenanceController;
 // use App\Http\Controllers\Organization\ClusterController;
@@ -224,6 +225,16 @@ Route::delete('/delete/{cluster}',[ClusterController::class,'destroy'])->name('c
     Route::post('/store',[VehicleVehicleRegistrationController::class, 'store'])->name('vehicleRegistration.store');
     Route::delete('/delete/{vehicle}',[VehicleVehicleRegistrationController::class,'destroy'])->name('vehicle.destroy');
     Route::put('/update/{vehicle}', [VehicleVehicleRegistrationController::class, 'update'])->name('vehicle.update');
+
+    });
+    Route::get('/change',[VehicleVehicleRegistrationController::class, 'switch'])->name('driver.switch');
+    Route::group([
+        'prefix'=>'driver',
+    ], function (){
+    Route::get('/',[DriverRegistrationController::class, 'RegistrationPage'])->name('driver.index');
+    Route::post('/store',[DriverRegistrationController::class, 'store'])->name('driver.store');
+    Route::delete('/delete/{driver}',[DriverRegistrationController::class,'destroy'])->name('driver.destroy');
+    Route::put('/update/{driver}', [DriverRegistrationController::class, 'update'])->name('driver.update');
 
     });
 });

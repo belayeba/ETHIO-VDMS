@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Vehicle\VehicleInfo;
 use App\Models\VehicleDetailModel;
 use App\Models\Vehicle\VehiclesModel;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -34,7 +35,7 @@ class VehicleRegistrationController extends Controller
     public function store(Request $request)
     {
         $user = Auth::id();
-        
+        // dd($request);
         $status= "Done";
 
         $validator = Validator::make($request->all(),[
@@ -113,10 +114,11 @@ class VehicleRegistrationController extends Controller
                 'insurance' => $fileinsurance,
             ]);
 
-            return response()->json([
-                'success' => true,
-                'message' => 'Vehicle created successfully.',
-            ]);
+            // return response()->json([
+            //     'success' => true,
+            //     'message' => 'Vehicle created successfully.',
+            // ]);
+            return redirect()->back()->with('success', 'Vehicle created successfully.');
       
     }
 
@@ -260,10 +262,11 @@ class VehicleRegistrationController extends Controller
                     ]);
                 }
             $Vehicle->delete();
-            return response()->json([
-                'success' => true,
-                'message' => 'Request Successfully deleted',
-            ]);
+            return redirect()->back()->with('success', 'Vehicle Deleted successfully.');
+            // return response()->json([
+            //     'success' => true,
+            //     'message' => 'Request Successfully deleted',
+            // ]);
         } 
     catch (Exception $e) 
         {
@@ -370,5 +373,8 @@ class VehicleRegistrationController extends Controller
         $detail->delete();
 
         return redirect()->route('vehicles.details.index', $vehicle)->with('success', 'Vehicle detail deleted successfully.');
+    }
+    public function switch(){
+        return view('Driver.switch');
     }
 }

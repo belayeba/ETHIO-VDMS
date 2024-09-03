@@ -255,6 +255,7 @@
                                             <tbody>
                                                 <!-- Table rows will be populated here -->
                                                 @foreach ($vehicle as $item)
+                                                {{-- {{ dd($item) }} --}}
                                                 <tr>
                                                 <!-- Table rows will be populated here -->
                                                 <td>{{$loop->iteration}}</td>
@@ -558,10 +559,8 @@
     document.getElementById('editVehicleCategory').value = data.vehicle_category;
     document.getElementById('editVehicleType').value = data.vehicle_type;
 
-    // Show or hide the organizational fields based on vehicle type
     toggleEditFields();
 
-    // Additional fields like file inputs can be handled as needed
 }
 
 function toggleEditFields() {
