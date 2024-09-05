@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Mentenance;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Models\Vehicle\MaintenancesModel;
-use App\Models\VehiclesModel;
+use App\Models\Vehicle\VehiclesModel;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
