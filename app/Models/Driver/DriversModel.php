@@ -17,7 +17,16 @@ class DriversModel extends Model
         protected $primaryKey = 'driver_id';
         public $incrementing = false;
         protected $keyType = 'uuid';
-        
+        protected static function boot()
+            {
+                parent::boot();
+
+                static::creating(function ($model) {
+                    if (empty($model->{$model->getKeyName()})) {
+                        $model->{$model->getKeyName()} = (string) Str::uuid();
+                    }
+                });
+            }
         protected $fillable = [
             'user_id',
             'register_by',
@@ -30,16 +39,7 @@ class DriversModel extends Model
             'created_at',
             'updated_at'
         ];
-        protected static function boot()
-            {
-                parent::boot();
-
-                static::creating(function ($model) {
-                    if (empty($model->{$model->getKeyName()})) {
-                        $model->{$model->getKeyName()} = (string) Str::uuid();
-                    }
-                });
-            }
+      
         public function user(): BelongsTo
             {
                 return $this->belongsTo(User::class, 'user_id');

@@ -3,6 +3,7 @@
 namespace App\Models\vehicle;
 
 use App\Models\Driver\DriversModel;
+use App\Models\User;
 use App\Models\Vehicle\VehiclesModel;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -50,6 +51,6 @@ class DailyKMCalculationModel extends Model
     }
     public function created_by(): BelongsTo
     {
-        return $this->belongsTo(user::class,'register_by','id');
+        return $this->belongsTo(User::class,'register_by','id');
     }
 }
