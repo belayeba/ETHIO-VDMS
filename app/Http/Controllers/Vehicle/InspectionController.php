@@ -26,6 +26,7 @@ class InspectionController extends Controller
         //Insert Data
     public function storeInspection(Request $request)
         {
+           // dd($request);
             $rules = [
                 'vehicle_id' => 'required|uuid|exists:vehicles,vehicle_id',
                 'parts' => 'required|array',
@@ -38,7 +39,8 @@ class InspectionController extends Controller
             // 
             $validator = Validator::make($request->all(), $rules);
         
-            if ($validator->fails()) {
+            if ($validator->fails()) 
+            {
                 return response()->json(['status' => 'error', 'errors' => $validator->errors()], 422);
             }
         
@@ -50,22 +52,21 @@ class InspectionController extends Controller
             $parts = $request->input('parts');
             $damagedParts = $request->input('damaged_parts', []);
             $damageDescriptions = $request->input('damage_descriptions', []);
-            // dd($damageDescriptions);
             DB::transaction(function () use ($inspectionId, $vehicleId, $inspectedBy, $inspectionDate, $parts, $damagedParts, $damageDescriptions) {
                 foreach ($parts as $partId => $partName) {
-                    $isDamaged = in_array($partId, $damagedParts);
-                    $damageDescription = $isDamaged && isset($damageDescriptions[$partId]) ? $damageDescriptions[$partId] : null;
-                    // dd($damageDescription);
                     InspectionModel::create([
                         'inspection_id' => $inspectionId,
                         'vehicle_id' => $vehicleId,
                         'inspected_by' => $inspectedBy,
                         'part_name' => $partName,
-                        'is_damaged' => $isDamaged,
-                        'damage_description' => $damageDescription,
+                        'is_damaged' => $damagedParts[$partId],
+                        'damage_description' => $damageDescriptions[$partId],
                         'inspection_date' => $inspectionDate,
                     ]);
+                  
+
                 }
+
             });
         
             return response()->json(['status' => 'success', 'message' => 'Inspection saved successfully']);

@@ -40,6 +40,7 @@ class CreateAllTablesWithUuid extends Migration
             $table->string('license_number', 255);
             $table->date('license_expiry_date');
             $table->string('status', 255)->default('active');
+            $table->string('license_file', 255);
             $table->string('phone_number', 20);
             $table->uuid('register_by');
             $table->foreign('register_by')->references('id')->on('users');
@@ -279,21 +280,21 @@ class CreateAllTablesWithUuid extends Migration
             $table->softDeletes();
         });
 
-        // Daily KM Calculation
-        Schema::create('daily_km_calculation', function (Blueprint $table) {
-            $table->uuid('id')->primary();
-            $table->uuid('vehicle_id');
-            $table->foreign('vehicle_id')->references('vehicle_id')->on('vehicles');
-            $table->date('date');
-            $table->decimal('km_driven', 8, 2)->nullable();
-            $table->integer('start_km')->nullable();
-            $table->integer('end_km')->nullable();
-            $table->uuid('created_by');
-            $table->foreign('created_by')->references('id')->on('users');
-            $table->timestamps();
-            $table->softDeletes();
-        });
-
+     // Driver Logs Table
+     Schema::create('daily_km_calculations', function (Blueprint $table) {
+        $table->uuid('calculation_id')->primary();
+        $table->decimal('morning_km', 10, 8)->nullable();
+        $table->decimal('afternoon_km', 10, 8)->nullable();
+        $table->uuid('vehicle_id');
+        $table->foreign('vehicle_id')->references('vehicle_id')->on('vehicles');
+        $table->uuid('driver_id');
+        $table->foreign('driver_id')->references('driver_id')->on('drivers');
+        $table->uuid('register_by');
+        $table->foreign('register_by')->references('id')->on('users');
+        $table->date('date');
+        $table->timestamps();
+        $table->softDeletes();
+     });
         // Vehicle Requests Temporary Table
         Schema::create('vehicle_requests_temporary', function (Blueprint $table) {
             $table->uuid('request_id')->primary();

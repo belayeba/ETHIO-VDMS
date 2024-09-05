@@ -35,8 +35,9 @@ class VehicleTemporaryRequestController extends Controller
                 $validator = Validator::make($request->all(), [
                     'purpose' => 'required|string|max:255',
                     'vehicle_type' => 'required|string',
-                    //'in_out_town'=>'required|boolean',
-                   // 'how_many_days'=>'required|integer',
+                    'in_out_town'=>'required|boolean',
+                    'how_many_days'=>'required|integer',
+                    'with_driver'=>'required|in:1,0',
                     'start_date' => 'required|date',
                     'start_time' => 'required|date_format:H:i',
                     'return_date' => 'required|date',
@@ -50,7 +51,7 @@ class VehicleTemporaryRequestController extends Controller
                     'itemNames' => 'nullable|equal_count',
                     'itemWeights' => 'nullable|equal_count',
                 ]);
-                // If validation fails, return an error response
+                // If validation fails, return an rerror response
                 if ($validator->fails()) 
                         {
                             return response()->json([
@@ -66,8 +67,9 @@ class VehicleTemporaryRequestController extends Controller
                             // Create the vehicle request
                             $Vehicle_Request = VehicleTemporaryRequestModel::create([
                                 'purpose' => $request->purpose,
-                                'in_out_town' =>true,
-                                'how_many_days' =>4,
+                                'in_out_town' =>$request->in_out_town,
+                                'with_driver' =>$request->with_driver,
+                                'how_many_days' =>$request->how_many_days,
                                 'vehicle_type' => $request->vehicle_type,
                                 'requested_by_id'=> $id,
                                 'start_location' => $request->start_location,
@@ -139,6 +141,9 @@ class VehicleTemporaryRequestController extends Controller
                     'request_id' => 'required|uuid|exists:vehicle_requests_temporary,request_id', // Check if UUID exists in the 'users' table
                     'purpose' => 'sometimes|string|max:255',
                     'vehicle_type' => 'sometimes|string',
+                    'in_out_town'=>'sometimes|in:1,0',
+                    'how_many_days'=>'sometimes|integer',
+                    'with_driver'=>'sometimes|in:1,0',
                     'start_date' => 'sometimes|date',
                     'start_time' => 'sometimes|date_format:H:i',
                     'return_date' => 'sometimes|date',

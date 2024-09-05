@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\vehicle;
 
 use App\Models\Driver\DriversModel;
+use App\Models\Vehicle\VehiclesModel;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -12,7 +13,7 @@ class DailyKMCalculationModel extends Model
 {
     use SoftDeletes;
 
-    protected $table = 'daily_km_calculations'; // Specify the table name
+    protected $table = 'daily_km_calculation'; // Specify the table name
     protected $primaryKey = 'calculation_id';
     public $incrementing = false;
     protected $keyType = 'uuid';
@@ -46,5 +47,9 @@ class DailyKMCalculationModel extends Model
     public function driver(): BelongsTo
     {
         return $this->belongsTo(DriversModel::class, 'driver_id');
+    }
+    public function created_by(): BelongsTo
+    {
+        return $this->belongsTo(user::class,'register_by','id');
     }
 }

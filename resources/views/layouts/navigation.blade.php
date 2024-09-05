@@ -125,9 +125,9 @@
                                 <li>
                                     <a href="{{route('user_list')}}">Create users</a>
                                 </li>
-                                <!-- <li>
-                                    <a href="#">Tests</a>
-                                </li> -->
+                                 <li>
+                                    <a href="{{route('driver.index')}}">Driver Registration</a>
+                                </li> 
                                 
                             </ul>
                         </div>
@@ -190,7 +190,29 @@
                             </ul>
                         </div>
                     </li>
-                    
+                    <li class="side-nav-item">
+                        <a data-bs-toggle="collapse" href="#sidebarReport" aria-expanded="false" aria-controls="sidebarReport" class="side-nav-link">
+                            <i class="  ri-user-fill"></i>
+                            <span>Report</span>
+                            <span class="menu-arrow"></span>
+                        </a>
+                        <div class="collapse" id="sidebarReport">
+                            <ul class="side-nav-second-level">
+                                <li>
+                                    <a href="{{ route('dailyreport.index') }}">Daily km Report</a>
+                                </li>
+                                <li>
+                                    <a href="">Perm_vehicle_req Report</a>
+                                </li>
+                                <li>
+                                    <a href="">Temp_vehicle_req Report</a>
+                                </li>
+                                
+                                
+                                
+                            </ul>
+                        </div>
+                    </li>
                 </div>
         </div>   
         </br></br>

@@ -23,6 +23,7 @@ class DriversModel extends Model
             'register_by',
             'license_number',
             'license_expiry_date',
+            'license_file',
             'status',
             'phone_number',
             'notes',

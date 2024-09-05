@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Driver\DriverRegistrationController;
 use App\Http\Controllers\Fuel\FeulController;
 use App\Http\Controllers\Mentenance\MentenanceController;
 use App\Http\Controllers\Organization\DepartmentController;
@@ -8,8 +9,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\tempController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\usercontroller;
-use App\Http\Controllers\LoginController;
 use App\Http\Controllers\Organization\ClusterController;
+use App\Http\Controllers\Vehicle\DailyReportController;
 use App\Http\Controllers\Vehicle\GivingBackPermanentVehicle;
 use App\Http\Controllers\Vehicle\VehicleParmanentlyRequestController;
 // use App\Http\Controllers\Organization\ClustersController;
@@ -135,7 +136,19 @@ Route::group(['middleware' => ['auth']], function()
                     Route::post('/vehicle-director-approve-request', 'VehicleDirectorApproveRequest')->name('vehicle_director_approve_request');
                     Route::post('/vehicle-director-reject-request', 'VehicleDirectorRejectRequest')->name('vehicle_director_reject_request');
                 });
-                
+                //Report Tinsae
+            Route::controller(DailyReportController::class)->group(function () 
+                {
+                    // Route::post('/return-vehicle-permanent', 'ReturntVehiclePerm')->name('return_vehicle_permanent');
+                    // Route::put('/update-return-request', 'update_return_request')->name('update_return_request');
+                    // Route::delete('/delete-request', 'deleteRequest')->name('delete_request');
+                    // Route::get('/director-approval-page', 'DirectorApprovalPage')->name('director_approval_page');
+                    // Route::post('/director-approve-request', 'DirectorApproveRequest')->name('director_approve_request');
+                    // Route::post('/director-reject-request', 'DirectorRejectRequest')->name('director_reject_request');
+                    // Route::get('/vehicle-director-page', 'VehicleDirector_page')->name('vehicle_director_page');
+                    // Route::post('/vehicle-director-approve-request', 'VehicleDirectorApproveRequest')->name('vehicle_director_approve_request');
+                    // Route::post('/vehicle-director-reject-request', 'VehicleDirectorRejectRequest')->name('vehicle_director_reject_request');
+                });   
             Route::controller(tempController::class)->group(function()
                 {
                     Route::group(['middleware' => ['can:edit posts']], function () {
@@ -227,12 +240,23 @@ Route::group(['middleware' => ['auth']], function()
                  // Define routes for daily_km
             Route::controller(Daily_KM_Calculation::class)->group(function ()
             {
+               Route::get('/daily','ReportPage')->name('dailyreport.index');
                Route::post('/daily_km/store', 'displayForm')->name('daily_km.page.store'); // Create a new inspection
                Route::get('/daily_km/morning', 'morning_km')->name('daily_km.page.show'); // Show a specific inspection
                Route::get('/daily_km/afternoon', 'aftern_km')->name('daily_km.page.list'); // List all inspections
                Route::get('/daily_km/page', 'displayPage')->name('daily_km.page'); // inspection page
                Route::delete('/daily_km/delete', 'delete_morningkm')->name('daily_km.page.delete'); // Delete a specific inspection
             });
+            // Samir Driver Registration
+            Route::group([
+                'prefix'=>'driver',
+            ], function ()
+                {
+                    Route::get('/',[DriverRegistrationController::class, 'RegistrationPage'])->name('driver.index');
+                    Route::post('/store',[DriverRegistrationController::class, 'store'])->name('driver.store');
+                    Route::delete('/delete/{driver}',[DriverRegistrationController::class,'destroy'])->name('driver.destroy');
+                    Route::put('/update/{driver}', [DriverRegistrationController::class, 'update'])->name('driver.update');
+                });
                 // Define routes for InspectionController
             Route::controller(InspectionController::class)->group(function ()
                  {
@@ -290,4 +314,6 @@ Route::group(['middleware' => ['auth']], function()
         Route::get('/create',[DepartmentController::class,'create'])->name('department.create');
         Route::post('/store',[DepartmentController::class,'store'])->name('department.store');
     });
+
+    // Tinsae
 });
