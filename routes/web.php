@@ -52,7 +52,7 @@ Route::group(['middleware' => ['auth']], function()
                         Route::post('/user_delete_request', 'deleteRequest')->name('temp_delete_request');
                         Route::post('/user_update_info', 'update')->name('temp_update_request');
                         Route::get('/director_approve_page/check', 'DirectorApprovalPage')->name('director_temp');
-                        Route::post('/director_approve_request', 'DirectorApproveRequest')->name('director_approve_request');
+                        Route::post('/director_approve_requesta', 'DirectorApproveRequest')->name('director_approve_request');
                         Route::post('/director_reject_request', 'DirectorRejectRequest')->name('director_reject_request');
                         Route::get('/simirit_approve_page', 'VehicleDirectorPage')->name('simirit_page');
                         Route::post('/simirit_approve_request', 'VehicleDirectorApproveRequest')->name('simirit_approve');
@@ -130,7 +130,7 @@ Route::group(['middleware' => ['auth']], function()
                     Route::put('/update-return-request', 'update_return_request')->name('update_return_request');
                     Route::delete('/delete-request', 'deleteRequest')->name('delete_request');
                     Route::get('/director-approval-page', 'DirectorApprovalPage')->name('director_approval_page');
-                    Route::post('/director-approve-request', 'DirectorApproveRequest')->name('director_approve_request');
+                    Route::post('/director-approve-request', 'DirectorApproveRequest')->name('director_approve_givingback_request');
                     Route::post('/director-reject-request', 'DirectorRejectRequest')->name('director_reject_request');
                     Route::get('/vehicle-director-page', 'VehicleDirector_page')->name('vehicle_director_page');
                     Route::post('/vehicle-director-approve-request', 'VehicleDirectorApproveRequest')->name('vehicle_director_approve_request');

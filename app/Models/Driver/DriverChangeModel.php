@@ -20,7 +20,6 @@ class DriverChangeModel extends Model
     protected $keyType = 'uuid';
     
     protected $fillable = [
-        'driver_change_id',
         'vehicle_id',
         'old_driver_id',
         'new_driver_id',

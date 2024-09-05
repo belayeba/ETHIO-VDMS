@@ -189,17 +189,7 @@
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                        @endforeach 
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </section>
-                    <div class="modal fade" id="viewDriverModal{{ $item->driver_id }}" tabindex="-1" aria-labelledby="viewDriverModalLabel{{ $item->driver_id }}" aria-hidden="true">
+                                                        <div class="modal fade" id="viewDriverModal{{ $item->driver_id }}" tabindex="-1" aria-labelledby="viewDriverModalLabel{{ $item->driver_id }}" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -243,6 +233,17 @@
     </div>
 </div>
 
+                                                        @endforeach 
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                   
                     
                     
                     <!-- Confirmation Modal -->
