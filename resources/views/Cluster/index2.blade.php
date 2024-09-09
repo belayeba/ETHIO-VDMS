@@ -1,11 +1,5 @@
-{{-- @include('common.adminhead') --}}
-<!DOCTYPE html>
-<html lang="en">
-@include('layouts.main-link')
-@include('layouts.header')
-@include('layouts.sidebar')
-@include('layouts.setting')
-
+@extends('layouts.navigation')
+@section('content')
 <body class="admin">
     <div class="wrapper">
         <div class="content-page">
@@ -38,7 +32,6 @@
                     <section class="sms-breadcrumb mb-10 white-box">
                         <div class="container-fluid p-0">
                             <div class="d-flex flex-wrap justify-content-between">
-                                <h2 class="text-uppercase">Cluster</h2>
                                 <div class="bc-pages">
                                     
                                 </div>
@@ -242,4 +235,4 @@
     <!-- App js -->
     <script src="assets/js/app.min.js"></script>
 </body>
-</html>
+@endsection

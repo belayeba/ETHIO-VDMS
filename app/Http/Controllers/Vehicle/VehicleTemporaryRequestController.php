@@ -369,9 +369,10 @@ class VehicleTemporaryRequestController extends Controller
                 $clusterId = $user->department->cluster_id;
 
                 // Query the VehicleTemporaryRequestModel using the cluster_id
-                $vehicleRequests = VehicleTemporaryRequestModel::with('approvedBy','requestedBy')->whereHas('requestedBy', function ($query) use ($clusterId) {
-                    $query->where('cluster_id', $clusterId);
-                })
+                $vehicleRequests = VehicleTemporaryRequestModel::with(['approvedBy', 'requestedBy.department'])
+                    ->whereHas('requestedBy.department', function ($query) use ($clusterId) {
+                        $query->where('cluster_id', $clusterId);
+                    })
                     ->where(function($query) {
                         $query->orWhere('how_many_days', '>', 0)
                             ->orWhere('in_out_town', true);

@@ -24,7 +24,7 @@ class VehiclesModel extends Model
         'vin', 'make', 'model', 'year', 'plate_number','registered_by',
         'registration_date', 'mileage', 'vehicle_type', 
         'vehicle_category', 'fuel_amount', 'last_service', 'libre','insurance',
-        'next_service', 'driver_id', 'fuel_type', 'status', 'notes'
+        'next_service', 'driver_id', 'inspection_id','fuel_type', 'status', 'notes'
     ];
     protected static function boot()
         {
@@ -51,6 +51,10 @@ class VehiclesModel extends Model
    public function driver():BelongsTo
       {
         return $this->belongsTo(User::class, 'driver_id','id');
+      }
+    public function inspection():BelongsTo
+      {
+        return $this->belongsTo(InspectionModel::class, 'inspection_id','inspection_id');
       }
     // Other relations
 }

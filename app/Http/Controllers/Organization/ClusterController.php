@@ -16,7 +16,7 @@ class ClusterController extends Controller
     {
         $clusters = ClustersModel::all();
         // dd($clusters);
-        return view('Cluster.index2', compact('clusters'));
+        return view('Cluster.index', compact('clusters'));
     }
 
     // Show the form for creating a new resource.
@@ -29,28 +29,26 @@ class ClusterController extends Controller
     public function store(Request $request)
     {
         // dd($request);
-        $request->validate([
-            'name' => 'required|string|max:255',
-            // 'created_by' => 'required', // Ensure a valid user ID is used
-        ]);
+        // $request->validate([
+        //     'name' => 'required|string|max:255',
+        //     'created_by' => 'required', // Ensure a valid user ID is used
+        // ]);
+        // dd($request);
         $user = auth()->user()->id; // Get the authenticated user's ID
-        // dd($user);
+        
         $request->merge(['created_by' => $user]); // Add the user's ID to the request data
+        // dd($request);
         ClustersModel::create($request->all());
-        return response()->json([
-            'success' => true,
-            'message' => 'Cluster created successfully',
-        ]);
         return redirect()->route('cluster.index')->with('success', 'Cluster created successfully.');
     
     }
 
     // Display the specified resource.
     public function show(ClustersModel $cluster)
-        {
-            $clusters=ClustersModel::get();
-            return view('cluster.show', compact('clusters'));
-        }
+    {
+        $clusters=ClustersModel::get();
+        return view('cluster.show', compact('clusters'));
+    }
 
     // Show the form for editing the specified resource.
     public function edit(ClustersModel $cluster)
@@ -61,22 +59,26 @@ class ClusterController extends Controller
     // Update the specified resource in storage.
     public function update(Request $request, ClustersModel $cluster)
     {
+        // dd($request);
         $request->validate([
             'name' => 'required|string|max:255',
         ]);
+        
         $user = auth()->user()->id; // Get the authenticated user's ID
-        $cluster->update([
-            'name'=>$request->input('name')
-        ]);
-        return redirect()->route('cluster.index')->with('success', 'Cluster updated successfully.');
+        $request->merge(['created_by' => $user]); 
+        // dd($request);// Add the user's ID to the request data
+        $cluster->update($request->all());
+        
+        return redirect()->back()->with('success', 'Cluster updated successfully.');
     }
 
     // Remove the specified resource from storage.
     public function destroy(ClustersModel $cluster)
-        {
-            $cluster->delete();
+    {
+       
+        $cluster->delete();
 
-            return redirect()->route('cluster.index')->with('success', 'Cluster deleted successfully.');
-        }
+        return redirect()->back()->with('success', 'Cluster deleted successfully.');
+    }
    
 }

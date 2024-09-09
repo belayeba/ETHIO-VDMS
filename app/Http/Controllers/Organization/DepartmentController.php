@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\Organization\DepartmentsModel;
 use Illuminate\Http\Request;
 use App\Models\Organization\ClustersModel;
+use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
 class DepartmentController extends Controller
@@ -18,8 +20,9 @@ class DepartmentController extends Controller
         //
         $departments = DepartmentsModel::all(); // Get all departments
         $clusters = ClustersModel::all(); // Get all clusters
+        // dd($clusters);
         // Pass the departments and clusters to the view
-        return view('Department.index', compact('departments', 'clusters'));
+        return view('department.index', compact('departments', 'clusters'));
     }
 
     /**
@@ -35,6 +38,7 @@ class DepartmentController extends Controller
      */
     public function store(Request $request)
     {
+        // dd($request);
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
             'cluster_id' => 'required|uuid|exists:clusters,cluster_id',
@@ -53,7 +57,7 @@ class DepartmentController extends Controller
         // Create the department
         DepartmentsModel::create($request->all());
         // Redirect to the index page with a success message
-        return redirect()->route('department.index')->with('success', 'Department created successfully.');
+        return redirect()->back()->with('success', 'Department created successfully.');
     }
 
     /**
@@ -90,7 +94,7 @@ class DepartmentController extends Controller
         // Update the department
         $department->update($request->all());
         // Redirect to the index page with a success message
-        return redirect()->route('department.index')->with('success', 'Department updated successfully.');
+        return redirect()->back()->with('success', 'Department updated successfully.');
     }
 
     /**
@@ -101,7 +105,6 @@ class DepartmentController extends Controller
         // Delete the department
         $department->delete();
         // Redirect to the index page with a success message
-        return redirect()->route('department.index')->with('success', 'Department deleted successfully.');
+        return redirect()->back()->with('success', 'Department deleted successfully.');
     }
-
 }

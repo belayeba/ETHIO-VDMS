@@ -167,7 +167,7 @@
                         <div class="collapse" id="sidebarOrganization">
                             <ul class="side-nav-second-level">
                                 <li>
-                                    <a href="/cluster">Cluster</a>
+                                    <a href="{{ route('cluster.index') }}">Cluster</a>
                                 </li>
                                 <li>
                                     <a href="/department">Department</a>
