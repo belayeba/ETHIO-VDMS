@@ -248,14 +248,14 @@ Route::group(['middleware' => ['auth']], function()
                 });
                  // Define routes for daily_km
             Route::controller(Daily_KM_Calculation::class)->group(function ()
-            {
-               Route::get('/daily','ReportPage')->name('dailyreport.index');
-               Route::post('/daily_km/store', 'displayForm')->name('daily_km.page.store'); // Create a new inspection
-               Route::get('/daily_km/morning', 'morning_km')->name('daily_km.page.show'); // Show a specific inspection
-               Route::get('/daily_km/afternoon', 'aftern_km')->name('daily_km.page.list'); // List all inspections
-               Route::get('/daily_km/page', 'displayPage')->name('daily_km.page'); // inspection page
-               Route::delete('/daily_km/delete', 'delete_morningkm')->name('daily_km.page.delete'); // Delete a specific inspection
-            });
+                {
+                Route::get('/daily','ReportPage')->name('dailyreport.index');
+                Route::post('/daily_km/store', 'displayForm')->name('daily_km.page.store'); // Create a new inspection
+                Route::get('/daily_km/morning', 'morning_km')->name('daily_km.page.show'); // Show a specific inspection
+                Route::get('/daily_km/afternoon', 'aftern_km')->name('daily_km.page.list'); // List all inspections
+                Route::get('/daily_km/page', 'displayPage')->name('daily_km.page'); // inspection page
+                Route::delete('/daily_km/delete', 'delete_morningkm')->name('daily_km.page.delete'); // Delete a specific inspection
+                });
             // Samir Driver Registration
             Route::group([
                 'prefix'=>'driver',
@@ -311,17 +311,18 @@ Route::group(['middleware' => ['auth']], function()
     Route::get('/',[ClusterController::class,'index'])->name('cluster.index');
     Route::get('/create',[ClusterController::class,'create'])->name('cluster.create');
     Route::post('/store', [ClusterController::class,'store'])->name('cluster.store');
-    Route::post('/update/{id}', [ClusterController::class,'update'])->name('cluster.update');
+    Route::post('/{cluster}/update', [ClusterController::class,'update'])->name('cluster.update');
     Route::get('/view',[ClusterController::class,'show'])->name('cluster.show');
     Route::delete('/delete/{cluster}',[ClusterController::class,'destroy'])->name('cluster.destroy');
     });
-
     Route::group([
         'prefix'=>'department',
     ], function (){
         Route::get('/',[DepartmentController::class,'index'])->name('department.index');
-        Route::get('/create',[DepartmentController::class,'create'])->name('department.create');
+        // Route::get('/create',[DepartmentController::class,'create'])->name('department.create');
         Route::post('/store',[DepartmentController::class,'store'])->name('department.store');
+        Route::post('/{department}/update', [DepartmentController::class,'update'])->name('department.update');
+        Route::delete('/delete/{department}',[DepartmentController::class,'destroy'])->name('department.destroy');
     });
 
     // Tinsae

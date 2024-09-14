@@ -25,37 +25,40 @@ class DriverChangeModel extends Model
         'new_driver_id',
         'change_date',
         'inspection_id',
+        'changed_by',
         'driver_accepted',
+        'driver_reject_reason',
         'created_at',
         'updated_at'
     ];
-    
     protected static function boot()
-    {
-        parent::boot();
+        {
+            parent::boot();
 
-        static::creating(function ($model) {
-            if (empty($model->{$model->getKeyName()})) {
-                $model->{$model->getKeyName()} = (string) Str::uuid();
-            }
-        });
-    }
+            static::creating(function ($model) {
+                if (empty($model->{$model->getKeyName()})) {
+                    $model->{$model->getKeyName()} = (string) Str::uuid();
+                }
+            });
+        }
     public function vehicle(): BelongsTo
-    {
-        return $this->belongsTo(VehiclesModel::class, 'vehicle_id');
-    }
-
+        {
+            return $this->belongsTo(VehiclesModel::class, 'vehicle_id');
+        }
     public function oldDriver(): BelongsTo
-    {
-        return $this->belongsTo(DriversModel::class, 'old_driver_id');
-    }
-
+        {
+            return $this->belongsTo(DriversModel::class, 'old_driver_id');
+        }
     public function newDriver(): BelongsTo
-    {
-        return $this->belongsTo(DriversModel::class, 'new_driver_id');
-    }
+        {
+            return $this->belongsTo(DriversModel::class, 'new_driver_id');
+        }
+    public function changed_by(): BelongsTo
+        {
+            return $this->belongsTo(User::class, 'changed_by');
+        }
     public function inspection(): BelongsTo
-    {
-        return $this->belongsTo(InspectionModel::class, 'inspection_id');
-    }
+        {
+            return $this->belongsTo(InspectionModel::class, 'inspection_id');
+        }
 }

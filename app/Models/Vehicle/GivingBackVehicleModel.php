@@ -3,6 +3,7 @@
 namespace App\Models\Vehicle;
 
 use App\Models\User;
+use App\Models\Vehicle\VehiclesModel as VehicleVehiclesModel;
 use App\Models\VehiclesModel;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -45,7 +46,7 @@ class GivingBackVehiclePermanently extends Model
         }
     public function vehicle(): BelongsTo
         {
-            return $this->belongsTo(VehiclesModel::class, 'vehicle_id');
+            return $this->belongsTo(VehicleVehiclesModel::class, 'vehicle_id');
         }
 
     public function returnedBy(): BelongsTo

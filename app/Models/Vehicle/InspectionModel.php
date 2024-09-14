@@ -13,7 +13,7 @@ class InspectionModel extends Model
     use SoftDeletes;
 
     // Set the primary key as a composite key
-    protected $primaryKey = ['inspection_id', 'part_name','vehicle_id','inspected_by'];
+    protected $primaryKey = ['inspection_id', 'part_name','vehicle_id'];
     public $incrementing = false;
 
     // Specify the table associated with the model
@@ -34,21 +34,17 @@ class InspectionModel extends Model
         'created_at',
         'updated_at'
     ];
-
     // Automatically generate UUID for inspection_id if not provided
     protected static function boot()
-    {
-        parent::boot();
+        {
+            parent::boot();
 
-        static::creating(function ($model) {
-            if (!$model->inspection_id) {
-                $model->inspection_id = (string) Str::uuid();
-            }
-        });
-    }
-
-    // Define relationships
-
+            static::creating(function ($model) {
+                if (!$model->inspection_id) {
+                    $model->inspection_id = (string) Str::uuid();
+                }
+            });
+        }
     // Relationship with the Vehicle model
     public function vehicle()
         {
