@@ -72,7 +72,7 @@ class VehicleTemporaryRequestModel extends Model
 
     public function requestedBy(): BelongsTo
     {
-        return $this->belongsTo(User::class, 'requested_by_id');
+        return $this->belongsTo(User::class, 'requested_by_id','id');
     }
 
     public function approvedBy(): BelongsTo

@@ -96,7 +96,16 @@
                                     <a href="{{route('vec_perm_request')}}">Permanent vehicle request</a>
                                 </li>
                                 <li>
-                                    <a href="/director_approve_page/check">Director</a>
+                                    <a href="{{route('director_temp')}}">Director</a>
+                                </li>
+                                <li>
+                                    <a href="{{route('ClusterDirector_temp')}}">Cluster Director</a>
+                                </li>
+                                <li>
+                                    <a href="{{route('HRClusterDirector_temp')}}">HR Director</a>
+                                </li>
+                                <li>
+                                    <a href="{{route('TransportDirector_temp')}}">Transport Director</a>
                                 </li>
                                 <li>
                                     <a href="{{route('simirit_page')}}">Dispatcher</a>
@@ -192,7 +201,7 @@
                     </li>
                     <li class="side-nav-item">
                         <a data-bs-toggle="collapse" href="#sidebarReport" aria-expanded="false" aria-controls="sidebarReport" class="side-nav-link">
-                            <i class="  ri-user-fill"></i>
+                            <i class="ri-user-fill"></i>
                             <span>Report</span>
                             <span class="menu-arrow"></span>
                         </a>
@@ -202,10 +211,10 @@
                                     <a href="{{ route('dailyreport.index') }}">Daily km Report</a>
                                 </li>
                                 <li>
-                                    <a href="">Perm_vehicle_req Report</a>
+                                    <a href="#">Perm_vehicle_req Report</a>
                                 </li>
                                 <li>
-                                    <a href="">Temp_vehicle_req Report</a>
+                                    <a href="#">Temp_vehicle_req Report</a>
                                 </li>
                                 
                                 

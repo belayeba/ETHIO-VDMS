@@ -10,7 +10,7 @@
                             <div class="card">
                                 <div class="card-body">
                                     <div class="table-responsive"  id="table1">
-                                        <h4 class="header-title mb-4">NEW REQUEST</h4>
+                                        <h4 class="header-title mb-4">NEW HR Director REQUEST</h4>
                                         <div class="toggle-tables">
                                             <button type="button" class="btn btn-secondary rounded-pill" autofocus  onclick="toggleDiv('table1')">PENDING REQUEST</button>
                                             <button type="button" class="btn btn-outline-secondary rounded-pill"  onclick="toggleDiv('table2')">ARCHIVED REQUEST</button>
@@ -28,7 +28,7 @@
                                                     <th>Action</th>
                                                 </tr>
                                             </thead>
-                                            @foreach($vehicle_requests->where('dir_approved_by', '===', null) as $request)
+                                            @foreach($vehicleRequests->where('hr_div_approved_by', '===', null) as $request)
                                                 <tbody>
                                                     <tr>
                                                         <td>{{$loop->iteration}}</td>
@@ -39,23 +39,23 @@
                                                         <td>{{$request->created_at}}</td>
                                                         <td>
                                                             <button type="button" class="btn btn-info rounded-pill" data-bs-toggle="modal" data-bs-target="#standard-modal-{{ $loop->index }}" title="Show"><i class=" ri-eye-line"></i></button>
-                                                            @if($request->dir_approved_by === Null && $request->director_reject_reason === Null)
+                                                            @if($request->hr_div_approved_by === Null && $request->hr_director_reject_reason === Null)
                                                             <button id="acceptButton" type="button" class="btn btn-primary rounded-pill" title="Accept" onclick="confirmFormSubmission('approvalForm-{{ $loop->index }}')"><i class="ri-checkbox-circle-line"></i></button>
                                                             <button type="button" class="btn btn-danger rounded-pill" data-bs-toggle="modal" data-bs-target="#staticBackdrop-{{ $loop->index }}" title="Reject"><i class=" ri-close-circle-fill"></i></button>
                                                             @endif
                                                         </td>
                                                     </tr>
                                                 </tbody>
-                                                <form id="approvalForm-{{ $loop->index }}" method="POST" action="{{ route('director_approve_request') }}" style="display: none;">
-                                                    @csrf
-                                                    <input type="hidden" name="request_id" value="{{ $request->request_id }}">
-                                                </form>
+                                                    <form id="approvalForm-{{ $loop->index }}" method="POST" action="{{ route('HRClusterDirector_approve_request') }}" style="display: none;">
+                                                        @csrf
+                                                        <input type="hidden" name="request_id" value="{{ $request->request_id }}">
+                                                    </form>
                                                 <!-- show all the information about the request modal -->
                                                 <div id="standard-modal-{{ $loop->index }}" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="standard-modalLabel" aria-hidden="true">
                                                     <div class="modal-dialog">
                                                         <div class="modal-content">
                                                             <div class="modal-header">
-                                                                <h4 class="modal-title" id="standard-modalLabel">Request Details </h4>
+                                                                <h4 class="modal-title" id="standard-modalLabel">Request Details</h4>
                                                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                             </div>
                                                             <div class="modal-body">
@@ -102,10 +102,10 @@
                                                     <div class="modal-dialog">
                                                         <div class="modal-content">
                                                             <div class="modal-header">
-                                                                <h5 class="modal-title" id="staticBackdropLabel">Reject reason {{ $request->request_id }}</h5>
+                                                                <h5 class="modal-title" id="staticBackdropLabel">Reject reason</h5>
                                                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                             </div> <!-- end modal header -->
-                                                            <form method="POST" action="{{route('director_reject_request')}}">
+                                                            <form method="POST" action="{{route('HRClusterDirector_reject_request')}}">
                                                                 @csrf
                                                                 <div class="modal-body">
                                                                     <div class="col-lg-6">
@@ -150,7 +150,7 @@
                                                     <th>Action</th>
                                                 </tr>
                                             </thead>
-                                            @foreach($vehicle_requests->where('dir_approved_by', '!==', null) as $request)
+                                            @foreach($vehicleRequests->where('hr_div_approved_by', '!==', null) as $request)
                                                 <tbody>
                                                     <tr>
                                                         <td>{{$loop->iteration}}</td>
@@ -159,9 +159,9 @@
                                                         <td>{{$request->start_location}}</td>
                                                         <td>{{$request->end_locations}}</td>
                                                         <td>{{$request->created_at}}</td>
-                                                        <td> @if($request->approved_by !== null && $request->director_reject_reason === null)
+                                                        <td> @if($request->hr_div_approved_by !== null && $request->hr_director_reject_reason === null)
                                                                 <p class="btn btn-primary ">ACCEPTED</p>
-                                                             @elseif($request->approved_by !== null && $request->director_reject_reason !== null)
+                                                             @elseif($request->hr_div_approved_by !== null && $request->hr_director_reject_reason !== null)
                                                                 <p class="btn btn-danger">REJECTED
                                                             @endif
                                                         </td>
@@ -234,7 +234,7 @@
     <script>
   
 
-  function confirmFormSubmission(formId) {
+        function confirmFormSubmission(formId) {
         if (confirm("Are you sure you want to accept this request?")) {
             var form = document.getElementById(formId);
             form.submit();

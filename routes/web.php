@@ -54,10 +54,19 @@ Route::group(['middleware' => ['auth']], function()
                         Route::get('/director_approve_page/check', 'DirectorApprovalPage')->name('director_temp');
                         Route::post('/director_approve_requesta', 'DirectorApproveRequest')->name('director_approve_request');
                         Route::post('/director_reject_request', 'DirectorRejectRequest')->name('director_reject_request');
-                        Route::get('/simirit_approve_page', 'VehicleDirectorPage')->name('simirit_page');
-                        Route::post('/simirit_approve_request', 'VehicleDirectorApproveRequest')->name('simirit_approve');
-                        Route::post('/simirit_fill_start_km', ' VehicleDirectorFillstartKm')->name('simirit_fill_start_km');
-                        Route::post('/simirit_reject_request', 'VehicleDirectorRejectRequest')->name('simirit_reject');
+                        Route::get('/clusterDirector_approve_page', 'clusterDirectorApprovalPage')->name('ClusterDirector_temp');
+                        Route::post('/clusterDirector_approve_requesta', 'clusterDirectorApproveRequest')->name('ClusterDirector_approve_request');
+                        Route::post('/clusterDirector_reject_request', 'cluster_DirectorRejectRequest')->name('ClusterDirector_reject_request');
+                        Route::get('/HRclusterDirector_approve_page', 'HRclusterDirectorApprovalPage')->name('HRClusterDirector_temp');
+                        Route::post('/HRclusterDirector_approve_requesta', 'HrclusterDirectorApproveRequest')->name('HRClusterDirector_approve_request');
+                        Route::post('/HRclusterDirector_reject_request', 'Hrcluster_DirectorRejectRequest')->name('HRClusterDirector_reject_request');
+                        Route::get('/TransportDirector_approve_page', 'TransportDirectorApprovalPage')->name('TransportDirector_temp');
+                        Route::post('/TransportDirector_approve_requesta', 'TransportDirectorApproveRequest')->name('TransportDirector_approve_request');
+                        Route::post('/TransportDirector_reject_request', 'TransportDirectorRejectRequest')->name('TransportDirector_reject_request');
+                        Route::get('/simirit_approve_page', 'SimiritPage')->name('simirit_page');
+                        Route::post('/simirit_approve_request', 'simiritApproveRequest')->name('simirit_approve');
+                        Route::post('/simirit_fill_start_km', ' simiritFillstartKm')->name('simirit_fill_start_km');
+                        Route::post('/simirit_reject_request', 'simiritRejectRequest')->name('simirit_reject');
                         Route::post('/simirit_returns_vehicle', 'Returning_temporary_vehicle')->name('simirit_return_vehicle');
                 });
             Route::controller(MentenanceController::class)->group(function()

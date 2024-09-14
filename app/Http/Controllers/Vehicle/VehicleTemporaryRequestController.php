@@ -263,18 +263,20 @@ class VehicleTemporaryRequestController extends Controller
                     $id = Auth::id();
                     $directors_data = User::select('department_id')->where('id',$id)->first();
                     $dept_id = $directors_data->department_id;
-                    $vehicle_requests = VehicleTemporaryRequestModel::whereHas('requestedBy', function ($query) use ($dept_id) {
-                        $query->where('department_id', $dept_id);
-                    })->whereNull('dir_approved_by')->get();
-                    //$vehicle_requests=VehicleTemporaryRequestModel::get();
+                    // $vehicle_requests = VehicleTemporaryRequestModel::whereHas('requestedBy', function ($query) use ($dept_id) {
+                    //     $query->where('department_id', $dept_id);
+                    // })->whereNull('dir_approved_by')->get();
+                    $vehicle_requests=VehicleTemporaryRequestModel::get();
                     return view("Request.DirectorPage", compact('vehicle_requests'));
             }
         // Directors Page
         public function DirectorApproveRequest(Request $request)
             {
+                    $request_id = "request_id".$id;
                     $validation = Validator::make($request->all(),[
-                    'request_id' => 'required|uuid|exists:vehicle_requests_temporary,request_id',
+                    $request_id => 'required|uuid|exists:vehicle_requests_temporary,request_id',
                     ]);
+                    // dd($request_id);
                     // Check validation error
                     if ($validation->fails()) 
                         {
@@ -284,11 +286,14 @@ class VehicleTemporaryRequestController extends Controller
                             ]);
                         }
                     // Check if it is not approved before
-                    $id = $request->input('request_id');
+                    $id = $request->input($request_id);
+                    
                     $user_id = Auth::id();
                 try
                     {
+                        // dd("test");
                         $Vehicle_Request = VehicleTemporaryRequestModel::findOrFail($id);
+
                         if($Vehicle_Request->dir_approved_by)
                             {
                                 return response()->json([
@@ -369,18 +374,19 @@ class VehicleTemporaryRequestController extends Controller
                 $clusterId = $user->department->cluster_id;
 
                 // Query the VehicleTemporaryRequestModel using the cluster_id
-                $vehicleRequests = VehicleTemporaryRequestModel::with('approvedBy','requestedBy')->whereHas('requestedBy', function ($query) use ($clusterId) {
+                $vehicleRequests = VehicleTemporaryRequestModel::
+                with('approvedBy','requestedBy.department')->whereHas('requestedBy.department', function ($query) use ($clusterId) {
                     $query->where('cluster_id', $clusterId);
                 })
                     ->where(function($query) {
                         $query->orWhere('how_many_days', '>', 0)
                             ->orWhere('in_out_town', true);
                     })
-                    ->whereNull('div_approved_by')
+                    // ->whereNull('div_approved_by')
                     ->whereNotNull('dir_approved_by')
                     ->get();
                 // Return the results, for example, passing them to a view
-                return view('vehicle_requests.index', compact('vehicleRequests'));
+                return view('Request.ClusterDirectorPage', compact('vehicleRequests'));
             }
         // DIRECTOR APPROVE THE REQUESTS
         public function clusterDirectorApproveRequest(Request $request)
@@ -399,31 +405,31 @@ class VehicleTemporaryRequestController extends Controller
                     // Check if it is not approved before
                     $id = $request->input('request_id');
                     $user_id = Auth::id();
-                    try
-                        {
-                            $Vehicle_Request = VehicleTemporaryRequestModel::findOrFail($id);
-                            if($Vehicle_Request->div_approved_by)
-                                {
-                                    return response()->json([
-                                        'success' => false,
-                                        'message' => 'Warning! You are denied the service',
-                                    ]);
-                                }
-                            $Vehicle_Request->div_approved_by = $user_id;
-                            $Vehicle_Request->save();
-                            return response()->json([
-                                'success' => true,
-                                'message' => 'The request approved successfully',
-                            ]);
-                        }
-                    catch (Exception $e) 
-                        {
-                            // Handle the case when the vehicle request is not found
-                            return response()->json([
-                                'success' => false,
-                                'message' => 'something went wrong',
-                            ]);
-                        }
+                try
+                    {
+                        $Vehicle_Request = VehicleTemporaryRequestModel::findOrFail($id);
+                        if($Vehicle_Request->div_approved_by)
+                            {
+                                return response()->json([
+                                    'success' => false,
+                                    'message' => 'Warning! You are denied the service',
+                                ]);
+                            }
+                        $Vehicle_Request->div_approved_by = $user_id;
+                        $Vehicle_Request->save();
+                        return response()->json([
+                            'success' => true,
+                            'message' => 'The request approved successfully',
+                        ]);
+                    }
+                catch (Exception $e) 
+                    {
+                        // Handle the case when the vehicle request is not found
+                        return response()->json([
+                            'success' => false,
+                            'message' => 'something went wrong',
+                        ]);
+                    }
             }   
         // Director Reject the request
         public function cluster_DirectorRejectRequest(Request $request)
@@ -483,18 +489,20 @@ class VehicleTemporaryRequestController extends Controller
                 $clusterId = $user->department->cluster_id;
 
                 // Query the VehicleTemporaryRequestModel using the cluster_id
-                $vehicleRequests = VehicleTemporaryRequestModel::with('approvedBy','requestedBy')->whereHas('requestedBy', function ($query) use ($clusterId) {
+                $vehicleRequests = VehicleTemporaryRequestModel::
+                with('approvedBy','requestedBy.department')->whereHas('requestedBy.department', function ($query) use ($clusterId) {
                     $query->where('cluster_id', $clusterId);
                 })
                     ->where(function($query) {
                         $query->orWhere('how_many_days', '>', 0)
                             ->orWhere('in_out_town', true);
                     })
-                    ->whereNull('hr_div_approved_by')
+                    // ->whereNull('hr_div_approved_by')
                     ->whereNotNull('div_approved_by')
-                    ->get();
+                    ->
+                    get();
                 // Return the results, for example, passing them to a view
-                return view('vehicle_requests.index', compact('vehicleRequests'));
+                return view('Request.HrDirectorPage', compact('vehicleRequests'));
             }
         public function HrclusterDirectorApproveRequest(Request $request)
             {
@@ -603,13 +611,13 @@ class VehicleTemporaryRequestController extends Controller
                     $hasInitialConditions,
                     // If at least one of the conditions is true
                     function ($query) {
-                        $query->whereNotNull('hr_div_approved_by')
-                            ->whereNull('transport_director_id');
+                        $query->whereNotNull('hr_div_approved_by');
+                            // ->whereNull('transport_director_id')
                     },
                     // If none of the conditions are true
                     function ($query) {
-                        $query->whereNotNull('dir_approved_by')
-                            ->whereNull('transport_director_id');
+                        $query->whereNotNull('dir_approved_by');
+                            // ->whereNull('transport_director_id')
                     }
                 );
 
@@ -617,7 +625,7 @@ class VehicleTemporaryRequestController extends Controller
                 $vehicleRequests = $vehicleRequests->get();
 
                 // Return the results, for example, passing them to a view
-                return view('vehicle_requests.index', compact('vehicleRequests'));
+                return view('Request.TransportDirectorPage', compact('vehicleRequests'));
             }
         public function TransportDirectorApproveRequest(Request $request)
             {
@@ -711,8 +719,8 @@ class VehicleTemporaryRequestController extends Controller
         public function SimiritPage() 
             {    
                     $id = Auth::id();
-                    $vehicle_requests = VehicleTemporaryRequestModel::with('')
-                                    ->whereNotNull('transport_director_id')
+                    $vehicle_requests = VehicleTemporaryRequestModel::
+                                    whereNotNull('transport_director_id')
                                     ->whereNull('vec_director_reject_reason')
                                     ->whereNull('assigned_by')
                                     ->get();
@@ -724,7 +732,6 @@ class VehicleTemporaryRequestController extends Controller
                     $validation = Validator::make($request->all(),[
                         'request_id'=>'required|exists:vehicle_requests_temporary,request_id',
                         'assigned_vehicle_id'=>'required|exists:vehicles,vehicle_id',
-                        'taking_inspection' =>'required|exists:vehicle_inspections,inspection_id'
                     ]);
                     // Check validation error
                     if ($validation->fails()) 
@@ -737,7 +744,6 @@ class VehicleTemporaryRequestController extends Controller
                     // Check if it is not approved before
                     $id = $request->input('request_id');
                     $assigned_vehicle = $request->input('assigned_vehicle_id');
-                    $taking_inspection = $request->input('taking_inspection');
                     $user_id = Auth::id();
                 try
                     {
@@ -751,7 +757,6 @@ class VehicleTemporaryRequestController extends Controller
                             }
                         $Vehicle_Request->assigned_by = $user_id;
                         $Vehicle_Request->assigned_vehicle_id = $assigned_vehicle;
-                        $Vehicle_Request->taking_inspection = $taking_inspection;
                         $Vehicle_Request->save();
                         return response()->json([
                             'success' => true,
@@ -863,8 +868,7 @@ class VehicleTemporaryRequestController extends Controller
             {
                     $validation = Validator::make($request->all(),[
                         'request_id'=>'required|uuid|vehicle_requests_temporary,request_id',
-                        'end_km'=>'required|number',
-                        'returning_inspection' =>'required|exists:vehicle_inspections,returning_inspection'
+                        'end_km'=>'required|number'
                     ]);
                     // Check validation error
                     if ($validation->fails()) 
@@ -877,14 +881,12 @@ class VehicleTemporaryRequestController extends Controller
                     // Check if it is not approved before
                     $id = $request->input('request_id');
                     $end_km = $request->input('end_km');
-                    $returning_inspection = $request->input('returning_inspection');
                     $user_id = Auth::id();
                 try
                     {
                         $Vehicle_Request = VehicleTemporaryRequestModel::findOrFail($id);
                         $Vehicle_Request->assigned_by = $user_id;
                         $Vehicle_Request->end_km = $end_km;
-                        $Vehicle_Request->returning_inspection = $returning_inspection;
                         $Vehicle_Request->save();
                         return response()->json([
                             'success' => true,
