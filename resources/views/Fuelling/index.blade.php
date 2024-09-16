@@ -110,10 +110,10 @@
                             <thead>
                                 <tr>
                                     <th scope="col">#</th>
-                                    <th scope="col">VEHICLE PLATE</th>
-                                    <th scope="col">FUEL AMOUNT</th>
-                                    <th scope="col">STATUS</th>
-                                    {{-- <th scope="col">Action</th> --}}
+                                    <th scope="col">Vehicle Plate</th>
+                                    <th scope="col">Fuel Amount</th>
+                                    <th scope="col">Status</th>
+                                    <th scope="col">Action</th>
                                 </tr>
                             </thead>
                             <tbody>

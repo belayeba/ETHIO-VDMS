@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Fuel;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Models\Vehicle\FuelsModel;
+use App\Models\Vehicle\VehiclesModel;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -16,8 +17,9 @@ class FeulController extends Controller
     public function displayFuelRequestPage()
         {
             $id = Auth::id();
+            $vehicle = VehiclesModel::all();
             $requested = FuelsModel::where('driver_id', $id)->latest()->get();
-            return view("Fuelling.index",compact('requested'));
+            return view("Fuelling.index",compact('requested','vehicle'));
         }
         // Fuel Request (Post Data)
     public function RequestFuel(Request $request) 
