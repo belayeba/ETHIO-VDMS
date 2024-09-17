@@ -44,7 +44,7 @@
                                 <div class="col-md-4">
                                     <div class="card">
                                         <div class="card-header">
-                                            <h4 class="mb-0">New Maintenance</h4>
+                                            <h4 class="header-title mb-0">New Maintenance</h4>
                                         </div>
                                         <div class="card-body">
                                             <form method="POST" action="" accept-charset="UTF-8" name="ebook-form" id="ebook-form" enctype="multipart/form-data">
@@ -86,7 +86,7 @@
                                 <div class="col-md-8">
                                     <div class="card">
                                         <div class="card-header">
-                                            <h4 class="mb-0">Maintenance List</h4>
+                                            <h4 class="header-title mb-0">Maintenance List</h4>
                                         </div>
                                         <div class="card-body">
                                             <div class="table-responsive">
