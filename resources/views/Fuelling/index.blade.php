@@ -1,7 +1,6 @@
 @extends('layouts.navigation')
 
 @section('content')
-
    
 <div class="content-page">
     <div class="content">
@@ -63,9 +62,16 @@
                                             <div class="col-md-3">
                                                 <div class="position-relative">
                                                     <label for="driving-license" class="form-label">Date</label>
-                                                    <input id="fill_date" name="Driving_license" class="form-control" placeholder="When" type="date">
+                                                    <input id="fill_date" name="Driving_license" class="form-control" placeholder="When" type="text">
                                                 </div>
                                             </div>
+                                             <script> 
+                                                $('#fill_date').calendarsPicker({ 
+                                                    calendar: $.calendars.instance('ethiopian', 'am'), 
+                                                    pickerClass: 'myPicker', 
+                                                    dateFormat: 'yyyy-mm-dd' 
+                                                });
+                                             </script>
 
                                             <div class="col-md-3">
                                                 <div class="position-relative">

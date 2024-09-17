@@ -104,7 +104,7 @@ class VehicleRegistrationController extends Controller
                     'fuel_type' => $request->fuel_type,
                     'notes' => $request->Notes,
                     'vehicle_type' => $request->vehicle_type,
-                    'inspection_id' => $request->inspection_id,
+                    // 'inspection_id' => $request->inspection_id,
                     'vehicle_category' => $request->vehicle_category,
                     'libre' => $filelibre,
                     'insurance' => $fileinsurance,

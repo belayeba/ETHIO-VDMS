@@ -1,7 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
 @include('layouts.main-link')
-
+<!-- ethiopian date scripts -->
+<script src="{{ asset('assets/js/jquery.min.js') }}"></script>
+<script src="{{ asset('assets/js/jquery.plugin.js') }}"></script> 
+<script src="{{ asset('assets/js/jquery.calendars.js') }}"></script> 
+<script src="{{ asset('assets/js/jquery.calendars.plus.js') }}"></script> 
+<script src="{{ asset('assets/js/jquery.calendars.picker.js') }}"></script> 
+<script src="{{ asset('assets/js/jquery.calendars.ethiopian.js') }}"></script> 
+<script src="{{ asset('assets/js/jquery.calendars.ethiopian-am.js') }}"></script>
 <body>
 <div class="wrapper">
     @include('layouts.header')
@@ -111,7 +118,10 @@
                                     <a href="{{route('simirit_page')}}">Dispatcher</a>
                                 </li>
                                 <li>
-                                    <a href="/director_approve_page/perm">Pemanent Requests</a>
+                                    <a href="{{route('perm_vec_director_page')}}">Pemanent Requests</a>
+                                </li>
+                                <li>
+                                    <a href="{{route('perm_vec_simirit_page')}}">Pemanent Approval</a>
                                 </li>
                                 <li>
                                     <a href="/mentaincance_request_page">Maintenance Request</a>
