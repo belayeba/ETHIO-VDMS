@@ -89,9 +89,11 @@
                         </a>
                         <div class="collapse" id="sidebarRequest">
                             <ul class="side-nav-second-level">
+                                @can('Temporary Request Page')
                                 <li>
                                     <a href="{{route('displayRequestPage')}}">Temporary vehicle request</a>
                                 </li>
+                                @endcan
                                 <li>
                                     <a href="{{route('vec_perm_request')}}">Permanent vehicle request</a>
                                 </li>

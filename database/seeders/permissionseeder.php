@@ -31,30 +31,52 @@ class permissionseeder extends Seeder {
 
         $permission_data = [
             [
-                'permission_group' => 'Posts',
+                'permission_group' => 'User Management',
                 'permissions' => [
-                    'create posts',
-                    'edit posts',
-                    'delete posts',
-                    'list post',
+                    'Create User',
+                    'Create Driver',
+                    'Change Driver',
                 ]
             ],
             [
-                'permission_group' => 'Users',
+                'permission_group' => 'Organization',
                 'permissions' => [
-                    'user-list',
-                    'user-create',
-                    'user-edit',
-                    'user-delete',
+                    'Create Department',
+                    'Create Cluster',
                 ]
             ],
             [
                 'permission_group' => 'Roles',
                 'permissions' => [
-                    'role-list',
-                    'role-create',
-                    'role-edit',
-                    'role-delete',
+                    'Create Role',
+                ]
+            ],
+            [
+                'permission_group' => 'Vehicle Temporary Request',
+                'permissions' => [
+                    'Temporary Request Page',
+                    'Director Approval Page',
+                    'Clustor Director Apporal Page',
+                    'HR Cluster Director Approval Page',
+                    'Transport Director',
+                    'Dispatcher Page',
+                ]
+            ],
+            [
+                'permission_group' => 'Vehicle Parmanent Request',
+                'permissions' => [
+                    'Permanent Request Page',
+                    'Vehicle Director Page',
+                    'Dispatcher',
+                ]
+            ],
+            [
+                'permission_group' => 'Vehicle Management',
+                'permissions' => [
+                    'Vehicle Registration',
+                    'Vehicle Part Registration',
+                    'Vehicle Inspection',
+                    'Daily KM Registration',
                 ]
             ],
         ];
