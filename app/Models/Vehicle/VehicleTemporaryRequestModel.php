@@ -43,6 +43,7 @@ class VehicleTemporaryRequestModel extends Model
         'hr_div_approved_by',
         'hr_director_reject_reason',
         'assigned_by',
+        'taken_by',
         'assigned_by_reject_reason',
         'transport_director_id',
         'vec_director_reject_reason',
@@ -58,17 +59,16 @@ class VehicleTemporaryRequestModel extends Model
         'created_at',
         'updated_at',
     ];
-
     protected static function boot()
-    {
-        parent::boot();
+        {
+            parent::boot();
 
-        static::creating(function ($model) {
-            if (empty($model->{$model->getKeyName()})) {
-                $model->{$model->getKeyName()} = (string) Str::uuid();
-            }
-        });
-    }
+            static::creating(function ($model) {
+                if (empty($model->{$model->getKeyName()})) {
+                    $model->{$model->getKeyName()} = (string) Str::uuid();
+                }
+            });
+        }
 
     public function requestedBy(): BelongsTo
     {
@@ -84,7 +84,10 @@ class VehicleTemporaryRequestModel extends Model
     {
         return $this->belongsTo(User::class, 'assigned_by');
     }
-
+    public function takendBy(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'taken_by');
+    }
     public function driverAcceptedBy(): BelongsTo
     {
         return $this->belongsTo(User::class, 'driver_accepted_by');

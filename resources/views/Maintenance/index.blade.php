@@ -32,12 +32,7 @@
                     <section class="sms-breadcrumb mb-10 white-box">
                         <div class="container-fluid p-0">
                             <div class="d-flex flex-wrap justify-content-between">
-                                <h2 class="text-uppercase">Maintenance</h2>
-                                <div class="bc-pages">
-                                    <a href="../dashboard.html">Dashboard</a>
-                                    <a href="#">Organization</a>
-                                    <a href="ebook.html">Maintenance</a>
-                                </div>
+                               
                             </div>
                         </div>
                     </section>
@@ -49,7 +44,7 @@
                                 <div class="col-md-4">
                                     <div class="card">
                                         <div class="card-header">
-                                            <h3 class="mb-0">New Maintenance</h3>
+                                            <h4 class="mb-0">New Maintenance</h4>
                                         </div>
                                         <div class="card-body">
                                             <form method="POST" action="" accept-charset="UTF-8" name="ebook-form" id="ebook-form" enctype="multipart/form-data">
@@ -57,15 +52,18 @@
                                                 {{-- <div class="card-body"> --}}
                                                     {{-- <div class="row"> --}}
                                                         <div class="col-auto">
-                                                            <div class="dropdown">
-                                                               <label for="dropdownMenuButton"> VEHICLE PLATE <strong class="text-danger">*</strong></label>
-                                                                <button class="btn btn-light dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="width: 300px">
-                                                                   --Choose--
-                                                                </button>
-                                                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                                                    <a class="dropdown-item" href="#">Action</a>
-                                                                    <a class="dropdown-item" href="#">Another action</a>
-                                                                </div>
+                                                            <div class="position-relative mb-3">
+                                                                <div class="position-relative mb-3">
+                                                                    <label class="form-label" for="validationTooltip02">Select Vehicle</label>
+                                                                    <select class="form-control" id="department_id" name="vehicle_id">
+                                                                            <option value=""   disabled selected>Select</option>
+                                                                            @foreach ($vehicle as $vec )
+                                                                            <option value="{{$vec->vehicle_id}}">
+                                                                                {{$vec->plate_number}}
+                                                                            </option>
+                                                                            @endforeach
+                                                                    </select>
+                                                                </div> 
                                                             </div>
                                                         </div>
                                                 <div class="mb-3">
@@ -88,7 +86,7 @@
                                 <div class="col-md-8">
                                     <div class="card">
                                         <div class="card-header">
-                                            <h3 class="mb-0">Maintenance List</h3>
+                                            <h4 class="mb-0">Maintenance List</h4>
                                         </div>
                                         <div class="card-body">
                                             <div class="table-responsive">
