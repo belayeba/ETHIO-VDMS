@@ -36,7 +36,7 @@ return new class extends Migration
             $table->bigIncrements('id'); // permission id
             $table->string('name');       // For MyISAM use string('name', 225); // (or 166 for InnoDB with Redundant/Compact row format)
             $table->string('guard_name'); // For MyISAM use string('guard_name', 25);
-            // $table->integer('permission_group_id')->unsigned()->nullable();
+            $table->integer('group_id');
             // $table->foreign('permission_group_id')->references('id')->on('permission_group');
             $table->timestamps();
 
@@ -145,6 +145,6 @@ return new class extends Migration
         Schema::drop($tableNames['model_has_permissions']);
         Schema::drop($tableNames['roles']);
         Schema::drop($tableNames['permissions']);
-        Schema::drop($tableNames['Permissiongroup']);
+        // Schema::drop($tableNames['Permissiongroup']);
     }
 };

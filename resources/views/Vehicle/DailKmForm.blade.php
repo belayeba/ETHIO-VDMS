@@ -25,8 +25,8 @@
                     <h4 class="header-title">Add vehicle part for inspection</h4>
                 </div>
                 <div class="card-body"> 
-                    <form action="{{route('vehicle_parts.store')}}" method="post" enctype="multipart/form-data">
-                        @csrf
+                    <form action="" method="post" enctype="multipart/form-data">
+                        
 
                         <div id="progressbarwizard">
                             <ul class="nav nav-pills nav-justified form-wizard-header mb-3">
@@ -47,16 +47,40 @@
                                     <div class="row">
                                         <div class="position-relative mb-3">
                                             <div class="mb-6 position-relative" >
-                                                <label class="form-label">Name</label>
-                                                <input type="text" name="name" class="form-control" placeholder="Enter Name of vehicle part">
-
+                                                <label class="form-label">Select Vehicle</label>
+                                                <select class="form-control" id="department_id" name="vehicle_id">
+                                                    <option value=""   disabled selected>Select</option>
+                                                    @foreach ($vehicle as $vec )
+                                                    <option value="{{$vec->vehicle_id}}">
+                                                        {{$vec->plate_number}}
+                                                    </option>
+                                                    @endforeach
+                                                </select>   
                                             </div>
                                         </div>
 
                                         <div class="position-relative mb-3">
                                             <div class="mb-6 position-relative" >
-                                                <label class="form-label">Notes</label>
-                                                <input type="text" name="notes" class="form-control" placeholder="Enter notes for vehicle part">
+                                                <label class="form-label">Select Time</label>
+                                                <select class="form-control" id="time" name="Time">
+                                                    <option value=""   disabled selected>Select</option>
+                                                    <option value="morning">Morning</option>
+                                                    <option value="evening">Evening</option>
+                                                </select>   
+                                            </div>
+                                        </div>
+
+                                        <div class="position-relative mb-3" id="morning" style="display:none">
+                                            <div class="mb-6 position-relative" >
+                                                <label class="form-label">Morning KM</label>
+                                                <input type="text" name="morning_km" class="form-control" placeholder="Enter Mornig KM">
+                                            </div>
+                                        </div>
+
+                                        <div class="position-relative mb-3" id="evening" style="display:none">
+                                            <div class="mb-6 position-relative" >
+                                                <label class="form-label">Evening KM</label>
+                                                <input type="text" name="evening_km" class="form-control" placeholder="Enter Evening KM">
                                             </div>
                                         </div>
 
@@ -149,7 +173,29 @@
 </div>
 </div>
                                 
-                    
+    
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+    const selectTime = document.getElementById('time');
+    const morning = document.getElementById('morning');
+    const evening = document.getElementById('evening');
+    const morningInput = document.querySelector('input[name="morning_km"]');
+    const eveningInput = document.querySelector('input[name="evening_km"]');
+
+    selectTime.addEventListener('change', function() {
+        if (selectTime.value === 'morning') {
+            morning.style.display = 'block';
+            evening.style.display = 'none';
+        } else if (selectTime.value === 'evening') {
+            morning.style.display = 'none';
+            evening.style.display = 'block';
+        } else {
+            morningInput.style.display = 'none';
+            eveningInput.style.display = 'none';
+        }
+    });
+});
+</script>
  <!-- Dropzone File Upload js -->
  <script src="{{ asset('assets/vendor/dropzone/min/dropzone.min.js') }}"></script>
 

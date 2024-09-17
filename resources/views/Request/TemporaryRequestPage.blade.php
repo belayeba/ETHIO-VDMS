@@ -25,6 +25,7 @@
                         <h4 class="header-title">Request Vehicle Service</h4>
                     </div>
                     <div class="card-body"> 
+                        <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate">
                         <form method="POST" action="{{route('temp_request_post')}}">
                             @csrf
 

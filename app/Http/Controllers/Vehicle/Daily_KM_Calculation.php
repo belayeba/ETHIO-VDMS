@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Vehicle;
 use App\Http\Controllers\Controller;
 use App\Models\vehicle\DailyKMCalculationModel;
 use Illuminate\Http\Request;
+use App\Models\Vehicle\VehiclesModel;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Support\Facades\Auth;
@@ -15,8 +16,9 @@ class Daily_KM_Calculation extends Controller
         public function displayPage()
             {
                 $today = Carbon::today()->toDateString();
+                $vehicle = VehiclesModel::get();
                 //   $TodaysDate = DailyKMCalculationModel::where('date',$today)->latest()->get();
-                return view('Vehicle.DailKmForm');
+                return view('Vehicle.DailKmForm',compact('vehicle'));
             }
         public function ReportPage()
             {

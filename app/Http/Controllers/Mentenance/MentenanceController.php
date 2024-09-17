@@ -17,7 +17,7 @@ class MentenanceController extends Controller
     public function displayMaintenanceRequestPage()
         {
             $id = Auth::id();
-            $vehicle = VehiclesModel::where('driver_id',$id)->latest()->get();
+            $vehicle = VehiclesModel::all();
             $requested = MaintenancesModel::where('requested_by', $id)->latest()->get();
             return view("Maintenance.index",compact('requested','vehicle'));
         }

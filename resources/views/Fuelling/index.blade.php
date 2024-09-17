@@ -2,158 +2,192 @@
 
 @section('content')
 
-    <div class="wrapper">
-        <div class="content-page">
-            <div class="preloader" dir="ltr">
-                <div class='body'>
-                    <span>
-                        <span></span>
-                        <span></span>
-                        <span></span>
-                    </span>
-                    <div class='base'>
-                        <span></span>
-                        <div class='face'></div>
-                    </div>
-                </div>
-                <div class='longfazers'>
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                </div>
-            </div>
-            <input type="hidden" name="table_name" id="table_name" value="">
-            <input type="hidden" name="csrf_token" class="csrf_token" value="{{ csrf_token() }}">
-          
+   
+<div class="content-page">
+    <div class="content">
 
-            <div class="main-wrapper" style="min-height: 600px">
-                <!-- Page Content  -->
-                <div id="main-content" class="">
-                    <section class="sms-breadcrumb mb-10 white-box">
-                        <div class="container-fluid p-0">
-                            <div class="d-flex flex-wrap justify-content-between">
-                                <h2 class="text-uppercase">Fueling</h2>
-                                <div class="bc-pages">
-                                    <a href="../dashboard.html">Dashboard</a>
-                                    <a href="#">Organization</a>
-                                    <a href="ebook.html">Fueling</a>
-                                </div>
-                            </div>
-                        </div>
-                    </section>
+        <!-- Start Content-->
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-5">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="header-title">Fuel Request</h4>
+                </div>
+                <div class="card-body"> 
+                    <form action="{{route('vec_perm_request_post')}}" method="post" enctype="multipart/form-data">
+                        @csrf
 
-                    <section class="admin-visitor-area up_st_admin_visitor">
-                        <div class="container-fluid p-0">
-                            <div class="row justify-content-center">
-                                <!-- Add New Ebook Form -->
-                                <div class="col-md-4">
-                                    <div class="card">
-                                        <div class="card-header">
-                                            <h3 class="mb-0">New Fueling</h3>
-                                        </div>
-                                        <div class="card-body">
-                                            <form method="POST" action="" accept-charset="UTF-8" name="ebook-form" id="ebook-form" enctype="multipart/form-data">
-                                                @csrf
-                                                {{-- <div class="card-body"> --}}
-                                                    {{-- <div class="row"> --}}
-                                                         <div class="col-auto">
-                                                             <div class="dropdown">
-                                                                <label for="dropdownMenuButton"> VEHICLE PLATE <strong class="text-danger">*</strong></label>
-                                                                 <button class="btn btn-light dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="width: 300px">
-                                                                    --Choose--
-                                                                 </button>
-                                                                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                                                     <a class="dropdown-item" href="#">Action</a>
-                                                                     <a class="dropdown-item" href="#">Another action</a>
-                                                                 </div>
-                                                             </div>
-                                                         </div>
-                                                <div class="mb-3">
-                                                    <label for="nameInput" class="form-label">FUEL AMOUNT <strong class="text-danger">*</strong></label>
-                                                    <input type="text" class="form-control" id="nameInput" name="name" placeholder="Enter the litre....">
-                                                </div>
-                                                <div class="d-flex justify-content-center">
-                                                    <button type="submit" class="btn btn-primary">Request</button>
-                                                </div>
-                                            </form>
-                                        </div>
-                                    </div>
+                        <div id="progressbarwizard">
+                            <ul class="nav nav-pills nav-justified form-wizard-header mb-3">
+                                <li class="nav-item">
+                                    <a href="#account-2" data-bs-toggle="tab" data-toggle="tab" class="nav-link rounded-0 py-2">
+                                        <i class="ri-car-fill fw-normal fs-20 align-middle me-1"></i>
+                                        <span class="d-none d-sm-inline">Request</span>
+                                    </a>
+                                </li>
+                            </ul>
+
+                            <div class="tab-content b-0 mb-0">
+                                <div id="bar" class="progress mb-3" style="height: 7px;">
+                                    <div class="bar progress-bar progress-bar-striped progress-bar-animated bg-success"></div>
                                 </div>
-                                
-                                <!-- Ebook List -->
-                                <div class="col-md-8">
-                                    <div class="card">
-                                        <div class="card-header">
-                                            <h3 class="mb-0">Fuelling List</h3>
-                                        </div>
-                                        <div class="card-body">
-                                            <div class="table-responsive">
-                                                <table id="lms_table" class="table">
-                                                    <thead>
-                                                        <tr>
-                                                            <th scope="col">#</th>
-                                                            <th scope="col">VEHICLE PLATE</th>
-                                                            <th scope="col">FUEL AMOUNT</th>
-                                                            <th scope="col">STATUS</th>
-                                                            {{-- <th scope="col">Action</th> --}}
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        <!-- Table rows will be populated here -->
-                                                    </tbody>
-                                                </table>
+                        
+                                <div class="tab-pane" id="account-2">
+                                    <div class="row">
+                                        <div class="position-relative mb-3">
+                                            <div class="mb-6 position-relative" id="datepicker1">
+                                                <label class="form-label">Type</label>
+                                                <select class="form-select mb-3">
+                                                    <option selected>Open this select menu</option>
+                                                    <option value="1">Monthly Fuel Request</option>
+                                                    <option value="2">Other Fuel Request</option>
+                                                 </select>
                                             </div>
                                         </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </section>
-                    
-                    <!-- Confirmation Modal -->
-                    <div class="modal fade" id="confirm-delete" tabindex="-1" role="dialog" aria-labelledby="confirmDeleteLabel" aria-hidden="true">
-                        <div class="modal-dialog modal-dialog-centered" role="document">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="confirmDeleteLabel">Delete Confirmation</h5>
-                                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                    </button>
-                                </div>
-                                <div class="modal-body">
-                                    <p class="text-center">Are you sure to delete ?</p>
-                                    <div class="d-flex justify-content-between">
-                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                                        <a id="delete_link" class="btn btn-danger">Delete</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                                        <div class="row mb-3 entry" >
+                                            <div class="col-md-3">
+                                                <div class="position-relative">
+                                                    <label for="position-letter" class="form-label">Fuel</label>
+                                                    <input id="Fuel_ammount" name="position_letter" class="form-control" placeholder="In Litter" type="number">
+                                                </div>
+                                            </div>
 
-                    <footer class="footer-area">
-                        <div class="container">
-                            <div class="row">
-                                <div class="col-lg-12 text-center mt-5">
-                                    <p class="p-3 mb-0">Copyright © 2024. All rights reserved | Made By Ai</p>
-                                </div>
-                            </div>
+                                            <div class="col-md-3">
+                                                <div class="position-relative">
+                                                    <label for="driving-license" class="form-label">price</label>
+                                                    <input id="fuel_price" name="Driving_license" class="form-control" placeholder="In Birr" type="number">
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-3">
+                                                <div class="position-relative">
+                                                    <label for="driving-license" class="form-label">Date</label>
+                                                    <input id="fill_date" name="Driving_license" class="form-control" placeholder="When" type="date">
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-3">
+                                                <div class="position-relative">
+                                                    <label for="driving-license" class="form-label">Attachment</label>
+                                                    <input id="attachment" name="Driving_license" class="form-control" type="file">
+                                                </div>
+                                            </div>
+
+                                        </div>
+
+                                            <div class="d-flex flex-wrap gap-2 justify-content-center align-items-center">
+                                                <button type="button" class="btn btn-primary rounded-pill" id="addItem">Add</button>
+                                            </div>
+
+                                        <div id="itemList"></div>
+                                    </div>
+
+                                    <ul class="list-inline wizard mb-0">
+                                        <li class="next list-inline-item float-end">
+                                            <button type="submit" class="btn btn-info">Submit</button>
+                                        </li>
+                                    </ul>
+                                </div> 
+                            </div>  
                         </div>
-                    </footer>
+                    </form> 
+
+                </div> <!-- end card-->
+            </div> <!-- end col-->
+        </div>
+        
+                                
+        <!-- Ebook List -->
+        <div class="col-md-7">
+            <div class="card">
+                <div class="card-header">
+                <h4 class="header-title">Request List</h4>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table id="lms_table" class="table">
+                            <thead>
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">Vehicle Plate</th>
+                                    <th scope="col">Fuel Amount</th>
+                                    <th scope="col">Status</th>
+                                    <th scope="col">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Table rows will be populated here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+         
+    <!-- Confirmation Modal -->
+    <div class="modal fade" id="confirm-delete" tabindex="-1" role="dialog" aria-labelledby="confirmDeleteLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="confirmDeleteLabel">Delete Confirmation</h5>
+                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p class="text-center">Are you sure to delete ?</p>
+                    <div class="d-flex justify-content-between">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <a id="delete_link" class="btn btn-danger">Delete</a>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <script src="backend/js/datatable_extra.js"></script>
-    <script src="backend/js/plugin.js"></script>
-    <script src="chat/js/custom7b4a.js?v=7.1.0"></script>
-    <script src="whatsapp-support/scripts7b4a.js?v=7.1.0"></script>
-    <script src="vendor/uppy/uppy.min.js"></script>
-    <script src="vendor/uppy/uppy.legacy.min.js"></script>
-    <script src="vendor/uppy/ru_RU.min.js"></script>
-    <script src="../Modules/AIContent/Resources/assets/js/ai_content.js"></script>
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+            const addButton = document.getElementById('addItem');
+            const itemList = document.getElementById('itemList');
+
+            addButton.addEventListener('click', function() {
+                const fuel = document.getElementById('Fuel_ammount').value;
+                const fuelPrice = document.getElementById('fuel_price').value;
+                const fillDate = document.getElementById('fill_date').value;
+                const attachment = document.getElementById('attachment').value;
+                const attachmentName = attachment.split('\\').pop();
+
+                if (fuel && fuelPrice && fillDate && attachment) {
+                    const itemDiv = document.createElement('div');
+                    itemDiv.innerHTML = `
+                       <span>Fuel: ${fuel} litters &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Price: ${fuelPrice} birr &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Date: ${fillDate} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Attachment: ${attachmentName}</span>
+                        <button class="removeItem">X</button>
+
+                    `;
+
+                    itemDiv.classList.add('itemEntry');
+
+                    itemList.appendChild(itemDiv);
+
+                    // Clear input fields after adding item
+                    document.getElementById('Fuel_ammount').value = '';
+                    document.getElementById('fuel_price').value = '';
+                    document.getElementById('fill_date').value = '';
+                    document.getElementById('attachment').value = '';
+                }
+            });
+
+            itemList.addEventListener('click', function(e) {
+                if (e.target.classList.contains('removeItem')) {
+                    const itemDiv = e.target.parentElement;
+                    itemDiv.remove();
+                }
+            });
+        });
+        </script>       
+    
     <script>
         $(document).on('click', '#show_ai_text_generator', function () {
             var selected_template = $(this).data('selected_template');
