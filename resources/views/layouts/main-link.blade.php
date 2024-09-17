@@ -8,8 +8,8 @@
         <!-- App favicon -->
         <link rel="shortcut icon" href="{{ asset('assets/images/favicon.ico') }}">
 
-        <!-- Daterangepicker css -->
-        <link rel="stylesheet" href="{{ asset('assets/vendor/daterangepicker/daterangepicker.css') }}">
+        <!-- EthiopianDatepicker css -->
+        <link href="{{ asset('assets/css/redmond.calendars.picker.css') }}" rel="stylesheet"/>
 
         <!-- Vector Map css -->
         <link rel="stylesheet" href="{{ asset('assets/vendor/admin-resources/jquery.vectormap/jquery-jvectormap-1.2.2.css') }}">

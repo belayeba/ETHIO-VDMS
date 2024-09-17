@@ -14,7 +14,7 @@ class DailyKMCalculationModel extends Model
 {
     use SoftDeletes;
 
-    protected $table = 'daily_km_calculation'; // Specify the table name
+    protected $table = 'daily_km_calculations'; // Specify the table name
     protected $primaryKey = 'calculation_id';
     public $incrementing = false;
     protected $keyType = 'uuid';

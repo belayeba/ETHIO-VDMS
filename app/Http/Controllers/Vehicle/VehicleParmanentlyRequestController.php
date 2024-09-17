@@ -275,13 +275,13 @@ class VehicleParmanentlyRequestController extends Controller
         {    
                 $id = Auth::id();
                 $Vehicle_Request = VehiclePermanentlyRequestModel::all();
-                return view("vehicle_requests", compact('vehicle_requests'));     
+                return view("Request.PermanentVehicleDirector", compact('Vehicle_Request'));     
         }
         // VEHICLE DIRECTOR APPROVE THE REQUESTS
     public function VehicleDirectorApproveRequest(Request $request)
         {
                 $validation = Validator::make($request->all(),[
-                    'request_id'=>'required|vehicle_requests_temporary,request_id',
+                    'request_id'=>'required|exists:vehicle_requests_parmanently,vehicle_request_permanent_id',
                 ]);
                 // Check validation error
                 if ($validation->fails()) 

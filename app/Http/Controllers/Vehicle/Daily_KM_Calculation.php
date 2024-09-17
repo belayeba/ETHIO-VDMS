@@ -17,8 +17,8 @@ class Daily_KM_Calculation extends Controller
             {
                 $today = Carbon::today()->toDateString();
                 $vehicle = VehiclesModel::get();
-                //   $TodaysDate = DailyKMCalculationModel::where('date',$today)->latest()->get();
-                return view('Vehicle.DailKmForm',compact('vehicle'));
+                $TodaysDate = DailyKMCalculationModel::where('date',$today)->latest()->get();
+                return view('Vehicle.DailKmForm',compact('vehicle','TodaysDate'));
             }
         public function ReportPage()
             {
@@ -39,7 +39,7 @@ class Daily_KM_Calculation extends Controller
             {
                     // Validate the request
                     $validator = Validator::make($request->all(), [
-                        'morning_km' => 'required|number',
+                        'morning_km' => 'required|integer',
                         'vehicle'=>'required|uuid|exists:vehicles,vehicle_id',
                         //'driver_id'=>'required|uuid|exists:drivers,driver_id'
                     ]);            
@@ -48,9 +48,10 @@ class Daily_KM_Calculation extends Controller
                         {
                             return response()->json([
                                 'success' => false,
-                                'message' => "All fields are required",
+                                'message' => $validator->errors(),
                             ]);
                         }
+                    $today = Carbon::today()->toDateString();
                     $id = Auth::id();
                     try
                         {
@@ -59,7 +60,8 @@ class Daily_KM_Calculation extends Controller
                                 'register_by'=>$id,
                                 'driver_id'=>$request->driver_id,
                                 'vehicle_id' => $request->vehicle,
-                                'morining_km' => $request->morning_km,
+                                'morning_km' => $request->morning_km,
+                                'date' => $today,
                             ]);
                             // Success: Record was created
                             return response()->json([
@@ -81,18 +83,19 @@ class Daily_KM_Calculation extends Controller
             {
                     // Validate the request
                     $validator = Validator::make($request->all(), [
-                        'afternoon_km' => 'required|number',
+                        'afternoon_km' => 'required|integer',
                         'vehicle'=>'required|uuid|exists:vehicles,vehicle_id',
-                        'driver_id'=>'required|uuid|exists:drivers,driver_id'
+                        // 'driver_id'=>'required|uuid|exists:drivers,driver_id'
                     ]);            
                     // If validation fails, return an error response
                     if ($validator->fails()) 
                         {
                             return response()->json([
                                 'success' => false,
-                                'message' => "All fields are required",
+                                'message' => $validator->errors(),
                             ]);
                         }
+                    $today = Carbon::today()->toDateString();
                     $id = Auth::id();
                     try
                         {
@@ -101,8 +104,9 @@ class Daily_KM_Calculation extends Controller
                                 'register_by'=>$id,
                                 'driver_id'=>$request->driver_id,
                                 'vehicle_id' => $request->vehicle,
-                                'afternoon_km' => $request->morning_km,
-                            ]);
+                                'afternoon_km' => $request->afternoon_km,
+                                'date' => $today,
+                             ]);
                             // Success: Record was created
                             return response()->json([
                                 'success' => true,
@@ -153,5 +157,43 @@ class Daily_KM_Calculation extends Controller
                             'message' => "Warning You are denied the service",
                         ]);
                     }
+            }
+         
+         public function CheckVehicle(Request $request)
+            {
+               try {
+                //code...
+                $id = $request->input('id');
+                $today = Carbon::today()->toDateString();
+                $vehicle = DailyKMCalculationModel::where('date',$today)->where('vehicle_id',$id)->first();
+                if($vehicle->morning_km !== null){
+                    return response()->json([
+                        'success' => true,
+                        'message' => "Morning km is filled",
+                        'filledField' => 'morning',
+                    ]);
+                }
+                elseif ($vehicle->afternoon_km !== null) {
+                    # code...
+                    return response()->json([
+                        'success' => true,
+                        'message' => "Afternoon km is filled",
+                        'filledField' => 'evening',
+                    ]);
+                }
+                else {
+                    # code...
+                    return response()->json([
+                        'success' => true,
+                        'message' => "Both filled",
+                    ]);
+                }
+            } catch (\Throwable $th) {
+                //throw $th;
+                return response()->json([
+                    'success' => true,
+                    'message' => "Choose to fill",
+                ]);
+               }
             }
     }
