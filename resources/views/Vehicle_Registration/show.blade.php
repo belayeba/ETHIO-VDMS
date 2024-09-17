@@ -168,6 +168,17 @@
                         <div class="tab-pane fade" id="third">
                                 <div class="row">
                                     <div class="col-12">
+                                        <div class="row mb-3">
+                                            <label class="col-md-3 col-form-label" for="driver">Driver</label>
+                                            <div class="col-md-9">
+                                                <select id="driver" name="driver" class="form-select" required>
+                                                    <option value="">Select Driver</option>
+                                                    @foreach($drivers as $driver)
+                                                        <option value="{{ $driver->driver_id }}">{{ $driver->user->username }}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                        </div>
                                        
                                         <div class="row mb-3">
                                             <label class="col-md-3 col-form-label" for="vehicle_category">Vehicle Category</label>
@@ -232,12 +243,10 @@
         </div>
     </div>
 </div>
-         
-            
-                        <div class="col-md-7">
+        <div class="col-md-7">
                             <div class="card">
                                 <div class="card-header">
-                                    <h3 class="mb-0">Vehicle List</h3>
+                                    <h4 class="header-title mb-0">Vehicle List</h4>
                                 </div>
                                 <div class="card-body">
                                     <div class="table-responsive">
@@ -253,11 +262,9 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <!-- Table rows will be populated here -->
                                                 @foreach ($vehicle as $item)
-                                                {{-- {{ dd($item) }} --}}
+                                                
                                                 <tr>
-                                                <!-- Table rows will be populated here -->
                                                 <td>{{$loop->iteration}}</td>
                                                 <td>{{ $item->plate_number }}</td>
                                                 <td>{{ $item->vehicle_type }}</td>
@@ -285,6 +292,7 @@
                                                                     last_service: '{{ $item->last_service }}',
                                                                     next_service: '{{ $item->next_service }}',
                                                                     notes: '{{ $item->notes }}',
+                                                                    driver: '{{ $item->driver_id }}',
                                                                     vehicle_category: '{{ $item->vehicle_category }}',
                                                                     vehicle_type: '{{ $item->vehicle_type }}',
                                                                     libre: '{{ $item->libre }}',
@@ -371,6 +379,16 @@
                     <div class="mb-3">
                         <label for="editNotes" class="form-label">Notes</label>
                         <input type="text" class="form-control" id="editNotes" name="notes">
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="editDriver" class="form-label">Driver</label>
+                        <select id="editDriver" name="editDriver" class="form-select" required>
+                            <option value="">Select Driver</option>
+                            @foreach($drivers as $driver)
+                            <option value="{{ $driver->id }}">{{ $driver->user->username }}</option>
+                        @endforeach
+                        </select>
                     </div>
 
                     <div class="mb-3">
@@ -469,6 +487,10 @@
                     <p>{{ $item->notes }}</p>
                 </div>
                 <div class="mb-3">
+                    <label class="form-label">Driver:</label>
+                    <p>{{ $item->driver_id }}</p>
+                </div>
+                <div class="mb-3">
                     <label class="form-label">Vehicle Category:</label>
                     <p>{{ $item->vehicle_category }}</p>
                 </div>
@@ -556,6 +578,7 @@
     document.getElementById('editLastService').value = data.last_service;
     document.getElementById('editNextService').value = data.next_service;
     document.getElementById('editNotes').value = data.notes;
+    document.getElementById('editDriver').value = data.driver;
     document.getElementById('editVehicleCategory').value = data.vehicle_category;
     document.getElementById('editVehicleType').value = data.vehicle_type;
 

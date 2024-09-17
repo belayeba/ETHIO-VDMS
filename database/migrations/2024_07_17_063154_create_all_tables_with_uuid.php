@@ -50,6 +50,7 @@ class CreateAllTablesWithUuid extends Migration
         // Vehicles Table
         Schema::create('vehicles', function (Blueprint $table) {
             $table->uuid('vehicle_id')->primary();
+            $table->uuid('inspection_id')->nullable();
             $table->string('vin', 255);
             $table->string('make', 255);
             $table->string('model', 255);

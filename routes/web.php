@@ -32,6 +32,11 @@ Route::get('/tabletest', function()
     return view('tables');
 });
 
+Route::get('/datetest', function()
+{
+    return view('date');
+});
+
 // Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 
@@ -250,9 +255,10 @@ Route::group(['middleware' => ['auth']], function()
             Route::controller(Daily_KM_Calculation::class)->group(function ()
                 {
                 Route::get('/daily','ReportPage')->name('dailyreport.index');
+                Route::get('/daily_km/check', 'CheckVehicle')->name('daily_km.page.check');
                 Route::post('/daily_km/store', 'displayForm')->name('daily_km.page.store'); // Create a new inspection
-                Route::get('/daily_km/morning', 'morning_km')->name('daily_km.page.show'); // Show a specific inspection
-                Route::get('/daily_km/afternoon', 'aftern_km')->name('daily_km.page.list'); // List all inspections
+                Route::post('/daily_km/morning', 'morning_km')->name('daily_km.page.morning'); // Show a specific inspection
+                Route::post('/daily_km/afternoon', 'aftern_km')->name('daily_km.page.evening'); // List all inspections
                 Route::get('/daily_km/page', 'displayPage')->name('daily_km.page'); // inspection page
                 Route::delete('/daily_km/delete', 'delete_morningkm')->name('daily_km.page.delete'); // Delete a specific inspection
                 });

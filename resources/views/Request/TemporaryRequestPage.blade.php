@@ -1,6 +1,6 @@
 @extends('layouts.navigation')
 @section('content')
-
+    
 <style>
 .badge {
     font-size: 0.9em;
@@ -101,10 +101,16 @@
                                         <div class="position-relative mb-3">
                                             <div class="mb-6 position-relative" id="datepicker1">
                                                 <label class="form-label">Start Date</label>
-                                                <input type="date" class="form-control" name="start_date" placeholder="Enter Date of departure"
-                                                    data-provide="datepicker" data-date-today-highlight="true"
-                                                    data-date-container="#datepicker1">
+                                                <input type="text" class="form-control" name="start_date" placeholder="Enter Date of departure"
+                                                    id="startdate">
                                             </div>
+                                            <script> 
+                                                $('#startdate').calendarsPicker({ 
+                                                    calendar: $.calendars.instance('ethiopian', 'am'), 
+                                                    pickerClass: 'myPicker', 
+                                                    dateFormat: 'yyyy-mm-dd' 
+                                                });
+                                             </script>
                                         </div>
                             
                                         <div class="position-relative mb-3">
@@ -119,10 +125,16 @@
                                         <div class="position-relative mb-3">
                                             <div class="mb-6 position-relative" id="datepicker1">
                                                 <label class="form-label">Return Date</label>
-                                                <input type="date" class="form-control" name="return_date" placeholder="Enter Date of arrival"
-                                                    data-provide="datepicker" data-date-today-highlight="true"
-                                                    data-date-container="#datepicker1">
+                                                <input type="text" class="form-control" name="return_date" placeholder="Enter Date of arrival"
+                                                  id="enddate">
                                             </div>
+                                            <script> 
+                                                $('#enddate').calendarsPicker({ 
+                                                    calendar: $.calendars.instance('ethiopian', 'am'), 
+                                                    pickerClass: 'myPicker', 
+                                                    dateFormat: 'yyyy-mm-dd' 
+                                                });
+                                             </script>
                                         </div>
 
                                         <div class="position-relative mb-3">
@@ -491,6 +503,8 @@
     </script>
 
     <script src="{{ asset('assets/js/vendor.min.js') }}"></script>
+
+   
 
     <!-- Datatables js -->
     <script src="{{ asset('assets/vendor/datatables.net/js/jquery.dataTables.min.js') }}"></script>

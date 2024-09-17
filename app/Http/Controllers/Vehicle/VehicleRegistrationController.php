@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Vehicle;
 
 use App\Http\Controllers\Controller;
+use App\Models\Driver\DriversModel;
 // use App\Models\Vehicle\VehicleModel;
 use App\Models\Vehicle\VehicleInfo;
 use App\Models\VehicleDetailModel;
@@ -23,9 +24,9 @@ class VehicleRegistrationController extends Controller
     // }
     public function index()
         {
-
+            $drivers = DriversModel::all();
             $vehicle = VehiclesModel::paginate(6);
-            return view('Vehicle_Registration.show',compact('vehicle'));
+            return view('Vehicle_Registration.show',compact('vehicle','drivers'));
         }
     public function create()
         {
@@ -34,9 +35,8 @@ class VehicleRegistrationController extends Controller
 
     public function store(Request $request)
         {
-        // dd($request)
             $user = Auth::id();
-            // dd($request);
+           
             $validator = Validator::make($request->all(),[
                 'vin' => 'required|string|max:255',
                 'make' => 'required|string|max:255',
@@ -100,11 +100,11 @@ class VehicleRegistrationController extends Controller
                     'last_service' => $request->Last_Service,
                     'next_service' => $request->Next_Service,
                     'registered_by' => $user,
-                    'driver_id' => $request->driver_id,
+                    'driver_id' => $request->driver,
                     'fuel_type' => $request->fuel_type,
                     'notes' => $request->Notes,
                     'vehicle_type' => $request->vehicle_type,
-                    'inspection_id' => $request->inspection_id,
+                    // 'inspection_id' => $request->inspection_id,
                     'vehicle_category' => $request->vehicle_category,
                     'libre' => $filelibre,
                     'insurance' => $fileinsurance,
