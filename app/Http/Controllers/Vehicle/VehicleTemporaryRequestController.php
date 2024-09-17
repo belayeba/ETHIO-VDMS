@@ -4,6 +4,7 @@ namespace App\Http\Controllers\vehicle;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Models\Vehicle\VehiclesModel;
 use App\Models\Vehicle\VehicleTemporaryRequestModel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -37,7 +38,7 @@ class VehicleTemporaryRequestController extends Controller
                     'vehicle_type' => 'required|string',
                     'in_out_town'=>'required|boolean',
                     'how_many_days'=>'required|integer',
-                    'with_driver'=>'required|in:1,0',
+                    'with_driver'=>'required|integer|in:1,0',
                     'start_date' => 'required|date',
                     'start_time' => 'required|date_format:H:i',
                     'return_date' => 'required|date',
@@ -477,21 +478,12 @@ class VehicleTemporaryRequestController extends Controller
             {
                 $userId = Auth::id();
 
-                // Fetch the user with the department and cluster information
-                $user = User::with('department')->find($userId);
-
-                // Get the cluster_id from the user's department
-                $clusterId = $user->department->cluster_id;
-
                 // Query the VehicleTemporaryRequestModel using the cluster_id
-                $vehicleRequests = VehicleTemporaryRequestModel::with('approvedBy','requestedBy')->whereHas('requestedBy', function ($query) use ($clusterId) {
-                    $query->where('cluster_id', $clusterId);
-                })
-                    ->where(function($query) {
+                $vehicleRequests = VehicleTemporaryRequestModel::with('approvedBy','requestedBy')->where(function($query) {
                         $query->orWhere('how_many_days', '>', 0)
                             ->orWhere('in_out_town', true);
                     })
-                    ->whereNull('hr_div_approved_by')
+                    //->whereNull('hr_div_approved_by')
                     ->whereNotNull('div_approved_by')
                     ->get();
                 // Return the results, for example, passing them to a view
@@ -743,6 +735,27 @@ class VehicleTemporaryRequestController extends Controller
                 try
                     {
                         $Vehicle_Request = VehicleTemporaryRequestModel::findOrFail($id);
+                        $vehicle_info = VehiclesModel::findOrFail($assigned_vehicle);
+                        if($Vehicle_Request->with_driver)
+                           {
+                              if(!$vehicle_info->driver_id)
+                                {
+                                    return response()->json([
+                                        'success' => false,
+                                        'message' => 'Assign Driver to this Vehicle first',
+                                    ]);
+                                }
+                           }
+                        else
+                           {
+                                if($vehicle_info->driver_id != $Vehicle_Request->requested_by_id)
+                                    {
+                                        return response()->json([
+                                            'success' => false,
+                                            'message' => 'This Request is asked with out driver, so change driver of this vehicle to the one who requested it',
+                                        ]);
+                                    }
+                           }
                         if($Vehicle_Request->assigned_by)
                             {
                                 return response()->json([
@@ -883,7 +896,7 @@ class VehicleTemporaryRequestController extends Controller
                 try
                     {
                         $Vehicle_Request = VehicleTemporaryRequestModel::findOrFail($id);
-                        $Vehicle_Request->assigned_by = $user_id;
+                        $Vehicle_Request->taken_by = $user_id;
                         $Vehicle_Request->end_km = $end_km;
                         $Vehicle_Request->returning_inspection = $returning_inspection;
                         $Vehicle_Request->save();
@@ -898,6 +911,58 @@ class VehicleTemporaryRequestController extends Controller
                         return response()->json([
                             'success' => false,
                             'message' => 'Sorry, Something went wrong',
+                        ]);
+                    }
+            }
+        public function driver_accept(Request $request)
+            {
+                $validation = Validator::make($request->all(),[
+                    'request_id'=>'required|exists:vehicle_requests_temporary,request_id',
+                ]);
+                    // Check validation error
+                if ($validation->fails()) 
+                    {
+                        return response()->json([
+                            'success' => false,
+                            'message' => 'Sorry, Something went wrong',
+                        ]);
+                    }
+                $logged_user = Auth::id();
+                try
+                    {
+                       $temp_req = VehicleTemporaryRequestModel::findOrFail($request->request_id);
+                       if($temp_req->requested_by_id != $logged_user) 
+                          {
+                                return response()->json([
+                                    'success' => false,
+                                    'message' => 'Warning! You are denied the service',
+                                ]);
+                          } 
+                          $temp_req->driver_accepted_by = $logged_user;
+                          $vehicle = VehiclesModel::findOrFail($temp_req->vehicle_id);
+                          $vehicle->status = true;
+                          if(!$temp_req->with_driver)
+                           {
+                                if($vehicle->driver_id != $temp_req->requested_by_id)
+                                    {
+                                        return response()->json([
+                                            'success' => false,
+                                            'message' => 'Warning! You are denied the service',
+                                        ]);
+                                    }
+                                else 
+                                    {
+                                        $vehicle->driver_id = null;
+                                    }
+                           }
+                          $temp_req->save();
+                          $vehicle->save();
+                    }
+                catch(Exception $e)
+                    {
+                        return response()->json([
+                            'success' => false,
+                            'message' => 'Sorry, Something Went Wrong',
                         ]);
                     }
             }

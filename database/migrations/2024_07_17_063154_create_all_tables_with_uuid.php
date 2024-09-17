@@ -319,6 +319,8 @@ class CreateAllTablesWithUuid extends Migration
             $table->uuid('hr_div_approved_by')->nullable();
             $table->foreign('hr_div_approved_by')->references('id')->on('users');
             $table->string('hr_director_reject_reason', 1000)->nullable();
+            $table->uuid('taken_by')->nullable();
+            $table->foreign('taken_by')->references('id')->on('users');
             $table->uuid('assigned_by')->nullable();
             $table->foreign('assigned_by')->references('id')->on('users');
             $table->string('assigned_by_reject_reason', 1000)->nullable();
