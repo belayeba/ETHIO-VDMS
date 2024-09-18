@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Spatie\Permission\Models\Role;
+use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Support\Fecades\Auth;
 use App\Models\User;
 use App\Models\Organization\DepartmentsModel; 
