@@ -16,9 +16,8 @@ class DriverRegistrationController extends Controller
     public function RegistrationPage()
     {
         $drivers = User::get();
-       
         $data = DriversModel::get();
-    //    dd($data);
+   
         return view('Driver.index',compact('drivers','data'));
     }
     // Create a new driver
@@ -50,7 +49,7 @@ class DriverRegistrationController extends Controller
                             }
                         $license = time() . '_' . $file->getClientOriginalName();
                         $file->move($storagePath, $license);
-//dd($request->input('notes'));
+
                     DriversModel::create([
                         'user_id' => $request->input('user_id'),
                         'license_number' => $request->input('license_number'),

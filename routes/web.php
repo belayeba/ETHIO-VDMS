@@ -51,7 +51,7 @@ Route::group(['middleware' => ['auth']], function()
                 // Vehicle Temprory Request
             Route::controller(VehicleTemporaryRequestController::class)->group(function()
                 {
-                        Route::get('temp_request_page', 'displayRequestPage')->name('displayRequestPage');
+                        Route::get('temp_request_page', 'displayRequestPage')->name('displayRequestPage');//->middleware('can:create postsTemporary Request Page');;
                         Route::get('temp_request_page/edit/{id}', 'editRequestPage')->name('editRequestPage');
                         Route::post('/user_post_request', 'RequestVehicleTemp')->name('temp_request_post');
                         Route::post('/user_delete_request', 'deleteRequest')->name('temp_delete_request');
@@ -133,9 +133,9 @@ Route::group(['middleware' => ['auth']], function()
                     Route::get('/director_approve_page/perm', 'DirectorApprovalPage')->name('perm_vec_director_page');
                     Route::post('/perm_director_approve_request', 'DirectorApproveRequest')->name('perm_vec_director_approve');
                     Route::post('/perm_director_reject_request', 'DirectorRejectRequest')->name('perm_vec_direct_reject');
-                    Route::get('/perm_simirit_approve_page', 'VehicleDirector_page')->name('perm_vec_simirit_page');
-                    Route::post('/perm_simirit_approve_request', 'VehicleDirectorApproveRequest')->name('perm_vec_simirit_approve');
-                    Route::post('/perm_simirit_reject_request', 'VehicleDirectorRejectRequest')->name('perm_vec_simirit_reject');
+                    Route::get('/perm_simirit_approve_page', 'Dispatcher_page')->name('perm_vec_simirit_page');
+                    Route::post('/perm_simirit_approve_request', 'DispatcherApproveRequest')->name('perm_vec_simirit_approve');
+                    Route::post('/perm_simirit_reject_request', 'DispatcherRejectRequest')->name('perm_vec_simirit_reject');
                 });
             Route::controller(GivingBackPermanentVehicle::class)->group(function () 
                 {

@@ -26,7 +26,7 @@ class DailyKMCalculationModel extends Model
         'date',
         'morning_km',
         'afternoon_km',
-        'register_by',
+        'created_by',
         'created_at',
         'updated_at'
     ];
@@ -51,6 +51,6 @@ class DailyKMCalculationModel extends Model
     }
     public function created_by(): BelongsTo
     {
-        return $this->belongsTo(User::class,'register_by','id');
+        return $this->belongsTo(User::class,'created_by','id');
     }
 }

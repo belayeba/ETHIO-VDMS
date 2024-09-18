@@ -39,7 +39,6 @@
                     <ul class="side-nav">
 
                     <li class="side-nav-title">Main</li>
-                    @can('user-create')
                     <li class="side-nav-item">
                         <a data-bs-toggle="collapse" href="#sidebarPages" aria-expanded="false" aria-controls="sidebarPages" class="side-nav-link">
                             <i class="ri-pages-line"></i>
@@ -86,7 +85,6 @@
                             </ul>
                         </div>
                     </li>
-                    @endcan
 
                     <li class="side-nav-item">
                        <a data-bs-toggle="collapse" href="#sidebarRequest" aria-expanded="false" aria-controls="sidebarRequest" class="side-nav-link">

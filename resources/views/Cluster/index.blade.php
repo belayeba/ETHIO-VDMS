@@ -37,12 +37,7 @@
                 <div id="main-content" class="">
                     <section class="sms-breadcrumb mb-10 white-box">
                         <div class="container-fluid p-0">
-                            {{-- <div class="d-flex flex-wrap justify-content-between">
-                                <h2 class="text-uppercase">Cluster</h2>
-                                <div class="bc-pages">
-                                    
-                                </div>
-                            </div> --}}
+                          
                         </div>
                     </section>
 
@@ -53,7 +48,7 @@
                                 <div class="col-md-4">
                                     <div class="card">
                                         <div class="card-header">
-                                            <h3 class="mb-0">New Cluster</h3>
+                                            <h4 class="header-title mb-0">New Cluster</h4>
                                         </div>
                                         <div class="card-body">
                                             <form method="POST" action="{{ route('cluster.store') }}" accept-charset="UTF-8" name="cluster-form" id="cluster-form" enctype="multipart/form-data">
@@ -74,7 +69,7 @@
                                 <div class="col-md-8">
                                     <div class="card">
                                         <div class="card-header">
-                                            <h3 class="mb-0">Cluster List</h3>
+                                            <h4 class="header-title mb-0">Cluster List</h4>
                                         </div>
                                         <div class="card-body">
                                             <div class="table-responsive">
