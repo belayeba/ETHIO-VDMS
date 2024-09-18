@@ -51,7 +51,7 @@ Route::group(['middleware' => ['auth']], function()
                 // Vehicle Temprory Request
             Route::controller(VehicleTemporaryRequestController::class)->group(function()
                 {
-                        Route::get('temp_request_page', 'displayRequestPage')->name('displayRequestPage')->middleware('can:create postsTemporary Request Page');;
+                        Route::get('temp_request_page', 'displayRequestPage')->name('displayRequestPage');//->middleware('can:create postsTemporary Request Page');;
                         Route::get('temp_request_page/edit/{id}', 'editRequestPage')->name('editRequestPage');
                         Route::post('/user_post_request', 'RequestVehicleTemp')->name('temp_request_post');
                         Route::post('/user_delete_request', 'deleteRequest')->name('temp_delete_request');

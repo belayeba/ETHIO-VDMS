@@ -39,7 +39,6 @@
                     <ul class="side-nav">
 
                     <li class="side-nav-title">Main</li>
-                    @can('user-create')
                     <li class="side-nav-item">
                         <a data-bs-toggle="collapse" href="#sidebarPages" aria-expanded="false" aria-controls="sidebarPages" class="side-nav-link">
                             <i class="ri-pages-line"></i>
@@ -86,7 +85,6 @@
                             </ul>
                         </div>
                     </li>
-                    @endcan
 
                     <li class="side-nav-item">
                        <a data-bs-toggle="collapse" href="#sidebarRequest" aria-expanded="false" aria-controls="sidebarRequest" class="side-nav-link">
@@ -96,11 +94,9 @@
                         </a>
                         <div class="collapse" id="sidebarRequest">
                             <ul class="side-nav-second-level">
-                                @can('Temporary Request Page')
                                 <li>
                                     <a href="{{route('displayRequestPage')}}">Temporary vehicle request</a>
                                 </li>
-                                @endcan
                                 <li>
                                     <a href="{{route('vec_perm_request')}}">Permanent vehicle request</a>
                                 </li>

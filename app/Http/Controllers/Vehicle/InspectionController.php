@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Vehicle\InspectionModel;
 use App\Models\Vehicle\VehiclePart;
 use App\Models\Vehicle\VehiclesModel;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
@@ -81,6 +82,24 @@ class InspectionController extends Controller
             }
         
             return response()->json(['status' => 'success', 'data' => $inspection]);
+        }
+     public function showInspectionbyVehicle($vehicle_id)
+        {
+            try
+                {
+                    $inspection = InspectionModel::where('vehicle_id', $vehicle_id)->latest()->first();
+                
+                    if ($inspection->isEmpty()) {
+                        return response()->json(['status' => 'error', 'message' => 'Inspection not found'], 404);
+                    }
+                
+                    return response()->json(['status' => 'success', 'data' => $inspection]);
+                }
+            catch(Exception $e)
+            {
+                return response()->json(['status' => 'error', 'message' => 'Something went wrong'], 404);
+
+            }
         }
         // List all inspection
     public function listInspections(Request $request)

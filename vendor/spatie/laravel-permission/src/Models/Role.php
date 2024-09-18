@@ -2,6 +2,7 @@
 
 namespace Spatie\Permission\Models;
 
+use App\Models\PermissionGroup;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Spatie\Permission\Contracts\Role as RoleContract;
@@ -189,5 +190,8 @@ class Role extends Model implements RoleContract
         }
 
         return $this->permissions->contains($permission->getKeyName(), $permission->getKey());
+    }
+    public function PermissionGroup() {
+        return $this->belongsTo( PermissionGroup::class, 'group_id', 'id' );
     }
 }
