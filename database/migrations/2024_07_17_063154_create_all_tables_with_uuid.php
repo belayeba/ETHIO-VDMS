@@ -278,18 +278,26 @@ class CreateAllTablesWithUuid extends Migration
             $table->softDeletes();
         });
         // Route
-        Schema::create('rotues', function (Blueprint $table) {
-            $table->uuid('trip_id')->primary();
-            $table->uuid('vehicle_id');
-            $table->foreign('vehicle_id')->references('vehicle_id')->on('vehicles');
+        Schema::create('routes', function (Blueprint $table) {
+            $table->uuid('route_id')->primary();
+            $table->string('route_name');
             $table->uuid('driver_id');
             $table->foreign('driver_id')->references('driver_id')->on('drivers');
-            $table->date('date');
-            $table->string('route', 1000)->nullable();
-            $table->text('purpose');
-            $table->uuid('register_by');
-            $table->foreign('register_by')->references('id')->on('users');
-            $table->string('notes', 1000)->nullable();
+            $table->uuid('vehicle_id');
+            $table->foreign('vehicle_id')->references('vehicle_id')->on('vehicles');
+            $table->uuid('registered_by');
+            $table->foreign('registered_by')->references('id')->on('users');
+            $table->timestamps();
+            $table->softDeletes();
+        });
+        Schema::create('route_user', function (Blueprint $table) {
+            $table->uuid('route_user_id')->primary();
+            $table->uuid('employee_id');
+            $table->foreign('employee_id')->references('id')->on('users');
+            $table->uuid('route_id');
+            $table->foreign('route_id')->references('route_id')->on('routes');
+            $table->uuid('registered_by');
+            $table->foreign('registered_by')->references('id')->on('users');
             $table->timestamps();
             $table->softDeletes();
         });
