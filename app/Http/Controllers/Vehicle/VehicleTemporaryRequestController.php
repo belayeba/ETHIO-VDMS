@@ -272,10 +272,9 @@ class VehicleTemporaryRequestController extends Controller
             }
         // Directors Page
         public function DirectorApproveRequest(Request $request)
-            {
-                    $request_id = "request_id".$id;
+            { 
                     $validation = Validator::make($request->all(),[
-                    $request_id => 'required|uuid|exists:vehicle_requests_temporary,request_id',
+                        'request_id'=>'required|exists:vehicle_requests_temporary,request_id',
                     ]);
                     // dd($request_id);
                     // Check validation error
@@ -287,7 +286,7 @@ class VehicleTemporaryRequestController extends Controller
                             ]);
                         }
                     // Check if it is not approved before
-                    $id = $request->input($request_id);
+                    $id = $request->input( 'request_id');
                     
                     $user_id = Auth::id();
                 try
