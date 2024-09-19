@@ -9,37 +9,39 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Models\Vehicle\VehicleTemporaryRequestModel;
 use Illuminate\Support\Str;
 
-class TripPersonsModel extends Model
-{
+class TripPersonsModel extends Model {
     use SoftDeletes;
 
-    protected $table = 'trip_person'; // Specify the table name
+    protected $table = 'trip_person';
+    // Specify the table name
     protected $primaryKey = 'trip_person_id';
     public $incrementing = false;
     protected $keyType = 'uuid';
-    
+
     protected $fillable = [
         'request_id',
-        'employee_id',
-        'created_at',
-        'updated_at'
+        'employee_id'
     ];
-    protected static function boot()
-        {
-            parent::boot();
+    protected static function boot() {
+        parent::boot();
 
-            static::creating(function ($model) {
-                if (empty($model->{$model->getKeyName()})) {
-                    $model->{$model->getKeyName()} = (string) Str::uuid();
+        static::creating( function ( $model ) {
+            if ( empty( $model-> {
+                $model->getKeyName()}
+            ) ) {
+                $model-> {
+                    $model->getKeyName()}
+                    = ( string ) Str::uuid();
                 }
-            });
-        }
-    public function vehicleRequestTemporary(): BelongsTo
-        {
-            return $this->belongsTo(VehicleTemporaryRequestModel::class, 'request_id');
-        }
-    public function user(): BelongsTo
-        {
-            return $this->belongsTo(User::class, 'employee_id');
-        }
+            }
+        );
+    }
+
+    public function vehicleRequestTemporary(): BelongsTo {
+        return $this->belongsTo( VehicleTemporaryRequestModel::class, 'request_id' );
+    }
+
+    public function user(): BelongsTo {
+        return $this->belongsTo( User::class, 'employee_id' );
+    }
 }

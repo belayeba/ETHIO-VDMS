@@ -31,9 +31,7 @@ class ClustersModel extends Model
     
     protected $fillable = [
         'name',
-        'created_by',
-        'created_at',
-        'updated_at'
+        'created_by'
     ];
 
     public function departments(): HasMany
