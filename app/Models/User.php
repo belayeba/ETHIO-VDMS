@@ -15,9 +15,11 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Str;
+use Spatie\Permission\Traits\HasRoles;
+
 class User extends Authenticatable
 {
-    use Notifiable, SoftDeletes, HasFactory;
+    use HasRoles, Notifiable, SoftDeletes, HasFactory;
 
     protected $table = 'users'; // Specify the table name
     protected $primaryKey = 'id';

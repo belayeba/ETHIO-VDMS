@@ -26,9 +26,7 @@ class VehiclePart extends Model
         'vehicle_parts_id',
         'name',
         'notes',
-        'created_by',
-        'created_at',
-        'updated_at'
+        'created_by'
     ];
 
     // Automatically generate UUID for vehicle_parts_id if not provided

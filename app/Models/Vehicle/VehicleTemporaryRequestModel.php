@@ -2,6 +2,7 @@
 
 namespace App\Models\Vehicle;
 
+use App\Models\Driver\DriversModel;
 use App\Models\Trip\TripMaterialModel;
 use App\Models\Trip\TripPersonsModel;
 use App\Models\User;
@@ -36,6 +37,7 @@ class VehicleTemporaryRequestModel extends Model
         'how_many_days',
         'with_driver',
         'vehicle_id',
+        'driver_id',
         'dir_approved_by',
         'director_reject_reason',
         'div_approved_by',
@@ -55,9 +57,7 @@ class VehicleTemporaryRequestModel extends Model
         'km_per_liter',
         'driver_accepted_by',
         'taking_inspection',
-        'returning_inspection',
-        'created_at',
-        'updated_at',
+        'returning_inspection'
     ];
     protected static function boot()
         {
@@ -79,7 +79,14 @@ class VehicleTemporaryRequestModel extends Model
     {
         return $this->belongsTo(User::class, 'dir_approved_by');
     }
-
+    public function vehicle(): BelongsTo
+    {
+        return $this->belongsTo(VehiclesModel::class, 'vehicle_id');
+    }
+    public function driver(): BelongsTo
+    {
+        return $this->belongsTo(DriversModel::class, 'driver_id');
+    }
     public function assignedBy(): BelongsTo
     {
         return $this->belongsTo(User::class, 'assigned_by');

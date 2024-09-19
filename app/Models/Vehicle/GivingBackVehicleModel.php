@@ -10,15 +10,15 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Str;
 
-class GivingBackVehiclePermanently extends Model
-{
+class GivingBackVehiclePermanently extends Model {
     use SoftDeletes;
 
-    protected $table = 'giving_back_vehicles_parmanently'; // Specify the table name
+    protected $table = 'giving_back_vehicles_parmanently';
+    // Specify the table name
     protected $primaryKey = 'giving_back_vehicle_id';
     public $incrementing = false;
     protected $keyType = 'uuid';
-    
+
     protected $fillable = [
         'vehicle_id',
         'purpose',
@@ -30,32 +30,32 @@ class GivingBackVehiclePermanently extends Model
         'returned_date',
         'vehicle_request_id',
         'vehicle_detail_id',
-        'status',
-        'created_at',
-        'updated_at'
+        'status'
     ];
-    protected static function boot()
-        {
-            parent::boot();
+    protected static function boot() {
+        parent::boot();
 
-            static::creating(function ($model) {
-                if (empty($model->{$model->getKeyName()})) {
-                    $model->{$model->getKeyName()} = (string) Str::uuid();
+        static::creating( function ( $model ) {
+            if ( empty( $model-> {
+                $model->getKeyName()}
+            ) ) {
+                $model-> {
+                    $model->getKeyName()}
+                    = ( string ) Str::uuid();
                 }
-            });
-        }
-    public function vehicle(): BelongsTo
-        {
-            return $this->belongsTo(VehicleVehiclesModel::class, 'vehicle_id');
-        }
+            }
+        );
+    }
 
-    public function returnedBy(): BelongsTo
-        {
-            return $this->belongsTo(User::class, 'returned_by');
-        }
+    public function vehicle(): BelongsTo {
+        return $this->belongsTo( VehicleVehiclesModel::class, 'vehicle_id' );
+    }
 
-    public function receivedBy(): BelongsTo
-        {
-            return $this->belongsTo(User::class, 'received_by');
-        }
+    public function returnedBy(): BelongsTo {
+        return $this->belongsTo( User::class, 'returned_by' );
+    }
+
+    public function receivedBy(): BelongsTo {
+        return $this->belongsTo( User::class, 'received_by' );
+    }
 }
