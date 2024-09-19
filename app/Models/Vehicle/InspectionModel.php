@@ -3,6 +3,7 @@
 namespace App\Models\Vehicle;
 
 use App\Models\User;
+use App\Models\Vehicle\VehiclesModel as VehicleVehiclesModel;
 use App\Models\VehiclesModel;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -30,9 +31,7 @@ class InspectionModel extends Model
         'part_name',
         'is_damaged',
         'damage_description',
-        'inspection_date',
-        'created_at',
-        'updated_at'
+        'inspection_date'
     ];
     // Automatically generate UUID for inspection_id if not provided
     protected static function boot()
@@ -48,7 +47,7 @@ class InspectionModel extends Model
     // Relationship with the Vehicle model
     public function vehicle()
         {
-            return $this->belongsTo(VehiclesModel::class, 'vehicle_id', 'vehicle_id');
+            return $this->belongsTo(VehicleVehiclesModel::class, 'vehicle_id', 'vehicle_id');
         }
     // Relationship with the User (Inspector) model
     public function inspector()

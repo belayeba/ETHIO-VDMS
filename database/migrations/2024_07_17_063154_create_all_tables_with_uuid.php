@@ -358,8 +358,8 @@ class CreateAllTablesWithUuid extends Migration
             $table->text('notes')->nullable();
             $table->string('comment', 255)->nullable();
             $table->decimal('km_per_liter', 10, 2)->nullable();
-            $table->uuid('driver_accepted_by')->nullable();
-            $table->foreign('driver_accepted_by')->references('id')->on('users');
+            $table->uuid('driver_id')->nullable();
+            $table->foreign('driver_id')->references('driver_id')->on('drivers');
             $table->uuid('taking_inspection')->nullable();  // Link to the entire inspection session
             $table->foreign('taking_inspection')->references('inspection_id')->on('vehicle_inspections');
             $table->uuid('returning_inspection')->nullable();  // Link to the entire inspection session

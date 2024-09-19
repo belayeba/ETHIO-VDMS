@@ -55,13 +55,16 @@ class Daily_KM_Calculation extends Controller
                     $id = Auth::id();
                     try
                         {
-                            $vehicle = DailyKMCalculationModel::where('vehicle_id',$request->vehicle)->whereDate('created_at',$today)->first();
-                            //dd()
-                            if($vehicle)
+                            $vehicle_daily = DailyKMCalculationModel::where('vehicle_id',$request->vehicle)->whereDate('created_at',$today)->first();
+                            //dd($vehicle);
+                            $driver_from_vehicle = VehiclesModel::select('driver_id')->where('vehicle_id',$request->vehicle)->first();
+                           /// $driver_id = $vehicle->driver_id;
+                           $driver_id = $driver_from_vehicle->driver_id;
+                            if($vehicle_daily)
                               {
                                    // update morning km
-                                   $vehicle->morning_km = $request->morning_km;
-                                   $vehicle->save();
+                                   $vehicle_daily->morning_km = $request->morning_km;
+                                   $vehicle_daily->save();
                                     // Success: Record was created
                                     return response()->json([
                                         'success' => true,
@@ -70,8 +73,8 @@ class Daily_KM_Calculation extends Controller
                               }
                             // Create Daily Km calculation
                             DailyKMCalculationModel::create([
-                                'created_by'=>$id,
-                                'driver_id'=>$request->driver_id,
+                                'register_by'=>$id,
+                                'driver_id'=>$driver_id,
                                 'vehicle_id' => $request->vehicle,
                                 'morning_km' => $request->morning_km,
                                 'date' => $today,
@@ -116,7 +119,7 @@ class Daily_KM_Calculation extends Controller
                             if($vehicle)
                               {
                                    // update morning km
-                                   $vehicle->morning_km = $request->morning_km;
+                                   $vehicle->afternoon_km = $request->afternoon_km;
                                    $vehicle->save();
                                     // Success: Record was created
                                     return response()->json([

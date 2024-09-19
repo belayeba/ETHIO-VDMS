@@ -3,7 +3,7 @@
 @section('content')
 
 <!-- DataTables CSS -->
-<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
+<!--<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css"> -->
 
 <!-- Content -->
 <div class="content-page">
