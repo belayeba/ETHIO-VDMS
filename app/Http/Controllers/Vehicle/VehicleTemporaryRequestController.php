@@ -382,7 +382,7 @@ class VehicleTemporaryRequestController extends Controller
                 })
                     ->where(function($query) {
                         $query->orWhere('how_many_days', '>', 1)
-                            ->orWhere('in_out_town', true);
+                            ->orWhere('in_out_town', false);
                     })
                     // ->whereNull('div_approved_by')
                     ->whereNotNull('dir_approved_by')
@@ -590,24 +590,22 @@ class VehicleTemporaryRequestController extends Controller
         public function TransportDirectorApprovalPage()
             {
                 $vehicleRequests = VehicleTemporaryRequestModel::with('approvedBy', 'requestedBy')
-    ->where(function ($query) {
-        // Check if how_many_days > 1 OR in_out_town is true
-        $query->where(function ($q) {
-            $q->where('how_many_days', '>', 1)
-              ->orWhere('in_out_town', true);
-        })
-        // Apply condition for hr_div_approved_by
-        ->whereNotNull('hr_div_approved_by');
-    })
-    // Fallback to dir_approved_by if the first condition isn't true
-    ->orWhere(function ($query) {
-        $query->where('how_many_days', '<=', 1)
-              ->where('in_out_town', false)
-              ->whereNotNull('dir_approved_by');
-    })
-    ->get();
-
-            
+                                    ->where(function ($query) {
+                                        // Check if how_many_days > 1 OR in_out_town is true
+                                        $query->where(function ($q) {
+                                            $q->where('how_many_days', '>', 1)
+                                            ->orWhere('in_out_town', false);
+                                        })
+                                        // Apply condition for hr_div_approved_by
+                                        ->whereNotNull('hr_div_approved_by');
+                                    })
+                                    // Fallback to dir_approved_by if the first condition isn't true
+                                    ->orWhere(function ($query) {
+                                        $query->where('how_many_days', '<=', 1)
+                                            ->where('in_out_town', true)
+                                            ->whereNotNull('dir_approved_by');
+                                    })
+                                    ->get();
 
                    // dd($vehicleRequests);
                 // Return the results, for example, passing them to a view

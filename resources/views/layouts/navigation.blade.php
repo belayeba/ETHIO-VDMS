@@ -244,9 +244,26 @@
                                 <li>
                                     <a href="#">Temp_vehicle_req Report</a>
                                 </li>
-                                
-                                
-                                
+                                <li>
+                                    <a href="#">Vehicle</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li class="side-nav-item">
+                        <a data-bs-toggle="collapse" href="#sidebarRoute" aria-expanded="false" aria-controls="sidebarReport" class="side-nav-link">
+                            <i class="ri-user-fill"></i>
+                            <span>Route</span>
+                            <span class="menu-arrow"></span>
+                        </a>
+                        <div class="collapse" id="sidebarRoute">
+                            <ul class="side-nav-second-level">
+                                <li>
+                                    <a href="{{ route('dailyreport.index') }}">Route Management</a>
+                                </li>
+                                <li>
+                                    <a href="#">Assign Employee to Service</a>
+                                </li>
                             </ul>
                         </div>
                     </li>

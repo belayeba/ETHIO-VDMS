@@ -30,11 +30,13 @@ class VehiclePermanentlyRequestModel extends Model {
         'vec_director_reject_reason',
         'given_date',
         'mileage',
+        'inspection_id',
+        'accepted_by_requestor',
+        'reject_reason_by_requestor',
         'status'
     ];
     protected static function boot() {
         parent::boot();
-
         static::creating( function ( $model ) {
             if ( empty( $model-> {
                 $model->getKeyName()}
@@ -57,6 +59,14 @@ class VehiclePermanentlyRequestModel extends Model {
 
     public function approvedBy(): BelongsTo {
         return $this->belongsTo( User::class, 'approved_by' );
+    }
+
+    public function accepted_by(): BelongsTo {
+        return $this->belongsTo( User::class, 'accepted_by_requestor' );
+    }
+
+    public function inspection(): BelongsTo {
+        return $this->belongsTo( InspectionModel::class, 'inspection_id' );
     }
 
 }

@@ -30,6 +30,7 @@ class InspectionModel extends Model
         'inspected_by',
         'part_name',
         'is_damaged',
+        'inspection_image',
         'damage_description',
         'inspection_date'
     ];
