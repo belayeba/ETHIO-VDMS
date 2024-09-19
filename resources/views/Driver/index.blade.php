@@ -128,7 +128,7 @@
                                                                     <i class="ri-eye-line"></i>
                                                                 </button>
 
-                                                                <button type="button" class="btn btn-primary edit-driver-btn" title="Edit Driver"
+                                                                <button type="button" class="btn btn-info rounded-pill" title="Edit Driver"
                                                                 data-bs-toggle="modal" 
                                                                 data-bs-target="#driver_modal_{{$loop->index}}"
                                                                 data-driver-name="{{ $item->user->username }}"

@@ -15,7 +15,7 @@ class ClusterController extends Controller
     public function index()
     {
         $clusters = ClustersModel::all();
-        // dd($clusters);
+        
         return view('Cluster.index', compact('clusters'));
     }
 
@@ -28,16 +28,15 @@ class ClusterController extends Controller
     // Store a newly created resource in storage.
     public function store(Request $request)
     {
-        // dd($request);
         // $request->validate([
         //     'name' => 'required|string|max:255',
-        //     'created_by' => 'required', // Ensure a valid user ID is used
+        //     'created_by' => 'required', 
         // ]);
-        // dd($request);
+        
         $user = auth()->user()->id; // Get the authenticated user's ID
         
         $request->merge(['created_by' => $user]); // Add the user's ID to the request data
-        // dd($request);
+        
         ClustersModel::create($request->all());
         return redirect()->route('cluster.index')->with('success', 'Cluster created successfully.');
     

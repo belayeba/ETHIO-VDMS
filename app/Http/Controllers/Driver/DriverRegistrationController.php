@@ -23,6 +23,7 @@ class DriverRegistrationController extends Controller
     // Create a new driver
     public function store(Request $request)
         {
+            // dd($request);
             try 
                 {
                     $validator = Validator::make($request->all(), [
@@ -30,7 +31,7 @@ class DriverRegistrationController extends Controller
                         'license_number' => 'required|string|max:255',
                         'license_expiry_date' => 'required|date|after:today',
                         'license_file' => 'required|file|mimes:pdf,jpg,jpeg',
-                        'phone_number' => 'nullable|string|max:20|unique:drivers,phone_number',
+                        //'phone_number' => 'nullable|string|max:20|unique:drivers,phone_number',
                         'notes' => 'nullable|string',
                     ]);
 
