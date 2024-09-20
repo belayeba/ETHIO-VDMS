@@ -103,10 +103,13 @@ class VehicleTemporaryRequestController extends Controller
                             DB::commit();
                         
                             // Return response to user
-                            return response()->json([
-                                'success' => true,
-                                'message' => 'You successfully requested a vehicle',
-                            ]);
+                            return redirect()->back()->with('success_message',
+                                'You successfully requested a vehicle',
+                            );
+                            // return redirect()->json([
+                            //     'success' => true,
+                            //     'message' => 'You successfully requested a vehicle',
+                            // ]);
                         
                         } 
                     catch (Exception $e) 
@@ -313,7 +316,9 @@ class VehicleTemporaryRequestController extends Controller
                             );
                     }
             }
+        }
          // Director Reject the request
+
         public function DirectorRejectRequest(Request $request)
             {
                 $validation = Validator::make($request->all(),[
@@ -566,6 +571,26 @@ class VehicleTemporaryRequestController extends Controller
         public function TransportDirectorApprovalPage()
             {
                 $vehicleRequests = VehicleTemporaryRequestModel::with('approvedBy', 'requestedBy')
+<<<<<<< HEAD
+                ->where(function ($query) {
+                    // Check if how_many_days > 1 OR in_out_town is true
+                    $query->where(function ($q) {
+                        $q->where('how_many_days', '>', 1)
+                        ->orWhere('in_out_town', false);
+                    })
+                    // Apply condition for hr_div_approved_by
+                    ->whereNotNull('hr_div_approved_by');
+                })
+                // Fallback to dir_approved_by if the first condition isn't true
+                ->orWhere(function ($query) {
+                    $query->where('how_many_days', '<=', 1)
+                        ->where('in_out_town', true)
+                        ->whereNotNull('dir_approved_by');
+                })
+                ->get();
+
+            
+=======
                                     ->where(function ($query) {
                                         // Check if how_many_days > 1 OR in_out_town is true
                                         $query->where(function ($q) {
@@ -582,6 +607,7 @@ class VehicleTemporaryRequestController extends Controller
                                             ->whereNotNull('dir_approved_by');
                                     })
                                     ->get();
+>>>>>>> 189a502bc8494e4d8687cf27d4397102f843c275
 
                    // dd($vehicleRequests);
                 // Return the results, for example, passing them to a view
@@ -670,7 +696,7 @@ class VehicleTemporaryRequestController extends Controller
         // Vehicle Director Page
         public function SimiritPage() 
             {    
-                    $vehicles = VehiclesModel::all();
+                    $vehicles = VehiclesModel::get();
                     $vehicle_requests = VehicleTemporaryRequestModel::
                                     whereNotNull('transport_director_id')
                                     ->whereNull('vec_director_reject_reason')
