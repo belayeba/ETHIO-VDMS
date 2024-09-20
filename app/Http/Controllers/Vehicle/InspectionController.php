@@ -21,7 +21,7 @@ class InspectionController extends Controller
                 ->distinct()
                 ->orderBy('inspection_date', 'desc')
                 ->get();
-// dd($inspections);
+             // dd($inspections);
             return view('Vehicle.Inspection', compact('inspections','parts','vehicle'));
         }
         //Insert Data
@@ -37,7 +37,6 @@ class InspectionController extends Controller
                 'damage_descriptions' => 'nullable|array',
                 'damage_descriptions.*' => 'string|nullable',
                 'inspection_image' => 'nullable|file|mimes:pdf,jpg,jpeg',
-
             ];
             // 
             $validator = Validator::make($request->all(), $rules);
@@ -98,12 +97,13 @@ class InspectionController extends Controller
         {
             try
                 {
-                    $inspection = InspectionModel::where('vehicle_id', $vehicle_id)->latest()->first();
-                
+                    $inspection = InspectionModel::select('inspection_id')->where('vehicle_id', $vehicle_id)->latest()->first();
+                    $inspection_id = $inspection->inspection_id;
+
+                    $latest_inspection = InspectionModel::where('inspection_id',$inspection_id)->get();//where('vehicle_id', $vehicle_id)->latest()->first();
                     if ($inspection->isEmpty()) {
                         return response()->json(['status' => 'error', 'message' => 'Inspection not found'], 404);
                     }
-                
                     return response()->json(['status' => 'success', 'data' => $inspection]);
                 }
             catch(Exception $e)

@@ -305,8 +305,8 @@ class CreateAllTablesWithUuid extends Migration
         // Driver Logs Table
         Schema::create('daily_km_calculations', function (Blueprint $table) {
             $table->uuid('calculation_id')->primary();
-            $table->decimal('morning_km', 10, 8)->nullable();
-            $table->decimal('afternoon_km', 10, 8)->nullable();
+            $table->integer('morning_km')->nullable();
+            $table->integer('afternoon_km')->nullable();
             $table->uuid('vehicle_id');
             $table->foreign('vehicle_id')->references('vehicle_id')->on('vehicles');
             $table->uuid('driver_id');

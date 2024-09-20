@@ -169,7 +169,9 @@
                                 <li>
                                     <a href="{{ route('driver.index') }}">Driver Registration</a>
                                 </li>
-
+                                <li>
+                                    <a href="{{ route('driver.switch') }}">Driver Change</a>
+                                </li>
                             </ul>
                         </div>
                     </li>

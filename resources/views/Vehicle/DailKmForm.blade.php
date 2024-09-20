@@ -31,7 +31,7 @@
                                 <div id="progressbarwizard">
                                     <ul class="nav nav-pills nav-justified form-wizard-header mb-3">
                                         <li class="nav-item">
-                                            <a href="#account-2" data-bs-toggle="tab" data-toggle="tab"
+                                            <a href="#account2" data-bs-toggle="tab" data-toggle="tab"
                                                 class="nav-link rounded-0 py-2">
                                                 <i class="ri-settings-5-line fw-normal fs-20 align-middle me-1"></i>
                                                 <span class="d-none d-sm-inline">ADD</span>
@@ -46,7 +46,7 @@
                                             </div>
                                         </div>
 
-                                        <div class="tab-pane" id="account-2">
+                                        <div class="tab-pane" id="account2">
                                             <div class="row">
                                                 <div class="position-relative mb-3">
                                                     <div class="mb-6 position-relative">
@@ -174,7 +174,7 @@
                                                         <form action="" method="post"
                                                             enctype="multipart/form-data">
 
-                                                            <div class="tab-pane" id="account-2">
+                                                            <div class="tab-pane" id="account2">
                                                                 <div class="row">
                                                                     <div class="position-relative mb-3">
                                                                         <div class="mb-6 position-relative"
@@ -295,6 +295,9 @@
         <script src="{{ asset('assets/vendor/dropzone/min/dropzone.min.js') }}"></script>
 
         <!-- File Upload Demo js -->
+        <script src="{{ asset('assets/js/app.min.js') }}"></script>
+        <script src="{{ asset('assets/js/vendor.min.js') }}"></script> 
+
         <script src="{{ asset('assets/js/pages/fileupload.init.js') }}"></script>
         <script src="assets/js/vendor.min.js"></script>
         <script src="assets/js/app.min.js"></script>
