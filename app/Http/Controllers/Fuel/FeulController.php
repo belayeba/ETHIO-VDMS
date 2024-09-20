@@ -56,10 +56,9 @@ class FeulController extends Controller
                 catch (Exception $e) 
                     {
                         // Handle the case when the vehicle request is not found
-                        return response()->json([
-                            'success' => false,
-                            'message' => 'Sorry, Something went wrong',
-                        ]);
+                      return redirect()->back()->with('error_message',
+                                 "Sorry, Something went wrong",
+                            );
                     }
         }
     public function update_fuel_request(Request $request) 

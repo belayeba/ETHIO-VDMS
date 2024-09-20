@@ -56,10 +56,9 @@ class VehicleTemporaryRequestController extends Controller
                 // If validation fails, return an rerror response
                 if ($validator->fails()) 
                         {
-                            return response()->json([
-                                'success' => false,
-                                'message' => $validator->errors(),
-                            ]);
+                            return redirect()->back()->with('error_message',
+                                 $validator->errors(),
+                            );
                         }
                     try 
                         {
@@ -104,10 +103,13 @@ class VehicleTemporaryRequestController extends Controller
                             DB::commit();
                         
                             // Return response to user
-                            return response()->json([
-                                'success' => true,
-                                'message' => 'You successfully requested a vehicle',
-                            ]);
+                            return redirect()->back()->with('success_message',
+                                'You successfully requested a vehicle',
+                            );
+                            // return redirect()->json([
+                            //     'success' => true,
+                            //     'message' => 'You successfully requested a vehicle',
+                            // ]);
                         
                         } 
                     catch (Exception $e) 
@@ -205,10 +207,9 @@ class VehicleTemporaryRequestController extends Controller
                 catch (Exception $e) 
                     {
                         // Handle the case when the vehicle request is not found
-                        return response()->json([
-                            'success' => false,
-                            'message' => 'Sorry, Something went wrong',
-                        ]);
+                      return redirect()->back()->with('error_message',
+                                 "Sorry, Something went wrong",
+                            );
                     }
             }
         // User can delete Request
@@ -233,10 +234,9 @@ class VehicleTemporaryRequestController extends Controller
                         $Vehicle_Request = VehicleTemporaryRequestModel::findOrFail($id);
                         if($Vehicle_Request->requested_by_id != $user_id)
                             {
-                                return response()->json([
-                                    'success' => false,
-                                    'message' => 'Warning! You are denied the service.',
-                                ]);
+                              return redirect()->back()->with('error_message',
+                                 "Warning, You are denied the service",
+                            );
                             }
                         if($Vehicle_Request->approved_by)
                             {
@@ -246,18 +246,16 @@ class VehicleTemporaryRequestController extends Controller
                                 ]);
                             }
                         $Vehicle_Request->delete();
-                        return response()->json([
-                            'success' => true,
-                            'message' => 'Request deleted successfully.',
-                        ]);
+                       return redirect()->back()->with('success_message',
+                                 "Request deleted successfully",
+                            );
                     }
                 catch (Exception $e) 
                     {
                         // Handle the case when the vehicle request is not found
-                        return response()->json([
-                            'success' => false,
-                            'message' => 'Sorry, Something went wrong',
-                        ]);
+                      return redirect()->back()->with('error_message',
+                                 "Sorry, Something went wrong",
+                            );
                     }
             }
         public function DirectorApprovalPage()
@@ -274,7 +272,6 @@ class VehicleTemporaryRequestController extends Controller
         // Directors Page
         public function DirectorApproveRequest(Request $request)
             { 
-            {
                    // $request_id = "request_id".$id;
                     $validation = Validator::make($request->all(),[
                         'request_id'=>'required|exists:vehicle_requests_temporary,request_id',
@@ -301,28 +298,27 @@ class VehicleTemporaryRequestController extends Controller
 
                         if($Vehicle_Request->dir_approved_by)
                             {
-                                return response()->json([
-                                    'success' => false,
-                                    'message' => 'Warning! You are denied the service',
-                                ]);
+                               return redirect()->back()->with('error_message',
+                                 "Warning, You are denied the service",
+                            );
                             }
                         $Vehicle_Request->dir_approved_by = $user_id;
                         $Vehicle_Request->save();
-                        return response()->json([
-                            'success' => true,
-                            'message' => 'The requests approved successfully',
-                        ]);
+                        return redirect()->back()->with('success_message',
+                                 "The requests approved successfully",
+                            );
                     }
                 catch (Exception $e) 
                     {
                         // Handle the case when the vehicle request is not found
-                        return response()->json([
-                            'success' => false,
-                            'message' => 'something went wrong',
-                        ]);
+                       return redirect()->back()->with('error_message',
+                                 "Something Went Wrong",
+                            );
                     }
             }
+        }
          // Director Reject the request
+
         public function DirectorRejectRequest(Request $request)
             {
                 $validation = Validator::make($request->all(),[
@@ -332,10 +328,9 @@ class VehicleTemporaryRequestController extends Controller
                     // Check validation error
                 if ($validation->fails()) 
                     {
-                        return response()->json([
-                            'success' => false,
-                            'message' => $validation->errors(),
-                        ]);
+                       return redirect()->back()->with('error_message',
+                                 $validation->errors(),
+                            );
                     }
                 // Check if it is not approved before
                 $id = $request->input('request_id');
@@ -346,26 +341,23 @@ class VehicleTemporaryRequestController extends Controller
                         $Vehicle_Request = VehicleTemporaryRequestModel::findOrFail($id);
                         if($Vehicle_Request->dir_approved_by)
                             {
-                                return response()->json([
-                                    'success' => false,
-                                    'message' => 'Warning! You are denied the service',
-                                ]);
+                               return redirect()->back()->with('error_message',
+                                 "Warning, You are denied the service",
+                            );
                             }
                         $Vehicle_Request->dir_approved_by = $user_id;
                         $Vehicle_Request->director_reject_reason = $reason;
                         $Vehicle_Request->save();
-                        return response()->json([
-                            'success' => true,
-                            'message' => 'The request Rejected Successfully',
-                        ]);
+                        return redirect()->back()->with('success_message',
+                                 "The request rejected successfully",
+                            );
                     }
                 catch (Exception $e) 
                     {
                         // Handle the case when the vehicle request is not found
-                        return response()->json([
-                            'success' => false,
-                            'message' => 'Sorry, Something went wrong',
-                        ]);
+                      return redirect()->back()->with('error_message',
+                                 "Sorry, Something went wrong",
+                            );
                     }
             }
         public function clusterDirectorApprovalPage()
@@ -385,7 +377,7 @@ class VehicleTemporaryRequestController extends Controller
                 })
                     ->where(function($query) {
                         $query->orWhere('how_many_days', '>', 1)
-                            ->orWhere('in_out_town', true);
+                            ->orWhere('in_out_town', false);
                     })
                     // ->whereNull('div_approved_by')
                     ->whereNotNull('dir_approved_by')
@@ -416,25 +408,22 @@ class VehicleTemporaryRequestController extends Controller
                         $Vehicle_Request = VehicleTemporaryRequestModel::findOrFail($id);
                         if($Vehicle_Request->div_approved_by)
                             {
-                                return response()->json([
-                                    'success' => false,
-                                    'message' => 'Warning! You are denied the service',
-                                ]);
+                               return redirect()->back()->with('error_message',
+                                 "Warning, You are denied the service",
+                            );
                             }
                         $Vehicle_Request->div_approved_by = $user_id;
                         $Vehicle_Request->save();
-                        return response()->json([
-                            'success' => true,
-                            'message' => 'The request approved successfully',
-                        ]);
+                       return redirect()->back()->with('success_message',
+                                 "The request approved successfully",
+                            );
                     }
                 catch (Exception $e) 
                     {
                         // Handle the case when the vehicle request is not found
-                        return response()->json([
-                            'success' => false,
-                            'message' => 'something went wrong',
-                        ]);
+                       return redirect()->back()->with('error_message',
+                                 "Something Went Wrong",
+                            );
                     }
             }   
         // Director Reject the request
@@ -447,10 +436,9 @@ class VehicleTemporaryRequestController extends Controller
                     // Check validation error
                 if ($validation->fails()) 
                     {
-                        return response()->json([
-                            'success' => false,
-                            'message' => $validation->errors(),
-                        ]);
+                       return redirect()->back()->with('error_message',
+                                 $validation->errors(),
+                            );
                     }
                 // Check if it is not approved before
                 $id = $request->input('request_id');
@@ -461,26 +449,23 @@ class VehicleTemporaryRequestController extends Controller
                         $Vehicle_Request = VehicleTemporaryRequestModel::findOrFail($id);
                         if($Vehicle_Request->div_approved_by)
                             {
-                                return response()->json([
-                                    'success' => false,
-                                    'message' => 'Warning! You are denied the service',
-                                ]);
+                               return redirect()->back()->with('error_message',
+                                 "Warning, You are denied the service",
+                            );
                             }
                         $Vehicle_Request->div_approved_by = $user_id;
                         $Vehicle_Request->cluster_director_reject_reason = $reason;
                         $Vehicle_Request->save();
-                        return response()->json([
-                            'success' => true,
-                            'message' => 'The request Rejected Successfully',
-                        ]);
+                        return redirect()->back()->with('success_message',
+                                 "The request rejected successfully",
+                            );
                     }
                 catch (Exception $e) 
                     {
                         // Handle the case when the vehicle request is not found
-                        return response()->json([
-                            'success' => false,
-                            'message' => 'Sorry, Something went wrong',
-                        ]);
+                      return redirect()->back()->with('error_message',
+                                 "Sorry, Something went wrong",
+                            );
                     }
             }
         // For HR CLUSTER
@@ -522,25 +507,22 @@ class VehicleTemporaryRequestController extends Controller
                         $Vehicle_Request = VehicleTemporaryRequestModel::findOrFail($id);
                         if($Vehicle_Request->hr_div_approved_by)
                             {
-                                return response()->json([
-                                    'success' => false,
-                                    'message' => 'Warning! You are denied the service',
-                                ]);
+                               return redirect()->back()->with('error_message',
+                                 "Warning, You are denied the service",
+                            );
                             }
                         $Vehicle_Request->hr_div_approved_by = $user_id;
                         $Vehicle_Request->save();
-                        return response()->json([
-                            'success' => true,
-                            'message' => 'The request approved successfully',
-                        ]);
+                       return redirect()->back()->with('success_message',
+                                 "The request approved successfully",
+                            );
                     }
                 catch (Exception $e) 
                     {
                         // Handle the case when the vehicle request is not found
-                        return response()->json([
-                            'success' => false,
-                            'message' => 'something went wrong',
-                        ]);
+                       return redirect()->back()->with('error_message',
+                                 "Something Went Wrong",
+                            );
                     }
             }   
             // Director Reject the request
@@ -553,10 +535,9 @@ class VehicleTemporaryRequestController extends Controller
                     // Check validation error
                 if ($validation->fails()) 
                     {
-                        return response()->json([
-                            'success' => false,
-                            'message' => $validation->errors(),
-                        ]);
+                       return redirect()->back()->with('error_message',
+                                 $validation->errors(),
+                            );
                     }
                 // Check if it is not approved before
                 $id = $request->input('request_id');
@@ -567,50 +548,66 @@ class VehicleTemporaryRequestController extends Controller
                         $Vehicle_Request = VehicleTemporaryRequestModel::findOrFail($id);
                         if($Vehicle_Request->hr_div_approved_by)
                             {
-                                return response()->json([
-                                    'success' => false,
-                                    'message' => 'Warning! You are denied the service',
-                                ]);
+                               return redirect()->back()->with('error_message',
+                                 "Warning, You are denied the service",
+                            );
                             }
                         $Vehicle_Request->hr_div_approved_by = $user_id;
                         $Vehicle_Request->hr_director_reject_reason = $reason;
                         $Vehicle_Request->save();
-                        return response()->json([
-                            'success' => true,
-                            'message' => 'The request Rejected Successfully',
-                        ]);
+                        return redirect()->back()->with('success_message',
+                                 "The request rejected successfully",
+                            );
                     }
                 catch (Exception $e) 
                     {
                         // Handle the case when the vehicle request is not found
-                        return response()->json([
-                            'success' => false,
-                            'message' => 'Sorry, Something went wrong',
-                        ]);
+                      return redirect()->back()->with('error_message',
+                                 "Sorry, Something went wrong",
+                            );
                     }
             }
         // DIRECTOR APPROVE THE REQUESTS
         public function TransportDirectorApprovalPage()
             {
                 $vehicleRequests = VehicleTemporaryRequestModel::with('approvedBy', 'requestedBy')
-    ->where(function ($query) {
-        // Check if how_many_days > 1 OR in_out_town is true
-        $query->where(function ($q) {
-            $q->where('how_many_days', '>', 1)
-              ->orWhere('in_out_town', true);
-        })
-        // Apply condition for hr_div_approved_by
-        ->whereNotNull('hr_div_approved_by');
-    })
-    // Fallback to dir_approved_by if the first condition isn't true
-    ->orWhere(function ($query) {
-        $query->where('how_many_days', '<=', 1)
-              ->where('in_out_town', false)
-              ->whereNotNull('dir_approved_by');
-    })
-    ->get();
+<<<<<<< HEAD
+                ->where(function ($query) {
+                    // Check if how_many_days > 1 OR in_out_town is true
+                    $query->where(function ($q) {
+                        $q->where('how_many_days', '>', 1)
+                        ->orWhere('in_out_town', false);
+                    })
+                    // Apply condition for hr_div_approved_by
+                    ->whereNotNull('hr_div_approved_by');
+                })
+                // Fallback to dir_approved_by if the first condition isn't true
+                ->orWhere(function ($query) {
+                    $query->where('how_many_days', '<=', 1)
+                        ->where('in_out_town', true)
+                        ->whereNotNull('dir_approved_by');
+                })
+                ->get();
 
             
+=======
+                                    ->where(function ($query) {
+                                        // Check if how_many_days > 1 OR in_out_town is true
+                                        $query->where(function ($q) {
+                                            $q->where('how_many_days', '>', 1)
+                                            ->orWhere('in_out_town', false);
+                                        })
+                                        // Apply condition for hr_div_approved_by
+                                        ->whereNotNull('hr_div_approved_by');
+                                    })
+                                    // Fallback to dir_approved_by if the first condition isn't true
+                                    ->orWhere(function ($query) {
+                                        $query->where('how_many_days', '<=', 1)
+                                            ->where('in_out_town', true)
+                                            ->whereNotNull('dir_approved_by');
+                                    })
+                                    ->get();
+>>>>>>> 189a502bc8494e4d8687cf27d4397102f843c275
 
                    // dd($vehicleRequests);
                 // Return the results, for example, passing them to a view
@@ -624,10 +621,9 @@ class VehicleTemporaryRequestController extends Controller
                     // Check validation error
                     if ($validation->fails()) 
                         {
-                            return response()->json([
-                                'success' => true,
-                                'message' => $validation->errors(),
-                            ]);
+                            return redirect()->back()->with('error_message',
+                            $validation->errors(),
+                            );
                         }
                     // Check if it is not approved before
                     $id = $request->input('request_id');
@@ -637,25 +633,22 @@ class VehicleTemporaryRequestController extends Controller
                         $Vehicle_Request = VehicleTemporaryRequestModel::findOrFail($id);
                         if($Vehicle_Request->transport_director_id)
                             {
-                                return response()->json([
-                                    'success' => false,
-                                    'message' => 'Warning! You are denied the service',
-                                ]);
+                               return redirect()->back()->with('error_message',
+                                 "Warning, You are denied the service",
+                            );
                             }
                         $Vehicle_Request->transport_director_id = $user_id;
                         $Vehicle_Request->save();
-                        return response()->json([
-                            'success' => true,
-                            'message' => 'The request approved successfully',
-                        ]);
+                       return redirect()->back()->with('success_message',
+                                 "The request approved successfully",
+                            );
                     }
                 catch (Exception $e) 
                     {
                         // Handle the case when the vehicle request is not found
-                        return response()->json([
-                            'success' => false,
-                            'message' => 'something went wrong',
-                        ]);
+                       return redirect()->back()->with('error_message',
+                                 "Something Went Wrong",
+                            );
                     }
             }   
             // Director Reject the request
@@ -668,10 +661,9 @@ class VehicleTemporaryRequestController extends Controller
                     // Check validation error
                 if ($validation->fails()) 
                     {
-                        return response()->json([
-                            'success' => false,
-                            'message' => $validation->errors(),
-                        ]);
+                       return redirect()->back()->with('error_message',
+                                 $validation->errors(),
+                            );
                     }
                 // Check if it is not approved before
                 $id = $request->input('request_id');
@@ -682,32 +674,29 @@ class VehicleTemporaryRequestController extends Controller
                         $Vehicle_Request = VehicleTemporaryRequestModel::findOrFail($id);
                         if($Vehicle_Request->transport_director_id)
                             {
-                                return response()->json([
-                                    'success' => false,
-                                    'message' => 'Warning! You are denied the service',
-                                ]);
+                               return redirect()->back()->with('error_message',
+                                 "Warning, You are denied the service",
+                            );
                             }
                         $Vehicle_Request->transport_director_id = $user_id;
                         $Vehicle_Request->vec_director_reject_reason = $reason;
                         $Vehicle_Request->save();
-                        return response()->json([
-                            'success' => true,
-                            'message' => 'The request Rejected Successfully',
-                        ]);
+                        return redirect()->back()->with('success_message',
+                                 "The request rejected successfully",
+                            );
                     }
                 catch (Exception $e) 
                     {
                         // Handle the case when the vehicle request is not found
-                        return response()->json([
-                            'success' => false,
-                            'message' => 'Sorry, Something went wrong',
-                        ]);
+                      return redirect()->back()->with('error_message',
+                                 "Sorry, Something went wrong",
+                            );
                     }
             }
         // Vehicle Director Page
         public function SimiritPage() 
             {    
-                    $vehicles = VehiclesModel::all();
+                    $vehicles = VehiclesModel::get();
                     $vehicle_requests = VehicleTemporaryRequestModel::
                                     whereNotNull('transport_director_id')
                                     ->whereNull('vec_director_reject_reason')
@@ -778,18 +767,16 @@ class VehicleTemporaryRequestController extends Controller
                         $Vehicle_Request->assigned_vehicle_id = $assigned_vehicle;
                         $Vehicle_Request->taking_inspection = $inspection_id;
                         $Vehicle_Request->save();
-                        return response()->json([
-                            'success' => true,
-                            'message' => 'You are successfully Approved the request',
-                        ]);
+                       return redirect()->back()->with('success_message',
+                                 "ou are successfully Approved the request",
+                            );
                     }   
                 catch (Exception $e) 
                     {
                         // Handle the case when the vehicle request is not found
-                        return response()->json([
-                            'success' => false,
-                            'message' => 'Sorry, Something went wrong',
-                        ]);
+                      return redirect()->back()->with('error_message',
+                                 "Sorry, Something went wrong",
+                            );
                     }
             }
             // Vehicle Director Fill start km
@@ -823,18 +810,16 @@ class VehicleTemporaryRequestController extends Controller
                         $Vehicle_Request->start_km = $start_km;
                         $Vehicle_Request->km_per_litre = $km_per_litre;
                         $Vehicle_Request->save();
-                        return response()->json([
-                            'success' => true,
-                            'message' => 'You have filled the information succefully',
-                        ]);
+                        return redirect()->back()->with('success_message',
+                        "You are successfully Approved the request",
+                   );
                     }
                 catch (Exception $e) 
                     {
                         // Handle the case when the vehicle request is not found
-                        return response()->json([
-                            'success' => false,
-                            'message' => 'Sorry, Something went wrong',
-                        ]);
+                      return redirect()->back()->with('error_message',
+                                 "Sorry, Something went wrong",
+                            );
                     }
             }
         //vehicle Director Reject the request
@@ -847,10 +832,9 @@ class VehicleTemporaryRequestController extends Controller
                     // Check validation error
                 if ($validation->fails()) 
                     {
-                        return response()->json([
-                            'success' => false,
-                            'message' => 'Sorry, Something went wrong',
-                        ]);
+                      return redirect()->back()->with('error_message',
+                                 "Sorry, Something went wrong",
+                            );
                     }
                 // Check if it is not approved before
                 $id = $request->input('request_id');
@@ -869,18 +853,16 @@ class VehicleTemporaryRequestController extends Controller
                         $Vehicle_Request->assigned_by = $user_id;
                         $Vehicle_Request->assigned_by_reject_reason = $reason;
                         $Vehicle_Request->save();
-                        return response()->json([
-                            'success' => true,
-                            'message' => 'The Request Rejected Successfully',
-                        ]);
+                        return redirect()->back()->with('success_message',
+                                 "The request rejected successfully",
+                            );
                     }
                 catch (Exception $e) 
                     {
                         // Handle the case when the vehicle request is not found
-                        return response()->json([
-                            'success' => false,
-                            'message' => 'Sorry, Something went wrong',
-                        ]);
+                      return redirect()->back()->with('error_message',
+                                 "Sorry, Something went wrong",
+                            );
                     }
             }
         // VEHICLE DIRECTOR APPROVE THE REQUESTS
@@ -908,18 +890,16 @@ class VehicleTemporaryRequestController extends Controller
                         $Vehicle_Request->taken_by = $user_id;
                         $Vehicle_Request->end_km = $end_km;
                         $Vehicle_Request->save();
-                        return response()->json([
-                            'success' => true,
-                            'message' => 'Return Successfully Done!',
-                        ]);                
+                        return redirect()->back()->with('success_message',
+                                 "Return Successfullly Done!",
+                            );               
                     }
                 catch (Exception $e) 
                     {
                         // Handle the case when the vehicle request is not found
-                        return response()->json([
-                            'success' => false,
-                            'message' => 'Sorry, Something went wrong',
-                        ]);
+                      return redirect()->back()->with('error_message',
+                                 "Sorry, Something went wrong",
+                            );
                     }
             }
         public function driver_accept(Request $request)
@@ -930,10 +910,9 @@ class VehicleTemporaryRequestController extends Controller
                     // Check validation error
                 if ($validation->fails()) 
                     {
-                        return response()->json([
-                            'success' => false,
-                            'message' => 'Sorry, Something went wrong',
-                        ]);
+                      return redirect()->back()->with('error_message',
+                                 "Sorry, Something went wrong",
+                            );
                     }
                 $logged_user = Auth::id();
                 try
@@ -981,10 +960,9 @@ class VehicleTemporaryRequestController extends Controller
                     }
                 catch(Exception $e)
                     {
-                        return response()->json([
-                            'success' => false,
-                            'message' => 'Sorry, Something Went Wrong',
-                        ]);
+                      return redirect()->back()->with('error_message',
+                                 "Sorry, Something went wrong",
+                            );
                     }
             }
     }

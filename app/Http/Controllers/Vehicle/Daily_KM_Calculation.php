@@ -46,10 +46,9 @@ class Daily_KM_Calculation extends Controller
                     // If validation fails, return an error response
                     if ($validator->fails()) 
                         {
-                            return response()->json([
-                                'success' => false,
-                                'message' => $validator->errors(),
-                            ]);
+                            return redirect()->back()->with('error_message',
+                                 $validator->errors(),
+                            );
                         }
                     $today = Carbon::today()->toDateString();
                     $id = Auth::id();
@@ -106,16 +105,18 @@ class Daily_KM_Calculation extends Controller
                     // If validation fails, return an error response
                     if ($validator->fails()) 
                         {
-                            return response()->json([
-                                'success' => false,
-                                'message' => $validator->errors(),
-                            ]);
+                            return redirect()->back()->with('error_message',
+                                 $validator->errors(),
+                            );
                         }
                     $today = Carbon::today()->toDateString();
                     $id = Auth::id();
                     try
                         {
                             $vehicle = DailyKMCalculationModel::where('vehicle_id',$request->vehicle)->whereDate('created_at',$today)->first();
+                            $driver_from_vehicle = VehiclesModel::select('driver_id')->where('vehicle_id',$request->vehicle)->first();
+                            /// $driver_id = $vehicle->driver_id;
+                            $driver_id = $driver_from_vehicle->driver_id;
                             if($vehicle)
                               {
                                    // update morning km
@@ -124,13 +125,13 @@ class Daily_KM_Calculation extends Controller
                                     // Success: Record was created
                                     return response()->json([
                                         'success' => true,
-                                        'message' => 'Morning KM calcuation Registered Successfully.',
+                                        'message' => 'Afternoon KM calcuation Registered Successfully.',
                                     ]);
                               }
                             // Create Daily Km calculation
                             DailyKMCalculationModel::create([
-                                'created_by'=>$id,
-                                'driver_id'=>$request->driver_id,
+                                'register_by'=>$id,
+                                'driver_id'=>$driver_id,
                                 'vehicle_id' => $request->vehicle,
                                 'afternoon_km' => $request->afternoon_km,
                                 'date' => $today,
@@ -147,7 +148,7 @@ class Daily_KM_Calculation extends Controller
                             // Handle the case when the vehicle request is not found
                             return response()->json([
                                 'success' => false,
-                                'message' => 'Sorry, Something went wrong',
+                                'message' => $e,
                             ]);
                         }
             }
@@ -159,10 +160,9 @@ class Daily_KM_Calculation extends Controller
                     // If validation fails, return an error response
                     if ($validator->fails()) 
                         {
-                            return response()->json([
-                                'success' => false,
-                                'message' => "Warning You are denied the service",
-                            ]);
+                           return redirect()->back()->with('error_message',
+                                 "Warning You are denied the service",
+                            );
                         }
                     $id = $request->input('vehicle_id');
                     $today = Carbon::today()->toDateString();
@@ -180,10 +180,9 @@ class Daily_KM_Calculation extends Controller
                 // If validation fails, return an error response
                 if ($validator->fails()) 
                     {
-                        return response()->json([
-                            'success' => false,
-                            'message' => "Warning You are denied the service",
-                        ]);
+                       return redirect()->back()->with('error_message',
+                                 "Warning You are denied the service",
+                            );
                     }
             }
          

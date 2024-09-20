@@ -112,7 +112,7 @@
                                                 <!-- end show modal -->
                                                 <!-- this is for the assign  modal -->
                                                 <div class="modal fade" id="staticaccept-{{ $loop->index }}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                                                    <div class="modal-dialog">
+                                                    <div class="modal-dialog modal-lg">
                                                         <div class="modal-content">
                                                             <div class="modal-header">
                                                                 <h5 class="modal-title" id="staticBackdropLabel">Assign Vehicle</h5>
@@ -124,26 +124,47 @@
                                                                     <div class="col-lg-6">
                                                                         <h5 class="mb-3">Select Vehicle</h5>
                                                                         <div class="form-floating">
-                                                                            <select name="assigned_vehicle_id" class="form-select" id="floatingSelect"
+                                                                            <select name="assigned_vehicle_id" class="form-select" id="vehicleselection"
                                                                                 aria-label="Floating label select example" required>
-                                                                                <option selected>Vehicles</option>
-                                                                                <option value="1">One</option>
-                                                                                <option value="2">Two</option>
-                                                                                <option value="3">Three</option>
+                                                                                <option value="" selected>Select</option>
+                                                                               @foreach ($vehicles as $item)
+                                                                                   <option value="{{$item->vehicle_id}}">{{$item->plate_number}}</option>
+                                                                               @endforeach
                                                                             </select>
-                                                                            <label for="floatingSelect">Works with selects</label>
+                                                                            <label for="floatingSelect">vehicle selection</label>
                                                                         </div>
                                                                         <input type="hidden" name="request_id" value="{{$request->request_id}}">
                                                                     </div>
                                                                 </div>
+                                                                <iframe src="" frameborder="0"></iframe>
                                                                 <div class="modal-footer">
-                                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                                    <button type="button" class="btn btn-secondary" style="display:none" id="assignBtn">Get Inspection</button>
                                                                     <button type="submit" class="btn btn-primary">Assign</button>
                                                                 </div> <!-- end modal footer -->
                                                             </form>                                                                    
                                                         </div> <!-- end modal content-->
                                                     </div> <!-- end modal dialog-->
                                                 </div>
+                                                <script>    
+                                                    const vehicleSelect = document.getElementById('vehicleselection');
+                                                    const InspectButton = document.getElementById('assignBtn');
+                                                    InspectButton.style.display = 'none';
+
+                                                    vehicleSelect.addEventListener('change', function() {
+                                                        if (vehicleSelect.value) {
+                                                            InspectButton.style.display = 'block';
+                                                        } else {
+                                                            InspectButton.style.display = 'none';
+                                                        }
+                                                    });
+                                                    document.getElementById('assignBtn').addEventListener('click', function() {
+                                                        var selectedCarId = document.getElementById('vehicleselection').value;
+                                                        console.log(selectedCarId);
+                                                        
+                                                        window.location.href = "{{ route('inspection.ByVehicle') }}?vehicleId=" + selectedCarId;
+                                                    });
+                                                </script>
+                                                </script>
                                                 <!-- end assign modal -->
                                                 <!-- this is for the assign  modal -->
                                                 <div class="modal fade" id="staticreject-{{ $loop->index }}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">

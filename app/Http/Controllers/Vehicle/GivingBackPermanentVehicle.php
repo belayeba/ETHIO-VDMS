@@ -248,10 +248,9 @@ public function DirectorRejectRequest(Request $request)
                 $Vehicle_Request = GivingBackVehiclePermanently::findOrFail($id);
                 if($Vehicle_Request->approved_by)
                     {
-                        return response()->json([
-                            'success' => false,
-                            'message' => 'Sorry, Something went wrong',
-                        ]);
+                      return redirect()->back()->with('error_message',
+                                 "Sorry, Something went wrong",
+                            );
                     }
                 $Vehicle_Request->approved_by = $user_id;
                 $Vehicle_Request->reject_reason_director = $reason;

@@ -32,10 +32,9 @@ class VehicleParmanentlyRequestController extends Controller
         ]);
         // If validation fails, return an error response
         if ($validator->fails()) {
-            return response()->json([
-                'success' => false,
-                'message' => $validator->errors(),
-            ]);
+            return redirect()->back()->with('error_message',
+                                 $validator->errors(),
+                            );
         }
         $id = Auth::id();
         try {
@@ -269,6 +268,14 @@ class VehicleParmanentlyRequestController extends Controller
         // Check if it is not approved before
         $id = $request->input('request_id');
         $vehicle_id = $request->vehicle_id;
+        $the_vehicle = VehiclesModel::findOrFail($vehicle_id);
+        if(!$the_vehicle->status)
+          {
+            return response()->json([
+                'success' => false,
+                'message' => 'This Vehicle is not active',
+            ]);
+          }
         $latest_inspection = InspectionModel::where('vehicle_id', $vehicle_id)->latest()->first();
         if (!$latest_inspection) {
             return response()->json([
@@ -289,7 +296,9 @@ class VehicleParmanentlyRequestController extends Controller
         $Vehicle_Request->vehicle_id = $vehicle_id;
         $Vehicle_Request->inspection_id = $latest_inspection->inspection_id;
         $Vehicle_Request->given_date =  $today;
+        $the_vehicle->status = false;
         $Vehicle_Request->save();
+        $the_vehicle->save();
         return response()->json([
             'success' => true,
             'message' => 'The Request is successfully Approved',
@@ -326,6 +335,69 @@ class VehicleParmanentlyRequestController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'You have successfully Rejected the Request',
+        ]);
+    }
+    public function accept_assigned_vehicle()
+    {
+        $logged_user = Auth::id();
+        $check_request = VehiclePermanentlyRequestModel::select('accepted_by_requestor')
+                         ->whereNotNull('given_by')
+                         ->whereNull('vec_director_reject_reason')
+                         ->whereNull('accepted_by_requestor')
+                         ->latest()
+                         ->first();
+        if(!$check_request)
+          {
+            return response()->json([
+                'success' => false,
+                'message' => 'Warning! You are denied the service',
+            ]);
+          }
+          $check_request->accepted_by_requestor = $logged_user;
+          $check_request->save();
+          return response()->json([
+            'success' => true,
+            'message' => 'Vehicle successfully Given to you',
+        ]);
+    }
+    public function reject_assigned_vehicle(Request $request)
+    {
+        $validation = Validator::make($request->all(), [
+            'request_id' => 'required|vehicle_requests_temporary,request_id',
+            'reason' => 'required|string|max:1000'
+        ]);
+        // Check validation error
+        if ($validation->fails()) {
+            return response()->json([
+                'success' => false,
+                'message' => $validation->errors(),
+            ]);
+        }
+        $logged_user = Auth::id();
+        $check_request = VehiclePermanentlyRequestModel::select('accepted_by_requestor')
+                         ->where('vehicle_request_permanent_id',$request->request_id)
+                         ->whereNotNull('given_by')
+                         ->whereNull('vec_director_reject_reason')
+                         ->whereNull('accepted_by_requestor')
+                         ->latest()
+                         ->first();
+        if(!$check_request)
+          {
+            return response()->json([
+                'success' => false,
+                'message' => 'Warning! You are denied the service',
+            ]);
+          }
+          $vehicle_id = $check_request->vehicle_id;
+          $vehicle = VehiclesModel::select('status')->where('vehicle_id',$vehicle_id)->first();
+          $vehicle->status = true;
+          $check_request->given_by = null;
+          $check_request->accepted_by_requestor = $logged_user;
+          $check_request->reject_reason_by_requestor = $request->reason;
+          $check_request->save();
+          return response()->json([
+            'success' => true,
+            'message' => 'Assigned Vehicle Complained successfully',
         ]);
     }
 }

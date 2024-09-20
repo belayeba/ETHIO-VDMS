@@ -159,9 +159,9 @@
                                                         <td>{{$request->start_location}}</td>
                                                         <td>{{$request->end_locations}}</td>
                                                         <td>{{$request->created_at}}</td>
-                                                        <td> @if($request->approved_by !== null && $request->director_reject_reason === null)
+                                                        <td> @if($request->dir_approved_by !== null && $request->director_reject_reason === null)
                                                                 <p class="btn btn-primary ">ACCEPTED</p>
-                                                             @elseif($request->approved_by !== null && $request->director_reject_reason !== null)
+                                                             @elseif($request->dir_approved_by !== null && $request->director_reject_reason !== null)
                                                                 <p class="btn btn-danger">REJECTED
                                                             @endif
                                                         </td>
