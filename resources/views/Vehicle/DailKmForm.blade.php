@@ -258,7 +258,7 @@
                 document.getElementById('vehicle_id_hidden_afternoon').value = selectedId;
                 // Craft and send the Ajax request
                 $.ajax({
-                    url: '{{ route('daily_km.page.check') }}',
+                    url: '{{ route("daily_km.page.check") }}',
                     method: 'GET',
                     data: {
                         id: selectedId

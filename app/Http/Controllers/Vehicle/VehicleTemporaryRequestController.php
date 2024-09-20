@@ -595,10 +595,9 @@ class VehicleTemporaryRequestController extends Controller
                     // Check validation error
                     if ($validation->fails()) 
                         {
-                            return response()->json([
-                                'success' => true,
-                                'message' => $validation->errors(),
-                            ]);
+                            return redirect()->back()->with('error_message',
+                            $validation->errors(),
+                            );
                         }
                     // Check if it is not approved before
                     $id = $request->input('request_id');

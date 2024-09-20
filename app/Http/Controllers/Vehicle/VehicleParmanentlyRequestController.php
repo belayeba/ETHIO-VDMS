@@ -32,10 +32,9 @@ class VehicleParmanentlyRequestController extends Controller
         ]);
         // If validation fails, return an error response
         if ($validator->fails()) {
-            return response()->json([
-                'success' => false,
-                'message' => $validator->errors(),
-            ]);
+            return redirect()->back()->with('error_message',
+                                 $validator->errors(),
+                            );
         }
         $id = Auth::id();
         try {
