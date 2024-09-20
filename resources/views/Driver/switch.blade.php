@@ -54,7 +54,7 @@
                                                         <select id="vehicleCategory" name="vehicle_id" class="form-select" required>
                                                             <option value="">Select Vehicle</option>
                                                             @foreach($vehicles as $vehicle)
-                                                                <option value="{{ $vehicle->vehicle_id }}">{{ $vehicle->model }}</option>
+                                                                <option value="{{ $vehicle->vehicle_id }}">{{ $vehicle->plate_number }}</option>
                                                             @endforeach
                                                         </select>
                                                     </div>
@@ -208,7 +208,7 @@
             </select>
           </div>
 
-          <button type="submit" class="btn btn-primary">Save changes</button>
+          <button type="submit" class="btn btn-primary">Update</button>
         </form>
       </div>
     </div>
