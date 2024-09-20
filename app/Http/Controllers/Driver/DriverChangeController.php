@@ -3,10 +3,10 @@
 namespace App\Http\Controllers\Driver;
 
 use App\Http\Controllers\Controller;
+use App\Models\Driver\DriverChangeModel as DriverDriverChangeModel;
 use App\Models\Driver\DriversModel;
 use Illuminate\Http\Request;
-use App\Models\DriverChange;
-use App\Models\DriverChangeModel;
+use App\Models\Vehicle\InspectionModel;
 use App\Models\Vehicle\VehiclesModel;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -19,15 +19,18 @@ class DriverChangeController extends Controller
             {
                 $vehicles = VehiclesModel::all();
                 $drivers = DriversModel::all();
-                return view('Driver.index',compact('vehicles','drivers'));
+                $driverChange = DriverDriverChangeModel::all();
+
+                return view('Driver.switch',compact('vehicles','drivers','driverChange'));
             }
         // Store a new Driver Change
         public function store(Request $request)
             {
+                // dd($request);
                 $validator = Validator::make($request->all(), [
-                    'vehicle_id' => 'required|uuid|exists:vehicles,vehicle_id',
-                    'new_driver_id' => 'required|uuid|exists:drivers,id',
-                    'inspection_id' => 'required|uuid|exists:vehicle_inspections,inspection_id',
+                    // 'vehicle_id' => 'required|uuid|exists:vehicles,vehicle_id',
+                    // 'new_driver_id' => 'required|uuid|exists:drivers,id',
+                    // 'inspection_id' => 'required|uuid|exists:vehicle_inspections,inspection_id',
                 ]);
                 if ($validator->fails()) 
                     {
@@ -35,13 +38,16 @@ class DriverChangeController extends Controller
                     }
                 $vehicle_info = VehiclesModel::findOrFail($request->vehicle_id);
                 $former_driver_id = $vehicle_info->driver_id;
+                // dd($vehicle_info);
                 $logged_user = Auth::id();
-                $driverChange = DriverChangeModel::create([
+                $inspection = InspectionModel::select('inspection_id')->where('vehicle_id',$request->vehicle_id)->latest()->first();
+                // dd($logged_user);
+                $driverChange = DriverDriverChangeModel::create([
                     'vehicle_id' => $request->vehicle_id,
                     'old_driver_id' => $former_driver_id,
-                    'changed_by' => $logged_user,
-                    'new_driver_id' => $request->new_driver_id,
-                    'inspection_id' => $request->inspection_id,
+                    // 'changed_by' => $logged_user,
+                    'new_driver_id' => $request->driver,
+                    'inspection_id' => $inspection->inspection_id,
                 ]);
                 $vehicle_info->driver_id = $request->new_driver_id;
                 $vehicle_info->save();
@@ -58,7 +64,7 @@ class DriverChangeController extends Controller
                     return response()->json(['success' => false,
                                             'message' => "Warning! You are denied the service"], 422);
                 }
-                $driverChange = DriverChangeModel::findOrFail($request->request_id);
+                $driverChange = DriverDriverChangeModel::findOrFail($request->request_id);
                 return response()->json([
                     'success' => true,
                     'data' => $driverChange,
@@ -80,7 +86,7 @@ class DriverChangeController extends Controller
                             'message' => 'Warning! You are denied the service',
                         ]);
                     }
-                    $driverChange = DriverChangeModel::findOrFail($request->request_id);
+                    $driverChange = DriverDriverChangeModel::findOrFail($request->request_id);
                     if($driverChange->driver_accepted == true)
                             {
                                 return response()->json([
@@ -96,9 +102,9 @@ class DriverChangeController extends Controller
                 ]);
             }
         // Delete a Driver Change
-        public function destroy(Request $request)
+        public function destroy(Request $request, $request_id)
             {
-                $validator = Validator::make($request->all(), [
+                $validator = Validator::make(['request_id' => $request_id], [
                     'request_id' => 'required|uuid|exists:driver_changes,driver_change_id'
                 ]);
                 if ($validator->fails()) 
@@ -106,7 +112,7 @@ class DriverChangeController extends Controller
                     return response()->json(['success' => false,
                                             'message' => "Warning! You are denied the service"], 422);
                 }
-                $driverChange = DriverChangeModel::findOrFail($request->request_id);
+                $driverChange = DriverDriverChangeModel::findOrFail($request->request_id);
                 if($driverChange->driver_accepted == true)
                     {
                         return response()->json([

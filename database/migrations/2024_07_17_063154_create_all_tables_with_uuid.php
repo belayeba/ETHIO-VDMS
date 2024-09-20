@@ -125,6 +125,7 @@ class CreateAllTablesWithUuid extends Migration
             $table->boolean('is_damaged')->default(false);
             $table->text('damage_description')->nullable();
             $table->dateTime('inspection_date');  // Time of inspection
+            $table->string('inspection_image')->nullable();
             $table->timestamps();
             $table->softDeletes();
             $table->primary(['inspection_id', 'part_name', 'inspected_by']);  // Composite primary key to avoid duplication
@@ -135,9 +136,9 @@ class CreateAllTablesWithUuid extends Migration
             $table->uuid('vehicle_id');
             $table->foreign('vehicle_id')->references('vehicle_id')->on('vehicles');
             $table->uuid('new_driver_id');
-            $table->foreign('new_driver_id')->references('id')->on('users');
+            $table->foreign('new_driver_id')->references('id')->on('drivers');
             $table->uuid('old_driver_id');
-            $table->foreign('old_driver_id')->references('id')->on('users');
+            $table->foreign('old_driver_id')->references('id')->on('drivers');
             $table->uuid('inspection_id');  // Link to the entire inspection session
             $table->foreign('inspection_id')->references('inspection_id')->on('vehicle_inspections');
             $table->boolean('driver_accepted')->default(0);

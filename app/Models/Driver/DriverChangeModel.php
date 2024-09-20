@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Driver;
 
 use App\Models\Driver\DriversModel;
+use App\Models\User;
 use App\Models\Vehicle\InspectionModel;
 use App\Models\Vehicle\VehiclesModel;
 use Illuminate\Database\Eloquent\Model;
