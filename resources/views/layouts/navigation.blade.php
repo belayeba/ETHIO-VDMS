@@ -97,53 +97,53 @@
                         </a>
                         <div class="collapse" id="sidebarRequest">
                             <ul class="side-nav-second-level">
-                                @can('Temporary Request Page')
-                                    <li>
-                                        <a href="{{ route('displayRequestPage') }}">Temporary vehicle request</a>
-                                    </li>
-                                @endcan()
-                                @can('Permanent Request Page')
-                                    <li>
-                                        <a href="{{ route('vec_perm_request') }}">Permanent vehicle request</a>
-                                    </li>
-                                @endcan()
-                                @can('Director Approval Page')
-                                    <li>
-                                        <a href="{{ route('director_temp') }}">Approve Temporary vehicle request</a>
-                                    </li>
-                                @endcan()
-                                @can('Clustor Director Apporal Page')
-                                    <li>
-                                        <a href="{{ route('ClusterDirector_temp') }}">Approve Temporary Vehicle Request</a>
-                                    </li>
-                                @endcan()
-                                @can('HR Cluster Director Approval Page')
-                                    <li>
-                                        <a href="{{ route('HRClusterDirector_temp') }}">Approve Temporary Vehicle
-                                            Request</a>
-                                    </li>
-                                @endcan()
-                                @can('Transport Director')
-                                    <li>
-                                        <a href="{{ route('TransportDirector_temp') }}">Approve Temporary Vehicle
-                                            Request</a>
-                                    </li>
-                                @endcan()
-                                @can('Dispatcher Page')
-                                    <li>
-                                        <a href="{{ route('simirit_page') }}">Give Vehicle Temporarly</a>
-                                    </li>
-                                @endcan()
-                                @can('Vehicle Director Page')
-                                    <li>
-                                        <a href="{{ route('perm_vec_director_page') }}">Vehicle Pemanent Requests</a>
-                                    </li>
-                                @endcan()
-                                @can('Dispatcher')
-                                    <li>
-                                        <a href="{{ route('perm_vec_simirit_page') }}">Give Vehicle Permanently</a>
-                                    </li>
-                                @endcan()
+                                {{-- @can('Temporary Request Page') --}}
+                                <li>
+                                    <a href="{{ route('displayRequestPage') }}">Temporary vehicle request</a>
+                                </li>
+                                {{-- @endcan() --}}
+                                {{-- @can('Permanent Request Page') --}}
+                                <li>
+                                    <a href="{{ route('vec_perm_request') }}">Permanent vehicle request</a>
+                                </li>
+                                {{-- @endcan() --}}
+                                {{-- @can('Director Approval Page') --}}
+                                <li>
+                                    <a href="{{ route('director_temp') }}">Approve Temporary vehicle request</a>
+                                </li>
+                                {{-- @endcan() --}}
+                                {{-- @can('Clustor Director Apporal Page') --}}
+                                <li>
+                                    <a href="{{ route('ClusterDirector_temp') }}">Approve Temporary Vehicle Request</a>
+                                </li>
+                                {{-- @endcan() --}}
+                                {{-- @can('HR Cluster Director Approval Page') --}}
+                                <li>
+                                    <a href="{{ route('HRClusterDirector_temp') }}">Approve Temporary Vehicle
+                                        Request</a>
+                                </li>
+                                {{-- @endcan() --}}
+                                {{-- @can('Transport Director') --}}
+                                <li>
+                                    <a href="{{ route('TransportDirector_temp') }}">Approve Temporary Vehicle
+                                        Request</a>
+                                </li>
+                                {{-- @endcan() --}}
+                                {{-- @can('Dispatcher Page') --}}
+                                <li>
+                                    <a href="{{ route('simirit_page') }}">Give Vehicle Temporarly</a>
+                                </li>
+                                {{-- @endcan() --}}
+                                {{-- @can('Vehicle Director Page') --}}
+                                <li>
+                                    <a href="{{ route('perm_vec_director_page') }}">Vehicle Pemanent Requests</a>
+                                </li>
+                                {{-- @endcan() --}}
+                                {{-- @can('Dispatcher') --}}
+                                <li>
+                                    <a href="{{ route('perm_vec_simirit_page') }}">Give Vehicle Permanently</a>
+                                </li>
+                                {{-- @endcan() --}}
                                 <li>
                                     <a href="/mentaincance_request_page">Maintenance Request</a>
                                 </li>

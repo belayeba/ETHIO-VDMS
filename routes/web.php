@@ -277,6 +277,7 @@ Route::group(['middleware' => ['auth']], function()
                  {
                     Route::post('/inspection/store', 'storeInspection')->name('inspection.store'); // Create a new inspection
                     Route::get('/inspection/{inspectionId}', 'showInspection')->name('inspection.show'); // Show a specific inspection
+                    Route::get('/inspection', 'showInspectionbyVehicle')->name('inspection.ByVehicle'); // Show a specific inspection
                     Route::get('/inspections', 'listInspections')->name('inspection.list'); // List all inspections
                     Route::get('/inspections/page', 'InspectionPage')->name('inspection.page'); // inspection page
                     Route::put('/inspection/{inspectionId}/{partName}', 'updateInspection')->name('inspection.update'); // Update a specific inspection

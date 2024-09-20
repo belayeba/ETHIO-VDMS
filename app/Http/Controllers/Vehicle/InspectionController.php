@@ -35,7 +35,7 @@ class InspectionController extends Controller
                 'damaged_parts' => 'nullable|array',
                 'damaged_parts.*' => 'required|boolean',
                 'damage_descriptions' => 'nullable|array',
-                'damage_descriptions.*' => 'string|nullable',
+                'damage_descriptions.*' => 'string|nullable',9
             ];
             // 
             $validator = Validator::make($request->all(), $rules);
@@ -83,17 +83,21 @@ class InspectionController extends Controller
         
             return response()->json(['status' => 'success', 'data' => $inspection]);
         }
-     public function showInspectionbyVehicle($vehicle_id)
+     public function showInspectionbyVehicle(Request $request)
         {
             try
                 {
-                    $inspection = InspectionModel::where('vehicle_id', $vehicle_id)->latest()->first();
-                
-                    if ($inspection->isEmpty()) {
+                    $vehicle_id = $request->input('vehicleId');
+                   
+                    // $inspection = InspectionModel::where('vehicle_id', $vehicle_id)->latest()->get();
+                    $inspection = InspectionModel::select('inspection_id')->where('vehicle_id', $vehicle_id)->latest()->first();
+                    $inspection_id = $inspection->inspection_id;
+                    $latest_inspection = InspectionModel::where('inspection_id', $inspection_id)->get();//where('vehicle_id', $vehicle_id)->latest()->first();
+                    if (!$inspection) {
                         return response()->json(['status' => 'error', 'message' => 'Inspection not found'], 404);
                     }
                 
-                    return response()->json(['status' => 'success', 'data' => $inspection]);
+                    return response()->json(['status' => 'success', 'data' => $latest_inspection]);
                 }
             catch(Exception $e)
             {
