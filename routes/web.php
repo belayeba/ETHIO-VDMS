@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Driver\DriverChangeController;
 use App\Http\Controllers\Driver\DriverRegistrationController;
 use App\Http\Controllers\Fuel\FeulController;
 use App\Http\Controllers\Mentenance\MentenanceController;
@@ -271,6 +272,15 @@ Route::group(['middleware' => ['auth']], function()
                     Route::post('/store',[DriverRegistrationController::class, 'store'])->name('driver.store');
                     Route::delete('/delete/{driver}',[DriverRegistrationController::class,'destroy'])->name('driver.destroy');
                     Route::put('/update/{driver}', [DriverRegistrationController::class, 'update'])->name('driver.update');
+                });
+                Route::group([
+                    'prefix'=>'driver_change',
+                ], function (){
+                Route::get('/',[DriverChangeController::class, 'driver_change_page'])->name('driver.switch');
+                Route::post('/store',[DriverChangeController::class, 'store'])->name('driver_change.store');
+                Route::put('/update/{request_id}', [DriverChangeController::class, 'update'])->name('driverchange.update');
+                Route::delete('/delete/{request_id}', [DriverChangeController::class, 'destroy'])->name('driverchange.destroy');
+
                 });
                 // Define routes for InspectionController
             Route::controller(InspectionController::class)->group(function ()

@@ -90,7 +90,7 @@ class InspectionController extends Controller
         
             if ($inspection->isEmpty()) {
                 return response()->json(['status' => 'error', 'message' => 'Inspection not found'], 404);
-            }
+            } 
         
             return response()->json(['status' => 'success', 'data' => $inspection]);
         }
