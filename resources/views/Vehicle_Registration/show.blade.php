@@ -26,12 +26,6 @@
                 <strong> Success- </strong> {!! session('success_message') !!} 
             </div>
             @endif
-            @if(session('success'))
-            <div class="alert alert-success alert-dismissible fade show" role="alert">
-                {{ session('success') }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-        @endif
             <!-- Start Content-->
             <section class="admin-visitor-area up_st_admin_visitor">
             <div class="container-fluid">

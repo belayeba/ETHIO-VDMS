@@ -45,16 +45,14 @@ class VehicleParmanentlyRequestController extends Controller
                 'position_letter' => $request->position_letter,
             ]);
             // Success: Record was created
-            return response()->json([
-                'success' => true,
-                'message' => 'Vehicle request created successfully.',
-            ]);
+            return redirect()->back()->with('success_message',
+            "Request Created Successfully",
+       );
         } catch (Exception $e) {
             // Handle the case when the vehicle request is not found
-            return response()->json([
-                'success' => false,
-                'message' => 'Sorry, Something went wrong',
-            ]);
+           return redirect()->back()->with('error_message',
+                               "Sorry, Something went wrong",
+                            );
         }
     }
     public function update_perm_request(Request $request)
@@ -103,10 +101,9 @@ class VehicleParmanentlyRequestController extends Controller
             }
         } catch (Exception $e) {
             // Handle the case when the vehicle request is not found
-            return response()->json([
-                'success' => false,
-                'message' => 'Sorry, Something went wrong',
-            ]);
+           return redirect()->back()->with('error_message',
+                               "Sorry, Something went wrong",
+                            );
         }
     }
     // User can delete Request
@@ -146,10 +143,9 @@ class VehicleParmanentlyRequestController extends Controller
             ]);
         } catch (Exception $e) {
             // Handle the case when the vehicle request is not found
-            return response()->json([
-                'success' => false,
-                'message' => 'Sorry, Something went wrong',
-            ]);
+           return redirect()->back()->with('error_message',
+                               "Sorry, Something went wrong",
+                            );
         }
     }
     // Directors Page
@@ -197,10 +193,9 @@ class VehicleParmanentlyRequestController extends Controller
             ]);
         } catch (Exception $e) {
             // Handle the case when the vehicle request is not found
-            return response()->json([
-                'success' => false,
-                'message' => 'Sorry, Something went wrong',
-            ]);
+           return redirect()->back()->with('error_message',
+                               "Sorry, Something went wrong",
+                            );
         }
     }
     // Director Reject the request
@@ -212,10 +207,9 @@ class VehicleParmanentlyRequestController extends Controller
         ]);
         // Check validation error
         if ($validation->fails()) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Sorry, Something went wrong',
-            ]);
+           return redirect()->back()->with('error_message',
+                               "Sorry, Something went wrong",
+                            );
         }
         // Check if it is not approved before
         $id = $request->input('request_id');
@@ -238,10 +232,9 @@ class VehicleParmanentlyRequestController extends Controller
             ]);
         } catch (Exception $e) {
             // Handle the case when the vehicle request is not found
-            return response()->json([
-                'success' => false,
-                'message' => 'Sorry, Something went wrong',
-            ]);
+           return redirect()->back()->with('error_message',
+                               "Sorry, Something went wrong",
+                            );
         }
     }
     // Vehicle Director Page
@@ -313,10 +306,9 @@ class VehicleParmanentlyRequestController extends Controller
         ]);
         // Check validation error
         if ($validation->fails()) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Sorry, Something went wrong',
-            ]);
+           return redirect()->back()->with('error_message',
+                               "Sorry, Something went wrong",
+                            );
         }
         // Check if it is not approved before
         $id = $request->input('request_id');

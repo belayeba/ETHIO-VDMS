@@ -82,6 +82,7 @@ class VehicleTemporaryRequestController extends Controller
                             ]);
                             // Handle optional material_name and weight fields
                             $materialNames = $request->input('itemWeights', []);
+                            //dd($materialNames);
                             $weights = $request->input('itemWeights', []);
                             foreach ($materialNames as $index => $materialName) 
                                 {
@@ -275,16 +276,14 @@ class VehicleTemporaryRequestController extends Controller
                    // $request_id = "request_id".$id;
                     $validation = Validator::make($request->all(),[
                         'request_id'=>'required|exists:vehicle_requests_temporary,request_id',
-                    'request_id' => 'required|uuid|exists:vehicle_requests_temporary,request_id',
                     ]);
                     // dd($request_id);
                     // Check validation error
                     if ($validation->fails()) 
                         {
-                            return response()->json([
-                                'success' => true,
-                                'message' => $validation->errors(),
-                            ]);
+                           return redirect()->back()->with('error_message',
+                               $validation->errors(),
+                            );
                         }
                     // Check if it is not approved before
                     $id = $request->input( 'request_id');
@@ -316,7 +315,6 @@ class VehicleTemporaryRequestController extends Controller
                             );
                     }
             }
-        }
          // Director Reject the request
 
         public function DirectorRejectRequest(Request $request)
@@ -395,10 +393,9 @@ class VehicleTemporaryRequestController extends Controller
                     // Check validation error
                     if ($validation->fails()) 
                         {
-                            return response()->json([
-                                'success' => true,
-                                'message' => $validation->errors(),
-                            ]);
+                           return redirect()->back()->with('error_message',
+                               $validation->errors(),
+                            );
                         }
                     // Check if it is not approved before
                     $id = $request->input('request_id');
@@ -494,10 +491,9 @@ class VehicleTemporaryRequestController extends Controller
                     // Check validation error
                     if ($validation->fails()) 
                         {
-                            return response()->json([
-                                'success' => true,
-                                'message' => $validation->errors(),
-                            ]);
+                           return redirect()->back()->with('error_message',
+                               $validation->errors(),
+                            );
                         }
                     // Check if it is not approved before
                     $id = $request->input('request_id');
@@ -571,7 +567,6 @@ class VehicleTemporaryRequestController extends Controller
         public function TransportDirectorApprovalPage()
             {
                 $vehicleRequests = VehicleTemporaryRequestModel::with('approvedBy', 'requestedBy')
-<<<<<<< HEAD
                 ->where(function ($query) {
                     // Check if how_many_days > 1 OR in_out_town is true
                     $query->where(function ($q) {
@@ -590,24 +585,6 @@ class VehicleTemporaryRequestController extends Controller
                 ->get();
 
             
-=======
-                                    ->where(function ($query) {
-                                        // Check if how_many_days > 1 OR in_out_town is true
-                                        $query->where(function ($q) {
-                                            $q->where('how_many_days', '>', 1)
-                                            ->orWhere('in_out_town', false);
-                                        })
-                                        // Apply condition for hr_div_approved_by
-                                        ->whereNotNull('hr_div_approved_by');
-                                    })
-                                    // Fallback to dir_approved_by if the first condition isn't true
-                                    ->orWhere(function ($query) {
-                                        $query->where('how_many_days', '<=', 1)
-                                            ->where('in_out_town', true)
-                                            ->whereNotNull('dir_approved_by');
-                                    })
-                                    ->get();
->>>>>>> 189a502bc8494e4d8687cf27d4397102f843c275
 
                    // dd($vehicleRequests);
                 // Return the results, for example, passing them to a view

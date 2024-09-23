@@ -14,12 +14,12 @@ use Illuminate\Support\Facades\Validator;
 class Daily_KM_Calculation extends Controller
     {
         public function displayPage()
-            {
-                $today = Carbon::today()->toDateString();
-                $vehicle = VehiclesModel::get();
-                $TodaysDate = DailyKMCalculationModel::where('date',$today)->latest()->get();
-                return view('Vehicle.DailKmForm',compact('vehicle','TodaysDate'));
-            }
+        {
+            $today = Carbon::today()->toDateString();
+            $vehicle = VehiclesModel::get();
+            $TodaysDate = DailyKMCalculationModel::where('date',$today)->latest()->get();
+            return view('Vehicle.DailKmForm',compact('vehicle','TodaysDate'));
+        }
         public function ReportPage()
             {
                     $dailkms = DailyKMCalculationModel::with('driver','vehicle','created')
@@ -65,10 +65,9 @@ class Daily_KM_Calculation extends Controller
                                    $vehicle_daily->morning_km = $request->morning_km;
                                    $vehicle_daily->save();
                                     // Success: Record was created
-                                    return response()->json([
-                                        'success' => true,
-                                        'message' => 'Morning KM calcuation Registered Successfully.',
-                                    ]);
+                                    return redirect()->back()->with('success_message',
+                                    "Morning KM calcuation Registered Successfully.",
+                                 );
                               }
                             // Create Daily Km calculation
                             DailyKMCalculationModel::create([
@@ -79,10 +78,10 @@ class Daily_KM_Calculation extends Controller
                                 'date' => $today,
                             ]);
                             // Success: Record was created
-                            return response()->json([
-                                'success' => true,
-                                'message' => 'Morning KM calcuation Registered Successfully.',
-                            ]);
+                            return redirect()->back()->with('success_message',
+                            'Morning KM calcuation Registered Successfully.',
+                       );
+                           
                                 
                         }
                     catch (Exception $e) 
@@ -123,10 +122,9 @@ class Daily_KM_Calculation extends Controller
                                    $vehicle->afternoon_km = $request->afternoon_km;
                                    $vehicle->save();
                                     // Success: Record was created
-                                    return response()->json([
-                                        'success' => true,
-                                        'message' => 'Afternoon KM calcuation Registered Successfully.',
-                                    ]);
+                                    return redirect()->back()->with('success_message',
+                                            'Afternoon KM calcuation Registered Successfully.',
+                                    );
                               }
                             // Create Daily Km calculation
                             DailyKMCalculationModel::create([
@@ -137,19 +135,17 @@ class Daily_KM_Calculation extends Controller
                                 'date' => $today,
                              ]);
                             // Success: Record was created
-                            return response()->json([
-                                'success' => true,
-                                'message' => 'Afternoon KM calcuation Registered Successfully.',
-                            ]);
+                            return redirect()->back()->with('success_message',
+                            'Afternoon KM calcuation Registered Successfully.',
+                       );
                                 
                         }
                     catch (Exception $e) 
                         {
                             // Handle the case when the vehicle request is not found
-                            return response()->json([
-                                'success' => false,
-                                'message' => $e,
-                            ]);
+                            return redirect()->back()->with('error_message',
+                            'Sorry, Something went wrong',
+                       );
                         }
             }
         public function get_vehicle_daily_km(Request $request)
@@ -167,6 +163,7 @@ class Daily_KM_Calculation extends Controller
                     $id = $request->input('vehicle_id');
                     $today = Carbon::today()->toDateString();
                     $vehicle = DailyKMCalculationModel::where('date',$today)->where('vehicle_id',$id)->first();
+                    
                     return response()->json([
                         'success' => false,
                         'vehicle' => $vehicle,
@@ -185,7 +182,6 @@ class Daily_KM_Calculation extends Controller
                             );
                     }
             }
-         
          public function CheckVehicle(Request $request)
             {
                try {
