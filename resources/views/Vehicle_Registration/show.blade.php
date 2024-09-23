@@ -216,7 +216,7 @@
                                                 <select id="vehicleType" name="vehicle_type" class="form-select" required onchange="toggleFields()">
                                                     <option value="">Select Vehicle Type</option>
                                                     <option value="Organizational">Organizational</option>
-                                                    <option value="other">Other</option>
+                                                    <option value="other">Rental</option>
                                                 </select>
                                             </div>
                                         </div>
@@ -336,107 +336,120 @@
 
                 <div class="modal-body">
                     <input type="hidden" id="vehicle_id" name="vehicle_id">
-
-                    <div class="mb-3">
-                        <label for="editVin" class="form-label">Chancy Number</label>
-                        <input type="text" class="form-control" id="editVin" name="vin" required>
-                    </div>
-
-                    <div class="mb-3">
-                        <label for="editMake" class="form-label">Make</label>
-                        <input type="text" class="form-control" id="editMake" name="make" required>
-                    </div>
-
-                    <div class="mb-3">
-                        <label for="editModel" class="form-label">Model</label>
-                        <input type="text" class="form-control" id="editModel" name="model" required>
-                    </div>
-
-                    <div class="mb-3">
-                        <label for="editYear" class="form-label">Year</label>
-                        <input type="number" class="form-control" id="editYear" name="year" required>
-                    </div>
-
-                    <div class="mb-3">
-                        <label for="editPlateNumber" class="form-label">Plate Number</label>
-                        <input type="text" class="form-control" id="editPlateNumber" name="plate_number" pattern="^[A-Z]{2}-\d{1}-\d{5}$" required>
-                    </div>
-
-                    <div class="mb-3">
-                        <label for="editRegistrationDate" class="form-label">Registration Date</label>
-                        <input type="date" class="form-control" id="editRegistrationDate" name="registration_date" required>
-                    </div>
-
-                    <div class="mb-3">
-                        <label for="editMileage" class="form-label">Mileage</label>
-                        <input type="number" class="form-control" id="editMileage" name="mileage" required>
-                    </div>
-
-                    <div class="mb-3">
-                        <label for="editFuelAmount" class="form-label">Fuel Amount</label>
-                        <input type="number" class="form-control" id="editFuelAmount" name="fuel_amount" required>
-                    </div>
-
-                    <div class="mb-3">
-                        <label for="editFuelType" class="form-label">Fuel Type</label>
-                        <input type="text" class="form-control" id="editFuelType" name="fuel_type" required>
-                    </div>
-
-                    <div class="mb-3">
-                        <label for="editLastService" class="form-label">Last Service</label>
-                        <input type="number" class="form-control" id="editLastService" name="last_service" required>
-                    </div>
-
-                    <div class="mb-3">
-                        <label for="editNextService" class="form-label">Next Service</label>
-                        <input type="number" class="form-control" id="editNextService" name="next_service" required>
-                    </div>
-
-                    <div class="mb-3">
-                        <label for="editNotes" class="form-label">Notes</label>
-                        <input type="text" class="form-control" id="editNotes" name="notes">
-                    </div>
-
-                    <div class="mb-3">
-                        <label for="editDriver" class="form-label">Driver</label>
-                        <select id="editDriver" name="editDriver" class="form-select" required>
-                            <option value="">Select Driver</option>
-                            @foreach($drivers as $driver)
-                            <option value="{{ $driver->id }}">{{ $driver->user->username }}</option>
-                        @endforeach
-                        </select>
-                    </div>
-
-                    <div class="mb-3">
-                        <label for="editVehicleCategory" class="form-label">Vehicle Category</label>
-                        <select id="editVehicleCategory" name="vehicle_category" class="form-select" required>
-                            <option value="Service">Service</option>
-                            <option value="Load">Load</option>
-                            <option value="Both">Both</option>
-                            <option value="Neither">Neither</option>
-                        </select>
-                    </div>
-
-                    <div class="mb-3">
-                        <label for="editVehicleType" class="form-label">Vehicle Type</label>
-                        <select id="editVehicleType" name="vehicle_type" class="form-select" required onchange="toggleEditFields()">
-                            <option value="Organizational">Organizational</option>
-                            <option value="Other">Other</option>
-                        </select>
-                    </div>
-
-                    <div id="editOrganizationalFields" style="display: none;">
-                        <div class="mb-3">
-                            <label for="editLibre" class="form-label">Libre</label>
-                            <input type="file" class="form-control" id="editLibre" name="libre">
+                
+                    <div class="row">
+                        <!-- First Column -->
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="editVin" class="form-label">Chancy Number</label>
+                                <input type="text" class="form-control" id="editVin" name="vin" value="{{ $item->vin }}" required>
+                            </div>
+                
+                            <div class="mb-3">
+                                <label for="editMake" class="form-label">Make</label>
+                                <input type="text" class="form-control" id="editMake" name="make" value="{{ $item->make }}" required>
+                            </div>
+                
+                            <div class="mb-3">
+                                <label for="editModel" class="form-label">Model</label>
+                                <input type="text" class="form-control" id="editModel" name="model" value="{{ $item->model }}" required>
+                            </div>
+                
+                            <div class="mb-3">
+                                <label for="editYear" class="form-label">Year</label>
+                                <input type="number" class="form-control" id="editYear" name="year" value="{{ $item->year }}" required>
+                            </div>
+                
+                            <div class="mb-3">
+                                <label for="editPlateNumber" class="form-label">Plate Number</label>
+                                <input type="text" class="form-control" id="editPlateNumber" name="plate_number" value="{{ $item->plate_number }}" pattern="^[A-Z]{2}-\d{1}-\d{5}$" required>
+                            </div>
+                
+                            <div class="mb-3">
+                                <label for="editRegistrationDate" class="form-label">Registration Date</label>
+                                <input type="date" class="form-control" id="editRegistrationDate" name="registration_date" value="{{ $item->registration_date }}" required>
+                            </div>
+                
+                            <div class="mb-3">
+                                <label for="editMileage" class="form-label">Mileage</label>
+                                <input type="number" class="form-control" id="editMileage" name="mileage" value="{{ $item->mileage }}" required>
+                            </div>
                         </div>
-
-                        <div class="mb-3">
-                            <label for="editInsurance" class="form-label">Insurance</label>
-                            <input type="file" class="form-control" id="editInsurance" name="insurance">
+                
+                        <!-- Second Column -->
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="editFuelAmount" class="form-label">Fuel Amount</label>
+                                <input type="number" class="form-control" id="editFuelAmount" name="fuel_amount" value="{{ $item->fuel_amount }}" required>
+                            </div>
+                
+                            <div class="mb-3">
+                                <label for="editFuelType" class="form-label">Fuel Type</label>
+                                <input type="text" class="form-control" id="editFuelType" name="fuel_type" value="{{ $item->fuel_type }}" required>
+                            </div>
+                
+                            <div class="mb-3">
+                                <label for="editLastService" class="form-label">Last Service</label>
+                                <input type="number" class="form-control" id="editLastService" name="last_service" value="{{ $item->last_service }}" required>
+                            </div>
+                
+                            <div class="mb-3">
+                                <label for="editNextService" class="form-label">Next Service</label>
+                                <input type="number" class="form-control" id="editNextService" name="next_service" value="{{ $item->next_service }}" required>
+                            </div>
+                
+                            <div class="mb-3">
+                                <label for="editDriver" class="form-label">Driver</label>
+                                <select id="editDriver" name="driver_id" class="form-select" required>
+                                    <option value="">Select Driver</option>
+                                    @foreach($drivers as $driver)
+                                        <option value="{{ $driver->id }}" {{ $item->driver_id == $driver->id ? 'selected' : '' }}>{{ $driver->user->username }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                
+                            <div class="mb-3">
+                                <label for="editVehicleCategory" class="form-label">Vehicle Category</label>
+                                <select id="editVehicleCategory" name="vehicle_category" class="form-select" required>
+                                    <option value="Service" {{ $item->vehicle_category == 'Service' ? 'selected' : '' }}>Service</option>
+                                    <option value="Load" {{ $item->vehicle_category == 'Load' ? 'selected' : '' }}>Load</option>
+                                    <option value="Both" {{ $item->vehicle_category == 'Both' ? 'selected' : '' }}>Both</option>
+                                    <option value="Neither" {{ $item->vehicle_category == 'Neither' ? 'selected' : '' }}>Neither</option>
+                                </select>
+                            </div>
+                
+                            <div class="mb-3">
+                                <label for="editVehicleType" class="form-label">Vehicle Type</label>
+                                <select id="editVehicleType" name="vehicle_type" class="form-select" required onchange="toggleEditFields()">
+                                    <option value="Organizational" {{ $item->vehicle_type == 'Organizational' ? 'selected' : '' }}>Organizational</option>
+                                    <option value="Other" {{ $item->vehicle_type == 'Other' ? 'selected' : '' }}>Other</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                
+                    <!-- Files section (still within the two-column structure) -->
+                    <div class="row">
+                        <div class="col-md-6">
+                            @if($item->libre)
+                            <div class="mb-3">
+                                <label for="editLibre" class="form-label">Libre</label>
+                                <input type="file" class="form-control" id="editLibre" name="libre">
+                            </div>
+                            @endif
+                        </div>
+                
+                        <div class="col-md-6">
+                            @if($item->insurance)
+                            <div class="mb-3">
+                                <label for="editInsurance" class="form-label">Insurance</label>
+                                <input type="file" class="form-control" id="editInsurance" name="insurance">
+                            </div>
+                            @endif
                         </div>
                     </div>
                 </div>
+                
 
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
