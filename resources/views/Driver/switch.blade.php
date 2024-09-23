@@ -223,7 +223,7 @@
             </select>
           </div>
 
-          <button type="submit" class="btn btn-primary">Save changes</button>
+          <button type="submit" class="btn btn-primary">Update</button>
         </form>
       </div>
     </div>

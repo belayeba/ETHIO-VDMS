@@ -136,17 +136,23 @@
                                                                         @csrf
                                                                         @method('POST')
                                                                         <input type="hidden" name="department_id" value="{{ $item->id }}">
-
+                                                    
                                                                         <div class="mb-3">
-                                                                            <label for="name" class="form-label">Cluster</label>
-                                                                            <input class="form-control" type="text" name="cluster" id="cluster_name_{{$loop->index}}" value="{{ $item->cluster->name }}">
+                                                                            <label for="cluster_id" class="form-label">Cluster</label>
+                                                                            <select id="cluster_id" name="cluster_id" class="form-select" required>
+                                                                                @foreach($departments as $department)
+                                                                                    <option value="{{ $department->cluster_id }}" {{ $item->cluster_id == $department->cluster_id ? 'selected' : '' }}>
+                                                                                        {{ $department->cluster->name }}
+                                                                                    </option>
+                                                                                @endforeach
+                                                                            </select>
                                                                         </div>
-
+                                                    
                                                                         <div class="mb-3">
                                                                             <label for="name" class="form-label">Name</label>
                                                                             <input class="form-control" type="text" name="name" id="department_name_{{$loop->index}}" value="{{ $item->name }}">
                                                                         </div>
-
+                                                    
                                                                         <div class="mb-3 text-center">
                                                                             <button class="btn btn-primary" type="submit">Update</button>
                                                                             <a type="button" href="{{ route('department.index') }}" class="btn btn-warning">Cancel</a>
@@ -156,6 +162,7 @@
                                                             </div>
                                                         </div>
                                                     </div>
+                                                    
                                                     @endforeach
                                                 </tbody>
                                             </table>

@@ -46,23 +46,18 @@
                 <div id="main-content" class="">
                     <section class="sms-breadcrumb mb-10 white-box">
                         <div class="container-fluid p-0">
-                            {{-- <div class="d-flex flex-wrap justify-content-between">
-                                <h2 class="text-uppercase">Cluster</h2>
-                                <div class="bc-pages">
-                                    
-                                </div>
-                            </div> --}}
+                           
                         </div>
                     </section>
 
                     <section class="admin-visitor-area up_st_admin_visitor">
                         <div class="container-fluid p-0">
                             <div class="row justify-content-center">
-                                <!-- Add New Cluster Form -->
+                                
                                 <div class="col-md-4">
                                     <div class="card">
                                         <div class="card-header">
-                                            <h3 class="mb-0">Driver Registration</h3>
+                                            <h4 class="header-title mb-0">Driver Registration</h4>
                                         </div>
                                         <div class="card-body">
                                             <form method="POST" action="{{ route('driver.store') }}" accept-charset="UTF-8" name="driver_registration-form" id="driver_registration-form" enctype="multipart/form-data">
@@ -107,11 +102,10 @@
                                     </div>
                                 </div>
                                 
-                                <!-- Cluster List -->
                                 <div class="col-md-8">
                                     <div class="card">
                                         <div class="card-header">
-                                            <h3 class="mb-0">Driver List</h3>
+                                            <h4 class="header-title mb-0">Driver List</h4>
                                         </div>
                                         <div class="card-body">
                                             <div class="table-responsive">
@@ -127,7 +121,6 @@
                                                     </thead>
                                                     <tbody>
                                                          @foreach ($data as $item)
-                                                         {{-- {{ dd($item->user->username) }} --}}
                                                         <tr>
                                                         <!-- Table rows will be populated here -->
                                                         <td>{{$loop->iteration}}</td>
@@ -171,9 +164,13 @@
                                                                             <input type="hidden" name="driver_id" value="{{ $item->driver_id }}">
                                                         
                                                                             <div class="mb-3">
-                                                                                <label for="name{{ $loop->index }}" class="form-label">Name</label>
-                                                                                <input class="form-control" type="text" name="name" id="name{{ $loop->index }}" value="{{ $item->user->username }}">
-                                                                            </div>
+                                                                                <label for="name" class="form-label">Driver</label>
+                                                                                <select id="name" name="name" class="form-select" required>
+                                                                                  @foreach($data as $item)
+                                                                                    <option value="{{ $item->user_id }}" {{ $item->user_id == $item->user_id ? 'selected' : '' }}>{{  $item->user->username }}</option>
+                                                                                  @endforeach
+                                                                                </select>
+                                                                              </div>
                                                         
                                                                             <div class="mb-3">
                                                                                 <label for="phone{{ $loop->index }}" class="form-label">Phone Number</label>

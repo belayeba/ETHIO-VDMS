@@ -19,7 +19,7 @@ class DriverChangeController extends Controller {
         $vehicles = VehiclesModel::all();
         $drivers = DriversModel::all();
         $driverChange = DriverDriverChangeModel::all();
-
+    
         return view( 'Driver.switch', compact( 'vehicles', 'drivers', 'driverChange' ) );
     }
     // Store a new Driver Change
@@ -37,14 +37,14 @@ class DriverChangeController extends Controller {
         //dd( $request->vehicle_id );
         $vehicle_info = VehiclesModel::findOrFail( $request->vehicle_id );
         $former_driver_id = $vehicle_info->driver_id;
-        // dd( $vehicle_info );
+        
         $logged_user = Auth::id();
         $inspection = InspectionModel::select( 'inspection_id' )->where( 'vehicle_id', $request->vehicle_id )->latest()->first();
-        // dd( $logged_user );
+        
         $driverChange = DriverDriverChangeModel::create( [
             'vehicle_id' => $request->vehicle_id,
             'old_driver_id' => $former_driver_id,
-            'changed_by' => $logged_user,
+            // 'changed_by' => $logged_user,
             'new_driver_id' => $request->driver,
             'inspection_id' => $inspection->inspection_id,
         ] );
