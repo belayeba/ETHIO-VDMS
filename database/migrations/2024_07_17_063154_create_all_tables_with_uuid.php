@@ -281,8 +281,7 @@ class CreateAllTablesWithUuid extends Migration
         Schema::create('routes', function (Blueprint $table) {
             $table->uuid('route_id')->primary();
             $table->string('route_name');
-            $table->uuid('driver_id');
-            $table->foreign('driver_id')->references('driver_id')->on('drivers');
+            $table->uuid('driver_phone');
             $table->uuid('vehicle_id');
             $table->foreign('vehicle_id')->references('vehicle_id')->on('vehicles');
             $table->uuid('registered_by');
@@ -388,6 +387,7 @@ class CreateAllTablesWithUuid extends Migration
             $table->timestamps();
             $table->softDeletes();
         });
+
     }
 
     public function down()
@@ -411,5 +411,8 @@ class CreateAllTablesWithUuid extends Migration
         Schema::dropIfExists('drivers');
         Schema::dropIfExists('departments');
         Schema::dropIfExists('clusters');
+        Schema::dropIfExists('routes');
+        Schema::dropIfExists('route_user');
+
     }
 }
