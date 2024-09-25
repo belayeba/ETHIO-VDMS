@@ -704,8 +704,6 @@ class VehicleTemporaryRequestController extends Controller
                     {
                         $Vehicle_Request = VehicleTemporaryRequestModel::findOrFail($id);
                         $vehicle_info = VehiclesModel::findOrFail($assigned_vehicle);
-                        if($Vehicle_Request->with_driver)
-                           {
                               if(!$vehicle_info->driver_id)
                                 {
                                     return response()->json([
@@ -713,17 +711,7 @@ class VehicleTemporaryRequestController extends Controller
                                         'message' => 'Assign Driver to this Vehicle first',
                                     ]);
                                 }
-                           }
-                        else
-                           {
-                                if($vehicle_info->driver_id != $Vehicle_Request->requested_by_id)
-                                    {
-                                        return response()->json([
-                                            'success' => false,
-                                            'message' => 'This Request is asked with out driver, so change driver of this vehicle to the one who requested it',
-                                        ]);
-                                    }
-                           }
+                           
                         if($Vehicle_Request->assigned_by)
                             {
                                 return response()->json([
@@ -777,6 +765,14 @@ class VehicleTemporaryRequestController extends Controller
                 try
                     {
                         $Vehicle_Request = VehicleTemporaryRequestModel::findOrFail($id);
+                        $vehicle = VehiclesModel::findOrFail($Vehicle_Request->vehicle_id);
+                        if(!$vehicle->status)
+                        {
+                            return response()->json([
+                                'success' => false,
+                                'message' => 'This vehicle is not active',
+                            ]);
+                        }
                         if($Vehicle_Request->start_km)
                             {
                                 return response()->json([
@@ -786,6 +782,7 @@ class VehicleTemporaryRequestController extends Controller
                             }
                         $Vehicle_Request->start_km = $start_km;
                         $Vehicle_Request->km_per_litre = $km_per_litre;
+                        $vehicle->status = false;
                         $Vehicle_Request->save();
                         return redirect()->back()->with('success_message',
                         "You are successfully Approved the request",
@@ -864,8 +861,16 @@ class VehicleTemporaryRequestController extends Controller
                 try
                     {
                         $Vehicle_Request = VehicleTemporaryRequestModel::findOrFail($id);
+                        if($Vehicle_Request->start_km > $end_km)
+                          {
+                            return redirect()->back()->with('error_message',
+                            "End KM should be greater than Start KM!",
+                       ); 
+                          }
+                        $vehicle = VehiclesModel::findOrFail($Vehicle_Request->vehicle_id);
                         $Vehicle_Request->taken_by = $user_id;
                         $Vehicle_Request->end_km = $end_km;
+                        $vehicle->status = true;
                         $Vehicle_Request->save();
                         return redirect()->back()->with('success_message',
                                  "Return Successfullly Done!",

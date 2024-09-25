@@ -16,7 +16,7 @@
     <div class="content-page">
         <div class="content">
 
-        @if(Session::has('error_message'))
+           @if(Session::has('error_message'))
             <div class="alert alert-danger alert-dismissible text-bg-danger border-0 fade show col-lg-5" 
                 role="alert">
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="Close"></button>
