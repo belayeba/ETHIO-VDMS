@@ -211,14 +211,14 @@ class PermanentFuelController extends Controller {
         try
             {
                 $logged_user = Auth::id();
-                $get_fuel_request = PermanentFuelModel::findOrFail($id);
-                if($get_fuel_request->finance_approved_by || $get_fuel_request->reject_reason )
+                $get_fuel_requests = PermanentFuelModel::where('fueling_id', $id)->get();
+                if($get_fuel_requests->finance_approved_by || $get_fuel_request->reject_reason )
                    {
                         return redirect()->back()->with('error_message',
                             "Warning! You are denied the service",
                             );
                    }
-                   $get_fuel_request->finance_approved_by = $logged_user;
+                   $get_fuel_requests->finance_approved_by = $logged_user;
                    $total_fuel = 0;
                    $total_fuel = $total_fuel + $fuel_amount;
                    $total_from_prev = $permanent->feul_left_from_prev + $permanent->quata;

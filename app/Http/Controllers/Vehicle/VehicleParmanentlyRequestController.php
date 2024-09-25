@@ -188,7 +188,7 @@ class VehicleParmanentlyRequestController extends Controller
                                 );
                 }
                 $Vehicle_Request->approved_by = $user_id;
-                $Vehicle_Request->accepted_by_requestor = null;
+                $Vehicle_Request->accepted_by_requestor = Null;
                 $Vehicle_Request->save();
                 return redirect()->back()->with('success_message',
                     "You are successfully Approved the Request",
@@ -197,7 +197,7 @@ class VehicleParmanentlyRequestController extends Controller
             catch (Exception $e) {
                 // Handle the case when the vehicle request is not found
             return redirect()->back()->with('error_message',
-                                "Sorry, Something went wrong",
+                                "Sorry, Something went wron",
                                 );
             }
         }
