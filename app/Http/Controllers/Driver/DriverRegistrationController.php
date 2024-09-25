@@ -23,6 +23,7 @@ class DriverRegistrationController extends Controller {
 
     public function store( Request $request ) {
         try {
+            // dd($request);
             $validator = Validator::make( $request->all(), [
                 'user_id' => 'required|uuid|exists:users,id',
                 'license_number' => 'required|string|max:255',

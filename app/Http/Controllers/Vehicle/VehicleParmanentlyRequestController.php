@@ -249,14 +249,15 @@ class VehicleParmanentlyRequestController extends Controller
     public function Dispatcher_page()
     {
         $Vehicle_Request = VehiclePermanentlyRequestModel::whereNotNull('approved_by')->get();
-      $Vehicle = VehiclesModel::where('status', 1)->get();
+        $Vehicle = VehiclesModel::where('status', 1)->get();
         return view("Request.PermanentVehicleDirector", compact('Vehicle_Request', 'Vehicle'));
     }
     // VEHICLE DIRECTOR APPROVE THE REQUESTS
     public function DispatcherApproveRequest(Request $request)
     {
+      
         $validation = Validator::make($request->all(), [
-            'request_id' => 'required|vehicle_requests_temporary,request_id',
+            'request_id' => 'required|exists:vehicle_requests_parmanently,vehicle_request_permanent_id',
             'vehicle_id' => 'required|uuid|exists:vehicles,vehicle_id'
         ]);
         // Check validation error
@@ -284,7 +285,7 @@ class VehicleParmanentlyRequestController extends Controller
                 'message' => 'Fill Inspection First',
             ]);
         }
-        $user_id = Auth::id();
+        $user_id = Auth::id(); 
         $Vehicle_Request = VehiclePermanentlyRequestModel::findOrFail($id);
         if ($Vehicle_Request->given_by) {
             return response()->json([
@@ -292,6 +293,7 @@ class VehicleParmanentlyRequestController extends Controller
                 'message' => 'Sorry, You are denied the service',
             ]);
         }
+        // dd($Vehicle_Request);
         $today = Carbon::today()->toDateString();
         $Vehicle_Request->given_by = $user_id;
         $Vehicle_Request->vehicle_id = $vehicle_id;
@@ -309,7 +311,7 @@ class VehicleParmanentlyRequestController extends Controller
     public function DispatcherRejectRequest(Request $request)
     {
         $validation = Validator::make($request->all(), [
-            'request_id' => 'required|vehicle_requests_temporary,request_id',
+            'request_id' => 'required|exists:vehicle_requests_parmanently,vehicle_request_permanent_id',
             'reason' => 'required|string|max:1000'
         ]);
         // Check validation error

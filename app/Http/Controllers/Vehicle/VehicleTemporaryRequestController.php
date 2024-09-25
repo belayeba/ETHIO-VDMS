@@ -316,7 +316,7 @@ class VehicleTemporaryRequestController extends Controller
                             );
                     }
             }
-        }
+        
          // Director Reject the request
 
         public function DirectorRejectRequest(Request $request)
@@ -571,26 +571,6 @@ class VehicleTemporaryRequestController extends Controller
         public function TransportDirectorApprovalPage()
             {
                 $vehicleRequests = VehicleTemporaryRequestModel::with('approvedBy', 'requestedBy')
-<<<<<<< HEAD
-                ->where(function ($query) {
-                    // Check if how_many_days > 1 OR in_out_town is true
-                    $query->where(function ($q) {
-                        $q->where('how_many_days', '>', 1)
-                        ->orWhere('in_out_town', false);
-                    })
-                    // Apply condition for hr_div_approved_by
-                    ->whereNotNull('hr_div_approved_by');
-                })
-                // Fallback to dir_approved_by if the first condition isn't true
-                ->orWhere(function ($query) {
-                    $query->where('how_many_days', '<=', 1)
-                        ->where('in_out_town', true)
-                        ->whereNotNull('dir_approved_by');
-                })
-                ->get();
-
-            
-=======
                                     ->where(function ($query) {
                                         // Check if how_many_days > 1 OR in_out_town is true
                                         $query->where(function ($q) {
@@ -607,7 +587,6 @@ class VehicleTemporaryRequestController extends Controller
                                             ->whereNotNull('dir_approved_by');
                                     })
                                     ->get();
->>>>>>> 189a502bc8494e4d8687cf27d4397102f843c275
 
                    // dd($vehicleRequests);
                 // Return the results, for example, passing them to a view
@@ -700,8 +679,8 @@ class VehicleTemporaryRequestController extends Controller
                     $vehicles = VehiclesModel::get();
                     $vehicle_requests = VehicleTemporaryRequestModel::
                                     whereNotNull('transport_director_id')
-                                    ->whereNull('vec_director_reject_reason')
-                                    ->whereNull('assigned_by')
+                                    // ->whereNull('vec_director_reject_reason')
+                                    // ->whereNull('assigned_by')
                                     ->get();
                     return view("Request.VehicleDirectorPage", compact('vehicle_requests','vehicles'));     
             }
@@ -724,30 +703,31 @@ class VehicleTemporaryRequestController extends Controller
                     $id = $request->input('request_id');
                     $assigned_vehicle = $request->input('assigned_vehicle_id');
                     $user_id = Auth::id();
-                try
-                    {
+                // try
+                //     {
                         $Vehicle_Request = VehicleTemporaryRequestModel::findOrFail($id);
                         $vehicle_info = VehiclesModel::findOrFail($assigned_vehicle);
-                        if($Vehicle_Request->with_driver)
-                           {
-                              if(!$vehicle_info->driver_id)
-                                {
-                                    return response()->json([
-                                        'success' => false,
-                                        'message' => 'Assign Driver to this Vehicle first',
-                                    ]);
-                                }
-                           }
-                        else
-                           {
-                                if($vehicle_info->driver_id != $Vehicle_Request->requested_by_id)
-                                    {
-                                        return response()->json([
-                                            'success' => false,
-                                            'message' => 'This Request is asked with out driver, so change driver of this vehicle to the one who requested it',
-                                        ]);
-                                    }
-                           }
+                     
+                        // if($Vehicle_Request->with_driver)
+                        //    {
+                        //       if(!$vehicle_info->driver_id)
+                        //         {
+                        //             return response()->json([
+                        //                 'success' => false,
+                        //                 'message' => 'Assign Driver to this Vehicle first',
+                        //             ]);
+                        //         }
+                        //    }
+                        // else
+                        //    {
+                        //         if($vehicle_info->driver_id != $Vehicle_Request->requested_by_id)
+                        //             {
+                        //                 return response()->json([
+                        //                     'success' => false,
+                        //                     'message' => 'This Request is asked with out driver, so change driver of this vehicle to the one who requested it',
+                        //                 ]);
+                        //             }
+                        //    }
                         if($Vehicle_Request->assigned_by)
                             {
                                 return response()->json([
@@ -763,30 +743,31 @@ class VehicleTemporaryRequestController extends Controller
                                     'message' => 'This Car has no inspection',
                                 ]);
                             }
+                          
                         $inspection_id = $inspection->inspection_id;
                         $Vehicle_Request->assigned_by = $user_id;
-                        $Vehicle_Request->assigned_vehicle_id = $assigned_vehicle;
+                        $Vehicle_Request->vehicle_id = $assigned_vehicle;
                         $Vehicle_Request->taking_inspection = $inspection_id;
                         $Vehicle_Request->save();
                        return redirect()->back()->with('success_message',
                                  "ou are successfully Approved the request",
                             );
-                    }   
-                catch (Exception $e) 
-                    {
-                        // Handle the case when the vehicle request is not found
-                      return redirect()->back()->with('error_message',
-                                 "Sorry, Something went wrong",
-                            );
-                    }
+                //     }   
+                // catch (Exception $e) 
+                //     {
+                //         // Handle the case when the vehicle request is not found
+                //       return redirect()->back()->with('error_message',
+                //                  "Sorry, Something went wrong",
+                //             );
+                //     }
             }
             // Vehicle Director Fill start km
         public function simiritFillstartKm(Request $request)
             {
                     $validation = Validator::make($request->all(),[
-                        'request_id'=>'required|uuid|vehicle_requests_temporary,request_id',
+                        'request_id'=>'required|uuid|exists:vehicle_requests_temporary,request_id',
                         'start_km'=>'required|integer',
-                        'km_per_litre','required|integer'
+                        // 'km_per_litre','required|integer'
                     ]);
                     // Check validation error
                     if ($validation->fails()) 
@@ -809,7 +790,7 @@ class VehicleTemporaryRequestController extends Controller
                                 ]);
                             }
                         $Vehicle_Request->start_km = $start_km;
-                        $Vehicle_Request->km_per_litre = $km_per_litre;
+                        // $Vehicle_Request->km_per_litre = $km_per_litre;
                         $Vehicle_Request->save();
                         return redirect()->back()->with('success_message',
                         "You are successfully Approved the request",
@@ -870,8 +851,8 @@ class VehicleTemporaryRequestController extends Controller
         public function Returning_temporary_vehicle(Request $request)
             {
                     $validation = Validator::make($request->all(),[
-                        'request_id'=>'required|uuid|vehicle_requests_temporary,request_id',
-                        'end_km'=>'required|number'
+                        'request_id'=>'required|uuid|exists:vehicle_requests_temporary,request_id',
+                        'end_km'=>'required|integer'
                     ]);
                     // Check validation error
                     if ($validation->fails()) 
@@ -892,7 +873,7 @@ class VehicleTemporaryRequestController extends Controller
                         $Vehicle_Request->end_km = $end_km;
                         $Vehicle_Request->save();
                         return redirect()->back()->with('success_message',
-                                 "Return Successfullly Done!",
+                                 "Return Successfully Done!",
                             );               
                     }
                 catch (Exception $e) 
@@ -930,7 +911,7 @@ class VehicleTemporaryRequestController extends Controller
                                             'success' => false,
                                             'message' => 'Warning! You are denied the service',
                                         ]);
-                                    }
+                                    } 
                                 else 
                                     {
                                         $vehicle->driver_id = null;

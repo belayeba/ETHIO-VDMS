@@ -22,6 +22,7 @@
                                                     <th>#</th>
                                                     <th>Requested By</th>
                                                     <th>Reason</th>
+                                                    <th>Date </th>
                                                     <th>Action</th>
                                                 </tr>
                                             </thead>

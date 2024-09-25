@@ -156,6 +156,7 @@
                                             <th>Action</th>
                                         </tr>
                                     </thead>
+                                   
                                     @foreach ($TodaysDate as $data)
                                         <tbody>
                                             <tr>

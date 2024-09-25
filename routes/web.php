@@ -71,7 +71,7 @@ Route::group(['middleware' => ['auth']], function()
                         Route::post('/TransportDirector_reject_request', 'TransportDirectorRejectRequest')->name('TransportDirector_reject_request');
                         Route::get('/simirit_approve_page', 'SimiritPage')->name('simirit_page');
                         Route::post('/simirit_approve_request', 'simiritApproveRequest')->name('simirit_approve');
-                        Route::post('/simirit_fill_start_km', ' simiritFillstartKm')->name('simirit_fill_start_km');
+                        Route::post('/simirit_fill_start_km/store', 'simiritFillstartKm')->name('simirit_fill_start_km');
                         Route::post('/simirit_reject_request', 'simiritRejectRequest')->name('simirit_reject');
                         Route::post('/simirit_returns_vehicle', 'Returning_temporary_vehicle')->name('simirit_return_vehicle');
                 });
@@ -286,7 +286,8 @@ Route::group(['middleware' => ['auth']], function()
             Route::controller(InspectionController::class)->group(function ()
                  {
                     Route::post('/inspection/store', 'storeInspection')->name('inspection.store'); // Create a new inspection
-                    Route::get('/inspection/{inspectionId}', 'showInspection')->name('inspection.show'); // Show a specific inspection
+                    // Route::get('/inspection', 'showInspection')->name('inspection.show'); // Show a specific inspection
+                    Route::get('/inspect_vehicle/{id}', 'showInspectionbyVehicle')->name('inspection.ByVehicle'); 
                     Route::get('/inspection', 'showInspectionbyVehicle')->name('inspection.ByVehicle'); // Show a specific inspection
                     Route::get('/inspections', 'listInspections')->name('inspection.list'); // List all inspections
                     Route::get('/inspections/page', 'InspectionPage')->name('inspection.page'); // inspection page

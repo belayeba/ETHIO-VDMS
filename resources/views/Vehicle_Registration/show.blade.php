@@ -447,88 +447,122 @@
     </div>
 </div>
 <div class="modal fade" id="viewModal{{ $item->vehicle_id }}" tabindex="-1" aria-labelledby="viewModalLabel{{ $item->vehicle_id }}" aria-hidden="true">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="viewModalLabel{{ $item->vehicle_id }}">Vehicle Details</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <div class="mb-3">
-                    <label class="form-label">Chancy Number:</label>
-                    <p>{{ $item->vin }}</p>
+                <div class="row">
+                    <!-- First Column -->
+                    <div class="col-md-6">
+                        <dl class="row mb-0">
+                            <dt class="col-sm-4">Chancy Number:</dt>
+                            <dd class="col-sm-8">{{ $item->vin }}.</dd>
+            
+                            <dt class="col-sm-4">Make:</dt>
+                            <dd class="col-sm-8">
+                                <p>{{ $item->make }}.</p>
+                            </dd>
+            
+                            <dt class="col-sm-4">Model:</dt>
+                            <dd class="col-sm-8">
+                                <p>{{ $item->model }}</p>
+                            </dd>
+            
+                            <dt class="col-sm-4">Year:</dt>
+                            <dd class="col-sm-8">
+                                <p>{{ $item->year }}</p>
+                            </dd>
+            
+                            <dt class="col-sm-4">Plate Number:</dt>
+                            <dd class="col-sm-8">
+                                <p>{{ $item->plate_number }}</p>
+                            </dd>
+            
+                            <dt class="col-sm-4">Registration Date:</dt>
+                            <dd class="col-sm-8">
+                                <p>{{ $item->registration_date }}</p>
+                            </dd>
+            
+                            <dt class="col-sm-4">Mileage:</dt>
+                            <dd class="col-sm-8">
+                                <p>{{ $item->mileage }}</p>
+                            </dd>
+                        </dl>
+                    </div>
+            
+                    <!-- Second Column -->
+                    <div class="col-md-6">
+                        <dl class="row mb-0">
+                            <dt class="col-sm-4">Fuel Amount:</dt>
+                            <dd class="col-sm-8">
+                                <p>{{ $item->fuel_amount }}</p>
+                            </dd>
+            
+                            <dt class="col-sm-4">Fuel Type:</dt>
+                            <dd class="col-sm-8">
+                                <p>{{ $item->fuel_type }}</p>
+                            </dd>
+            
+                            <dt class="col-sm-4">Last Service:</dt>
+                            <dd class="col-sm-8">
+                                <p>{{ $item->last_service }}</p>
+                            </dd>
+            
+                            <dt class="col-sm-4">Next Service:</dt>
+                            <dd class="col-sm-8">
+                                <p>{{ $item->next_service }}</p>
+                            </dd>
+            
+                            <dt class="col-sm-4">Driver:</dt>
+                            <dd class="col-sm-8">
+                                <p>{{ $item->driver_id }}</p>
+                            </dd>
+            
+                            <dt class="col-sm-4">Vehicle Category:</dt>
+                            <dd class="col-sm-8">
+                                <p>{{ $item->vehicle_category }}</p>
+                            </dd>
+            
+                            <dt class="col-sm-4">Vehicle Type:</dt>
+                            <dd class="col-sm-8">
+                                <p>{{ $item->vehicle_type }}</p>
+                            </dd>
+                        </dl>
+                    </div>
                 </div>
-                <div class="mb-3">
-                    <label class="form-label">Make:</label>
-                    <p>{{ $item->make }}</p>
+            
+                <!-- Files section (still within the two-column structure) -->
+                <div class="row">
+                    <div class="col-md-6">
+                        @if($item->libre)
+                        <dl class="row mb-0">
+                            <dt class="col-sm-4">Libre:</dt>
+                            <dd class="col-sm-8">
+                                <p><a href="{{ Storage::url($item->libre) }}" target="_blank">View File</a></p>
+                            </dd>
+                        </dl>
+                        @endif
+                    </div>
+            
+                    <div class="col-md-6">
+                        @if($item->insurance)
+                        <dl class="row mb-0">
+                            <dt class="col-sm-4">Insurance:</dt>
+                            <dd class="col-sm-8">
+                                <p><a href="{{ Storage::url($item->insurance) }}" target="_blank">View File</a></p>
+                            </dd>
+                        </dl>
+                        @endif
+                    </div>
                 </div>
-                <div class="mb-3">
-                    <label class="form-label">Model:</label>
-                    <p>{{ $item->model }}</p>
+            
+                <!-- Modal Footer -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
                 </div>
-                <div class="mb-3">
-                    <label class="form-label">Year:</label>
-                    <p>{{ $item->year }}</p>
-                </div>
-                <div class="mb-3">
-                    <label class="form-label">Plate Number:</label>
-                    <p>{{ $item->plate_number }}</p>
-                </div>
-                <div class="mb-3">
-                    <label class="form-label">Registration Date:</label>
-                    <p>{{ $item->registration_date }}</p>
-                </div>
-                <div class="mb-3">
-                    <label class="form-label">Mileage:</label>
-                    <p>{{ $item->mileage }}</p>
-                </div>
-                <div class="mb-3">
-                    <label class="form-label">Fuel Amount:</label>
-                    <p>{{ $item->fuel_amount }}</p>
-                </div>
-                <div class="mb-3">
-                    <label class="form-label">Fuel Type:</label>
-                    <p>{{ $item->fuel_type }}</p>
-                </div>
-                <div class="mb-3">
-                    <label class="form-label">Last Service:</label>
-                    <p>{{ $item->last_service }}</p>
-                </div>
-                <div class="mb-3">
-                    <label class="form-label">Next Service:</label>
-                    <p>{{ $item->next_service }}</p>
-                </div>
-                <div class="mb-3">
-                    <label class="form-label">Notes:</label>
-                    <p>{{ $item->notes }}</p>
-                </div>
-                <div class="mb-3">
-                    <label class="form-label">Driver:</label>
-                    <p>{{ $item->driver_id }}</p>
-                </div>
-                <div class="mb-3">
-                    <label class="form-label">Vehicle Category:</label>
-                    <p>{{ $item->vehicle_category }}</p>
-                </div>
-                <div class="mb-3">
-                    <label class="form-label">Vehicle Type:</label>
-                    <p>{{ $item->vehicle_type }}</p>
-                </div>
-                @if($item->libre)
-                <div class="mb-3">
-                    <label class="form-label">Libre:</label>
-                    <p><a href="{{ Storage::url($item->libre) }}" target="_blank">View File</a></p>
-                </div>
-                @endif
-                @if($item->insurance)
-                <div class="mb-3">
-                    <label class="form-label">Insurance:</label>
-                    <p><a href="{{ Storage::url($item->insurance) }}" target="_blank">View File</a></p>
-                </div>
-                @endif
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
             </div>
         </div>
     </div>

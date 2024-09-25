@@ -18,11 +18,11 @@
         <div class="leftside-menu">
             <!-- Brand Logo Light -->
             <a href="index.html" class="logo logo-light">
-                <span class="logo-lg">
-                    <img src="assets/images/logo.png" alt="logo">
+                <span class="logo-md">
+                    <img src="assets/images/Aii.jpg" alt="logo" style="max-width: 100%; max-height: 90%;">
                 </span>
                 <span class="logo-sm">
-                    <img src="assets/images/logo-sm.png" alt="small logo">
+                    <img src="assets/images/Aii.jpg" alt="logo" style="max-width: 100%; max-height: 90%;">
                 </span>
             </a>
 
