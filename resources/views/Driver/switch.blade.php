@@ -3,6 +3,21 @@
 
     <div class="wrapper">
         <div class="content-page">
+        @if(Session::has('error_message'))
+            <div class="alert alert-danger alert-dismissible text-bg-danger border-0 fade show col-lg-5" 
+                role="alert">
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="Close"></button>
+                <strong>Error - </strong> {!! session('error_message') !!}
+            </div>
+            @endif
+            
+            @if(Session::has('success_message'))
+            <div class="alert alert-primary alert-dismissible text-bg-primary border-0 fade show col-lg-5"
+                role="alert">
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="Close"></button>
+                <strong> Success- </strong> {!! session('success_message') !!} 
+            </div>
+            @endif
             <div class="preloader" dir="ltr">
                 <div class='body'>
                     <span>
@@ -100,7 +115,7 @@
                                                         @foreach ($driverChange as $item)
                                                             <tr>
                                                                 <td>{{ $loop->iteration }}</td>
-                                                                <td>{{ $item->vehicle->model }}</td>
+                                                                <td>{{ $item->vehicle->plate_number }}</td>
                                                                 <td>{{ $item->oldDriver->user->username }}</td> 
                                                                 <td>{{ $item->newDriver->user->username }}</td>
                                                                 <td>
@@ -208,7 +223,7 @@
             </select>
           </div>
 
-          <button type="submit" class="btn btn-primary">Save changes</button>
+          <button type="submit" class="btn btn-primary">Update</button>
         </form>
       </div>
     </div>

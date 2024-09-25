@@ -41,7 +41,7 @@
                 <ul class="side-nav">
 
                     <li class="side-nav-title">Main</li>
-                    {{-- <li class="side-nav-item">
+                     <!-- <li class="side-nav-item">
                         <a data-bs-toggle="collapse" href="#sidebarPages" aria-expanded="false" aria-controls="sidebarPages" class="side-nav-link">
                             <i class="ri-pages-line"></i>
                             <span> Pages </span>
@@ -86,7 +86,7 @@
                                 </li>
                             </ul>
                         </div>
-                    </li> --}}
+                    </li>  -->
 
                     <li class="side-nav-item">
                         <a data-bs-toggle="collapse" href="#sidebarRequest" aria-expanded="false"
@@ -97,53 +97,53 @@
                         </a>
                         <div class="collapse" id="sidebarRequest">
                             <ul class="side-nav-second-level">
-                                {{-- @can('Temporary Request Page') --}}
+                                @can('Temporary Request Page') 
                                 <li>
                                     <a href="{{ route('displayRequestPage') }}">Temporary vehicle request</a>
                                 </li>
-                                {{-- @endcan() --}}
-                                {{-- @can('Permanent Request Page') --}}
+                                 @endcan() 
+                                 @can('Permanent Request Page') 
                                 <li>
                                     <a href="{{ route('vec_perm_request') }}">Permanent vehicle request</a>
                                 </li>
-                                {{-- @endcan() --}}
-                                {{-- @can('Director Approval Page') --}}
+                                 @endcan() 
+                                 @can('Director Approval Page') 
                                 <li>
                                     <a href="{{ route('director_temp') }}">Approve Temporary vehicle request</a>
                                 </li>
-                                {{-- @endcan() --}}
-                                {{-- @can('Clustor Director Apporal Page') --}}
+                                 @endcan() 
+                                 @can('Clustor Director Apporal Page') 
                                 <li>
                                     <a href="{{ route('ClusterDirector_temp') }}">Approve Temporary Vehicle Request</a>
                                 </li>
-                                {{-- @endcan() --}}
-                                {{-- @can('HR Cluster Director Approval Page') --}}
+                                 @endcan() 
+                                 @can('HR Cluster Director Approval Page') 
                                 <li>
                                     <a href="{{ route('HRClusterDirector_temp') }}">Approve Temporary Vehicle
                                         Request</a>
                                 </li>
-                                {{-- @endcan() --}}
-                                {{-- @can('Transport Director') --}}
+                                 @endcan() 
+                                 @can('Transport Director') 
                                 <li>
                                     <a href="{{ route('TransportDirector_temp') }}">Approve Temporary Vehicle
                                         Request</a>
                                 </li>
-                                {{-- @endcan() --}}
-                                {{-- @can('Dispatcher Page') --}}
+                                 @endcan() 
+                                 @can('Dispatcher Page') 
                                 <li>
                                     <a href="{{ route('simirit_page') }}">Give Vehicle Temporarly</a>
                                 </li>
-                                {{-- @endcan() --}}
-                                {{-- @can('Vehicle Director Page') --}}
+                                 @endcan() 
+                                 @can('Vehicle Director Page') 
                                 <li>
                                     <a href="{{ route('perm_vec_director_page') }}">Vehicle Pemanent Requests</a>
                                 </li>
-                                {{-- @endcan() --}}
-                                {{-- @can('Dispatcher') --}}
+                                 @endcan() 
+                                 @can('Dispatcher') 
                                 <li>
                                     <a href="{{ route('perm_vec_simirit_page') }}">Give Vehicle Permanently</a>
                                 </li>
-                                {{-- @endcan() --}}
+                                 @endcan() 
                                 <li>
                                     <a href="/mentaincance_request_page">Maintenance Request</a>
                                 </li>
@@ -189,7 +189,7 @@
                                     <a href="{{ route('vehicleRegistration.index') }}">Vehicle Registration </a>
                                 </li>
                                 <li>
-                                    <a href="{{ route('vehicle_parts.index') }}">Vehicle Inspection Parts</a>
+                                    <a href="{{ route('vehicle_parts.index') }}">Vehicle Parts</a>
                                 </li>
                                 <li>
                                     <a href="{{ route('inspection.page') }}">Vehicle Inspection</a>
@@ -260,6 +260,24 @@
                             </ul>
                         </div>
                     </li>
+                    <li class="side-nav-item">
+                        <a data-bs-toggle="collapse" href="#routeManagement" aria-expanded="false"
+                            aria-controls="routeManagement" class="side-nav-link">
+                            <i class="ri-user-fill"></i>
+                            <span>Route Management</span>
+                            <span class="menu-arrow"></span>
+                        </a>
+                        <div class="collapse" id="routeManagement">
+                            <ul class="side-nav-second-level">
+                                <li>
+                                    <a href="{{ route('dailyreport.index') }}">Route Registration</a>
+                                </li>
+                                <li>
+                                    <a href="#">Employee Service</a>
+                                </li>                                
+                            </ul>
+                        </div>
+                    </li>
             </div>
         </div>
         </br></br>
@@ -270,10 +288,10 @@
         @include('layouts.setting')
     </div>
 
-    <script src="{{ asset('assets/js/app.min.js') }}"></script>
-    {{-- <link href="{{ asset('assets/css/app.min.css') }}" rel="stylesheet" type="text/css" id="app-style" /> --}}
+    <!-- <script src="{{ asset('assets/js/app.min.js') }}"></script> -->
+     <link href="{{ asset('assets/css/app.min.css') }}" rel="stylesheet" type="text/css" id="app-style" /> 
 
 </body>
 
 </html>
-{{-- <script src="{{ asset('assets/js/vendor.min.js') }}"></script> --}}
+ <script src="{{ asset('assets/js/vendor.min.js') }}"></script> 

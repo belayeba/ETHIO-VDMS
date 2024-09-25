@@ -15,7 +15,6 @@
 
     <div class="content-page">
         <div class="content">
-
         @if(Session::has('error_message'))
             <div class="alert alert-danger alert-dismissible text-bg-danger border-0 fade show col-lg-5" 
                 role="alert">
@@ -43,7 +42,6 @@
                             <div class="card-body">
                                 <!-- <form action="" method="post" enctype="multipart/form-data">
                                                             @csrf -->
-
                                 <div id="progressbarwizard">
                                     <ul class="nav nav-pills nav-justified form-wizard-header mb-3">
                                         <li class="nav-item">
@@ -132,7 +130,6 @@
                                                                                 <button type="submit" class="btn btn-info">Submit</button>
                                                                             </li>
                                                                         </ul> -->
-
                                         </div>
                                     </div>
                                 </div>
@@ -155,8 +152,7 @@
                                             <th>Evening km</th>
                                             <th>Action</th>
                                         </tr>
-                                    </thead>
-                                   
+                                    </thead>                                  
                                     @foreach ($TodaysDate as $data)
                                         <tbody>
                                             <tr>
@@ -175,7 +171,6 @@
                                                 </td>
                                             </tr>
                                         </tbody>
-
                                         <!-- edit the information of the request modal -->
                                         <div id="standardmodal-{{ $loop->index }}" class="modal fade" tabindex="-1"
                                             role="dialog" aria-labelledby="standard-modalLabel" aria-hidden="true">
@@ -199,7 +194,7 @@
                                                                             <label class="form-label">Vehicle</label>
                                                                             <input type="text" name="afternoon_km"
                                                                                 class="form-control"
-                                                                                value="{{ $data->vehicle->plate_number }}"
+                                                                                value="{{ $data->afternoon_km }}"
                                                                                 readonly tabindex="-1"
                                                                                 style="user-select: none; pointer-events: none;">
                                                                         </div>
@@ -275,7 +270,7 @@
                 document.getElementById('vehicle_id_hidden_afternoon').value = selectedId;
                 // Craft and send the Ajax request
                 $.ajax({
-                    url: '{{ route('daily_km.page.check') }}',
+                    url: '{{ route("daily_km.page.check") }}',
                     method: 'GET',
                     data: {
                         id: selectedId

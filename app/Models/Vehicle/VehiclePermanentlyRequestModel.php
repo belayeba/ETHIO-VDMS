@@ -22,6 +22,8 @@ class VehiclePermanentlyRequestModel extends Model {
     protected $fillable = [
         'vehicle_id',
         'requested_by',
+        'fuel_quata',
+        'feul_left_from_prev',
         'position_letter',
         'purpose',
         'approved_by',

@@ -104,7 +104,7 @@ class InspectionController extends Controller
                     //dd($inspection_id);
 
                     $latest_inspection = InspectionModel::with('inspector:id,first_name','part:vehicle_parts_id,name')
-                    ->select('inspection_id','inspected_by','part_name','created_at','is_damaged','damage_description')
+                    ->select('inspection_id','inspected_by','part_name','created_at','is_damaged','inspection_image','damage_description')
                     ->where('inspection_id', $inspection_id)
                     ->get()                   //dd($inspection->isEmpty());
                     ->map(function ($inspection) {
@@ -114,6 +114,7 @@ class InspectionController extends Controller
                             'part_name'          => $inspection->part->name,
                             'created_at'         => $inspection->created_at,
                             'is_damaged'         => $inspection->is_damaged,
+                            'image_path'         => $inspection->inspection_image,
                             'damage_description'  => $inspection->damage_description,
                         ];
                     });
@@ -123,6 +124,10 @@ class InspectionController extends Controller
                 {
                     return response()->json(['status' => 'error', 'message' => "Sorry, Something Went Wrong"], 404);
                 }
+        }
+     public function send_photo_data($inspection_id)
+        {
+            $get_photo_path = InspectionModel::select('inspection_image')->where('inspection_id',$inspection_id)->first();
         }
         // List all inspection
     public function listInspections(Request $request)

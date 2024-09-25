@@ -57,10 +57,9 @@ class VehicleRegistrationController extends Controller {
             'insurance' => 'nullable|file|mimes:pdf,jpg,jpeg',
         ] );
         if ( $validator->fails() ) {
-            return response()->json( [
-                'success' => false,
-                'message' => $validator->errors(),
-            ] );
+            return redirect()->back()->with('error_message',
+                               $validator->errors(),
+                            );
         }
         $filelibre = '';
         $fileinsurance = '';
@@ -111,7 +110,7 @@ class VehicleRegistrationController extends Controller {
         //     'success' => true,
         //     'message' => 'Vehicle created successfully.',
         // ] );
-        return redirect()->back()->with( 'success', 'Vehicle created successfully.' );
+        return redirect()->back()->with( 'success_message', 'Vehicle created successfully.' );
 
     }
 
@@ -150,10 +149,9 @@ class VehicleRegistrationController extends Controller {
         ] );
         // dd( $validator );
         if ( $validator->fails() ) {
-            return response()->json( [
-                'success' => false,
-                'message' => $validator->errors(),
-            ] );
+            return redirect()->back()->with('error_message',
+                               $validator->errors(),
+                            );
         }
         // Handle file uploads if necessary
         if ( $request->hasFile( 'libre' ) ) {
@@ -231,20 +229,12 @@ class VehicleRegistrationController extends Controller {
         }
         // Check if the request is that of this users
         $id = $request->input( 'request_id' );
-        $user_id = Auth::id();
         try {
             $Vehicle = VehiclesModel::findOrFail( $id );
-            if ( $Vehicle->registered_by != $user_id ) {
-                return response()->json( [
-                    'success' => false,
-                    'message' => 'Warning! You are denied the service.',
-                ] );
-            }
-            if ( $Vehicle->driver_id !== null ) {
-                return response()->json( [
-                    'success' => false,
-                    'message' => 'Warning! You are denied the service.',
-                ] );
+            if ( $Vehicle->driver_id != null ) {
+                return redirect()->back()->with('error_message',
+                               "You cannot delete this vehilce",
+                            );
             }
             $Vehicle->delete();
             return redirect()->back()->with( 'success', 'Vehicle Deleted successfully.' );
@@ -254,10 +244,9 @@ class VehicleRegistrationController extends Controller {
             // ] );
         } catch ( Exception $e ) {
             // Handle the case when the vehicle request is not found
-            return response()->json( [
-                'success' => false,
-                'message' => 'Sorry, Something went wrong',
-            ] );
+            return redirect()->back()->with('error_message',
+                               "Sorry, Something went wrong",
+                            );
         }
     }
     /**
@@ -303,8 +292,9 @@ class VehicleRegistrationController extends Controller {
         $validated[ 'vehicle_id' ] = $vehicle->vehicle_id;
 
         VehicleDetailModel::create( $validated );
-
-        return redirect()->route( 'vehicles.details.index', $vehicle )->with( 'success', 'Vehicle detail created successfully.' );
+        return redirect()->back()->with('success_message',
+        "Vehicle detail created successfully.",
+     );
     }
 
     /**
@@ -339,7 +329,9 @@ class VehicleRegistrationController extends Controller {
 
         $detail->update( $validated );
 
-        return redirect()->route( 'vehicles.details.index', $vehicle )->with( 'success', 'Vehicle detail updated successfully.' );
+        return redirect()->back()->with('success_message',
+        "Vehicle detail updated successfully.",
+     );    
     }
 
     /**
@@ -352,7 +344,9 @@ class VehicleRegistrationController extends Controller {
 
     public function destroyDetail( VehicleInfo $vehicle, VehicleDetailModel $detail ) {
         $detail->delete();
-
-        return redirect()->route( 'vehicles.details.index', $vehicle )->with( 'success', 'Vehicle detail deleted successfully.' );
+        return redirect()->back()->with('success_message',
+        "Vehicle detail deleted successfully.",
+     );
+       // return redirect()->route( 'vehicles.details.index', $vehicle )->with( 'success', 'Vehicle detail deleted successfully.' );
     }
 }

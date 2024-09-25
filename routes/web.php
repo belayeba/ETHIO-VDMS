@@ -291,7 +291,7 @@ Route::group(['middleware' => ['auth']], function()
                     Route::get('/inspection', 'showInspectionbyVehicle')->name('inspection.ByVehicle'); // Show a specific inspection
                     Route::get('/inspections', 'listInspections')->name('inspection.list'); // List all inspections
                     Route::get('/inspections/page', 'InspectionPage')->name('inspection.page'); // inspection page
-                    Route::get('/inspect_vehicle/{id}', 'showInspectionbyVehicle'); // inspection page
+                    Route::get('/inspect_vehicle/{id}', 'showInspectionbyVehicle');//->name('inspection.ByVehicle'); // inspection page
                     Route::put('/inspection/{inspectionId}/{partName}', 'updateInspection')->name('inspection.update'); // Update a specific inspection
                     Route::delete('/inspection/{inspectionId}', 'deleteInspection')->name('inspection.delete'); // Delete a specific inspection
                  });
