@@ -98,8 +98,8 @@
                                                             <label class="form-label">Reason</label>
                                                             <input type="text" name="purpose" class="form-control"
                                                                 placeholder="Enter purpose of Request"
-                                                                data-provide="datepicker" data-date-today-highlight="true"
-                                                                data-date-container="#datepicker1">
+                                                                
+                                                                >
                                                         </div>
                                                     </div>
 
@@ -107,9 +107,9 @@
                                                         <div class="mb-6 position-relative" id="datepicker1">
                                                             <label class="form-label">Vehicle type</label>
                                                             <input type="text" class="form-control" name="vehicle_type"
-                                                                placeholder="Select vehicle type" data-provide="datepicker"
-                                                                data-date-today-highlight="true"
-                                                                data-date-container="#datepicker1">
+                                                                placeholder="Select vehicle type"
+                                                                
+                                                                >
                                                         </div>
                                                     </div>
                                                 </div>
@@ -143,8 +143,7 @@
                                                             <label class="form-label">Start Time</label>
                                                             <input type="time" class="form-control" name="start_time"
                                                                 placeholder="Enter Time of departure"
-                                                                data-provide="datepicker" data-date-today-highlight="true"
-                                                                data-date-container="#datepicker1">
+                                                                >
                                                         </div>
                                                     </div>
 
@@ -168,8 +167,8 @@
                                                             <label class="form-label">Return Time</label>
                                                             <input type="time" class="form-control" name="return_time"
                                                                 placeholder="Enter Time of arrival"
-                                                                data-provide="datepicker" data-date-today-highlight="true"
-                                                                data-date-container="#datepicker1">
+                                                                
+                                                                >
                                                         </div>
                                                     </div>
                                                     <div class="position-relative mb-3">
@@ -177,8 +176,8 @@
                                                             <label class="form-label">How many Days</label>
                                                             <input type="number" class="form-control"
                                                                 name="how_many_days" placeholder="Enter the Duration"
-                                                                data-provide="datepicker" data-date-today-highlight="true"
-                                                                data-date-container="#datepicker1">
+                                                                
+                                                                >
                                                         </div>
                                                     </div>
                                                 </div>
@@ -203,8 +202,8 @@
                                                             <input type="text" class="form-control"
                                                                 name="start_location"
                                                                 placeholder="Enter starting location"
-                                                                data-provide="datepicker" data-date-today-highlight="true"
-                                                                data-date-container="#datepicker1">
+                                                                
+                                                                >
                                                         </div>
                                                     </div>
 
@@ -213,8 +212,8 @@
                                                             <label class="form-label">Location to</label>
                                                             <input type="text" class="form-control"
                                                                 name="end_location" placeholder="Enter arrival location"
-                                                                data-provide="datepicker" data-date-today-highlight="true"
-                                                                data-date-container="#datepicker1">
+                                                                
+                                                                >
                                                         </div>
                                                     </div>
                                                 </div> <!-- end card-body-->

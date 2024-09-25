@@ -46,7 +46,7 @@ class DriverChangeController extends Controller {
             'old_driver_id' => $former_driver_id,
             // 'changed_by' => $logged_user,
             'new_driver_id' => $request->driver,
-            'inspection_id' => $inspection->inspection_id,
+            // 'inspection_id' => $inspection->inspection_id || null,
         ] );
         $vehicle_info->driver_id = $request->driver;
         $vehicle_info->save();
