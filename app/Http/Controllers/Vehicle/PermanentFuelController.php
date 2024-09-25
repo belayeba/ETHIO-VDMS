@@ -7,6 +7,7 @@ use App\Models\Driver\DriversModel;
 use App\Models\ParmanentFueling;
 use App\Models\Vehicle\PermanentFuelModel;
 use App\Models\Vehicle\VehiclePermanentlyRequestModel;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -102,8 +103,8 @@ class PermanentFuelController extends Controller {
         $fueling = PermanentFuelModel::findOrFail( $id );
         return redirect()->back()->with('data',
         $fueling,
-        );    }
-
+        );    
+    }
     public function update(Request $request, $id)
     {
         // Validate input
@@ -173,17 +174,7 @@ class PermanentFuelController extends Controller {
                 $fueling->reciet_attachment = $fileName;
             }
             $fueling->save();
-            $total_fuel = $total_fuel + $fuel_amount;
         }
-        $total_from_prev = $permanent->feul_left_from_prev + $permanent->quata;
-        $left_for_next = $total_from_prev - $total_fuel;
-        if($left_for_next<0)
-            {
-               $left_for_next = 0;
-            }
-        $permanent->feul_left_from_prev = $left_for_next;
-        $permanent->save();
-    
         return redirect()->route('fuelings.index')->with('success', 'Fueling records updated successfully.');
     }
     public function destroy( $id ) {
@@ -209,4 +200,42 @@ class PermanentFuelController extends Controller {
 
         return redirect()->route( 'fuelings.index' )->with( 'success', 'Fueling record deleted successfully.' );
     }
+    public function finance_get_page()
+    {
+        $fuels = PermanentFuelModel::latest()->get();
+        return view('finance.index',compact('fuels'));
+    }
+    // Finance Approval
+    public function finance_appprove($id)
+     {
+        try
+            {
+                $logged_user = Auth::id();
+                $get_fuel_request = PermanentFuelModel::findOrFail($id);
+                if($get_fuel_request->finance_approved_by || $get_fuel_request->reject_reason )
+                   {
+                        return redirect()->back()->with('error_message',
+                            "Warning! You are denied the service",
+                            );
+                   }
+                   $get_fuel_request->finance_approved_by = $logged_user;
+                   $total_fuel = 0;
+                   $total_fuel = $total_fuel + $fuel_amount;
+                   $total_from_prev = $permanent->feul_left_from_prev + $permanent->quata;
+                   $left_for_next = $total_from_prev - $total_fuel;
+                   if($left_for_next<0)
+                       {
+                          $left_for_next = 0;
+                       }
+                   $permanent->feul_left_from_prev = $left_for_next;
+                   $permanent->save();
+            }
+        catch(Exception $e)
+            {
+                return redirect()->back()->with('error_message',
+                "Warning! You are denied the service",
+                );
+            }
+
+     }
 }
