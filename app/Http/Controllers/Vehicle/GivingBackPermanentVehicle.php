@@ -18,7 +18,7 @@ class GivingBackPermanentVehicle extends Controller
 public function displayReturnPermRequestPage()
     {
         $id = Auth::id();
-        $Requested = GivingBackVehiclePermanently::where('requested_by_id',$id)->latest()->get();
+        $Requested = VehiclePermanentlyRequestModel::where('requested_by',$id)->latest()->get();
         return view("Request.ParmanententRequestPage",compact('Requested'));
     }
     // Send Vehicle Return Request Parmananently

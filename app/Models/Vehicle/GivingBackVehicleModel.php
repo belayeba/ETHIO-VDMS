@@ -28,6 +28,7 @@ class GivingBackVehiclePermanently extends Model {
         'received_by',
         'reject_reason_vec_dire',
         'returned_date',
+        'inspection_id',
         'vehicle_request_id',
         'status'
     ];
