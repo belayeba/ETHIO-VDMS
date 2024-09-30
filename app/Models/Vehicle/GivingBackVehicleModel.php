@@ -29,7 +29,6 @@ class GivingBackVehiclePermanently extends Model {
         'reject_reason_vec_dire',
         'returned_date',
         'vehicle_request_id',
-        'vehicle_detail_id',
         'status'
     ];
     protected static function boot() {

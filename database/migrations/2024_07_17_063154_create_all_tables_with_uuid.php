@@ -152,6 +152,8 @@ class CreateAllTablesWithUuid extends Migration
             $table->uuid('requested_by');
             $table->foreign('requested_by')->references('id')->on('users');
             $table->string('position_letter');
+            $table->integer('fuel_quata')->nullable();
+            $table->integer('feul_left_from_prev')->nullable();
             $table->string('purpose');
             $table->uuid('approved_by')->nullable();
             $table->foreign('approved_by')->references('id')->on('users');
@@ -165,7 +167,7 @@ class CreateAllTablesWithUuid extends Migration
             $table->integer('mileage')->nullable();
             $table->uuid('inspection_id')->nullable();  // Link to the entire inspection session
             $table->foreign('inspection_id')->references('inspection_id')->on('vehicle_inspections');
-            $table->integer('status')->nullable();
+            $table->boolean('status')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
@@ -189,7 +191,7 @@ class CreateAllTablesWithUuid extends Migration
             $table->foreign('vehicle_detail_id')->references('detail_id')->on('vehicles_detail');
             $table->uuid('inspection_id')->nullable();  // Link to the entire inspection session
             $table->foreign('inspection_id')->references('inspection_id')->on('vehicle_inspections');
-            $table->integer('status')->nullable();
+            $table->boolean('status')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

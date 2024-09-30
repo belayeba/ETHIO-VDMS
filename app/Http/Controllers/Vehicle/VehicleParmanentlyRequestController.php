@@ -293,9 +293,7 @@ class VehicleParmanentlyRequestController extends Controller
         $Vehicle_Request->vehicle_id = $vehicle_id;
         $Vehicle_Request->inspection_id = $latest_inspection->inspection_id;
         $Vehicle_Request->given_date =  $today;
-        $the_vehicle->status = false;
         $Vehicle_Request->save();
-        $the_vehicle->save();
         return response()->json([
             'success' => true,
             'message' => 'The Request is successfully Approved',
@@ -334,10 +332,13 @@ class VehicleParmanentlyRequestController extends Controller
             'message' => 'You have successfully Rejected the Request',
         ]);
     }
-    public function accept_assigned_vehicle()
+    public function accept_assigned_vehicle($id)
     {
+
         $logged_user = Auth::id();
-        $check_request = VehiclePermanentlyRequestModel::select('accepted_by_requestor')
+        $check_request = VehiclePermanentlyRequestModel::select('vehicle_id','accepted_by_requestor')
+                         ->where('vehicle_request_permanent_id',$id)
+                         ->where('requested_by',$logged_user)
                          ->whereNotNull('given_by')
                          ->whereNull('vec_director_reject_reason')
                          ->whereNull('accepted_by_requestor')
@@ -350,7 +351,17 @@ class VehicleParmanentlyRequestController extends Controller
                 'message' => 'Warning! You are denied the service',
             ]);
           }
+          $get_the_vehilce = VehiclesModel::find($check_request->vehicle_id);
+          if($get_the_vehilce->status = false)
+           {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Reject Your request because Assigned vehicle is not active',
+                ]);
+           }
           $check_request->accepted_by_requestor = $logged_user;
+          $get_the_vehilce->status = false;
+          $get_the_vehilce->save();
           $check_request->save();
           return response()->json([
             'success' => true,
@@ -371,15 +382,16 @@ class VehicleParmanentlyRequestController extends Controller
                 ]);
             }
             $logged_user = Auth::id();
-            $check_request = VehiclePermanentlyRequestModel::select('accepted_by_requestor','vec_director_reject_reason')
-                            ->where('vehicle_request_permanent_id',$request->request_id)->first();
-            if($check_request->accepted_by_requestor != $logged_user || $check_request->given_by != null || $check_request->vec_director_reject_reason != null )
-            {
-                    return response()->json([
-                        'success' => false,
-                        'message' => 'Warning! You are denied the service',
-                    ]);
-            }
+            $check_request = VehiclePermanentlyRequestModel::select('accepted_by_requestor','reject_reason_by_requestor')
+                            ->where('vehicle_request_permanent_id',$request->request_id)
+                            ->first();
+            if($check_request->requested_by != $logged_user || $check_request->given_by == null || $check_request->vec_director_reject_reason != null )
+                {
+                        return response()->json([
+                            'success' => false,
+                            'message' => 'Warning! You are denied the service',
+                        ]);
+                }
             $check_request->given_by = null;
             $check_request->accepted_by_requestor = $logged_user;
             $check_request->reject_reason_by_requestor = $request->reason;

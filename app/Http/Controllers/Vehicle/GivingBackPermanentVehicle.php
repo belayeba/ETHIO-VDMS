@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Vehicle;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Models\Vehicle\GivingBackVehiclePermanently;
+use App\Models\Vehicle\VehiclePermanentlyRequestModel;
+use App\Models\Vehicle\VehiclesModel;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -25,7 +27,8 @@ public function ReturntVehiclePerm(Request $request)
             // Validate the request
             $validator = Validator::make($request->all(), [
                 'purpose' => 'required|string|max:1000',
-                'vehicle' => 'required|uuid|exists:vehicles,vehicle_id'
+                'vehicle' => 'required|uuid|exists:vehicles,vehicle_id',
+                'request_id' => 'required|exists:vehicle_requests_parmanently,vehicle_request_permanent_id'
             ]);            
             // If validation fails, return an error response
             if ($validator->fails()) 
@@ -35,14 +38,22 @@ public function ReturntVehiclePerm(Request $request)
                         'message' => $validator->errors(),
                     ]);
                 }
-            $id = Auth::id();
+            $logged_user = Auth::id();
+            $get_permanent_request = VehiclePermanentlyRequestModel::find('request_id');
+            if($get_permanent_request->requested_by != $logged_user || $get_permanent_request->status = false)
+              {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Warning! You are denied the service',
+                ]);
+              }
             try
                 {
                     // Create the user
                     GivingBackVehiclePermanently::create([
                         'vehicle_id'=>$request->vehicle,
                         'purpose' =>$request->purpose,
-                        'requested_by' => $id,
+                        'requested_by' => $logged_user,
                     ]);
                     // Success: Record was created
                     return response()->json([
@@ -66,7 +77,9 @@ public function update_return_request(Request $request)
         $validator = Validator::make($request->all(), [
             'request_id' => 'required|uuid|exists:giving_back_vehicles_parmanently,giving_back_vehicle_id', 
             'purpose' => 'sometimes|required|string|max:1000',
-            'vehicle' => 'sometimes|required|uuid|exists:vehicles,vehicle_id'
+            'vehicle' => 'sometimes|required|uuid|exists:vehicles,vehicle_id',
+            'perm_request_id' => 'required|uuid|exists:vehicle_requests_parmanently,vehicle_request_permanent_id', 
+
         ]);
         // Check if validation fails
         if ($validator->fails()) 
@@ -74,7 +87,7 @@ public function update_return_request(Request $request)
                 return response()->json([
                     'success' => false,
                     'message' => $validator->errors()
-                ], 422); // 422 Unprocessable Entity
+                ], 422); 
             }
         $id = $request->input('request_id');
         try
@@ -98,10 +111,19 @@ public function update_return_request(Request $request)
                         } 
                     else
                         {
+                            $get_permanent_request = VehiclePermanentlyRequestModel::find('perm_request_id');
+                            if($get_permanent_request->requested_by != $user_id || $get_permanent_request->status = false)
+                              {
+                                    return response()->json([
+                                        'success' => false,
+                                        'message' => 'Warning! You are denied the service',
+                                    ]);
+                              }
                                 // Update the record with new data
                                 $Vehicle_Request->update([
                                     'purpose' => $request->purpose,
-                                    'vehicle_id' => $request->vehicle,
+                                    'vehicle_id' => $get_permanent_request->vehicle_id,
+                                    'vehicle_request_id' => $request->perm_request_id,
                                 ]);
                                 // Return a success response
                                 return response()->json([
@@ -139,14 +161,7 @@ public function deleteRequest(Request $request)
         try 
             {
                 $Vehicle_Request = GivingBackVehiclePermanently::findOrFail($id);
-                if($Vehicle_Request->requested_by != $user_id)
-                    {
-                        return response()->json([
-                            'success' => false,
-                            'message' => 'Warning! You are denied the service.',
-                        ]);
-                    }
-                if($Vehicle_Request->approved_by)
+                if($Vehicle_Request->requested_by != $user_id || $Vehicle_Request->approved_by)
                     {
                         return response()->json([
                             'success' => false,
@@ -178,7 +193,6 @@ public function DirectorApprovalPage()
             $vehicle_requests = GivingBackVehiclePermanently::whereHas('requestedBy', function ($query) use ($dept_id) {
                 $query->where('department_id', $dept_id);
             })->get();
-
             return view("DirectorPage", compact('vehicle_requests'));
     }
 // DIRECTOR APPROVE THE REQUESTS
@@ -294,6 +308,7 @@ public function VehicleDirectorApproveRequest(Request $request)
             $id = $request->input('request_id');
             $user_id = Auth::id();
             $Vehicle_Request = GivingBackVehiclePermanently::findOrFail($id);
+            $the_vehicle = VehiclesModel::find($Vehicle_Request->vehicle_id);
             if($Vehicle_Request->received_by)
                 {
                     return response()->json([
@@ -302,6 +317,8 @@ public function VehicleDirectorApproveRequest(Request $request)
                     ]);
                 }
             $Vehicle_Request->received_by = $user_id;
+            $the_vehicle->status = true;
+            $the_vehicle->save();
             $Vehicle_Request->save();
             return response()->json([
                 'success' => true,
