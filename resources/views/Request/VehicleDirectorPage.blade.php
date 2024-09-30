@@ -289,7 +289,7 @@
                                                     <button type="button" class="btn btn-info rounded-pill" data-bs-toggle="modal" data-bs-target="#archived-modal-{{ $loop->index }}" title="Show"><i class=" ri-eye-line"></i></button>
                                                     @if($request->start_km == null)
                                                     <button type="button" class="btn btn-primary rounded-pill" data-bs-toggle="modal" data-bs-target="#staticdispatch-{{ $loop->index }}" title="Dispatch"><i class="  ri-contract-right-fill"></i></button>
-                                                    @elseif($request->start_km !== null && $request->start_km == null)
+                                                    @elseif($request->start_km !== null && $request->end_km == null)
                                                     <button type="button" class="btn btn-secondary rounded-pill" data-bs-toggle="modal" data-bs-target="#staticreturn-{{ $loop->index }}" title="Return"><i class="  ri-contract-left-fill"></i></button>
                                                     @endif
                                                 </td>
