@@ -270,10 +270,10 @@
                         <div class="collapse" id="routeManagement">
                             <ul class="side-nav-second-level">
                                 <li>
-                                    <a href="{{ route('dailyreport.index') }}">Route Registration</a>
+                                    <a href="{{ route('route.index') }}">Route Registration</a>
                                 </li>
                                 <li>
-                                    <a href="#">Employee Service</a>
+                                    <a href="{{ route('route.show') }}">Employee Service</a>
                                 </li>                                
                             </ul>
                         </div>
