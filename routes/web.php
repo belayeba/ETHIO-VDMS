@@ -11,6 +11,7 @@ use App\Http\Controllers\tempController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\usercontroller;
 use App\Http\Controllers\Organization\ClusterController;
+use App\Http\Controllers\Route\RouteController;
 use App\Http\Controllers\Vehicle\DailyReportController;
 use App\Http\Controllers\Vehicle\GivingBackPermanentVehicle;
 use App\Http\Controllers\Vehicle\VehicleParmanentlyRequestController;
@@ -280,6 +281,18 @@ Route::group(['middleware' => ['auth']], function()
                 Route::post('/store',[DriverChangeController::class, 'store'])->name('driver_change.store');
                 Route::put('/update/{request_id}', [DriverChangeController::class, 'update'])->name('driverchange.update');
                 Route::delete('/delete/{request_id}', [DriverChangeController::class, 'destroy'])->name('driverchange.destroy');
+
+                });
+
+                Route::group([
+                    'prefix'=>'Route',
+                ], function (){
+                Route::get('/',[RouteController::class, 'displayAllRoutes'])->name('route.index');
+                Route::get('/user',[RouteController::class, 'displayRoute'])->name('route.show');
+                Route::post('/store',[RouteController::class, 'registerRoute'])->name('route.store');
+                Route::post('/employee/store',[RouteController::class, 'assignUsersToRoute'])->name('employeeService.store');
+                Route::put('/update/{request_id}', [RouteController::class, 'update'])->name('route.update');
+                Route::delete('/delete/{request_id}', [RouteController::class, 'removeRoute'])->name('route.destroy');
 
                 });
                 // Define routes for InspectionController
