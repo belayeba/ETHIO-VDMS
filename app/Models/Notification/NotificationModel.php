@@ -6,9 +6,10 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Models\User;
+use Illuminate\Notifications\DatabaseNotification;
 use Illuminate\Support\Str;
 
-class NotificationModel extends Model {
+class NotificationModel extends DatabaseNotification {
     use SoftDeletes;
 
     protected $table = 'notifications';
@@ -19,8 +20,9 @@ class NotificationModel extends Model {
 
     protected $fillable = [
         'user_id',
-        'message',
-        'is_read',
+        'notifiable',
+        'data',
+        'read_at'
     ];
     protected static function boot() {
         parent::boot();

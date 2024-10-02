@@ -14,12 +14,12 @@ use Illuminate\Support\Facades\Validator;
 class Daily_KM_Calculation extends Controller
     {
         public function displayPage()
-        {
-            $today = Carbon::today()->toDateString();
-            $vehicle = VehiclesModel::get();
-            $TodaysDate = DailyKMCalculationModel::where('date',$today)->latest()->get();
-            return view('Vehicle.DailKmForm',compact('vehicle','TodaysDate'));
-        }
+            {
+                $today = Carbon::today()->toDateString();
+                $vehicle = VehiclesModel::get();
+                $TodaysDate = DailyKMCalculationModel::where('date',$today)->latest()->get();
+                return view('Vehicle.DailKmForm',compact('vehicle','TodaysDate'));
+            }
         public function ReportPage()
             {
                     $dailkms = DailyKMCalculationModel::with('driver','vehicle','created')
