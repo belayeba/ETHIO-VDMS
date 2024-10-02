@@ -106,7 +106,6 @@ class usercontroller extends Controller
             $user = User::create($data);
             $user->assignRole($request->input('roles'));
 
-            dd('success');
 
         }
         catch (Exception $exception) {

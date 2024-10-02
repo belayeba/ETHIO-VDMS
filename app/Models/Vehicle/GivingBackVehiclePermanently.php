@@ -28,8 +28,8 @@ class GivingBackVehiclePermanently extends Model {
         'received_by',
         'reject_reason_vec_dire',
         'returned_date',
+        'inspection_id',
         'vehicle_request_id',
-        'vehicle_detail_id',
         'status'
     ];
     protected static function boot() {
@@ -49,6 +49,10 @@ class GivingBackVehiclePermanently extends Model {
 
     public function vehicle(): BelongsTo {
         return $this->belongsTo( VehicleVehiclesModel::class, 'vehicle_id' );
+    }
+
+    public function permanentRequest(): BelongsTo {
+        return $this->belongsTo( VehiclePermanentlyRequestModel::class, 'vehicle_request_permanent_id' );
     }
 
     public function returnedBy(): BelongsTo {
