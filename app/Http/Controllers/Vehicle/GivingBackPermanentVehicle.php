@@ -9,6 +9,8 @@ use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
+use App\Models\Vehicle\VehiclePermanentlyRequestModel;
+
 
 class GivingBackPermanentVehicle extends Controller
 {
@@ -16,16 +18,16 @@ class GivingBackPermanentVehicle extends Controller
 public function displayReturnPermRequestPage()
     {
         $id = Auth::id();
-        $Requested = GivingBackVehiclePermanently::where('requested_by_id',$id)->latest()->get();
-        return view("Request.ParmanententRequestPage",compact('Requested'));
+        $Requested = VehiclePermanentlyRequestModel::where('requested_by',$id)->latest()->get();
+        return view("Return.GivingParmanententVehiclePage",compact('Requested'));
     }
     // Send Vehicle Return Request Parmananently
 public function ReturntVehiclePerm(Request $request) 
-    {
+    {dd($request);
             // Validate the request
             $validator = Validator::make($request->all(), [
                 'purpose' => 'required|string|max:1000',
-                'vehicle' => 'required|uuid|exists:vehicles,vehicle_id'
+                'permanen' => 'required|uuid|exists:vehicles,vehicle_id'
             ]);            
             // If validation fails, return an error response
             if ($validator->fails()) 
@@ -172,14 +174,16 @@ public function deleteRequest(Request $request)
 public function DirectorApprovalPage()
     {
             $id = Auth::id();
-            $directors_data = User::where('id',$id)->get('department_id');
-            $dept_id = $directors_data->department_id;
+            // $directors_data = User::where('id',$id)->get('department_id');
+            // $dept_id = $directors_data->department_id;
 
-            $vehicle_requests = GivingBackVehiclePermanently::whereHas('requestedBy', function ($query) use ($dept_id) {
-                $query->where('department_id', $dept_id);
-            })->get();
+            $vehicle_requests = GivingBackVehiclePermanently::
+            // whereHas('requestedBy', function ($query) use ($dept_id) {
+            //     $query->where('department_id', $dept_id);
+            // })
+            get();
 
-            return view("DirectorPage", compact('vehicle_requests'));
+            return view("Return.DirectorPage", compact('vehicle_requests'));
     }
 // DIRECTOR APPROVE THE REQUESTS
 public function DirectorApproveRequest(Request $request)
@@ -273,8 +277,8 @@ public function DirectorRejectRequest(Request $request)
 public function VehicleDirector_page() 
     {    
             $id = Auth::id();
-            $Vehicle_Request = GivingBackVehiclePermanently::all();
-            return view("vehicle_requests", compact('vehicle_requests'));     
+            $vehicle_requests = GivingBackVehiclePermanently::all();
+            return view("Return.vehicle_requests", compact('vehicle_requests'));     
     }
     // VEHICLE DIRECTOR APPROVE THE REQUESTS
 public function VehicleDirectorApproveRequest(Request $request)
@@ -294,6 +298,7 @@ public function VehicleDirectorApproveRequest(Request $request)
             $id = $request->input('request_id');
             $user_id = Auth::id();
             $Vehicle_Request = GivingBackVehiclePermanently::findOrFail($id);
+
             if($Vehicle_Request->received_by)
                 {
                     return response()->json([

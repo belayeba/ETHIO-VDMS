@@ -31,7 +31,7 @@
                                 <div id="bar" class="progress mb-3" style="height: 7px;">
                                     <div class="bar progress-bar progress-bar-striped progress-bar-animated bg-success"></div>
                                 </div>
-                        
+                                
                                 <div class="tab-pane" id="account-2">
                                     <div class="row">
                                         <div class="position-relative mb-3">
@@ -43,7 +43,28 @@
                                                     <option value="2">Other Fuel Request</option>
                                                  </select>
                                             </div>
-                                        </div>
+                                        </div>   
+                                            <div class="mb-3 position-relative">
+                                                <label class="form-label">Select Month</label>
+                                                <select class="form-select mb-3">
+                                                <option value="">Select</option>    
+                                                <option value="1">መስከረም</option>
+                                                <option value="2">ጥቅምት</option>
+                                                <option value="3">ኅዳር</option>
+                                                <option value="4">ታህሣሥ</option>
+                                                <option value="5">ጥር</option>
+                                                <option value="6">የካቲት</option>
+                                                <option value="7">መጋቢት</option>
+                                                <option value="8">ሚያዝያ</option>
+                                                <option value="9">ግንቦት</option>
+                                                <option value="10">ሰኔ</option>
+                                                <option value="11">ሐምሌ</option>
+                                                <option value="12">ነሐሴ</option>
+                                                <option value="13">ጳጉሜ</option>
+                                            </select>
+                                            </div>
+                                        
+
                                         <div class="row mb-3 entry" >
                                             <div class="col-md-3">
                                                 <div class="position-relative">
@@ -66,10 +87,16 @@
                                                 </div>
                                             </div>
                                              <script> 
+                                                var currentYear = 2024;
+
                                                 $('#fill_date').calendarsPicker({ 
                                                     calendar: $.calendars.instance('ethiopian', 'am'), 
                                                     pickerClass: 'myPicker', 
-                                                    dateFormat: 'yyyy-mm-dd' 
+                                                    dateFormat: 'yyyy-mm-dd'                                                     
+                                                    // defaultDate: ethiopianCalendar.newDate(currentYear, 02, 1),  // Set default date to 01 of the selected month
+                                                    // showOnFocus: true,  // Ensure the picker shows on focus
+
+                                                    // month: true
                                                 });
                                              </script>
 
@@ -95,7 +122,7 @@
                                         </li>
                                     </ul>
                                 </div> 
-                            </div>  
+                            </div>   
                         </div>
                     </form> 
 
