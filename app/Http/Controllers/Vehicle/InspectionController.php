@@ -71,7 +71,7 @@ class InspectionController extends Controller
                         'vehicle_id' => $vehicleId,
                         'inspected_by' => $inspectedBy,
                         'part_name' => $partName,
-                        'inspection_image' => $fileinspection,
+                        // 'inspection_image' => $fileinspection,
                         'is_damaged' => $damagedParts[$partId],
                         'damage_description' => $damageDescriptions[$partId],
                         'inspection_date' => $inspectionDate,
@@ -93,13 +93,13 @@ class InspectionController extends Controller
         
             return response()->json(['status' => 'success', 'data' => $inspection]);
         }
-        //This inpection by vehicle 
-     public function showInspectionbyVehicle(Request $request,$vehicle_id)
+        public function showInspectionbyVehicle(Request $request)
         {
             try
                 {
-                    //$vehicle_id = "35a80c14-3e82-400c-a365-c86104ced1a2";
+                    $vehicle_id = $request->input('id');
                     $inspection = InspectionModel::select('inspection_id')->where('vehicle_id', $vehicle_id)->latest()->first();
+                    // dd( $vehicle_id);
                     $inspection_id = $inspection->inspection_id;
                     //dd($inspection_id);
 

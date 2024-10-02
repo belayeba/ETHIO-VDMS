@@ -152,6 +152,8 @@ class CreateAllTablesWithUuid extends Migration
             $table->uuid('requested_by');
             $table->foreign('requested_by')->references('id')->on('users');
             $table->string('position_letter');
+            $table->integer('fuel_quata')->nullable();
+            $table->integer('feul_left_from_prev')->nullable();
             $table->string('purpose');
             $table->uuid('approved_by')->nullable();
             $table->foreign('approved_by')->references('id')->on('users');
@@ -165,7 +167,7 @@ class CreateAllTablesWithUuid extends Migration
             $table->integer('mileage')->nullable();
             $table->uuid('inspection_id')->nullable();  // Link to the entire inspection session
             $table->foreign('inspection_id')->references('inspection_id')->on('vehicle_inspections');
-            $table->integer('status')->nullable();
+            $table->boolean('status')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
@@ -189,7 +191,7 @@ class CreateAllTablesWithUuid extends Migration
             $table->foreign('vehicle_detail_id')->references('detail_id')->on('vehicles_detail');
             $table->uuid('inspection_id')->nullable();  // Link to the entire inspection session
             $table->foreign('inspection_id')->references('inspection_id')->on('vehicle_inspections');
-            $table->integer('status')->nullable();
+            $table->boolean('status')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
@@ -249,7 +251,25 @@ class CreateAllTablesWithUuid extends Migration
             $table->timestamps();
             $table->softDeletes();
         });
-
+      // Fueling Table
+      Schema::create('Parmanent_fuelings', function (Blueprint $table) {
+        $table->uuid('fueling_id')->primary();
+        $table->uuid('vehicle_id');
+        $table->foreign('vehicle_id')->references('vehicle_id')->on('vehicles');
+        $table->uuid('driver_id');
+        $table->foreign('driver_id')->references('driver_id')->on('drivers');
+        $table->uuid('finance_approved_by')->nullable();
+        $table->foreign('finance_approved_by')->references('id')->on('users');
+        $table->uuid('permanent_id')->nullable();
+        $table->foreign('permanent_id')->references('vehicle_request_permanent_id')->on('vehicle_requests_parmanently');
+        $table->string('reject_reason')->nullable();
+        $table->date('fuiling_date');
+        $table->string('month');
+        $table->integer('fuel_amount');
+        $table->double('fuel_cost');
+        $table->timestamps();
+        $table->softDeletes();
+    });
         // GPS Tracking Table
         Schema::create('gps_tracking', function (Blueprint $table) {
             $table->uuid('tracking_id')->primary();
