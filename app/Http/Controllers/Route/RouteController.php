@@ -28,9 +28,10 @@ class RouteController extends Controller
         $routes = Route::get();
         $users = User::all();
         $routeUser = RouteUser::all();
+        // dd($routeUser);
         $routeUser = $routeUser->groupBy('route_id');
-        $routeUser = RouteUser::with('user.department')->get();
-// dd($routeUser);
+        //$routeUser = RouteUser::with('user.department')->get();
+
         return view('Route.show', compact('routes','users','routeUser'));
     }
 
@@ -67,17 +68,9 @@ class RouteController extends Controller
 
     public function assignUsersToRoute(Request $request)
     {
-        // dd($request);
         // $route = Route::findOrFail($route_id);
 
-        // assign driver
-        // if ($request->has('driver_phone')) {
-        //     $route->driver_phone = $request->driver_phone;
-        //     $route->save();
-        // }
-
         // Assign Users to Route
-      //  dd($route_user_id);
         foreach ($request->people_id as $user_id) {
             RouteUser::create([
                 'employee_id' => $user_id,

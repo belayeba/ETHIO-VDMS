@@ -25,7 +25,7 @@ class DriverChangeController extends Controller {
     // Store a new Driver Change
 
     public function store( Request $request ) {
-        // dd( $request );
+       
         $validator = Validator::make( $request->all(), [
             'vehicle_id' => 'required|uuid|exists:vehicles,vehicle_id',
             'driver' => 'required|uuid|exists:drivers,driver_id',
@@ -48,7 +48,6 @@ class DriverChangeController extends Controller {
             'new_driver_id' => $request->driver,
             'inspection_id' => $inspection->inspection_id || null,
         ] );
-        dd($driverChange);
         $vehicle_info->driver_id = $request->driver;
         $vehicle_info->save();
         return redirect()->back()->with('success_message','Driver Change Successfully Requested .',);
