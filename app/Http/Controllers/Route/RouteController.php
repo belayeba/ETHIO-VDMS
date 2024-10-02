@@ -61,8 +61,8 @@ class RouteController extends Controller
             'vehicle_id' => $request->vehicle_id,
             'registered_by' => auth()->user()->id,
         ]);
-
-        return response()->json(['message' => 'Route registered successfully', 'route' => $route]);
+        return redirect()->back()->with('success_message',
+        'Route registered successfully.',);
     }
 
     public function assignUsersToRoute(Request $request)
@@ -85,8 +85,8 @@ class RouteController extends Controller
                 'registered_by' => auth()->user()->id,
             ]);
         }
-
-        return response()->json(['message' => 'Users assigned successfully']);
+        return redirect()->back()->with('success_message',
+        'Users assigned successfully.',);
     }
 
     public function updateRouteAssignment(Request $request, $route_id)
@@ -124,8 +124,9 @@ class RouteController extends Controller
         // Delete the route
         $route->delete();
     
-        // Return a success message as JSON response
-        return response()->json(['message' => 'Route deleted successfully']);
+        // Return a success message 
+        return redirect()->back()->with('success_message',
+        'Route deleted successfully.',);
     }
 
     public function removeUserFromRoute(Request $request, $route_id)
