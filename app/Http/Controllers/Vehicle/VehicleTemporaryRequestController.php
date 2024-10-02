@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Validator;
 use Exception;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-
+use App\Notifications\TaskCompleted;
 class VehicleTemporaryRequestController extends Controller
     {
         // Display Request Page
@@ -102,7 +102,12 @@ class VehicleTemporaryRequestController extends Controller
                         
                             // Commit the transaction
                             DB::commit();
-                        
+                            $user = User::find($id);  // Find the user to notify
+                            $message = "The task has been completed!";
+                            $url = url("/tasks/belay");
+
+                            // Send the notification with the dynamic message and URL
+                            $user->notifications(new TaskCompleted($message, $url));                            
                             // Return response to user
                             return redirect()->back()->with('success_message',
                                 'You successfully requested a vehicle',
@@ -264,10 +269,11 @@ class VehicleTemporaryRequestController extends Controller
                     $id = Auth::id();
                     $directors_data = User::select('department_id')->where('id',$id)->first();
                     $dept_id = $directors_data->department_id;
-                    // $vehicle_requests = VehicleTemporaryRequestModel::whereHas('requestedBy', function ($query) use ($dept_id) {
-                    //     $query->where('department_id', $dept_id);
-                    // })->whereNull('dir_approved_by')->get();
-                    $vehicle_requests=VehicleTemporaryRequestModel::get();
+                    //dd($dept_id);
+                    $vehicle_requests = VehicleTemporaryRequestModel::whereHas('requestedBy', function ($query) use ($dept_id) {
+                        $query->where('department_id', $dept_id);
+                    })->latest()->get();
+                    //$vehicle_requests=VehicleTemporaryRequestModel::get();
                     return view("Request.DirectorPage", compact('vehicle_requests'));
             }
         // Directors Page
@@ -864,13 +870,16 @@ class VehicleTemporaryRequestController extends Controller
                         if($Vehicle_Request->start_km > $end_km)
                           {
                             return redirect()->back()->with('error_message',
-                            "End KM should be greater than Start KM!",
-                       ); 
+                            "End KM should be greater than Start KM!",); 
                           }
                         $vehicle = VehiclesModel::findOrFail($Vehicle_Request->vehicle_id);
+                        $inspection = InspectionModel::where('vehicle_id',$Vehicle_Request->vehicle_id)->latest->first();
+                        $latest_inspection = $inspection->vehicle_id;
                         $Vehicle_Request->taken_by = $user_id;
                         $Vehicle_Request->end_km = $end_km;
                         $vehicle->status = true;
+                        $Vehicle_Request->status = false;
+                        $Vehicle_Request->returning_inspection = $latest_inspection;
                         $Vehicle_Request->save();
                         return redirect()->back()->with('success_message',
                                  "Return Successfully Done!",
@@ -892,7 +901,7 @@ class VehicleTemporaryRequestController extends Controller
                     // Check validation error
                 if ($validation->fails()) 
                     {
-                      return redirect()->back()->with('error_message',
+                          return redirect()->back()->with('error_message',
                                  "Sorry, Something went wrong",
                             );
                     }
@@ -904,25 +913,25 @@ class VehicleTemporaryRequestController extends Controller
                           $vehicle = VehiclesModel::findOrFail($temp_req->vehicle_id);
                           $vehicle->status = true;
                           if(!$temp_req->with_driver)
-                           {
-                                if($vehicle->driver_id != $temp_req->logged_user)
-                                    {
-                                        return response()->json([
-                                            'success' => false,
-                                            'message' => 'Warning! You are denied the service',
-                                        ]);
-                                    } 
-                                else 
-                                    {
-                                        $vehicle->driver_id = null;
-                                        $temp_req->save();
-                                        $vehicle->save();
-                                        return response()->json([
-                                            'success' => true,
-                                            'message' => 'Vehicle Returned Successfully',
-                                        ]);
-                                    }
-                           }
+                            {
+                                    if($vehicle->driver_id != $temp_req->logged_user)
+                                        {
+                                            return response()->json([
+                                                'success' => false,
+                                                'message' => 'Warning! You are denied the service',
+                                            ]);
+                                        } 
+                                    else 
+                                        {
+                                            $vehicle->driver_id = null;
+                                            $temp_req->save();
+                                            $vehicle->save();
+                                            return response()->json([
+                                                'success' => true,
+                                                'message' => 'Vehicle Returned Successfully',
+                                            ]);
+                                        }
+                            }
                          else
                             {
                                 if($vehicle->driver_id != $logged_user) 

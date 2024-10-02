@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Models\Vehicle\GivingBackVehiclePermanently;
 use App\Models\Vehicle\VehiclePermanentlyRequestModel;
 use App\Models\Vehicle\VehiclesModel;
+use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -27,7 +28,6 @@ public function ReturntVehiclePerm(Request $request)
             // Validate the request
             $validator = Validator::make($request->all(), [
                 'purpose' => 'required|string|max:1000',
-                'vehicle' => 'required|uuid|exists:vehicles,vehicle_id',
                 'request_id' => 'required|exists:vehicle_requests_parmanently,vehicle_request_permanent_id'
             ]);            
             // If validation fails, return an error response
@@ -51,9 +51,10 @@ public function ReturntVehiclePerm(Request $request)
                 {
                     // Create the user
                     GivingBackVehiclePermanently::create([
-                        'vehicle_id'=>$request->vehicle,
+                        'vehicle_id'=>$get_permanent_request->vehicle_id,
                         'purpose' =>$request->purpose,
                         'requested_by' => $logged_user,
+                        'permanent_request' => $get_permanent_request->vehicle_request_permanent_id,
                     ]);
                     // Success: Record was created
                     return response()->json([
@@ -287,7 +288,9 @@ public function DirectorRejectRequest(Request $request)
 public function VehicleDirector_page() 
     {    
             $id = Auth::id();
-            $Vehicle_Request = GivingBackVehiclePermanently::all();
+            $Vehicle_Request = GivingBackVehiclePermanently::whereNotNull('approved_by')
+                                ->whereNull('reject_reason_director')
+                                ->get();
             return view("vehicle_requests", compact('vehicle_requests'));     
     }
     // VEHICLE DIRECTOR APPROVE THE REQUESTS
@@ -309,6 +312,7 @@ public function VehicleDirectorApproveRequest(Request $request)
             $user_id = Auth::id();
             $Vehicle_Request = GivingBackVehiclePermanently::findOrFail($id);
             $the_vehicle = VehiclesModel::find($Vehicle_Request->vehicle_id);
+            $get_permanent_request = VehiclePermanentlyRequestModel::find($Vehicle_Request->vehicle_request_id);
             if($Vehicle_Request->received_by)
                 {
                     return response()->json([
@@ -316,10 +320,14 @@ public function VehicleDirectorApproveRequest(Request $request)
                         'message' => 'Sorry, You are denied the service',
                     ]);
                 }
+            $todayDateTime = Carbon::now();
+            $get_permanent_request->status = false;
             $Vehicle_Request->received_by = $user_id;
+            $Vehicle_Request->returned_date = $todayDateTime;
             $the_vehicle->status = true;
             $the_vehicle->save();
             $Vehicle_Request->save();
+            $get_permanent_request->save();
             return response()->json([
                 'success' => true,
                 'message' => 'The Vehicle Successfully Returned',

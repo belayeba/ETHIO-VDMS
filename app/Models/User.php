@@ -17,11 +17,11 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Str;
 use Spatie\Permission\Traits\HasRoles;
 
-class User extends Authenticatable
-{
+class User extends Authenticatable {
     use HasRoles, Notifiable, SoftDeletes, HasFactory;
 
-    protected $table = 'users'; // Specify the table name
+    protected $table = 'users';
+    // Specify the table name
     protected $primaryKey = 'id';
     public $incrementing = false;
     protected $keyType = 'uuid';
@@ -46,57 +46,54 @@ class User extends Authenticatable
         'remember_token',
     ];
 
-    protected static function boot()
-    {
+    protected static function boot() {
         parent::boot();
 
-        static::creating(function ($model) {
-            if (empty($model->{$model->getKeyName()})) {
-                $model->{$model->getKeyName()} = (string) Str::uuid();
+        static::creating( function ( $model ) {
+            if ( empty( $model-> {
+                $model->getKeyName()}
+            ) ) {
+                $model-> {
+                    $model->getKeyName()}
+                    = ( string ) Str::uuid();
+                }
             }
-        });
+        );
     }
 
-    public function drivers(): HasMany
-    {
-        return $this->hasMany(DriversModel::class, 'user_id');
+    public function drivers(): HasMany {
+        return $this->hasMany( DriversModel::class, 'user_id' );
     }
 
-    public function notifications(): HasMany
-    {
-        return $this->hasMany(NotificationModel::class, 'user_id');
-    }
-    public function department(): BelongsTo
-        {
-            return $this->belongsTo(DepartmentsModel::class, 'department_id');
-        }
-    public function driverCommunications(): HasMany
-        {
-            return $this->hasMany(DriverCommunicationModel::class, 'user_id');
-        }
-
-    public function requestedVehicleRequests(): HasMany
-    {
-        return $this->hasMany(VehicleTemporaryRequestModel::class, 'requested_by_id');
+    public function notify(): HasMany {
+        return $this->hasMany( NotificationModel::class, 'user_id' );
     }
 
-    public function approvedVehicleRequests(): HasMany
-    {
-        return $this->hasMany(VehicleTemporaryRequestModel::class, 'approved_by');
+    public function department(): BelongsTo {
+        return $this->belongsTo( DepartmentsModel::class, 'department_id' );
     }
 
-    public function assignedVehicleRequests(): HasMany
-    {
-        return $this->hasMany(VehicleTemporaryRequestModel::class, 'assigned_by');
+    public function driverCommunications(): HasMany {
+        return $this->hasMany( DriverCommunicationModel::class, 'user_id' );
     }
 
-    public function registeredDrivers(): HasMany
-    {
-        return $this->hasMany(DriversModel::class, 'register_by');
+    public function requestedVehicleRequests(): HasMany {
+        return $this->hasMany( VehicleTemporaryRequestModel::class, 'requested_by_id' );
     }
 
-    public function maintainedVehicles(): HasMany
-    {
-        return $this->hasMany(MaintenancesModel::class, 'maintained_by');
+    public function approvedVehicleRequests(): HasMany {
+        return $this->hasMany( VehicleTemporaryRequestModel::class, 'approved_by' );
+    }
+
+    public function assignedVehicleRequests(): HasMany {
+        return $this->hasMany( VehicleTemporaryRequestModel::class, 'assigned_by' );
+    }
+
+    public function registeredDrivers(): HasMany {
+        return $this->hasMany( DriversModel::class, 'register_by' );
+    }
+
+    public function maintainedVehicles(): HasMany {
+        return $this->hasMany( MaintenancesModel::class, 'maintained_by' );
     }
 }
