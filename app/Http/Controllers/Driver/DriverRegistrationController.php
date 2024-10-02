@@ -57,8 +57,8 @@ class DriverRegistrationController extends Controller {
                 'notes' => $request->input( 'notes' ),
             ] );
 
-            // return response()->json( [ 'message' => 'Driver created successfully', 'driver' => $driver ], 201 );
-            return redirect()->back()->with( 'success', 'Driver created successfully.' );
+            
+            return redirect()->back()->with('success_message','Driver created successfully.',);
         } catch ( Exception $e ) {
             // return response()->json( [ 'message' => 'Driver creation failed' ], 500 );
             return redirect()->back()->with( 'error', 'Driver creation failed.' );
@@ -124,8 +124,7 @@ class DriverRegistrationController extends Controller {
                 'phone_number' => $request->input( 'phone_number' ),
                 'notes' => $request->input( 'notes' ),
             ] );
-
-            return response()->json( [ 'message' => 'Driver updated successfully', 'driver' => $driver ] );
+            return redirect()->back()->with('success_message','Driver updated successfully.',);
         } catch ( Exception $e ) {
             return response()->json( [ 'message' => 'Driver not found' ], 404 );
         }
@@ -138,7 +137,7 @@ class DriverRegistrationController extends Controller {
         try {
             $driver = DriversModel::findOrFail( $id );
             $driver->delete();
-            return response()->json( [ 'message' => 'Driver deleted successfully' ] );
+            return redirect()->back()->with('success_message','Driver deleted successfully.',);
         } catch ( Exception $e ) {
             return response()->json( [ 'message' => 'Driver not found' ], 404 );
         }
