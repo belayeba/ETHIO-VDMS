@@ -25,7 +25,7 @@ class DriverChangeController extends Controller {
     // Store a new Driver Change
 
     public function store( Request $request ) {
-        // dd( $request );
+       
         $validator = Validator::make( $request->all(), [
             'vehicle_id' => 'required|uuid|exists:vehicles,vehicle_id',
             'driver' => 'required|uuid|exists:drivers,driver_id',
@@ -46,11 +46,11 @@ class DriverChangeController extends Controller {
             'old_driver_id' => $former_driver_id,
             // 'changed_by' => $logged_user,
             'new_driver_id' => $request->driver,
-            // 'inspection_id' => $inspection->inspection_id || null,
+            'inspection_id' => $inspection->inspection_id || null,
         ] );
         $vehicle_info->driver_id = $request->driver;
         $vehicle_info->save();
-        return response()->json( [ 'Message'=>'Driver Change Successfully Requested' ], 201 );
+        return redirect()->back()->with('success_message','Driver Change Successfully Requested .',);
     }
     // Get a specific Driver Change
 
@@ -91,6 +91,7 @@ class DriverChangeController extends Controller {
             ] );
         }
         $driverChange->update( $request->all() );
+        // return redirect()->back()->with('success_message','Driver change successfully updated.',);
         return response()->json( [
             'success' => true,
             'message' => 'Driver change successfully updated',
@@ -121,6 +122,6 @@ class DriverChangeController extends Controller {
             ] );
         }
         $driverChange->delete();
-        return response()->json( [ 'message' => 'Driver change deleted successfully' ] );
+        return redirect()->back()->with('success_message','Driver change deleted successfully.',);
     }
 }

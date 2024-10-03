@@ -46,8 +46,7 @@ class ClusterController extends Controller {
 
         ClustersModel::create( $request->all() );
         return redirect()->back()->with('success_message',
-        'Cluster created successfully.',
-     );
+        'Cluster created successfully.',);
        // return redirect()->route( 'cluster.index' )->with( 'success', 'Cluster created successfully.' );
 
     }

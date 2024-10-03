@@ -62,4 +62,8 @@ class GivingBackVehiclePermanently extends Model {
     public function receivedBy(): BelongsTo {
         return $this->belongsTo( User::class, 'received_by' );
     }
+    public function requestedBy(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'requested_by','id');
+    }
 }
