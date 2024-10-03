@@ -371,7 +371,7 @@ class VehicleParmanentlyRequestController extends Controller
     public function reject_assigned_vehicle(Request $request)
         {
             $validation = Validator::make($request->all(), [
-                'request_id' => 'required|vehicle_requests_temporary,request_id',
+                'request_id' => 'required|exists:vehicle_requests_parmanently,vehicle_request_permanent_id',
                 'reason' => 'required|string|max:1000'
             ]);
             // Check validation error

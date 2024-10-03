@@ -138,6 +138,9 @@ Route::group(['middleware' => ['auth']], function()
                     Route::get('/perm_simirit_approve_page', 'Dispatcher_page')->name('perm_vec_simirit_page');
                     Route::post('/perm_simirit_approve_request', 'DispatcherApproveRequest')->name('perm_vec_simirit_approve');
                     Route::post('/perm_simirit_reject_request', 'DispatcherRejectRequest')->name('perm_vec_simirit_reject');
+                    Route::get('/user_accept_assigned_vehicle/{id}', 'accept_assigned_vehicle')->name('accept_assigned_vehicle');
+                    Route::post('/user_decline_assigned_vehicle', 'reject_assigned_vehicle')->name('reject_assigned_vehicle');
+
                 });
             Route::controller(GivingBackPermanentVehicle::class)->group(function () 
                 {
