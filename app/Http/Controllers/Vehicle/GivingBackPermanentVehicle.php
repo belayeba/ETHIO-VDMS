@@ -12,7 +12,7 @@ use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
-use App\Models\Vehicle\VehiclePermanentlyRequestModel;
+// use App\Models\Vehicle\VehiclePermanentlyRequestModel;
 
 
 class GivingBackPermanentVehicle extends Controller
@@ -22,11 +22,11 @@ public function displayReturnPermRequestPage()
     {
         $id = Auth::id();
         $Requested = VehiclePermanentlyRequestModel::where('requested_by',$id)->latest()->get();
-        return view("Request.ParmanententRequestPage",compact('Requested'));
+        return view("Return.ReturnPermanentVehiclePage",compact('Requested'));
     }
     // Send Vehicle Return Request Parmananently
 public function ReturntVehiclePerm(Request $request) 
-    {dd($request);
+    {
             // Validate the request
             $validator = Validator::make($request->all(), [
                 'purpose' => 'required|string|max:1000',
@@ -190,13 +190,13 @@ public function deleteRequest(Request $request)
 public function DirectorApprovalPage()
     {
             $id = Auth::id();
-            // $directors_data = User::where('id',$id)->get('department_id');
-            // $dept_id = $directors_data->department_id;
+            $directors_data = User::where('id',$id)->get('department_id');
+            $dept_id = $directors_data->department_id;
 
             $vehicle_requests = GivingBackVehiclePermanently::whereHas('requestedBy', function ($query) use ($dept_id) {
                 $query->where('department_id', $dept_id);
             })->get();
-            return view("DirectorPage", compact('vehicle_requests'));
+            return view("Return.DirectorPage", compact('vehicle_requests'));
     }
 // DIRECTOR APPROVE THE REQUESTS
 public function DirectorApproveRequest(Request $request)
@@ -293,7 +293,7 @@ public function VehicleDirector_page()
             $Vehicle_Request = GivingBackVehiclePermanently::whereNotNull('approved_by')
                                 ->whereNull('reject_reason_director')
                                 ->get();
-            return view("vehicle_requests", compact('vehicle_requests'));     
+            return view("Return.vehicle_requests", compact('vehicle_requests'));     
     }
     // VEHICLE DIRECTOR APPROVE THE REQUESTS
 public function VehicleDirectorApproveRequest(Request $request)

@@ -41,7 +41,7 @@ class CreateAllTablesWithUuid extends Migration
             $table->date('license_expiry_date');
             $table->string('status', 255)->default('active');
             $table->string('license_file', 255);
-            $table->string('phone_number', 20);
+            //$table->string('phone_number', 20);
             $table->uuid('register_by');
             $table->foreign('register_by')->references('id')->on('users');
             $table->text('notes')->nullable();
@@ -302,10 +302,9 @@ class CreateAllTablesWithUuid extends Migration
         Schema::create('routes', function (Blueprint $table) {
             $table->uuid('route_id')->primary();
             $table->string('route_name');
-            $table->uuid('driver_id');
-            $table->foreign('driver_id')->references('driver_id')->on('drivers');
             $table->uuid('vehicle_id');
             $table->foreign('vehicle_id')->references('vehicle_id')->on('vehicles');
+            $table->integer('driver_phone');
             $table->uuid('registered_by');
             $table->foreign('registered_by')->references('id')->on('users');
             $table->timestamps();

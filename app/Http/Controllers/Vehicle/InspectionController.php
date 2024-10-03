@@ -93,15 +93,15 @@ class InspectionController extends Controller
         
             return response()->json(['status' => 'success', 'data' => $inspection]);
         }
-        public function showInspectionbyVehicle(Request $request)
+    public function showInspectionbyVehicle(Request $request)
         {
             try
                 {
                     $vehicle_id = $request->input('id');
                     $inspection = InspectionModel::select('inspection_id')->where('vehicle_id', $vehicle_id)->latest()->first();
-                    // dd( $vehicle_id);
+                    // dd( $inspection);
                     $inspection_id = $inspection->inspection_id;
-                    //dd($inspection_id);
+                    // dd($inspection_id);
 
                     $latest_inspection = InspectionModel::with('inspector:id,first_name','part:vehicle_parts_id,name')
                     ->select('inspection_id','inspected_by','part_name','created_at','is_damaged','inspection_image','damage_description')
@@ -118,6 +118,7 @@ class InspectionController extends Controller
                             'damage_description'  => $inspection->damage_description,
                         ];
                     });
+
                     return response()->json(['status' => 'success', 'data' => $latest_inspection]);
                 }
             catch(Exception $e)
