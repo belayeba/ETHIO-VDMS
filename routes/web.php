@@ -293,6 +293,7 @@ Route::group(['middleware' => ['auth']], function()
                 Route::post('/employee/store',[RouteController::class, 'assignUsersToRoute'])->name('employeeService.store');
                 Route::put('/update/{request_id}', [RouteController::class, 'update'])->name('route.update');
                 Route::delete('/delete/{request_id}', [RouteController::class, 'removeRoute'])->name('route.destroy');
+                Route::delete('/user/delete/{request_id}', [RouteController::class, 'removeUserFromRoute'])->name('routeUser.destroy');
 
                 });
                 // Define routes for InspectionController

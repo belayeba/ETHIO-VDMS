@@ -9,7 +9,6 @@ use App\Models\RouteManagement\RouteUser;
 use App\Models\User;
 use App\Models\Vehicle\VehiclesModel as Vehicle;
 use App\Models\Vehicle\VehiclesModel;
-use Illuminate\Validation\Rules\Unique;
 use Illuminate\Support\Str;
 
 class RouteController extends Controller
@@ -122,18 +121,17 @@ class RouteController extends Controller
         'Route deleted successfully.',);
     }
 
-    public function removeUserFromRoute(Request $request, $route_id)
+    public function removeUserFromRoute($id)
     {
-        // Remove specific users from the route
-        foreach ($request->user_ids as $user_id) {
-            RouteUser::where('route_id', $route_id)
-                    ->where('employee_id', $user_id)
-                    ->delete();
+        $routeUser = RouteUser::where('employee_id', $id)->first();
+    
+        if ($routeUser) {
+            $routeUser->delete();
+            return response()->json(['message' => 'User removed from route successfully']);
+        } else {
+            return response()->json(['error' => 'User not found in route'], 404);
         }
-
-        return response()->json(['message' => 'Users removed from route successfully']);
     }
-
     public function removeAllUsersFromRoute($route_id)
     {
         RouteUser::where('route_id', $route_id)->delete();
