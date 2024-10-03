@@ -93,7 +93,7 @@ class InspectionController extends Controller
         
             return response()->json(['status' => 'success', 'data' => $inspection]);
         }
-        public function showInspectionbyVehicle(Request $request)
+    public function showInspectionbyVehicle(Request $request)
         {
             try
                 {
@@ -118,7 +118,7 @@ class InspectionController extends Controller
                             'damage_description'  => $inspection->damage_description,
                         ];
                     });
-                    // dd($latest_inspection);
+
                     return response()->json(['status' => 'success', 'data' => $latest_inspection]);
                 }
             catch(Exception $e)

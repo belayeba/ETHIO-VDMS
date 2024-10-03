@@ -101,7 +101,7 @@
                                                             <td>{{ $data->first()->route->vehicle->plate_number }}</td>
                                                             <td>
                                                                 <button type="button" class="btn btn-info rounded-pill" 
-                                                                    data-bs-toggle="modal" data-bs-target="#viewEmployeeModal" 
+                                                                    data-bs-toggle="modal" data-bs-target="#viewEmployeeModal-{{ $loop->index }}" 
                                                                     data-id="{{ $data->first()->id }}" 
                                                                     data-name="{{ $data->first()->user->username }}" 
                                                                     data-department="{{ $data->first()->user->department->name }}">
@@ -109,8 +109,6 @@
                                                                 </button>
                                                             </td>
                                                         </tr>
-                                                        </div>
-                                                     </div>
                                                         @endforeach
                                                     </tbody>
                                                 </table>
@@ -118,6 +116,7 @@
                                         </div>
                                     </div>
                                 </div>
+<<<<<<< HEAD
                             </div>
                         </div>
                     </section>
@@ -138,20 +137,54 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            @foreach ($routeUser as $data)
-                                                <tr>
-                                                    <td>{{ $loop->iteration }}</td> <!-- Loop iteration for numbering -->
-                                                    <td>{{ optional($data->user)->username ?? 'N/A' }}</td> <!-- Ensure user exists -->
-                                                    <td>{{ optional($data->user->department)->name ?? 'N/A' }}</td> <!-- Ensure department exists -->
-                                                </tr>
+                                            @foreach ($routeUser as $route_id => $data)
+                                                @foreach ($data as $dat)
+                                                    <tr>
+                                                        <td>{{ $loop->iteration }}</td> <!-- Loop iteration for numbering -->
+                                                        <td>{{ optional($dat->user)->username ?? 'N/A' }}</td> <!-- Ensure user exists -->
+                                                        <td>{{ optional($dat->user->department)->name ?? 'N/A' }}</td> <!-- Ensure department exists -->
+                                                    </tr>
+                                                @endforeach
                                             @endforeach
                                         </tbody>
                                     </table>
+=======
+                                
+                                <!-- Modals -->
+                                @foreach ($routeUser as $route_id => $data)
+                                <div class="modal fade" id="viewEmployeeModal-{{ $loop->index }}" tabindex="-1" role="dialog" aria-labelledby="viewEmployeeModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog modal-lg">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="viewEmployeeModalLabel">View Employee Details for Route {{ $data->first()->route->route_name }}</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <table class="table table-striped">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>#</th>
+                                                            <th>Employee</th>
+                                                            <th>Department</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        @foreach ($data as $dat)
+                                                        <tr>
+                                                            <td>{{ $loop->iteration }}</td> <!-- Loop iteration for numbering -->
+                                                            <td>{{ optional($dat->user)->username ?? 'N/A' }}</td> <!-- Ensure user exists -->
+                                                            <td>{{ optional($dat->user->department)->name ?? 'N/A' }}</td> <!-- Ensure department exists -->
+                                                        </tr>
+                                                        @endforeach
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+>>>>>>> 2e17c25b8976f1c4d3ce9ee470e497acfa468d3a
                                 </div>
-                            </div>
-                        </div>
-                    </div>
-
+                                @endforeach
+                                
                     <!-- Footer -->
                     <footer class="footer-area">
                         <div class="container">
