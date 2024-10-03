@@ -138,12 +138,14 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            @foreach ($routeUser as $data)
-                                                <tr>
-                                                    <td>{{ $loop->iteration }}</td> <!-- Loop iteration for numbering -->
-                                                    <td>{{ optional($data->user)->username ?? 'N/A' }}</td> <!-- Ensure user exists -->
-                                                    <td>{{ optional($data->user->department)->name ?? 'N/A' }}</td> <!-- Ensure department exists -->
-                                                </tr>
+                                            @foreach ($routeUser as $route_id => $data)
+                                                @foreach ($data as $dat)
+                                                    <tr>
+                                                        <td>{{ $loop->iteration }}</td> <!-- Loop iteration for numbering -->
+                                                        <td>{{ optional($dat->user)->username ?? 'N/A' }}</td> <!-- Ensure user exists -->
+                                                        <td>{{ optional($dat->user->department)->name ?? 'N/A' }}</td> <!-- Ensure department exists -->
+                                                    </tr>
+                                                @endforeach
                                             @endforeach
                                         </tbody>
                                     </table>

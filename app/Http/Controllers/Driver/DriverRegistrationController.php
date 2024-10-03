@@ -23,7 +23,7 @@ class DriverRegistrationController extends Controller {
 
     public function store( Request $request ) {
         try {
-            // dd($request);
+            // dd( $request );
             $validator = Validator::make( $request->all(), [
                 'user_id' => 'required|uuid|exists:users,id',
                 'license_number' => 'required|string|max:255',
@@ -46,7 +46,6 @@ class DriverRegistrationController extends Controller {
             }
             $license = time() . '_' . $file->getClientOriginalName();
             $file->move( $storagePath, $license );
-
             DriversModel::create( [
                 'user_id' => $request->input( 'user_id' ),
                 'license_number' => $request->input( 'license_number' ),
@@ -57,11 +56,10 @@ class DriverRegistrationController extends Controller {
                 'notes' => $request->input( 'notes' ),
             ] );
 
-            // return response()->json( [ 'message' => 'Driver created successfully', 'driver' => $driver ], 201 );
             return redirect()->back()->with( 'success', 'Driver created successfully.' );
         } catch ( Exception $e ) {
-            // return response()->json( [ 'message' => 'Driver creation failed' ], 500 );
-            return redirect()->back()->with( 'error', 'Driver creation failed.' );
+            return response()->json( [ 'message' => $e ], 500 );
+            //return redirect()->back()->with( 'error', 'Driver creation failed.' );
         }
     }
 
