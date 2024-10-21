@@ -104,6 +104,7 @@
                                 <th>Roll.no</th>
                                 <th>Date Requested</th>
                                 <th>status</th>
+                                <th>Vehicle</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
@@ -113,6 +114,7 @@
                                     <td>{{$loop->iteration}}</td>
                                     <td>{{$request->created_at->format('M j, Y,')}}</td>
                                     <td>{{$request->status == 1 ? "Approved" : "Pending"}}</td>
+                                    <td>{{$request->vehicle_id !== null ? $request->vehicle->plate_number : " "}}</td>
                                     <td>
                                         {{-- <button type="button" class="btn btn-info rounded-pill" title="show"><i class=" ri-eye-line"></i></button> --}}
                                             <form method="POST" action="{{ route('user_perm_delet') }}">
@@ -127,7 +129,7 @@
                                             <input type="hidden" value="{{$request->vehicle_id}}" id="vehicleselection">
                                             <a href="#" class="btn btn-info rounded-pill"  id="assignBtn" title="Inspect">Inspect</a>
                                         @endif
-                                        @if($request->vehicle_id !== null && $request->accepted_by_requestor === null )                                         
+                                        @if($request->vehicle_id !== null && $request->accepted_by_requestor == null )                                         
                                             <a href="{{ route('accept_assigned_vehicle', ['id' => $request->vehicle_request_permanent_id]) }}" class="btn btn-primary rounded-pill"  title="Accept">Accept</a>
                                             <button type="button" class="btn btn-danger rounded-pill" data-bs-toggle="modal" data-bs-target="#staticBackdrop-{{ $loop->index }}" title="Reject">Reject</button>
                                         @endif 

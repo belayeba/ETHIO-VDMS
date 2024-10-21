@@ -56,12 +56,8 @@ class DriverRegistrationController extends Controller {
                 'notes' => $request->input( 'notes' ),
             ] );
 
-<<<<<<< HEAD
-            return redirect()->back()->with( 'success', 'Driver created successfully.' );
-=======
             
             return redirect()->back()->with('success_message','Driver created successfully.',);
->>>>>>> 2e17c25b8976f1c4d3ce9ee470e497acfa468d3a
         } catch ( Exception $e ) {
             return response()->json( [ 'message' => $e ], 500 );
             //return redirect()->back()->with( 'error', 'Driver creation failed.' );

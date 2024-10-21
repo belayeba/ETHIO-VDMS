@@ -24,6 +24,68 @@ class VehicleTemporaryRequestController extends Controller
                 $Requested = VehicleTemporaryRequestModel::with('peoples', 'materials')->where('requested_by_id', $id)->get();
                 return view("Request.TemporaryRequestPage",compact('Requested','users'));
             }
+            
+        public function FetchTemporaryRequest()
+            {
+                        
+                $data = VehicleTemporaryRequestModel::get();
+                
+                return datatables()->of($data)
+                ->addIndexColumn()
+                ->addColumn('counter', function($row) use ($data){
+                    static $counter = 0;
+                    $counter++;
+                    return $counter;
+                })
+
+                ->addColumn('start_date', function ($row) {
+                    return $row->start_date;
+                })
+
+                ->addColumn('location', function ($row) {
+                    return  $row->start_location . ',</br> To: ' . $row->end_locations;
+                })
+
+                ->addColumn('actions', function ($row) {
+                    $actions = '<button type="button" class="btn btn-info rounded-pill" 
+                    data-bs-toggle="modal" 
+                    data-bs-target="#standard-modal"
+                    data-purpose="' . $row->purpose . '"
+                    data-vehicle_type="' . $row->vehicle_type . '"
+                    data-start_date="' . $row->start_date . '"
+                    data-start_time="' . $row->start_time . '"
+                    data-end_date="' . $row->end_date . '"
+                    data-end_time="' . $row->end_time . '"
+                    data-start_location="' . $row->start_location . '&nbsp;&nbsp;&nbsp;' . $row->end_locations . '"
+                    data-passengers=\'' . json_encode($row->peoples) . '\'
+                    data-materials=\'' . json_encode($row->materials) . '\'
+                    data-dir_approved_by="' . $row->dir_approved_by . '"
+                    data-director_reject_reason="' . $row->director_reject_reason . '"
+                    data-div_approved_by="' . $row->div_approved_by . '"
+                    data-cluster_director_reject_reason="' . $row->cluster_director_reject_reason . '"
+                    data-hr_div_approved_by="' . $row->hr_div_approved_by . '"
+                    data-hr_director_reject_reason="' . $row->hr_director_reject_reason . '"
+                    data-transport_director_id="' . $row->transport_director_id . '"
+                    data-vec_director_reject_reason="' . $row->vec_director_reject_reason . '"
+                    data-assigned_by="' . $row->assigned_by . '"
+                    data-assigned_by_reject_reason="' . $row->assigned_by_reject_reason . '"
+                    data-vehicle_id="' . $row->vehicle_id . '"
+                    data-vehicle_plate="' . ($row->vehicle ? $row->vehicle->plate_number : '') . '"
+                    data-start_km="' . $row->start_km . '"
+                    data-end_km="' . $row->end_km . '"
+                    title="Show Details">
+                    <i class="ri-eye-line"></i></button>';                    
+                    if ($row->dir_approved_by == null && $row->director_reject_reason == null) {
+                        $actions .= '<a href="'.route('editRequestPage', ['id' => $row->request_id]).'" class="btn btn-secondary rounded-pill" title="edit"><i class="ri-edit-line"></i></a>';
+                    }
+        
+                    return $actions;
+                })
+
+                ->rawColumns(['actions','start_date','location','counter'])
+                ->toJson();
+        
+            }
         // Send Vehicle Request Temporary
         public function RequestVehicleTemp(Request $request) 
             {
@@ -596,6 +658,68 @@ class VehicleTemporaryRequestController extends Controller
                 // Return the results, for example, passing them to a view
                 return view('Request.TransportDirectorPage', compact('vehicleRequests'));
             }
+
+        public function FetchTransportDirector()
+            {
+                        
+                $data = VehicleTemporaryRequestModel::get();
+                
+                return datatables()->of($data)
+                ->addIndexColumn()
+                ->addColumn('counter', function($row) use ($data){
+                    static $counter = 0;
+                    $counter++;
+                    return $counter;
+                })
+
+                ->addColumn('name', function ($row) {
+                    return  $row->requestedBy->first_name. ' ' . $row->requestedBy->last_name;
+                })
+
+                ->addColumn('type', function ($row) {
+                    return  $row->vehicle_type;
+                })
+
+                ->addColumn('start_date', function ($row) {
+                    return $row->start_date;
+                })
+
+                ->addColumn('start_location', function ($row) {
+                    return  $row->start_location ;
+                })
+
+                ->addColumn('end_location', function ($row) {
+                    return  $row->end_locations;
+                })
+
+                ->addColumn('actions', function ($row) {
+                    $actions = '<button type="button" class="btn btn-info rounded-pill btn-show" data-toggle="modal" data-target="#standard-modal" 
+                                data-purpose="' . $row->purpose . '"
+                                data-vehicle="' . $row->vehicle_type . '"
+                                data-start_date="' . $row->start_date . '"
+                                data-start_time="' . $row->start_time . '"
+                                data-end_date="' . $row->end_date . '"
+                                data-end_time="' . $row->end_time . '"
+                                data-start_location="' . $row->start_location . '"
+                                data-end_locations="' . $row->end_locations . '"
+                                data-passengers="' . $row->peoples->pluck('user.first_name')->implode(', ') . '"
+                                data-materials="' . $row->materials->pluck('material_name')->implode(', ') . '"
+                                title="Show">
+                                <i class="ri-eye-line"></i></button>';
+                    
+                    if ($row->transport_director_id === null && $row->vec_director_reject_reason === null) {
+                        $actions .= '<button id="acceptButton" type="button" class="btn btn-primary rounded-pill" title="Accept" onclick="confirmFormSubmission(\'approvalForm-'.$row->index.'\')"><i class="ri-checkbox-circle-line"></i></button>';
+                        $actions .= '<button type="button" class="btn btn-danger rounded-pill" data-bs-toggle="modal" data-bs-target="#staticBackdrop-'.$row->index.'" title="Reject"><i class="ri-close-circle-fill"></i></button>';
+                    }
+                
+                    return $actions;
+                })
+
+                ->rawColumns(['actions','name','Type','start_date','start_location','end_location','counter'])
+                ->toJson();
+        
+            }
+            
         public function TransportDirectorApproveRequest(Request $request)
             {
                     $validation = Validator::make($request->all(),[

@@ -4,7 +4,23 @@
    
 <div class="content-page">
     <div class="content">
-
+        
+        @if(Session::has('error_message'))
+        <div class="alert alert-danger alert-dismissible text-bg-danger border-0 fade show col-lg-5" 
+            role="alert">
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="Close"></button>
+            <strong>Error - </strong> {!! session('error_message') !!}
+        </div>
+        @endif
+        
+        @if(Session::has('success_message'))
+        <div class="alert alert-primary alert-dismissible text-bg-primary border-0 fade show col-lg-5"
+            role="alert">
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="Close"></button>
+            <strong> Success- </strong> {!! session('success_message') !!} 
+        </div>
+        @endif
+        
         <!-- Start Content-->
 <div class="container-fluid">
     <div class="row">
@@ -14,7 +30,7 @@
                     <h4 class="header-title">Fuel Request</h4>
                 </div>
                 <div class="card-body"> 
-                    <form action="{{route('vec_perm_request_post')}}" method="post" enctype="multipart/form-data">
+                    <form action="{{route('store_fuel_request')}}" method="post" enctype="multipart/form-data">
                         @csrf
 
                         <div id="progressbarwizard">
@@ -37,7 +53,7 @@
                                         <div class="position-relative mb-3">
                                             <div class="mb-6 position-relative" id="datepicker1">
                                                 <label class="form-label">Type</label>
-                                                <select class="form-select mb-3">
+                                                <select class="form-select mb-3" name="vehicle_id">
                                                     <option selected>Open this select menu</option>
                                                     <option value="1">Monthly Fuel Request</option>
                                                     <option value="2">Other Fuel Request</option>
@@ -46,7 +62,7 @@
                                         </div>   
                                             <div class="mb-3 position-relative">
                                                 <label class="form-label">Select Month</label>
-                                                <select class="form-select mb-3">
+                                                <select class="form-select mb-3" name="month">
                                                 <option value="">Select</option>    
                                                 <option value="1">መስከረም</option>
                                                 <option value="2">ጥቅምት</option>
@@ -69,21 +85,21 @@
                                             <div class="col-md-3">
                                                 <div class="position-relative">
                                                     <label for="position-letter" class="form-label">Fuel</label>
-                                                    <input id="Fuel_ammount" name="position_letter" class="form-control" placeholder="In Litter" type="number">
+                                                    <input id="Fuel_ammount"  class="form-control" placeholder="In Litter" type="number">
                                                 </div>
                                             </div>
 
                                             <div class="col-md-3">
                                                 <div class="position-relative">
                                                     <label for="driving-license" class="form-label">price</label>
-                                                    <input id="fuel_price" name="Driving_license" class="form-control" placeholder="In Birr" type="number">
+                                                    <input id="fuel_price"  class="form-control" placeholder="In Birr" type="number">
                                                 </div>
                                             </div>
 
                                             <div class="col-md-3">
                                                 <div class="position-relative">
                                                     <label for="driving-license" class="form-label">Date</label>
-                                                    <input id="fill_date" name="Driving_license" class="form-control" placeholder="When" type="text">
+                                                    <input id="fill_date"  class="form-control" placeholder="When" type="text">
                                                 </div>
                                             </div>
                                              <script> 
@@ -122,6 +138,68 @@
                                         </li>
                                     </ul>
                                 </div> 
+                                <script>
+                                    document.addEventListener('DOMContentLoaded', function() {
+                                    const addButton = document.getElementById('addItem');
+                                    const itemList = document.getElementById('itemList');
+                                    
+                                    addButton.addEventListener('click', function() {
+                                        const fuel = document.getElementById('Fuel_ammount').value;
+                                        const fuelPrice = document.getElementById('fuel_price').value;
+                                        const fillDate = document.getElementById('fill_date').value;
+                                        const attachment = document.getElementById('attachment').value;
+                                        const attachmentName = attachment.split('\\').pop();
+                                        
+                                        if (fuel && fuelPrice && fillDate && attachment) {
+                                            const itemDiv = document.createElement('div');
+                                            itemDiv.innerHTML = `
+                                                <span>Fuel: ${fuel} litters &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Price: ${fuelPrice} birr &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Date: ${fillDate} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Attachment: ${attachmentName}</span>
+                                                <button class="removeItem">X</button>
+                                            `;
+                                            
+                                            const fuelInput = document.createElement('input');
+                                            fuelInput.type = 'hidden';
+                                            fuelInput.name = 'fuel_amount[]';
+                                            fuelInput.value = fuel;
+                                            
+                                            const priceInput = document.createElement('input');
+                                            priceInput.type = 'hidden';
+                                            priceInput.name = 'fuel_cost[]';
+                                            priceInput.value = fuelPrice;
+                                            
+                                            const dateInput = document.createElement('input');
+                                            dateInput.type = 'hidden';
+                                            dateInput.name = 'fuiling_date[]';
+                                            dateInput.value = fillDate;
+                                            
+                                            const attachmentInput = document.createElement('input');
+                                            attachmentInput.type = 'hidden';
+                                            attachmentInput.name = 'reciet_attachment[]';
+                                            attachmentInput.value = attachment;
+
+                                            itemDiv.classList.add('itemEntry');
+                                            itemList.appendChild(itemDiv);
+                                            itemList.appendChild(fuelInput);
+                                            itemList.appendChild(priceInput);
+                                            itemList.appendChild(dateInput);
+                                            itemList.appendChild(attachmentInput);
+
+                                            // Clear input fields after adding item
+                                            document.getElementById('Fuel_ammount').value = '';
+                                            document.getElementById('fuel_price').value = '';
+                                            document.getElementById('fill_date').value = '';
+                                            document.getElementById('attachment').value = '';
+                                        }
+                                    });
+
+                                    itemList.addEventListener('click', function(e) {
+                                        if (e.target.classList.contains('removeItem')) {
+                                            const itemDiv = e.target.parentElement;
+                                            itemDiv.remove();
+                                        }
+                                    });
+                                });
+                                </script>  
                             </div>   
                         </div>
                     </form> 
@@ -180,46 +258,7 @@
         </div>
     </div>
 
-        <script>
-            document.addEventListener('DOMContentLoaded', function() {
-            const addButton = document.getElementById('addItem');
-            const itemList = document.getElementById('itemList');
-
-            addButton.addEventListener('click', function() {
-                const fuel = document.getElementById('Fuel_ammount').value;
-                const fuelPrice = document.getElementById('fuel_price').value;
-                const fillDate = document.getElementById('fill_date').value;
-                const attachment = document.getElementById('attachment').value;
-                const attachmentName = attachment.split('\\').pop();
-
-                if (fuel && fuelPrice && fillDate && attachment) {
-                    const itemDiv = document.createElement('div');
-                    itemDiv.innerHTML = `
-                       <span>Fuel: ${fuel} litters &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Price: ${fuelPrice} birr &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Date: ${fillDate} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Attachment: ${attachmentName}</span>
-                        <button class="removeItem">X</button>
-
-                    `;
-
-                    itemDiv.classList.add('itemEntry');
-
-                    itemList.appendChild(itemDiv);
-
-                    // Clear input fields after adding item
-                    document.getElementById('Fuel_ammount').value = '';
-                    document.getElementById('fuel_price').value = '';
-                    document.getElementById('fill_date').value = '';
-                    document.getElementById('attachment').value = '';
-                }
-            });
-
-            itemList.addEventListener('click', function(e) {
-                if (e.target.classList.contains('removeItem')) {
-                    const itemDiv = e.target.parentElement;
-                    itemDiv.remove();
-                }
-            });
-        });
-        </script>       
+     
     
     <script>
         $(document).on('click', '#show_ai_text_generator', function () {

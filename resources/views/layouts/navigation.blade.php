@@ -9,7 +9,81 @@
 <script src="{{ asset('assets/js/jquery.calendars.picker.js') }}"></script>
 <script src="{{ asset('assets/js/jquery.calendars.ethiopian.js') }}"></script>
 <script src="{{ asset('assets/js/jquery.calendars.ethiopian-am.js') }}"></script>
+<style>
+    .dataTables_wrapper .dataTables_paginate .paginate_button {
+        box-sizing: border-box;
+        display: inline-block;
+        min-width: 1.5em;
+        padding: 0.5em 1em;
+        margin-left: 2px;
+        text-align: center;
+        text-decoration: none !important;
+        cursor: pointer;
+        *cursor: hand;
+        color: #333 !important;
+        border: 1px solid transparent;
+        border-radius: 2px;
+    }
 
+    .dataTables_wrapper .dataTables_paginate .paginate_button.current,
+    .dataTables_wrapper .dataTables_paginate .paginate_button.current:hover {
+        color: #333 !important;
+        border: 1px solid #979797;
+        background-color: white;
+        background: -webkit-gradient(linear,
+                left top,
+                left bottom,
+                color-stop(0%, white),
+                color-stop(100%, #dcdcdc));
+        background: -webkit-linear-gradient(top, white 0%, #dcdcdc 100%);
+        background: -moz-linear-gradient(top, white 0%, #dcdcdc 100%);
+        background: -ms-linear-gradient(top, white 0%, #dcdcdc 100%);
+        background: -o-linear-gradient(top, white 0%, #dcdcdc 100%);
+        background: linear-gradient(to bottom, white 0%, #dcdcdc 100%);
+    }
+
+    .dataTables_wrapper .dataTables_paginate .paginate_button.disabled,
+    .dataTables_wrapper .dataTables_paginate .paginate_button.disabled:hover,
+    .dataTables_wrapper .dataTables_paginate .paginate_button.disabled:active {
+        cursor: default;
+        color: #666 !important;
+        border: 1px solid transparent;
+        background: transparent;
+        box-shadow: none;
+    }
+
+    .dataTables_wrapper .dataTables_paginate .paginate_button:hover {
+        color: white !important;
+        border: 1px solid #111;
+        background-color: #585858;
+        background: -webkit-gradient(linear,
+                left top,
+                left bottom,
+                color-stop(0%, #585858),
+                color-stop(100%, #111));
+        background: -webkit-linear-gradient(top, #585858 0%, #111 100%);
+        background: -moz-linear-gradient(top, #585858 0%, #111 100%);
+        background: -ms-linear-gradient(top, #585858 0%, #111 100%);
+        background: -o-linear-gradient(top, #585858 0%, #111 100%);
+        background: linear-gradient(to bottom, #585858 0%, #111 100%);
+    }
+
+    .dataTables_wrapper .dataTables_paginate .paginate_button:active {
+        outline: none;
+        background-color: #2b2b2b;
+        background: -webkit-gradient(linear,
+                left top,
+                left bottom,
+                color-stop(0%, #2b2b2b),
+                color-stop(100%, #0c0c0c));
+        background: -webkit-linear-gradient(top, #2b2b2b 0%, #0c0c0c 100%);
+        background: -moz-linear-gradient(top, #2b2b2b 0%, #0c0c0c 100%);
+        background: -ms-linear-gradient(top, #2b2b2b 0%, #0c0c0c 100%);
+        background: -o-linear-gradient(top, #2b2b2b 0%, #0c0c0c 100%);
+        background: linear-gradient(to bottom, #2b2b2b 0%, #0c0c0c 100%);
+        box-shadow: inset 0 0 3px #111;
+    }
+</style>
 
 <body>
     <div class="wrapper">
@@ -167,6 +241,25 @@
                     </li>
 
                     <li class="side-nav-item">
+                        <a data-bs-toggle="collapse" href="#sidebarFuel" aria-expanded="false"
+                            aria-controls="sidebarFuel" class="side-nav-link">
+                            <i class="  ri-gas-station-fill"></i>
+                            <span>Fuel Management</span>
+                            <span class="menu-arrow"></span>
+                        </a>
+                        <div class="collapse" id="sidebarFuel">
+                            <ul class="side-nav-second-level">
+                                <li>
+                                    <a href="{{route('permanenet_fuel_request')}}">Fuel Request</a>
+                                </li>
+                                <li>
+                                    <a href="{{route('finance_approve_fuel_page')}}">Finance Page</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+
+                    <li class="side-nav-item">
                         <a data-bs-toggle="collapse" href="#sidebarUser" aria-expanded="false"
                             aria-controls="sidebarUser" class="side-nav-link">
                             <i class="  ri-user-fill"></i>
@@ -306,4 +399,4 @@
 </body>
 
 </html>
- <script src="{{ asset('assets/js/vendor.min.js') }}"></script> 
+ {{-- <script src="{{ asset('assets/js/vendor.min.js') }}"></script>  --}}

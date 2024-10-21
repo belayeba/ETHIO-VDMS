@@ -27,18 +27,11 @@ class RouteController extends Controller {
         $routes = Route::get();
         $users = User::all();
         $routeUser = RouteUser::all();
-<<<<<<< HEAD
-        $routeUser = $routeUser->groupBy( 'route_id' );
-        //$routeUser = RouteUser::with( 'user.department' )->get();
-        //dd( $routeUser );
-        return view( 'Route.show', compact( 'routes', 'users', 'routeUser' ) );
-=======
         // dd($routeUser);
         $routeUser = $routeUser->groupBy('route_id');
         //$routeUser = RouteUser::with('user.department')->get();
 
         return view('Route.show', compact('routes','users','routeUser'));
->>>>>>> 2e17c25b8976f1c4d3ce9ee470e497acfa468d3a
     }
 
     public function loadAssignmentForm( $route_id ) {
@@ -66,27 +59,6 @@ class RouteController extends Controller {
             'driver_phone' => $request->driver_phone,
             'vehicle_id' => $request->vehicle_id,
             'registered_by' => auth()->user()->id,
-<<<<<<< HEAD
-        ] );
-
-        return response()->json( [ 'message' => 'Route registered successfully', 'route' => $route ] );
-    }
-
-    public function assignUsersToRoute( Request $request ) {
-        // dd( $request );
-        // $route = Route::findOrFail( $route_id );
-
-        // assign driver
-        // if ( $request->has( 'driver_phone' ) ) {
-        //     $route->driver_phone = $request->driver_phone;
-        //     $route->save();
-        // }
-
-        // Assign Users to Route
-        //  dd( $route_user_id );
-        foreach ( $request->people_id as $user_id ) {
-            RouteUser::create( [
-=======
         ]);
         return redirect()->back()->with('success_message',
         'Route registered successfully.',);
@@ -99,19 +71,13 @@ class RouteController extends Controller {
         // Assign Users to Route
         foreach ($request->people_id as $user_id) {
             RouteUser::create([
->>>>>>> 2e17c25b8976f1c4d3ce9ee470e497acfa468d3a
                 'employee_id' => $user_id,
                 'route_id' => $request->route_id,
                 'registered_by' => auth()->user()->id,
             ] );
         }
-<<<<<<< HEAD
-
-        return response()->json( [ 'message' => 'Users assigned successfully' ] );
-=======
         return redirect()->back()->with('success_message',
         'Users assigned successfully.',);
->>>>>>> 2e17c25b8976f1c4d3ce9ee470e497acfa468d3a
     }
 
     public function updateRouteAssignment( Request $request, $route_id ) {

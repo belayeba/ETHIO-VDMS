@@ -21,7 +21,7 @@ class InspectionController extends Controller
                 ->distinct()
                 ->orderBy('inspection_date', 'desc')
                 ->get();
-             // dd($inspections);
+            //  dd($inspections);
             return view('Vehicle.Inspection', compact('inspections','parts','vehicle'));
         }
         //Insert Data
@@ -83,15 +83,38 @@ class InspectionController extends Controller
             return response()->json(['status' => 'success', 'message' => 'Inspection saved successfully']);
         }
         // Show a specific inspection
-    public function showInspection($inspectionId)
+    public function showInspection(Request $request)
         {
-            $inspection = InspectionModel::where('inspection_id', $inspectionId)->get();
-        
-            if ($inspection->isEmpty()) {
-                return response()->json(['status' => 'error', 'message' => 'Inspection not found'], 404);
-            } 
-        
-            return response()->json(['status' => 'success', 'data' => $inspection]);
+            try
+            {
+                $inspectionId = $request->input('id');
+                $inspection = InspectionModel::where('inspection_id', $inspectionId)->get();
+            
+                if ($inspection->isEmpty()) {
+                    return response()->json(['status' => 'error', 'message' => 'Inspection not found'], 404);
+                } 
+                $latest_inspection = InspectionModel::with('inspector:id,first_name','part:vehicle_parts_id,name')
+                ->select('inspection_id','inspected_by','part_name','created_at','is_damaged','inspection_image','damage_description')
+                ->where('inspection_id', $inspectionId)
+                ->get()                   //dd($inspection->isEmpty());
+                ->map(function ($inspection) {
+                    return [
+                        'inspection_id'      => $inspection->inspection_id,
+                        'inspected_by'       => $inspection->inspector->first_name,
+                        'part_name'          => $inspection->part->name,
+                        'created_at'         => $inspection->created_at,
+                        'is_damaged'         => $inspection->is_damaged,
+                        'image_path'         => $inspection->inspection_image,
+                        'damage_description'  => $inspection->damage_description,
+                    ];
+                });
+
+                return response()->json(['status' => 'success', 'data' => $latest_inspection]);
+            }
+            catch(Exception $e)
+                {
+                    return response()->json(['status' => 'error', 'message' => "Sorry, Something Went Wrong"], 404);
+                }
         }
     public function showInspectionbyVehicle(Request $request)
         {

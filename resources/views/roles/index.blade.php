@@ -23,22 +23,6 @@
             <!-- Start Content-->
             <div class="container-fluid">
 
-                <!-- start page title -->
-                <div class="row">
-                    <div class="col-12">
-                        <div class="page-title-box">
-                            <div class="page-title-right">
-                                <ol class="breadcrumb m-0">
-                                    <li class="breadcrumb-item"><a href="javascript: void(0);">Velonic</a></li>
-                                    <li class="breadcrumb-item"><a href="javascript: void(0);">Tables</a></li>
-                                    <li class="breadcrumb-item active">Data Tables</li>
-                                </ol>
-                            </div>
-                            <h4 class="page-title">Data Tables</h4>
-                        </div>
-                    </div>
-                </div>
-                <!-- end page title -->
 
                 <div class="col-12">
                     <div class="card">
@@ -164,16 +148,51 @@
                                             <tr>
                                                 <td style="color: black;  font-family:system-ui">{{ ++$i }}</td>
                                                 <td style="color: black;  font-family:system-ui">{{ $role->name }}</td>
-                                                <td style="color: black;  font-family:system-ui">
-                                                    @if (!empty($rolePermissions))
-                                                        @foreach ($rolePermissions as $v)
-                                                            @if ($v->role_id == $role->id)
-                                                                {{ $v->name }},
-                                                            @endif
-                                                        @endforeach
-                                                    @endif
+                                                <td style="color: black; font-family: system-ui; max-width: 50px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="">
+                                                    <button id="permissionText" data-bs-toggle="modal"
+                                                    data-bs-target="#centermodal_{{$role->id}}" style="background: none; border: none; color: rgb(16, 16, 17); cursor: pointer;" title="Click to see more">
+                                                        @if (!empty($rolePermissions))
+                                                            @foreach ($rolePermissions as $v)
+                                                                @if ($v->role_id == $role->id)
+                                                                    {{ $v->name }},
+                                                                @endif
+                                                            @endforeach
+                                                        @endif
+                                                    </button>
+                                                    {{-- <button onclick="expandPermission()" style="background: none; border: none; color: rgb(16, 16, 17); cursor: pointer;">...</button> --}}
                                                 </td>
-                                                <td style=" text-align:center;">
+                                               <!-- Center modal content -->
+                                                    <div class="modal fade" id="centermodal_{{$role->id}}" tabindex="-1" role="dialog"
+                                                    aria-hidden="true">
+                                                    <div class="modal-dialog modal-dialog-centered">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <h4 class="modal-title" id="myCenterModalLabel">Permmisions for <u>{{$role->name}}</u></h4>
+                                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                                    aria-label="Close"></button>
+                                                            </div>
+                                                            <div class="modal-body">
+                                                                <h5>
+                                                                    @php
+                                                                        $counter = 1;
+                                                                     @endphp
+                                                                    @if (!empty($rolePermissions))  
+                                                                        @foreach ($rolePermissions as $v)
+                                                                            @if ($v->role_id == $role->id)
+                                                                               {{$counter}}&nbsp;&nbsp;&nbsp;&nbsp;{{ $v->name }}</br>
+                                                                               @php
+                                                                                 $counter++;
+                                                                               @endphp
+                                                                            @endif
+                                                                          
+                                                                        @endforeach
+                                                                    @endif
+                                                                </h5>
+                                                            </div>
+                                                        </div><!-- /.modal-content -->
+                                                    </div><!-- /.modal-dialog -->
+                                                </div><!-- /.modal -->
+                                                <td >
 
                                                     <form method="POST" action="{!! route('roles.destroy', $role->id) !!}"
                                                         accept-charset="UTF-8">
@@ -181,11 +200,6 @@
                                                         {{ csrf_field() }}
 
                                                         <div class="btn-group btn-group-xs pull-right" role="group">
-
-                                                            <a href="{{ route('roles.show', $role->id) }}"
-                                                                class="btn btn-info" title="Show"><i
-                                                                    class="ri-eye-fill"></i></a>
-
 
                                                             @if ($role->name !== 'Admin')
                                                                 <a href="{{ route('roles.edit', $role->id) }}"
@@ -212,7 +226,7 @@
 
                                     </tbody>
                                 </table>
-
+                               
 
                         </div> <!-- end row-->
                         {!! $roles->render() !!}
