@@ -163,21 +163,16 @@ class VehicleTemporaryRequestController extends Controller
                             }
                         
                             // Commit the transaction
-                            DB::commit();
                             $user = User::find($id);  // Find the user to notify
-                            $message = "The task has been completed!";
-                            $url = url("/tasks/belay");
-
-                            // Send the notification with the dynamic message and URL
-                            $user->notifications(new TaskCompleted($message, $url));                            
+                            $message = "You have requested Temporary Request";
+                            $subject = "Vehicle Temporary Request";
+                            $url = "facebook.com";
+                            $user->NotifyUser($message,$subject,$url);  
+                            DB::commit();                         
                             // Return response to user
                             return redirect()->back()->with('success_message',
                                 'You successfully requested a vehicle',
                             );
-                            // return redirect()->json([
-                            //     'success' => true,
-                            //     'message' => 'You successfully requested a vehicle',
-                            // ]);
                         
                         } 
                     catch (Exception $e) 
@@ -722,6 +717,7 @@ class VehicleTemporaryRequestController extends Controller
             
         public function TransportDirectorApproveRequest(Request $request)
             {
+                     dd("coming");
                     $validation = Validator::make($request->all(),[
                     'request_id' => 'required|uuid|exists:vehicle_requests_temporary,request_id',
                     ]);

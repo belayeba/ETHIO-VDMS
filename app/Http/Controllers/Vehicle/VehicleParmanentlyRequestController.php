@@ -197,7 +197,7 @@ class VehicleParmanentlyRequestController extends Controller
             catch (Exception $e) {
                 // Handle the case when the vehicle request is not found
             return redirect()->back()->with('error_message',
-                                "Sorry, Something went wron",
+                                "Sorry, Something went wron ".$e,
                                 );
             }
         }

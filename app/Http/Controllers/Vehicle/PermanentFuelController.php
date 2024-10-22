@@ -42,7 +42,6 @@ class PermanentFuelController extends Controller {
 
         // Get driver based on the logged-in user
         $get_driver = DriversModel::select( 'driver_id' )->where( 'user_id', $logged_user )->first();
-
         // Ensure that the driver exists
         if ( !$get_driver ) {
             return redirect()->back()->with('error_message',
@@ -51,11 +50,10 @@ class PermanentFuelController extends Controller {
         }
 
         $get_driver_id = $get_driver->driver_id;
-
         // Get permanent vehicle request associated with driver and vehicle
         $permanent = VehiclePermanentlyRequestModel::select( 'vehicle_request_permanent_id','fuel_quata','feul_left_from_prev' )
-        ->where( 'driver_id', $logged_user )
-        ->where( 'vehicle_id', $request->vehicle_id )
+        ->where( 'requested_by', $logged_user )
+        ->where( 'vehicle_id', "e4d52c47-86b6-4190-8b97-e555ba971685" )
         ->where( 'status', true )
         ->first();
         // Ensure that the permanent vehicle request exists
@@ -70,7 +68,7 @@ class PermanentFuelController extends Controller {
         foreach ( $request->fuel_amount as $index => $fuel_amount ) {
             $fueling = new PermanentFuelModel();
             $fueling->fueling_id = $fueling_id;
-            $fueling->vehicle_id = $request->vehicle_id;
+            $fueling->vehicle_id = "e4d52c47-86b6-4190-8b97-e555ba971685";
             $fueling->driver_id = $get_driver_id;
             $fueling->permanent_id = $get_permanent_id;
             $fueling->fuiling_date = $request->fuiling_date[ $index ];

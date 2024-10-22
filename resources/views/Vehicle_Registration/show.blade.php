@@ -245,7 +245,7 @@
                                     <li class="next list-inline-item float-end">
                                         <button type="submit" class="btn btn-info">Submit</button>
                                     </li>
-                                </form>
+                                </form> 
                             </ul>
                         </div>
                     </div>

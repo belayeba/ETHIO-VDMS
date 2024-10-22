@@ -173,69 +173,71 @@
                             <ul class="side-nav-second-level">
                                  @can('Temporary Request Page')  
                                 <li>
-                                    <a href="{{ route('displayRequestPage') }}">Temporary vehicle request</a>
+                                    <a href="{{ route('displayRequestPage') }}">Temporary vehicle</a>
                                 </li>
                                   @endcan()  
                                   @can('Permanent Request Page')  
                                 <li>
-                                    <a href="{{ route('vec_perm_request') }}">Permanent vehicle request</a>
+                                    <a href="{{ route('vec_perm_request') }}">Permanent vehicle</a>
                                 </li>
                                   @endcan()  
                                   @can('Director Approval Page')  
                                 <li>
-                                    <a href="{{ route('director_temp') }}">Approve Temporary vehicle request</a>
+                                    <a href="{{ route('director_temp') }}">Approve Temporary</a>
                                 </li>
                                   @endcan()  
                                   @can('Clustor Director Apporal Page')  
                                 <li>
-                                    <a href="{{ route('ClusterDirector_temp') }}">Approve Temporary Vehicle Request</a>
+                                    <a href="{{ route('ClusterDirector_temp') }}">Approve Temporary</a>
                                 </li>
                                   @endcan()  
                                   @can('HR Cluster Director Approval Page')  
                                 <li>
-                                    <a href="{{ route('HRClusterDirector_temp') }}">Approve Temporary Vehicle
+                                    <a href="{{ route('HRClusterDirector_temp') }}">Approve Temporary
                                         Request</a>
                                 </li>
                                   @endcan()  
                                   @can('Transport Director')  
                                 <li>
-                                    <a href="{{ route('TransportDirector_temp') }}">Approve Temporary Vehicle
+                                    <a href="{{ route('TransportDirector_temp') }}">Approve Temporary
                                         Request</a>
                                 </li>
                                   @endcan()  
                                   @can('Dispatcher Page')  
                                 <li>
-                                    <a href="{{ route('simirit_page') }}">Give Vehicle Temporarly</a>
+                                    <a href="{{ route('simirit_page') }}">Temporarly</a>
                                 </li>
                                   @endcan()  
                                   @can('Vehicle Director Page')  
                                 <li>
-                                    <a href="{{ route('perm_vec_director_page') }}">Vehicle Pemanent Requests</a>
+                                    <a href="{{ route('perm_vec_director_page') }}">Pemanent</a>
                                 </li>
                                   @endcan()  
                                   @can('Dispatcher')  
                                 <li>
-                                    <a href="{{ route('perm_vec_simirit_page') }}">Give Vehicle Permanently</a>
+                                    <a href="{{ route('perm_vec_simirit_page') }}">Permanent</a>
                                 </li>
                                   @endcan()  
+                                  @can('Request Return')  
                                 <li>
-                                    <a href="{{ route('return_permanent_request_page') }}">Return Permanent Vehicle</a>
+                                    <a href="{{ route('return_permanent_request_page') }}">Return Permanent</a>
                                 </li>
-
+                                @endcan()  
+                                @can('Approve Return') 
                                 <li>
-                                    <a href="{{ route('director_approval_page') }}">Approve Return Request</a>
+                                    <a href="{{ route('director_approval_page') }}">Approve Return</a>
                                 </li>
-
+                                @endcan()  
+                                @can('Take Back to Transport') 
                                 <li>
-                                    <a href="{{ route('vehicle_director_page') }}">Dispatcher Return Requests</a>
+                                    <a href="{{ route('vehicle_director_page') }}">Return Permanent</a>
                                 </li>
-
+                                @endcan()  
+                                @can('Request Mentenance') 
                                 <li>
-                                    <a href="/mentaincance_request_page">Maintenance Request</a>
+                                    <a href="/mentaincance_request_page">Maintenance </a>
                                 </li>
-                                <li>
-                                    <a href="/fuel_request_page">Fuel Request</a>
-                                </li>
+                                @endcan()    
                             </ul>
                         </div>
                     </li>
@@ -249,16 +251,20 @@
                         </a>
                         <div class="collapse" id="sidebarFuel">
                             <ul class="side-nav-second-level">
+                                @can('Request Fuel') 
                                 <li>
-                                    <a href="{{route('permanenet_fuel_request')}}">Fuel Request</a>
+                                    <a href="{{route('permanenet_fuel_request')}}">Request</a>
                                 </li>
+                                @endcan()  
+                                @can('Finance Accept') 
                                 <li>
-                                    <a href="{{route('finance_approve_fuel_page')}}">Finance Page</a>
+                                    <a href="{{route('finance_approve_fuel_page')}}">Approve</a>
                                 </li>
+                                @endcan()  
                             </ul>
                         </div>
                     </li>
-
+                    @can('Create User')
                     <li class="side-nav-item">
                         <a data-bs-toggle="collapse" href="#sidebarUser" aria-expanded="false"
                             aria-controls="sidebarUser" class="side-nav-link">
@@ -268,19 +274,26 @@
                         </a>
                         <div class="collapse" id="sidebarUser">
                             <ul class="side-nav-second-level">
+                               @can('Create User')
                                 <li>
                                     <a href="{{ route('user_list') }}">Create users</a>
                                 </li>
+                                @endcan()  
+                                @can('Create Driver')
                                 <li>
                                     <a href="{{ route('driver.index') }}">Driver Registration</a>
                                 </li>
+                                @endcan()  
+                                @can('Change Driver')
                                 <li>
                                     <a href="{{ route('driver.switch') }}">Driver Change</a>
                                 </li>
+                                @endcan()  
                             </ul>
                         </div>
                     </li>
-
+                    @endcan()  
+                    @can('Vehicle Registration')
                     <li class="side-nav-item">
                         <a data-bs-toggle="collapse" href="#sidebarVehicle" aria-expanded="false"
                             aria-controls="sidebarVehicle" class="side-nav-link">
@@ -290,23 +303,31 @@
                         </a>
                         <div class="collapse" id="sidebarVehicle">
                             <ul class="side-nav-second-level">
+                                 @can('Vehicle Registration')
                                 <li>
-                                    <a href="{{ route('vehicleRegistration.index') }}">Vehicle Registration </a>
+                                    <a href="{{ route('vehicleRegistration.index') }}">Registration </a>
                                 </li>
+                                @endcan()  
+                                @can('Vehicle Part Registration')
                                 <li>
                                     <a href="{{ route('vehicle_parts.index') }}">Vehicle Parts</a>
                                 </li>
+                                @endcan()  
+                                @can('Vehicle Inspection')
                                 <li>
-                                    <a href="{{ route('inspection.page') }}">Vehicle Inspection</a>
+                                    <a href="{{ route('inspection.page') }}">Inspection</a>
                                 </li>
+                                @endcan()  
+                                @can('Daily KM Registration')
                                 <li>
                                     <a href="{{ route('daily_km.page') }}">Daily KM</a>
                                 </li>
-
+                                @endcan()  
                             </ul>
                         </div>
                     </li>
-
+                    @endcan() 
+                    @can('Create Cluster') 
                     <li class="side-nav-item">
                         <a data-bs-toggle="collapse" href="#sidebarOrganization" aria-expanded="false"
                             aria-controls="sidebarOrganization" class="side-nav-link">
@@ -316,16 +337,21 @@
                         </a>
                         <div class="collapse" id="sidebarOrganization">
                             <ul class="side-nav-second-level">
+                                @can('Create Cluster')
                                 <li>
                                     <a href="{{ route('cluster.index') }}">Cluster</a>
                                 </li>
+                                @endcan()  
+                                @can('Create Department')
                                 <li>
                                     <a href="/department">Department</a>
                                 </li>
+                                @endcan()  
                             </ul>
                         </div>
                     </li>
-
+                    @endcan()  
+                    @can('Create Role')
                     <li class="side-nav-item">
                         <a data-bs-toggle="collapse" href="#sidebarRole" aria-expanded="false"
                             aria-controls="sidebarRole" class="side-nav-link">
@@ -335,12 +361,16 @@
                         </a>
                         <div class="collapse" id="sidebarRole">
                             <ul class="side-nav-second-level">
+                                @can('Create Role')
                                 <li>
                                     <a href="{{ route('roles.index') }}">Roles</a>
                                 </li>
+                                @endcan()  
                             </ul>
-                        </div>
+                        </div>    
                     </li>
+                    @endcan()  
+                    @can('Daily KM Report')
                     <li class="side-nav-item">
                         <a data-bs-toggle="collapse" href="#sidebarReport" aria-expanded="false"
                             aria-controls="sidebarReport" class="side-nav-link">
@@ -350,21 +380,26 @@
                         </a>
                         <div class="collapse" id="sidebarReport">
                             <ul class="side-nav-second-level">
+                                @can('Daily KM Report')
                                 <li>
-                                    <a href="{{ route('dailyreport.index') }}">Daily km Report</a>
+                                    <a href="{{ route('dailyreport.index') }}">Daily KM</a>
                                 </li>
+                                @endcan()  
+                                @can('Permananet Vehicle Request')
                                 <li>
-                                    <a href="#">Perm_vehicle_req Report</a>
+                                    <a href="#">Permanent</a>
                                 </li>
+                                @endcan()  
+                                @can('Temporary Vehicle Request')
                                 <li>
-                                    <a href="#">Temp_vehicle_req Report</a>
+                                    <a href="#">Temporary</a>
                                 </li>
-                                
-                                
-                                
+                                @endcan()  
                             </ul>
                         </div>
                     </li>
+                    @endcan()  
+                    @can('Route Registration')
                     <li class="side-nav-item">
                         <a data-bs-toggle="collapse" href="#routeManagement" aria-expanded="false"
                             aria-controls="routeManagement" class="side-nav-link">
@@ -374,15 +409,20 @@
                         </a>
                         <div class="collapse" id="routeManagement">
                             <ul class="side-nav-second-level">
+                               @can('Route Registration')
                                 <li>
-                                    <a href="{{ route('route.index') }}">Route Registration</a>
+                                    <a href="{{ route('route.index') }}">Registration</a>
                                 </li>
+                                @endcan()  
+                                @can('Assign Employee to ROute')
                                 <li>
                                     <a href="{{ route('route.show') }}">Employee Service</a>
-                                </li>                                
+                                </li>  
+                                @endcan()  
                             </ul>
                         </div>
                     </li>
+                    @endcan()  
             </div>
         </div>
         </br></br>

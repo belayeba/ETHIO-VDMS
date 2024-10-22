@@ -11,12 +11,13 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class PermanentFuelModel extends Model {
     use HasFactory, SoftDeletes;
 
-    protected $table = 'Parmanent_fuelings';
-    protected $primaryKey = 'fueling_id';
+    protected $table = 'permanent_fuelings';
+    protected $primaryKey = 'fueling_id,month';
     public $incrementing = false;
     protected $keyType = 'uuid';
 
     protected $fillable = [
+        'fueling_id',
         'vehicle_id',
         'driver_id',
         'finance_approved_by',

@@ -162,6 +162,9 @@ class CreateAllTablesWithUuid extends Migration
             $table->uuid('given_by')->nullable();
             $table->foreign('given_by')->references('id')->on('users');
             $table->string('vec_director_reject_reason', 1000)->nullable();
+            $table->uuid('accepted_by_requestor')->nullable();
+            $table->foreign('accepted_by_requestor')->references('id')->on('users');
+            $table->string('reject_reason_by_requestor', 1000)->nullable();
             $table->date('given_date')->nullable();
             $table->uuid('vehicle_id')->nullable();
             $table->foreign('vehicle_id')->references('vehicle_id')->on('vehicles');
@@ -253,24 +256,33 @@ class CreateAllTablesWithUuid extends Migration
             $table->softDeletes();
         });
       // Fueling Table
-      Schema::create('Parmanent_fuelings', function (Blueprint $table) {
-        $table->uuid('fueling_id')->primary();
+      Schema::create('Permanent_fuelings', function (Blueprint $table) {
+        $table->uuid('fueling_id');  // Primary key is just fueling_id, without month
         $table->uuid('vehicle_id');
         $table->foreign('vehicle_id')->references('vehicle_id')->on('vehicles');
+        
         $table->uuid('driver_id');
         $table->foreign('driver_id')->references('driver_id')->on('drivers');
+        
         $table->uuid('finance_approved_by')->nullable();
         $table->foreign('finance_approved_by')->references('id')->on('users');
+        
         $table->uuid('permanent_id')->nullable();
         $table->foreign('permanent_id')->references('vehicle_request_permanent_id')->on('vehicle_requests_parmanently');
+        
         $table->string('reject_reason')->nullable();
         $table->date('fuiling_date');
         $table->string('month');
         $table->integer('fuel_amount');
-        $table->double('fuel_cost');
+        $table->decimal('fuel_cost', 8, 2);
+        
         $table->timestamps();
         $table->softDeletes();
+    
+        // Add a unique constraint on the combination of fueling_id and month
+        $table->unique(['fueling_id', 'month']);
     });
+    
         // GPS Tracking Table
         Schema::create('gps_tracking', function (Blueprint $table) {
             $table->uuid('tracking_id')->primary();
