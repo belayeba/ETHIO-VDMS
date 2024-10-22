@@ -1,10 +1,6 @@
 @extends('layouts.navigation')
 
 @section('content')
-<script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
-<script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
-<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
-<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
     <div class="wrapper">
         <div class="content-page">
             <div class="content">
@@ -87,8 +83,37 @@
                                                 <!-- Date Range Picker -->
                                                 <div class="col-lg-4 mt-3">
                                                     <label for="daterangetime" class="form-label">Date Range Pick With Times</label>
-                                                    <input type="text" class="form-control date" id="daterangetime" name="date_range" data-toggle="date-picker" data-time-picker="true" data-locale='{"format": "DD/MM hh:mm A"}'>
+                                                    <input type="text" class="form-control date" id="datepicker" name="date_range" data-toggle="date-picker" data-time-picker="true" data-locale='{"format": "DD/MM hh:mm A"}'>
                                                 </div>
+
+                                                {{-- <input id="datepicker"/> --}}
+    <script>
+      const picker = new easepick.create({
+        element: document.getElementById('datepicker'),
+        css: [
+          'https://cdn.jsdelivr.net/npm/@easepick/core@1.2.1/dist/index.css',
+          'https://cdn.jsdelivr.net/npm/@easepick/range-plugin@1.2.1/dist/index.css',
+        ],
+        plugins: ['RangePlugin'],
+        RangePlugin: {
+          tooltip: true,
+        },
+      });
+    </script>
+
+                                                {{-- <div class="col-md-3">
+                                                <div class="position-relative">
+                                                    <label for="driving-license" class="form-label">Date</label>
+                                                    <input id="fill_date" name="Driving_license" class="form-control" placeholder="When" type="text">
+                                                </div>
+                                            </div>
+                                             <script> 
+                                                $('#fill_date').calendarsPicker({ 
+                                                    calendar: $.calendars.instance('ethiopian', 'am'), 
+                                                    pickerClass: 'myPicker', 
+                                                    dateFormat: 'yyyy-mm-dd' 
+                                                });
+                                             </script> --}}
                                             </div>
                                             
                                             <!-- Filter Button -->
@@ -99,7 +124,8 @@
                                             </div>
                                         </div>
                                     </from>
-                                    <input type="text" name="datetimes" />                                    </div>
+                                    
+                                </div>
                                 </div>
                             </div>
                         </div>
@@ -155,26 +181,8 @@
         </div>
 
     </div>
-    <script>
-        $(function() {
-      $('input[name="datetimes"]').daterangepicker({
-        timePicker: true,
-        startDate: moment().startOf('hour'),
-        endDate: moment().startOf('hour').add(32, 'hour'),
-        locale: {
-          format: 'M/DD hh:mm A'
-        }
-      });
-    });
-        // $(document).ready(function() {
-        //     $('#daterangetime').daterangepicker({
-        //         timePicker: true,
-        //         timePicker24Hour: false,
-        //         locale: {
-        //             format: 'DD/MM hh:mm A'
-        //         }
-        //     });
-        // });
-    </script>
+   
+  
 @endsection
+
 

@@ -9,6 +9,7 @@
 <script src="{{ asset('assets/js/jquery.calendars.picker.js') }}"></script> 
 <script src="{{ asset('assets/js/jquery.calendars.ethiopian.js') }}"></script> 
 <script src="{{ asset('assets/js/jquery.calendars.ethiopian-am.js') }}"></script>
+<script src="https://cdn.jsdelivr.net/npm/@easepick/bundle@1.2.1/dist/index.umd.min.js"></script>
 <body>
 <div class="wrapper">
     @include('layouts.header')

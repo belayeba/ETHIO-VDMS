@@ -57,8 +57,11 @@ class Daily_KM_Calculation extends Controller
                 $plateNumber = $request->input('plate_number');
                 $name = $request->input('name');
                 $department = $request->input('department');
-                $startDate = $request->input('start_date');
-                $endDate = $request->input('end_date');
+                $dateRange = $request->input('date_range');
+
+                $dates = explode(' - ', $dateRange);
+                $startDate = $dates[0];
+                $endDate = $dates[1];
 
                 // Query the daily KM data with filters
                 $query = DailyKMCalculationModel::with('vehicle', 'driver');
@@ -84,6 +87,7 @@ class Daily_KM_Calculation extends Controller
 
                 if ($startDate && $endDate) {
                     $query->whereBetween('date', [$startDate, $endDate]);
+
                 }
 
 
