@@ -28,7 +28,7 @@ use App\Http\Controllers\Vehicle\PermanentFuelController;
 
 Route::get('/', function () 
 {
-    return view('templates.index');
+    return view('auth.login');
 });
 
 
