@@ -27,18 +27,11 @@ class RouteController extends Controller {
         $routes = Route::get();
         $users = User::all();
         $routeUser = RouteUser::all();
-<<<<<<< HEAD
+        // dd( $routeUser );
         $routeUser = $routeUser->groupBy( 'route_id' );
         //$routeUser = RouteUser::with( 'user.department' )->get();
-        //dd( $routeUser );
-        return view( 'Route.show', compact( 'routes', 'users', 'routeUser' ) );
-=======
-        // dd($routeUser);
-        $routeUser = $routeUser->groupBy('route_id');
-        //$routeUser = RouteUser::with('user.department')->get();
 
-        return view('Route.show', compact('routes','users','routeUser'));
->>>>>>> 2e17c25b8976f1c4d3ce9ee470e497acfa468d3a
+        return view( 'Route.show', compact( 'routes', 'users', 'routeUser' ) );
     }
 
     public function loadAssignmentForm( $route_id ) {
@@ -65,83 +58,56 @@ class RouteController extends Controller {
             'route_name' => $request->route_name,
             'driver_phone' => $request->driver_phone,
             'vehicle_id' => $request->vehicle_id,
-            'registered_by' => auth()->user()->id,
-<<<<<<< HEAD
-        ] );
+            'registered_by' => auth()->user()->id, ] );
 
-        return response()->json( [ 'message' => 'Route registered successfully', 'route' => $route ] );
-    }
-
-    public function assignUsersToRoute( Request $request ) {
-        // dd( $request );
-        // $route = Route::findOrFail( $route_id );
-
-        // assign driver
-        // if ( $request->has( 'driver_phone' ) ) {
-        //     $route->driver_phone = $request->driver_phone;
-        //     $route->save();
-        // }
-
-        // Assign Users to Route
-        //  dd( $route_user_id );
-        foreach ( $request->people_id as $user_id ) {
-            RouteUser::create( [
-=======
-        ]);
-        return redirect()->back()->with('success_message',
-        'Route registered successfully.',);
-    }
-
-    public function assignUsersToRoute(Request $request)
-    {
-        // $route = Route::findOrFail($route_id);
-
-        // Assign Users to Route
-        foreach ($request->people_id as $user_id) {
-            RouteUser::create([
->>>>>>> 2e17c25b8976f1c4d3ce9ee470e497acfa468d3a
-                'employee_id' => $user_id,
-                'route_id' => $request->route_id,
-                'registered_by' => auth()->user()->id,
-            ] );
-        }
-<<<<<<< HEAD
-
-        return response()->json( [ 'message' => 'Users assigned successfully' ] );
-=======
-        return redirect()->back()->with('success_message',
-        'Users assigned successfully.',);
->>>>>>> 2e17c25b8976f1c4d3ce9ee470e497acfa468d3a
-    }
-
-    public function updateRouteAssignment( Request $request, $route_id ) {
-        $route = Route::findOrFail( $route_id );
-
-        // Update driver
-        if ( $request->has( 'driver_phone' ) ) {
-            $route->driver_phone = $request->driver_phone;
-            $route->save();
+            return response()->json( [ 'message' => 'Route registered successfully', 'route' => $route ] );
         }
 
-        // // Remove existing users from route
-        // RouteUser::where( 'route_id', $route_id )->delete();
+        public function assignUsersToRoute( Request $request ) {
+            // $route = Route::findOrFail( $route_id );
 
-        // Reassign new users
-        if ( $request->user_ids ) {
-            foreach ( $request->user_ids as $user_id ) {
+            // Assign Users to Route
+            foreach ( $request->people_id as $user_id ) {
                 RouteUser::create( [
                     'employee_id' => $user_id,
-                    'route_id' => $route_id,
+                    'route_id' => $request->route_id,
                     'registered_by' => auth()->user()->id,
                 ] );
             }
+
+            return response()->json( [ 'message' => 'Users assigned successfully' ] );
+            return redirect()->back()->with( 'success_message',
+            'Users assigned successfully.', );
         }
 
-        return response()->json( [ 'message' => 'Route assignments updated successfully' ] );
-    }
+        public function updateRouteAssignment( Request $request, $route_id ) {
+            $route = Route::findOrFail( $route_id );
 
-    public function removeRoute( $route_id ) {
-        // Find the route by ID or fail if it doesn't exist
+            // Update driver
+            if ( $request->has( 'driver_phone' ) ) {
+                $route->driver_phone = $request->driver_phone;
+                $route->save();
+            }
+
+            // // Remove existing users from route
+            // RouteUser::where( 'route_id', $route_id )->delete();
+
+            // Reassign new users
+            if ( $request->user_ids ) {
+                foreach ( $request->user_ids as $user_id ) {
+                    RouteUser::create( [
+                        'employee_id' => $user_id,
+                        'route_id' => $route_id,
+                        'registered_by' => auth()->user()->id,
+                    ] );
+                }
+            }
+
+            return response()->json( [ 'message' => 'Route assignments updated successfully' ] );
+        }
+
+        public function removeRoute( $route_id ) {
+            // Find the route by ID or fail if it doesn't exist
         $route = Route::findOrFail($route_id);
     
         // Delete the route
@@ -169,6 +135,6 @@ class RouteController extends Controller {
         RouteUser::where('route_id', $route_id)->delete();
 
         return response()->json(['message' => 'All users removed from route successfully' ] );
-    }
+        }
 
-}
+    }

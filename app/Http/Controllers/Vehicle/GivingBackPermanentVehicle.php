@@ -12,7 +12,6 @@ use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
-use App\Models\Vehicle\VehiclePermanentlyRequestModel;
 
 
 class GivingBackPermanentVehicle extends Controller
@@ -190,8 +189,8 @@ public function deleteRequest(Request $request)
 public function DirectorApprovalPage()
     {
             $id = Auth::id();
-            // $directors_data = User::where('id',$id)->get('department_id');
-            // $dept_id = $directors_data->department_id;
+            $directors_data = User::where('id',$id)->get('department_id');
+            $dept_id = $directors_data->department_id;
 
             $vehicle_requests = GivingBackVehiclePermanently::whereHas('requestedBy', function ($query) use ($dept_id) {
                 $query->where('department_id', $dept_id);

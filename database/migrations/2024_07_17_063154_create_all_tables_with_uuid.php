@@ -90,13 +90,14 @@ class CreateAllTablesWithUuid extends Migration
         });
 
         // Vehicle Parts Table
-        Schema::create('vehicle_parts', function (Blueprint $table) {
-            $table->uuid('vehicle_parts_id')->primary();
-            $table->uuid('name');
-            $table->string('notes');
-            $table->timestamps();
-            $table->softDeletes();
-        });
+            Schema::create('vehicle_parts', function (Blueprint $table) {
+                $table->uuid('vehicle_parts_id')->primary();
+                $table->string('type')->options('[spare_part,vehicle_part]');
+                $table->uuid('name');
+                $table->string('notes');
+                $table->timestamps();
+                $table->softDeletes();
+            });
         // Vehicle Detail
         Schema::create('vehicles_detail', function (Blueprint $table) {
             $table->uuid('detail_id')->primary();

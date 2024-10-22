@@ -12,6 +12,7 @@ use App\Http\Controllers\RoleController;
 use App\Http\Controllers\usercontroller;
 use App\Http\Controllers\Organization\ClusterController;
 use App\Http\Controllers\Route\RouteController;
+use App\Http\Controllers\Notification\NotificationController;
 use App\Http\Controllers\Vehicle\DailyReportController;
 use App\Http\Controllers\Vehicle\GivingBackPermanentVehicle;
 use App\Http\Controllers\Vehicle\VehicleParmanentlyRequestController;
@@ -308,6 +309,15 @@ Route::group(['middleware' => ['auth']], function()
                     Route::put('/inspection/{inspectionId}/{partName}', 'updateInspection')->name('inspection.update'); // Update a specific inspection
                     Route::delete('/inspection/{inspectionId}', 'deleteInspection')->name('inspection.delete'); // Delete a specific inspection
                  });
+                 Route::controller(NotificationController::class)->group(function () {
+                    Route::post('/delete_notification', 'delete_notification');
+                    Route::get('/read_all_notifications', 'read_all_notifications');
+                    Route::get('/get_all_notifications', 'get_all_notifications');
+                    Route::get('/clear_all_notifications', 'clear_all_notifications');
+                    Route::get('/get_new_message_count', 'get_new_message_count');
+                    Route::get('/check_notify', 'check_notify');
+
+                });
                  // SAMIR
                  Route::group([
                     'prefix'=>'vehicle',

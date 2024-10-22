@@ -116,39 +116,6 @@
                                         </div>
                                     </div>
                                 </div>
-<<<<<<< HEAD
-                            </div>
-                        </div>
-                    </section>
-                    <div class="modal fade" id="viewEmployeeModal" tabindex="-1" role="dialog" aria-labelledby="viewEmployeeModalLabel" aria-hidden="true">
-                        <div class="modal-dialog modal-lg">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="viewEmployeeModalLabel">View Employee Details</h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                </div>
-                                <div class="modal-body">
-                                    <table class="table table-striped">
-                                        <thead>
-                                            <tr>
-                                                <th>#</th>
-                                                <th>Employee</th>
-                                                <th>Department</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @foreach ($routeUser as $route_id => $data)
-                                                @foreach ($data as $dat)
-                                                    <tr>
-                                                        <td>{{ $loop->iteration }}</td> <!-- Loop iteration for numbering -->
-                                                        <td>{{ optional($dat->user)->username ?? 'N/A' }}</td> <!-- Ensure user exists -->
-                                                        <td>{{ optional($dat->user->department)->name ?? 'N/A' }}</td> <!-- Ensure department exists -->
-                                                    </tr>
-                                                @endforeach
-                                            @endforeach
-                                        </tbody>
-                                    </table>
-=======
                                 
                                 <!-- Modals -->
                                 @foreach ($routeUser as $route_id => $data)
@@ -181,10 +148,8 @@
                                             </div>
                                         </div>
                                     </div>
->>>>>>> 2e17c25b8976f1c4d3ce9ee470e497acfa468d3a
                                 </div>
                                 @endforeach
-                                
                     <!-- Footer -->
                     <footer class="footer-area">
                         <div class="container">
