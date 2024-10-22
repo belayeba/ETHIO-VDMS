@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Traits\HasRoles;
-use Illuminate\Support\Fecades\Auth;
+use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use App\Models\Organization\DepartmentsModel; 
 use Yajra\DataTables\Facades\DataTables;
@@ -187,6 +187,66 @@ class usercontroller extends Controller
      * @return \Illuminate\View\View
      */
     
+    public function profile()
+     {
+
+        $user=Auth::id();
+        $users = user::findOrFail($user);
+        return  view ('users.profile',compact('users'));
+
+     }
+
+      /**
+     * Show the form for editing the specified user.
+     *
+     * @param int $id
+     *
+     * @return \Illuminate\View\View
+     */
+    
+    public function profile_save( Request $request)
+    {
+
+        $validator = Validator::make($request->all(), [
+            'old_password' => 'required|string',
+            'new_password' => 'required|string',
+            'confirm_password' => 'required|string|same:new_password',
+        ] );
+        
+        if ($validator->fails()) 
+        {
+            return redirect()->back()->with('error_message',
+                 $validator->errors(),
+            );
+        }
+
+        try {
+            //code...
+            $id=Auth::id();
+            $users = user::findOrFail($id);
+
+            $oldpassword = $request->input('old_password');
+
+            $newPassword = $request->input('new_password');
+
+            if (Hash::check($oldpassword, $users->password))
+            {
+                User::whereId($id)->update(['password' => Hash::make($newPassword)]);
+                return redirect()->back()->with("success_message", "Your password has been changed successfully");
+            }
+            else{
+
+                return redirect()->back()->with('error_message','Old password didn\'t match!');
+            }
+
+        } catch (\Throwable $th) {
+            //throw $th;
+            return redirect()->back()->with('error_message','Something went wrong!');
+        }
+
+    }
+    
+
 
 
 

@@ -16,19 +16,21 @@ use Illuminate\Support\Str;
 class PermanentFuelController extends Controller {
     public function index() {
         $fuelings = PermanentFuelModel::all();
-        return view( 'fuelings.index', compact( 'fuelings' ) );
+        return view( 'Fuelling.ParmanententRequestPage', compact( 'fuelings' ) );
     }
 
     public function store( Request $request ) {
+        // dd($request);
         // Validate input
         $validator = Validator::make($request->all(), [
-            'vehicle_id' => 'required|uuid|exists:vehicles,vehicle_id',
+            'vehicle_id' => 'required|string',
             'fuiling_date.*' => 'required|date',
             'month' => 'required|string',
             'fuel_amount.*' => 'required|integer',
             'fuel_cost.*' => 'required|numeric',
-            'reciet_attachment.*' => 'required|file|mimes:pdf,jpg,jpeg,png'
+            'reciet_attachment.*' => 'required|string'
         ] );
+        
         if ($validator->fails()) 
         {
             return redirect()->back()->with('error_message',
@@ -52,7 +54,7 @@ class PermanentFuelController extends Controller {
 
         // Get permanent vehicle request associated with driver and vehicle
         $permanent = VehiclePermanentlyRequestModel::select( 'vehicle_request_permanent_id','fuel_quata','feul_left_from_prev' )
-        ->where( 'driver_id', $get_driver_id )
+        ->where( 'driver_id', $logged_user )
         ->where( 'vehicle_id', $request->vehicle_id )
         ->where( 'status', true )
         ->first();
@@ -192,7 +194,7 @@ class PermanentFuelController extends Controller {
     public function finance_get_page()
     {
         $fuels = PermanentFuelModel::latest()->get();
-        return view('finance.index',compact('fuels'));
+        return view('Fuelling.financeApprove',compact('fuels'));
     }
     // Finance Approval
     public function finance_appprove($id)

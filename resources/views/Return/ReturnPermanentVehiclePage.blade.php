@@ -1,17 +1,7 @@
 @extends('layouts.navigation')
 @section('content')
 
-<style>
-.badge {
-    font-size: 0.9em;
-    padding: 0.3em 0.5em;
-    margin-right: 0.2em;
-}
-.remove-tag {
-    cursor: pointer;
-    margin-left: 0.3em;
-}
-</style>
+{{--  --}}
 
 <div class="content-page">
         <div class="content">
@@ -58,14 +48,13 @@
                                     <td>{{$request->given_date}}</td>
                                     <td>{{$request->status == 1 ? 'Owned' : 'Returned'}}</td>
                                     <td>
-                                        <form method="POST" action="{{ route('user_perm_delet') }}">
+                                        <form method="POST" action="">
                                             @csrf
                                             <input type="hidden" name="request_id" value="{{ $request->vehicle_request_permanent_id }}">
-                                            <button type="button" class="btn btn-info rounded-pill" title="show"><i class=" ri-eye-line"></i></button>
                                             @if($request->status === 1 )
-                                            <a href="{{route('perm_vec_update')}}" class="btn btn-secondary rounded-pill"  data-bs-toggle="modal" data-bs-target="#standard-modal-{{ $loop->index }}" title="edit"><i class=" ri-edit-line"></i>return</a>
-                                            {{-- <button type="submit" class="btn btn-danger rounded-pill" title="Delete"><i class="ri-close-circle-line"></i></button> --}}
+                                            <a href="{{route('perm_vec_update')}}" class="btn btn-primary rounded-pill"  data-bs-toggle="modal" data-bs-target="#standard-modal-{{ $loop->index }}" title="Return">return</a>
                                             @endif
+                                            <button type="submit" class="btn btn-danger rounded-pill" title="Delete"><i class="ri-close-circle-line"></i></button>
                                         </form>
                                     </td>
                                 </tr>
@@ -82,9 +71,6 @@
                                             <div class="modal-body">
                                                 <form action="{{route('return_vehicle_permanent')}}" method="post" enctype="multipart/form-data">
                                                     @csrf
-                            
-
-                                                    
                                                             <div class="tab-pane" id="account-2">
                                                                 <div class="row">
                                                                     <div class="position-relative mb-3">
@@ -116,7 +102,6 @@
                             
                                                             </div>  
                                                     </div>
-                            
                                                 </form>
                                         </div><!-- /.modal-content -->
                                     </div><!-- /.modal-dialog -->

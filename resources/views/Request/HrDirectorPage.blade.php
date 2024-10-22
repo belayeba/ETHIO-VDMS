@@ -111,7 +111,7 @@
                                                     </div><!-- /.modal-dialog -->
                                                 </div>
                                                 <!-- end show modal -->
-                                                <!-- this is for the assign  modal -->
+                                                <!-- this is for the Reject  modal -->
                                                 <div class="modal fade" id="staticBackdrop-{{ $loop->index }}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                                                     <div class="modal-dialog">
                                                         <div class="modal-content">

@@ -20,11 +20,10 @@
         @endif
 
             <div class="main-wrapper" style="min-height: 600px">
-                <!-- Page Content  -->
+               
                 <div id="main-content">
                     <section class="sms-breadcrumb mb-10 white-box">
                         <div class="container-fluid p-0">
-                            <!-- Add any breadcrumb content here if needed -->
                         </div>
                     </section>
 
@@ -32,7 +31,6 @@
                         <div class="container-fluid p-0">
                             <div class="row justify-content-center">
 
-                                <!-- Route Assignment Form -->
                                 <div class="col-md-4">
                                     <div class="card">
                                         <div class="card-header">
@@ -41,7 +39,6 @@
                                         <div class="card-body">
                                             <form method="POST" action="{{ route('employeeService.store') }}" accept-charset="UTF-8" name="route_assigning_form" id="route_assigning_form" enctype="multipart/form-data">
                                                 @csrf
-                                                <!-- Route Selection -->
                                                 <div class="row mb-3">
                                                     <label class="col-md-3 col-form-label" for="route">Route</label>
                                                     <div class="col-md-9">
@@ -54,7 +51,6 @@
                                                     </div>
                                                 </div>
 
-                                                <!-- User Assignment (always visible) -->
                                                 <div id="TogglePackage">
                                                     <div class="row">
                                                         <p class="mb-1 fw-bold text-muted">Select People</p>
@@ -76,7 +72,6 @@
                                     </div>
                                 </div>
 
-                                <!-- Route List -->
                                 <div class="col-md-8">
                                     <div class="card">
                                         <div class="card-header">
@@ -133,6 +128,7 @@
                                                             <th>#</th>
                                                             <th>Employee</th>
                                                             <th>Department</th>
+                                                            <th>Action</th> 
                                                         </tr>
                                                     </thead>
                                                     <tbody>
@@ -141,6 +137,16 @@
                                                             <td>{{ $loop->iteration }}</td> <!-- Loop iteration for numbering -->
                                                             <td>{{ optional($dat->user)->username ?? 'N/A' }}</td> <!-- Ensure user exists -->
                                                             <td>{{ optional($dat->user->department)->name ?? 'N/A' }}</td> <!-- Ensure department exists -->
+                                                            <td>
+                                                                <!-- Remove button/icon -->
+                                                                <form action="{{ route('routeUser.destroy', $dat->employee_id) }}" method="POST" onsubmit="return confirm('Are you sure you want to remove this employee?');">
+                                                                    @csrf
+                                                                    @method('DELETE')
+                                                                    <button type="submit" class="btn btn-danger btn-sm">
+                                                                        <i class="ri-delete-bin-line"></i>
+                                                                    </button>
+                                                                </form>
+                                                            </td>
                                                         </tr>
                                                         @endforeach
                                                     </tbody>
@@ -150,6 +156,8 @@
                                     </div>
                                 </div>
                                 @endforeach
+                                
+                                
                     <!-- Footer -->
                     <footer class="footer-area">
                         <div class="container">
