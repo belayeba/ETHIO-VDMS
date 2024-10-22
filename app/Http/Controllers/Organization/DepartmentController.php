@@ -22,7 +22,7 @@ class DepartmentController extends Controller
         $clusters = ClustersModel::all(); // Get all clusters
         // dd($clusters);
         // Pass the departments and clusters to the view
-        return view('department.index', compact('departments', 'clusters'));
+        return view('Department.index', compact('departments', 'clusters'));
     }
 
     /**
@@ -30,7 +30,7 @@ class DepartmentController extends Controller
      */
     public function create()
     {
-        return view('department.create'); // Return the create view
+        return view('Department.create'); // Return the create view
     }
 
     /**
@@ -67,7 +67,7 @@ class DepartmentController extends Controller
     {
         // Return the show view with the department data
 
-        return view('department.show', compact('department'));
+        return view('Department.show', compact('department'));
     }
 
     /**
@@ -76,7 +76,7 @@ class DepartmentController extends Controller
     public function edit(DepartmentsModel $department)
     {
         // Return the edit view with the department data
-        return view('department.edit', compact('department'));
+        return view('Department.edit', compact('department'));
     }
 
     /**

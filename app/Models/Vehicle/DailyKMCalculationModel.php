@@ -9,9 +9,10 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Str;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class DailyKMCalculationModel extends Model {
-    use SoftDeletes;
+    use SoftDeletes, HasFactory;
 
     protected $table = 'daily_km_calculations';
     // Specify the table name
@@ -51,7 +52,7 @@ class DailyKMCalculationModel extends Model {
         return $this->belongsTo( DriversModel::class, 'driver_id' );
     }
 
-    public function created_by(): BelongsTo {
-        return $this->belongsTo( User::class, 'created_by', 'id' );
+    public function registeredBy(): BelongsTo {
+        return $this->belongsTo( User::class, 'register_by', 'id' );
     }
 }

@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\Vehicle;
 
 use App\Http\Controllers\Controller;
-use App\Models\vehicle\DailyKMCalculationModel;
+use App\Models\Vehicle\DailyKMCalculationModel;
 use Illuminate\Http\Request;
 use App\Models\Vehicle\VehiclesModel;
+use App\Models\Organization\DepartmentsModel;
+use App\Models\Driver\DriversModel;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Support\Facades\Auth;
@@ -22,12 +24,85 @@ class Daily_KM_Calculation extends Controller
             }
         public function ReportPage()
             {
-                    $dailkms = DailyKMCalculationModel::with('driver','vehicle','created')
+                $vehicles = VehiclesModel::select('vehicle_id', 'plate_number')->get();
+                $drivers = DriversModel::with('driver_id', 'users')->get();
+                $departments = DepartmentsModel::select('department_id', 'name')->get(); 
+        
+                // dd($drivers->driver_id);
+                // Fetch the daily KM data
+                $dailkms = DailyKMCalculationModel::with('vehicle', 'driver', 'registeredBy')
                                 ->latest()
                                 ->take(50)
                                 ->get();
-                return view('Vehicle.dailyReport',compact('dailkms'));
+            
+                return view('Vehicle.dailyReport', compact('vehicles', 'drivers', 'departments', 'dailkms'));
             }
+
+            public function filterReport(Request $request)
+            {
+                // Validate input filters
+                $validator = Validator::make($request->all(), [
+                    'plate_number' => 'nullable|string',
+                    'name' => 'nullable|string',
+                    'department' => 'nullable|string',
+                    'start_date' => 'nullable|date',
+                    'end_date' => 'nullable|date',
+                ]);
+
+                if ($validator->fails()) {
+                    return redirect()->back()->withErrors($validator)->withInput();
+                }
+
+                // Get filter parameters
+                $plateNumber = $request->input('plate_number');
+                $name = $request->input('name');
+                $department = $request->input('department');
+                $startDate = $request->input('start_date');
+                $endDate = $request->input('end_date');
+
+                // Query the daily KM data with filters
+                $query = DailyKMCalculationModel::with('vehicle', 'driver');
+
+                if ($plateNumber) {
+                    $query->whereHas('vehicle', function ($q) use ($plateNumber) {
+                        $q->where('plate_number', 'LIKE', "%{$plateNumber}%");
+                    });
+
+                }
+
+                if ($name) {
+                    $query->whereHas('driver', function ($q) use ($name) {
+                        $q->where('name', 'LIKE', "%{$name}%");
+                    });
+                }
+
+                if ($department) {
+                    $query->whereHas('driver', function ($q) use ($department) {
+                        $q->where('department', 'LIKE', "%{$department}%");
+                    });
+                }
+
+                if ($startDate && $endDate) {
+                    $query->whereBetween('date', [$startDate, $endDate]);
+                }
+
+
+
+                $dailkms = $query->latest()->get();
+
+                if($dailkms->isEmpty()) {
+                    $dailkms = $query;
+                }
+
+                $vehicles = VehiclesModel::select('vehicle_id', 'plate_number')->get();
+                $drivers = DriversModel::with('driver_id')->get();
+                $departments = DepartmentsModel::select('department_id', 'name')->get(); 
+            
+            
+                return view('Vehicle.dailyReport', compact('vehicles', 'drivers', 'departments', 'dailkms'));
+            }
+
+
         //getting today's info
         public function displayForm()
             {

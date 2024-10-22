@@ -42,11 +42,15 @@ class DriversModel extends Model {
         'notes',
     ];
 
-    public function user(): BelongsTo {
+    public function users(): BelongsTo {
         return $this->belongsTo( User::class, 'user_id' );
     }
 
     public function registeredBy(): BelongsTo {
         return $this->belongsTo( User::class, 'register_by' );
+    }
+
+    public function driver_id(): BelongsTo {
+        return $this->belongsTo( DriversModel::class, 'driver_id' );
     }
 }

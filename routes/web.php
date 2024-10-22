@@ -40,13 +40,13 @@ Route::get('/datetest', function()
 // Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 
-    Auth::routes();
+//     Auth::routes();
 
-Route::group(['middleware' => ['auth']], function()
-{
+// Route::group(['middleware' => ['auth']], function()
+// {
 
         Route::resource('roles', RoleController::class);
-        Route::get('/logout', 'LoginController@logout')->name('logout.logout');
+        Route::get('/logout', 'LoginController@logout')->name('logout');
 
                 // Vehicle Temprory Request
             Route::controller(VehicleTemporaryRequestController::class)->group(function()
@@ -331,5 +331,8 @@ Route::group(['middleware' => ['auth']], function()
         Route::delete('/delete/{department}',[DepartmentController::class,'destroy'])->name('department.destroy');
     });
 
+    //filters
+    Route::get('/vehicle/report/filter', [Daily_KM_Calculation::class, 'filterReport'])->name('vehicle.filterReport');
+
     // Tinsae
-});
+// });
