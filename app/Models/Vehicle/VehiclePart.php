@@ -26,6 +26,7 @@ class VehiclePart extends Model
         'vehicle_parts_id',
         'name',
         'notes',
+        'type',
         'created_by'
     ];
 

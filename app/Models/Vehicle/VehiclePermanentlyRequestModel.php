@@ -35,7 +35,7 @@ class VehiclePermanentlyRequestModel extends Model {
         'inspection_id',
         'accepted_by_requestor',
         'reject_reason_by_requestor',
-        'status'
+        'status' // Vehicle Returned or not
     ];
     protected static function boot() {
         parent::boot();

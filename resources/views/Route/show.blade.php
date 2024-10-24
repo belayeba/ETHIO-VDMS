@@ -18,7 +18,6 @@
                 <strong> Success- </strong> {!! session('success_message') !!} 
             </div>
         @endif
-
             <div class="main-wrapper" style="min-height: 600px">
                
                 <div id="main-content">
@@ -99,7 +98,7 @@
                                                                     data-bs-toggle="modal" data-bs-target="#viewEmployeeModal-{{ $loop->index }}" 
                                                                     data-id="{{ $data->first()->id }}" 
                                                                     data-name="{{ $data->first()->user->username }}" 
-                                                                    data-department="{{ $data->first()->user->department->name }}">
+                                                                    data-department="{{ $data->first()->user->department->name ?? 'N/A' }}">
                                                                     <i class="ri-eye-line"></i>
                                                                 </button>
                                                             </td>

@@ -105,7 +105,7 @@ Route::group(['middleware' => ['auth']], function()
                         Route::get('/finance_approve_page', 'finance_get_page')->name('finance_approve_fuel_page');
                         // Route::post('/director_approve_request', 'DirectorApproveRequest')->name('director_approve_request');
                         // Route::post('/director_reject_request', 'DirectorApproveRequest')->name('director_reject_request');
-                        // Route::get('/simirit_approve_page', 'VehicleDirector')->name('simirit_page');
+                        Route::get('/get_my_request', 'my_request');
                         // Route::post('/simirit_approve_request', 'VehicleDirectorApproveRequest')->name('simirit_approve');
                         // Route::post('/simirit_fill_start_km', ' VehicleDirectorFillstartKm')->name('simirit_fill_start_km');
                         // Route::post('/simirit_reject_request', 'VehicleDirectorRejectRequest')->name('simirit_reject');
@@ -157,12 +157,12 @@ Route::group(['middleware' => ['auth']], function()
                     Route::post('/return-vehicle-permanent', 'ReturntVehiclePerm')->name('return_vehicle_permanent');
                     Route::put('/update-return-request', 'update_return_request')->name('update_return_request');
                     Route::delete('/delete-request', 'deleteRequest')->name('delete_request');
-                    Route::get('/director-approval-page', 'DirectorApprovalPage')->name('director_approval_page');
-                    Route::post('/director-approve-request', 'DirectorApproveRequest')->name('director_approve_givingback_request');
-                    Route::post('/director-reject-request', 'DirectorRejectRequest')->name('director_reject_request');
-                    Route::get('/vehicle-director-page', 'VehicleDirector_page')->name('vehicle_director_page');
-                    Route::post('/vehicle-director-approve-request', 'VehicleDirectorApproveRequest')->name('vehicle_director_approve_request');
-                    Route::post('/vehicle-director-reject-request', 'VehicleDirectorRejectRequest')->name('vehicle_director_reject_request');
+                    Route::get('/director-approval-page', 'VehicleDirector_page')->name('director_approval_page');
+                    Route::post('/director-approve-request', 'VehicleDirectorApproveRequest')->name('vehicle_director_approve_request');
+                    Route::post('/director-reject-request', 'Vec_DirectorRejectRequest')->name('director_reject_request');
+                    Route::get('/vehicle-director-page', 'Dispatcher_page')->name('vehicle_director_page');
+                    Route::post('/vehicle-director-approve-request', 'DispatcherApproveRequest')->name('director_approve_givingback_request');
+                    Route::post('/vehicle-director-reject-request', 'DispatcherRejectRequest')->name('vehicle_director_reject_request');
                 });
                 //Report Tinsae
             Route::controller(DailyReportController::class)->group(function () 

@@ -20,18 +20,18 @@ class GivingBackPermanentVehicle extends Controller
 public function displayReturnPermRequestPage()
     {
         $id = Auth::id();
-        $Requested = VehiclePermanentlyRequestModel::where('requested_by',$id)->latest()->get();
+        $Requested = GivingBackVehiclePermanently::where('requested_by',$id)->latest()->get();
         return view("Return.ReturnPermanentVehiclePage",compact('Requested'));
     }
     // Send Vehicle Return Request Parmananently
 public function ReturntVehiclePerm(Request $request) 
     {
-            // Validate the request
+                   // Validate the request
             $validator = Validator::make($request->all(), [
                 'purpose' => 'required|string|max:1000',
                 'request_id' => 'required|exists:vehicle_requests_parmanently,vehicle_request_permanent_id'
             ]);            
-            // If validation fails, return an error response
+                  // If validation fails, return an error response
             if ($validator->fails()) 
                 {
                     return response()->json([
@@ -55,9 +55,10 @@ public function ReturntVehiclePerm(Request $request)
                         'vehicle_id'=>$get_permanent_request->vehicle_id,
                         'purpose' =>$request->purpose,
                         'requested_by' => $logged_user,
-                        'permanent_request' => $get_permanent_request->vehicle_request_permanent_id,
+                        'permanent_request' =>$get_permanent_request->vehicle_request_permanent_id,
                     ]);
                     // Success: Record was created
+                    // Redirect page to Permananet
                     return response()->json([
                         'success' => true,
                         'message' => 'Request sent successfully.',
@@ -79,8 +80,6 @@ public function update_return_request(Request $request)
         $validator = Validator::make($request->all(), [
             'request_id' => 'required|uuid|exists:giving_back_vehicles_parmanently,giving_back_vehicle_id', 
             'purpose' => 'sometimes|required|string|max:1000',
-            'vehicle' => 'sometimes|required|uuid|exists:vehicles,vehicle_id',
-            'perm_request_id' => 'required|uuid|exists:vehicle_requests_parmanently,vehicle_request_permanent_id', 
 
         ]);
         // Check if validation fails
@@ -113,7 +112,8 @@ public function update_return_request(Request $request)
                         } 
                     else
                         {
-                            $get_permanent_request = VehiclePermanentlyRequestModel::find('perm_request_id');
+                            $perm_request_id = $Vehicle_Request->permanent_request;
+                            $get_permanent_request = VehiclePermanentlyRequestModel::find($perm_request_id);
                             if($get_permanent_request->requested_by != $user_id || $get_permanent_request->status = false)
                               {
                                     return response()->json([
@@ -124,8 +124,6 @@ public function update_return_request(Request $request)
                                 // Update the record with new data
                                 $Vehicle_Request->update([
                                     'purpose' => $request->purpose,
-                                    'vehicle_id' => $get_permanent_request->vehicle_id,
-                                    'vehicle_request_id' => $request->perm_request_id,
                                 ]);
                                 // Return a success response
                                 return response()->json([
@@ -185,22 +183,14 @@ public function deleteRequest(Request $request)
                 ]);
             }
     }
-     // Directors Page
-public function DirectorApprovalPage()
-    {
-            $id = Auth::id();
-            $directors_data = User::where('id',$id)->get('department_id');
-            $dept_id = $directors_data->department_id;
-            $directors_data = User::where('id',$id)->get('department_id');
-            $dept_id = $directors_data->department_id;
-
-            $vehicle_requests = GivingBackVehiclePermanently::whereHas('requestedBy', function ($query) use ($dept_id) {
-                $query->where('department_id', $dept_id);
-            })->get();
-            return view("Return.DirectorPage", compact('vehicle_requests'));
+// Vehicle Director Page
+public function VehicleDirector_page() 
+    {    
+            $vehicle_requests = GivingBackVehiclePermanently::latest()->get();
+            return view("Return.vehicle_requests", compact('vehicle_requests'));     
     }
 // DIRECTOR APPROVE THE REQUESTS
-public function DirectorApproveRequest(Request $request)
+public function VehicleDirectorApproveRequest(Request $request)
     {
             $validation = Validator::make($request->all(),[
                 'request_id'=>'required|uuid|exists:giving_back_vehicles_parmanently,giving_back_vehicle_id',
@@ -243,7 +233,7 @@ public function DirectorApproveRequest(Request $request)
             }
     }
 // Director Reject the request
-public function DirectorRejectRequest(Request $request)
+public function Vec_DirectorRejectRequest(Request $request)
     {
         $validation = Validator::make($request->all(),[
             'request_id'=>'required|uuid|exists:giving_back_vehicles_parmanently,giving_back_vehicle_id',
@@ -271,7 +261,7 @@ public function DirectorRejectRequest(Request $request)
                             );
                     }
                 $Vehicle_Request->approved_by = $user_id;
-                $Vehicle_Request->reject_reason_director = $reason;
+                $Vehicle_Request->reject_reason_vec_director = $reason;
                 $Vehicle_Request->save();
                 return response()->json([
                     'success' => true,
@@ -287,17 +277,16 @@ public function DirectorRejectRequest(Request $request)
                 ]);
             }
     }
-// Vehicle Director Page
-public function VehicleDirector_page() 
+// Dispatcher Page
+public function Dispatcher_page() 
     {    
-            $id = Auth::id();
-            $Vehicle_Request = GivingBackVehiclePermanently::whereNotNull('approved_by')
-                                ->whereNull('reject_reason_director')
+            $vehicle_requests = GivingBackVehiclePermanently::whereNotNull('approved_by')
+                                ->whereNull('reject_reason_vec_director')
                                 ->get();
             return view("Return.vehicle_requests", compact('vehicle_requests'));     
     }
     // VEHICLE DIRECTOR APPROVE THE REQUESTS
-public function VehicleDirectorApproveRequest(Request $request)
+public function DispatcherApproveRequest(Request $request)
     {
             $validation = Validator::make($request->all(),[
                 'request_id'=>'required|uuid|exists:giving_back_vehicles_parmanently,giving_back_vehicle_id',
@@ -315,7 +304,7 @@ public function VehicleDirectorApproveRequest(Request $request)
             $user_id = Auth::id();
             $Vehicle_Request = GivingBackVehiclePermanently::findOrFail($id);
             $the_vehicle = VehiclesModel::find($Vehicle_Request->vehicle_id);
-            $get_permanent_request = VehiclePermanentlyRequestModel::find($Vehicle_Request->vehicle_request_id);
+            $get_permanent_request = VehiclePermanentlyRequestModel::find($Vehicle_Request->permanent_request );
             if($Vehicle_Request->received_by)
                 {
                     return response()->json([
@@ -337,7 +326,7 @@ public function VehicleDirectorApproveRequest(Request $request)
             ]);
     }
 //vehicle Director Reject the request
-public function VehicleDirectorRejectRequest(Request $request)
+public function DispatcherRejectRequest(Request $request)
     {
         $validation = Validator::make($request->all(),[
             'request_id'=>'required|uuid|exists:giving_back_vehicles_parmanently,giving_back_vehicle_id',
@@ -366,7 +355,7 @@ public function VehicleDirectorRejectRequest(Request $request)
                         ]);
                     }
                 $Vehicle_Request->received_by = $user_id;
-                $Vehicle_Request->reject_reason_vec_dire = $reason;
+                $Vehicle_Request->reject_reason_dispatcher = $reason;
                 $Vehicle_Request->save();
                 return response()->json([
                     'success' =>true,

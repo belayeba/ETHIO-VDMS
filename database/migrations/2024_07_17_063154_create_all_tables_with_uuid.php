@@ -95,6 +95,8 @@ class CreateAllTablesWithUuid extends Migration
                 $table->string('type')->options('[spare_part,vehicle_part]');
                 $table->uuid('name');
                 $table->string('notes');
+                $table->uuid('created_by');
+                $table->foreign('created_by')->references('id')->on('users');
                 $table->timestamps();
                 $table->softDeletes();
             });
@@ -171,7 +173,7 @@ class CreateAllTablesWithUuid extends Migration
             $table->integer('mileage')->nullable();
             $table->uuid('inspection_id')->nullable();  // Link to the entire inspection session
             $table->foreign('inspection_id')->references('inspection_id')->on('vehicle_inspections');
-            $table->boolean('status')->nullable();
+            $table->boolean('status')->default(true); // COLUMN THAT SHOWS VEHICLE RETURNED OR NOT
             $table->timestamps();
             $table->softDeletes();
         });
@@ -179,22 +181,18 @@ class CreateAllTablesWithUuid extends Migration
             $table->uuid('giving_back_vehicle_id')->primary();
             $table->uuid('requested_by');
             $table->foreign('requested_by')->references('id')->on('users');
-            $table->uuid('vehicle_id');
-            $table->foreign('vehicle_id')->references('vehicle_id')->on('vehicles');
-            $table->uuid('approved_by')->nullable();
             $table->string('purpose');
-            $table->string('reject_reason_vec_dire')->nullable();
-            $table->string('reject_reason_director')->nullable();
+            $table->uuid('approved_by')->nullable();
             $table->foreign('approved_by')->references('id')->on('users');
+            $table->string('reject_reason_vec_director')->nullable();
             $table->uuid('received_by')->nullable();
             $table->foreign('received_by')->references('id')->on('users');
+            $table->string('reject_reason_dispatcher')->nullable();
             $table->date('returned_date')->nullable();
-            $table->uuid('vehicle_request_id')->nullable();
-            $table->foreign('vehicle_request_id')->references('vehicle_request_permanent_id')->on('vehicle_requests_parmanently');
-            $table->uuid('vehicle_detail_id')->nullable();
-            $table->foreign('vehicle_detail_id')->references('detail_id')->on('vehicles_detail');
-            $table->uuid('inspection_id')->nullable();  // Link to the entire inspection session
-            $table->foreign('inspection_id')->references('inspection_id')->on('vehicle_inspections');
+            $table->uuid('permanent_request')->nullable();
+            $table->foreign('permanent_request')->references('vehicle_request_permanent_id')->on('vehicle_requests_parmanently');
+            // $table->uuid('inspection_id')->nullable();  // Link to the entire inspection session
+            // $table->foreign('inspection_id')->references('inspection_id')->on('vehicle_inspections');
             $table->boolean('status')->nullable();
             $table->timestamps();
             $table->softDeletes();
@@ -275,14 +273,15 @@ class CreateAllTablesWithUuid extends Migration
         $table->string('month');
         $table->integer('fuel_amount');
         $table->decimal('fuel_cost', 8, 2);
-        
+        $table->string('reciet_attachment');
+
         $table->timestamps();
         $table->softDeletes();
     
         // Add a unique constraint on the combination of fueling_id and month
-        $table->unique(['fueling_id', 'month']);
+        $table->primary(['fueling_id', 'month', 'driver_id']);  // Composite primary key to avoid duplication
+
     });
-    
         // GPS Tracking Table
         Schema::create('gps_tracking', function (Blueprint $table) {
             $table->uuid('tracking_id')->primary();

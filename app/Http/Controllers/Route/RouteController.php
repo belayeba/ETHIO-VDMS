@@ -9,6 +9,7 @@ use App\Models\RouteManagement\RouteUser;
 use App\Models\User;
 use App\Models\Vehicle\VehiclesModel as Vehicle;
 use App\Models\Vehicle\VehiclesModel;
+use Illuminate\Support\Facades\Validator;
 
 class RouteController extends Controller {
     //
