@@ -8,9 +8,16 @@ use App\Models\Vehicle\VehiclePermanentlyRequestModel;
 use App\Models\Vehicle\VehiclesModel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\Vehicle\Daily_KM_Calculation;
 
 class Fuel_QuataController extends Controller
 {
+    protected $dailyKmCalculation;
+
+    public function __construct(Daily_KM_Calculation $dailyKmCalculation)
+    {
+        $this->dailyKmCalculation = $dailyKmCalculation;
+    }
     // List all fuel quotas
     public function index()
         {
@@ -33,11 +40,14 @@ class Fuel_QuataController extends Controller
             $logged_user = Auth::id();
             $the_vehicle = VehiclesModel::find($request->vehicle_id);
             $fual_quata = $the_vehicle->fuel_amount;
+            $today = \Carbon\Carbon::today();
+           $ethiopianDate = $this->dailyKmCalculation->ConvertToEthiopianDate($today); 
             $fuelQuata = Fuel_QuataModel::create([
                 'vehicle_id' => $request->vehicle_id,
                 'old_quata' => $fual_quata,                // Current fuel quota
                 'new_quata' => $request->new_quata,        // New quota provided in request
                 'changed_by' => $logged_user,              // Set to logged-in user's ID
+                'created_at' => $ethiopianDate
             ]);
             $the_vehicle->fuel_amount = $request->new_quata;
             $get_permananet = VehiclePermanentlyRequestModel::select('fuel_quata')->where('vehicle_id',$request->vehicle_id)->where('status',1)->first();

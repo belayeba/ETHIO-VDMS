@@ -57,7 +57,8 @@ class VehicleTemporaryRequestModel extends Model
         'km_per_liter',
         'driver_accepted_by',
         'taking_inspection',
-        'returning_inspection'
+        'returning_inspection',
+        'created_at'
     ];
     protected static function boot()
         {

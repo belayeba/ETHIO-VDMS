@@ -21,10 +21,10 @@ class VehiclesModel extends Model {
     protected $keyType = 'uuid';
 
     protected $fillable = [
-        'vin', 'make', 'model', 'year', 'plate_number', 'registered_by',
-        'registration_date', 'mileage', 'vehicle_type',
+        'vin', 'make', 'model', 'year', 'plate_number', 'registered_by', 'mileage', 'vehicle_type',
         'vehicle_category', 'fuel_amount', 'last_service', 'libre', 'insurance',
-        'next_service', 'driver_id', 'inspection_id', 'fuel_type', 'status', 'notes'
+        'next_service', 'driver_id', 'inspection_id', 'fuel_type', 'status', 'notes', 'created_at',
+
     ];
     protected static function boot() {
         parent::boot();

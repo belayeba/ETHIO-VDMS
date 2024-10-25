@@ -355,11 +355,10 @@ class CreateAllTablesWithUuid extends Migration
             $table->integer('afternoon_km')->nullable();
             $table->uuid('vehicle_id');
             $table->foreign('vehicle_id')->references('vehicle_id')->on('vehicles')->onDelete('restrict');
-            $table->uuid('driver_id');
+            $table->uuid('driver_id')->nullable();
             $table->foreign('driver_id')->references('driver_id')->on('drivers')->onDelete('restrict');
             $table->uuid('register_by');
             $table->foreign('register_by')->references('id')->on('users')->onDelete('restrict');
-            $table->date('date');
             $table->timestamps();
             $table->softDeletes();
         });

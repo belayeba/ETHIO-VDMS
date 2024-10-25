@@ -13,9 +13,16 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
+use App\Http\Controllers\Vehicle\Daily_KM_Calculation;
 
 class GivingBackPermanentVehicle extends Controller
 {
+    protected $dailyKmCalculation;
+
+    public function __construct(Daily_KM_Calculation $dailyKmCalculation)
+    {
+        $this->dailyKmCalculation = $dailyKmCalculation;
+    }
     // Display Request Page
 public function displayReturnPermRequestPage()
     {
@@ -50,12 +57,15 @@ public function ReturntVehiclePerm(Request $request)
               }
             try
                 {
+                    $today = \Carbon\Carbon::today();
+                     $ethiopianDate = $this->dailyKmCalculation->ConvertToEthiopianDate($today); 
                     // Create the user
                     GivingBackVehiclePermanently::create([
                         'vehicle_id'=>$get_permanent_request->vehicle_id,
                         'purpose' =>$request->purpose,
                         'requested_by' => $logged_user,
                         'permanent_request' =>$get_permanent_request->vehicle_request_permanent_id,
+                        'created_at' => $ethiopianDate
                     ]);
                     // Success: Record was created
                     // Redirect page to Permananet

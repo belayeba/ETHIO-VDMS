@@ -13,6 +13,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
+use App\Http\Controllers\Vehicle\Daily_KM_Calculation;
 
 class VehicleRegistrationController extends Controller {
     // public function index()
@@ -22,7 +23,12 @@ class VehicleRegistrationController extends Controller {
 
     //     return view( 'Vehicle_Registration.show', compact( 'vehicles' ) );
     // }
+    protected $dailyKmCalculation;
 
+    public function __construct(Daily_KM_Calculation $dailyKmCalculation)
+    {
+        $this->dailyKmCalculation = $dailyKmCalculation;
+    }
     public function index() {
         $drivers = DriversModel::all();
         $vehicle = VehiclesModel::paginate( 6 );
@@ -85,6 +91,8 @@ class VehicleRegistrationController extends Controller {
             $fileinsurance = time() . '_' . $file->getClientOriginalName();
             $file->move( $storagePath, $fileinsurance );
         }
+        $today = \Carbon\Carbon::today();
+        $ethiopianDate = $this->dailyKmCalculation->ConvertToEthiopianDate($today); 
         VehiclesModel::create( [
             'vin'=>$request->vin,
             'make' => $request->make,
@@ -105,6 +113,7 @@ class VehicleRegistrationController extends Controller {
             'vehicle_category' => $request->vehicle_category,
             'libre' => $filelibre,
             'insurance' => $fileinsurance,
+            'created_at' => $ethiopianDate
         ] );
 
         // return response()->json( [

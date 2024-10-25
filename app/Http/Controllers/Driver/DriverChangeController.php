@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Driver;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\Vehicle\Daily_KM_Calculation;
 use App\Models\Driver\DriverChangeModel as DriverDriverChangeModel;
 use App\Models\Driver\DriversModel;
 use App\Models\User;
@@ -15,7 +16,12 @@ use Illuminate\Support\Str;
 
 class DriverChangeController extends Controller {
     // Driver change Page
+    protected $dailyKmCalculation;
 
+    public function __construct(Daily_KM_Calculation $dailyKmCalculation)
+    {
+        $this->dailyKmCalculation = $dailyKmCalculation;
+    }
     public function driver_change_page() {
         $vehicles = VehiclesModel::all();
         $drivers = DriversModel::all();
@@ -45,12 +51,15 @@ class DriverChangeController extends Controller {
            {
             return redirect()->back()->with('error_message','Inspection should be done first .',);
            }
-        DriverDriverChangeModel::create( [
+           $today = \Carbon\Carbon::today();
+           $ethiopianDate = $this->dailyKmCalculation->ConvertToEthiopianDate($today);       
+            DriverDriverChangeModel::create( [
             'vehicle_id' => $request->vehicle_id,
             'old_driver_id' => $former_driver_id,
              'changed_by' => $logged_user,
             'new_driver_id' => $request->driver,
             'inspection_id' => $inspection->inspection_id,
+            'created_at' =>$ethiopianDate,
         ] );
         $vehicle_info->driver_id = $request->driver;
         $vehicle_info->save();

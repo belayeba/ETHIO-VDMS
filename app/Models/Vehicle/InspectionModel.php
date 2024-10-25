@@ -32,7 +32,8 @@ class InspectionModel extends Model
         'is_damaged',
         'inspection_image',
         'damage_description',
-        'inspection_date'
+        'inspection_date',
+        'created_at'
     ];
     // Automatically generate UUID for inspection_id if not provided
     protected static function boot()

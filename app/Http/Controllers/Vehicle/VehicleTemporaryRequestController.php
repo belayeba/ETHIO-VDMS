@@ -14,8 +14,16 @@ use Exception;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use App\Notifications\TaskCompleted;
+use App\Http\Controllers\Vehicle\Daily_KM_Calculation;
+
 class VehicleTemporaryRequestController extends Controller
     {
+        protected $dailyKmCalculation;
+
+        public function __construct(Daily_KM_Calculation $dailyKmCalculation)
+            {
+                $this->dailyKmCalculation = $dailyKmCalculation;
+            }
         // Display Request Page
         public function displayRequestPage()
             {
@@ -128,6 +136,8 @@ class VehicleTemporaryRequestController extends Controller
                             $id = Auth::id();
                             // dd($request->return_time);
                             // Create the vehicle request
+                            $today = \Carbon\Carbon::today();
+                            $ethiopianDate = $this->dailyKmCalculation->ConvertToEthiopianDate($today); 
                             $Vehicle_Request = VehicleTemporaryRequestModel::create([
                                 'purpose' => $request->purpose,
                                 'in_out_town' =>$request->in_out_town,
@@ -141,6 +151,7 @@ class VehicleTemporaryRequestController extends Controller
                                 'start_time' => $request->start_time,
                                 'end_date' => $request->return_date,
                                 'end_time' => $request->return_time,
+                                'created_at' => $ethiopianDate
                             ]);
                             // Handle optional material_name and weight fields
                             $materialNames = $request->input('itemWeights', []);

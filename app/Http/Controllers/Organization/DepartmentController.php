@@ -9,12 +9,16 @@ use App\Models\Organization\ClustersModel;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
+use App\Http\Controllers\Vehicle\Daily_KM_Calculation;
 
 class DepartmentController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+    protected $dailyKmCalculation;
+
+    public function __construct(Daily_KM_Calculation $dailyKmCalculation)
+    {
+        $this->dailyKmCalculation = $dailyKmCalculation;
+    }
     public function index()
     {
         //
@@ -52,7 +56,9 @@ class DepartmentController extends Controller
             }
 
         $user = auth()->user()->id; // Get the authenticated user's ID
-        $request->merge(['created_by' => $user]); // Add the user's ID to the request data
+        $today = \Carbon\Carbon::today();
+        $ethiopianDate = $this->dailyKmCalculation->ConvertToEthiopianDate($today); 
+        $request->merge(['created_by' => $user,'created_at'=>$ethiopianDate]); // Add the user's ID to the request data
         // Create the department
         DepartmentsModel::create($request->all());
         // Redirect to the index page with a success message

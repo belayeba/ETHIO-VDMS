@@ -12,9 +12,16 @@ use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
+use App\Http\Controllers\Vehicle\Daily_KM_Calculation;
 
 class VehicleParmanentlyRequestController extends Controller
 {
+    protected $dailyKmCalculation;
+
+    public function __construct(Daily_KM_Calculation $dailyKmCalculation)
+    {
+        $this->dailyKmCalculation = $dailyKmCalculation;
+    }
     // Display Request Page
     public function displayPermRequestPage()
         {
@@ -40,11 +47,14 @@ class VehicleParmanentlyRequestController extends Controller
             $id = Auth::id();
             try 
             {
+                $today = \Carbon\Carbon::today();
+                $ethiopianDate = $this->dailyKmCalculation->ConvertToEthiopianDate($today); 
                 // Create the user
                 VehiclePermanentlyRequestModel::create([
                     'requested_by' => $id,
                     'purpose' => $request->purpose,
                     'position_letter' => $request->position_letter,
+                    'created_at' => $ethiopianDate
                 ]);
                 // Success: Record was created
                 return redirect()->back()->with('success_message',
@@ -353,12 +363,12 @@ class VehicleParmanentlyRequestController extends Controller
             }
             $get_the_vehilce = VehiclesModel::find($check_request->vehicle_id);
             if($get_the_vehilce->status = false)
-            {
-                    return response()->json([
-                        'success' => false,
-                        'message' => 'Reject Your request because Assigned vehicle is not active',
-                    ]);
-            }
+                {
+                        return response()->json([
+                            'success' => false,
+                            'message' => 'Reject Your request because Assigned vehicle is not active',
+                        ]);
+                }
             $fuel_quata = $get_the_vehilce->fuel_amount;
             $check_request->accepted_by_requestor = $logged_user;
             $get_the_vehilce->status = false;

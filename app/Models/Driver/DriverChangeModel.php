@@ -29,6 +29,7 @@ class DriverChangeModel extends Model {
         'changed_by',
         'driver_accepted',
         'driver_reject_reason',
+        'created_at'
     ];
     protected static function boot() {
         parent::boot();

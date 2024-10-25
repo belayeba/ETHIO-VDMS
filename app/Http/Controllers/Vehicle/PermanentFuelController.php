@@ -12,8 +12,15 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
+use App\Http\Controllers\Vehicle\Daily_KM_Calculation;
 
 class PermanentFuelController extends Controller {
+    protected $dailyKmCalculation;
+
+    public function __construct(Daily_KM_Calculation $dailyKmCalculation)
+    {
+        $this->dailyKmCalculation = $dailyKmCalculation;
+    }
     public function index() {
         $fuelings = PermanentFuelModel::latest()->get();
         return view( 'Fuelling.ParmanententRequestPage', compact( 'fuelings' ) );
@@ -67,6 +74,8 @@ class PermanentFuelController extends Controller {
 
         $get_permanent_id = $permanent->vehicle_request_permanent_id;
         // Loop through each set of fueling data
+        $today = \Carbon\Carbon::today();
+        $ethiopianDate = $this->dailyKmCalculation->ConvertToEthiopianDate($today); 
         foreach ( $request->fuel_amount as $index => $fuel_amount ) {
             $fueling = new PermanentFuelModel();
             $fueling->driver_id = $the_driver_id;
@@ -88,7 +97,7 @@ class PermanentFuelController extends Controller {
                 // Assign file name to the model
                 $fueling->reciet_attachment = $fileName;
             }
-            
+            $fueling->created_at = $ethiopianDate;
             $fueling->save();
         }
         return redirect()->route( 'permanenet_fuel_request' )->with( 'success', 'Fueling records created successfully.' );

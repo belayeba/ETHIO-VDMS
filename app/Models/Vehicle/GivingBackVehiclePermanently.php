@@ -30,7 +30,8 @@ class GivingBackVehiclePermanently extends Model {
         'returned_date',
         'inspection_id',
         'permanent_request',
-        'status'
+        'status',
+        'created_at'
     ];
     protected static function boot() {
         parent::boot();

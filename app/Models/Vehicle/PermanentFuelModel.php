@@ -28,6 +28,7 @@ class PermanentFuelModel extends Model {
         'fuel_amount',
         'fuel_cost',
         'reciet_attachment',
+        'created_at'
     ];
     public function vehicle() {
         return $this->belongsTo( VehiclesModel::class, 'vehicle_id', 'vehicle_id' );

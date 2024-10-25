@@ -22,6 +22,7 @@ class Fuel_QuataModel extends Model
         'old_quata',
         'new_quata',
         'changed_by',
+        'created_at'
     ];
     protected static function boot() {
         parent::boot();
