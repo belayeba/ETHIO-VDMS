@@ -14,6 +14,7 @@ use App\Http\Controllers\Organization\ClusterController;
 use App\Http\Controllers\Route\RouteController;
 use App\Http\Controllers\Notification\NotificationController;
 use App\Http\Controllers\Vehicle\DailyReportController;
+use App\Http\Controllers\Vehicle\Fuel_QuataController;
 use App\Http\Controllers\Vehicle\GivingBackPermanentVehicle;
 use App\Http\Controllers\Vehicle\VehicleParmanentlyRequestController;
 // use App\Http\Controllers\Organization\ClustersController;
@@ -122,11 +123,11 @@ Route::group(['middleware' => ['auth']], function()
                 Route::group([
                     'prefix'=>'vehicle',
                 ], function (){
-                Route::get('/',[VehicleVehicleRegistrationController::class, 'index'])->name('vehicleRegistration.index');
-                Route::post('/store',[VehicleVehicleRegistrationController::class, 'store'])->name('vehicleRegistration.store');
-                Route::delete('/delete/{vehicle}',[VehicleVehicleRegistrationController::class,'destroy'])->name('vehicle.destroy');
-                Route::put('/update/{vehicle}', [VehicleVehicleRegistrationController::class, 'update'])->name('vehicle.update');
-            
+                    Route::get('/',[VehicleVehicleRegistrationController::class, 'index'])->name('vehicleRegistration.index');
+                    Route::post('/store',[VehicleVehicleRegistrationController::class, 'store'])->name('vehicleRegistration.store');
+                    Route::delete('/delete/{vehicle}',[VehicleVehicleRegistrationController::class,'destroy'])->name('vehicle.destroy');
+                    Route::put('/update/{vehicle}', [VehicleVehicleRegistrationController::class, 'update'])->name('vehicle.update');
+                
                 });
             // Vehicle Permanent Request
             Route::controller(VehicleParmanentlyRequestController::class)->group(function()
@@ -262,13 +263,20 @@ Route::group(['middleware' => ['auth']], function()
                  // Define routes for daily_km
             Route::controller(Daily_KM_Calculation::class)->group(function ()
                 {
-                Route::get('/daily','ReportPage')->name('dailyreport.index');
-                Route::get('/daily_km/check', 'CheckVehicle')->name('daily_km.page.check');
-                Route::post('/daily_km/store', 'displayForm')->name('daily_km.page.store'); // Create a new inspection
-                Route::post('/daily_km/morning', 'morning_km')->name('daily_km.page.morning'); // Show a specific inspection
-                Route::post('/daily_km/afternoon', 'aftern_km')->name('daily_km.page.evening'); // List all inspections
-                Route::get('/daily_km/page', 'displayPage')->name('daily_km.page'); // inspection page
-                Route::delete('/daily_km/delete', 'delete_morningkm')->name('daily_km.page.delete'); // Delete a specific inspection
+                    Route::get('/daily','ReportPage')->name('dailyreport.index');
+                    Route::get('/daily_km/check', 'CheckVehicle')->name('daily_km.page.check');
+                    Route::post('/daily_km/store', 'displayForm')->name('daily_km.page.store'); // Create a new inspection
+                    Route::post('/daily_km/morning', 'morning_km')->name('daily_km.page.morning'); // Show a specific inspection
+                    Route::post('/daily_km/afternoon', 'aftern_km')->name('daily_km.page.evening'); // List all inspections
+                    Route::get('/daily_km/page', 'displayPage')->name('daily_km.page'); // inspection page
+                    Route::delete('/daily_km/delete', 'delete_morningkm')->name('daily_km.page.delete'); // Delete a specific inspection
+                });
+            Route::controller(Fuel_QuataController::class)->group(function ()
+                {
+                    Route::get('/get_all','index')->name('all_fuel_quata');
+                    Route::get('/get_one/{id}', 'show')->name('select_one');
+                    Route::post('/save_change', 'store')->name('save_quata_change'); 
+                    Route::post('/save_update', 'update')->name('save_quata_update');
                 });
     // Samir Driver Registration
     Route::group([
@@ -372,6 +380,4 @@ Route::group(['middleware' => ['auth']], function()
         Route::post('/{department}/update', [DepartmentController::class,'update'])->name('department.update');
         Route::delete('/delete/{department}',[DepartmentController::class,'destroy'])->name('department.destroy');
     });
-
-    // Tinsae
 });

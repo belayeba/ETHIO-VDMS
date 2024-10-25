@@ -115,53 +115,6 @@
                 <ul class="side-nav">
 
                     <li class="side-nav-title">Main</li>
-                     <!-- <li class="side-nav-item">
-                        <a data-bs-toggle="collapse" href="#sidebarPages" aria-expanded="false" aria-controls="sidebarPages" class="side-nav-link">
-                            <i class="ri-pages-line"></i>
-                            <span> Pages </span>
-                            <span class="menu-arrow"></span>
-                        </a>
-                        <div class="collapse" id="sidebarPages">
-                            <ul class="side-nav-second-level">
-
-                            <li>
-                                <a href="/temp45">Starter Page</a>
-                            </li>
-                           
-                                <li>
-                                    <a href="/temp39">Contact List</a>
-                                </li>
-                                <li>
-                                    <a href="/temp44">Profile</a>
-                                </li>
-                                <li>
-                                    <a href="/temp46">Timeline</a>
-                                </li>
-                                <li>
-                                    <a href="/temp41">Invoice</a>
-                                </li>
-                                <li>
-                                    <a href="/temp40">FAQ</a>
-                                </li>
-                                <li>
-                                    <a href="/tempe43">Pricing</a>
-                                </li>
-                                <li>
-                                    <a href="/temp42">Maintenance</a>
-                                </li>
-                                <li>
-                                    <a href="/temp12">Error 404</a>
-                                </li>
-                                <li>
-                                    <a href="/temp11">Error 404-alt</a>
-                                </li>
-                                <li>
-                                    <a href="/temp13">Error 500</a>
-                                </li>
-                            </ul>
-                        </div>
-                    </li>  -->
-
                     <li class="side-nav-item">
                         <a data-bs-toggle="collapse" href="#sidebarRequest" aria-expanded="false"
                             aria-controls="sidebarRequest" class="side-nav-link">
@@ -314,6 +267,11 @@
                                 @can('Vehicle Part Registration')
                                 <li>
                                     <a href="{{ route('vehicle_parts.index') }}">Vehicle Parts</a>
+                                </li>
+                                @endcan()
+                                @can('Vehicle Part Registration')
+                                <li>
+                                    <a href="{{ route('vehicle_parts.index') }}">Change Fuel Quata</a>
                                 </li>
                                 @endcan()  
                                 @can('Vehicle Inspection')
