@@ -73,7 +73,7 @@ class PermanentFuelController extends Controller {
             $fueling->permanent_id = $get_permanent_id;
             $fueling->fuiling_date = $request->fuiling_date[ $index ];
             $fueling->month = $request->month;
-            $fueling->fuel_amount = $fuel_amount;
+            $fueling->fuel_amount = $fuel_amount[ $index ];
             $fueling->fuel_cost = $request->fuel_cost[ $index ];
             if ($request->hasFile( "reciet_attachment[$index]" ) ) {
                 $file = $request->file( "reciet_attachment[$index]" );

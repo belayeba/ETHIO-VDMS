@@ -173,12 +173,12 @@
                             <ul class="side-nav-second-level">
                                  @can('Temporary Request Page')  
                                 <li>
-                                    <a href="{{ route('displayRequestPage') }}">Temporary vehicle</a>
+                                    <a href="{{ route('displayRequestPage') }}">Temporary Request</a>
                                 </li>
                                   @endcan()  
                                   @can('Permanent Request Page')  
                                 <li>
-                                    <a href="{{ route('vec_perm_request') }}">Permanent vehicle</a>
+                                    <a href="{{ route('vec_perm_request') }}">Permanent Request</a>
                                 </li>
                                   @endcan()  
                                   @can('Director Approval Page')  
@@ -193,29 +193,27 @@
                                   @endcan()  
                                   @can('HR Cluster Director Approval Page')  
                                 <li>
-                                    <a href="{{ route('HRClusterDirector_temp') }}">Approve Temporary
-                                        Request</a>
+                                    <a href="{{ route('HRClusterDirector_temp') }}">Approve Temporary</a>
                                 </li>
                                   @endcan()  
                                   @can('Transport Director')  
                                 <li>
-                                    <a href="{{ route('TransportDirector_temp') }}">Approve Temporary
-                                        Request</a>
+                                    <a href="{{ route('TransportDirector_temp') }}">Approve Temporary</a>
                                 </li>
                                   @endcan()  
                                   @can('Dispatcher Page')  
                                 <li>
-                                    <a href="{{ route('simirit_page') }}">Temporarly</a>
+                                    <a href="{{ route('simirit_page') }}">Temporarly Assign</a>
                                 </li>
                                   @endcan()  
                                   @can('Vehicle Director Page')  
                                 <li>
-                                    <a href="{{ route('perm_vec_director_page') }}">Pemanent</a>
+                                    <a href="{{ route('perm_vec_director_page') }}">Approve Pemanent</a>
                                 </li>
                                   @endcan()  
                                   @can('Dispatcher')  
                                 <li>
-                                    <a href="{{ route('perm_vec_simirit_page') }}">Permanent</a>
+                                    <a href="{{ route('perm_vec_simirit_page') }}">Assign Permanent</a>
                                 </li>
                                   @endcan()  
                                   @can('Request Return')  
@@ -287,6 +285,11 @@
                                 @can('Change Driver')
                                 <li>
                                     <a href="{{ route('driver.switch') }}">Driver Change</a>
+                                </li>
+                                @endcan()
+                                @can('Change Driver')
+                                <li>
+                                    <a href="{{ route('driver.switch') }}">Driver Accept</a>
                                 </li>
                                 @endcan()  
                             </ul>

@@ -100,16 +100,10 @@ Route::group(['middleware' => ['auth']], function()
                 {
                         Route::get('/permanent_fuel_request_page', 'index')->name('permanenet_fuel_request');
                         Route::post('/fuel_post_request', 'store')->name('store_fuel_request');
-                        // Route::post('/user_delete_request', 'deleteRequest')->name('temp_delete_request');
-                        // Route::post('/user_update_info', 'update_temp_request')->name('temp_update_request');
                         Route::get('/finance_approve_page', 'finance_get_page')->name('finance_approve_fuel_page');
-                        // Route::post('/director_approve_request', 'DirectorApproveRequest')->name('director_approve_request');
-                        // Route::post('/director_reject_request', 'DirectorApproveRequest')->name('director_reject_request');
-                        Route::get('/get_my_request', 'my_request');
-                        // Route::post('/simirit_approve_request', 'VehicleDirectorApproveRequest')->name('simirit_approve');
-                        // Route::post('/simirit_fill_start_km', ' VehicleDirectorFillstartKm')->name('simirit_fill_start_km');
-                        // Route::post('/simirit_reject_request', 'VehicleDirectorRejectRequest')->name('simirit_reject');
-                        // Route::post('/simirit_returns_vehicle', 'Returning_temporary_vehicle')->name('simirit_return_vehicle');
+                        Route::post('/finance_appprove/{id}', 'finance_appprove')->name('finance_approve');
+                        Route::get('/get_my_request', 'my_request')->name('my_request');
+                        Route::post('/reject_request/{id}', 'finance_reject')->name('finance_reject');
                 });
             Route::controller(usercontroller::class)->group(function()
                 {

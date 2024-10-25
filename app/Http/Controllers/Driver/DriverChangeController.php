@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Driver;
 use App\Http\Controllers\Controller;
 use App\Models\Driver\DriverChangeModel as DriverDriverChangeModel;
 use App\Models\Driver\DriversModel;
+use App\Models\User;
 use Illuminate\Http\Request;
 use App\Models\Vehicle\InspectionModel;
 use App\Models\Vehicle\VehiclesModel;
@@ -40,13 +41,16 @@ class DriverChangeController extends Controller {
         
         $logged_user = Auth::id();
         $inspection = InspectionModel::select( 'inspection_id' )->where( 'vehicle_id', $request->vehicle_id )->latest()->first();
-        
-        $driverChange = DriverDriverChangeModel::create( [
+        if(!$inspection)
+           {
+            return redirect()->back()->with('error_message','Inspection should be done first .',);
+           }
+        DriverDriverChangeModel::create( [
             'vehicle_id' => $request->vehicle_id,
             'old_driver_id' => $former_driver_id,
-            // 'changed_by' => $logged_user,
+             'changed_by' => $logged_user,
             'new_driver_id' => $request->driver,
-            'inspection_id' => $inspection->inspection_id || null,
+            'inspection_id' => $inspection->inspection_id,
         ] );
         $vehicle_info->driver_id = $request->driver;
         $vehicle_info->save();
@@ -124,4 +128,52 @@ class DriverChangeController extends Controller {
         $driverChange->delete();
         return redirect()->back()->with('success_message','Driver change deleted successfully.',);
     }
+    public function driver_get_request()
+        {
+            $logged_user = Auth::id();
+            $Driver = DriversModel::find($logged_user);
+            $driver_id = $Driver->driver_id;
+            $get_request = DriverDriverChangeModel::where('new_driver_id',$driver_id)->latest()->get();
+            return response()->json(['my_request'=>$get_request]);
+        }
+    public function driver_accept(Request $request)
+        {
+            $validator = Validator::make( $request->all(), [
+                'request_id' => 'required|uuid|exists:driver_changes,driver_change_id',
+            ] );
+            if ( $validator->fails() ) {
+                return response()->json( [ 'success' => false,
+                'message' => 'Warning! You are denied the service' ], 422 );
+            }
+            $logged_user = Auth::id();
+            $get_request = DriverDriverChangeModel::find($request->request_id);
+            if($get_request->new_driver != $logged_user || !$get_request->driver_accepted || !$get_request->driver_reject_reason)
+                {
+                    return response()->json(['error_message'=>"Warning! You are denied the service"]);
+                }
+            $get_request->driver_accepted = $logged_user;
+            $get_request->save();
+            return response()->json(['success_message'=>"Vehicle Successfully Transfered to you"]);
+        }
+    public function driver_reject(Request $request)
+        {
+            $validator = Validator::make( $request->all(), [
+                'request_id' => 'required|uuid|exists:driver_changes,driver_change_id',
+                'reason' => 'required|string'
+            ] );
+            if ( $validator->fails() ) {
+                return response()->json( [ 'success' => false,
+                'message' => 'Warning! You are denied the service' ], 422 );
+            }
+            $logged_user = Auth::id();
+            $get_request = DriverDriverChangeModel::find($request->request_id);
+            if($get_request->new_driver != $logged_user || !$get_request->driver_accepted || !$get_request->driver_reject_reason)
+                {
+                    return response()->json(['error_message'=>"Warning! You are denied the service"]);
+                }
+            $get_request->driver_accepted = $logged_user;
+            $get_request->driver_reject_reason = $request->reason;
+            $get_request->save();
+            return response()->json(['success_message'=>"Vehicle Successfully Transfered to you"]);
+        }
 }

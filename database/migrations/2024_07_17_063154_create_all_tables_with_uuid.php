@@ -142,6 +142,8 @@ class CreateAllTablesWithUuid extends Migration
             $table->foreign('new_driver_id')->references('driver_id')->on('drivers');
             $table->uuid('old_driver_id');
             $table->foreign('old_driver_id')->references('driver_id')->on('drivers');
+            $table->uuid('changed_by');
+            $table->foreign('changed_by')->references('id')->on('users');
             $table->uuid('inspection_id');  // Link to the entire inspection session
             $table->foreign('inspection_id')->references('inspection_id')->on('vehicle_inspections');
             $table->boolean('driver_accepted')->default(0);
