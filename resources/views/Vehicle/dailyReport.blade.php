@@ -152,6 +152,7 @@
                                             <th>Morning KM</th>
                                             <th>Night KM</th>
                                             <th>Daily KM Difference </th>
+                                            <th>Night KM Difference </th>
 
                                         </tr>
                                     </thead>
@@ -164,7 +165,9 @@
                                                 <td>{{ $km->vehicle->plate_number ?? 'N/A' }}</td>
                                                 <td>{{ $km->morning_km }}</td>
                                                 <td>{{ $km->afternoon_km }}</td>
-                                                <td>{{ $km->afternoon_km - $km->morning_km }}</td>
+                                                <td>{{ $km->daily_km  }}</td>
+                                                <td>{{ $km->night_km ?? 'NULL'  }}</td>
+
                                             </tr>
                                         @endforeach
                                     </tbody>

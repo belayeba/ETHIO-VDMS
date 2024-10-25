@@ -62,7 +62,6 @@ class Daily_KM_Calculation extends Controller
                 $dates = explode(' - ', $dateRange);
                 // Query the daily KM data with filters
                 $query = DailyKMCalculationModel::with('vehicle', 'driver');
-
                 if ($plateNumber) {
                     $query->whereHas('vehicle', function ($q) use ($plateNumber) {
                         $q->where('plate_number', 'LIKE', "%{$plateNumber}%");
@@ -90,6 +89,7 @@ class Daily_KM_Calculation extends Controller
                 }
 
                 $dailkms = $query->latest()->get();
+
 
                 if($dailkms->isEmpty()) {
                     $dailkms = $query;

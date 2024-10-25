@@ -29,6 +29,7 @@ class DailyKMCalculationModel extends Model {
         'afternoon_km',
         'register_by'
     ];
+
     protected static function boot() {
         parent::boot();
 
@@ -54,5 +55,24 @@ class DailyKMCalculationModel extends Model {
 
     public function registeredBy(): BelongsTo {
         return $this->belongsTo( User::class, 'register_by', 'id' );
+    }
+
+    public function getDailyKmAttribute()
+    {
+        // Calculate the difference between afternoon_km and morning_km
+        return $this->afternoon_km - $this->morning_km;
+    }
+
+    public function getNightKmAttribute()
+    {
+        $yesterdayRecord = self::where('vehicle_id', $this->vehicle_id)
+            ->where('date', '=', \Carbon\Carbon::parse($this->date)->subDay()->format('Y-m-d'))
+            ->first();
+
+        if ($yesterdayRecord) {
+            return $this->morning_km - $yesterdayRecord->afternoon_km;
+        }
+
+        return null;
     }
 }
