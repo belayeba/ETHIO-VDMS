@@ -69,37 +69,26 @@
                                                     </select>
                                                 </div>
                                             
-                                                <!-- Department Filter -->
-                                                <div class="col-lg-4">
-                                                    <label for="selectDepartment" class="form-label">Department</label>
-                                                    <select id="selectDepartment" name="department" class="form-select">
-                                                        <option value="">Select Department</option>
-                                                        @foreach($departments as $department)
-                                                            <option value="{{ $department->department_id }}">{{ $department->name }}</option>
-                                                        @endforeach
-                                                    </select>
-                                                </div>
-                                            
                                                 <!-- Date Range Picker -->
-                                                <div class="col-lg-4 mt-3">
+                                                <div class="col-lg-4 z-3">
                                                     <label for="daterangetime" class="form-label">Date Range Pick With Times</label>
                                                     <input type="text" class="form-control date" id="datepicker" name="date_range" data-toggle="date-picker" data-time-picker="true" data-locale='{"format": "DD/MM hh:mm A"}'>
                                                 </div>
 
                                                 {{-- <input id="datepicker"/> --}}
-    <script>
-      const picker = new easepick.create({
-        element: document.getElementById('datepicker'),
-        css: [
-          'https://cdn.jsdelivr.net/npm/@easepick/core@1.2.1/dist/index.css',
-          'https://cdn.jsdelivr.net/npm/@easepick/range-plugin@1.2.1/dist/index.css',
-        ],
-        plugins: ['RangePlugin'],
-        RangePlugin: {
-          tooltip: true,
-        },
-      });
-    </script>
+                                                <script>
+                                                const picker = new easepick.create({
+                                                    element: document.getElementById('datepicker'),
+                                                    css: [
+                                                    'https://cdn.jsdelivr.net/npm/@easepick/core@1.2.1/dist/index.css',
+                                                    'https://cdn.jsdelivr.net/npm/@easepick/range-plugin@1.2.1/dist/index.css',
+                                                    ],
+                                                    plugins: ['RangePlugin'],
+                                                    RangePlugin: {
+                                                    tooltip: true,
+                                                    },
+                                                });
+                                                </script>
 
                                                 {{-- <div class="col-md-3">
                                                 <div class="position-relative">

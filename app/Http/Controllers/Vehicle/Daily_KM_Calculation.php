@@ -73,13 +73,6 @@ class Daily_KM_Calculation extends Controller
                     $query->whereHas('driver', function ($q) use ($name) {
                         $q->where('name', 'LIKE', "%{$name}%");
                     });
-                    dd($query);
-                }
-
-                if ($department) {
-                    $query->whereHas('driver', function ($q) use ($department) {
-                        $q->where('department', 'LIKE', "%{$department}%");
-                    });
                 }
 
                 if (count($dates) == 2) {
