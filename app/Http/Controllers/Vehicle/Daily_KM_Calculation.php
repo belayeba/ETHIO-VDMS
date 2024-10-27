@@ -10,15 +10,27 @@ use Carbon\Carbon;
 use Exception;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
-
+use Andegna\DateTime;
 class Daily_KM_Calculation extends Controller
     {
+        
         public function displayPage()
             {
-                $today = Carbon::today()->toDateString();
+                $today = Carbon::today();
+                $ethio_date = $this->ConvertToEthiopianDate($today);
                 $vehicle = VehiclesModel::get();
-                $TodaysDate = DailyKMCalculationModel::where('date',$today)->latest()->get();
+                $TodaysDate = DailyKMCalculationModel::where('created_at',$ethio_date)->latest()->get();
                 return view('Vehicle.DailKmForm',compact('vehicle','TodaysDate'));
+            }
+        public function ConvertToEthiopianDate($today)
+            {
+                $ethiopianDate = new DateTime($today);
+        
+                // Format the Ethiopian date
+                $formattedDate = $ethiopianDate->format('Y-m-d');
+        
+                // Display the Ethiopian date
+                return $formattedDate;
             }
         public function ReportPage()
             {
@@ -31,8 +43,9 @@ class Daily_KM_Calculation extends Controller
         //getting today's info
         public function displayForm()
             {
-                    $today = Carbon::today()->toDateString();
-                    $TodaysDate = DailyKMCalculationModel::where('date',$today)->latest()->get();
+                    $today = Carbon::today();
+                    $ethio_date = $this->ConvertToEthiopianDate($today);
+                    $TodaysDate = DailyKMCalculationModel::where('created_at',$ethio_date)->latest()->get();
                     return view('DailKmForm',compact('TodaysDate'));
             }
         public function morning_km(Request $request)
@@ -50,11 +63,12 @@ class Daily_KM_Calculation extends Controller
                                  $validator->errors(),
                             );
                         }
-                    $today = Carbon::today()->toDateString();
+                    $today = Carbon::today();
+                    $ethio_date = $this->ConvertToEthiopianDate($today);
                     $id = Auth::id();
                     try
                         {
-                            $vehicle_daily = DailyKMCalculationModel::where('vehicle_id',$request->vehicle)->whereDate('created_at',$today)->first();
+                            $vehicle_daily = DailyKMCalculationModel::where('vehicle_id',$request->vehicle)->whereDate('created_at',$ethio_date)->first();
                             //dd($vehicle);
                             $driver_from_vehicle = VehiclesModel::select('driver_id')->where('vehicle_id',$request->vehicle)->first();
                            /// $driver_id = $vehicle->driver_id;
@@ -66,7 +80,7 @@ class Daily_KM_Calculation extends Controller
                                    $vehicle_daily->save();
                                     // Success: Record was created
                                     return redirect()->back()->with('success_message',
-                                    "Morning KM calcuation Registered Successfully.",
+                                    "Morning KM calcuation Updated Successfully.",
                                  );
                               }
                             // Create Daily Km calculation
@@ -75,12 +89,12 @@ class Daily_KM_Calculation extends Controller
                                 'driver_id'=>$driver_id,
                                 'vehicle_id' => $request->vehicle,
                                 'morning_km' => $request->morning_km,
-                                'date' => $today,
-                            ]);
-                            // Success: Record was created
-                            return redirect()->back()->with('success_message',
-                            'Morning KM calcuation Registered Successfully.',
-                       );
+                                'created_at' => $ethio_date,
+                                ]);
+                                // Success: Record was created
+                                return redirect()->back()->with('success_message',
+                                'Morning KM calcuation Registered Successfully.',
+                            );
                            
                                 
                         }
@@ -108,11 +122,13 @@ class Daily_KM_Calculation extends Controller
                                  $validator->errors(),
                             );
                         }
-                    $today = Carbon::today()->toDateString();
+                    $today = Carbon::today();
+                    $ethio_date = $this->ConvertToEthiopianDate($today);
+
                     $id = Auth::id();
                     try
                         {
-                            $vehicle = DailyKMCalculationModel::where('vehicle_id',$request->vehicle)->whereDate('created_at',$today)->first();
+                            $vehicle = DailyKMCalculationModel::where('vehicle_id',$request->vehicle)->whereDate('created_at',$ethio_date)->first();
                             $driver_from_vehicle = VehiclesModel::select('driver_id')->where('vehicle_id',$request->vehicle)->first();
                             /// $driver_id = $vehicle->driver_id;
                             $driver_id = $driver_from_vehicle->driver_id;
@@ -132,7 +148,7 @@ class Daily_KM_Calculation extends Controller
                                 'driver_id'=>$driver_id,
                                 'vehicle_id' => $request->vehicle,
                                 'afternoon_km' => $request->afternoon_km,
-                                'date' => $today,
+                                'created_at' => $ethio_date,
                              ]);
                             // Success: Record was created
                             return redirect()->back()->with('success_message',
@@ -161,34 +177,23 @@ class Daily_KM_Calculation extends Controller
                             );
                         }
                     $id = $request->input('vehicle_id');
-                    $today = Carbon::today()->toDateString();
-                    $vehicle = DailyKMCalculationModel::where('date',$today)->where('vehicle_id',$id)->first();
+                    $today = Carbon::today();
+                    $ethio_date = $this->ConvertToEthiopianDate($today);
+                    $vehicle = DailyKMCalculationModel::where('created_at',$ethio_date)->where('vehicle_id',$id)->first();
                     
                     return response()->json([
                         'success' => false,
                         'vehicle' => $vehicle,
                     ]);
             }
-        public function delete_morningkm(Request $request)
-            {
-                $validator = Validator::make($request->all(), [
-                    'vehicle_id'=>'required|uuid|vehicles_id',
-                ]);
-                // If validation fails, return an error response
-                if ($validator->fails()) 
-                    {
-                       return redirect()->back()->with('error_message',
-                                 "Warning You are denied the service",
-                            );
-                    }
-            }
          public function CheckVehicle(Request $request)
             {
                try {
                 //code...
                 $id = $request->input('id');
-                $today = Carbon::today()->toDateString();
-                $vehicle = DailyKMCalculationModel::where('date',$today)->where('vehicle_id',$id)->first();
+                $today = Carbon::today();
+                $ethio_date = $this->ConvertToEthiopianDate($today);
+                $vehicle = DailyKMCalculationModel::where('created_at',$ethio_date)->where('vehicle_id',$id)->first();
                 if($vehicle->morning_km !== null){
                     return response()->json([
                         'success' => true,

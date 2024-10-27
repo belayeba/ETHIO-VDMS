@@ -115,53 +115,6 @@
                 <ul class="side-nav">
 
                     <li class="side-nav-title">Main</li>
-                     <!-- <li class="side-nav-item">
-                        <a data-bs-toggle="collapse" href="#sidebarPages" aria-expanded="false" aria-controls="sidebarPages" class="side-nav-link">
-                            <i class="ri-pages-line"></i>
-                            <span> Pages </span>
-                            <span class="menu-arrow"></span>
-                        </a>
-                        <div class="collapse" id="sidebarPages">
-                            <ul class="side-nav-second-level">
-
-                            <li>
-                                <a href="/temp45">Starter Page</a>
-                            </li>
-                           
-                                <li>
-                                    <a href="/temp39">Contact List</a>
-                                </li>
-                                <li>
-                                    <a href="/temp44">Profile</a>
-                                </li>
-                                <li>
-                                    <a href="/temp46">Timeline</a>
-                                </li>
-                                <li>
-                                    <a href="/temp41">Invoice</a>
-                                </li>
-                                <li>
-                                    <a href="/temp40">FAQ</a>
-                                </li>
-                                <li>
-                                    <a href="/tempe43">Pricing</a>
-                                </li>
-                                <li>
-                                    <a href="/temp42">Maintenance</a>
-                                </li>
-                                <li>
-                                    <a href="/temp12">Error 404</a>
-                                </li>
-                                <li>
-                                    <a href="/temp11">Error 404-alt</a>
-                                </li>
-                                <li>
-                                    <a href="/temp13">Error 500</a>
-                                </li>
-                            </ul>
-                        </div>
-                    </li>  -->
-
                     <li class="side-nav-item">
                         <a data-bs-toggle="collapse" href="#sidebarRequest" aria-expanded="false"
                             aria-controls="sidebarRequest" class="side-nav-link">
@@ -173,12 +126,12 @@
                             <ul class="side-nav-second-level">
                                  @can('Temporary Request Page')  
                                 <li>
-                                    <a href="{{ route('displayRequestPage') }}">Temporary vehicle</a>
+                                    <a href="{{ route('displayRequestPage') }}">Temporary Request</a>
                                 </li>
                                   @endcan()  
                                   @can('Permanent Request Page')  
                                 <li>
-                                    <a href="{{ route('vec_perm_request') }}">Permanent vehicle</a>
+                                    <a href="{{ route('vec_perm_request') }}">Permanent Request</a>
                                 </li>
                                   @endcan()  
                                   @can('Director Approval Page')  
@@ -193,29 +146,27 @@
                                   @endcan()  
                                   @can('HR Cluster Director Approval Page')  
                                 <li>
-                                    <a href="{{ route('HRClusterDirector_temp') }}">Approve Temporary
-                                        Request</a>
+                                    <a href="{{ route('HRClusterDirector_temp') }}">Approve Temporary</a>
                                 </li>
                                   @endcan()  
                                   @can('Transport Director')  
                                 <li>
-                                    <a href="{{ route('TransportDirector_temp') }}">Approve Temporary
-                                        Request</a>
+                                    <a href="{{ route('TransportDirector_temp') }}">Approve Temporary</a>
                                 </li>
                                   @endcan()  
                                   @can('Dispatcher Page')  
                                 <li>
-                                    <a href="{{ route('simirit_page') }}">Temporarly</a>
+                                    <a href="{{ route('simirit_page') }}">Temporarly Assign</a>
                                 </li>
                                   @endcan()  
                                   @can('Vehicle Director Page')  
                                 <li>
-                                    <a href="{{ route('perm_vec_director_page') }}">Pemanent</a>
+                                    <a href="{{ route('perm_vec_director_page') }}">Approve Pemanent</a>
                                 </li>
                                   @endcan()  
                                   @can('Dispatcher')  
                                 <li>
-                                    <a href="{{ route('perm_vec_simirit_page') }}">Permanent</a>
+                                    <a href="{{ route('perm_vec_simirit_page') }}">Assign Permanent</a>
                                 </li>
                                   @endcan()  
                                   @can('Request Return')  
@@ -288,6 +239,11 @@
                                 <li>
                                     <a href="{{ route('driver.switch') }}">Driver Change</a>
                                 </li>
+                                @endcan()
+                                @can('Change Driver')
+                                <li>
+                                    <a href="{{ route('driver.switch') }}">Driver Accept</a>
+                                </li>
                                 @endcan()  
                             </ul>
                         </div>
@@ -311,6 +267,11 @@
                                 @can('Vehicle Part Registration')
                                 <li>
                                     <a href="{{ route('vehicle_parts.index') }}">Vehicle Parts</a>
+                                </li>
+                                @endcan()
+                                @can('Vehicle Part Registration')
+                                <li>
+                                    <a href="{{ route('vehicle_parts.index') }}">Change Fuel Quata</a>
                                 </li>
                                 @endcan()  
                                 @can('Vehicle Inspection')

@@ -9,9 +9,17 @@ use App\Models\RouteManagement\RouteUser;
 use App\Models\User;
 use App\Models\Vehicle\VehiclesModel as Vehicle;
 use App\Models\Vehicle\VehiclesModel;
+use Illuminate\Support\Facades\Validator;
+use App\Http\Controllers\Vehicle\Daily_KM_Calculation;
 
 class RouteController extends Controller {
     //
+    protected $dailyKmCalculation;
+
+    public function __construct(Daily_KM_Calculation $dailyKmCalculation)
+    {
+        $this->dailyKmCalculation = $dailyKmCalculation;
+    }
     public function displayAllRoutes() {
         $routes = Route::get();
         $vehicles = VehiclesModel::all();
@@ -45,11 +53,14 @@ class RouteController extends Controller {
         if ( $validator->fails() ) {
             return response()->json( [ 'errors' => $validator->errors() ], 422 );
         }
-        $route = Route::create( [
+        $today = \Carbon\Carbon::today();
+        $ethiopianDate = $this->dailyKmCalculation->ConvertToEthiopianDate($today); 
+        Route::create( [
             'route_name' => $request->route_name,
             'driver_phone' => $request->driver_phone,
             'vehicle_id' => $request->vehicle_id,
             'registered_by' => auth()->user()->id,
+            'created_at' => $ethiopianDate
         ] );
         return redirect()->back()->with('success_message','Route registered successfully.',);
     }

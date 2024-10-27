@@ -9,10 +9,16 @@ use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
+use App\Http\Controllers\Vehicle\Daily_KM_Calculation;
 
 class DriverRegistrationController extends Controller {
     //Page
+    protected $dailyKmCalculation;
 
+    public function __construct(Daily_KM_Calculation $dailyKmCalculation)
+        {
+            $this->dailyKmCalculation = $dailyKmCalculation;
+        }
     public function RegistrationPage() {
         $drivers = User::get();
         $data = DriversModel::get();
@@ -45,6 +51,8 @@ class DriverRegistrationController extends Controller {
             }
             $license = time() . '_' . $file->getClientOriginalName();
             $file->move( $storagePath, $license );
+            $today = \Carbon\Carbon::today();
+           $ethiopianDate = $this->dailyKmCalculation->ConvertToEthiopianDate($today); 
             DriversModel::create( [
                 'user_id' => $request->input( 'user_id' ),
                 'license_number' => $request->input( 'license_number' ),
@@ -52,6 +60,7 @@ class DriverRegistrationController extends Controller {
                 'license_file' => $license,
                 'register_by' => $loged_user,
                 'notes' => $request->input( 'notes' ),
+                'created_at' => $ethiopianDate
             ] );
 
             return redirect()->back()->with('success_message','Driver created successfully.',);

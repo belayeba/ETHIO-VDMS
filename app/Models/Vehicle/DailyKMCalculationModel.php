@@ -23,10 +23,10 @@ class DailyKMCalculationModel extends Model {
         'calculation_id',
         'vehicle_id',
         'driver_id',
-        'date',
         'morning_km',
         'afternoon_km',
-        'register_by'
+        'register_by',
+        'created_at'
     ];
     protected static function boot() {
         parent::boot();

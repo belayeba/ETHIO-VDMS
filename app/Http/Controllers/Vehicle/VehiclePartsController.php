@@ -5,7 +5,8 @@ namespace App\Http\Controllers\Vehicle;
     use App\Http\Controllers\Controller;
     use App\Models\Vehicle\VehiclePart;
     use Illuminate\Http\Request;
-    use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
     
 class VehiclePartsController extends Controller
     {
@@ -15,6 +16,7 @@ class VehiclePartsController extends Controller
                 $rules = [
                     'name' => 'required|string',
                     'notes' => 'nullable|string',
+                    //'type' => "required|in:spare_part,norma_part"
                 ];
         
                 $validator = Validator::make($request->all(), $rules);
@@ -22,9 +24,11 @@ class VehiclePartsController extends Controller
                 if ($validator->fails()) {
                     return response()->json(['status' => 'error', 'errors' => $validator->errors()], 422);
                 }
-        
+                $logged_user = Auth::id();
                 $vehiclePart = VehiclePart::create([
                     'name' => $request->input('name'),
+                    'type' => "spare_part",//$request->input('type'),
+                    'created_by' =>$logged_user,
                     'notes' => $request->input('notes'),
                 ]);
         

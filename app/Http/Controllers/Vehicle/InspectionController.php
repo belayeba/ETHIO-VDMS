@@ -11,8 +11,16 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
+use App\Http\Controllers\Vehicle\Daily_KM_Calculation;
+
 class InspectionController extends Controller
 {
+    protected $dailyKmCalculation;
+
+    public function __construct(Daily_KM_Calculation $dailyKmCalculation)
+    {
+        $this->dailyKmCalculation = $dailyKmCalculation;
+    }
     public function InspectionPage()
         {
             $vehicle = VehiclesModel::all();
@@ -65,6 +73,8 @@ class InspectionController extends Controller
             }
             $damageDescriptions = $request->input('damage_descriptions', []);
             DB::transaction(function () use ($inspectionId, $vehicleId, $inspectedBy, $inspectionDate, $parts, $damagedParts, $damageDescriptions,$fileinspection) {
+                $today = \Carbon\Carbon::today();
+                $ethiopianDate = $this->dailyKmCalculation->ConvertToEthiopianDate($today); 
                 foreach ($parts as $partId => $partName) {
                     InspectionModel::create([
                         'inspection_id' => $inspectionId,
@@ -75,6 +85,7 @@ class InspectionController extends Controller
                         'is_damaged' => $damagedParts[$partId],
                         'damage_description' => $damageDescriptions[$partId],
                         'inspection_date' => $inspectionDate,
+                        'created_at' => $ethiopianDate
                     ]);
                 }
 

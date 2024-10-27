@@ -10,10 +10,16 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
+use App\Http\Controllers\Vehicle\Daily_KM_Calculation;
 
 class ClusterController extends Controller {
-    // Display a listing of the resource.
+    protected $dailyKmCalculation;
 
+    public function __construct(Daily_KM_Calculation $dailyKmCalculation)
+    {
+        $this->dailyKmCalculation = $dailyKmCalculation;
+    }
+    // Display a listing of the resource.
     public function index() {
         $clusters = ClustersModel::all();
 
@@ -41,9 +47,10 @@ class ClusterController extends Controller {
         }
         $user = Auth::id();
         // Get the authenticated user's ID
+        $today = \Carbon\Carbon::today();
+        $ethiopianDate = $this->dailyKmCalculation->ConvertToEthiopianDate($today); 
+        $request->merge(['created_by' => $user,'created_at' => $ethiopianDate]); 
         
-        $request->merge(['created_by' => $user]); // Add the user's ID to the request data
-
         ClustersModel::create( $request->all() );
         return redirect()->back()->with('success_message',
         'Cluster created successfully.',);
