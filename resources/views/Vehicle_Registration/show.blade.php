@@ -37,11 +37,15 @@
         </div>
        
         <div class="card-body">
-            <div id="rootwizard">
+            <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate">
+            @csrf
+
+            <div id="progressbarwizard">
                     <ul class="nav nav-pills nav-justified form-wizard-header mb-3">
-                        <li class="nav-item" data-target-form="#accountForm">
-                            <a href="#first" data-bs-toggle="tab" data-toggle="tab" class="nav-link rounded-0 py-2">
-                                <i class="ri-account-circle-line fw-normal fs-20 align-middle me-1"></i>
+                        <li class="nav-item">
+                            <a href="#first" data-bs-toggle="tab" data-toggle="tab"
+                                class="nav-link rounded-0 py-2">
+                                <i class="ri-car-fill fw-normal fs-20 align-middle me-1"></i>
                                 <span class="d-none d-sm-inline">Vehicle Info</span>
                             </a>
                         </li>
@@ -60,6 +64,11 @@
                     </ul>
 
                     <div class="tab-content mb-0 b-0">
+                        <div id="bar" class="progress mb-3" style="height: 7px;">
+                            <div
+                                class="bar progress-bar progress-bar-striped progress-bar-animated bg-success">
+                            </div>
+                        </div>
 
                         <div class="tab-pane" id="first">
                             <form method="POST" action="{{ route('vehicleRegistration.store') }}" accept-charset="UTF-8" name="ebook-form" id="ebook-form" enctype="multipart/form-data">
@@ -104,7 +113,7 @@
                                 </div> <!-- end row -->
                             <ul class="list-inline wizard mb-0">
                                 <li class="next list-inline-item float-end">
-                                    <a href="javascript:void(0);" class="btn btn-info">Next <i class="ri-arrow-right-line ms-1"></i></a>
+                                    <a href="#" class="btn btn-info" id="nextBtn">Next <i class="ri-arrow-right-line ms-1"></i></a>
                                 </li>
                             </ul>
                         </div>
@@ -113,12 +122,12 @@
                             <form id="profileForm" method="post" action="#" class="form-horizontal">
                                 <div class="row">
                                     <div class="col-12">
-                                        <div class="row mb-3">
+                                        {{-- <div class="row mb-3">
                                             <label class="col-md-3 col-form-label" for="registration_date">Registration Date</label>
                                             <div class="col-md-9">
                                                 <input type="date" id="Registration Date" name="registration_date" placeholder="Enter the registration date" class="form-control" required>
                                             </div>
-                                        </div>
+                                        </div> --}}
                                         <div class="row mb-3">
                                             <label class="col-md-3 col-form-label" for="mileage">Mileage</label>
                                             <div class="col-md-9">
@@ -134,9 +143,13 @@
                                         </div>
 
                                         <div class="row mb-3">
-                                            <label class="col-md-3 col-form-label" for="fuel type">Fuel Type</label>
+                                            <label class="col-md-3 col-form-label" for="fuel_type">Fuel Type</label>
                                             <div class="col-md-9">
-                                                <input type="text" id="fuel type" name="fuel type" placeholder="Enter the fuel type" class="form-control" required>
+                                                <select id="fuel_type" name="fuel_type" class="form-select" required>
+                                                    <option value="">Select Fuel Type</option>
+                                                    <option value="Benzene">Benzene</option>
+                                                    <option value="Diesel">Diesel</option>
+                                                </select>
                                             </div>
                                         </div>
 
@@ -167,10 +180,10 @@
                                 <!-- end row -->
                             <ul class="pager wizard mb-0 list-inline">
                                 <li class="previous list-inline-item">
-                                    <button type="button" class="btn btn-light"><i class="ri-arrow-left-line me-1"></i> Back to Account</button>
+                                    <button type="button" class="btn btn-light"><i class="ri-arrow-left-line me-1"></i> Back </button>
                                 </li>
                                 <li class="next list-inline-item float-end">
-                                    <button type="button" class="btn btn-info">Add More Info <i class="ri-arrow-right-line ms-1"></i></button>
+                                    <button type="button" class="btn btn-info">Next <i class="ri-arrow-right-line ms-1"></i></button>
                                 </li>
                             </ul>
                         </div>
@@ -238,7 +251,7 @@
                                 <!-- end row -->
                             <ul class="pager wizard mb-0 list-inline mt-1">
                                 <li class="previous list-inline-item">
-                                    <button type="button" class="btn btn-light"><i class="ri-arrow-left-line me-1"></i> Back to Profile</button>
+                                    <button type="button" class="btn btn-light"><i class="ri-arrow-left-line me-1"></i> Back </button>
                                 </li>
                                 <!-- Your form fields go here -->
                                     
@@ -572,21 +585,6 @@
                     <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
                 </div>
             </div>
-            
-               
-                {{-- @if($item->libre)
-                <div class="mb-3">
-                    <label class="form-label">Libre:</label>
-                    <p><a href="{{ Storage::url($item->libre) }}" target="_blank">View File</a></p>
-                </div>
-                @endif --}}
-                {{-- @if($item->insurance)
-                <div class="mb-3">
-                    <label class="form-label">Insurance:</label>
-                    <p><a href="{{ Storage::url($item->insurance) }}" target="_blank">View File</a></p>
-                </div>
-                @endif
-            </div> --}}
         </div>
     </div>
 </div>
@@ -629,6 +627,13 @@
         organizationalFields.style.display = "none";  // Hide the fields
     }
 }
+</script>
+
+<script>
+    document.getElementById('nextBtn').addEventListener('click', function(event) {
+        event.preventDefault(); // Prevent default link behavior
+        document.getElementById('second').scrollIntoView({ behavior: 'smooth' }); // Scroll to the form
+    });
 </script>
 
 <script>

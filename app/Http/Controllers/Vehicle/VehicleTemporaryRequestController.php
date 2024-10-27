@@ -717,7 +717,6 @@ class VehicleTemporaryRequestController extends Controller
             
         public function TransportDirectorApproveRequest(Request $request)
             {
-                     dd("coming");
                     $validation = Validator::make($request->all(),[
                     'request_id' => 'required|uuid|exists:vehicle_requests_temporary,request_id',
                     ]);

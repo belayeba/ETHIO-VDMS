@@ -54,8 +54,8 @@
                                             <div class="col-mb-3 form-group {{ $errors->has('cluster') ? 'has-error' : '' }}">
                                                 <label for="cluster" class=" control-label">Cluster</label>
                                                     
-                                                <select data-placeholder = "{{ 'Select Cluster' }}" value="cluster"  class="form-control select" id="cluster_id" name="cluster_id" data-fouc required="true">
-                                                    <option style="display: none;"> </option>
+                                                <select class="form-control select" id="cluster_id" name="cluster_id" data-fouc required>
+                                                    <option value="">Select Cluster</option>
                                                     @foreach ($clusters as $item)
                                                     
                                                     <option value="{{ $item->cluster_id }}">

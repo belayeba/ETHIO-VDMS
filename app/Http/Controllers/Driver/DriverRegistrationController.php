@@ -16,20 +16,19 @@ class DriverRegistrationController extends Controller {
     public function RegistrationPage() {
         $drivers = User::get();
         $data = DriversModel::get();
-
+    
         return view( 'Driver.index', compact( 'drivers', 'data' ) );
     }
     // Create a new driver
 
     public function store( Request $request ) {
         try {
-            // dd( $request );
+            // dd( $request->input( 'expiry_date' ));
             $validator = Validator::make( $request->all(), [
                 'user_id' => 'required|uuid|exists:users,id',
                 'license_number' => 'required|string|max:255',
-                'license_expiry_date' => 'required|date|after:today',
+                'expiry_date' => 'required|date',
                 'license_file' => 'required|file|mimes:pdf,jpg,jpeg',
-                //'phone_number' => 'nullable|string|max:20|unique:drivers,phone_number',
                 'notes' => 'nullable|string',
             ] );
 
@@ -49,14 +48,12 @@ class DriverRegistrationController extends Controller {
             DriversModel::create( [
                 'user_id' => $request->input( 'user_id' ),
                 'license_number' => $request->input( 'license_number' ),
-                'license_expiry_date' => $request->input( 'license_expiry_date' ),
+                'license_expiry_date' => $request->input( 'expiry_date' ),
                 'license_file' => $license,
-                //'phone_number' => $request->input( 'phone_number' ),
                 'register_by' => $loged_user,
                 'notes' => $request->input( 'notes' ),
             ] );
 
-            
             return redirect()->back()->with('success_message','Driver created successfully.',);
         } catch ( Exception $e ) {
             return response()->json( [ 'message' => $e ], 500 );

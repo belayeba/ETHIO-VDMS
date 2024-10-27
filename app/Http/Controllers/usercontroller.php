@@ -30,6 +30,7 @@ class usercontroller extends Controller
         return DataTables::of($users)
             ->addIndexColumn()
             ->addColumn('first_name', function($row){
+                dd($row);
                 return $row->first_name;
             })
             ->addColumn('email', function($row){
