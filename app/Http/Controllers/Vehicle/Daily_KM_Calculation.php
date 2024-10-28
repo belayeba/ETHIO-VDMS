@@ -13,7 +13,6 @@ use Illuminate\Support\Facades\Validator;
 use Andegna\DateTime;
 class Daily_KM_Calculation extends Controller
     {
-        
         public function displayPage()
             {
                 $today = Carbon::today();
@@ -40,7 +39,7 @@ class Daily_KM_Calculation extends Controller
                                 ->get();
                 return view('Vehicle.dailyReport',compact('dailkms'));
             }
-        //getting today's info
+           //getting today's info
         public function displayForm()
             {
                     $today = Carbon::today();
