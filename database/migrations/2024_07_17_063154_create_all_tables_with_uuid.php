@@ -56,6 +56,7 @@ class CreateAllTablesWithUuid extends Migration
             $table->string('make', 255);
             $table->string('model', 255);
             $table->integer('year');
+            $table->integer('capacity');
             $table->string('plate_number', 255);
             $table->date('registration_date');
             $table->integer('mileage');
@@ -140,7 +141,7 @@ class CreateAllTablesWithUuid extends Migration
             $table->foreign('vehicle_id')->references('vehicle_id')->on('vehicles')->onDelete('restrict');
             $table->uuid('new_driver_id');
             $table->foreign('new_driver_id')->references('driver_id')->on('drivers')->onDelete('restrict');
-            $table->uuid('old_driver_id');
+            $table->uuid('old_driver_id')->nullable();
             $table->foreign('old_driver_id')->references('driver_id')->on('drivers')->onDelete('restrict');
             $table->uuid('changed_by');
             $table->foreign('changed_by')->references('id')->on('users')->onDelete('restrict');

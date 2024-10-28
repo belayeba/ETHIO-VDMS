@@ -48,7 +48,7 @@ class VehicleRegistrationController extends Controller {
             'model' => 'required|string|max:255',
             'year' => 'required|integer',
             'plate_number' => 'required|string|max:255',
-            'registration_date' => 'required|date',
+            'capacity' => 'required|integer',
             'mileage' => 'required|integer',
             'fuel_amount' => 'required|numeric',
             'last_service' => 'nullable|date',
@@ -99,7 +99,6 @@ class VehicleRegistrationController extends Controller {
             'model' => $request->model,
             'year' => $request->year,
             'plate_number' => $request->plate_number,
-            'registration_date' => $request->registration_date,
             'mileage' => $request->mileage,
             'fuel_amount' => $request->fuel_amount,
             'last_service' => $request->Last_Service,
@@ -109,7 +108,7 @@ class VehicleRegistrationController extends Controller {
             'fuel_type' => $request->fuel_type,
             'notes' => $request->Notes,
             'vehicle_type' => $request->vehicle_type,
-            // 'inspection_id' => $request->inspection_id,
+            'capacity' => $request->capacity,
             'vehicle_category' => $request->vehicle_category,
             'libre' => $filelibre,
             'insurance' => $fileinsurance,
@@ -144,7 +143,7 @@ class VehicleRegistrationController extends Controller {
             'model' => 'required|string|max:255',
             'year' => 'required|integer|min:1900|max:'.date( 'Y' ),
             'plate_number' => 'required|regex:/^[A-Z]{2}-\d{1}-\d{5}$/',
-            'registration_date' => 'required|date',
+            'capacity' => 'required|integer',
             'mileage' => 'required|integer',
             'fuel_amount' => 'required|integer',
             'fuel_type' => 'required|string|max:255',
@@ -221,16 +220,19 @@ class VehicleRegistrationController extends Controller {
                 }
             }
         // Update the vehicle with the new data
+        $today = \Carbon\Carbon::today();
+        $ethiopianDate = $this->dailyKmCalculation->ConvertToEthiopianDate($today); 
         VehiclesModel::find( $id )->update( [
             'vin'=>$request->vin,
             'make' => $request->make,
             'model' => $request->model,
             'year' => $request->year,
             'plate_number' => $request->plate_number,
-            'registration_date' => $request->registration_date,
+            'registration_date' => $ethiopianDate,
             'mileage' => $request->mileage,
             'fuel_amount' => $request->fuel_amount,
             'last_service' => $request->Last_Service,
+            'capacity' => $request->capacity,
             'next_service' => $request->Next_Service,
             'registered_by' => $user,
             'fuel_type' => $request->fuel_type,

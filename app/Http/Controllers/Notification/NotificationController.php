@@ -21,19 +21,8 @@ class NotificationController extends Controller
         }
     function get_all_notifications()
         {
-
-            return response()->json(["notifications"=> NotificationModel::where('user_id', Auth::id())->latest()->get()->map(function($notification){
-                $date_part=explode(":",$notification->created_at);
-                return 
-                [
-                    "message"=>$notification->message,
-                    "date"=>$date_part[0].":".$date_part[1],
-                    "id"=>$notification->notification_id,
-                    "is_new"=>$notification->is_read?false:true
-                ];
-
-            })],200);            
-        
+            $my_notification = NotificationModel::where('user_id', Auth::id())->latest()->get();
+            return response()->json(["notifications"=> $my_notification]);        
         }
 
     function delete_notification(Request $request)
@@ -48,12 +37,10 @@ class NotificationController extends Controller
             ]);
             return response()->json("success",200);         
         }
-
     function get_new_message_count(Request $request)
         {
             return response()->json(["new_notification"=>NotificationModel::where('user_id', Auth::id())->where("is_read",0)->count()],200);   
         }
-
     function check_notify()
         {
             $id = Auth::id();

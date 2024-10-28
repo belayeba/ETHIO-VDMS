@@ -62,7 +62,11 @@ class DriverRegistrationController extends Controller {
                 'notes' => $request->input( 'notes' ),
                 'created_at' => $ethiopianDate
             ] );
-
+            $user = User::find($request->user_id);
+            $message = "You are registered as driver ";
+            $subject = "Driver Registration";
+            $url = "#";
+            $user->NotifyUser($message,$subject,$url);
             return redirect()->back()->with('success_message','Driver created successfully.',);
         } catch ( Exception $e ) {
             return response()->json( [ 'message' => $e ], 500 );

@@ -19,9 +19,9 @@ class VehicleParmanentlyRequestController extends Controller
     protected $dailyKmCalculation;
 
     public function __construct(Daily_KM_Calculation $dailyKmCalculation)
-    {
-        $this->dailyKmCalculation = $dailyKmCalculation;
-    }
+        {
+            $this->dailyKmCalculation = $dailyKmCalculation;
+        }
     // Display Request Page
     public function displayPermRequestPage()
         {
@@ -166,12 +166,12 @@ class VehicleParmanentlyRequestController extends Controller
     public function DirectorApprovalPage()
         {
             $id = Auth::id();
-            // $directors_data = User::where('id',$id)->get('department_id');
-            // $dept_id = $directors_data->department_id;
+            $directors_data = User::where('id',$id)->get('department_id');
+            $dept_id = $directors_data->department_id;
             $vehicle_requests = VehiclePermanentlyRequestModel::latest()->get();
-            // $vehicle_requests = VehiclePermanentlyRequestModel::whereHas('requestedBy', function ($query) use ($dept_id) {
-            //     $query->where('department_id', $dept_id);
-            // })->get();
+            $vehicle_requests = VehiclePermanentlyRequestModel::whereHas('requestedBy', function ($query) use ($dept_id) {
+                $query->where('department_id', $dept_id);
+            })->get();
 
             return view("Request.PermanentDirectorPage", compact('vehicle_requests'));
         }
@@ -238,6 +238,11 @@ class VehicleParmanentlyRequestController extends Controller
                 $Vehicle_Request->approved_by = $user_id;
                 $Vehicle_Request->director_reject_reason = $reason;
                 $Vehicle_Request->save();
+                $user = User::find($Vehicle_Request->requested_by);
+                $message = "Your Vehicle Permanent Request Rejected, click here to see its detail";
+                $subject = "Vehicle Permanent";
+                $url = "{{ route('vec_perm_request') }}";
+                $user->NotifyUser($message,$subject,$url);
                 return response()->json([
                     'success' => true,
                     'message' => 'You are successfully Rejected the Request',
@@ -304,6 +309,11 @@ class VehicleParmanentlyRequestController extends Controller
             $Vehicle_Request->inspection_id = $latest_inspection->inspection_id;
             $Vehicle_Request->given_date =  $today;
             $Vehicle_Request->save();
+            $user = User::find($Vehicle_Request->requested_by);
+            $message = "Your Vehicle Permanent Request Approved, click here to see its detail";
+            $subject = "Vehicle Permanent";
+            $url = "{{ route('vec_perm_request') }}";
+            $user->NotifyUser($message,$subject,$url);
             return response()->json([
                 'success' => true,
                 'message' => 'The Request is successfully Approved',
@@ -337,6 +347,11 @@ class VehicleParmanentlyRequestController extends Controller
             $Vehicle_Request->given_by = $user_id;
             $Vehicle_Request->vec_director_reject_reason = $reason;
             $Vehicle_Request->save();
+            $user = User::find($Vehicle_Request->requested_by);
+            $message = "Your Vehicle Permanent Request Rejected, click here to see its detail";
+            $subject = "Vehicle Permanent";
+            $url = "{{ route('vec_perm_request') }}";
+            $user->NotifyUser($message,$subject,$url);
             return response()->json([
                 'success' => true,
                 'message' => 'You have successfully Rejected the Request',

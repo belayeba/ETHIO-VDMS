@@ -267,11 +267,16 @@ public function Vec_DirectorRejectRequest(Request $request)
                 if($Vehicle_Request->approved_by)
                     {
                       return redirect()->back()->with('error_message',
-                                 "Sorry, Something went wrong",
+                                 "Warning, You are denied the service",
                             );
                     }
                 $Vehicle_Request->approved_by = $user_id;
                 $Vehicle_Request->reject_reason_vec_director = $reason;
+                $user = User::find($Vehicle_Request->requested_by);
+                $message = "Your Vehicle Return Request Rejected, click here to see its detail";
+                $subject = "Vehicle Returning";
+                $url = "{{ route('return_permanent_request_page') }}";
+                $user->NotifyUser($message,$subject,$url);
                 $Vehicle_Request->save();
                 return response()->json([
                     'success' => true,
@@ -330,6 +335,11 @@ public function DispatcherApproveRequest(Request $request)
             $the_vehicle->save();
             $Vehicle_Request->save();
             $get_permanent_request->save();
+            $user = User::find($get_permanent_request->requested_by);
+            $message = "Your Vehicle Successfully Returned";
+            $subject = "Vehicle Returning";
+            $url = "{{ route('return_permanent_request_page') }}";
+            $user->NotifyUser($message,$subject,$url);
             return response()->json([
                 'success' => true,
                 'message' => 'The Vehicle Successfully Returned',
@@ -367,6 +377,11 @@ public function DispatcherRejectRequest(Request $request)
                 $Vehicle_Request->received_by = $user_id;
                 $Vehicle_Request->reject_reason_dispatcher = $reason;
                 $Vehicle_Request->save();
+                $user = User::find($Vehicle_Request->requested_by);
+                $message = "Your Vehicle Return Request Rejected click here to see its detail";
+                $subject = "Vehicle Returning";
+                $url = "{{ route('return_permanent_request_page') }}";
+                $user->NotifyUser($message,$subject,$url);
                 return response()->json([
                     'success' =>true,
                     'message' => 'You have successfully Rejected the Request',

@@ -63,6 +63,13 @@ class DriverChangeController extends Controller {
         ] );
         $vehicle_info->driver_id = $request->driver;
         $vehicle_info->save();
+        $the_driver = DriversModel::find($request->driver);
+        $the_vehicle = VehiclesModel::find($request->vehicle_id);
+        $user = User::find($the_driver->user_id);
+        $message = "Vehicle with $the_vehicle->plate_number plate number is assigned to you, click here to see its detail";
+        $subject = "Vehicle Assigned";
+        $url = "{{ route('driver.requestPage') }}";
+        $user->NotifyUser($message,$subject,$url);
         return redirect()->back()->with('success_message','Driver Change Successfully Requested .',);
     }
     // Get a specific Driver Change
@@ -162,6 +169,13 @@ class DriverChangeController extends Controller {
                 }
             $get_request->driver_accepted = $logged_user;
             $get_request->save();
+            $user = User::find($get_request->changed_by);
+            $driver_name = $get_request->newDriver->user->first_name;
+            $plate_number = $get_request->vehicle->plate_number;
+            $message = "$driver_name accepted that he is assigned to vehicle with $plate_number plate number, click here to see its detail";
+            $subject = "Driver Assignment";
+            $url = "{{ route('driver.switch') }}";
+            $user->NotifyUser($message,$subject,$url);
             return response()->json(['success_message'=>"Vehicle Successfully Transfered to you"]);
         }
     public function driver_reject(Request $request)
@@ -183,6 +197,13 @@ class DriverChangeController extends Controller {
             $get_request->driver_accepted = $logged_user;
             $get_request->driver_reject_reason = $request->reason;
             $get_request->save();
+            $user = User::find($get_request->changed_by);
+            $driver_name = $get_request->newDriver->user->first_name;
+            $plate_number = $get_request->vehicle->plate_number;
+            $message = "$driver_name rejected that he is assigned to vehicle with $plate_number plate number, click here to see its detail";
+            $subject = "Driver Assignment";
+            $url = "{{ route('driver.switch') }}";
+            $user->NotifyUser($message,$subject,$url);
             return response()->json(['success_message'=>"Vehicle Successfully Transfered to you"]);
         }
 }

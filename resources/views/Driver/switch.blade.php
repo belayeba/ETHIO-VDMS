@@ -116,7 +116,7 @@
                                                             <tr>
                                                                 <td>{{ $loop->iteration }}</td>
                                                                 <td>{{ $item->vehicle->plate_number }}</td>
-                                                                <td>{{ $item->oldDriver->user->username }}</td> 
+                                                                <td>{{ $item->oldDriver?$item->oldDriver->user->username:"No previous Driver" }}</td> 
                                                                 <td>{{ $item->newDriver->user->username }}</td>
                                                                 <td>
                                                                     <button type="button" class="btn btn-info rounded-pill" data-bs-toggle="modal" title="View Driver Change" data-bs-target="#viewDriverChangeModal{{ $item->id }}">
@@ -127,7 +127,7 @@
                                                                         data-bs-toggle="modal" 
                                                                         data-bs-target="#editDriverChangeModal_{{ $loop->index }}"
                                                                         data-vehicle="{{ $item->vehicle->model }}"
-                                                                        data-old-driver="{{ $item->oldDriver->user->username }}"
+                                                                        data-old-driver="{{ $item->oldDriver?$item->oldDriver->user->username:'No previous driver' }}"
                                                                         data-new-driver="{{ $item->newDriver->user->username }}">
                                                                         <i class="ri-edit-line"></i> 
                                                                     </button>
@@ -166,7 +166,7 @@
 
         <div class="mb-3">
           <label for="oldDriver" class="form-label">Old Driver</label>
-          <input type="text" class="form-control" id="oldDriver" value="{{ $item->oldDriver->user->username }}" readonly>
+          <input type="text" class="form-control" id="oldDriver" value="{{ $item->oldDriver?$item->oldDriver->user->username:'No former Driver' }}" readonly>
         </div>
 
         <div class="mb-3">
@@ -195,7 +195,6 @@
         <form method="POST" action="{{ route('driverchange.update', ['request_id' => $item->driver_change_id]) }}">
           @csrf
           @method('PUT')
-
           <div class="mb-3">
             <label for="vehicle" class="form-label">Vehicle</label>
             <select id="vehicle" name="vehicle_id" class="form-select" required>

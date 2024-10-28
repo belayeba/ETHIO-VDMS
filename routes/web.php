@@ -292,12 +292,11 @@ Route::group(['middleware' => ['auth']], function()
             'prefix'=>'driver_change',
         ], function (){
         Route::get('/',[DriverChangeController::class, 'driver_change_page'])->name('driver.switch');
+        Route::get('/my_request',[DriverChangeController::class, 'driver_get_request'])->name('driver.requestPage');
         Route::post('/store',[DriverChangeController::class, 'store'])->name('driver_change.store');
         Route::put('/update/{request_id}', [DriverChangeController::class, 'update'])->name('driverchange.update');
         Route::delete('/delete/{request_id}', [DriverChangeController::class, 'destroy'])->name('driverchange.destroy');
-
         });
-
                 Route::group([
                     'prefix'=>'Route',
                 ], function (){
@@ -308,7 +307,6 @@ Route::group(['middleware' => ['auth']], function()
                 Route::put('/update/{request_id}', [RouteController::class, 'update'])->name('route.update');
                 Route::delete('/delete/{request_id}', [RouteController::class, 'removeRoute'])->name('route.destroy');
                 Route::delete('/user/delete/{request_id}', [RouteController::class, 'removeUserFromRoute'])->name('routeUser.destroy');
-
                 });
                 // Define routes for InspectionController
             Route::controller(InspectionController::class)->group(function ()
