@@ -33,6 +33,8 @@ class VehicleParmanentlyRequestController extends Controller
         // show list of permanent request
         public function FetchPermanentRequest()
             {
+             
+
                 $id = Auth::id();        
                 $data = VehiclePermanentlyRequestModel::where('requested_by', $id)->get();
                 

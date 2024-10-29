@@ -326,10 +326,10 @@ Route::group(['middleware' => ['auth']], function()
                  Route::controller(NotificationController::class)->group(function () {
                     Route::post('/delete_notification', 'delete_notification');
                     Route::get('/read_all_notifications', 'read_all_notifications');
-                    Route::get('/get_all_notifications', 'get_all_notifications');
+                    Route::get('/get_all_notifications', 'get_all_notifications')->name('get_all_notifications');
                     Route::get('/clear_all_notifications', 'clear_all_notifications');
                     Route::get('/get_new_message_count', 'get_new_message_count');
-                    Route::get('/check_notify', 'check_notify');
+                    Route::get('/check_notify', 'check_notify')->name('check_notify');
 
                 });
                  // SAMIR
