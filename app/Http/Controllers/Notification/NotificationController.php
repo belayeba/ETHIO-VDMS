@@ -11,6 +11,10 @@ use Illuminate\Foundation\Auth\User as AuthUser;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Notification\NotificationModel;
+<<<<<<< HEAD
+=======
+
+>>>>>>> b76ab9cbb093434d81a0e0db862542b5cadc7cdc
 class NotificationController extends Controller {
     function clear_all_notifications() {
         NotificationModel::where( 'user_id', Auth::id() )->delete();
@@ -25,14 +29,21 @@ class NotificationController extends Controller {
     }
 
     function delete_notification( Request $request ) {
+<<<<<<< HEAD
         NotificationModel::where( 'user_id', Auth::id() )->delete();
         return response()->json( 'success', 200 );
+=======
+
+        NotificationModel::where( 'user_id', Auth::id() )->delete();
+        return redirect()->back();
+
+>>>>>>> b76ab9cbb093434d81a0e0db862542b5cadc7cdc
     }
     function read_all_notifications( Request $request ) {
         NotificationModel::where( 'user_id', Auth::id() )->update( [
             'is_read'=>1
         ] );
-        return response()->json( 'success', 200 );
+        return redirect()->back();
 
     }
 

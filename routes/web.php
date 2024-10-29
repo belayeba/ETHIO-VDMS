@@ -275,11 +275,20 @@ Route::group(['middleware' => ['auth']], function()
                 });
             Route::controller(Fuel_QuataController::class)->group(function ()
                 {
-                    Route::get('/get_all','index')->name('all_fuel_quata');
+                    // Route::get('/get_all','index')->name('all_fuel_quata');
                     Route::get('/get_one/{id}', 'show')->name('select_one');
                     Route::post('/save_change', 'store')->name('save_quata_change'); 
                     Route::post('/save_update', 'update')->name('save_quata_update');
                 });
+
+                Route::group([
+                    'prefix'=>'quota',
+                ], function ()
+                    {
+                Route::get('/',[Fuel_QuataController::class,'index'])->name('quota.index');
+                Route::post('/store',[Fuel_QuataController::class,'store'])->name('quota.store');
+            });
+
     // Samir Driver Registration
     Route::group([
         'prefix'=>'driver',
@@ -324,8 +333,8 @@ Route::group(['middleware' => ['auth']], function()
                     Route::delete('/inspection/{inspectionId}', 'deleteInspection')->name('inspection.delete'); // Delete a specific inspection
                  });
                  Route::controller(NotificationController::class)->group(function () {
-                    Route::post('/delete_notification', 'delete_notification');
-                    Route::get('/read_all_notifications', 'read_all_notifications');
+                    Route::post('/delete_notification', 'delete_notification')->name('delete_all_notification');
+                    Route::get('/read_all_notifications', 'read_all_notifications')->name('read_all_notification');
                     Route::get('/get_all_notifications', 'get_all_notifications')->name('get_all_notifications');
                     Route::get('/clear_all_notifications', 'clear_all_notifications');
                     Route::get('/get_new_message_count', 'get_new_message_count');

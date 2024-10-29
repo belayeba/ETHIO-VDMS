@@ -25,7 +25,7 @@ class PermanentFuelController extends Controller {
         $logged_user = Auth::id();
         $get_driver = DriversModel::where('user_id',$logged_user)->first();
         $fuelings = PermanentFuelModel::where('driver_id',$get_driver->driver_id)->latest()->get();
-        return view( 'Fuelling.ParmanententRequestPage', compact( 'fuelings' ) );
+        return view( 'Fuelling.ParmanententRequestPage' );
     }
     public function my_request()
       {
