@@ -29,6 +29,7 @@ class DriverChangeModel extends Model {
         'changed_by',
         'driver_accepted',
         'driver_reject_reason',
+        'created_at'
     ];
     protected static function boot() {
         parent::boot();
@@ -57,7 +58,7 @@ class DriverChangeModel extends Model {
         return $this->belongsTo( DriversModel::class, 'new_driver_id' );
     }
 
-    public function changed_by(): BelongsTo {
+    public function Assigned_by(): BelongsTo {
         return $this->belongsTo( User::class, 'changed_by' );
     }
 

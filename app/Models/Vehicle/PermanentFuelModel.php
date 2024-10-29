@@ -7,17 +7,18 @@ use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Str;
 
 class PermanentFuelModel extends Model {
     use HasFactory, SoftDeletes;
 
-    protected $table = 'Parmanent_fuelings';
-    protected $primaryKey = 'fueling_id';
+    protected $table = 'permanent_fuelings';
+    protected $primaryKey = 'fueling_id,month,driver_id';
     public $incrementing = false;
     protected $keyType = 'uuid';
 
     protected $fillable = [
-        'vehicle_id',
+        'fueling_id',
         'driver_id',
         'finance_approved_by',
         'permanent_id',
@@ -26,8 +27,9 @@ class PermanentFuelModel extends Model {
         'month',
         'fuel_amount',
         'fuel_cost',
+        'reciet_attachment',
+        'created_at'
     ];
-
     public function vehicle() {
         return $this->belongsTo( VehiclesModel::class, 'vehicle_id', 'vehicle_id' );
     }

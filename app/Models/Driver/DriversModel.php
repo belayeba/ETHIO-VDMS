@@ -40,6 +40,7 @@ class DriversModel extends Model {
         'status',
         'phone_number',
         'notes',
+        'created_at'
     ];
 
     public function user(): BelongsTo {

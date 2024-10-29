@@ -79,8 +79,47 @@ class permissionseeder extends Seeder {
                     'Daily KM Registration',
                 ]
             ],
+            [
+                'permission_group' => 'Return Permanent Vehicle',
+                'permissions' => [
+                    'Request Return',
+                    'Approve Return',
+                    'Take Back to Transport',
+                ]
+            ],
+            [
+                'permission_group' => 'Fuel Management',
+                'permissions' => [
+                    'Request Fuel',
+                    'Finance Accept',
+                ]
+            ],
+            [
+                'permission_group' => 'Mentenance Management',
+                'permissions' => [
+                    'Request Mentenance',
+                    'Approve Mentenance',
+                ]
+            ],
+            [
+                'permission_group' => 'Route Management',
+                'permissions' => [
+                    'Route Registration',
+                    'Assign Employee to ROute',
+                    'Change Route For Employee',
+                ]
+            ],
+            [
+                'permission_group' => 'Report Management',
+                'permissions' => [
+                    'Daily KM Report',
+                    'Permananet Vehicle Request',
+                    'Temporary Vehicle Request',
+                    'Fuel Request',
+                    'Maintance Request'
+                ]
+            ],
         ];
-
         foreach ( $permission_data as $group ) {
             $permissions = $group[ 'permissions' ];
             $groupId = PermissionGroup::create( [ 'name' => $group[ 'permission_group' ] ] )->id;

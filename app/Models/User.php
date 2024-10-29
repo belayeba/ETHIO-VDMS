@@ -8,12 +8,14 @@ use App\Models\Notification\NotificationModel;
 use App\Models\Organization\DepartmentsModel;
 use App\Models\Vehicle\VehicleTemporaryRequestModel;
 use App\Models\Vehicle\MaintenancesModel;
+use App\Notifications\CustomMessageNotification;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Spatie\Permission\Traits\HasRoles;
 
@@ -95,5 +97,10 @@ class User extends Authenticatable {
 
     public function maintainedVehicles(): HasMany {
         return $this->hasMany( MaintenancesModel::class, 'maintained_by' );
+    }
+    public function NotifyUser($message, $subject = null, $url = null)
+    {
+        $notification = new CustomMessageNotification($message, $subject, $url);
+        return $notification->storeInCustomTable($this);
     }
 }

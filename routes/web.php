@@ -12,7 +12,9 @@ use App\Http\Controllers\RoleController;
 use App\Http\Controllers\usercontroller;
 use App\Http\Controllers\Organization\ClusterController;
 use App\Http\Controllers\Route\RouteController;
+use App\Http\Controllers\Notification\NotificationController;
 use App\Http\Controllers\Vehicle\DailyReportController;
+use App\Http\Controllers\Vehicle\Fuel_QuataController;
 use App\Http\Controllers\Vehicle\GivingBackPermanentVehicle;
 use App\Http\Controllers\Vehicle\VehicleParmanentlyRequestController;
 // use App\Http\Controllers\Organization\ClustersController;
@@ -100,16 +102,10 @@ Route::group(['middleware' => ['auth']], function()
                 {
                         Route::get('/permanent_fuel_request_page', 'index')->name('permanenet_fuel_request');
                         Route::post('/fuel_post_request', 'store')->name('store_fuel_request');
-                        // Route::post('/user_delete_request', 'deleteRequest')->name('temp_delete_request');
-                        // Route::post('/user_update_info', 'update_temp_request')->name('temp_update_request');
                         Route::get('/finance_approve_page', 'finance_get_page')->name('finance_approve_fuel_page');
-                        // Route::post('/director_approve_request', 'DirectorApproveRequest')->name('director_approve_request');
-                        // Route::post('/director_reject_request', 'DirectorApproveRequest')->name('director_reject_request');
-                        // Route::get('/simirit_approve_page', 'VehicleDirector')->name('simirit_page');
-                        // Route::post('/simirit_approve_request', 'VehicleDirectorApproveRequest')->name('simirit_approve');
-                        // Route::post('/simirit_fill_start_km', ' VehicleDirectorFillstartKm')->name('simirit_fill_start_km');
-                        // Route::post('/simirit_reject_request', 'VehicleDirectorRejectRequest')->name('simirit_reject');
-                        // Route::post('/simirit_returns_vehicle', 'Returning_temporary_vehicle')->name('simirit_return_vehicle');
+                        Route::post('/finance_appprove/{id}', 'finance_appprove')->name('finance_approve');
+                        Route::get('/get_my_request', 'my_request')->name('my_request');
+                        Route::post('/reject_request/{id}', 'finance_reject')->name('finance_reject');
                 });
             Route::controller(usercontroller::class)->group(function()
                 {
@@ -128,11 +124,11 @@ Route::group(['middleware' => ['auth']], function()
                 Route::group([
                     'prefix'=>'vehicle',
                 ], function (){
-                Route::get('/',[VehicleVehicleRegistrationController::class, 'index'])->name('vehicleRegistration.index');
-                Route::post('/store',[VehicleVehicleRegistrationController::class, 'store'])->name('vehicleRegistration.store');
-                Route::delete('/delete/{vehicle}',[VehicleVehicleRegistrationController::class,'destroy'])->name('vehicle.destroy');
-                Route::put('/update/{vehicle}', [VehicleVehicleRegistrationController::class, 'update'])->name('vehicle.update');
-            
+                    Route::get('/',[VehicleVehicleRegistrationController::class, 'index'])->name('vehicleRegistration.index');
+                    Route::post('/store',[VehicleVehicleRegistrationController::class, 'store'])->name('vehicleRegistration.store');
+                    Route::delete('/delete/{vehicle}',[VehicleVehicleRegistrationController::class,'destroy'])->name('vehicle.destroy');
+                    Route::put('/update/{vehicle}', [VehicleVehicleRegistrationController::class, 'update'])->name('vehicle.update');
+                
                 });
             // Vehicle Permanent Request
             Route::controller(VehicleParmanentlyRequestController::class)->group(function()
@@ -269,13 +265,20 @@ Route::group(['middleware' => ['auth']], function()
                  // Define routes for daily_km
             Route::controller(Daily_KM_Calculation::class)->group(function ()
                 {
-                Route::get('/daily','ReportPage')->name('dailyreport.index');
-                Route::get('/daily_km/check', 'CheckVehicle')->name('daily_km.page.check');
-                Route::post('/daily_km/store', 'displayForm')->name('daily_km.page.store'); // Create a new inspection
-                Route::post('/daily_km/morning', 'morning_km')->name('daily_km.page.morning'); // Show a specific inspection
-                Route::post('/daily_km/afternoon', 'aftern_km')->name('daily_km.page.evening'); // List all inspections
-                Route::get('/daily_km/page', 'displayPage')->name('daily_km.page'); // inspection page
-                Route::delete('/daily_km/delete', 'delete_morningkm')->name('daily_km.page.delete'); // Delete a specific inspection
+                    Route::get('/daily','ReportPage')->name('dailyreport.index');
+                    Route::get('/daily_km/check', 'CheckVehicle')->name('daily_km.page.check');
+                    Route::post('/daily_km/store', 'displayForm')->name('daily_km.page.store'); // Create a new inspection
+                    Route::post('/daily_km/morning', 'morning_km')->name('daily_km.page.morning'); // Show a specific inspection
+                    Route::post('/daily_km/afternoon', 'aftern_km')->name('daily_km.page.evening'); // List all inspections
+                    Route::get('/daily_km/page', 'displayPage')->name('daily_km.page'); // inspection page
+                    Route::delete('/daily_km/delete', 'delete_morningkm')->name('daily_km.page.delete'); // Delete a specific inspection
+                });
+            Route::controller(Fuel_QuataController::class)->group(function ()
+                {
+                    Route::get('/get_all','index')->name('all_fuel_quata');
+                    Route::get('/get_one/{id}', 'show')->name('select_one');
+                    Route::post('/save_change', 'store')->name('save_quata_change'); 
+                    Route::post('/save_update', 'update')->name('save_quata_update');
                 });
     // Samir Driver Registration
     Route::group([
@@ -291,12 +294,11 @@ Route::group(['middleware' => ['auth']], function()
             'prefix'=>'driver_change',
         ], function (){
         Route::get('/',[DriverChangeController::class, 'driver_change_page'])->name('driver.switch');
+        Route::get('/my_request',[DriverChangeController::class, 'driver_get_request'])->name('driver.requestPage');
         Route::post('/store',[DriverChangeController::class, 'store'])->name('driver_change.store');
         Route::put('/update/{request_id}', [DriverChangeController::class, 'update'])->name('driverchange.update');
         Route::delete('/delete/{request_id}', [DriverChangeController::class, 'destroy'])->name('driverchange.destroy');
-
         });
-
                 Route::group([
                     'prefix'=>'Route',
                 ], function (){
@@ -307,31 +309,39 @@ Route::group(['middleware' => ['auth']], function()
                 Route::put('/update/{request_id}', [RouteController::class, 'update'])->name('route.update');
                 Route::delete('/delete/{request_id}', [RouteController::class, 'removeRoute'])->name('route.destroy');
                 Route::delete('/user/delete/{request_id}', [RouteController::class, 'removeUserFromRoute'])->name('routeUser.destroy');
+                });
+                // Define routes for InspectionController
+            Route::controller(InspectionController::class)->group(function ()
+                 {
+                    Route::post('/inspection/store', 'storeInspection')->name('inspection.store'); // Create a new inspection
+                    // Route::get('/inspection', 'showInspection')->name('inspection.show'); // Show a specific inspection
+                    Route::get('/inspect_vehicle/{id}', 'showInspectionbyVehicle')->name('inspection.ByVehicle'); 
+                    Route::get('/inspection', 'showInspectionbyVehicle')->name('inspection.ByVehicle'); // Show a specific inspection
+                    Route::get('/inspections', 'listInspections')->name('inspection.list'); // List all inspections
+                    Route::get('/inspections/page', 'InspectionPage')->name('inspection.page'); // inspection page
+                    Route::get('/inspect_vehicle/{id}', 'showInspectionbyVehicle');//->name('inspection.ByVehicle'); // inspection page
+                    Route::put('/inspection/{inspectionId}/{partName}', 'updateInspection')->name('inspection.update'); // Update a specific inspection
+                    Route::delete('/inspection/{inspectionId}', 'deleteInspection')->name('inspection.delete'); // Delete a specific inspection
+                 });
+                 Route::controller(NotificationController::class)->group(function () {
+                    Route::post('/delete_notification', 'delete_notification');
+                    Route::get('/read_all_notifications', 'read_all_notifications');
+                    Route::get('/get_all_notifications', 'get_all_notifications');
+                    Route::get('/clear_all_notifications', 'clear_all_notifications');
+                    Route::get('/get_new_message_count', 'get_new_message_count');
+                    Route::get('/check_notify', 'check_notify');
 
-        });
-        // Define routes for InspectionController
-    Route::controller(InspectionController::class)->group(function ()
-            {
-            Route::post('/inspection/store', 'storeInspection')->name('inspection.store'); // Create a new inspection
-            Route::get('/inspection/{id}', 'showInspection')->name('inspection.show'); // Show a specific inspection
-            Route::get('/inspect_vehicle/{id}', 'showInspectionbyVehicle')->name('inspection.ByVehicle'); 
-            Route::get('/inspection', 'showInspectionbyVehicle')->name('inspection.ByVehicle'); // Show a specific inspection
-            Route::get('/inspections', 'listInspections')->name('inspection.list'); // List all inspections
-            Route::get('/inspections/page', 'InspectionPage')->name('inspection.page'); // inspection page
-            Route::get('/inspect_vehicle/{id}', 'showInspectionbyVehicle');//->name('inspection.ByVehicle'); // inspection page
-            Route::put('/inspection/{inspectionId}/{partName}', 'updateInspection')->name('inspection.update'); // Update a specific inspection
-            Route::delete('/inspection/{inspectionId}', 'deleteInspection')->name('inspection.delete'); // Delete a specific inspection
-            });
-            // SAMIR
-            Route::group([
-            'prefix'=>'vehicle',
-        ], function (){
-        Route::get('/',[VehicleRegistrationController::class, 'index'])->name('vehicleRegistration.index');
-        Route::post('/store',[VehicleRegistrationController::class, 'store'])->name('vehicleRegistration.store');
-        Route::delete('/delete/{vehicle}',[VehicleRegistrationController::class,'destroy'])->name('vehicle.destroy');
-        Route::put('/update/{vehicle}', [VehicleRegistrationController::class, 'update'])->name('vehicle.update');
-    
-        });
+                });
+                 // SAMIR
+                 Route::group([
+                    'prefix'=>'vehicle',
+                ], function (){
+                Route::get('/',[VehicleRegistrationController::class, 'index'])->name('vehicleRegistration.index');
+                Route::post('/store',[VehicleRegistrationController::class, 'store'])->name('vehicleRegistration.store');
+                Route::delete('/delete/{vehicle}',[VehicleRegistrationController::class,'destroy'])->name('vehicle.destroy');
+                Route::put('/update/{vehicle}', [VehicleRegistrationController::class, 'update'])->name('vehicle.update');
+            
+                });
             // Route::controller(VehicleRegistrationController::class)->group(function () 
             //     {
             //          Route::get('/xx', 'index')->name('vehicleRegistration.index'); 
@@ -370,6 +380,4 @@ Route::group(['middleware' => ['auth']], function()
         Route::post('/{department}/update', [DepartmentController::class,'update'])->name('department.update');
         Route::delete('/delete/{department}',[DepartmentController::class,'destroy'])->name('department.destroy');
     });
-
-    // Tinsae
 });

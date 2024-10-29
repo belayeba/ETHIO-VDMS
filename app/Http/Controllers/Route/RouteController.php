@@ -9,9 +9,17 @@ use App\Models\RouteManagement\RouteUser;
 use App\Models\User;
 use App\Models\Vehicle\VehiclesModel as Vehicle;
 use App\Models\Vehicle\VehiclesModel;
+use Illuminate\Support\Facades\Validator;
+use App\Http\Controllers\Vehicle\Daily_KM_Calculation;
 
 class RouteController extends Controller {
     //
+    protected $dailyKmCalculation;
+
+    public function __construct(Daily_KM_Calculation $dailyKmCalculation)
+    {
+        $this->dailyKmCalculation = $dailyKmCalculation;
+    }
     public function displayAllRoutes() {
         $routes = Route::get();
         $vehicles = VehiclesModel::all();
@@ -45,11 +53,14 @@ class RouteController extends Controller {
         if ( $validator->fails() ) {
             return response()->json( [ 'errors' => $validator->errors() ], 422 );
         }
-        $route = Route::create( [
+        $today = \Carbon\Carbon::today();
+        $ethiopianDate = $this->dailyKmCalculation->ConvertToEthiopianDate($today); 
+        Route::create( [
             'route_name' => $request->route_name,
             'driver_phone' => $request->driver_phone,
             'vehicle_id' => $request->vehicle_id,
             'registered_by' => auth()->user()->id,
+            'created_at' => $ethiopianDate
         ] );
         return redirect()->back()->with('success_message','Route registered successfully.',);
     }
@@ -66,8 +77,8 @@ class RouteController extends Controller {
         return redirect()->back()->with('success_message','Users assigned successfully.',);
     }
 
-    public function updateRouteAssignment( Request $request, $route_id ) {
-        $route = Route::findOrFail( $route_id );
+        public function updateRouteAssignment( Request $request, $route_id ) {
+            $route = Route::findOrFail( $route_id );
 
         // Update driver
         if ( $request->has( 'driver_phone' ) ) {
@@ -88,8 +99,8 @@ class RouteController extends Controller {
         return response()->json( [ 'message' => 'Route assignments updated successfully' ] );
     }
 
-    public function removeRoute( $route_id ) {
-        // Find the route by ID or fail if it doesn't exist
+        public function removeRoute( $route_id ) {
+            // Find the route by ID or fail if it doesn't exist
         $route = Route::findOrFail($route_id);
     
         // Delete the route
@@ -114,6 +125,6 @@ class RouteController extends Controller {
         RouteUser::where('route_id', $route_id)->delete();
 
         return response()->json(['message' => 'All users removed from route successfully' ] );
-    }
+        }
 
-}
+    }

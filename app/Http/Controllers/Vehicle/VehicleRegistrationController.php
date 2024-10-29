@@ -11,7 +11,9 @@ use App\Models\Vehicle\VehiclesModel;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
+use App\Http\Controllers\Vehicle\Daily_KM_Calculation;
 
 class VehicleRegistrationController extends Controller {
     // public function index()
@@ -21,7 +23,12 @@ class VehicleRegistrationController extends Controller {
 
     //     return view( 'Vehicle_Registration.show', compact( 'vehicles' ) );
     // }
+    protected $dailyKmCalculation;
 
+    public function __construct(Daily_KM_Calculation $dailyKmCalculation)
+    {
+        $this->dailyKmCalculation = $dailyKmCalculation;
+    }
     public function index() {
         $drivers = DriversModel::all();
         $vehicle = VehiclesModel::paginate( 6 );
@@ -41,7 +48,7 @@ class VehicleRegistrationController extends Controller {
             'model' => 'required|string|max:255',
             'year' => 'required|integer',
             'plate_number' => 'required|string|max:255',
-            'registration_date' => 'required|date',
+            'capacity' => 'required|integer',
             'mileage' => 'required|integer',
             'fuel_amount' => 'required|numeric',
             'last_service' => 'nullable|date',
@@ -84,13 +91,14 @@ class VehicleRegistrationController extends Controller {
             $fileinsurance = time() . '_' . $file->getClientOriginalName();
             $file->move( $storagePath, $fileinsurance );
         }
+        $today = \Carbon\Carbon::today();
+        $ethiopianDate = $this->dailyKmCalculation->ConvertToEthiopianDate($today); 
         VehiclesModel::create( [
             'vin'=>$request->vin,
             'make' => $request->make,
             'model' => $request->model,
             'year' => $request->year,
             'plate_number' => $request->plate_number,
-            'registration_date' => $request->registration_date,
             'mileage' => $request->mileage,
             'fuel_amount' => $request->fuel_amount,
             'last_service' => $request->Last_Service,
@@ -100,10 +108,11 @@ class VehicleRegistrationController extends Controller {
             'fuel_type' => $request->fuel_type,
             'notes' => $request->Notes,
             'vehicle_type' => $request->vehicle_type,
-            // 'inspection_id' => $request->inspection_id,
+            'capacity' => $request->capacity,
             'vehicle_category' => $request->vehicle_category,
             'libre' => $filelibre,
             'insurance' => $fileinsurance,
+            'created_at' => $ethiopianDate
         ] );
 
         // return response()->json( [
@@ -134,7 +143,7 @@ class VehicleRegistrationController extends Controller {
             'model' => 'required|string|max:255',
             'year' => 'required|integer|min:1900|max:'.date( 'Y' ),
             'plate_number' => 'required|regex:/^[A-Z]{2}-\d{1}-\d{5}$/',
-            'registration_date' => 'required|date',
+            'capacity' => 'required|integer',
             'mileage' => 'required|integer',
             'fuel_amount' => 'required|integer',
             'fuel_type' => 'required|string|max:255',
@@ -188,21 +197,44 @@ class VehicleRegistrationController extends Controller {
             $fileinsurance = time() . '_' . $file->getClientOriginalName();
             $file->move( $storagePath, $fileinsurance );
         }
-
+            $references = [
+                ['table' => 'vehicle_inspections', 'column' => 'vehicle_id'],
+                ['table' => 'driver_changes', 'column' => 'vehicle_id'],
+                ['table' => 'vehicle_requests_parmanently', 'column' => 'vehicle_id'],
+                ['table' => 'maintenances', 'column' => 'vehicle_id'],
+                ['table' => 'fuelings', 'column' => 'vehicle_id'],
+                ['table' => 'Permanent_fuelings', 'column' => 'vehicle_id'],
+                ['table' => 'trips', 'column' => 'vehicle_id'],
+                ['table' => 'routes', 'column' => 'vehicle_id'],
+                ['table' => 'daily_km_calculations', 'column' => 'vehicle_id'],
+                ['table' => 'vehicle_requests_temporary', 'column' => 'vehicle_id'],
+                ['table' => 'fuel_quatas', 'column' => 'vehicle_id'],
+            ];
+        
+            // Check each table for references
+            foreach ($references as $reference) {
+                if (DB::table($reference['table'])->where($reference['column'], $id)->exists()) {
+                    return redirect()->back()->with('error_message',
+                    "Record is referenced in another table and cannot be updated",
+                            );
+                }
+            }
         // Update the vehicle with the new data
+        $today = \Carbon\Carbon::today();
+        $ethiopianDate = $this->dailyKmCalculation->ConvertToEthiopianDate($today); 
         VehiclesModel::find( $id )->update( [
             'vin'=>$request->vin,
             'make' => $request->make,
             'model' => $request->model,
             'year' => $request->year,
             'plate_number' => $request->plate_number,
-            'registration_date' => $request->registration_date,
+            'registration_date' => $ethiopianDate,
             'mileage' => $request->mileage,
             'fuel_amount' => $request->fuel_amount,
             'last_service' => $request->Last_Service,
+            'capacity' => $request->capacity,
             'next_service' => $request->Next_Service,
             'registered_by' => $user,
-            'driver_id' => $request->driver_id,
             'fuel_type' => $request->fuel_type,
             'inspection_id' => $request->inspection_id,
             'status' => $status,
@@ -236,12 +268,29 @@ class VehicleRegistrationController extends Controller {
                                "You cannot delete this vehilce",
                             );
             }
+            $references = [
+                ['table' => 'vehicle_inspections', 'column' => 'vehicle_id'],
+                ['table' => 'driver_changes', 'column' => 'vehicle_id'],
+                ['table' => 'vehicle_requests_parmanently', 'column' => 'vehicle_id'],
+                ['table' => 'maintenances', 'column' => 'vehicle_id'],
+                ['table' => 'fuelings', 'column' => 'vehicle_id'],
+                ['table' => 'Permanent_fuelings', 'column' => 'vehicle_id'],
+                ['table' => 'trips', 'column' => 'vehicle_id'],
+                ['table' => 'routes', 'column' => 'vehicle_id'],
+                ['table' => 'daily_km_calculations', 'column' => 'vehicle_id'],
+                ['table' => 'vehicle_requests_temporary', 'column' => 'vehicle_id'],
+                ['table' => 'fuel_quatas', 'column' => 'vehicle_id'],
+            ];
+            // Check each table for references
+            foreach ($references as $reference) {
+                if (DB::table($reference['table'])->where($reference['column'], $id)->exists()) {
+                    return redirect()->back()->with('error_message',
+                    "Record is referenced in another table and cannot be deleted",
+                            );
+                }
+            }
             $Vehicle->delete();
             return redirect()->back()->with( 'success', 'Vehicle Deleted successfully.' );
-            // return response()->json( [
-            //     'success' => true,
-            //     'message' => 'Request Successfully deleted',
-            // ] );
         } catch ( Exception $e ) {
             // Handle the case when the vehicle request is not found
             return redirect()->back()->with('error_message',

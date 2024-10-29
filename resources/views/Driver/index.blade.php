@@ -82,9 +82,19 @@
                                                     <label for="nameInput" class="form-label">License Number <strong class="text-danger">*</strong></label>
                                                     <input type="text" class="form-control" id="license_number" name="license_number" placeholder="Enter License Number">
                                                 </div>
-                                                <div class="mb-3">
-                                                    <label for="nameInput" class="form-label">License expiry date <strong class="text-danger">*</strong></label>
-                                                    <input type="date" class="form-control" id="license_expiry_date" name="license_expiry_date" placeholder="Enter License expiry date">
+                                                <div class="position-relative mb-3">
+                                                    <div class="mb-6 position-relative" id="datepicker1">
+                                                        <label class="form-label">License expiry date </label>
+                                                        <input type="text" class="form-control" name="expiry_date"
+                                                            placeholder="Enter license expiry date" id="expirydate">
+                                                    </div>
+                                                    <script>
+                                                        $('#expirydate').calendarsPicker({
+                                                            calendar: $.calendars.instance('ethiopian', 'am'),
+                                                            pickerClass: 'myPicker',
+                                                            dateFormat: 'yyyy-mm-dd'
+                                                        });
+                                                    </script>
                                                 </div>
                                                 {{-- <div class="mb-3">
                                                     <label for="nameInput" class="form-label"> Phone Number<strong class="text-danger">*</strong></label>
@@ -121,6 +131,7 @@
                                                     </thead>
                                                     <tbody>
                                                          @foreach ($data as $item)
+                                                         {{-- {{ dd($item->license_file) }} --}}
                                                         <tr>
                                                         <!-- Table rows will be populated here -->
                                                         <td>{{$loop->iteration}}</td>
@@ -228,7 +239,7 @@
                 <div class="mb-3">
                     <label class="form-label">License File:</label>
                     @if($item->license_file)
-                        <p><a href="{{ Storage::url($item->license_file) }}" target="_blank">View File</a></p>
+                        <p><a href="{{ Storage::disk('public')->url($item->license_file) }}" target="_blank">View File</a></p>
                     @else
                         <p>No file uploaded</p>
                     @endif
@@ -278,6 +289,40 @@
                             </div>
                         </div>
                     </div>
+
+                    <style>
+                        @media only screen and (max-width: 768px) {
+    .col-md-4 {
+        width: 100%;
+    }
+
+    .col-md-8 {
+        width: 100%;
+    }
+
+    .card {
+        margin-bottom: 20px;
+    }
+
+    .table-responsive {
+        overflow-x: auto;
+    }
+
+    .modal-dialog {
+        max-width: 90%;
+    }
+}
+
+@media only screen and (max-width: 480px) {
+    .card {
+        padding: 10px;
+    }
+
+    .modal-dialog {
+        max-width: 100%;
+    }
+}
+                    </style>
 
                     <footer class="footer-area">
                         <div class="container">

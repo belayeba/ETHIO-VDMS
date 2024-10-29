@@ -292,7 +292,7 @@ class MentenanceController extends Controller
        // Vehicle Director Page
     public function VehicleDirector_page() 
         {    
-                $Maintenance_Request = MaintenancesModel::latest()->limit(100)->get();
+                $Maintenance_Request = MaintenancesModel::latest()->get();
                 return view("Maintenance_Requests", compact('Maintenance_Requests'));     
         }
         // VEHICLE DIRECTOR APPROVE THE REQUESTS

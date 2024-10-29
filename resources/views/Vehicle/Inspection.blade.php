@@ -78,7 +78,7 @@
                                         <div class="position-relative mb-3">
                                             <label class="form-label" for="validationTooltip02">Select Vehicle</label>
                                             <select class="form-control" id="department_id" name="vehicle_id">
-                                                    <option value=""   disabled selected>Select</option>
+                                                <option value="">Select Vehicle</option>
                                                     @foreach ($vehicle as $vec )
                                                     <option value="{{$vec->vehicle_id}}">
                                                         {{$vec->plate_number}}
