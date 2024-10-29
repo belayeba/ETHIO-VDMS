@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Notification;
 
 use App\Http\Controllers\Controller;
-use App\Models\Notification\NotificationModel;
 use App\Models\User;
 use App\Models\User\UserModel;
 use App\Notifications\CustomMessageNotification;
@@ -45,13 +44,38 @@ class NotificationController extends Controller {
 
     }
 
-    function check_notify() {
-        $id = Auth::id();
-        $user = User::find( $id );
-        $message = 'Notification works very well';
-        $subject = 'CHECKING';
-        $url = 'facebook.com';
-        $user->NotifyUser( $message, $subject, $url );
+    function redirect_to_intended( Request $request ) {
+        // Validate incoming request data
+        $validator = Validator::make( $request->all(), [
+            'notification_id' => 'required|uuid|exists:notifications,notification_id',
+            'route' => 'required|string|max:100|url',
+        ] );
+
+        if ( $validator->fails() ) {
+            return redirect()->back()->withErrors( $validator )->withInput();
+        }
+
+        // Retrieve the notification and verify it exists
+        $notification = NotificationModel::find( $request->notification_id );
+        if ( !$notification ) {
+            return redirect()->back()->with( 'error_message', 'Notification not found.' );
+        }
+
+        // Ensure that the notification is not already marked as read
+        if ( $notification->is_read ) {
+            return redirect()->back()->with( 'error_message', 'Notification is already marked as read.' );
+        }
+
+        // Try to mark the notification as read and handle potential issues
+        try {
+            $notification->is_read = 1;
+            $notification->save();
+        } catch ( \Exception $e ) {
+            return redirect()->back()->with( 'error_message', 'Failed to update notification status.' );
+        }
+        // Perform the redirection if everything is valid
+        return redirect( $request->route );
     }
+
 }
 

@@ -94,8 +94,8 @@ class CreateAllTablesWithUuid extends Migration
             Schema::create('vehicle_parts', function (Blueprint $table) {
                 $table->uuid('vehicle_parts_id')->primary();
                 $table->string('type')->options('[spare_part,vehicle_part]');
-                $table->uuid('name');
-                $table->string('notes');
+                $table->uuid('name')->unique();
+                $table->string('notes')->nullable();
                 $table->uuid('created_by');
                 $table->foreign('created_by')->references('id')->on('users')->onDelete('restrict');
                 $table->timestamps();

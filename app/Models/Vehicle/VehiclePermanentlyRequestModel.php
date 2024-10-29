@@ -2,11 +2,13 @@
 
 namespace App\Models\Vehicle;
 
+use App\Http\Controllers\Vehicle\GivingBackPermanentVehicle;
 use App\Models\User;
 use App\Models\Vehicle\VehiclesModel as VehicleVehiclesModel;
 use App\Models\VehiclesModel;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Str;
 
@@ -70,6 +72,9 @@ class VehiclePermanentlyRequestModel extends Model {
 
     public function inspection(): BelongsTo {
         return $this->belongsTo( InspectionModel::class, 'inspection_id' );
+    }
+    public function get_return():HasMany{
+        return $this->hasMany( GivingBackVehiclePermanently::class, 'vehicle_request_permanent_id','permanent_request' );
     }
 
 }

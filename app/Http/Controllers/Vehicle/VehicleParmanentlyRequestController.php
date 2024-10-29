@@ -13,6 +13,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Controllers\Vehicle\Daily_KM_Calculation;
+use App\Models\Vehicle\GivingBackVehiclePermanently;
 
 class VehicleParmanentlyRequestController extends Controller
 {
@@ -27,6 +28,7 @@ class VehicleParmanentlyRequestController extends Controller
         {
             $id = Auth::id();
             $Requested = VehiclePermanentlyRequestModel::where('requested_by', $id)->latest()->get();
+            //$check_permanent = GivingBackVehiclePermanently::where()
             return view("Request.ParmanententRequestPage", compact('Requested'));
         }
 

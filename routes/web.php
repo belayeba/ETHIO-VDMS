@@ -329,8 +329,7 @@ Route::group(['middleware' => ['auth']], function()
                     Route::get('/get_all_notifications', 'get_all_notifications')->name('get_all_notifications');
                     Route::get('/clear_all_notifications', 'clear_all_notifications');
                     Route::get('/get_new_message_count', 'get_new_message_count');
-                    Route::get('/check_notify', 'check_notify')->name('check_notify');
-
+                    Route::post('/change_status', 'redirect_to_inteded');
                 });
                  // SAMIR
                  Route::group([
