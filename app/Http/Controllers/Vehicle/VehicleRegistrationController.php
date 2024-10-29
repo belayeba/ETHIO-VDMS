@@ -40,7 +40,9 @@ class VehicleRegistrationController extends Controller {
     }
 
     public function store( Request $request ) {
+        // dd($request->mileage);
         $user = Auth::id();
+        $capacity = (int) $request->capacity;
 
         $validator = Validator::make( $request->all(), [
             'vin' => 'required|string|max:255',
@@ -51,12 +53,11 @@ class VehicleRegistrationController extends Controller {
             'capacity' => 'required|integer',
             'mileage' => 'required|integer',
             'fuel_amount' => 'required|numeric',
-            'last_service' => 'nullable|date',
-            'next_service' => 'nullable|date',
+            'last_service' => 'nullable|numeric',
+            'next_service' => 'nullable|numeric',
             'registered_by' => 'nullable|uuid|exists:users,id',
             'driver_id' => 'nullable|uuid|exists:drivers,driver_id',
             'fuel_type' => 'required|string|max:255',
-            // 'inspection_id' => 'nullable|uuid|exists:vehicle_inspections,inspection_id',
             'notes' => 'nullable|string',
             'vehicle_type' => 'required|string|max:255',
             'vehicle_category' => 'required|string|max:255',
@@ -108,7 +109,7 @@ class VehicleRegistrationController extends Controller {
             'fuel_type' => $request->fuel_type,
             'notes' => $request->Notes,
             'vehicle_type' => $request->vehicle_type,
-            'capacity' => $request->capacity,
+            'capacity' => $capacity,
             'vehicle_category' => $request->vehicle_category,
             'libre' => $filelibre,
             'insurance' => $fileinsurance,
