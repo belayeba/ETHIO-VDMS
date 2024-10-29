@@ -115,9 +115,12 @@
                                   <h6 class="m-0 fs-16 fw-semibold"> Notification</h6>
                               </div>
                               <div class="col-auto">
-                                  <a href="javascript: void(0);" class="text-dark text-decoration-underline">
-                                      <small>Clear All</small>
-                                  </a>
+                                  <form action="{{ route('delete_all_notification') }}" method="POST">
+                                      @csrf
+                                      <button type="submit" class="text-dark text-decoration-underline">
+                                          <small>Clear All</small>
+                                      </button>
+                                  </form>
                               </div>
                           </div>
                       </div>
@@ -135,7 +138,7 @@
                       </div>
 
                       <!-- All-->
-                      <a href="javascript:void(0);"
+                      <a href="{{ route('read_all_notification') }}"
                           class="dropdown-item text-center text-primary text-decoration-underline fw-bold notify-item border-top border-light py-2">
                           View All
                       </a>
