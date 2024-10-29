@@ -204,6 +204,7 @@
           </ul>
       </div>
   </div>
+  </div>
   <script>
       $.ajax({
           url: '/get_new_message_count',

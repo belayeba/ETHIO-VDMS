@@ -29,12 +29,7 @@ class VehicleParmanentlyRequestController extends Controller
             $id = Auth::id();
             $Requested = VehiclePermanentlyRequestModel::where('requested_by', $id)->latest()->get();
             //$check_permanent = GivingBackVehiclePermanently::where()
-            // return view("Request.ParmanententRequestPage", compact('Requested'));
-            $user = User::find($id );
-            $message = "Your Vehicle Permanent Request Rejected, click here to see its detail";
-            $subject = "Vehicle Permanent";
-            $url = "{{ route('vec_perm_request') }}";
-            $user->NotifyUser($message,$subject,$url);
+            return view("Request.ParmanententRequestPage", compact('Requested'));
         }
 
         // show list of permanent request
