@@ -936,15 +936,17 @@ class VehicleTemporaryRequestController extends Controller
                             }
                         $Vehicle_Request->start_km = $start_km;
                         // $Vehicle_Request->km_per_litre = $km_per_litre;
+                        $vehicle->status = false;
+                        $vehicle->save();
                         $Vehicle_Request->save();
                         return redirect()->back()->with('success_message',
                         "You are successfully Approved the request",
-                   );
+                     );
                     }
                 catch (Exception $e) 
                     {
                         // Handle the case when the vehicle request is not found
-                      return redirect()->back()->with('error_message',
+                           return redirect()->back()->with('error_message',
                                  "Sorry, Something went wrong",
                             );
                     }

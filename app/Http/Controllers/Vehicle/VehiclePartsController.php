@@ -14,7 +14,7 @@ class VehiclePartsController extends Controller
         public function store(Request $request)
             {
                 $rules = [
-                    'name' => 'required|string',
+                    'name' => 'required|string|unique:vehicle_parts,name',
                     'notes' => 'nullable|string',
                     //'type' => "required|in:spare_part,norma_part"
                 ];
@@ -22,7 +22,9 @@ class VehiclePartsController extends Controller
                 $validator = Validator::make($request->all(), $rules);
         
                 if ($validator->fails()) {
-                    return response()->json(['status' => 'error', 'errors' => $validator->errors()], 422);
+                    return redirect()->back()->with('error_message',
+                    $validator->errors(),
+                    );
                 }
                 $logged_user = Auth::id();
                 $vehiclePart = VehiclePart::create([
@@ -31,7 +33,9 @@ class VehiclePartsController extends Controller
                     'created_by' =>$logged_user,
                     'notes' => $request->input('notes'),
                 ]);
-        
+                return redirect()->back()->with('success_message',
+                "Vehicle Part Successfully Registered",
+                );
                 return response()->json(['status' => 'success', 'data' => $vehiclePart], 201);
             }
     
