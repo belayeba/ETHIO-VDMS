@@ -37,8 +37,8 @@
                                             <input type="text" class="form-control" name="first_name"
                                                 id="validationTooltip01" placeholder="First name" required>
                                             <!-- <div class="valid-tooltip">
-                                                                            Looks good!
-                                                                        </div> -->
+                                                                                Looks good!
+                                                                            </div> -->
                                             <div class="invalid-tooltip">
                                                 Please enter first name.
                                             </div>
@@ -170,4 +170,6 @@
                         </div> <!-- end card-body-->
                     </div> <!-- end card-->
                 </div> <!-- end col-->
+                <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+                <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
             @endsection
