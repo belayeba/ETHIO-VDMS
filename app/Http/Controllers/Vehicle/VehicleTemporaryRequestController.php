@@ -822,11 +822,11 @@ class VehicleTemporaryRequestController extends Controller
         // Vehicle Director Page
         public function SimiritPage() 
             {    
-                    $vehicles = VehiclesModel::get();
+                    $vehicles = VehiclesModel::where('status',1)->get();
                     $vehicle_requests = VehicleTemporaryRequestModel::
                                     whereNotNull('transport_director_id')
-                                    // ->whereNull('vec_director_reject_reason')
-                                    // ->whereNull('assigned_by')
+                                     //->whereNull('vec_director_reject_reason')
+                                     //->whereNull('assigned_by')
                                     ->get();
                     return view("Request.VehicleDirectorPage", compact('vehicle_requests','vehicles'));     
             }
@@ -849,8 +849,8 @@ class VehicleTemporaryRequestController extends Controller
                     $id = $request->input('request_id');
                     $assigned_vehicle = $request->input('assigned_vehicle_id');
                     $user_id = Auth::id();
-                // try
-                //     {
+                try
+                    {
                         $Vehicle_Request = VehicleTemporaryRequestModel::findOrFail($id);
                         $vehicle_info = VehiclesModel::findOrFail($assigned_vehicle);
                               if(!$vehicle_info->driver_id)
@@ -876,7 +876,6 @@ class VehicleTemporaryRequestController extends Controller
                                     'message' => 'This Car has no inspection',
                                 ]);
                             }
-                          
                         $inspection_id = $inspection->inspection_id;
                         $Vehicle_Request->assigned_by = $user_id;
                         $Vehicle_Request->vehicle_id = $assigned_vehicle;
@@ -890,14 +889,14 @@ class VehicleTemporaryRequestController extends Controller
                        return redirect()->back()->with('success_message',
                                  "ou are successfully Approved the request",
                             );
-                //     }   
-                // catch (Exception $e) 
-                //     {
-                //         // Handle the case when the vehicle request is not found
-                //       return redirect()->back()->with('error_message',
-                //                  "Sorry, Something went wrong",
-                //             );
-                //     }
+                    }   
+                catch (Exception $e) 
+                    {
+                        // Handle the case when the vehicle request is not found
+                      return redirect()->back()->with('error_message',
+                                 "Sorry, Something went wrong",
+                            );
+                    }
             }
             // Vehicle Director Fill start km
         public function simiritFillstartKm(Request $request)

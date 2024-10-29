@@ -166,12 +166,12 @@ class VehicleParmanentlyRequestController extends Controller
     public function DirectorApprovalPage()
         {
             $id = Auth::id();
-            $directors_data = User::where('id',$id)->get('department_id');
-            $dept_id = $directors_data->department_id;
+           // $directors_data = User::where('id',$id)->get('department_id');
+           // $dept_id = $directors_data->department_id;
             $vehicle_requests = VehiclePermanentlyRequestModel::latest()->get();
-            $vehicle_requests = VehiclePermanentlyRequestModel::whereHas('requestedBy', function ($query) use ($dept_id) {
-                $query->where('department_id', $dept_id);
-            })->get();
+           // $vehicle_requests = VehiclePermanentlyRequestModel::whereHas('requestedBy', function ($query) use ($dept_id) {
+                //$query->where('department_id', $dept_id);
+            //})->get();
 
             return view("Request.PermanentDirectorPage", compact('vehicle_requests'));
         }

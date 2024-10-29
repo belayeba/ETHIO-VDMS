@@ -22,7 +22,9 @@ class PermanentFuelController extends Controller {
         $this->dailyKmCalculation = $dailyKmCalculation;
     }
     public function index() {
-        $fuelings = PermanentFuelModel::latest()->get();
+        $logged_user = Auth::id();
+        $get_driver = DriversModel::where('user_id',$logged_user)->first();
+        $fuelings = PermanentFuelModel::where('driver_id',$get_driver->driver_id)->latest()->get();
         return view( 'Fuelling.ParmanententRequestPage', compact( 'fuelings' ) );
     }
     public function my_request()
@@ -30,7 +32,7 @@ class PermanentFuelController extends Controller {
         $logged_user = Auth::id();
         $get_driver = DriversModel::where('user_id',$logged_user)->first();
         $get_my_request = PermanentFuelModel::where('driver_id',$get_driver->driver_id)->latest()->get();
-       return response()->json(['my_requests' => $get_my_request]);
+        return response()->json(['my_requests' => $get_my_request]);
       }
     public function store( Request $request ) {
         // dd($request);
