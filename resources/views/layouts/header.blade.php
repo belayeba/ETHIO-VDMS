@@ -41,14 +41,14 @@
               </button>
 
               <!-- Topbar Search Form -->
-              <div class="app-search d-none d-lg-block">
+              {{-- <div class="app-search d-none d-lg-block">
                   <form>
                       <div class="input-group">
                           <input type="search" class="form-control" placeholder="Search...">
                           <span class="ri-search-line search-icon text-muted"></span>
                       </div>
                   </form>
-              </div>
+              </div> --}}
           </div>
 
           <ul class="topbar-menu d-flex align-items-center gap-3">
@@ -106,7 +106,7 @@
                   <a class="nav-link dropdown-toggle arrow-none" data-bs-toggle="dropdown" href="#" role="button"
                       aria-haspopup="false" aria-expanded="false">
                       <i class="ri-notification-3-line fs-22"></i>
-                      <span class="noti-icon-badge badge text-bg-pink">3</span>
+                      <span class="noti-icon-badge badge text-bg-pink" id="display_count"></span>
                   </a>
                   <div class="dropdown-menu dropdown-menu-end dropdown-menu-animated dropdown-lg py-0">
                       <div class="p-2 border-top-0 border-start-0 border-end-0 border-dashed border">
@@ -122,64 +122,14 @@
                           </div>
                       </div>
 
-                      <div style="max-height: 300px;" data-simplebar>
+                      <div id="display_notification" style="max-height: 300px; overflow-y: auto;">
                           <!-- item-->
                           <a href="javascript:void(0);" class="dropdown-item notify-item">
                               <div class="notify-icon bg-primary-subtle">
                                   <i class="mdi mdi-comment-account-outline text-primary"></i>
                               </div>
-                              <p class="notify-details">Caleb Flakelar commented on Admin
-                                  <small class="noti-time">1 min ago</small>
-                              </p>
-                          </a>
-
-                          <!-- item-->
-                          <a href="javascript:void(0);" class="dropdown-item notify-item">
-                              <div class="notify-icon bg-warning-subtle">
-                                  <i class="mdi mdi-account-plus text-warning"></i>
-                              </div>
-                              <p class="notify-details">New user registered.
-                                  <small class="noti-time">5 hours ago</small>
-                              </p>
-                          </a>
-
-                          <!-- item-->
-                          <a href="javascript:void(0);" class="dropdown-item notify-item">
-                              <div class="notify-icon bg-danger-subtle">
-                                  <i class="mdi mdi-heart text-danger"></i>
-                              </div>
-                              <p class="notify-details">Carlos Crouch liked
-                                  <small class="noti-time">3 days ago</small>
-                              </p>
-                          </a>
-
-                          <!-- item-->
-                          <a href="javascript:void(0);" class="dropdown-item notify-item">
-                              <div class="notify-icon bg-pink-subtle">
-                                  <i class="mdi mdi-comment-account-outline text-pink"></i>
-                              </div>
-                              <p class="notify-details">Caleb Flakelar commented on Admi
-                                  <small class="noti-time">4 days ago</small>
-                              </p>
-                          </a>
-
-                          <!-- item-->
-                          <a href="javascript:void(0);" class="dropdown-item notify-item">
-                              <div class="notify-icon bg-purple-subtle">
-                                  <i class="mdi mdi-account-plus text-purple"></i>
-                              </div>
-                              <p class="notify-details">New user registered.
-                                  <small class="noti-time">7 days ago</small>
-                              </p>
-                          </a>
-
-                          <!-- item-->
-                          <a href="javascript:void(0);" class="dropdown-item notify-item">
-                              <div class="notify-icon bg-success-subtle">
-                                  <i class="mdi mdi-heart text-success"></i>
-                              </div>
-                              <p class="notify-details">Carlos Crouch liked <b>Admin</b>.
-                                  <small class="noti-time">Carlos Crouch liked</small>
+                              <p class="notify-details">
+                                  <small class="noti-time"></small>
                               </p>
                           </a>
                       </div>
@@ -251,4 +201,40 @@
           </ul>
       </div>
   </div>
+  <script>
+      $.ajax({
+          url: '/get_new_message_count',
+          type: 'GET',
+          dataType: 'json',
+          success: function(data) {
+              console.log(data);
+              // Handle the notifications data as needed
+              $('#display_count').text(data.new_notification);
+              // Clear existing notifications
+              const notificationsContainer = $('#display_notification');
+              notificationsContainer.empty();
+
+              // Loop through each notification and add it to the div
+              data.data.forEach(function(notification) {
+                  // Create the notification HTML structure
+                  const notificationItem = `
+                <a href="${notification.url}" class="dropdown-item notify-item">
+                    <div class="notify-icon bg-primary-subtle">
+                        <i class="mdi mdi-comment-account-outline text-primary"></i>
+                    </div>
+                    <p class="notify-details">${notification.message}
+                        <small class="noti-time">${notification.subject}</small>
+                    </p>
+                </a>
+            `;
+
+                  // Append the notification item to the container
+                  notificationsContainer.append(notificationItem);
+              });
+          },
+          error: function(jqXHR, textStatus, errorThrown) {
+              console.error('Error fetching notifications:', textStatus, errorThrown);
+          }
+      });
+  </script>
   <!-- ========== Topbar End ========== -->
