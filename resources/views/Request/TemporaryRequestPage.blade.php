@@ -16,22 +16,22 @@
     <div class="content-page">
         <div class="content">
 
-           @if(Session::has('error_message'))
-            <div class="alert alert-danger alert-dismissible text-bg-danger border-0 fade show col-lg-5" 
-                role="alert">
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="Close"></button>
-                <strong>Error - </strong> {!! session('error_message') !!}
-            </div>
+            @if (Session::has('error_message'))
+                <div class="alert alert-danger alert-dismissible text-bg-danger border-0 fade show col-lg-5" role="alert">
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert"
+                        aria-label="Close"></button>
+                    <strong>Error - </strong> {!! session('error_message') !!}
+                </div>
             @endif
-            
-            @if(Session::has('success_message'))
-            <div class="alert alert-primary alert-dismissible text-bg-primary border-0 fade show col-lg-5"
-                role="alert">
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="Close"></button>
-                <strong> Success- </strong> {!! session('success_message') !!} 
-            </div>
+
+            @if (Session::has('success_message'))
+                <div class="alert alert-primary alert-dismissible text-bg-primary border-0 fade show col-lg-5" role="alert">
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert"
+                        aria-label="Close"></button>
+                    <strong> Success- </strong> {!! session('success_message') !!}
+                </div>
             @endif
-            
+
             <!-- Start Content-->
             <div class="container-fluid">
                 <div class="row">
@@ -78,11 +78,11 @@
                                                 </a>
                                             </li>
                                             <!-- <li class="nav-item">
-                                            <a href="#finish-4" data-bs-toggle="tab" data-toggle="tab" class="nav-link rounded-0 py-2">
-                                                <i class=" ri-suitcase-3-fill fw-normal fs-20 align-middle me-1"></i>
-                                                <span class="d-none d-sm-inline">Extras</span>
-                                            </a>
-                                        </li> -->
+                                                                        <a href="#finish-4" data-bs-toggle="tab" data-toggle="tab" class="nav-link rounded-0 py-2">
+                                                                            <i class=" ri-suitcase-3-fill fw-normal fs-20 align-middle me-1"></i>
+                                                                            <span class="d-none d-sm-inline">Extras</span>
+                                                                        </a>
+                                                                    </li> -->
                                         </ul>
 
                                         <div class="tab-content b-0 mb-0">
@@ -99,8 +99,7 @@
                                                         <div class="mb-6 position-relative" id="datepicker1">
                                                             <label class="form-label">Reason</label>
                                                             <input type="text" name="purpose" class="form-control"
-                                                                placeholder="Enter purpose of Request"
-                                                                >
+                                                                placeholder="Enter purpose of Request">
                                                         </div>
                                                     </div>
 
@@ -108,9 +107,7 @@
                                                         <div class="mb-6 position-relative" id="datepicker1">
                                                             <label class="form-label">Vehicle type</label>
                                                             <input type="text" class="form-control" name="vehicle_type"
-                                                                placeholder="Select vehicle type"
-                                                                
-                                                                >
+                                                                placeholder="Select vehicle type">
                                                         </div>
                                                     </div>
                                                 </div>
@@ -143,8 +140,7 @@
                                                         <div class="mb-6 position-relative" id="datepicker1">
                                                             <label class="form-label">Start Time</label>
                                                             <input type="time" class="form-control" name="start_time"
-                                                                placeholder="Enter Time of departure"
-                                                                >
+                                                                placeholder="Enter Time of departure">
                                                         </div>
                                                     </div>
 
@@ -167,18 +163,14 @@
                                                         <div class="mb-6 position-relative" id="datepicker1">
                                                             <label class="form-label">Return Time</label>
                                                             <input type="time" class="form-control" name="return_time"
-                                                                placeholder="Enter Time of arrival"
-                                                                
-                                                                >
+                                                                placeholder="Enter Time of arrival">
                                                         </div>
                                                     </div>
                                                     <div class="position-relative mb-3">
                                                         <div class="mb-6 position-relative" id="datepicker1">
                                                             <label class="form-label">How many Days</label>
                                                             <input type="number" class="form-control"
-                                                                name="how_many_days" placeholder="Enter the Duration"
-                                                                
-                                                                >
+                                                                name="how_many_days" placeholder="Enter the Duration">
                                                         </div>
                                                     </div>
                                                 </div>
@@ -202,9 +194,7 @@
                                                             <label class="form-label">Location From</label>
                                                             <input type="text" class="form-control"
                                                                 name="start_location"
-                                                                placeholder="Enter starting location"
-                                                                
-                                                                >
+                                                                placeholder="Enter starting location">
                                                         </div>
                                                     </div>
 
@@ -212,9 +202,7 @@
                                                         <div class="mb-6 position-relative" id="datepicker1">
                                                             <label class="form-label">Location to</label>
                                                             <input type="text" class="form-control"
-                                                                name="end_location" placeholder="Enter arrival location"
-                                                                
-                                                                >
+                                                                name="end_location" placeholder="Enter arrival location">
                                                         </div>
                                                     </div>
                                                 </div> <!-- end card-body-->
@@ -378,7 +366,8 @@
                         <div class="card">
                             <div class="card-body">
 
-                                <table id="basic-datatable" class="Temporary_datatable table table-centered mb-0 table-nowrap">
+                                <table id="basic-datatable"
+                                    class="Temporary_datatable table table-centered mb-0 table-nowrap">
                                     <thead>
                                         <tr>
                                             <th>Roll.no</th>
@@ -388,8 +377,8 @@
                                         </tr>
                                     </thead>
 
-                                        <tbody>
-                                            {{-- <tr>
+                                    <tbody>
+                                        {{-- <tr>
                                                 <td>{{ $loop->iteration }}</td>
                                                 <td>{{ $request->start_date }}</td>
                                                 <td>From:{{ $request->start_location }},</br>To:{{ $request->end_locations }} </td>
@@ -405,140 +394,57 @@
                                                     @endif
                                                 </td>
                                             </tr> --}}
-                                        </tbody>
+                                    </tbody>
                                 </table>
 
 
-                                    <div id="standard-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="standard-modalLabel" aria-hidden="true">
-                                        <div class="modal-dialog">
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <h4 class="modal-title">Request Details</h4>
-                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                </div>
-                                                <div class="modal-body">
-                                                    <dl class="row mb-0">
-                                                        <dt class="col-sm-5">Request reason</dt>
-                                                        <dd class="col-sm-7" data-field="purpose"></dd>
-                                    
-                                                        <dt class="col-sm-5">Requested vehicle</dt>
-                                                        <dd class="col-sm-7" data-field="vehicle_type"></dd>
-                                    
-                                                        <dt class="col-sm-5">Start date and Time</dt>
-                                                        <dd class="col-sm-7" data-field="start_date"></dd>
-                                    
-                                                        <dt class="col-sm-5">Return date and Time</dt>
-                                                        <dd class="col-sm-7" data-field="end_date"></dd>
-                                    
-                                                        <dt class="col-sm-5">Location From and To</dt>
-                                                        <dd class="col-sm-7" data-field="start_location"></dd>
-                                    
-                                                        <dt class="col-sm-5">Passengers</dt>
-                                                        <dd class="col-sm-7" data-field="passengers"></dd>
-                                    
-                                                        <dt class="col-sm-5">Materials</dt>
-                                                        <dd class="col-sm-7" data-field="materials"></dd>
-                                    
-                                                        <dt class="col-sm-5">Progress</dt>
-                                                        <dd class="col-sm-7" data-field="progress"></dd>
-                                                    </dl>
-                                                </div>
-                                                <div class="modal-footer">
-                                                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
-                                                </div>
+                                
+
+                                <!-- show all the information about the request modal -->
+                                <div id="standard-modal" class="modal fade" tabindex="-1" role="dialog"
+                                    aria-labelledby="standard-modalLabel" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h4 class="modal-title">Request Details</h4>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                    aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <dl class="row mb-0">
+                                                    <dt class="col-sm-5">Request reason</dt>
+                                                    <dd class="col-sm-7" data-field="purpose"></dd>
+
+                                                    <dt class="col-sm-5">Requested vehicle</dt>
+                                                    <dd class="col-sm-7" data-field="vehicle_type"></dd>
+
+                                                    <dt class="col-sm-5">Start date and Time</dt>
+                                                    <dd class="col-sm-7" data-field="start_date"></dd>
+
+                                                    <dt class="col-sm-5">Return date and Time</dt>
+                                                    <dd class="col-sm-7" data-field="end_date"></dd>
+
+                                                    <dt class="col-sm-5">Location From and To</dt>
+                                                    <dd class="col-sm-7" data-field="start_location"></dd>
+
+                                                    <dt class="col-sm-5">Passengers</dt>
+                                                    <dd class="col-sm-7" data-field="passengers"></dd>
+
+                                                    <dt class="col-sm-5">Materials</dt>
+                                                    <dd class="col-sm-7" data-field="materials"></dd>
+
+                                                    <dt class="col-sm-5">Progress</dt>
+                                                    <dd class="col-sm-7" data-field="progress"></dd>
+                                                </dl>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-light"
+                                                    data-bs-dismiss="modal">Close</button>
                                             </div>
                                         </div>
                                     </div>
-                                        <!-- show all the information about the request modal -->
-                                        {{-- <div id="standard-modal-{{ $loop->index }}" class="modal fade" tabindex="-1"
-                                            role="dialog" aria-labelledby="standard-modalLabel" aria-hidden="true">
-                                            <div class="modal-dialog">
-                                                <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <h4 class="modal-title" id="standard-modalLabel">Request Details
-                                                        </h4>
-                                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                            aria-label="Close"></button>
-                                                    </div>
-                                                    <div class="modal-body">
-                                                        <dl class="row mb-0">
-                                                            <dt class="col-sm-5">Request reason</dt>
-                                                            <dd class="col-sm-7">{{ $request->purpose }}.</dd>
-
-                                                            <dt class="col-sm-5">Requested vehicle</dt>
-                                                            <dd class="col-sm-7">
-                                                                <p>{{ $request->vehicle_type }}.</p>
-                                                            </dd>
-
-                                                            <dt class="col-sm-5">Start date and Time</dt>
-                                                            <dd class="col-sm-7">{{ $request->start_date }},
-                                                                {{ $request->start_time }}.</dd>
-
-                                                            <dt class="col-sm-5">Return date and Time</dt>
-                                                            <dd class="col-sm-7">{{ $request->end_date }},
-                                                                {{ $request->end_time }}.</dd>
-
-                                                            <dt class="col-sm-5">Location From and To</dt>
-                                                            <dd class="col-sm-7">{{ $request->start_location }},
-                                                                {{ $request->end_locations }}.</dd>
-
-                                                            <dt class="col-sm-5 text-truncate">passenger</dt>
-
-                                                            <dd class="col-sm-7">
-                                                                @foreach ($request->peoples as $person)
-                                                                    {{ $person->user->first_name }}.</br>
-                                                                @endforeach
-                                                            </dd>
-                                                            <dt class="col-sm-5">Materials</dt>
-                                                            <dd class="col-sm-7">
-                                                                @foreach ($request->materials as $material)
-                                                                    <p>Material name: {{ $material->material_name }},</br>
-                                                                        Material Weight: {{ $material->weight }}.</p>
-                                                                @endforeach
-                                                            </dd>
-                                                            <dt class="col-sm-5">Progress</dt>
-                                                            <dd class="col-sm-7">
-                                                            @if($request->dir_approved_by !== null)
-                                                               Approved by Director 
-                                                            @else Pending for Approval @endif
-                                                            @if($request->director_reject_reason !== null)
-                                                            </br>Rejected by Director @endif
-                                                            @if($request->div_approved_by !== null)
-                                                            </br>Approved by Division-Director @endif
-                                                            @if($request->cluster_director_reject_reason !== null)
-                                                            </br>Rejected by Division-Director @endif
-                                                            @if($request->hr_div_approved_by !== null)
-                                                            </br>Approved by HR-Director @endif
-                                                            @if($request->hr_director_reject_reason !== null)
-                                                            </br>Rejected by HR-Director @endif
-                                                            @if($request->transport_director_id !== null)
-                                                            </br> Approved by Dispatcher-Director @endif
-                                                            @if($request->vec_director_reject_reason !== null)
-                                                            </br> Rejected by Dispatcher-Director @endif
-                                                            @if($request->assigned_by !== null)
-                                                            </br> Approved by Dispatcher @endif
-                                                            @if($request->assigned_by_reject_reason !== null)
-                                                             </br>Rejected by Dispatcher @endif
-                                                            @if($request->vehicle_id !== null)
-                                                            </br>Assigned Vehicle <u>{{$request->vehicle->plate_number}}</u> @endif
-                                                            @if($request->start_km !== null)
-                                                            </br>Vehicle Request <u>{{$request->vehicle->plate_number}}</u> Dispatched  @endif
-                                                            @if($request->end_km !== null)
-                                                            </br>Request completed @endif
-                                                            </dd>
-                                                            
-                                                        </dl>
-                                                    </div>
-                                                    <div class="modal-footer">
-                                                        <button type="button" class="btn btn-light"
-                                                            data-bs-dismiss="modal">Close</button>
-                                                        <!-- <button type="button" class="btn btn-primary">Save changes</button> -->
-                                                    </div>
-                                                </div><!-- /.modal-content -->
-                                            </div><!-- /.modal-dialog -->
-                                        </div>
-                                        <!-- end show modal -->
-                                   --}}
+                                </div>
+                                <!-- end show modal -->
                             </div> <!-- end card body-->
                         </div> <!-- end card -->
                     </div><!-- end col-->
@@ -549,19 +455,32 @@
                 <script src="{{ asset('assets/vendor/datatables.net/js/jquery.dataTables.min.js') }}"></script>
 
                 <script>
-                     var table = $('.Temporary_datatable').DataTable({
+                    var table = $('.Temporary_datatable').DataTable({
                         processing: true,
                         pageLength: 3,
                         serverSide: true,
                         ajax: "{{ route('FetchTemporaryRequest') }}",
-                        columns: [
-                            { data: 'counter', name: 'counter' },
-                            { data: 'start_date', name: 'start_date' },
-                            { data: 'location', name: 'location' },
-                            { data: 'actions', name: 'actions', orderable: false, searchable: false },
+                        columns: [{
+                                data: 'counter',
+                                name: 'counter'
+                            },
+                            {
+                                data: 'start_date',
+                                name: 'start_date'
+                            },
+                            {
+                                data: 'location',
+                                name: 'location'
+                            },
+                            {
+                                data: 'actions',
+                                name: 'actions',
+                                orderable: false,
+                                searchable: false
+                            },
                         ]
                     });
-                    
+
                     document.addEventListener('DOMContentLoaded', function() {
                         const select = document.getElementById('multiSelect');
                         const selectedValuesDiv = document.getElementById('selectedValues');
@@ -633,100 +552,116 @@
                         });
                     });
 
-                $('#standard-modal').on('show.bs.modal', function (event) {
-                    var button = $(event.relatedTarget); // Button that triggered the modal
-                    var modal = $(this); // The modal
+                    $('#standard-modal').on('show.bs.modal', function(event) {
+                        var button = $(event.relatedTarget); // Button that triggered the modal
+                        var modal = $(this); // The modal
 
-                    // Populate basic request details
-                    modal.find('.modal-title').text('Request Details');
-                    modal.find('[data-field="purpose"]').text(button.data('purpose'));
-                    modal.find('[data-field="vehicle_type"]').text(button.data('vehicle_type'));
-                    modal.find('[data-field="start_date"]').text(button.data('start_date') + ', ' + button.data('start_time'));
-                    modal.find('[data-field="end_date"]').text(button.data('end_date') + ', ' + button.data('end_time'));
-                    modal.find('[data-field="start_location"]').text(button.data('start_location'));
-                    modal.find('[data-field="end_locations"]').text(button.data('end_locations'));
+                        // Populate basic request details
+                        modal.find('.modal-title').text('Request Details');
+                        modal.find('[data-field="purpose"]').text(button.data('purpose'));
+                        modal.find('[data-field="vehicle_type"]').text(button.data('vehicle_type'));
+                        modal.find('[data-field="start_date"]').text(button.data('start_date') + ', ' + button.data(
+                            'start_time'));
+                        modal.find('[data-field="end_date"]').text(button.data('end_date') + ', ' + button.data('end_time'));
+                        modal.find('[data-field="start_location"]').text(button.data('start_location'));
+                        modal.find('[data-field="end_locations"]').text(button.data('end_locations'));
 
-                    // Populate passengers
-                    var passengers = button.data('passengers');
-                    var passengerList = '';
-                    if (passengers) {
-                        passengers.forEach(function (person) {
-                            passengerList += person.user.first_name + '<br>';
-                        });
-                    }
-                    modal.find('[data-field="passengers"]').html(passengerList);
+                        // Populate passengers
+                        var passengers = button.data('passengers');
+                        var passengerList = '';
+                        if (passengers) {
+                            passengers.forEach(function(person) {
+                                passengerList += person.user.first_name + '<br>';
+                            });
+                        }
+                        modal.find('[data-field="passengers"]').html(passengerList);
 
-                    // Populate materials
-                    var materials = button.data('materials');
-                    var materialList = '';
-                    if (materials) {
-                        materials.forEach(function (material) {
-                            materialList += 'Material name: ' + material.material_name + ',<br>' +
-                                'Material Weight: ' + material.weight + '.<br>';
-                        });
-                    }
-                    modal.find('[data-field="materials"]').html(materialList);
+                        // Populate materials
+                        var materials = button.data('materials');
+                        var materialList = '';
+                        if (materials) {
+                            materials.forEach(function(material) {
+                                materialList += 'Material name: ' + material.material_name + ',<br>' +
+                                    'Material Weight: ' + material.weight + '.<br>';
+                            });
+                        }
+                        modal.find('[data-field="materials"]').html(materialList);
 
-                    // Populate progress
-                    var progress = '';
+                        // Function to build progress messages
+                        function buildProgressMessage(button) {
+                            let progressMessages = [];
 
-                    if (button.data('dir_approved_by') !== null) {
-                        progress += 'Approved by Director<br>';
-                    } else {
-                        progress += 'Pending for Approval<br>';
-                    }
+                            const messages = [{
+                                    condition: button.data('dir_approved_by'),
+                                    message: 'Approved by Director'
+                                },
+                                {
+                                    condition: button.data('director_reject_reason'),
+                                    message: 'Rejected by Director'
+                                },
+                                {
+                                    condition: button.data('div_approved_by'),
+                                    message: 'Approved by Division-Director'
+                                },
+                                {
+                                    condition: button.data('cluster_director_reject_reason'),
+                                    message: 'Rejected by Division-Director'
+                                },
+                                {
+                                    condition: button.data('hr_div_approved_by'),
+                                    message: 'Approved by HR-Director'
+                                },
+                                {
+                                    condition: button.data('hr_director_reject_reason'),
+                                    message: 'Rejected by HR-Director'
+                                },
+                                {
+                                    condition: button.data('transport_director_id'),
+                                    message: 'Approved by Dispatcher-Director'
+                                },
+                                {
+                                    condition: button.data('vec_director_reject_reason'),
+                                    message: 'Rejected by Dispatcher-Director'
+                                },
+                                {
+                                    condition: button.data('assigned_by'),
+                                    message: 'Approved by Dispatcher'
+                                },
+                                {
+                                    condition: button.data('assigned_by_reject_reason'),
+                                    message: 'Rejected by Dispatcher'
+                                },
+                                {
+                                    condition: button.data('vehicle_id'),
+                                    message: 'Assigned Vehicle <u>' + button.data('vehicle_plate') + '</u>'
+                                },
+                                {
+                                    condition: button.data('start_km'),
+                                    message: 'Vehicle Request <u>' + button.data('vehicle_plate') + '</u> Dispatched'
+                                },
+                                {
+                                    condition: button.data('end_km'),
+                                    message: 'Request completed'
+                                },
+                            ];
+                            messages.forEach(item => {
+                                if (item.condition) {
+                                    progressMessages.push(item.message);
+                                }
+                            });
 
-                    if (button.data('director_reject_reason') !== null) {
-                        progress += 'Rejected by Director<br>';
-                    }
+                            // If no conditions were met, set progress to 'Pending'
+                            let progress = progressMessages.length > 0 ? progressMessages.join('<br>') : 'Pending';
 
-                    if (button.data('div_approved_by') !== null) {
-                        progress += 'Approved by Division-Director<br>';
-                    }
 
-                    if (button.data('cluster_director_reject_reason') !== null) {
-                        progress += 'Rejected by Division-Director<br>';
-                    }
 
-                    if (button.data('hr_div_approved_by') !== null) {
-                        progress += 'Approved by HR-Director<br>';
-                    }
+                            return progress;
+                        }
 
-                    if (button.data('hr_director_reject_reason') !== null) {
-                        progress += 'Rejected by HR-Director<br>';
-                    }
+                        // Populate progress
+                        modal.find('[data-field="progress"]').html(buildProgressMessage(button));
 
-                    if (button.data('transport_director_id') !== null) {
-                        progress += 'Approved by Dispatcher-Director<br>';
-                    }
-
-                    if (button.data('vec_director_reject_reason') !== null) {
-                        progress += 'Rejected by Dispatcher-Director<br>';
-                    }
-
-                    if (button.data('assigned_by') !== null) {
-                        progress += 'Approved by Dispatcher<br>';
-                    }
-
-                    if (button.data('assigned_by_reject_reason') !== null) {
-                        progress += 'Rejected by Dispatcher<br>';
-                    }
-
-                    if (button.data('vehicle_id') !== null) {
-                        progress += 'Assigned Vehicle <u>' + button.data('vehicle_plate') + '</u><br>';
-                    }
-
-                    if (button.data('start_km') !== null) {
-                        progress += 'Vehicle Request <u>' + button.data('vehicle_plate') + '</u> Dispatched<br>';
-                    }
-
-                    if (button.data('end_km') !== null) {
-                        progress += 'Request completed<br>';
-                    }
-
-                    modal.find('[data-field="progress"]').html(progress);
-                });
-                
+                    });
                 </script>
 
 
@@ -738,8 +673,8 @@
                 <script>
                     src = "{{ asset('assets/vendor/datatables.net-bs5/js/dataTables.bootstrap5.min.js') }}" >
                 </script>
-                
-{{-- 
+
+                {{-- 
                 <!-- Datatables js -->
                 <script src="{{ asset('assets/vendor/datatables.net/js/jquery.dataTables.min.js') }}"></script>
                 <script src="{{ asset('assets/vendor/datatables.net-bs5/js/dataTables.bootstrap5.min.js') }}"></script>
@@ -752,4 +687,3 @@
                 <script src="{{ asset('assets/js/app.min.js') }}"></script>
             @endsection
             <script src="{{ asset('assets/js/vendor.min.js') }}"></script>
-
