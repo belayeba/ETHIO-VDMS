@@ -433,6 +433,7 @@ class VehicleParmanentlyRequestController extends Controller
                             ->whereNull('accepted_by_requestor')
                             ->latest()
                             ->first();
+                            dd($check_request);
             if(!$check_request)
             {
                 return response()->json([
