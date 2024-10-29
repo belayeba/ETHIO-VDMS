@@ -122,12 +122,6 @@
                             <form id="profileForm" method="post" action="#" class="form-horizontal">
                                 <div class="row">
                                     <div class="col-12">
-                                        {{-- <div class="row mb-3">
-                                            <label class="col-md-3 col-form-label" for="registration_date">Registration Date</label>
-                                            <div class="col-md-9">
-                                                <input type="date" id="Registration Date" name="registration_date" placeholder="Enter the registration date" class="form-control" required>
-                                            </div>
-                                        </div> --}}
                                         <div class="row mb-3">
                                             <label class="col-md-3 col-form-label" for="mileage">Mileage</label>
                                             <div class="col-md-9">
@@ -138,7 +132,7 @@
                                         <div class="row mb-3">
                                             <label class="col-md-3 col-form-label" for="fuel amount">Fuel Amount</label>
                                             <div class="col-md-9">
-                                                <input type="number" id="fuel amount" name="fuel amount" placeholder="Enter the fuel amount" class="form-control" required>
+                                                <input type="number" id="fuel amount" name="fuel_amount" placeholder="Enter the fuel amount" class="form-control" required>
                                             </div>
                                         </div>
 
@@ -150,6 +144,12 @@
                                                     <option value="Benzene">Benzene</option>
                                                     <option value="Diesel">Diesel</option>
                                                 </select>
+                                            </div>
+                                        </div>
+                                        <div class="row mb-3">
+                                            <label class="col-md-3 col-form-label" for="capacity">Capacity</label>
+                                            <div class="col-md-9">
+                                                <input type="number" id="capacity" name="capacity" placeholder="Enter the max Capacity" class="form-control" required>
                                             </div>
                                         </div>
 
@@ -308,8 +308,8 @@
                                                                     model: '{{ $item->model }}',
                                                                     year: '{{ $item->year }}',
                                                                     plate_number: '{{ $item->plate_number }}',
-                                                                    registration_date: '{{ $item->registration_date }}',
                                                                     mileage: '{{ $item->mileage }}',
+                                                                    capacity: '{{ $item->capacity }}',
                                                                     fuel_amount: '{{ $item->fuel_amount }}',
                                                                     fuel_type: '{{ $item->fuel_type }}',
                                                                     last_service: '{{ $item->last_service }}',
@@ -373,13 +373,12 @@
                             </div>
                 
                             <div class="mb-3">
-                                <label for="editRegistrationDate" class="form-label">Registration Date</label>
-                                <input type="date" class="form-control" id="editRegistrationDate" name="registration_date" value="{{ $item->registration_date }}" required>
-                            </div>
-                
-                            <div class="mb-3">
                                 <label for="editMileage" class="form-label">Mileage</label>
                                 <input type="number" class="form-control" id="editMileage" name="mileage" value="{{ $item->mileage }}" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="editCapacity" class="form-label">Capacity</label>
+                                <input type="number" class="form-control" id="editCapacity" name="capacity" value="{{ $item->capacity }}" required>
                             </div>
                         </div>
                 
@@ -502,14 +501,14 @@
                                 <p>{{ $item->plate_number }}</p>
                             </dd>
             
-                            <dt class="col-sm-4">Registration Date:</dt>
-                            <dd class="col-sm-8">
-                                <p>{{ $item->registration_date }}</p>
-                            </dd>
-            
                             <dt class="col-sm-4">Mileage:</dt>
                             <dd class="col-sm-8">
                                 <p>{{ $item->mileage }}</p>
+                            </dd>
+
+                            <dt class="col-sm-4">Capacity:</dt>
+                            <dd class="col-sm-8">
+                                <p>{{ $item->capacity }}</p>
                             </dd>
                         </dl>
                     </div>
@@ -649,8 +648,8 @@
     document.getElementById('editModel').value = data.model;
     document.getElementById('editYear').value = data.year;
     document.getElementById('editPlateNumber').value = data.plate_number;
-    document.getElementById('editRegistrationDate').value = data.registration_date;
     document.getElementById('editMileage').value = data.mileage;
+    document.getElementById('editCapacity').value = data.capacity;
     document.getElementById('editFuelAmount').value = data.fuel_amount;
     document.getElementById('editFuelType').value = data.fuel_type;
     document.getElementById('editLastService').value = data.last_service;
