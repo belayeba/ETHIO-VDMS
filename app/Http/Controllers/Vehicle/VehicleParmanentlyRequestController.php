@@ -22,6 +22,66 @@ class VehicleParmanentlyRequestController extends Controller
             $Requested = VehiclePermanentlyRequestModel::where('requested_by', $id)->latest()->get();
             return view("Request.ParmanententRequestPage", compact('Requested'));
         }
+
+        // show list of permanent request
+        public function FetchPermanentRequest()
+            {
+                $id = Auth::id();        
+                $data = VehiclePermanentlyRequestModel::where('requested_by', $id)->get();
+                
+                return datatables()->of($data)
+                ->addIndexColumn()
+                ->addColumn('counter', function($row) use ($data){
+                    static $counter = 0;
+                    $counter++;
+                    return $counter;
+                })
+
+                ->addColumn('start_date', function ($row) {
+                    return $row->created_at->format('M j, Y,');
+                })
+
+                ->addColumn('status', function ($row) {
+                    return $row->status == 1 ? 'Approved' : 'Pending';
+                })
+
+                ->addColumn('vehicle', function ($row) {
+                    return  $row->vehicle_id !== null ? $row->vehicle->plate_number : ' ' ;
+                })
+
+                ->addColumn('actions', function ($row){
+                    $action = '';
+
+                    if (is_null($row->approved_by) && is_null($row->director_reject_reason)) {
+                        $action .= '<button type="button" class="btn btn-secondary rounded-pill" data-bs-toggle="modal" data-bs-target="#standard-modal" data-id="' . $row->vehicle_request_permanent_id . '" data-reason="' . $row->purpose. '"  title="edit">
+                                    <i class="ri-edit-line"></i>
+                                </button>
+                               <button type="button" class="btn btn-danger rounded-pill delete-btn" 
+                                data-id="' . $row->vehicle_request_permanent_id . '" title="Delete">
+                                <i class="ri-close-circle-line"></i></button>';
+                    }
+
+                    $action .= '</form>';
+
+                    if (!is_null($row->vehicle_id)) {
+                        $action = '<input type="hidden" value="' . $row->vehicle_id . '" id="vehicleselection"> 
+                        <a href="#" class="btn btn-info rounded-pill assignBtn" data-id="' . $row->vehicle_id . '" title="Inspect">Inspect</a>';
+             
+                    }
+
+                    if (!is_null($row->vehicle_id) && !is_null($row->accepted_by_requestor)) {
+                        $action .= '<a href="' . route('accept_assigned_vehicle', ['id' => $row->vehicle_request_permanent_id]) . '" class="btn btn-primary rounded-pill" title="Accept">Accept</a>
+                                <button type="button" class="btn btn-danger rounded-pill reject-btn" data-bs-toggle="modal" data-bs-target="#staticBackdrop" data-id="' . $row->vehicle_request_permanent_id . '" title="Reject">Reject</button>';
+                    }
+
+                    return $action;
+                })
+
+                ->rawColumns(['actions','start_date','status','vehicle','counter'])
+                ->toJson();
+        
+            }
+
     // Send Vehicle Request Parmananently
     public function RequestVehiclePerm(Request $request)
         {

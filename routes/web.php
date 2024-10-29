@@ -61,7 +61,8 @@ Route::group(['middleware' => ['auth']], function()
                         Route::post('/user_post_request', 'RequestVehicleTemp')->name('temp_request_post');
                         Route::post('/user_delete_request', 'deleteRequest')->name('temp_delete_request');
                         Route::post('/user_update_info', 'update')->name('temp_update_request');
-                        Route::get('/director_approve_page/check', 'DirectorApprovalPage')->name('director_temp');
+                        Route::get('/director_approve_page/Temp', 'DirectorApprovalPage')->name('director_temp');
+                        Route::get('/fetch_director_page/perm', 'FetchForDirector')->name('FetchForDirector');
                         Route::post('/director_approve_requesta', 'DirectorApproveRequest')->name('director_approve_request');
                         Route::post('/director_reject_request', 'DirectorRejectRequest')->name('director_reject_request');
                         Route::get('/clusterDirector_approve_page', 'clusterDirectorApprovalPage')->name('ClusterDirector_temp');
@@ -137,6 +138,7 @@ Route::group(['middleware' => ['auth']], function()
             Route::controller(VehicleParmanentlyRequestController::class)->group(function()
                 {
                     Route::get('/perm_request_page', 'displayPermRequestPage')->name('vec_perm_request');
+                    Route::get('fetch_permanent_request', 'FetchPermanentRequest')->name('FetchPermanentRequest');
                     Route::post('/perm_user_post_request', 'RequestVehiclePerm')->name('vec_perm_request_post');
                     Route::post('/Perm_user_delete_request', 'deleteRequest')->name('user_perm_delet');
                     Route::post('/perm_user_update_info', 'update_perm_request')->name('perm_vec_update');
@@ -158,7 +160,7 @@ Route::group(['middleware' => ['auth']], function()
                     Route::delete('/delete-request', 'deleteRequest')->name('delete_request');
                     Route::get('/director-approval-page', 'DirectorApprovalPage')->name('director_approval_page');
                     Route::post('/director-approve-request', 'DirectorApproveRequest')->name('director_approve_givingback_request');
-                    Route::post('/director-reject-request', 'DirectorRejectRequest')->name('director_reject_request');
+                    Route::post('/director-reject-request', 'DirectorRejectRequest')->name('director_reject_requesting');
                     Route::get('/vehicle-director-page', 'VehicleDirector_page')->name('vehicle_director_page');
                     Route::post('/vehicle-director-approve-request', 'VehicleDirectorApproveRequest')->name('vehicle_director_approve_request');
                     Route::post('/vehicle-director-reject-request', 'VehicleDirectorRejectRequest')->name('vehicle_director_reject_request');
