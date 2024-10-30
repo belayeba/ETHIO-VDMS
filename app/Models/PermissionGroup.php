@@ -4,11 +4,14 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Spatie\Permission\Contracts\Permission;
 
-class PermissionGroup extends Model {
+class PermissionGroup extends Model
+{
     use HasFactory;
 
     protected $table = 'permission_groups';
+
     // Specify the table name
     protected $primaryKey = 'id';
 
@@ -16,7 +19,8 @@ class PermissionGroup extends Model {
         'name',
     ];
 
-    public function permissions() {
-        return $this->hasMany( Permission::class, 'group_id', 'id' );
+    public function permissions()
+    {
+        return $this->hasMany(Permission::class, 'group_id', 'id');
     }
 }

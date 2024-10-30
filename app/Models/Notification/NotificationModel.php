@@ -2,42 +2,34 @@
 
 namespace App\Models\Notification;
 
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Models\User;
-use Illuminate\Support\Str;
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
-class NotificationModel extends Model {
-    use SoftDeletes;
+class NotificationModel extends Model
+{
+    use HasFactory;
+    use HasUuids,SoftDeletes;
+
+    protected $primaryKey = 'notification_id';
+
+    public $incrementing = false;
+
+    protected $keyType = 'uuid';
 
     protected $table = 'notifications';
-    // Specify the table name
-    protected $primaryKey = 'notification_id';
-    public $incrementing = false;
-    protected $keyType = 'uuid';
 
     protected $fillable = [
         'user_id',
         'message',
         'is_read',
     ];
-    protected static function boot() {
-        parent::boot();
 
-        static::creating( function ( $model ) {
-            if ( empty( $model-> {
-                $model->getKeyName()}
-            ) ) {
-                $model-> {
-                    $model->getKeyName()}
-                    = ( string ) Str::uuid();
-                }
-            }
-        );
-    }
-
-    public function user(): BelongsTo {
-        return $this->belongsTo( User::class, 'user_id' );
+    // Define relationship with the User model
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id', 'user_id');
     }
 }

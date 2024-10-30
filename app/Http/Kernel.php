@@ -3,7 +3,6 @@
 namespace App\Http;
 
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
-use \App\Http\Middleware\RoleMiddleware;
 
 class Kernel extends HttpKernel
 {
@@ -32,7 +31,7 @@ class Kernel extends HttpKernel
         'api' => [
             // Middleware for API routes
         ],
-        
+
         // Add your custom middleware groups here
     ];
 
@@ -45,7 +44,7 @@ class Kernel extends HttpKernel
      */
     protected $routeMiddleware = [
         // Add your named middleware here
-       'role' => \App\Http\Middleware\RoleMiddleware::class,
+        'role' => \App\Http\Middleware\RoleMiddleware::class,
         'permission' => \Spatie\Permission\Middlewares\PermissionMiddleware::class,
         'role_or_permission' => \Spatie\Permission\Middlewares\RoleOrPermissionMiddleware::class,
         'auth' => \App\Http\Middleware\Authenticate::class,

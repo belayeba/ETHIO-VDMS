@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Driver;
 
-use App\Models\Driver\DriversModel;
+use App\Models\User;
 use App\Models\Vehicle\InspectionModel;
 use App\Models\Vehicle\VehiclesModel;
 use Illuminate\Database\Eloquent\Model;
@@ -10,13 +10,17 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Str;
 
-class DriverChangeModel extends Model {
+class DriverChangeModel extends Model
+{
     use SoftDeletes;
 
     protected $table = 'driver_changes';
+
     // Specify the table name
     protected $primaryKey = 'driver_change_id';
+
     public $incrementing = false;
+
     protected $keyType = 'uuid';
 
     protected $fillable = [
@@ -29,38 +33,45 @@ class DriverChangeModel extends Model {
         'driver_accepted',
         'driver_reject_reason',
     ];
-    protected static function boot() {
+
+    protected static function boot()
+    {
         parent::boot();
 
-        static::creating( function ( $model ) {
-            if ( empty( $model-> {
+        static::creating(function ($model) {
+            if (empty($model->{
                 $model->getKeyName()}
-            ) ) {
-                $model-> {
+            )) {
+                $model->{
                     $model->getKeyName()}
-                    = ( string ) Str::uuid();
-                }
+                = (string) Str::uuid();
             }
+        }
         );
     }
 
-    public function vehicle(): BelongsTo {
-        return $this->belongsTo( VehiclesModel::class, 'vehicle_id' );
+    public function vehicle(): BelongsTo
+    {
+        return $this->belongsTo(VehiclesModel::class, 'vehicle_id');
     }
 
-    public function oldDriver(): BelongsTo {
-        return $this->belongsTo( DriversModel::class, 'old_driver_id' );
+    public function oldDriver(): BelongsTo
+    {
+        return $this->belongsTo(DriversModel::class, 'old_driver_id');
     }
 
-    public function newDriver(): BelongsTo {
-        return $this->belongsTo( DriversModel::class, 'new_driver_id' );
+    public function newDriver(): BelongsTo
+    {
+        return $this->belongsTo(DriversModel::class, 'new_driver_id');
     }
 
-    public function changed_by(): BelongsTo {
-        return $this->belongsTo( User::class, 'changed_by' );
+    public function changed_by(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'changed_by');
     }
 
-    public function inspection(): BelongsTo {
-        return $this->belongsTo( InspectionModel::class, 'inspection_id' );
+    public function inspection(): BelongsTo
+    {
+        return $this->belongsTo(InspectionModel::class, 'inspection_id');
     }
 }

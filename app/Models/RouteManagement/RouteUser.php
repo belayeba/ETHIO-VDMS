@@ -2,25 +2,40 @@
 
 namespace App\Models\RouteManagement;
 
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Str;
 
 class RouteUser extends Model
 {
     use HasFactory, SoftDeletes;
 
     protected $table = 'route_user';
+
     protected $primaryKey = 'route_user_id'; // UUID as primary key
+
     public $incrementing = false;            // Since it's not an auto-incrementing key
+
     protected $keyType = 'uuid';             // Primary key type
 
     protected $fillable = [
-        'route_user_id',
         'employee_id',
         'route_id',
         'registered_by',
     ];
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($model) {
+            if (empty($model->route_user_id)) {
+                $model->route_user_id = (string) Str::uuid();
+            }
+        });
+    }
 
     // Relationship to User model (employee)
     public function user()

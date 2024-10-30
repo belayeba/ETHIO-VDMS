@@ -2,11 +2,8 @@
 
 namespace Database\Factories\vehicle;
 
-use App\Models\Vehicle\DailyKMCalculationModel;
-use Illuminate\Http\Request;
-use App\Models\Organization\DepartmentsModel;
-use App\Models\Driver\DriversModel;
 use App\Models\User;
+use App\Models\Vehicle\DailyKMCalculationModel;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 

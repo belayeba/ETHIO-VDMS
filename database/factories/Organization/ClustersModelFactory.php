@@ -4,7 +4,6 @@ namespace Database\Factories\Organization;
 
 use App\Models\Organization\ClustersModel;
 use App\Models\User;
-
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 

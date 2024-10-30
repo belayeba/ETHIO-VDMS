@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Vehicle;
 
 use App\Http\Controllers\Controller;
+
 //use App\Models\Report;
 
 class DailyReportController extends Controller

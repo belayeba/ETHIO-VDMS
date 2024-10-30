@@ -4,7 +4,6 @@ namespace App\Models\Vehicle;
 
 use App\Models\User;
 use App\Models\Vehicle\VehiclesModel as VehicleVehiclesModel;
-use App\Models\VehiclesModel;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Str;
@@ -14,7 +13,8 @@ class InspectionModel extends Model
     use SoftDeletes;
 
     // Set the primary key as a composite key
-    protected $primaryKey = ['inspection_id', 'part_name','vehicle_id'];
+    protected $primaryKey = ['inspection_id', 'part_name', 'vehicle_id'];
+
     public $incrementing = false;
 
     // Specify the table associated with the model
@@ -30,33 +30,38 @@ class InspectionModel extends Model
         'inspected_by',
         'part_name',
         'is_damaged',
+        'inspection_image',
         'damage_description',
-        'inspection_date'
+        'inspection_date',
     ];
+
     // Automatically generate UUID for inspection_id if not provided
     protected static function boot()
-        {
-            parent::boot();
+    {
+        parent::boot();
 
-            static::creating(function ($model) {
-                if (!$model->inspection_id) {
-                    $model->inspection_id = (string) Str::uuid();
-                }
-            });
-        }
+        static::creating(function ($model) {
+            if (! $model->inspection_id) {
+                $model->inspection_id = (string) Str::uuid();
+            }
+        });
+    }
+
     // Relationship with the Vehicle model
     public function vehicle()
-        {
-            return $this->belongsTo(VehicleVehiclesModel::class, 'vehicle_id', 'vehicle_id');
-        }
+    {
+        return $this->belongsTo(VehicleVehiclesModel::class, 'vehicle_id', 'vehicle_id');
+    }
+
     // Relationship with the User (Inspector) model
     public function inspector()
-        {
-            return $this->belongsTo(User::class, 'inspected_by', 'id');
-        }
+    {
+        return $this->belongsTo(User::class, 'inspected_by', 'id');
+    }
+
     // Relationship with the VehiclePart model
     public function part()
-        {
-            return $this->belongsTo(VehiclePart::class, 'part_name', 'vehicle_parts_id');
-        }
+    {
+        return $this->belongsTo(VehiclePart::class, 'part_name', 'vehicle_parts_id');
+    }
 }

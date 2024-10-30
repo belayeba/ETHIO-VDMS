@@ -6,6 +6,22 @@
         <div class="content">
 
         @if(Session::has('error_message'))
+            <div class="alert alert-danger alert-dismissible text-bg-danger border-0 fade show col-lg-5" 
+                role="alert">
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="Close"></button>
+                <strong>Error - </strong> {!! session('error_message') !!}
+            </div>
+            @endif
+            
+            @if(Session::has('success_message'))
+            <div class="alert alert-primary alert-dismissible text-bg-primary border-0 fade show col-lg-5"
+                role="alert">
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="Close"></button>
+                <strong> Success- </strong> {!! session('success_message') !!} 
+            </div>
+            @endif
+
+        @if(Session::has('error_message'))
         <div class="alert alert-danger alert-dismissible text-bg-danger border-0 fade show col-lg-8" 
             role="alert">
             <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="Close"></button>

@@ -6,24 +6,29 @@ use App\Models\Communication\DriverCommunicationModel;
 use App\Models\Driver\DriversModel;
 use App\Models\Notification\NotificationModel;
 use App\Models\Organization\DepartmentsModel;
-use App\Models\Vehicle\VehicleTemporaryRequestModel;
 use App\Models\Vehicle\MaintenancesModel;
-use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
-use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Models\Vehicle\VehicleTemporaryRequestModel;
+use App\Notifications\CustomMessageNotification;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Str;
 use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
 {
-    use HasRoles, Notifiable, SoftDeletes, HasFactory;
+    use HasFactory, HasRoles, Notifiable, SoftDeletes;
 
-    protected $table = 'users'; // Specify the table name
+    protected $table = 'users';
+
+    // Specify the table name
     protected $primaryKey = 'id';
+
     public $incrementing = false;
+
     protected $keyType = 'uuid';
 
     protected $fillable = [
@@ -38,7 +43,7 @@ class User extends Authenticatable
         'email_verified_at',
         'department_id',
         'created_at',
-        'updated_at'
+        'updated_at',
     ];
 
     protected $hidden = [
@@ -51,10 +56,15 @@ class User extends Authenticatable
         parent::boot();
 
         static::creating(function ($model) {
-            if (empty($model->{$model->getKeyName()})) {
-                $model->{$model->getKeyName()} = (string) Str::uuid();
+            if (empty($model->{
+                $model->getKeyName()}
+            )) {
+                $model->{
+                    $model->getKeyName()}
+                = (string) Str::uuid();
             }
-        });
+        }
+        );
     }
 
     public function drivers(): HasMany
@@ -62,18 +72,25 @@ class User extends Authenticatable
         return $this->hasMany(DriversModel::class, 'user_id');
     }
 
-    public function notifications(): HasMany
+    public function notify(): HasMany
     {
         return $this->hasMany(NotificationModel::class, 'user_id');
     }
+
     public function department(): BelongsTo
-        {
-            return $this->belongsTo(DepartmentsModel::class, 'department_id');
-        }
+    {
+        return $this->belongsTo(DepartmentsModel::class, 'department_id');
+    }
+
+    public function cluster(): BelongsTo
+    {
+        return $this->department?->cluster();
+    }
+
     public function driverCommunications(): HasMany
-        {
-            return $this->hasMany(DriverCommunicationModel::class, 'user_id');
-        }
+    {
+        return $this->hasMany(DriverCommunicationModel::class, 'user_id');
+    }
 
     public function requestedVehicleRequests(): HasMany
     {
@@ -98,5 +115,12 @@ class User extends Authenticatable
     public function maintainedVehicles(): HasMany
     {
         return $this->hasMany(MaintenancesModel::class, 'maintained_by');
+    }
+
+    public function NotifyUser($message, $subject = null, $url = null)
+    {
+        $notification = new CustomMessageNotification($message, $subject, $url);
+
+        return $notification->storeInCustomTable($this);
     }
 }

@@ -6,7 +6,6 @@ use App\Models\Driver\DriversModel;
 use App\Models\Trip\TripMaterialModel;
 use App\Models\Trip\TripPersonsModel;
 use App\Models\User;
-use App\Models\Vehicle\VehicleInspection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -18,8 +17,11 @@ class VehicleTemporaryRequestModel extends Model
     use SoftDeletes;
 
     protected $table = 'vehicle_requests_temporary'; // Specify the table name
+
     protected $primaryKey = 'request_id';
+
     public $incrementing = false;
+
     protected $keyType = 'uuid';
 
     protected $fillable = [
@@ -57,44 +59,50 @@ class VehicleTemporaryRequestModel extends Model
         'km_per_liter',
         'driver_accepted_by',
         'taking_inspection',
-        'returning_inspection'
+        'returning_inspection',
     ];
-    protected static function boot()
-        {
-            parent::boot();
 
-            static::creating(function ($model) {
-                if (empty($model->{$model->getKeyName()})) {
-                    $model->{$model->getKeyName()} = (string) Str::uuid();
-                }
-            });
-        }
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($model) {
+            if (empty($model->{$model->getKeyName()})) {
+                $model->{$model->getKeyName()} = (string) Str::uuid();
+            }
+        });
+    }
 
     public function requestedBy(): BelongsTo
     {
-        return $this->belongsTo(User::class, 'requested_by_id','id');
+        return $this->belongsTo(User::class, 'requested_by_id', 'id');
     }
 
     public function approvedBy(): BelongsTo
     {
         return $this->belongsTo(User::class, 'dir_approved_by');
     }
+
     public function vehicle(): BelongsTo
     {
         return $this->belongsTo(VehiclesModel::class, 'vehicle_id');
     }
+
     public function driver(): BelongsTo
     {
         return $this->belongsTo(DriversModel::class, 'driver_id');
     }
+
     public function assignedBy(): BelongsTo
     {
         return $this->belongsTo(User::class, 'assigned_by');
     }
+
     public function takendBy(): BelongsTo
     {
         return $this->belongsTo(User::class, 'taken_by');
     }
+
     public function driverAcceptedBy(): BelongsTo
     {
         return $this->belongsTo(User::class, 'driver_accepted_by');
@@ -121,13 +129,19 @@ class VehicleTemporaryRequestModel extends Model
     }
 
     public function scopeByCluster($query)
-        {
-            $userId = Auth::id();
-            $user = User::with('department')->find($userId);
-            $clusterId = $user->department->cluster_id;
+    {
+        $userId = Auth::id();
+        $user = User::with('department')->find($userId);
+        $clusterId = $user->department->cluster_id;
 
-            return $query->whereHas('requestedBy', function ($q) use ($clusterId) {
-                $q->where('cluster_id', $clusterId);
-            });
-        }
+        return $query->whereHas('requestedBy', function ($q) use ($clusterId) {
+            $q->where('cluster_id', $clusterId);
+        });
+    }
+
+    public function department()
+    {
+        return $this->requestedBy();
+
+    }
 }

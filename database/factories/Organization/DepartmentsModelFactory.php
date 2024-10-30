@@ -2,11 +2,12 @@
 
 namespace Database\Factories\Organization;
 
-use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Support\Str;
-use App\Models\Organization\DepartmentsModel; // Import the DepartmentsModel
-use App\Models\Organization\ClustersModel; // Import the ClustersModel
-use App\Models\User; // Import the User model
+use App\Models\Organization\ClustersModel;
+use App\Models\Organization\DepartmentsModel;
+use App\Models\User; // Import the DepartmentsModel
+use Illuminate\Database\Eloquent\Factories\Factory; // Import the ClustersModel
+use Illuminate\Support\Str; // Import the User model
+
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Organization\Department>
  */

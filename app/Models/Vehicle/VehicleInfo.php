@@ -9,6 +9,7 @@ use Illuminate\Support\Str;
 class VehicleInfo extends Model
 {
     use HasFactory;
+
     protected static function boot()
     {
         parent::boot();

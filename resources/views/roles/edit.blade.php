@@ -5,6 +5,22 @@
     <div class="content-page">
         <div class="content">
 
+        @if(Session::has('error_message'))
+            <div class="alert alert-danger alert-dismissible text-bg-danger border-0 fade show col-lg-5" 
+                role="alert">
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="Close"></button>
+                <strong>Error - </strong> {!! session('error_message') !!}
+            </div>
+            @endif
+            
+            @if(Session::has('success_message'))
+            <div class="alert alert-primary alert-dismissible text-bg-primary border-0 fade show col-lg-5"
+                role="alert">
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="Close"></button>
+                <strong> Success- </strong> {!! session('success_message') !!} 
+            </div>
+            @endif
+
             <!-- Start Content-->
             <div class="container-fluid">
 
@@ -12,25 +28,25 @@
                 <div class="row">
                     <div class="col-12">
                         <div class="page-title-box">
-                            <div class="page-title-right">
-                                <ol class="breadcrumb m-0">
-                                    <li class="breadcrumb-item"><a href="javascript: void(0);">Velonic</a></li>
-                                    <li class="breadcrumb-item"><a href="javascript: void(0);">Base UI</a></li>
-                                    <li class="breadcrumb-item active">Cards</li>
-                                </ol>
-                            </div>
-                            <h4 class="page-title">Cards</h4>
+                            <h4 class="page-title">Role Edit</h4>
                         </div>
                     </div>
                 </div>
                 <!-- end page title -->
 
                 <div class="row">
-                    <div class="col-lg-8 col-lg-3">
+                    <div class="col-lg-10 col-lg-3">
 
                         <!-- Simple card -->
                         <div class="card d-block">
-
+                            <div class="card-header">
+                                <h4 class="header-title">Role Table</h4>
+                                <div class="btn-group btn-group-sm pull-right" role="group">
+                                    <button type="button" class="btn btn-secondary" style="font-weight: italic; border-radius: 35px;" onclick=" window.history.back();">
+                                        <i class=" ri-arrow-left-fill"></i>
+                                    </button>
+                                </div>
+                            </div>
                             <div class="card-body">
                                 {{-- <div class="btn-group btn-group-sm pull-right" role="group">
                                     <a href="{{ route('roles.index') }}" class="btn btn-primary"
@@ -125,7 +141,7 @@
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
-                                                    <div class="col-md-offset-2 col-md-10">
+                                                    <div class="col-md-offset-20 col-md-10">
                                                         <input class="btn btn-primary" type="submit"
                                                             style="border-radius: 25px;" value="ይስጡ">
                                                     </div>
@@ -136,5 +152,7 @@
                                 </div> <!-- end card-->
                             </div><!-- end col -->
                         </div>
+                        <script src="{{ asset('assets/js/app.min.js') }}"></script>    
 
+                        <script src="{{ asset('assets/js/vendor.min.js') }}"></script>
                     @endsection

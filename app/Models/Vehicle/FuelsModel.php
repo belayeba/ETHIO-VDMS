@@ -10,13 +10,17 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Str;
 
-class FuelsModel extends Model {
+class FuelsModel extends Model
+{
     use SoftDeletes;
 
     protected $table = 'fuelings';
+
     // Specify the table name
     protected $primaryKey = 'fueling_id';
+
     public $incrementing = false;
+
     protected $keyType = 'uuid';
 
     protected $fillable = [
@@ -32,36 +36,42 @@ class FuelsModel extends Model {
         'fuel_amount',
         'fuel_cost',
         'fuiling_date',
-        'notes'
+        'notes',
     ];
-    protected static function boot() {
+
+    protected static function boot()
+    {
         parent::boot();
 
-        static::creating( function ( $model ) {
-            if ( empty( $model-> {
+        static::creating(function ($model) {
+            if (empty($model->{
                 $model->getKeyName()}
-            ) ) {
-                $model-> {
+            )) {
+                $model->{
                     $model->getKeyName()}
-                    = ( string ) Str::uuid();
-                }
+                = (string) Str::uuid();
             }
+        }
         );
     }
 
-    public function vehicle(): BelongsTo {
-        return $this->belongsTo( VehicleVehiclesModel::class, 'vehicle_id' );
+    public function vehicle(): BelongsTo
+    {
+        return $this->belongsTo(VehicleVehiclesModel::class, 'vehicle_id');
     }
 
-    public function driver(): BelongsTo {
-        return $this->belongsTo( DriversModel::class, 'driver_id' );
+    public function driver(): BelongsTo
+    {
+        return $this->belongsTo(DriversModel::class, 'driver_id');
     }
 
-    public function approvedBy(): BelongsTo {
-        return $this->belongsTo( User::class, 'approved_by' );
+    public function approvedBy(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'approved_by');
     }
 
-    public function serviceGivenBy(): BelongsTo {
-        return $this->belongsTo( User::class, 'service_given_by' );
+    public function serviceGivenBy(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'service_given_by');
     }
 }

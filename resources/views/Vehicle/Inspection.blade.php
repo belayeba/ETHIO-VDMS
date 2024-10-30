@@ -14,7 +14,23 @@
 </style>
 
 <div class="content-page">
-    <div class="content">
+        <div class="content">
+
+        @if(Session::has('error_message'))
+            <div class="alert alert-danger alert-dismissible text-bg-danger border-0 fade show col-lg-5" 
+                role="alert">
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="Close"></button>
+                <strong>Error - </strong> {!! session('error_message') !!}
+            </div>
+            @endif
+            
+            @if(Session::has('success_message'))
+            <div class="alert alert-primary alert-dismissible text-bg-primary border-0 fade show col-lg-5"
+                role="alert">
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="Close"></button>
+                <strong> Success- </strong> {!! session('success_message') !!} 
+            </div>
+            @endif
 
         <!-- Start Content-->
 <div class="container-fluid">
@@ -22,7 +38,7 @@
         <div class="col-lg-6">
                 <div class="card">
                     <div class="card-header">
-                        <h4 class="header-title">Request Vehicle Service</h4>
+                        <h4 class="header-title">Vehicle Inspection</h4>
                     </div>
                     <div class="card-body"> 
                         <form method="POST" action="{{route('inspection.store')}}">
@@ -150,58 +166,23 @@
                                 <th>Actions</th>
                             </tr>
                         </thead>
+                        @foreach($inspections as $data) 
+                        <tbody>
+                            <tr>
+                                <td>{{$data->inspection_id}}</td>
+                                <td>{{$data->vehicle->plate_number}}</td>
+                                <td>{{$data->inspection_date}}</td>
+                                <td> <input type="hidden" value="{{$data->inspection_id}}" id="vehicleselection">
+                                    <a href="#" class="btn btn-info rounded-pill"  id="assignBtn" title="Inspect">Inspect</a></td>
 
-                
+                            </tr>
+                        </tbody>
+                    @endforeach
                     </table>
                 </div> <!-- end card body-->
             </div> <!-- end card -->
     </div><!-- end col-->
 </div> 
-<script>
-     document.addEventListener('DOMContentLoaded', function() {
-        const checkboxes = document.querySelectorAll('.damaged-checkbox');
-        const okcheckboxed = document.querySelectorAll('.ok-checkbox');
-
-        checkboxes.forEach(checkbox => {
-            checkbox.addEventListener('change', function() {
-                const row = this.getAttribute('data-row');
-                const notesInput = document.querySelector(`.damaged-notes[data-row="${row}"]`);
-                
-                if (this.checked) {
-                    notesInput.classList.remove('d-none');
-                } else {
-                    notesInput.classList.add('d-none');
-                }
-            });
-        });
-
-        okcheckboxed.forEach(checkbox => {
-            checkbox.addEventListener('change', function() {
-                const row = this.getAttribute('data-row');
-                const notesInput = document.querySelector(`.damaged-notes[data-row="${row}"]`);
-                notesInput.classList.add('d-none');
-                notesInput.value = ''; 
-            });
-        });
-    });
-    
-    document.addEventListener('DOMContentLoaded', function() {
-        const checkboxes = document.querySelectorAll('input[type="checkbox"]');
-        
-        checkboxes.forEach(checkbox => {
-            checkbox.addEventListener('change', function() {
-                const row = this.getAttribute('data-row');
-                const otherCheckbox = document.querySelector(`input[type="checkbox"][data-row="${row}"]:not(#${this.id})`);
-                
-                if (otherCheckbox.checked) {
-                    otherCheckbox.checked = false;
-                }
-            });
-        });
-    });
-  
-
-</script>
 
     <script src="{{ asset('assets/js/vendor.min.js') }}"></script>
 

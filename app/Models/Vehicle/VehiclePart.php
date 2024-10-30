@@ -13,6 +13,7 @@ class VehiclePart extends Model
 
     // Specify the primary key
     protected $primaryKey = 'vehicle_parts_id';
+
     public $incrementing = false;
 
     // Set the key type to string (UUIDs)
@@ -26,7 +27,8 @@ class VehiclePart extends Model
         'vehicle_parts_id',
         'name',
         'notes',
-        'created_by'
+        'type',
+        'created_by',
     ];
 
     // Automatically generate UUID for vehicle_parts_id if not provided
@@ -35,15 +37,15 @@ class VehiclePart extends Model
         parent::boot();
 
         static::creating(function ($model) {
-            if (!$model->vehicle_parts_id) {
+            if (! $model->vehicle_parts_id) {
                 $model->vehicle_parts_id = (string) Str::uuid();
             }
         });
     }
-     // Relationship with the User (Inspector) model
-     public function created_by()
-     {
-         return $this->belongsTo(User::class, 'created_by', 'id');
-     }
- 
+
+    // Relationship with the User (Inspector) model
+    public function created_by()
+    {
+        return $this->belongsTo(User::class, 'created_by', 'id');
+    }
 }

@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-
 class tempController extends Controller
 {
     //
@@ -86,6 +84,7 @@ class tempController extends Controller
     {
         return view('templates.extended-scrollbar');
     }
+
     public function temp17()
     {
         return view('templates.extended-scrollspy');
@@ -386,4 +385,3 @@ class tempController extends Controller
         return view('templates.ui-utilities');
     }
 }
-

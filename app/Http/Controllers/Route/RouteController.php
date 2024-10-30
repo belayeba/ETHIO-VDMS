@@ -3,35 +3,39 @@
 namespace App\Http\Controllers\Route;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Models\RouteManagement\Route;
 use App\Models\RouteManagement\RouteUser;
 use App\Models\User;
+use App\Models\Vehicle\VehiclesModel;
 use App\Models\Vehicle\VehiclesModel as Vehicle;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class RouteController extends Controller
 {
     //
     public function displayAllRoutes()
     {
-        $routes = Route::with(['routeUsers.user', 'vehicle', 'registeredBy'])
-                        ->get();
+        $routes = Route::get();
+        $vehicles = VehiclesModel::all();
 
-        return view('routes.index', compact('routes'));
+        return view('Route.index', compact('routes', 'vehicles'));
     }
 
-    public function displayRoute($route_id)
+    public function displayRoute()
     {
-        $route = Route::with(['routeUsers.user', 'vehicle', 'registeredBy'])
-                    ->findOrFail($route_id);
+        $routes = Route::get();
+        $users = User::all();
+        $routeUser = RouteUser::all();
+        $routeUser = $routeUser->groupBy('route_id');
 
-        return view('routes.show', compact('route'));
+        return view('Route.show', compact('routes', 'users', 'routeUser'));
     }
 
     public function loadAssignmentForm($route_id)
     {
         $route = Route::with(['routeUsers.user', 'vehicle'])
-                    ->findOrFail($route_id);
+            ->findOrFail($route_id);
 
         $users = User::all();
         $vehicles = Vehicle::all();
@@ -39,47 +43,39 @@ class RouteController extends Controller
         return view('routes.assign', compact('route', 'users', 'vehicles'));
     }
 
-
-        public function registerRoute(Request $request)
+    public function registerRoute(Request $request)
     {
-        $request->validate([
+        //dd( $request );
+        $validator = Validator::make($request->all(), [
             'route_name' => 'required|string',
-            'driver_phone' => 'string|nullable',
-            'vehicle_id' => 'required|uuid',
+            'driver_phone' => ['required', 'regex:/^(?:\+251|0)[1-9]\d{8}$/'],
+            'vehicle_id' => 'required|uuid|exists:vehicles,vehicle_id',
         ]);
-
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422);
+        }
         $route = Route::create([
-            'route_id' => Str::uuid(),
             'route_name' => $request->route_name,
             'driver_phone' => $request->driver_phone,
             'vehicle_id' => $request->vehicle_id,
             'registered_by' => auth()->user()->id,
         ]);
 
-        return response()->json(['message' => 'Route registered successfully', 'route' => $route]);
+        return redirect()->back()->with('success_message', 'Route registered successfully.');
     }
 
-    public function assignDriverAndUsersToRoute(Request $request, $route_id)
+    public function assignUsersToRoute(Request $request)
     {
-        $route = Route::findOrFail($route_id);
 
-        // assign driver
-        if ($request->has('driver_phone')) {
-            $route->driver_phone = $request->driver_phone;
-            $route->save();
-        }
-
-        // Assign Users to Route
-        foreach ($request->user_ids as $user_id) {
+        foreach ($request->people_id as $user_id) {
             RouteUser::create([
-                'route_user_id' => Str::uuid(),
                 'employee_id' => $user_id,
-                'route_id' => $route_id,
+                'route_id' => $request->route_id,
                 'registered_by' => auth()->user()->id,
             ]);
         }
 
-        return response()->json(['message' => 'Driver and users assigned successfully']);
+        return redirect()->back()->with('success_message', 'Users assigned successfully.');
     }
 
     public function updateRouteAssignment(Request $request, $route_id)
@@ -92,14 +88,10 @@ class RouteController extends Controller
             $route->save();
         }
 
-        // // Remove existing users from route
-        // RouteUser::where('route_id', $route_id)->delete();
-
         // Reassign new users
-        if ( $request->user_ids) {
+        if ($request->user_ids) {
             foreach ($request->user_ids as $user_id) {
                 RouteUser::create([
-                    'route_user_id' => Str::uuid(),
                     'employee_id' => $user_id,
                     'route_id' => $route_id,
                     'registered_by' => auth()->user()->id,
@@ -110,27 +102,29 @@ class RouteController extends Controller
         return response()->json(['message' => 'Route assignments updated successfully']);
     }
 
-    public function removeDriverFromRoute($route_id)
+    public function removeRoute($route_id)
     {
+        // Find the route by ID or fail if it doesn't exist
         $route = Route::findOrFail($route_id);
-        
-        // Set driver_phone to null to remove the driver
-        $route->driver_phone = null;
-        $route->save();
 
-        return response()->json(['message' => 'Driver removed successfully']);
+        // Delete the route
+        $route->delete();
+
+        // Return a success message
+        return redirect()->back()->with('success_message', 'Route deleted successfully.');
     }
 
-    public function removeUserFromRoute(Request $request, $route_id)
+    public function removeUserFromRoute($id)
     {
-        // Remove specific users from the route
-        foreach ($request->user_ids as $user_id) {
-            RouteUser::where('route_id', $route_id)
-                    ->where('employee_id', $user_id)
-                    ->delete();
-        }
+        $routeUser = RouteUser::where('employee_id', $id)->first();
 
-        return response()->json(['message' => 'Users removed from route successfully']);
+        if ($routeUser) {
+            $routeUser->delete();
+
+            return redirect()->back()->with('success_message', 'User removed from route successfully.');
+        } else {
+            return response()->json(['error' => 'User not found in route'], 404);
+        }
     }
 
     public function removeAllUsersFromRoute($route_id)
@@ -139,5 +133,4 @@ class RouteController extends Controller
 
         return response()->json(['message' => 'All users removed from route successfully']);
     }
-
 }

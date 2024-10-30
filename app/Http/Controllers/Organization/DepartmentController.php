@@ -3,11 +3,10 @@
 namespace App\Http\Controllers\Organization;
 
 use App\Http\Controllers\Controller;
-use App\Models\Organization\DepartmentsModel;
-use Illuminate\Http\Request;
 use App\Models\Organization\ClustersModel;
+use App\Models\Organization\DepartmentsModel;
 use App\Models\User;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
 class DepartmentController extends Controller
@@ -20,7 +19,7 @@ class DepartmentController extends Controller
         //
         $departments = DepartmentsModel::all(); // Get all departments
         $clusters = ClustersModel::all(); // Get all clusters
-        // dd($clusters);
+
         // Pass the departments and clusters to the view
         return view('Department.index', compact('departments', 'clusters'));
     }
@@ -44,18 +43,18 @@ class DepartmentController extends Controller
             'cluster_id' => 'required|uuid|exists:clusters,cluster_id',
         ]);
         // If validation fails, return an error response
-        if ($validator->fails()) 
-            {
-                return response()->json([
-                    'success' => false,
-                    'message' => $validator->errors(),
-                ]);
-            }
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'message' => $validator->errors(),
+            ]);
+        }
 
         $user = auth()->user()->id; // Get the authenticated user's ID
         $request->merge(['created_by' => $user]); // Add the user's ID to the request data
         // Create the department
         DepartmentsModel::create($request->all());
+
         // Redirect to the index page with a success message
         return redirect()->back()->with('success', 'Department created successfully.');
     }
@@ -93,6 +92,7 @@ class DepartmentController extends Controller
         $request->merge(['created_by' => $user]); // Add the user's ID to the request data
         // Update the department
         $department->update($request->all());
+
         // Redirect to the index page with a success message
         return redirect()->back()->with('success', 'Department updated successfully.');
     }
@@ -104,6 +104,7 @@ class DepartmentController extends Controller
     {
         // Delete the department
         $department->delete();
+
         // Redirect to the index page with a success message
         return redirect()->back()->with('success', 'Department deleted successfully.');
     }

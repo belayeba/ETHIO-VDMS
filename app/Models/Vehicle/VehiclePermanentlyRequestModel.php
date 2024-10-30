@@ -4,24 +4,29 @@ namespace App\Models\Vehicle;
 
 use App\Models\User;
 use App\Models\Vehicle\VehiclesModel as VehicleVehiclesModel;
-use App\Models\VehiclesModel;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Str;
 
-class VehiclePermanentlyRequestModel extends Model {
+class VehiclePermanentlyRequestModel extends Model
+{
     use SoftDeletes;
 
     protected $table = 'vehicle_requests_parmanently';
+
     // Specify the table name
     protected $primaryKey = 'vehicle_request_permanent_id';
+
     public $incrementing = false;
+
     protected $keyType = 'uuid';
 
     protected $fillable = [
         'vehicle_id',
         'requested_by',
+        'fuel_quata',
+        'feul_left_from_prev',
         'position_letter',
         'purpose',
         'approved_by',
@@ -30,33 +35,55 @@ class VehiclePermanentlyRequestModel extends Model {
         'vec_director_reject_reason',
         'given_date',
         'mileage',
-        'status'
+        'inspection_id',
+        'accepted_by_requestor',
+        'reject_reason_by_requestor',
+        'status', // Vehicle Returned or not
     ];
-    protected static function boot() {
-        parent::boot();
 
-        static::creating( function ( $model ) {
-            if ( empty( $model-> {
+    protected static function boot()
+    {
+        parent::boot();
+        static::creating(function ($model) {
+            if (empty($model->{
                 $model->getKeyName()}
-            ) ) {
-                $model-> {
+            )) {
+                $model->{
                     $model->getKeyName()}
-                    = ( string ) Str::uuid();
-                }
+                = (string) Str::uuid();
             }
+        }
         );
     }
 
-    public function vehicle(): BelongsTo {
-        return $this->belongsTo( VehicleVehiclesModel::class, 'vehicle_id' );
+    public function vehicle(): BelongsTo
+    {
+        return $this->belongsTo(VehicleVehiclesModel::class, 'vehicle_id');
     }
 
-    public function requestedBy(): BelongsTo {
-        return $this->belongsTo( User::class, 'requested_by' );
+    public function requestedBy(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'requested_by');
     }
 
-    public function approvedBy(): BelongsTo {
-        return $this->belongsTo( User::class, 'approved_by' );
+    public function approvedBy(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'approved_by');
     }
 
+    public function accepted_by(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'accepted_by_requestor');
+    }
+
+    public function inspection(): BelongsTo
+    {
+        return $this->belongsTo(InspectionModel::class, 'inspection_id');
+    }
+
+    public function department()
+    {
+        return $this->requestedBy();
+
+    }
 }
