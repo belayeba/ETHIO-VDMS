@@ -242,7 +242,7 @@
                                     @endcan()
                                     @can('Change Driver')
                                         <li>
-                                            <a href="{{ route('driver.switch') }}">Driver Accept</a>
+                                            <a href="{{ route('driverchange.request') }}">Driver Accept</a>
                                         </li>
                                     @endcan()
                                 </ul>
@@ -271,7 +271,7 @@
                                     @endcan()
                                     @can('Vehicle Part Registration')
                                         <li>
-                                            <a href="{{ route('vehicle_parts.index') }}">Change Fuel Quata</a>
+                                            <a href="{{ route('quota.index') }}">Change Fuel Quata</a>
                                         </li>
                                     @endcan()
                                     @can('Vehicle Inspection')

@@ -287,6 +287,7 @@ Route::group(['middleware' => ['auth']], function()
                     {
                 Route::get('/',[Fuel_QuataController::class,'index'])->name('quota.index');
                 Route::post('/store',[Fuel_QuataController::class,'store'])->name('quota.store');
+                Route::put('/update/{id}',[Fuel_QuataController::class,'update'])->name('quota.update');
             });
 
     // Samir Driver Registration
@@ -303,6 +304,7 @@ Route::group(['middleware' => ['auth']], function()
             'prefix'=>'driver_change',
         ], function (){
         Route::get('/',[DriverChangeController::class, 'driver_change_page'])->name('driver.switch');
+        Route::get('/request',[DriverChangeController::class, 'driver_get_request'])->name('driverchange.request');
         Route::get('/my_request',[DriverChangeController::class, 'driver_get_request'])->name('driver.requestPage');
         Route::post('/store',[DriverChangeController::class, 'store'])->name('driver_change.store');
         Route::put('/update/{request_id}', [DriverChangeController::class, 'update'])->name('driverchange.update');
@@ -323,7 +325,7 @@ Route::group(['middleware' => ['auth']], function()
             Route::controller(InspectionController::class)->group(function ()
                  {
                     Route::post('/inspection/store', 'storeInspection')->name('inspection.store'); // Create a new inspection
-                    // Route::get('/inspection', 'showInspection')->name('inspection.show'); // Show a specific inspection
+                    Route::get('/inspectionbyId/{id}', 'showInspection')->name('inspection.show'); // Show a specific inspection
                     Route::get('/inspect_vehicle/{id}', 'showInspectionbyVehicle')->name('inspection.ByVehicle'); 
                     Route::get('/inspection', 'showInspectionbyVehicle')->name('inspection.ByVehicle'); // Show a specific inspection
                     Route::get('/inspections', 'listInspections')->name('inspection.list'); // List all inspections

@@ -35,14 +35,12 @@ class Fuel_QuataController extends Controller
     // Store a new fuel quota record
     public function store(Request $request)
         {
-            // dd($request);
             $request->validate([
                 'vehicle_id' => 'required|uuid|exists:vehicles,vehicle_id',
                 'Fuel_Quota' => 'required|integer',
             ]);
             $logged_user = Auth::id();
             $the_vehicle = VehiclesModel::find($request->vehicle_id);
-           // dd($the_vehicle);
             $fual_quata = $the_vehicle->fuel_amount;
             $today = \Carbon\Carbon::today();
            $ethiopianDate = $this->dailyKmCalculation->ConvertToEthiopianDate($today); 
@@ -67,16 +65,13 @@ class Fuel_QuataController extends Controller
     public function update(Request $request, $id)
         {
             $fuelQuata = Fuel_QuataModel::findOrFail($id);
-
             $request->validate([
-                'request_id' => 'required|uuid|exists:fuel_quatas,fuel_quata_id',
-                'new_quata' => 'required|integer',
+                'fuel_quata_id' => 'required|uuid|exists:fuel_quatas,fuel_quata_id',
+                'new_quota' => 'required|integer',
             ]);
             $the_vehicle = $fuelQuata->vehicle_id;
-            $fual_quata = $the_vehicle->fuel_amount;
             $fuelQuata->update($request->all());
-            $the_vehicle->fuel_amount = $request->new_quata;
-            $get_permananet = VehiclePermanentlyRequestModel::select('fuel_quata')->where('vehicle_id',$request->vehicle_id)->where('status',1)->first();
+            $get_permananet = VehiclePermanentlyRequestModel::select('fuel_quata')->where('vehicle_id',$fuelQuata->vehicle_id)->where('status',1)->first();
             if($get_permananet)
                 {
                     $get_permananet->fuel_quata = $request->new_quata;
