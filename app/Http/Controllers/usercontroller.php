@@ -106,6 +106,7 @@ class usercontroller extends Controller
             $user = User::create($data);
             $user->assignRole($request->input('roles'));
 
+            return ridrect()->route('user_list')->with('success_message', 'User is registered successfully');
 
         }
         catch (Exception $exception) {
