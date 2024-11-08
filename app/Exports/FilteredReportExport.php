@@ -21,8 +21,15 @@ class FilteredReportExport implements FromCollection, WithHeadings
 
     public function headings(): array
     {
-        return [
-            'Vehicle', 'Driver', 'Date', 'Morning KM', 'Afternoon KM', 'Registered By',
-        ];
+        if ($this->dailkms->isNotEmpty()) {
+            return collect(array_keys((array) $this->dailkms->first()))
+            ->map(function ($key) {
+                return ucwords(str_replace('_', ' ', $key));
+            })
+            ->toArray();        }
+
+        // Return default headings if the collection is empty
+        return ['Vehicle', 'Driver', 'Date', 'Morning KM', 'Afternoon KM', 'Registered By'];
     }
+    
 }

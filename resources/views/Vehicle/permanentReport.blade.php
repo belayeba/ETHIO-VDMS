@@ -47,7 +47,7 @@
                                         <div class="col-12">
                                             <div class="box_header common_table_header">
                                                 <div class="main-title d-md-flex">
-                                                    <h3 class="mb-0 mr-30 mb_xs_15px mb_sm_20px">Filter Report</h3>
+                                                    <h3 class="mb-0 mr-30 mb_xs_15px mb_sm_20px">Filter Permananet Report</h3>
                                                 </div>
                                             </div>
                                         </div>
@@ -115,8 +115,7 @@
 
                                                         <!-- Date Range Picker -->
                                                         <div class="col-lg-4 z-3">
-                                                            <label for="daterangetime" class="form-label">Date Range Pick
-                                                                With Times</label>
+                                                            <label for="daterangetime" class="form-label">Date Range</label>
                                                             <input type="text" class="form-control date" id="datepicker"
                                                                 name="date_range" data-toggle="date-picker"
                                                                 data-time-picker="true"

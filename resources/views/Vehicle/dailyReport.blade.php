@@ -108,11 +108,15 @@
                                                     dateFormat: 'yyyy-mm-dd' 
                                                 });
                                              </script> --}}
-
                                              <div class="col-lg-4 mt-3">
-                                                <button type="submit" class="btn btn-info">Filter <i class="ri-arrow-right-line ms-1"></i></button>
-                                                </div>
-                                            </div>                                            
+                                                <button type="submit" class="btn btn-info">Filter <i
+                                                        class="ri-arrow-right-line ms-1"></i></button>
+                                            </div>
+                                                <div class="col-lg-4 mt-3">
+                                                    <!-- Set export to 1 when exporting -->
+                                                    <button type="submit" class="btn btn-success" onclick="document.getElementById('export').value=1">Export</button>
+                                                    <input type="hidden" id="export" name="export" value="0">
+                                                </div>                                                </div>
                                         </div>
                                     </form>
                     
@@ -135,11 +139,6 @@
                                     methods and styling to display buttons on a page
                                     that will interact with a DataTable.
                                 </p>
-                                <form action="{{ route('dailyreport.filterReport') }}" method="GET">
-                                    <!-- Include your filter fields here -->
-                                    <input type="hidden" name="export" value="1">
-                                    <button type="submit" class="btn btn-success">Export</button>
-                                </form>
                             </div>
                             
                             <div class="card-body">
@@ -161,11 +160,11 @@
                                         @foreach($dailkms as $km)
                                             <tr>
                                                 <td>{{ $km->date }}</td>
-                                                <td>{{ $km->vehicle->plate_number ?? 'N/A' }}</td>
+                                                <td>{{ $km->plate_number  }}</td>
                                                 <td>{{ $km->morning_km }}</td>
                                                 <td>{{ $km->afternoon_km }}</td>
                                                 <td>{{ $km->daily_km  }}</td>
-                                                <td>{{ $km->night_km ?? 'NULL'  }}</td>
+                                                <td>{{ $km->night_km  }}</td>
 
                                             </tr>
                                         @endforeach
