@@ -35,7 +35,7 @@ class PermanentFuelController extends Controller {
         return response()->json(['my_requests' => $get_my_request]);
       }
     public function store( Request $request ) {
-        // dd($request);
+        // dd($request); 
         // Validate input
         $validator = Validator::make($request->all(), [
             'vehicle_id' => 'required|uuid|exists:vehicles,vehicle_id',
@@ -69,25 +69,33 @@ class PermanentFuelController extends Controller {
         ->where( 'vehicle_id',$request->vehicle_id)// $request->vehicle_id )
         ->where( 'status', true )
         ->first();
+        
         // Ensure that the permanent vehicle request exists
         if ( !$permanent ) {
-            return back()->withErrors( [ 'error' => 'No active permanent vehicle request found for this driver and vehicle.' ] );
+             return redirect()->back()->with('error_message','No active permanent vehicle request found for this driver and vehicle.');
         }
 
         $get_permanent_id = $permanent->vehicle_request_permanent_id;
         // Loop through each set of fueling data
+       
         $today = \Carbon\Carbon::today();
+        $files = $request->file( "reciet_attachment_" );
         $ethiopianDate = $this->dailyKmCalculation->ConvertToEthiopianDate($today); 
         foreach ( $request->fuel_amount as $index => $fuel_amount ) {
             $fueling = new PermanentFuelModel();
+            // $fuel=Str::uuid();
+            // $fueling->fueling_id = $fuel;
+            $fueling->vehicle_id = $request->input('vehicle_id');
             $fueling->driver_id = $the_driver_id;
             $fueling->permanent_id = $get_permanent_id;
+            // dd($request->fuiling_date[ $index ]);
             $fueling->fuiling_date = $request->fuiling_date[ $index ];
             $fueling->month = $request->month;
             $fueling->fuel_amount = $fuel_amount[ $index ];
             $fueling->fuel_cost = $request->fuel_cost[ $index ];
-            if ($request->hasFile( "reciet_attachment[$index]" ) ) {
-                $file = $request->file( "reciet_attachment[$index]" );
+            
+            if ($files[$index] )  {
+                $file = $files[$index];
                 $fileName = time() . '_' . $file->getClientOriginalName(); // Generate unique filename
                 $storagePath = storage_path( 'app/public/vehicles/reciept' ); // Define storage path
                 // Check if directory exists, if not create it
@@ -97,7 +105,8 @@ class PermanentFuelController extends Controller {
                 // Move file to the storage path
                 $file->move( $storagePath, $fileName );
                 // Assign file name to the model
-                $fueling->reciet_attachment = $fileName;
+                $fueling->reciet_attachment = $fileName; 
+                
             }
             $fueling->created_at = $ethiopianDate;
             $fueling->save();

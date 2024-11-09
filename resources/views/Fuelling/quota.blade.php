@@ -41,7 +41,7 @@
                     <h4 class="header-title">Add Fuel Quota</h4>
                 </div>
                 <div class="card-body"> 
-                    <form action="{{ route('quota.store')}}" method="POST" enctype="multipart/form-data">
+                    <form action="{{ route('save_quota_change')}}" method="POST" enctype="multipart/form-data">
                         @csrf
                         @method('POST')
                         <div id="progressbarwizard">
@@ -68,7 +68,6 @@
                                             <select class="form-control select" id="vehicleCategory" name="vehicle_id" data-fouc required>
                                                 <option value="">Select Vehicle</option>
                                                 @foreach ($vehicles as $vehicle)
-                                                
                                                 <option value="{{ $vehicle->vehicle_id }}">{{ $vehicle->plate_number }}</option>
                                             @endforeach
                                         </select>
@@ -127,7 +126,7 @@
                                     <td>{{$fuelQuata->changer->first_name."  ".$fuelQuata->changer->last_name }}</td>
                                     <td>{{$fuelQuata->created_at->format('Y-m-d') }}</td>
                                     <td>
-                                        <form method="POST" action="{{ route('vehicle_parts.destroy', ['id' => $request->vehicle_parts_id]) }}">
+                                        <form method="POST" action="">
                                             @csrf
                                             @method('DELETE')
                                             <a href="" class="btn btn-secondary rounded-pill" data-bs-toggle="modal" data-bs-target="#standard-modal-{{ $loop->index }}" title="edit"><i class=" ri-edit-line"></i></a>
@@ -138,7 +137,7 @@
                             </tbody>
                             
                             <!-- edit the information of the request modal -->
-                                {{-- <div id="standard-modal-{{ $loop->index }}" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="standard-modalLabel" aria-hidden="true">
+                                <div id="standard-modal-{{ $loop->index }}" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="standard-modalLabel" aria-hidden="true">
                                     <div class="modal-dialog">
                                         <div class="modal-content">
                                             <div class="modal-header">
@@ -146,21 +145,22 @@
                                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                             </div>
                                             <div class="modal-body">
-                                            <form action="{{route('vehicle_parts.update',['id'=>$request->vehicle_parts_id])}}" method="post" enctype="multipart/form-data">
+                                            <form action="{{route('save_quota_update', ['id' => $fuelQuata->fuel_quata_id])}}" method="post" enctype="multipart/form-data">
                                                 @csrf
                                                 <div class="tab-pane" id="account-2">
                                                     <div class="row">
                                                         <div class="position-relative mb-3">
                                                             <div class="mb-6 position-relative" id="datepicker1">
-                                                                <label class="form-label">Name</label>
-                                                                <input type="text" name="name" value="{{$request->name}}" class="form-control" placeholder="Enter purpose of Request" required>
-                                                                <input type="hidden" name="request_id" value="{{$request->vehicle_parts_id}}">
+                                                                <label class="form-label">Vehicle</label>
+                                                                <input type="text" name="vehicle_id" value="{{ $fuelQuata->vehicle->plate_number }}" class="form-control" required 
+                                                                oninput="this.value = this.defaultValue !== this.value ? this.defaultValue : this.value;">                                                                <input type="hidden" name="request_id" value="{{$fuelQuata->new_quata}}">
                                                             </div>
                                                         </div>
 
                                                         <div class="position-relative mb-3">
-                                                                <label class="form-label">Note</label>
-                                                                <input type="text" name="notes" value="{{$request->notes}}" class="form-control" placeholder="Enter purpose of Request" required>
+                                                                <label class="form-label">Fuel Quota</label>
+                                                                <input type="number" name="new_quata" value="{{$fuelQuata->new_quata}}" class="form-control" placeholder="Enter updated fuel quota" required>
+                                                                <input type="hidden" name="request_id" value="{{$fuelQuata->fuel_quata_id}}" class="form-control">
                                                         </div>
                                                     </div>
                                                 </div> 
@@ -173,7 +173,7 @@
                                         </div><!-- /.modal-content -->
                                     </div><!-- /.modal-dialog -->
                                 </div>
-                            <!-- end show modal --> --}}
+                            <!-- end show modal -->
 
                         @endforeach             
                     </table>

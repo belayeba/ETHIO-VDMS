@@ -271,7 +271,7 @@
                                     @endcan()
                                     @can('Vehicle Part Registration')
                                         <li>
-                                            <a href="{{ route('vehicle_parts.index') }}">Change Fuel Quata</a>
+                                            <a href="{{ route('all_fuel_quota') }}">Change Fuel Quota</a>
                                         </li>
                                     @endcan()
                                     @can('Vehicle Inspection')

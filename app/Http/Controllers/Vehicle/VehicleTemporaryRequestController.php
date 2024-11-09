@@ -339,16 +339,16 @@ class VehicleTemporaryRequestController extends Controller
         }
 
             // fetching director approval requests
-        public function FetchForDirector()
+        public function FetchForDirector(Request $request)
             {
+                // dd($request->input('customDataValue'));
                 $id = Auth::id();
-                $directors_data = User::select('department_id')->where('id',$id)->first();
-                $dept_id = $directors_data->department_id;
+              
+                $data_drawer_value = $request->input('customDataValue');
 
-                $data = VehicleTemporaryRequestModel::whereHas('requestedBy', function ($query) use ($dept_id) {
-                        $query->where('department_id', $dept_id);
-                    })->latest()->get();;
-                
+                $data = $this->fetchDirectorData($id, $data_drawer_value);
+               
+               
                 return datatables()->of($data)
                 ->addIndexColumn()
                 ->addColumn('counter', function($row) use ($data){
@@ -377,16 +377,39 @@ class VehicleTemporaryRequestController extends Controller
                     return $row->created_at;
                 })
 
-                ->addColumn('status', function ($row) {
-                    if ($row->dir_approved_by !== null && $row->director_reject_reason === null) {
-                        return 'ACCEPTED';
-                    } elseif ($row->dir_approved_by !== null && $row->director_reject_reason !== null) {
-                        return 'REJECTED';
+                ->addColumn('status', function ($row) use ($data_drawer_value) {
+                    if ($data_drawer_value == 1) {
+                        if ($row->div_approved_by !== null && $row->cluster_director_reject_reason === null) {
+                            return 'CLUSTER ACCEPTED';
+                        } elseif ($row->div_approved_by !== null && $row->cluster_director_reject_reason !== null) {
+                            return 'CLUSTER REJECTED';
+                        }
+                        return 'CLUSTER PENDING';
+                    } elseif ($data_drawer_value == 2) {
+                        if ($row->hr_div_approved_by !== null && $row->hr_director_reject_reason === null) {
+                            return 'ACCEPTED';
+                        } elseif ($row->hr_div_approved_by !== null && $row->hr_director_reject_reason !== null) {
+                            return 'REJECTED';
+                        }
+                        return 'PENDING';
+                    } elseif ($data_drawer_value == 3) {
+                        if ($row->transport_director_id !== null && $row->vec_director_reject_reason === null) {
+                            return 'ACCEPTED';
+                        } elseif ($row->transport_director_id !== null && $row->vec_director_reject_reason !== null) {
+                            return 'REJECTED';
+                        }
+                        return 'PENDING';
+                    } else {
+                        if ($row->dir_approved_by !== null && $row->director_reject_reason === null) {
+                            return 'DIRECTOR ACCEPTED';
+                        } elseif ($row->dir_approved_by !== null && $row->director_reject_reason !== null) {
+                            return 'DIRECTOR REJECTED';
+                        }
+                        return 'DIRECTOR PENDING';
                     }
-                      return 'PENDING';
                 })
 
-                ->addColumn('actions', function ($row) {
+                ->addColumn('actions', function ($row)  use ($data_drawer_value) {
                     $actions = '<button type="button" class="btn btn-info rounded-pill" 
                     data-bs-toggle="modal" 
                     data-bs-target="#standard-modal"
@@ -414,12 +437,29 @@ class VehicleTemporaryRequestController extends Controller
                     data-start_km="' . $row->start_km . '"
                     data-end_km="' . $row->end_km . '"
                     title="Show Details">
-                    <i class="ri-eye-line"></i></button>';                    
+                    <i class="ri-eye-line"></i></button>'; 
+                    if ($data_drawer_value == 1) {
+                        if ($row->div_approved_by == null && $row->cluster_director_reject_reason == null) {
+                            $actions .= '<button  type="button" class="btn btn-primary rounded-pill accept-btn"  data-id="' . $row->request_id . '" title="Accept"><i class="ri-checkbox-circle-line"></i></button>';
+                            $actions .= '<button type="button" class="btn btn-danger rounded-pill reject-btn" data-id="' . $row->request_id . '" data-bs-toggle="modal" data-bs-target="#staticBackdrop" title="Reject"><i class=" ri-close-circle-fill"></i></button>';
+                        }
+                    } elseif ($data_drawer_value == 2) {
+                        if ($row->hr_div_approved_by == null && $row->hr_director_reject_reason == null) {
+                            $actions .= '<button  type="button" class="btn btn-primary rounded-pill accept-btn"  data-id="' . $row->request_id . '" title="Accept"><i class="ri-checkbox-circle-line"></i></button>';
+                            $actions .= '<button type="button" class="btn btn-danger rounded-pill reject-btn" data-id="' . $row->request_id . '" data-bs-toggle="modal" data-bs-target="#staticBackdrop" title="Reject"><i class=" ri-close-circle-fill"></i></button>';
+                        }
+                    } elseif ($data_drawer_value == 3) {
+                        if ($row->transport_director_id == null && $row->vec_director_reject_reason == null) {
+                            $actions .= '<button  type="button" class="btn btn-primary rounded-pill accept-btn"  data-id="' . $row->request_id . '" title="Accept"><i class="ri-checkbox-circle-line"></i></button>';
+                            $actions .= '<button type="button" class="btn btn-danger rounded-pill reject-btn" data-id="' . $row->request_id . '" data-bs-toggle="modal" data-bs-target="#staticBackdrop" title="Reject"><i class=" ri-close-circle-fill"></i></button>';
+                        }
+                    }
+                     else{              
                     if ($row->dir_approved_by == null && $row->director_reject_reason == null) {
                         $actions .= '<button  type="button" class="btn btn-primary rounded-pill accept-btn"  data-id="' . $row->request_id . '" title="Accept"><i class="ri-checkbox-circle-line"></i></button>';
                         $actions .= '<button type="button" class="btn btn-danger rounded-pill reject-btn" data-id="' . $row->request_id . '" data-bs-toggle="modal" data-bs-target="#staticBackdrop" title="Reject"><i class=" ri-close-circle-fill"></i></button>';
                     }
-        
+                }
                     return $actions;
                 })
 
@@ -427,6 +467,70 @@ class VehicleTemporaryRequestController extends Controller
                 ->toJson();
         
             }
+
+        protected function fetchDirectorData($id, $data_drawer_value){
+
+            if($data_drawer_value == 1){
+                
+                $user = User::with('department')->find($id);
+
+                $clusterId = $user->department->cluster_id;
+                
+                $data = VehicleTemporaryRequestModel::
+                with('approvedBy','requestedBy.department')->whereHas('requestedBy.department', function ($query) use ($clusterId) {
+                    $query->where('cluster_id', $clusterId);
+                })
+                    ->where(function($query) {
+                        $query->orWhere('how_many_days', '>', 1)
+                            ->orWhere('in_out_town', false);
+                    })
+                    // ->whereNull('div_approved_by')
+                    ->whereNotNull('dir_approved_by')
+                    ->get();
+            }
+            elseif($data_drawer_value == 2){
+
+                $data = VehicleTemporaryRequestModel::
+                where(function($query) {
+                    $query->orWhere('how_many_days', '>', 0)
+                        ->orWhere('in_out_town', true);
+                })
+                ->whereNull('cluster_director_reject_reason')
+                ->whereNotNull('div_approved_by')
+                ->get();
+            }
+            elseif($data_drawer_value == 3){
+
+                $data = VehicleTemporaryRequestModel::with('approvedBy', 'requestedBy')
+                ->where(function ($query) {
+                    // Check if how_many_days > 1 OR in_out_town is true
+                    $query->where(function ($q) {
+                        $q->where('how_many_days', '>', 1)
+                        ->orWhere('in_out_town', false);
+                    })
+                    // Apply condition for hr_div_approved_by
+                    ->whereNotNull('hr_div_approved_by');
+                })
+                // Fallback to dir_approved_by if the first condition isn't true
+                ->orWhere(function ($query) {
+                    $query->where('how_many_days', '<=', 1)
+                        ->where('in_out_town', true)
+                        ->whereNotNull('dir_approved_by');
+                })
+                ->get();
+            }
+            else{
+                
+                $directors_data = User::select('department_id')->where('id',$id)->first();
+                $dept_id = $directors_data->department_id;
+    
+                $data = VehicleTemporaryRequestModel::whereHas('requestedBy', function ($query) use ($dept_id) {
+                        $query->where('department_id', $dept_id);
+                    })->latest()->get();;
+            }
+
+            return $data;
+        }
 
         // Directors Page
         public function DirectorApproveRequest(Request $request)
@@ -764,67 +868,6 @@ class VehicleTemporaryRequestController extends Controller
                 return view('Request.TransportDirectorPage', compact('vehicleRequests'));
             }
 
-        public function FetchTransportDirector()
-            {
-                        
-                $data = VehicleTemporaryRequestModel::get();
-                
-                return datatables()->of($data)
-                ->addIndexColumn()
-                ->addColumn('counter', function($row) use ($data){
-                    static $counter = 0;
-                    $counter++;
-                    return $counter;
-                })
-
-                ->addColumn('name', function ($row) {
-                    return  $row->requestedBy->first_name. ' ' . $row->requestedBy->last_name;
-                })
-
-                ->addColumn('type', function ($row) {
-                    return  $row->vehicle_type;
-                })
-
-                ->addColumn('start_date', function ($row) {
-                    return $row->start_date;
-                })
-
-                ->addColumn('start_location', function ($row) {
-                    return  $row->start_location ;
-                })
-
-                ->addColumn('end_location', function ($row) {
-                    return  $row->end_locations;
-                })
-
-                ->addColumn('actions', function ($row) {
-                    $actions = '<button type="button" class="btn btn-info rounded-pill btn-show" data-toggle="modal" data-target="#standard-modal" 
-                                data-purpose="' . $row->purpose . '"
-                                data-vehicle="' . $row->vehicle_type . '"
-                                data-start_date="' . $row->start_date . '"
-                                data-start_time="' . $row->start_time . '"
-                                data-end_date="' . $row->end_date . '"
-                                data-end_time="' . $row->end_time . '"
-                                data-start_location="' . $row->start_location . '"
-                                data-end_locations="' . $row->end_locations . '"
-                                data-passengers="' . $row->peoples->pluck('user.first_name')->implode(', ') . '"
-                                data-materials="' . $row->materials->pluck('material_name')->implode(', ') . '"
-                                title="Show">
-                                <i class="ri-eye-line"></i></button>';
-                    
-                    if ($row->transport_director_id === null && $row->vec_director_reject_reason === null) {
-                        $actions .= '<button id="acceptButton" type="button" class="btn btn-primary rounded-pill" title="Accept" onclick="confirmFormSubmission(\'approvalForm-'.$row->index.'\')"><i class="ri-checkbox-circle-line"></i></button>';
-                        $actions .= '<button type="button" class="btn btn-danger rounded-pill" data-bs-toggle="modal" data-bs-target="#staticBackdrop-'.$row->index.'" title="Reject"><i class="ri-close-circle-fill"></i></button>';
-                    }
-                
-                    return $actions;
-                })
-
-                ->rawColumns(['actions','name','Type','start_date','start_location','end_location','counter'])
-                ->toJson();
-        
-            }
-            
         public function TransportDirectorApproveRequest(Request $request)
             {
                     $validation = Validator::make($request->all(),[
