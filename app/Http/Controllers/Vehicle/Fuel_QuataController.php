@@ -38,7 +38,7 @@ class Fuel_QuataController extends Controller
         {
             
             $validation = Validator::make($request->all(),[
-            $request->validate([
+           
                 'vehicle_id' => 'required|uuid|exists:vehicles,vehicle_id',
                 'Fuel_Quota' => 'required|integer',
             ]);
@@ -79,11 +79,9 @@ class Fuel_QuataController extends Controller
             $fuelQuata = Fuel_QuataModel::findOrFail($id);
 // dd($fuelQuata);
             $validation = Validator::make($request->all(),[
-                'request_id' => 'required|uuid|exists:fuel_quatas,fuel_quata_id',
-                'new_quata' => 'required|integer',
-            $request->validate([
                 'fuel_quata_id' => 'required|uuid|exists:fuel_quatas,fuel_quata_id',
-                'new_quota' => 'required|integer',
+                'new_quata' => 'required|integer',
+          
             ]);
             if ($validation->fails()) 
             {
