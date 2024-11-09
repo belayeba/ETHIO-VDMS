@@ -96,10 +96,6 @@
                                                         });
                                                     </script>
                                                 </div>
-                                                {{-- <div class="mb-3">
-                                                    <label for="nameInput" class="form-label"> Phone Number<strong class="text-danger">*</strong></label>
-                                                    <input type="number" class="form-control" id="phone_number" name="phone_number" placeholder="Enter Phone Number">
-                                                </div> --}}
                                                 <div class="mb-3">
                                                     <label for="nameInput" class="form-label"> Notes<strong class="text-danger">*</strong></label>
                                                     <input type="text" class="form-control" id="notes" name="notes" placeholder="Notes">
@@ -139,7 +135,7 @@
                                                         <td>{{ $item->user->phone_number }}</td>
                                                         <td>{{ $item->status }}</td>
                                                         <td>
-                                                            <form method="POST" action="{{ route('driver.destroy',$item) }}"accept-charset="UTF-8">
+                                                            <form method="POST" action=""accept-charset="UTF-8">
                                                                 @method('DELETE')
                                                                 <input name="_method" value="DELETE" type="hidden">
                                                                 {{ csrf_field() }}
@@ -158,8 +154,8 @@
                                                                 <i class="ri-edit-line"></i> 
                                                             </button>
                                                             
-                                                            <button type="submit" class="btn btn-danger rounded-pill" title="Delete Driver"
-                                                                onclick="return confirm(&quot;Click OK to delete Driver.&quot;)">
+                                                            <button type="button" class="btn btn-danger rounded-pill" title="Delete Driver"
+                                                               data-bs-toggle="modal" data-bs-target="#warning_alert">
                                                                 <i class="ri-close-circle-line"></i>
                                                             </button>
                                                           </form>
@@ -213,49 +209,78 @@
                                                             </div>
                                                         </div>
                                                         <div class="modal fade" id="viewDriverModal{{ $item->driver_id }}" tabindex="-1" aria-labelledby="viewDriverModalLabel{{ $item->driver_id }}" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="viewDriverModalLabel{{ $item->driver_id }}">Driver Details</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <div class="mb-3">
-                    <label class="form-label">Name:</label>
-                    <p>{{ $item->user->username }}</p>
-                </div>
-                <div class="mb-3">
-                    <label class="form-label">Phone Number:</label>
-                    <p>{{ $item->user->phone_number }}</p>
-                </div>
-                <div class="mb-3">
-                    <label class="form-label">License Number:</label>
-                    <p>{{ $item->license_number }}</p>
-                </div>
-                <div class="mb-3">
-                    <label class="form-label">License Expiry Date:</label>
-                    <p>{{ $item->license_expiry_date }}</p>
-                </div>
-                <div class="mb-3">
-                    <label class="form-label">License File:</label>
-                    @if($item->license_file)
-                        <p><a href="{{ Storage::disk('public')->url($item->license_file) }}" target="_blank">View File</a></p>
-                    @else
-                        <p>No file uploaded</p>
-                    @endif
-                </div>
-                <div class="mb-3">
-                    <label class="form-label">Notes:</label>
-                    <p>{{ $item->notes }}</p>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+                                                            <div class="modal-dialog">
+                                                                <div class="modal-content">
+                                                                    <div class="modal-header">
+                                                                        <h5 class="modal-title" id="viewDriverModalLabel{{ $item->driver_id }}">Driver Details</h5>
+                                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                                    </div>
+                                                                    <div class="modal-body">
+                                                                        <div class="mb-3">
+                                                                            <label class="form-label">Name:</label>
+                                                                            <p>{{ $item->user->username }}</p>
+                                                                        </div>
+                                                                        <div class="mb-3">
+                                                                            <label class="form-label">Phone Number:</label>
+                                                                            <p>{{ $item->user->phone_number }}</p>
+                                                                        </div>
+                                                                        <div class="mb-3">
+                                                                            <label class="form-label">License Number:</label>
+                                                                            <p>{{ $item->license_number }}</p>
+                                                                        </div>
+                                                                        <div class="mb-3">
+                                                                            <label class="form-label">License Expiry Date:</label>
+                                                                            <p>{{ $item->license_expiry_date }}</p>
+                                                                        </div>
+                                                                        <div class="mb-3">
+                                                                            <label class="form-label">License File:</label>
+                                                                            @if($item->license_file)
+                                                                                <p><a href="{{ Storage::disk('public')->url($item->license_file) }}" target="_blank">View File</a></p>
+                                                                            @else
+                                                                                <p>No file uploaded</p>
+                                                                            @endif
+                                                                        </div>
+                                                                        <div class="mb-3">
+                                                                            <label class="form-label">Notes:</label>
+                                                                            <p>{{ $item->notes }}</p>
+                                                                        </div>
+                                                                        <div class="modal-footer">
+                                                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
 
+                                                         <!-- Accept Alert Modal -->
+                                                    <div id="warning_alert" class="modal fade" id="confirmationModal" tabindex="-1" role="dialog"
+                                                    aria-labelledby="confirmationModalLabel"aria-hidden="true">
+                                                    <div class="modal-dialog modal-sm">
+                                                        <div class="modal-content">
+                                                            <form method="POST" action="{{ route('driver.destroy',$item) }}">
+                                                                @csrf
+                                                                @method('DELETE')
+                                                                <input type="hidden" name="request_id" id="request_id">
+                                                                <div class="modal-body p-4">
+                                                                    <div class="text-center">
+                                                                        <i class="ri-alert-line h1 text-warning"></i>
+                                                                        <h4 class="mt-2">Warning</h4>
+                                                                        <h5 class="mt-3">
+                                                                            Are you sure you want to delete this driver?</br> This action
+                                                                            cannot be
+                                                                            undone.
+                                                                        </h5>
+                                                                        <button type="button" class="btn btn-secondary"
+                                                                            data-bs-dismiss="modal">Cancel</button>
+                                                                        <button type="submit" class="btn btn-primary"
+                                                                            id="confirmDelete">Yes,
+                                                                            Accept</button>
+                                                                    </div>
+                                                                </div>
+                                                            </form>
+                                                        </div><!-- /.modal-content -->
+                                                    </div><!-- /.modal-dialog -->
+                                                </div><!-- /.modal -->
                                                         @endforeach 
                                                     </tbody>
                                                 </table>
@@ -266,63 +291,6 @@
                             </div>
                         </div>
                     </section>
-                   
-                    
-                    
-                    <!-- Confirmation Modal -->
-                    <div class="modal fade" id="confirm-delete" tabindex="-1" role="dialog" aria-labelledby="confirmDeleteLabel" aria-hidden="true">
-                        <div class="modal-dialog modal-dialog-centered" role="document">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="confirmDeleteLabel">Delete Confirmation</h5>
-                                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                    </button>
-                                </div>
-                                <div class="modal-body">
-                                    <p class="text-center">Are you sure to delete ?</p>
-                                    <div class="d-flex justify-content-between">
-                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                                        <a id="delete_link" class="btn btn-danger">Delete</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <style>
-                        @media only screen and (max-width: 768px) {
-    .col-md-4 {
-        width: 100%;
-    }
-
-    .col-md-8 {
-        width: 100%;
-    }
-
-    .card {
-        margin-bottom: 20px;
-    }
-
-    .table-responsive {
-        overflow-x: auto;
-    }
-
-    .modal-dialog {
-        max-width: 90%;
-    }
-}
-
-@media only screen and (max-width: 480px) {
-    .card {
-        padding: 10px;
-    }
-
-    .modal-dialog {
-        max-width: 100%;
-    }
-}
-                    </style>
 
                     <footer class="footer-area">
                         <div class="container">

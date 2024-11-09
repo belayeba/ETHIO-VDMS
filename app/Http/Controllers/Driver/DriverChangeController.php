@@ -147,10 +147,14 @@ class DriverChangeController extends Controller {
     public function driver_get_request()
         {
             $logged_user = Auth::id();
-            $Driver = DriversModel::find($logged_user);
+            // dd($logged_user);
+            $Driver = DriversModel::where('user_id', $logged_user)->first();
             $driver_id = $Driver->driver_id;
+            // dd($driver_id);
             $get_request = DriverDriverChangeModel::where('new_driver_id',$driver_id)->latest()->get();
-            return response()->json(['my_request'=>$get_request]);
+            // dd($get_request);
+            // return response()->json(['my_request'=>$get_request]);
+            return view( 'Driver.acceptance', compact( 'get_request' ) );
         }
     public function driver_accept(Request $request)
         {

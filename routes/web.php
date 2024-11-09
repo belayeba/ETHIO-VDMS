@@ -286,6 +286,7 @@ Route::group(['middleware' => ['auth']], function()
                     {
                 Route::get('/',[Fuel_QuataController::class,'index'])->name('quota.index');
                 Route::post('/store',[Fuel_QuataController::class,'store'])->name('quota.store');
+                Route::put('/update/{id}',[Fuel_QuataController::class,'update'])->name('quota.update');
             });
 
     // Samir Driver Registration
@@ -302,6 +303,7 @@ Route::group(['middleware' => ['auth']], function()
             'prefix'=>'driver_change',
         ], function (){
         Route::get('/',[DriverChangeController::class, 'driver_change_page'])->name('driver.switch');
+        Route::get('/request',[DriverChangeController::class, 'driver_get_request'])->name('driverchange.request');
         Route::get('/my_request',[DriverChangeController::class, 'driver_get_request'])->name('driver.requestPage');
         Route::post('/store',[DriverChangeController::class, 'store'])->name('driver_change.store');
         Route::put('/update/{request_id}', [DriverChangeController::class, 'update'])->name('driverchange.update');

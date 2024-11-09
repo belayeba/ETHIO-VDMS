@@ -33,10 +33,7 @@ class VehiclePartsController extends Controller
                     'created_by' =>$logged_user,
                     'notes' => $request->input('notes'),
                 ]);
-                return redirect()->back()->with('success_message',
-                "Vehicle Part Successfully Registered",
-                );
-                return response()->json(['status' => 'success', 'data' => $vehiclePart], 201);
+                return redirect()->back()->with('success_message',"Vehicle Part Successfully Registered",);
             }
     
         // Retrieve a specific vehicle part
@@ -83,8 +80,7 @@ class VehiclePartsController extends Controller
                     'name' => $request->input('name'),
                     'notes' => $request->input('notes'),
                 ]);
-        
-                return response()->json(['status' => 'success', 'data' => $vehiclePart]);
+                return redirect()->back()->with('success_message',"Vehicle Part Successfully Updated",);
             }
     
         // Delete a vehicle part
@@ -97,8 +93,7 @@ class VehiclePartsController extends Controller
                 }
         
                 $vehiclePart->delete();
-        
-                return response()->json(['status' => 'success', 'message' => 'Vehicle part deleted successfully']);
+                return redirect()->back()->with('success_message',"Vehicle Part Successfully Deleted",);
             }
     }
     
