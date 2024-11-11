@@ -132,12 +132,12 @@
                                                                         <i class="ri-edit-line"></i> 
                                                                     </button>
                                                     
-                                                                    <form method="POST" action="{{ route('driverchange.destroy',  ['request_id' => $item->driver_change_id]) }}" style="display:inline-block;" accept-charset="UTF-8">
+                                                                    <form method="POST" action=" " style="display:inline-block;" accept-charset="UTF-8">
                                                                         @method('DELETE')
                                                                         {{ csrf_field() }}
-                                                                        <button type="submit" class="btn btn-danger rounded-pill" title="Delete Driver Change"
-                                                                            onclick="return confirm('Are you sure you want to delete this Driver Change?');">
-                                                                            <i class="ri-close-circle-line"></i> 
+                                                                        <button type="button" class="btn btn-danger rounded-pill" title="Delete Driver Change"
+                                                                         data-bs-toggle="modal" data-bs-target="#warning_alert">
+                                                                        <i class="ri-close-circle-line"></i>
                                                                         </button>
                                                                     </form>
                                                                 </td>
@@ -149,89 +149,116 @@
                                         </div>
                                     </div>
                                 </div>
+                                <div id="warning_alert" class="modal fade" id="confirmationModal" tabindex="-1" role="dialog"
+                   aria-labelledby="confirmationModalLabel"aria-hidden="true">
+                   <div class="modal-dialog modal-sm">
+                       <div class="modal-content">
+                           <form method="POST" action="{{ route('driverchange.destroy',$item) }}">
+                               @csrf
+                               @method('DELETE')
+                               <input type="hidden" name="request_id" id="request_id">
+                               <div class="modal-body p-4">
+                                   <div class="text-center">
+                                       <i class="ri-alert-line h1 text-warning"></i>
+                                       <h4 class="mt-2">Warning</h4>
+                                       <h5 class="mt-3">
+                                           Are you sure you want to delete this driver change?</br> This action
+                                           cannot be
+                                           undone.
+                                       </h5>
+                                       <button type="button" class="btn btn-secondary"
+                                           data-bs-dismiss="modal">Cancel</button>
+                                       <button type="submit" class="btn btn-primary"
+                                           id="confirmDelete">Yes,
+                                           Accept</button>
+                                   </div>
+                               </div>
+                           </form>
+                       </div><!-- /.modal-content -->
+                   </div><!-- /.modal-dialog -->
+               </div><!-- /.modal -->
+
                                 <!-- View Modal for Driver Change -->
-@foreach ($driverChange as $item)
-<div class="modal fade" id="viewDriverChangeModal{{ $item->id }}" tabindex="-1" aria-labelledby="viewDriverChangeLabel{{ $item->id }}" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="viewDriverChangeLabel{{ $item->id }}">View Driver Change</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <div class="mb-3">
-          <label for="vehicle" class="form-label">Vehicle</label>
-          <input type="text" class="form-control" id="vehicle" value="{{ $item->vehicle->model }}" readonly>
-        </div>
+                            @foreach ($driverChange as $item)
+                            <div class="modal fade" id="viewDriverChangeModal{{ $item->id }}" tabindex="-1" aria-labelledby="viewDriverChangeLabel{{ $item->id }}" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="viewDriverChangeLabel{{ $item->id }}">View Driver Change</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="mb-3">
+                                    <label for="vehicle" class="form-label">Vehicle</label>
+                                    <input type="text" class="form-control" id="vehicle" value="{{ $item->vehicle->model }}" readonly>
+                                    </div>
 
-        <div class="mb-3">
-          <label for="oldDriver" class="form-label">Old Driver</label>
-          <input type="text" class="form-control" id="oldDriver" value="{{ $item->oldDriver?$item->oldDriver->user->username:'No former Driver' }}" readonly>
-        </div>
+                                    <div class="mb-3">
+                                    <label for="oldDriver" class="form-label">Old Driver</label>
+                                    <input type="text" class="form-control" id="oldDriver" value="{{ $item->oldDriver?$item->oldDriver->user->username:'No former Driver' }}" readonly>
+                                    </div>
 
-        <div class="mb-3">
-          <label for="newDriver" class="form-label">New Driver</label>
-          <input type="text" class="form-control" id="newDriver" value="{{ $item->newDriver->user->username }}" readonly>
-        </div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-      </div>
-    </div>
-  </div>
-</div>
-@endforeach
-
-<!-- Edit Modal for Driver Change -->
-@foreach ($driverChange as $item)
-<div class="modal fade" id="editDriverChangeModal_{{ $loop->index }}" tabindex="-1" aria-labelledby="editDriverChangeLabel{{ $loop->index }}" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="editDriverChangeLabel{{ $loop->index }}">Edit Driver Change</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <form method="POST" action="{{ route('driverchange.update', ['request_id' => $item->driver_change_id]) }}">
-          @csrf
-          @method('PUT')
-          <div class="mb-3">
-            <label for="vehicle" class="form-label">Vehicle</label>
-            <select id="vehicle" name="vehicle_id" class="form-select" required>
-              @foreach($vehicles as $vehicle)
-                <option value="{{ $vehicle->vehicle_id }}" {{ $vehicle->vehicle_id == $item->vehicle_id ? 'selected' : '' }}>{{ $vehicle->model }}</option>
-              @endforeach
-            </select>
-          </div>
-
-          <div class="mb-3">
-            <label for="oldDriver" class="form-label">Old Driver</label>
-            <select id="oldDriver" name="old_driver_id" class="form-select" required>
-              @foreach($drivers as $driver)
-                <option value="{{ $driver->driver_id }}" {{ $driver->driver_id == $item->old_driver_id ? 'selected' : '' }}>{{ $driver->user->username }}</option>
-              @endforeach
-            </select>
-          </div>
-
-          <div class="mb-3">
-            <label for="newDriver" class="form-label">New Driver</label>
-            <select id="newDriver" name="new_driver_id" class="form-select" required>
-              @foreach($drivers as $driver)
-                <option value="{{ $driver->driver_id }}" {{ $driver->driver_id == $item->new_driver_id ? 'selected' : '' }}>{{ $driver->user->username }}</option>
-              @endforeach
-            </select>
-          </div>
-
-          <button type="submit" class="btn btn-primary">Update</button>
-        </form>
-      </div>
-    </div>
-  </div>
-</div>
-@endforeach
-
-
+                                    <div class="mb-3">
+                                    <label for="newDriver" class="form-label">New Driver</label>
+                                    <input type="text" class="form-control" id="newDriver" value="{{ $item->newDriver->user->username }}" readonly>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                </div>
+                                </div>
                             </div>
+                            </div>
+                            @endforeach
+
+                            <!-- Edit Modal for Driver Change -->
+                            @foreach ($driverChange as $item)
+                            <div class="modal fade" id="editDriverChangeModal_{{ $loop->index }}" tabindex="-1" aria-labelledby="editDriverChangeLabel{{ $loop->index }}" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="editDriverChangeLabel{{ $loop->index }}">Edit Driver Change</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <form method="POST" action="{{ route('driverchange.update', ['request_id' => $item->driver_change_id]) }}">
+                                    @csrf
+                                    @method('PUT')
+                                    <div class="mb-3">
+                                        <label for="vehicle" class="form-label">Vehicle</label>
+                                        <select id="vehicle" name="vehicle_id" class="form-select" required>
+                                        @foreach($vehicles as $vehicle)
+                                            <option value="{{ $vehicle->vehicle_id }}" {{ $vehicle->vehicle_id == $item->vehicle_id ? 'selected' : '' }}>{{ $vehicle->model }}</option>
+                                        @endforeach
+                                        </select>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label for="oldDriver" class="form-label">Old Driver</label>
+                                        <select id="oldDriver" name="old_driver_id" class="form-select" required>
+                                        @foreach($drivers as $driver)
+                                            <option value="{{ $driver->driver_id }}" {{ $driver->driver_id == $item->old_driver_id ? 'selected' : '' }}>{{ $driver->user->username }}</option>
+                                        @endforeach
+                                        </select>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label for="newDriver" class="form-label">New Driver</label>
+                                        <select id="newDriver" name="new_driver_id" class="form-select" required>
+                                        @foreach($drivers as $driver)
+                                            <option value="{{ $driver->driver_id }}" {{ $driver->driver_id == $item->new_driver_id ? 'selected' : '' }}>{{ $driver->user->username }}</option>
+                                        @endforeach
+                                        </select>
+                                    </div>
+
+                                    <button type="submit" class="btn btn-primary">Update</button>
+                                    </form>
+                                </div>
+                                </div>
+                            </div>
+                            </div>
+                            @endforeach
+                        </div>
                         </div>
                     </section>
 

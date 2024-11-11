@@ -41,7 +41,7 @@
                     <h4 class="header-title">Add Fuel Quota</h4>
                 </div>
                 <div class="card-body"> 
-                    <form action="{{ route('quota.store')}}" method="POST" enctype="multipart/form-data">
+                    <form action="{{ route('save_quota_change')}}" method="POST" enctype="multipart/form-data">
                         @csrf
                         @method('POST')
                         <div id="progressbarwizard">
@@ -68,7 +68,6 @@
                                             <select class="form-control select" id="vehicleCategory" name="vehicle_id" data-fouc required>
                                                 <option value="">Select Vehicle</option>
                                                 @foreach ($vehicles as $vehicle)
-                                                
                                                 <option value="{{ $vehicle->vehicle_id }}">{{ $vehicle->plate_number }}</option>
                                             @endforeach
                                         </select>
@@ -112,8 +111,8 @@
                                 <th>Vehicle</th>
                                 <th>Old Quota</th>
                                 <th>New Quota</th>
-                                <th>Changed By</th>
-                                <th>Changed Date</th>
+                                {{-- <th>Changed By</th> --}}
+                                {{-- <th>Changed Date</th> --}}
                                 <th>Actions</th>
                             </tr>
                         </thead>
@@ -124,57 +123,103 @@
                                     <td>{{$fuelQuata->vehicle->plate_number}}</td>
                                     <td>{{$fuelQuata->old_quata}}</td>
                                     <td>{{$fuelQuata->new_quata}}</td>
-                                    <td>{{$fuelQuata->changer->first_name."  ".$fuelQuata->changer->last_name }}</td>
-                                    <td>{{$fuelQuata->created_at->format('Y-m-d') }}</td>
                                     <td>
-                                        <form method="POST" action="{{ route('vehicle_parts.destroy', ['id' => $request->vehicle_parts_id]) }}">
+                                        <form method="POST" action="">
                                             @csrf
-                                            @method('DELETE')
-                                            <a href="" class="btn btn-secondary rounded-pill" data-bs-toggle="modal" data-bs-target="#standard-modal-{{ $loop->index }}" title="edit"><i class=" ri-edit-line"></i></a>
-                                            <button type="submit" class="btn btn-danger rounded-pill" title="Delete"><i class="ri-close-circle-line"></i></button>
-                                        </form>
-                                    </td>
+                                            <input name="_method" value="DELETE" type="hidden">
+                                            {{ csrf_field() }}
+                                            <button type="button" class="btn btn-info rounded-pill" data-bs-toggle="modal" title="View Quota" data-bs-target="#viewQuotaModal{{ $fuelQuata->fuel_quata_id }}">
+                                                <i class="ri-eye-line"></i>
+                                            </button>
+
+                                            <button type="button" class="btn btn-info rounded-pill" title="Edit Fuel Quota"
+                                            data-bs-toggle="modal" 
+                                            data-bs-target="#quota_modal_{{$loop->index}}"
+                                            data-vehicle="{{ $fuelQuata->vehicle->plate_number }}"
+                                            data-old-quota="{{ $fuelQuata->old_quata }}"
+                                            data-new-quota ="{{ $fuelQuata->new_quata }}"
+                                            data-changed-by ="{{ $fuelQuata->changer->first_name }}"
+                                            data-changed-date  ="{{ $fuelQuata->created_at->format('Y-m-d') }}">
+                                            <i class="ri-edit-line"></i> 
+                                        </button>
+                                        
+                                        {{-- <button type="submit" class="btn btn-danger rounded-pill" title="Delete Quota"
+                                            onclick="return confirm(&quot;Click OK to delete Fuel Quota.&quot;)">
+                                            <i class="ri-close-circle-line"></i>
+                                        </button> --}}
+                                      </form>
                                 </tr>
                             </tbody>
-                            
-                            <!-- edit the information of the request modal -->
-                                {{-- <div id="standard-modal-{{ $loop->index }}" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="standard-modalLabel" aria-hidden="true">
-                                    <div class="modal-dialog">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h4 class="modal-title" id="standard-modalLabel">Request Details</h4>
-                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                            </div>
-                                            <div class="modal-body">
-                                            <form action="{{route('vehicle_parts.update',['id'=>$request->vehicle_parts_id])}}" method="post" enctype="multipart/form-data">
+                            <div id="quota_modal_{{$loop->index}}" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-body">
+                                            <form method="POST" action="{{ route('quota.update', $fuelQuata) }}" class="ps-3 pe-3">
                                                 @csrf
-                                                <div class="tab-pane" id="account-2">
-                                                    <div class="row">
-                                                        <div class="position-relative mb-3">
-                                                            <div class="mb-6 position-relative" id="datepicker1">
-                                                                <label class="form-label">Name</label>
-                                                                <input type="text" name="name" value="{{$request->name}}" class="form-control" placeholder="Enter purpose of Request" required>
-                                                                <input type="hidden" name="request_id" value="{{$request->vehicle_parts_id}}">
-                                                            </div>
-                                                        </div>
-
-                                                        <div class="position-relative mb-3">
-                                                                <label class="form-label">Note</label>
-                                                                <input type="text" name="notes" value="{{$request->notes}}" class="form-control" placeholder="Enter purpose of Request" required>
-                                                        </div>
-                                                    </div>
-                                                </div> 
+                                                @method('PUT')
+                                                <input type="hidden" name="fuel_quata_id" value="{{ $fuelQuata->fuel_quata_id  }}">
+                            
+                                                <div class="mb-3">
+                                                    <label for="name" class="form-label">Vehicle</label>
+                                                    <select id="name" name="name" class="form-select" required>
+                                                        <option value="{{ $fuelQuata->fuel_quata_id  }}" {{ $fuelQuata->fuel_quata_id  == $fuelQuata->fuel_quata_id  ? 'selected' : '' }}>{{  $fuelQuata->vehicle->plate_number  }}</option>
+                                                    </select>
+                                                  </div>
+                            
+                                                <div class="mb-3">
+                                                    <label for="old_quota{{ $loop->index }}" class="form-label">Old Quota</label>
+                                                    <input class="form-control" type="number" name="old_quota" id="old_quota{{ $loop->index }}" value="{{ $fuelQuata->old_quata }}">
                                                 </div>
-                                                <div class="modal-footer">
-                                                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
-                                                    <button type="submit" class="btn btn-info">Submit</button>
+                            
+                                                <div class="mb-3">
+                                                    <label for="new_quota{{ $loop->index }}" class="form-label">New Quota</label>
+                                                    <input class="form-control" type="number" name="new_quota" id="new_quota{{ $loop->index }}" value="{{ $fuelQuata->new_quata }}">
                                                 </div>
-                                            </form>     
-                                        </div><!-- /.modal-content -->
-                                    </div><!-- /.modal-dialog -->
+                            
+                                                <div class="mb-3 text-center">
+                                                    <button class="btn btn-primary" type="submit">Update</button>
+                                                    <a type="button" href="{{ route('quota.index') }}" class="btn btn-warning">Cancel</a>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
                                 </div>
-                            <!-- end show modal --> --}}
-
+                            </div>
+                            <div class="modal fade" id="viewQuotaModal{{ $fuelQuata->fuel_quata_id  }}" tabindex="-1" aria-labelledby="viewQuotaModalLabel{{ $fuelQuata->fuel_quata_id  }}" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="viewQuotaModalLabel{{ $fuelQuata->fuel_quata_id  }}">Fuel Quota Detail</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="mb-3">
+                                                <label class="form-label">Vehicle:</label>
+                                                <p>{{ $fuelQuata->vehicle->plate_number }}</p>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label class="form-label">Old Quota:</label>
+                                                <p>{{ $fuelQuata->old_quata }}</p>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label class="form-label">New Quota:</label>
+                                                <p>{{ $fuelQuata->new_quata}}</p>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label class="form-label">Changed By:</label>
+                                                <p>{{ $fuelQuata->changer->first_name }}</p>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label class="form-label">Changed Date:</label>
+                                                <p>{{ $fuelQuata->created_at->format('Y-m-d')  }}</p>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         @endforeach             
                     </table>
 
@@ -184,8 +229,28 @@
     </div> 
 </div>
 </div>
-                                
-                    
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+   var editButtons = document.querySelectorAll('.edit-quota-btn');
+
+   editButtons.forEach(function(button) {
+       button.addEventListener('click', function() {
+           var vehicle = this.getAttribute('data-vehicle');
+           var old_quota = this.getAttribute('data-old-quota');
+           var new_quota = this.getAttribute('data-new-quota');
+           var index = this.getAttribute('data-bs-target').split('_').pop();
+
+           // Populate the modal input fields with the selected driver's details
+           document.getElementById('vehicle' + index).value = vehicle;
+           document.getElementById('old_quota' + index).value = old_quota;
+           document.getElementById('new_quota' + index).value = new_quota;
+       });
+   });
+});
+
+   </script>
+                                     
  <!-- Dropzone File Upload js -->
  <script src="{{ asset('assets/vendor/dropzone/min/dropzone.min.js') }}"></script>
 

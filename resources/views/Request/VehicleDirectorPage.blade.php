@@ -160,6 +160,7 @@
 
                                                         if (response.status === 'success' && Array.isArray(response.data) && response.data.length > 0) {
                                                             // Create the table
+                                                            var Image = response.data[0].image_path;
                                                             var inspectedBy = response.data[0].inspected_by;
                                                             var createdAt = new Date(response.data[0].created_at).toLocaleDateString('en-US', {
                                                                 year: 'numeric',
@@ -168,10 +169,11 @@
                                                             });
                                                         // Create a section to display "Inspected By" and "Created At" at the top right corner
                                                             var infoSection = document.createElement('div');
-                                                            infoSection.className = 'd-flex justify-content-end mb-3'; // Flexbox to align right and add margin-bottom
+                                                            infoSection.className = 'd-flex justify-content-end mb-4'; // Flexbox to align right and add margin-bottom
                                                             infoSection.innerHTML = `
                                                                 <p><strong>Inspected By:</strong> ${inspectedBy} </br>
-                                                                <strong>Created At:</strong> ${createdAt}</p>
+                                                                <strong>Created At:</strong> ${createdAt}</br>
+                                                                <strong>Image:</strong> ${Image}</p>
                                                             `;
                                                             cardsContainer.appendChild(infoSection); // Append the info section before the table
 

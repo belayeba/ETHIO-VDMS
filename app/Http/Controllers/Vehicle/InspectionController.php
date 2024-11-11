@@ -81,7 +81,7 @@ class InspectionController extends Controller
                         'vehicle_id' => $vehicleId,
                         'inspected_by' => $inspectedBy,
                         'part_name' => $partName,
-                        // 'inspection_image' => $fileinspection,
+                        'inspection_image' => $fileinspection,
                         'is_damaged' => $damagedParts[$partId],
                         'damage_description' => $damageDescriptions[$partId],
                         'inspection_date' => $inspectionDate,
@@ -96,6 +96,7 @@ class InspectionController extends Controller
         // Show a specific inspection
     public function showInspection(Request $request)
         {
+            // dd($request);
             try
             {
                 $inspectionId = $request->input('id');

@@ -97,11 +97,10 @@
                                                         <td>{{$loop->iteration}}</td>
                                                         <td>{{ $item->name }}</td>
                                                         <td>
-                                                            <form method="POST" action="{{ route('cluster.destroy',$item) }}"accept-charset="UTF-8">
+                                                            <form method="POST" action=" "accept-charset="UTF-8">
                                                                 @method('DELETE')
                                                                 <input name="_method" value="DELETE" type="hidden">
                                                                 {{ csrf_field() }}
-                                                                
                                                                     <a type="button" class="btn btn-secondary rounded-pill"  
                                                                             data-bs-toggle="modal" 
                                                                             data-bs-target="#cluster_modal_{{$loop->index}}"
@@ -110,10 +109,9 @@
                                                                             <i class="ri-edit-line"></i>
                                                                     </a>
  
-                                        
-                                                            <button type="submit" class="btn btn-danger rounded-pill" title="Delete Cluster"
-                                                               onclick="return confirm(&quot;Click OK to delete Cluster.&quot;)">
-                                                               <i class="ri-close-circle-line"></i> 
+                                                            <button type="button" class="btn btn-danger rounded-pill" title="Delete Cluster"
+                                                               data-bs-toggle="modal" data-bs-target="#warning_alert">
+                                                                <i class="ri-close-circle-line"></i>
                                                             </button>
                                                           </form>
                                                          </td> 
@@ -136,8 +134,7 @@
                                                                                 <button class="btn btn-primary" type="submit">Update</button>
                                                                                 <a type="button" href="{{ route('cluster.index') }}" class="btn btn-warning">Cancel</a>
                                                                             </div>
-                                                                            
-                                                                        </form>
+                                                                         </form>
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -145,6 +142,35 @@
                                                         @endforeach
                                                     </tbody>
                                                 </table>
+                                                <!-- Accept Alert Modal -->
+                                                <div id="warning_alert" class="modal fade" id="confirmationModal" tabindex="-1" role="dialog"
+                                                aria-labelledby="confirmationModalLabel"aria-hidden="true">
+                                                <div class="modal-dialog modal-sm">
+                                                    <div class="modal-content">
+                                                        <form method="POST" action="{{ route('cluster.destroy',$item) }}">
+                                                            @csrf
+                                                            @method('DELETE')
+                                                            <input type="hidden" name="request_id" id="request_id">
+                                                            <div class="modal-body p-4">
+                                                                <div class="text-center">
+                                                                    <i class="ri-alert-line h1 text-warning"></i>
+                                                                    <h4 class="mt-2">Warning</h4>
+                                                                    <h5 class="mt-3">
+                                                                        Are you sure you want to delete this cluster?</br> This action
+                                                                        cannot be
+                                                                        undone.
+                                                                    </h5>
+                                                                    <button type="button" class="btn btn-secondary"
+                                                                        data-bs-dismiss="modal">Cancel</button>
+                                                                    <button type="submit" class="btn btn-primary"
+                                                                        id="confirmDelete">Yes,
+                                                                        Accept</button>
+                                                                </div>
+                                                            </div>
+                                                        </form>
+                                                    </div><!-- /.modal-content -->
+                                                </div><!-- /.modal-dialog -->
+                                            </div><!-- /.modal -->
                                             </div>
                                         </div>
                                     </div>

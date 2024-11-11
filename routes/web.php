@@ -74,7 +74,6 @@ Route::group(['middleware' => ['auth']], function()
                         Route::post('/HRclusterDirector_approve_requesta', 'HrclusterDirectorApproveRequest')->name('HRClusterDirector_approve_request');
                         Route::post('/HRclusterDirector_reject_request', 'Hrcluster_DirectorRejectRequest')->name('HRClusterDirector_reject_request');
                         Route::get('/TransportDirector_approve_page', 'TransportDirectorApprovalPage')->name('TransportDirector_temp');
-                        Route::get('/Fetch_TransportDirector_approve', 'FetchTransportDirector')->name('FetchTransportDirector');
                         Route::post('/TransportDirector_approve_requesta', 'TransportDirectorApproveRequest')->name('TransportDirector_approve_request');
                         Route::post('/TransportDirector_reject_request', 'TransportDirectorRejectRequest')->name('TransportDirector_reject_request');
                         Route::get('/simirit_approve_page', 'SimiritPage')->name('simirit_page');
@@ -275,10 +274,10 @@ Route::group(['middleware' => ['auth']], function()
                 });
             Route::controller(Fuel_QuataController::class)->group(function ()
                 {
-                    // Route::get('/get_all','index')->name('all_fuel_quata');
+                    Route::get('/get_all','index')->name('all_fuel_quota');
                     Route::get('/get_one/{id}', 'show')->name('select_one');
-                    Route::post('/save_change', 'store')->name('save_quata_change'); 
-                    Route::post('/save_update', 'update')->name('save_quata_update');
+                    Route::post('/save_change', 'store')->name('save_quota_change'); 
+                    Route::post('/save_update/{id}', 'update')->name('save_quota_update');
                 });
 
                 Route::group([
@@ -287,6 +286,7 @@ Route::group(['middleware' => ['auth']], function()
                     {
                 Route::get('/',[Fuel_QuataController::class,'index'])->name('quota.index');
                 Route::post('/store',[Fuel_QuataController::class,'store'])->name('quota.store');
+                Route::put('/update/{id}',[Fuel_QuataController::class,'update'])->name('quota.update');
             });
 
     // Samir Driver Registration
@@ -303,6 +303,7 @@ Route::group(['middleware' => ['auth']], function()
             'prefix'=>'driver_change',
         ], function (){
         Route::get('/',[DriverChangeController::class, 'driver_change_page'])->name('driver.switch');
+        Route::get('/request',[DriverChangeController::class, 'driver_get_request'])->name('driverchange.request');
         Route::get('/my_request',[DriverChangeController::class, 'driver_get_request'])->name('driver.requestPage');
         Route::post('/store',[DriverChangeController::class, 'store'])->name('driver_change.store');
         Route::put('/update/{request_id}', [DriverChangeController::class, 'update'])->name('driverchange.update');
@@ -323,12 +324,12 @@ Route::group(['middleware' => ['auth']], function()
             Route::controller(InspectionController::class)->group(function ()
                  {
                     Route::post('/inspection/store', 'storeInspection')->name('inspection.store'); // Create a new inspection
-                    // Route::get('/inspection', 'showInspection')->name('inspection.show'); // Show a specific inspection
-                    Route::get('/inspect_vehicle/{id}', 'showInspectionbyVehicle')->name('inspection.ByVehicle'); 
+                    Route::post('/inspection/show', 'showInspection')->name('inspection.show.specific'); // Show a specific inspection
+                    // Route::get('/inspect_vehicle/{id}', 'showInspectionbyVehicle')->name('inspection.ByVehicle'); 
                     Route::get('/inspection', 'showInspectionbyVehicle')->name('inspection.ByVehicle'); // Show a specific inspection
                     Route::get('/inspections', 'listInspections')->name('inspection.list'); // List all inspections
                     Route::get('/inspections/page', 'InspectionPage')->name('inspection.page'); // inspection page
-                    Route::get('/inspect_vehicle/{id}', 'showInspectionbyVehicle');//->name('inspection.ByVehicle'); // inspection page
+                    // Route::get('/inspect_vehicle/{id}', 'showInspectionbyVehicle');//->name('inspection.ByVehicle'); // inspection page
                     Route::put('/inspection/{inspectionId}/{partName}', 'updateInspection')->name('inspection.update'); // Update a specific inspection
                     Route::delete('/inspection/{inspectionId}', 'deleteInspection')->name('inspection.delete'); // Delete a specific inspection
                  });

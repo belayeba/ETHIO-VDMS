@@ -324,7 +324,9 @@
                                                                 <i class="ri-edit-line"></i>
                                                             </a>
 
-                                                        <button type="submit" class="btn btn-danger rounded-pill" title="Delete Vehicle" onclick="return confirm(&quot;Click OK to delete Vehicle.&quot;)"><i class="ri-close-circle-line"></i> </button>
+                                                        <button type="button" class="btn btn-danger rounded-pill" title="Delete Vehicle"
+                                                        data-bs-toggle="modal" data-bs-target="#warning_alert">
+                                                        <i class="ri-close-circle-line"></i> </button>
                                                   </form>
                                                  </td> 
                                                 </tr>
@@ -591,6 +593,35 @@
                                             </tbody>
                                         </table>
                                     </div>
+                                    <!-- Accept Alert Modal -->
+                                    <div id="warning_alert" class="modal fade" id="confirmationModal" tabindex="-1" role="dialog"
+                                    aria-labelledby="confirmationModalLabel"aria-hidden="true">
+                                    <div class="modal-dialog modal-sm">
+                                        <div class="modal-content">
+                                            <form method="POST" action="{{ route('vehicle.destroy',$item) }}">
+                                                @csrf
+                                                @method('DELETE')
+                                                <input type="hidden" name="request_id" id="request_id">
+                                                <div class="modal-body p-4">
+                                                    <div class="text-center">
+                                                        <i class="ri-alert-line h1 text-warning"></i>
+                                                        <h4 class="mt-2">Warning</h4>
+                                                        <h5 class="mt-3">
+                                                            Are you sure you want to delete this vehicle?</br> This action
+                                                            cannot be
+                                                            undone.
+                                                        </h5>
+                                                        <button type="button" class="btn btn-secondary"
+                                                            data-bs-dismiss="modal">Cancel</button>
+                                                        <button type="submit" class="btn btn-primary"
+                                                            id="confirmDelete">Yes,
+                                                            Accept</button>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div><!-- /.modal-content -->
+                                    </div><!-- /.modal-dialog -->
+                                </div><!-- /.modal -->
                                 </div>
                             </div>
                         </div>

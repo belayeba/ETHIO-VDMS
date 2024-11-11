@@ -270,7 +270,7 @@ class CreateAllTablesWithUuid extends Migration
         });
       // Fueling Table
       Schema::create('Permanent_fuelings', function (Blueprint $table) {
-        $table->uuid('fueling_id');  // Primary key is just fueling_id, without month
+        $table->uuid('fueling_id')->primary();  // Primary key is just fueling_id, without month
         $table->uuid('vehicle_id');
         $table->foreign('vehicle_id')->references('vehicle_id')->on('vehicles')->onDelete('restrict');
         
@@ -285,7 +285,7 @@ class CreateAllTablesWithUuid extends Migration
         
         $table->string('reject_reason')->nullable();
         $table->date('fuiling_date');
-        $table->integer('year');
+        $table->integer('year')->nullable();
         $table->string('month');
         $table->integer('fuel_amount');
         $table->decimal('fuel_cost', 8, 2);
@@ -295,7 +295,7 @@ class CreateAllTablesWithUuid extends Migration
         $table->softDeletes();
     
         // Add a unique constraint on the combination of fueling_id and month
-        $table->primary(['year', 'month', 'driver_id']);  // Composite primary key to avoid duplication
+        // $table->primary([ 'fueling_id','month', 'vehicle_id']);  // Composite primary key to avoid duplication
 
     });
         // GPS Tracking Table

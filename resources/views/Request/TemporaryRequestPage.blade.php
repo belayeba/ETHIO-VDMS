@@ -365,7 +365,15 @@
                     <div class="col-7">
                         <div class="card">
                             <div class="card-body">
-
+                                <iframe
+                                width="100%"
+                                height="600"
+                                seamless
+                                frameBorder="0"
+                               scrolling="auto"
+                                src="http://localhost:8089/superset/dashboard/9/?standalone=1&height=1000&width=800"
+                              >
+                              </iframe>
                                 <table id="basic-datatable"
                                     class="Temporary_datatable table table-centered mb-0 table-nowrap">
                                     <thead>

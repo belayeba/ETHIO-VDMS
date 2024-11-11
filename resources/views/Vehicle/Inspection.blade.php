@@ -41,7 +41,7 @@
                         <h4 class="header-title">Vehicle Inspection</h4>
                     </div>
                     <div class="card-body"> 
-                        <form method="POST" action="{{route('inspection.store')}}">
+                        <form method="POST" action="{{route('inspection.store')}}" enctype="multipart/form-data">
                             @csrf
 
                             <div id="progressbarwizard">
@@ -74,7 +74,7 @@
                             
                                 <div class="tab-pane" id="account-2">
                                 <div class="row">
-                                    <div class="position-relative mb-3">
+                                    <div class="position-relative ">
                                         <div class="position-relative mb-3">
                                             <label class="form-label" for="validationTooltip02">Select Vehicle</label>
                                             <select class="form-control" id="department_id" name="vehicle_id">
@@ -87,31 +87,74 @@
                                             </select>
                                         </div> 
                                     </div>
+                                    {{-- <div class="position-relative mb-3"> --}}
+                                        <div class="position-relative mb-3">
+                                            <label class="form-label" for="validationTooltip02">Insert Inspection Image</label></br>
+                                            <input type="file" name="inspection_image" class="form-control">  
+                                        </div> 
+                                    {{-- </div> --}}
                                     @foreach($parts as $part)
-                                        <div class="row align-items-center mb-3">
-                                            <div class="col-md-3">
-                                                <strong>{{$part->name}}</strong>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <div class="row">
-                                                    <div class="col-3">
-                                                        <div class="form-check">
-                                                            <input type="checkbox" class="form-check-input ok-checkbox" id="ok_{{$loop->index}}" name="damaged_parts[{{$part->id}}]" value="1" data-row="{{$loop->index}}">
-                                                            <input type="hidden" name="parts[{{$part->id}}]" value="{{$part->vehicle_parts_id}}">
-                                                            <label class="form-check-label" for="ok_{{$loop->index}}">OK</label>
-                                                        </div>
+                                    <div class="row align-items-center mb-3">
+                                        <div class="col-md-3">
+                                            <strong>{{$part->name}}</strong>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="row">
+                                                <div class="col-3">
+                                                    <div class="form-check">
+                                                        <input type="checkbox" class="form-check-input ok-checkbox" id="ok_{{$loop->index}}" name="damaged_parts[{{$part->id}}]" value="1" data-row="{{$loop->index}}">
+                                                        <input type="hidden" name="parts[{{$part->id}}]" value="{{$part->vehicle_parts_id}}">
+                                                        <label class="form-check-label" for="ok_{{$loop->index}}">OK</label>
                                                     </div>
-                                                    <div class="col-3">
+                                                </div>
+                                                <div class="col-3">
                                                     <div class="form-check form-checkbox-danger">
                                                         <input type="checkbox" class="form-check-input damaged-checkbox" id="damaged_{{$loop->index}}" name="damaged_parts[{{$part->id}}]" value="0" data-row="{{$loop->index}}">
                                                         <label class="form-check-label" for="damaged_{{$loop->index}}">Damaged</label>
-                                                        <input type="text" name="damage_descriptions[{{$part->id}}]" class=" d-none damaged-notes" placeholder="Add Description" data-row="{{$loop->index}}">
-                                                    </div>
+                                                        <input type="text" name="damage_descriptions[{{$part->id}}]" class="d-none damaged-notes" placeholder="Add Description" data-row="{{$loop->index}}">
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    @endforeach
+                                    </div>
+                                @endforeach
+                                <script>
+                                    document.addEventListener('DOMContentLoaded', function () {
+                                        const okCheckboxes = document.querySelectorAll('.ok-checkbox');
+                                        const damagedCheckboxes = document.querySelectorAll('.damaged-checkbox');
+                                
+                                        okCheckboxes.forEach(checkbox => {
+                                            checkbox.addEventListener('change', function () {
+                                                const rowIndex = this.dataset.row;
+                                                const damagedCheckbox = document.querySelector(`#damaged_${rowIndex}`);
+                                                const notesField = document.querySelector(`input.damaged-notes[data-row="${rowIndex}"]`);
+                                
+                                                if (this.checked) {
+                                                    damagedCheckbox.checked = false;  // Uncheck "Damaged" checkbox
+                                                    notesField.classList.add('d-none');  // Hide the input field
+                                                    notesField.value = ''; // Clear any existing input
+                                                }
+                                            });
+                                        });
+                                
+                                        damagedCheckboxes.forEach(checkbox => {
+                                            checkbox.addEventListener('change', function () {
+                                                const rowIndex = this.dataset.row;
+                                                const okCheckbox = document.querySelector(`#ok_${rowIndex}`);
+                                                const notesField = document.querySelector(`input.damaged-notes[data-row="${rowIndex}"]`);
+                                
+                                                if (this.checked) {
+                                                    okCheckbox.checked = false; // Uncheck "OK" checkbox
+                                                    notesField.classList.remove('d-none'); // Show the input field
+                                                } else {
+                                                    notesField.classList.add('d-none'); // Hide the input field if unchecked
+                                                    notesField.value = ''; // Clear any existing input
+                                                }
+                                            });
+                                        });
+                                    });
+                                </script>
+                                    
                                 </div>
                                     <ul class="list-inline wizard mb-0">
                                         <!-- <li class="next list-inline-item float-end">
@@ -169,14 +212,145 @@
                         @foreach($inspections as $data) 
                         <tbody>
                             <tr>
-                                <td>{{$data->inspection_id}}</td>
+                                <td>{{$loop->iteration}}</td>
                                 <td>{{$data->vehicle->plate_number}}</td>
                                 <td>{{$data->inspection_date}}</td>
-                                <td> <input type="hidden" value="{{$data->inspection_id}}" id="vehicleselection">
-                                    <a href="#" class="btn btn-info rounded-pill"  id="assignBtn" title="Inspect">Inspect</a></td>
-
+                                <td> 
+                                    <button type="button" class="btn btn-info rounded-pill" title="Inspect" id="assignBtn-{{$loop->iteration}}">Show</button>
+                                  
+                                    <input type="hidden" name="id" id="IdSelection-{{$loop->iteration}}" value="{{$data->inspection_id}}" id="vehicleselection">
+                                    <button type="button" class="btn btn-danger rounded-pill reject-btn" data-bs-toggle="modal" data-bs-target="#confirmationModal-{{ $loop->index }}" title="Reject"><i class=" ri-close-circle-fill"></i></button>
+                                </td>
                             </tr>
                         </tbody>
+                        <script>
+                            document.getElementById('assignBtn-{{$loop->iteration}}').addEventListener('click', function() {
+                            var selectedCarId = document.getElementById('IdSelection-{{$loop->iteration}}').value;
+                                
+                                // Perform an Ajax request to fetch data based on the selected car ID
+                                $.ajax({
+                                    url: "{{ route('inspection.show.specific') }}",
+                                    type: 'post',
+                                    headers: {
+                                        'X-CSRF-TOKEN': "{{ csrf_token() }}"
+                                    },
+                                    data: { id: selectedCarId },
+                                    success: function(response) {
+                                        $('#staticaccept-{{$loop->iteration}}').modal('show');
+                                        var cardsContainer = document.getElementById('inspectionCardsContainer-{{$loop->iteration}}');
+                                        cardsContainer.innerHTML = ''; // Clear previous cards
+                        
+                                        if (response.status === 'success' && Array.isArray(response.data) && response.data.length > 0) {
+                                            // Create the table
+                                            var Image = response.data[0].image_path;
+                                            var imageUrl = Image ? "{{ asset('storage/vehicles/Inspections/') }}" + '/' + Image : null;    
+                                            var inspectedBy = response.data[0].inspected_by;
+                                            var createdAt = new Date(response.data[0].created_at).toLocaleDateString('en-US', {
+                                                year: 'numeric',
+                                                month: '2-digit',
+                                                day: '2-digit'
+                                            });
+                                        // Create a section to display "Inspected By" and "Created At" at the top right corner
+                                            var infoSection = document.createElement('div');
+                                            infoSection.className = 'd-flex justify-content-end mb-4'; // Flexbox to align right and add margin-bottom
+                                            infoSection.innerHTML = `
+                                                <p><strong>Inspected By:</strong> ${inspectedBy} </br>
+                                                <strong>Created At:</strong> ${createdAt}</br>
+                                               <strong>Image:</strong> 
+                                               ${ imageUrl 
+                                                    ? `<a href="${imageUrl}" target="_blank"> Click to View </a>` 
+                                                    : 'No image'
+                                                }
+                                            `;
+                                            cardsContainer.appendChild(infoSection); // Append the info section before the table
+                        
+                                            var table = document.createElement('table');
+                                            table.className = 'table table-striped'; // Add Bootstrap classes for styling
+                                            table.innerHTML = `
+                                                <thead>
+                                                    <tr>
+                                                        <th>Part Name</th>
+                                                        <th>Is Damaged</th>
+                                                        <th>Damage Description</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                </tbody>
+                                            `;
+                        
+                                            response.data.forEach(function(inspection) {
+                                                var row = document.createElement('tr');
+                                                row.innerHTML = `
+                                                    <td>${inspection.part_name}</td>
+                                                    <td>${inspection.is_damaged ? 'No' : 'Yes'}</td>
+                                                    <td>${inspection.damage_description ? inspection.damage_description : 'N/A'}</td>
+                                                `;
+                                                table.querySelector('tbody').appendChild(row); // Append row to the table body
+                                            });
+                        
+                                            cardsContainer.appendChild(table);
+                        
+                                        } else {
+                                            // Handle the case where no data is available
+                                            cardsContainer.innerHTML = '<p>No inspection data available.</p>';
+                                        }
+                                    },
+                                    error: function() {
+                                        var cardsContainer = document.getElementById('inspectionCardsContainer');
+                                        cardsContainer.innerHTML = ''; // Clear previous cards
+                                        cardsContainer.innerHTML = '<p>No inspection data available at the moment. Please check the Plate number!</p>';
+                                    }
+                                });
+                            });
+                        </script>
+                        <!-- this is for the assign  modal -->
+                        <div class="modal fade" id="staticaccept-{{$loop->iteration}}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-lg modal-dialog-scrollable">
+                                <div class="modal-content">
+                                     
+                                        <div class="modal-header">
+                                                                                                            
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div> <!-- end modal header -->
+                                        <div class="modal-body">
+                                            <div class="row mt-3" id="inspectionCardsContainer-{{$loop->iteration}}" class="table table-striped"> 
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="submit" class="btn btn-secondary"  data-bs-dismiss="modal" aria-label="Close">close</button>
+                                        </div> <!-- end modal footer -->
+                                                                                                    
+                                </div> <!-- end modal content-->
+                            </div> <!-- end modal dialog-->
+                         <!-- Accept Alert Modal -->
+                         <div class="modal fade" id="confirmationModal-{{ $loop->index }}" tabindex="-1" role="dialog"
+                         aria-labelledby="confirmationModalLabel"aria-hidden="true">
+                         <div class="modal-dialog modal-sm">
+                             <div class="modal-content">
+                                 <form method="POST" action="{{ route('inspection.delete', ['inspectionId' => $data->inspection_id]) }}">
+                                     @csrf
+                                     @method('DELETE')
+                                     <input type="hidden" name="request_id" id="request_id">
+                                     <div class="modal-body p-4">
+                                         <div class="text-center">
+                                             <i class="ri-alert-line h1 text-danger"></i>
+                                             <h4 class="mt-2">Warning</h4>
+                                             <h5 class="mt-3">
+                                                 Are you sure you want to DELETE this Inspection Form?</br> This action
+                                                 cannot be
+                                                 undone.
+                                             </h5>
+                                             <button type="button" class="btn btn-secondary"
+                                                 data-bs-dismiss="modal">Cancel</button>
+                                             <button type="submit" class="btn btn-danger"
+                                                 id="confirmDelete">Yes,
+                                                 DELETE</button>
+                                         </div>
+                                     </div>
+                                 </form>
+                             </div><!-- /.modal-content -->
+                         </div><!-- /.modal-dialog -->
+                     </div><!-- /.modal -->
                     @endforeach
                     </table>
                 </div> <!-- end card body-->
