@@ -43,15 +43,12 @@ class PermanentFuelModel extends Model {
     public function vehicle() {
         return $this->belongsTo( VehiclesModel::class, 'vehicle_id', 'vehicle_id' );
     }
-
     public function driver() {
         return $this->belongsTo( DriversModel::class, 'driver_id', 'driver_id' );
     }
-
     public function financeApprover() {
         return $this->belongsTo( User::class, 'finance_approved_by', 'id' );
     }
-
     public function permanentRequest() {
         return $this->belongsTo( VehiclePermanentlyRequestModel::class, 'permanent_id', 'vehicle_request_permanent_id' );
     }

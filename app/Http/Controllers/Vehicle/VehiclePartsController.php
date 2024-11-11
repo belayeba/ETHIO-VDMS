@@ -16,7 +16,7 @@ class VehiclePartsController extends Controller
                 $rules = [
                     'name' => 'required|string|unique:vehicle_parts,name',
                     'notes' => 'nullable|string',
-                    'type' => "required|in:spare_part,norma_part"
+                    'type' => "required|in:spare_part,normal_part"
                 ];
         
                 $validator = Validator::make($request->all(), $rules);
