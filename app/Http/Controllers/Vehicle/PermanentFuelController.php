@@ -24,7 +24,8 @@ class PermanentFuelController extends Controller {
     public function index() {
         $logged_user = Auth::id();
         $get_driver = DriversModel::where('user_id',$logged_user)->first();
-        $fuelings = PermanentFuelModel::where('driver_id',$get_driver->driver_id)
+        $fuelings = PermanentFuelModel::select('fueling_id','month','year','vehicle_id')
+                                       ->where('driver_id',$get_driver->driver_id)
                                        ->groupBy('fueling_id')
                                        ->latest()->get();
         return view( 'Fuelling.ParmanententRequestPage',compact('fuelings'));
@@ -117,8 +118,8 @@ class PermanentFuelController extends Controller {
         }
         return redirect()->route( 'permanenet_fuel_request' )->with( 'success', 'Fueling records created successfully.' );
     }
-    public function show( $id ) {
-        $fueling = PermanentFuelModel::findOrFail( $id );
+   public function show( $id ) {
+        $fueling = PermanentFuelModel::where('fueling_id',$id );
         return redirect()->back()->with('data',
         $fueling,
         );    
@@ -189,7 +190,7 @@ class PermanentFuelController extends Controller {
                     $file = $request->file( "reciet_attachment[$index]" );
                     $fileName = time() . '_' . $file->getClientOriginalName();
                     $storagePath = storage_path( 'app/public/vehicles/reciept' );
-                    if ( !file_exists( $storagePath ) ) {
+                    if (!file_exists( $storagePath ) ) {
                         mkdir( $storagePath, 0755, true );
                     }
                     $file->move( $storagePath, $fileName );
@@ -224,7 +225,8 @@ class PermanentFuelController extends Controller {
     }
     public function finance_get_page()
     {
-        $fuels = PermanentFuelModel::groupBy('fueling_id')
+        $fuels = PermanentFuelModel:: select('fueling_id','driver_id','year')
+                                        ->groupBy('fueling_id')
                                         ->latest()
                                         ->get();
         return view('Fuelling.financeApprove',compact('fuels'));
