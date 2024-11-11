@@ -126,7 +126,7 @@ class PermanentFuelController extends Controller {
         return redirect()->route( 'permanenet_fuel_request' )->with( 'success', 'Fueling records created successfully.' );
     }
     public function show( $id ) {
-        $fueling = PermanentFuelModel::findOrFail( $id );
+        $fueling = PermanentFuelModel::where('fueling_id',$id );
         return redirect()->back()->with('data',
         $fueling,
         );    
