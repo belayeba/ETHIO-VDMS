@@ -218,9 +218,13 @@ class InspectionController extends Controller
                                         ->delete();
         
             if ($deleted) {
-                return response()->json(['status' => 'success', 'message' => 'Inspection deleted successfully']);
+                return redirect()->back()->with('success_message',
+                "Inspection deleted successfully",
+                 );
             } else {
-                return response()->json(['status' => 'error', 'message' => 'Inspection not found or not deleted'], 404);
+                return redirect()->back()->with('error_message',
+                "Inspection not found or not deleted",
+                 );
             }
         }
         

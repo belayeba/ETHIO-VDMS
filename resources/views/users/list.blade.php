@@ -1,5 +1,5 @@
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+{{-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script> --}}
 
 <!-- DataTables JS -->
 
@@ -29,34 +29,37 @@
             </div>
             @endif
             <div class="container-fluid">
-                <div class="col-12">
-                    <div class="card">
-                        <div class="card-header">
-                            <h4 class="header-title">User Lists</h4>
-                            <a href="{{ route('user_create') }}" class="btn btn-primary rounded-pill">Create</a>
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-header d-flex justify-content-between align-items-center flex-wrap gap-2">
+                                <h4 class="header-title mb-0">User Lists</h4>
+                                <a href="{{ route('user_create') }}" class="btn btn-primary rounded-pill">Create</a>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-centered table-nowrap user_datatable">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col">Name</th>
+                                                <th scope="col">Email</th>
+                                                <th scope="col">Phone</th>
+                                                <th scope="col">Department</th>
+                                                <th scope="col">Start date</th>
+                                                <th scope="col">Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <!-- Table content -->
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
                         </div>
-                        <div class="card-body">
-                            <table class=" table table-centered mb-0 table-nowrap user_datatable">
-                                <thead>
-                                    <tr>
-                                        <th>Name</th>
-                                        <th>Email</th>
-                                        <th>Phone</th>
-                                        <th>Department</th>
-                                        <th>Start date</th>
-                                        <th>Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-
-                                </tbody>
-                            </table>
-                        </div> <!-- end card body-->
-                    </div> <!-- end card -->
-                </div><!-- end col-->
+                    </div>
+                </div>
             </div> <!-- end row-->
-        </div>
-    </div>
+      
     <!-- END wrapper -->
 
     <!-- jQuery first -->
