@@ -24,8 +24,10 @@ class PermanentFuelController extends Controller {
     public function index() {
         $logged_user = Auth::id();
         $get_driver = DriversModel::where('user_id',$logged_user)->first();
-        $fuelings = PermanentFuelModel::where('driver_id',$get_driver->driver_id)->latest()->get();
-        return view( 'Fuelling.ParmanententRequestPage' );
+        $fuelings = PermanentFuelModel::where('driver_id',$get_driver->driver_id)
+                                       ->groupBy('fueling_id')
+                                       ->latest()->get();
+        return view( 'Fuelling.ParmanententRequestPage',compact('fuelings'));
     }
     public function my_request()
       {
@@ -41,6 +43,7 @@ class PermanentFuelController extends Controller {
             'vehicle_id' => 'required|uuid|exists:vehicles,vehicle_id',
             'fuiling_date.*' => 'required|date',
             'month' => 'required|In:1,2,3,4,5,6,7,8,9,10,11,12,13',
+            'year' => 'required|integer',
             'fuel_amount.*' => 'required|integer',
             'fuel_cost.*' => 'required|numeric',
             'reciet_attachment.*' => 'required|file|mimes:jpeg,png,pdf|max:2048'
@@ -77,20 +80,21 @@ class PermanentFuelController extends Controller {
 
         $get_permanent_id = $permanent->vehicle_request_permanent_id;
         // Loop through each set of fueling data
-       
+        $fuel=Str::uuid();
         $today = \Carbon\Carbon::today();
         $files = $request->file( "reciet_attachment_" );
+        $fueling_date = $request->input('fuiling_date');
         $ethiopianDate = $this->dailyKmCalculation->ConvertToEthiopianDate($today); 
         foreach ( $request->fuel_amount as $index => $fuel_amount ) {
             $fueling = new PermanentFuelModel();
-            // $fuel=Str::uuid();
-            // $fueling->fueling_id = $fuel;
+            $fueling->fueling_id = $fuel;
             $fueling->vehicle_id = $request->input('vehicle_id');
             $fueling->driver_id = $the_driver_id;
             $fueling->permanent_id = $get_permanent_id;
             // dd($request->fuiling_date[ $index ]);
-            $fueling->fuiling_date = $request->fuiling_date[ $index ];
+            $fueling->fuiling_date = $fueling_date[ $index ];
             $fueling->month = $request->month;
+            $fueling->year = $request->year;
             $fueling->fuel_amount = $fuel_amount[ $index ];
             $fueling->fuel_cost = $request->fuel_cost[ $index ];
             
@@ -220,7 +224,9 @@ class PermanentFuelController extends Controller {
     }
     public function finance_get_page()
     {
-        $fuels = PermanentFuelModel::latest()->get();
+        $fuels = PermanentFuelModel::groupBy('fueling_id')
+                                        ->latest()
+                                        ->get();
         return view('Fuelling.financeApprove',compact('fuels'));
     }
     // Finance Approval

@@ -93,7 +93,9 @@ class VehiclePartsController extends Controller
                 }
         
                 $vehiclePart->delete();
-                return redirect()->back()->with('success_message',"Vehicle Part Successfully Deleted",);
+                return redirect()->back()->with('success_message',
+                'Successfully Deleted.',
+            );
             }
     }
     

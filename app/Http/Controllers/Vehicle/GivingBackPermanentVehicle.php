@@ -41,19 +41,17 @@ public function ReturntVehiclePerm(Request $request)
                   // If validation fails, return an error response
             if ($validator->fails()) 
                 {
-                    return response()->json([
-                        'success' => false,
-                        'message' => $validator->errors(),
-                    ]);
+                    return redirect()->back()->with('error_message',
+                    'All field is required',
+                    );
                 }
             $logged_user = Auth::id();
             $get_permanent_request = VehiclePermanentlyRequestModel::find('request_id');
             if($get_permanent_request->requested_by != $logged_user || $get_permanent_request->status = false)
               {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Warning! You are denied the service',
-                ]);
+                return redirect()->back()->with('error_message',
+                    'Warning! You are denied the service',
+                    );
               }
             try
                 {
@@ -69,19 +67,17 @@ public function ReturntVehiclePerm(Request $request)
                     ]);
                     // Success: Record was created
                     // Redirect page to Permananet
-                    return response()->json([
-                        'success' => true,
-                        'message' => 'Request sent successfully.',
-                    ]);
+                    return redirect()->back()->with('success_message',
+                    'Request sent successfully',
+                    );
                         
                 }
             catch (Exception $e) 
                 {
                     // Handle the case when the vehicle request is not found
-                    return response()->json([
-                        'success' => false,
-                        'message' => 'Sorry, Something went wrong',
-                    ]);
+                    return redirect()->back()->with('error_message',
+                    'Sorry, Something Went Wrong.',
+                    );
                 }
     }
 public function update_return_request(Request $request) 
@@ -95,10 +91,9 @@ public function update_return_request(Request $request)
         // Check if validation fails
         if ($validator->fails()) 
             {
-                return response()->json([
-                    'success' => false,
-                    'message' => $validator->errors()
-                ], 422); 
+                return redirect()->back()->with('error_message',
+                'All field is required.',
+                );
             }
         $id = $request->input('request_id');
         try
@@ -108,17 +103,15 @@ public function update_return_request(Request $request)
                 // Check if the record was found
                 if($user_id != $Vehicle_Request->requested_by)
                         {
-                            return response()->json([
-                                'success' => false,
-                                'message' => 'Warning! You are denied the service.'
-                            ]);
+                            return redirect()->back()->with('error_message',
+                            'Warning you are denied the service',
+                            );
                         }
                     if($Vehicle_Request->approved_by)
                         {
-                            return response()->json([
-                                'success' => false,
-                                'message' => 'Warning! You are denied the service.'
-                            ]);
+                            return redirect()->back()->with('error_message',
+                            'Warning! You are denied the service',
+                            );
                         } 
                     else
                         {
@@ -126,29 +119,26 @@ public function update_return_request(Request $request)
                             $get_permanent_request = VehiclePermanentlyRequestModel::find($perm_request_id);
                             if($get_permanent_request->requested_by != $user_id || $get_permanent_request->status = false)
                               {
-                                    return response()->json([
-                                        'success' => false,
-                                        'message' => 'Warning! You are denied the service',
-                                    ]);
+                                return redirect()->back()->with('error_message',
+                                'Warning! You are denied the service.',
+                                );
                               }
                                 // Update the record with new data
                                 $Vehicle_Request->update([
                                     'purpose' => $request->purpose,
                                 ]);
                                 // Return a success response
-                                return response()->json([
-                                    'success' => true,
-                                    'message' => 'Request updated successfully.',
-                                ]);
+                                return redirect()->back()->with('success_message',
+                                'Request updated successfully.',
+                                );
                         }
             }
         catch (Exception $e) 
             {
                 // Handle the case when the vehicle request is not found
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Sorry, Something went wrong',
-                ]);
+                return redirect()->back()->with('error_message',
+                                'Sorry, Something went wrong.',
+                                );
             }
     }
      // User can delete Request
@@ -160,10 +150,9 @@ public function deleteRequest(Request $request)
         // Check validation error
         if ($validation->fails()) 
             {
-                return response()->json([
-                    'success' => false,
-                    'message' => "Warning! You are denied the service",
-                ]);
+                return redirect()->back()->with('error_message',
+                'Warning! You are denied the service.',
+                );
             }
         // Check if the request is that of this users
         $id = $request->input('request_id');
@@ -173,24 +162,22 @@ public function deleteRequest(Request $request)
                 $Vehicle_Request = GivingBackVehiclePermanently::findOrFail($id);
                 if($Vehicle_Request->requested_by != $user_id || $Vehicle_Request->approved_by)
                     {
-                        return response()->json([
-                            'success' => false,
-                            'message' => 'Warning! You are denied the service.',
-                        ]);
+                        return redirect()->back()->with('error_message',
+                        'Warning! You are denied the service.',
+                        );
                     }
                 $Vehicle_Request->delete();
-                return response()->json([
-                    'success' => true,
-                    'message' => 'Request Successfully deleted',
-                ]);
+                return redirect()->back()->with('success_message',
+                        'Deleted successfully',
+                    );
             } 
         catch (Exception $e) 
             {
                 // Handle the case when the vehicle request is not found
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Sorry, Something went wrong',
-                ]);
+
+                 return redirect()->back()->with('error_message',
+                    'Sorry, Something Went Wrong.',
+                    );
             }
     }
 // Vehicle Director Page
@@ -208,10 +195,9 @@ public function VehicleDirectorApproveRequest(Request $request)
             // Check validation error
             if ($validation->fails()) 
                 {
-                    return response()->json([
-                        'success' => false,
-                        'message' =>"Warning! You are denied the service",
-                    ]);
+                   return redirect()->back()->with('error_message',
+                                'Warning! You are denied the service.',
+                                );
                 }
             // Check if it is not approved before
             $id = $request->input('request_id');
@@ -221,25 +207,22 @@ public function VehicleDirectorApproveRequest(Request $request)
                 $Vehicle_Request = GivingBackVehiclePermanently::findOrFail($id);
                 if($Vehicle_Request->approved_by)
                     {
-                        return response()->json([
-                            'success' => false,
-                            'message' => 'Warning!, You are denied the service',
-                        ]);
+                        return redirect()->back()->with('error_message',
+                        'Sorry, Something Went Wrong.',
+                        );
                     }
                 $Vehicle_Request->approved_by = $user_id;
                 $Vehicle_Request->save();
-                return response()->json([
-                    'success' => true,
-                    'message' => 'You approved the request successfully',
-                ]);
+                return redirect()->back()->with('success_message',
+                                'You approved successfully',
+                            );
             }
         catch (Exception $e) 
             {
                 // Handle the case when the vehicle request is not found
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Sorry, Something went wrong',
-                ]);
+                return redirect()->back()->with('error_message',
+                    'Sorry, Something Went Wrong.',
+                    );
             }
     }
 // Director Reject the request
@@ -252,10 +235,9 @@ public function Vec_DirectorRejectRequest(Request $request)
               // Check validation error
         if ($validation->fails()) 
             {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Sorry, Something went wrong',
-                ]);
+                return redirect()->back()->with('error_message',
+                'Sorry, Something Went Wrong.',
+                );
             }
           // Check if it is not approved before
         $id = $request->input('request_id');
@@ -278,18 +260,16 @@ public function Vec_DirectorRejectRequest(Request $request)
                 $url = "{{ route('return_permanent_request_page') }}";
                 $user->NotifyUser($message,$subject,$url);
                 $Vehicle_Request->save();
-                return response()->json([
-                    'success' => true,
-                    'message' => 'You are successfully Rejected the Request',
-                ]);
+                return redirect()->back()->with('success_message',
+                'You are rejected the request Successfully.',
+            );
             }
         catch (Exception $e) 
             {
                 // Handle the case when the vehicle request is not found
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Sorry, Something went wrong',
-                ]);
+                return redirect()->back()->with('error_message',
+                'Sorry, Something Went Wrong.',
+                );
             }
     }
 // Dispatcher Page
@@ -309,10 +289,9 @@ public function DispatcherApproveRequest(Request $request)
             // Check validation error
             if ($validation->fails()) 
                 {
-                    return response()->json([
-                        'success' => false,
-                        'message' => "Sorry, You are denied the service",
-                    ]);
+                    return redirect()->back()->with('error_message',
+                    'Sorry, Something Went Wrong.',
+                    );
                 }
             // Check if it is not approved before
             $id = $request->input('request_id');
@@ -322,10 +301,9 @@ public function DispatcherApproveRequest(Request $request)
             $get_permanent_request = VehiclePermanentlyRequestModel::find($Vehicle_Request->permanent_request );
             if($Vehicle_Request->received_by)
                 {
-                    return response()->json([
-                        'success' => false,
-                        'message' => 'Sorry, You are denied the service',
-                    ]);
+                    return redirect()->back()->with('error_message',
+                    'Sorry, Something Went Wrong.',
+                    );
                 }
             $todayDateTime = Carbon::now();
             $get_permanent_request->status = false;
@@ -340,10 +318,9 @@ public function DispatcherApproveRequest(Request $request)
             $subject = "Vehicle Returning";
             $url = "{{ route('return_permanent_request_page') }}";
             $user->NotifyUser($message,$subject,$url);
-            return response()->json([
-                'success' => true,
-                'message' => 'The Vehicle Successfully Returned',
-            ]);
+            return redirect()->back()->with('success_message',
+                                'Vehicle Successfully Returned',
+                            );
     }
 //vehicle Director Reject the request
 public function DispatcherRejectRequest(Request $request)
@@ -355,10 +332,9 @@ public function DispatcherRejectRequest(Request $request)
               // Check validation error
         if ($validation->fails()) 
             {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Sorry, Something went wrong',
-                ]);
+                return redirect()->back()->with('error_message',
+                    'Sorry, Something Went Wrong.',
+                    );
             }
           // Check if it is not approved before
         $id = $request->input('request_id');
@@ -369,10 +345,9 @@ public function DispatcherRejectRequest(Request $request)
                 $Vehicle_Request = GivingBackVehiclePermanently::findOrFail($id);
                 if($Vehicle_Request->received_by)
                     {
-                        return response()->json([
-                            'success' => false,
-                            'message' => 'Warning! You are denied the service',
-                        ]);
+                        return redirect()->back()->with('error_message',
+                        'Warning! You are denied the service.',
+                        );
                     }
                 $Vehicle_Request->received_by = $user_id;
                 $Vehicle_Request->reject_reason_dispatcher = $reason;
@@ -382,17 +357,15 @@ public function DispatcherRejectRequest(Request $request)
                 $subject = "Vehicle Returning";
                 $url = "{{ route('return_permanent_request_page') }}";
                 $user->NotifyUser($message,$subject,$url);
-                return response()->json([
-                    'success' =>true,
-                    'message' => 'You have successfully Rejected the Request',
-                ]);
+                return redirect()->back()->with('success_message',
+                'You have successfully Rejected the request.',
+            );
             }
         catch(Exception $e)
             {
-                return response()->json([
-                    'success' =>false,
-                    'message' => 'Sorry, Something Went Wrong',
-                ]);
+                return redirect()->back()->with('error_message',
+                'Sorry, Something Went Wrong.',
+                );
             }
     }
 }

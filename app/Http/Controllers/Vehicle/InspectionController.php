@@ -18,9 +18,9 @@ class InspectionController extends Controller
     protected $dailyKmCalculation;
 
     public function __construct(Daily_KM_Calculation $dailyKmCalculation)
-    {
-        $this->dailyKmCalculation = $dailyKmCalculation;
-    }
+        {
+            $this->dailyKmCalculation = $dailyKmCalculation;
+        }
     public function InspectionPage()
         {
             $vehicle = VehiclesModel::all();
@@ -90,9 +90,9 @@ class InspectionController extends Controller
                 }
 
             });
-        
-            return response()->json(['status' => 'success', 'message' => 'Inspection saved successfully']);
-        }
+                return redirect()->back()->with('success_message',
+                    'Inspection saved successfully.',);
+               }
         // Show a specific inspection
     public function showInspection(Request $request)
         {
@@ -120,7 +120,6 @@ class InspectionController extends Controller
                         'damage_description'  => $inspection->damage_description,
                     ];
                 });
-
                 return response()->json(['status' => 'success', 'data' => $latest_inspection]);
             }
             catch(Exception $e)
@@ -205,7 +204,9 @@ class InspectionController extends Controller
         
             if ($updated) 
             {
-                return response()->json(['status' => 'success', 'message' => 'Inspection updated successfully']);
+                return redirect()->back()->with('success_message',
+                    'Inspection Updated successfully',
+                );
             } 
             else 
             {

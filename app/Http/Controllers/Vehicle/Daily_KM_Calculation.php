@@ -100,11 +100,10 @@ class Daily_KM_Calculation extends Controller
                     catch (Exception $e) 
                         {
                             // Handle the case when the vehicle request is not found
-                            return response()->json([
-                                'success' => false,
-                                'message' => $e,
-                            ]);
-                        }
+                            return redirect()->back()->with('error_message',
+                            'Sorry, Something went wrong',
+                        );
+                    }
             }
         public function aftern_km(Request $request)
             {
@@ -181,7 +180,7 @@ class Daily_KM_Calculation extends Controller
                     $vehicle = DailyKMCalculationModel::where('created_at',$ethio_date)->where('vehicle_id',$id)->first();
                     
                     return response()->json([
-                        'success' => false,
+                        'success_message' => false,
                         'vehicle' => $vehicle,
                     ]);
             }
@@ -211,14 +210,14 @@ class Daily_KM_Calculation extends Controller
                 else {
                     # code...
                     return response()->json([
-                        'success' => true,
+                        'success_message' => true,
                         'message' => "Both filled",
                     ]);
                 }
                 } catch (\Throwable $th) {
                     //throw $th;
                     return response()->json([
-                        'success' => true,
+                        'success_message' => true,
                         'message' => "Choose to fill",
                     ]);
                 }

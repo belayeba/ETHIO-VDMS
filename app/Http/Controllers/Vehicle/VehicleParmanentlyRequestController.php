@@ -32,66 +32,66 @@ class VehicleParmanentlyRequestController extends Controller
             return view("Request.ParmanententRequestPage", compact('Requested'));
         }
 
-        // show list of permanent request
-        public function FetchPermanentRequest()
-            {
-             
+    // show list of permanent request
+    public function FetchPermanentRequest()
+        {
+            
 
-                $id = Auth::id();        
-                $data = VehiclePermanentlyRequestModel::where('requested_by', $id)->get();
-                
-                return datatables()->of($data)
-                ->addIndexColumn()
-                ->addColumn('counter', function($row) use ($data){
-                    static $counter = 0;
-                    $counter++;
-                    return $counter;
-                })
+            $id = Auth::id();        
+            $data = VehiclePermanentlyRequestModel::where('requested_by', $id)->get();
+            
+            return datatables()->of($data)
+            ->addIndexColumn()
+            ->addColumn('counter', function($row) use ($data){
+                static $counter = 0;
+                $counter++;
+                return $counter;
+            })
 
-                ->addColumn('start_date', function ($row) {
-                    return $row->created_at->format('M j, Y,');
-                })
+            ->addColumn('start_date', function ($row) {
+                return $row->created_at->format('M j, Y,');
+            })
 
-                ->addColumn('status', function ($row) {
-                    return $row->status == 1 ? 'Approved' : 'Pending';
-                })
+            ->addColumn('status', function ($row) {
+                return $row->status == 1 ? 'Approved' : 'Pending';
+            })
 
-                ->addColumn('vehicle', function ($row) {
-                    return  $row->vehicle_id !== null ? $row->vehicle->plate_number : ' ' ;
-                })
+            ->addColumn('vehicle', function ($row) {
+                return  $row->vehicle_id !== null ? $row->vehicle->plate_number : ' ' ;
+            })
 
-                ->addColumn('actions', function ($row){
-                    $action = '';
+            ->addColumn('actions', function ($row){
+                $action = '';
 
-                    if (is_null($row->approved_by) && is_null($row->director_reject_reason)) {
-                        $action .= '<button type="button" class="btn btn-secondary rounded-pill" data-bs-toggle="modal" data-bs-target="#standard-modal" data-id="' . $row->vehicle_request_permanent_id . '" data-reason="' . $row->purpose. '"  title="edit">
-                                    <i class="ri-edit-line"></i>
-                                </button>
-                               <button type="button" class="btn btn-danger rounded-pill delete-btn" 
-                                data-id="' . $row->vehicle_request_permanent_id . '" title="Delete">
-                                <i class="ri-close-circle-line"></i></button>';
-                    }
+                if (is_null($row->approved_by) && is_null($row->director_reject_reason)) {
+                    $action .= '<button type="button" class="btn btn-secondary rounded-pill" data-bs-toggle="modal" data-bs-target="#standard-modal" data-id="' . $row->vehicle_request_permanent_id . '" data-reason="' . $row->purpose. '"  title="edit">
+                                <i class="ri-edit-line"></i>
+                            </button>
+                            <button type="button" class="btn btn-danger rounded-pill delete-btn" 
+                            data-id="' . $row->vehicle_request_permanent_id . '" title="Delete">
+                            <i class="ri-close-circle-line"></i></button>';
+                }
 
-                    $action .= '</form>';
+                $action .= '</form>';
 
-                    if (!is_null($row->vehicle_id)) {
-                        $action = '<input type="hidden" value="' . $row->vehicle_id . '" id="vehicleselection"> 
-                        <a href="#" class="btn btn-info rounded-pill assignBtn" data-id="' . $row->vehicle_id . '" title="Inspect">Inspect</a>';
-             
-                    }
+                if (!is_null($row->vehicle_id)) {
+                    $action = '<input type="hidden" value="' . $row->vehicle_id . '" id="vehicleselection"> 
+                    <a href="#" class="btn btn-info rounded-pill assignBtn" data-id="' . $row->vehicle_id . '" title="Inspect">Inspect</a>';
+            
+                }
 
-                    if (!is_null($row->vehicle_id) && !is_null($row->accepted_by_requestor)) {
-                        $action .= '<a href="' . route('accept_assigned_vehicle', ['id' => $row->vehicle_request_permanent_id]) . '" class="btn btn-primary rounded-pill" title="Accept">Accept</a>
-                                <button type="button" class="btn btn-danger rounded-pill reject-btn" data-bs-toggle="modal" data-bs-target="#staticBackdrop" data-id="' . $row->vehicle_request_permanent_id . '" title="Reject">Reject</button>';
-                    }
+                if (!is_null($row->vehicle_id) && !is_null($row->accepted_by_requestor)) {
+                    $action .= '<a href="' . route('accept_assigned_vehicle', ['id' => $row->vehicle_request_permanent_id]) . '" class="btn btn-primary rounded-pill" title="Accept">Accept</a>
+                            <button type="button" class="btn btn-danger rounded-pill reject-btn" data-bs-toggle="modal" data-bs-target="#staticBackdrop" data-id="' . $row->vehicle_request_permanent_id . '" title="Reject">Reject</button>';
+                }
 
-                    return $action;
-                })
+                return $action;
+            })
 
-                ->rawColumns(['actions','start_date','status','vehicle','counter'])
-                ->toJson();
-        
-            }
+            ->rawColumns(['actions','start_date','status','vehicle','counter'])
+            ->toJson();
+    
+        }
 
     // Send Vehicle Request Parmananently
     public function RequestVehiclePerm(Request $request)
@@ -143,10 +143,9 @@ class VehicleParmanentlyRequestController extends Controller
             ]);
             // Check if validation fails
             if ($validator->fails()) {
-                return response()->json([
-                    'success' => false,
-                    'message' => $validator->errors()
-                ], 422); // 422 Unprocessable Entity
+                return redirect()->back()->with('error_message',
+                'All fields required',
+                );
             }
             $id = $request->input('request_id');
             try {
@@ -154,34 +153,35 @@ class VehicleParmanentlyRequestController extends Controller
                 $user_id = Auth::id();
                 // Check if the record was found
                 if ($user_id != $Vehicle_Request->requested_by) {
-                    return response()->json([
-                        'success' => false,
-                        'message' => 'Warning! You are denied the service.'
-                    ]);
-                }
-                if ($Vehicle_Request->approved_by) {
-                    return response()->json([
-                        'success' => false,
-                        'message' => 'Warning! You are denied the service.'
-                    ]);
-                } else {
-                    // Update the record with new data
-                    $Vehicle_Request->update([
-                        'purpose' => $request->purpose,
-                        'position_letter' => $request->position_letter,
-                    ]);
-
-                    // Return a success response
-                    return response()->json([
-                        'success' => true,
-                        'message' => 'Vehicle request updated successfully.',
-                    ]);
-                }
-            } catch (Exception $e) {
-                // Handle the case when the vehicle request is not found
-            return redirect()->back()->with('error_message',
-                                "Sorry, Something went wrong",
+                    return redirect()->back()->with('error_message',
+                                'Warning! You are denied the service.',
                                 );
+                }
+                if ($Vehicle_Request->approved_by) 
+                    {
+                        return redirect()->back()->with('error_message',
+                        'Warning! You are denied the service.',
+                        );
+                    } 
+                else 
+                    {
+                        // Update the record with new data
+                        $Vehicle_Request->update([
+                            'purpose' => $request->purpose,
+                            'position_letter' => $request->position_letter,
+                        ]);
+                        // Return a success response
+                        return redirect()->back()->with('success_message',
+                                'Vehicle Request updated successfully.',
+                                );
+                    }
+            } 
+            catch (Exception $e) 
+            {
+                // Handle the case when the vehicle request is not found
+                return redirect()->back()->with('error_message',
+                                    "Sorry, Something went wrong",
+                                    );
             }
         }
     // User can delete Request
@@ -192,10 +192,9 @@ class VehicleParmanentlyRequestController extends Controller
             ]);
             // Check validation error
             if ($validation->fails()) {
-                return response()->json([
-                    'success' => false,
-                    'message' => $validation->errors(),
-                ]);
+                return redirect()->back()->with('error_message',
+                'All fields are required',
+                );
             }
             // Check if the request is that of this users
             $id = $request->input('request_id');
@@ -203,22 +202,19 @@ class VehicleParmanentlyRequestController extends Controller
             try {
                 $Vehicle_Request = VehiclePermanentlyRequestModel::findOrFail($id);
                 if ($Vehicle_Request->requested_by != $user_id) {
-                    return response()->json([
-                        'success' => false,
-                        'message' => 'Warning! You are denied the service.',
-                    ]);
+                    return redirect()->back()->with('error_message',
+                    'All fields are required',
+                    );
                 }
                 if ($Vehicle_Request->approved_by) {
-                    return response()->json([
-                        'success' => false,
-                        'message' => 'Warning! You are denied the service.',
-                    ]);
+                    return redirect()->back()->with('error_message',
+                                'Warning! You are denied the service.',
+                                );
                 }
                 $Vehicle_Request->delete();
-                return response()->json([
-                    'success' => true,
-                    'message' => 'Request Successfully deleted',
-                ]);
+                return redirect()->back()->with('success_message',
+                'Successfully Deleted.',
+            );
             } catch (Exception $e) {
                 // Handle the case when the vehicle request is not found
             return redirect()->back()->with('error_message',
@@ -307,10 +303,9 @@ class VehicleParmanentlyRequestController extends Controller
                 $subject = "Vehicle Permanent";
                 $url = "{{ route('vec_perm_request') }}";
                 $user->NotifyUser($message,$subject,$url);
-                return response()->json([
-                    'success' => true,
-                    'message' => 'You are successfully Rejected the Request',
-                ]);
+                return redirect()->back()->with('success_message',
+                'Successfully Rejected.',
+            );
             } catch (Exception $e) {
                 // Handle the case when the vehicle request is not found
             return redirect()->back()->with('error_message',
@@ -335,10 +330,9 @@ class VehicleParmanentlyRequestController extends Controller
             ]);
             // Check validation error
             if ($validation->fails()) {
-                return response()->json([
-                    'success' => false,
-                    'message' => $validation->errors(),
-                ]);
+                return redirect()->back()->with('error_message',
+                'All field are required',
+                );
             }
             // Check if it is not approved before
             $id = $request->input('request_id');
@@ -346,25 +340,22 @@ class VehicleParmanentlyRequestController extends Controller
             $the_vehicle = VehiclesModel::findOrFail($vehicle_id);
             if(!$the_vehicle->status)
             {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'This Vehicle is not active',
-                ]);
+                return redirect()->back()->with('error_message',
+                                'Vehicle Not active.',
+                                );
             }
             $latest_inspection = InspectionModel::where('vehicle_id', $vehicle_id)->latest()->first();
             if (!$latest_inspection) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Fill Inspection First',
-                ]);
+                return redirect()->back()->with('error_message',
+                'Fill inspection first',
+                );
             }
             $user_id = Auth::id(); 
             $Vehicle_Request = VehiclePermanentlyRequestModel::findOrFail($id);
             if ($Vehicle_Request->given_by) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Sorry, You are denied the service',
-                ]);
+                return redirect()->back()->with('error_message',
+                'Sorry, something went wrong',
+                );
             }
             // dd($Vehicle_Request);
             $today = Carbon::today()->toDateString();
@@ -378,10 +369,9 @@ class VehicleParmanentlyRequestController extends Controller
             $subject = "Vehicle Permanent";
             $url = "{{ route('vec_perm_request') }}";
             $user->NotifyUser($message,$subject,$url);
-            return response()->json([
-                'success' => true,
-                'message' => 'The Request is successfully Approved',
-            ]);
+            return redirect()->back()->with('success_message',
+                'Successfully Approved.',
+            );
         }
     //vehicle Director Reject the request
     public function DispatcherRejectRequest(Request $request)
@@ -392,10 +382,9 @@ class VehicleParmanentlyRequestController extends Controller
             ]);
             // Check validation error
             if ($validation->fails()) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Sorry, Something went wrong',
-                ]);
+                return redirect()->back()->with('error_message',
+                'Sorry, Something Went Wrong.',
+                );
             }
             // Check if it is not approved before
             $id = $request->input('request_id');
@@ -403,10 +392,9 @@ class VehicleParmanentlyRequestController extends Controller
             $user_id = Auth::id();
             $Vehicle_Request = VehiclePermanentlyRequestModel::findOrFail($id);
             if ($Vehicle_Request->assigned_by) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Warning! You are denied the service',
-                ]);
+                return redirect()->back()->with('error_message',
+                'Warning! You are denied the service.',
+                );
             }
             $Vehicle_Request->given_by = $user_id;
             $Vehicle_Request->vec_director_reject_reason = $reason;
@@ -416,10 +404,9 @@ class VehicleParmanentlyRequestController extends Controller
             $subject = "Vehicle Permanent";
             $url = "{{ route('vec_perm_request') }}";
             $user->NotifyUser($message,$subject,$url);
-            return response()->json([
-                'success' => true,
-                'message' => 'You have successfully Rejected the Request',
-            ]);
+            return redirect()->back()->with('success_message',
+                'Successfully Rejected.',
+            );
         }
     public function accept_assigned_vehicle($id)
         {
@@ -436,18 +423,16 @@ class VehicleParmanentlyRequestController extends Controller
                             dd($check_request);
             if(!$check_request)
             {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Warning! You are denied the service',
-                ]);
+                return redirect()->back()->with('error_message',
+                                'Warning! You are denied the service.',
+                                );
             }
             $get_the_vehilce = VehiclesModel::find($check_request->vehicle_id);
             if($get_the_vehilce->status = false)
                 {
-                        return response()->json([
-                            'success' => false,
-                            'message' => 'Reject Your request because Assigned vehicle is not active',
-                        ]);
+                    return redirect()->back()->with('error_message',
+                    'Reject the request because assigned vehicle is not active',
+                    );
                 }
             $fuel_quata = $get_the_vehilce->fuel_amount;
             $check_request->accepted_by_requestor = $logged_user;
@@ -455,10 +440,9 @@ class VehicleParmanentlyRequestController extends Controller
             $get_the_vehilce->save();
             $check_request->fuel_quata =  $fuel_quata;
             $check_request->save();
-            return response()->json([
-                'success' => true,
-                'message' => 'Vehicle successfully Given to you',
-            ]);
+            return redirect()->back()->with('success_message',
+            'Vehicle successfully Given to you.',
+        );
         }
     public function reject_assigned_vehicle(Request $request)
         {
@@ -468,10 +452,9 @@ class VehicleParmanentlyRequestController extends Controller
             ]);
             // Check validation error
             if ($validation->fails()) {
-                return response()->json([
-                    'success' => false,
-                    'message' => $validation->errors(),
-                ]);
+                return redirect()->back()->with('error_message',
+                'Fill all the field.',
+                );
             }
             $logged_user = Auth::id();
             $check_request = VehiclePermanentlyRequestModel::select('accepted_by_requestor','reject_reason_by_requestor')
@@ -479,18 +462,16 @@ class VehicleParmanentlyRequestController extends Controller
                             ->first();
             if($check_request->requested_by != $logged_user || $check_request->given_by == null || $check_request->vec_director_reject_reason != null )
                 {
-                        return response()->json([
-                            'success' => false,
-                            'message' => 'Warning! You are denied the service',
-                        ]);
+                    return redirect()->back()->with('error_message',
+                    'Warning! You are denied the service.',
+                    );
                 }
             $check_request->given_by = null;
             $check_request->accepted_by_requestor = $logged_user;
             $check_request->reject_reason_by_requestor = $request->reason;
             $check_request->save();
-            return response()->json([
-                'success' => true,
-                'message' => 'Assigned Vehicle Complained successfully',
-            ]);
+            return redirect()->back()->with('success_message',
+                'Complained submitted successfully.',
+            );
         }
 }
