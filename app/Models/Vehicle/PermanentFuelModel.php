@@ -13,7 +13,6 @@ class PermanentFuelModel extends Model {
     use HasFactory, SoftDeletes;
 
     protected $table = 'permanent_fuelings';
-    protected $primaryKey = ['fueling_id'];
     public $incrementing = false;
     protected $keyType = 'uuid';
 
