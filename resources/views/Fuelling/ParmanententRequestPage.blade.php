@@ -161,14 +161,111 @@
                                                         <td>status</td>
                                                         <td>{{$request->month}}/{{$request->year}}</td>
                                                         <td>
-                                                            <button type="button" class="btn btn-info rounded-pill" data-bs-toggle="modal" data-bs-target="#standard-modal-{{ $loop->index }}" title="Show"><i class=" ri-eye-line"></i></button>
-                                                            @if($request->dir_approved_by === Null && $request->director_reject_reason === Null)
-                                                            <button id="acceptButton" type="button" class="btn btn-primary rounded-pill" title="Accept" onclick="confirmFormSubmission('approvalForm-{{ $loop->index }}')"><i class="ri-checkbox-circle-line"></i></button>
+                                                            <button type="button" class="btn btn-info rounded-pill" title="Inspect" id="assignBtn-{{$loop->iteration}}">Show</button>
+                                  
+                                                            <input type="hidden" name="id" id="IdSelection-{{$loop->iteration}}" value="{{$request->fueling_id}}" id="vehicleselection">
+
                                                             <button type="button" class="btn btn-danger rounded-pill" data-bs-toggle="modal" data-bs-target="#staticBackdrop-{{ $loop->index }}" title="Reject"><i class=" ri-close-circle-fill"></i></button>
-                                                            @endif
+                                                           
                                                         </td>
                                                     </tr>
                                                 </tbody>
+                                                <!-- this is for the assign  modal -->
+                                                <div class="modal fade" id="staticaccept-{{$loop->iteration}}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                                                    <div class="modal-dialog modal-lg modal-dialog-scrollable">
+                                                        <div class="modal-content">
+                                                            
+                                                                <div class="modal-header">
+                                                                                                                                    
+                                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                                </div> <!-- end modal header -->
+                                                                <div class="modal-body">
+                                                                    <div class="row mt-3" id="inspectionCardsContainer-{{$loop->iteration}}" class="table table-striped"> 
+                                                                    </div>
+                                                                </div>
+                                                                <div class="modal-footer">
+                                                                    <button type="submit" class="btn btn-secondary"  data-bs-dismiss="modal" aria-label="Close">close</button>
+                                                                </div> <!-- end modal footer -->
+                                                            </div>                                                              
+                                                        </div> <!-- end modal content-->
+                                                    </div> <!-- end modal dialog-->
+
+                                                    
+                                                    <script>
+                                                        document.getElementById('assignBtn-{{$loop->iteration}}').addEventListener('click', function() {
+                                                        var selectedCarId = document.getElementById('IdSelection-{{$loop->iteration}}').value;
+                                                            
+                                                            // Perform an Ajax request to fetch data based on the selected car ID
+                                                            $.ajax({
+                                                                url: '/show_detail/' + selectedCarId,
+                                                                type: 'get',
+                                                               
+                                                                data: { id: selectedCarId },
+                                                                success: function(response) {
+                                                                    $('#staticaccept-{{$loop->iteration}}').modal('show');
+                                                                    var cardsContainer = document.getElementById('inspectionCardsContainer-{{$loop->iteration}}');
+                                                                    cardsContainer.innerHTML = ''; // Clear previous cards
+                                                    
+                                                                    if (response.status === 'success' && Array.isArray(response.data) && response.data.length > 0) {
+                                                                        // Create the table
+                                                                       
+                                                                    // Create a section to display "Inspected By" and "Created At" at the top right corner
+                                                                        var infoSection = document.createElement('div');
+                                                                        infoSection.className = 'd-flex justify-content-end mb-4'; // Flexbox to align right and add margin-bottom
+                                                                        infoSection.innerHTML = `
+                                                                            <p><strong>Inspected By:</strong>  </br>
+                                                                            <strong>Created At:</strong> </br>
+                                                                        <strong>Image:</strong> 
+                                                                       
+                                                                        `;
+                                                                        cardsContainer.appendChild(infoSection); // Append the info section before the table
+                                                    
+                                                                        var table = document.createElement('table');
+                                                                        table.className = 'table table-striped'; // Add Bootstrap classes for styling
+                                                                        table.innerHTML = `
+                                                                            <thead>
+                                                                                <tr>
+                                                                                    <th>Roll no</th>
+                                                                                    <th>Fuel Ammount</th>
+                                                                                    <th>Fuel Cost</th>
+                                                                                    <th>Fueling Date</th>
+                                                                                    <th>Receit</th>
+                                                                                </tr>
+                                                                            </thead>
+                                                                            <tbody>
+                                                                            </tbody>
+                                                                        `;
+                                                                            
+                                                                       var count = 0;
+                                                                        response.data.forEach(function(fueling,index) {
+                                                                            var row = document.createElement('tr');
+                                                                             count = count +1;
+                                                                            row.innerHTML = `
+                                                                                <td>${count}</td>
+                                                                                <td>${fueling.fuel_amount}</td>
+                                                                                <td>${fueling.fuel_cost}</td>
+                                                                                <td>${fueling.fuiling_date }</td>
+                                                                                <td>${fueling.reciet_attachement }</td>
+                                                                            `;
+                                                                            table.querySelector('tbody').appendChild(row); // Append row to the table body
+                                                                        });
+                                                    
+                                                                        cardsContainer.appendChild(table);
+                                                    
+                                                                    } else {
+                                                                        // Handle the case where no data is available
+                                                                        cardsContainer.innerHTML = '<p>No inspection data available.</p>';
+                                                                    }
+                                                                },
+                                                                error: function() {
+                                                                    var cardsContainer = document.getElementById('inspectionCardsContainer');
+                                                                    cardsContainer.innerHTML = ''; // Clear previous cards
+                                                                    cardsContainer.innerHTML = '<p>No inspection data available at the moment. Please check the Plate number!</p>';
+                                                                }
+                                                            });
+                                                        });
+                                                    </script>
+
                                             @endforeach
                                         </tbody>
                                     </table>
@@ -200,35 +297,6 @@
                         </div>
                     </div>
                 </div>
-
-
-
-                <script>
-                    $(document).on('click', '#show_ai_text_generator', function() {
-                        var selected_template = $(this).data('selected_template');
-                        var ai_template = $('#ai_template');
-                        if (selected_template) {
-                            ai_template.val(selected_template);
-                            $('#ai_template').niceSelect('update');
-                        }
-                        $("#ai_text_generation_modal").modal('show');
-                    });
-
-                    $(document).on('change', '#ai_template', function(e) {
-                        let templateId = $(this).val();
-                        if (templateId == 1 || templateId == 11) {
-                            $('#titleDiv').addClass('d-none');
-                        } else {
-                            $('#titleDiv').removeClass('d-none');
-                        }
-                    });
-
-                    $('.dataTables_length label select').niceSelect();
-                    $('.dataTables_length label .nice-select').addClass('dataTable_select');
-                    $(document).on('click', '.dataTables_length label .nice-select', function() {
-                        $(this).toggleClass('open_selectlist');
-                    });
-                </script>
 
                 <!-- Vendor js -->
                 <script src="assets/js/vendor.min.js"></script>

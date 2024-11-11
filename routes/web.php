@@ -103,6 +103,7 @@ Route::group(['middleware' => ['auth']], function()
                         Route::post('/fuel_post_request', 'store')->name('store_fuel_request');
                         Route::get('/finance_approve_page', 'finance_get_page')->name('finance_approve_fuel_page');
                         Route::post('/finance_appprove/{id}', 'finance_appprove')->name('finance_approve');
+                        Route::get('/show_detail/{id}', 'show');
                         Route::get('/get_my_request', 'my_request')->name('my_request');
                         Route::post('/reject_request/{id}', 'finance_reject')->name('finance_reject');
                 });

@@ -126,10 +126,38 @@ class PermanentFuelController extends Controller {
         return redirect()->route( 'permanenet_fuel_request' )->with( 'success', 'Fueling records created successfully.' );
     }
     public function show( $id ) {
-        $fueling = PermanentFuelModel::where('fueling_id',$id );
-        return redirect()->back()->with('data',
-        $fueling,
-        );    
+        
+        // dd($id);
+        $fueling = PermanentFuelModel::where('fueling_id',$id )->get();
+        // dd($fueling);
+
+        if ($fueling->isEmpty()) {
+            return response()->json(['status' => 'error', 'message' => 'Request not found'], 404);
+        } 
+
+        $fueling_data= PermanentFuelModel::with('vehicle:vehicle_id,plate_number','financeApprover:id,first_name')
+        ->select('driver_id','finance_approved_by','fuel_amount','fuel_cost','fuiling_date','reciet_attachment','year','month')
+        ->where('fueling_id', $id)
+        ->get()                
+      
+
+        ->map(function ($fueling) {
+            return [
+                'fueling_id'         => $fueling->fueling_id,
+                'year'               => $fueling->year,
+                'month'              => $fueling->month,
+                'fuel_amount'        => $fueling->fuel_amount,
+                'fuel_cost'          => $fueling->fuel_cost,
+                'fuiling_date'       => $fueling->fuiling_date,
+                'reciet_attachment'  => $fueling->reciet_attachment,
+                'finance_approved_by'=> $fueling->financeApprover->first_name ?? 'not approved',
+            ];
+        });
+
+        // dd($fueling_data);
+
+        return response()->json(['status' => 'success', 'data' => $fueling_data]);
+ 
     }
     public function update(Request $request, $id)
         {
@@ -232,7 +260,8 @@ class PermanentFuelController extends Controller {
     }
     public function finance_get_page()
     {
-        $fuels = PermanentFuelModel::groupBy('fueling_id')
+        $fuels = PermanentFuelModel:: select('vehicle_id','fueling_id','driver_id','month','year','finance_approved_by')
+                                        ->distinct()
                                         ->latest()
                                         ->get();
         return view('Fuelling.financeApprove',compact('fuels'));
