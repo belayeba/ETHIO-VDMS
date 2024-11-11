@@ -32,7 +32,7 @@ class PermanentFuelController extends Controller {
                                         ->distinct()
                                         ->latest()
                                         ->get();
-                                    //    dd($vehicles); 
+                                      // dd($vehicles); 
         return view( 'Fuelling.ParmanententRequestPage',compact('fuelings','vehicles'));
     }
     public function my_request()
@@ -225,7 +225,7 @@ class PermanentFuelController extends Controller {
                     $file = $request->file( "reciet_attachment[$index]" );
                     $fileName = time() . '_' . $file->getClientOriginalName();
                     $storagePath = storage_path( 'app/public/vehicles/reciept' );
-                    if ( !file_exists( $storagePath ) ) {
+                    if (!file_exists( $storagePath ) ) {
                         mkdir( $storagePath, 0755, true );
                     }
                     $file->move( $storagePath, $fileName );
@@ -316,51 +316,51 @@ class PermanentFuelController extends Controller {
             }
      }
      public function finance_reject(Request $request,$id)
-     {
-            $validator = Validator::make($request->all(), [
-                'reason' => 'required|string|max:500',
-            ] );
-            if ($validator->fails()) 
-            {
-                return redirect()->back()->with('error_message',
-                    $validator->errors(),
-                );
-            }
-        try
-            {
-                $logged_user = Auth::id();
-                $get_fuel_requests = PermanentFuelModel::where('fueling_id', $id)->get();
-                $get_one_fuel_request = PermanentFuelModel::where('fueling_id', $id)->first();
-                if($get_one_fuel_request->finance_approved_by || $get_one_fuel_request->reject_reason )
-                    {
-                        return redirect()->back()->with('error_message',
-                            "Warning! You are denied the service",
-                            );
-                    }
-                $permanent = VehiclePermanentlyRequestModel::select( 'vehicle_request_permanent_id','fuel_quata','feul_left_from_prev' )
-                ->where( 'driver_id', $get_one_fuel_request->driver_id )
-                ->where( 'vehicle_id', $get_one_fuel_request->vehicle_id )
-                ->where( 'status', true )
-                ->first();
-                // Ensure that the permanent vehicle request exists
-                if ( !$permanent ) 
-                    {
-                        return back()->withErrors( [ 'error' => 'No active permanent vehicle request found for this driver and vehicle.' ] );
-                    }
-                foreach ($get_fuel_requests as $fuel_request) {
-                        $fuel_request->finance_approved_by = $logged_user;
-                        $fuel_request->reject_reason = $request->reason;
-                        $fuel_request->save(); // Save the updated model to the database
-                    }                
-                return redirect()->back()->with('success_message',
-                "You have successfully Rejected the Request",
-                );
-            }
-        catch(Exception $e)
-            {
-                return redirect()->back()->with('error_message',
-                "Warning! You are denied the service",
-                );
-            }
-     }
+        {
+                $validator = Validator::make($request->all(), [
+                    'reason' => 'required|string|max:500',
+                ] );
+                if ($validator->fails()) 
+                {
+                    return redirect()->back()->with('error_message',
+                        $validator->errors(),
+                    );
+                }
+            try
+                {
+                    $logged_user = Auth::id();
+                    $get_fuel_requests = PermanentFuelModel::where('fueling_id', $id)->get();
+                    $get_one_fuel_request = PermanentFuelModel::where('fueling_id', $id)->first();
+                    if($get_one_fuel_request->finance_approved_by || $get_one_fuel_request->reject_reason )
+                        {
+                            return redirect()->back()->with('error_message',
+                                "Warning! You are denied the service",
+                                );
+                        }
+                    $permanent = VehiclePermanentlyRequestModel::select( 'vehicle_request_permanent_id','fuel_quata','feul_left_from_prev' )
+                    ->where( 'driver_id', $get_one_fuel_request->driver_id )
+                    ->where( 'vehicle_id', $get_one_fuel_request->vehicle_id )
+                    ->where( 'status', true )
+                    ->first();
+                    // Ensure that the permanent vehicle request exists
+                    if ( !$permanent ) 
+                        {
+                            return back()->withErrors( [ 'error' => 'No active permanent vehicle request found for this driver and vehicle.' ] );
+                        }
+                    foreach ($get_fuel_requests as $fuel_request) {
+                            $fuel_request->finance_approved_by = $logged_user;
+                            $fuel_request->reject_reason = $request->reason;
+                            $fuel_request->save(); // Save the updated model to the database
+                        }                
+                    return redirect()->back()->with('success_message',
+                    "You have successfully Rejected the Request",
+                    );
+                }
+            catch(Exception $e)
+                {
+                    return redirect()->back()->with('error_message',
+                    "Warning! You are denied the service",
+                    );
+                }
+        }
 }
