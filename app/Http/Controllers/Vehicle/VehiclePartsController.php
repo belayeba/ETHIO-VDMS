@@ -97,8 +97,9 @@ class VehiclePartsController extends Controller
                 }
         
                 $vehiclePart->delete();
-        
-                return response()->json(['status' => 'success', 'message' => 'Vehicle part deleted successfully']);
+                return redirect()->back()->with('success_message',
+                'Successfully Deleted.',
+            );
             }
     }
     

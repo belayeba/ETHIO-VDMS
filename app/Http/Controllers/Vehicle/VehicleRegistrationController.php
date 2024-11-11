@@ -66,8 +66,8 @@ class VehicleRegistrationController extends Controller {
         ] );
         if ( $validator->fails() ) {
             return redirect()->back()->with('error_message',
-                               $validator->errors(),
-                            );
+            'All field should be field',
+            );
         }
         $filelibre = '';
         $fileinsurance = '';
@@ -245,8 +245,9 @@ class VehicleRegistrationController extends Controller {
             'libre' => $filelibre,
             'insurance' => $fileinsurance,
         ] );
-
-        return redirect()->back()->with( 'success', 'Vehicle updated successfully.' );
+        return redirect()->back()->with('success_message',
+        'Successfully Updated.',
+    );
     }
 
     public function destroy( Request $request ) {
@@ -255,10 +256,9 @@ class VehicleRegistrationController extends Controller {
         ] );
         // Check validation error
         if ( $validation->fails() ) {
-            return response()->json( [
-                'success' => false,
-                'message' => $validation->errors(),
-            ] );
+            return redirect()->back()->with('error_message',
+                                'Warning! You are denied the service.',
+                                );
         }
         // Check if the request is that of this users
         $id = $request->input( 'request_id' );
@@ -291,7 +291,9 @@ class VehicleRegistrationController extends Controller {
                 }
             }
             $Vehicle->delete();
-            return redirect()->back()->with( 'success', 'Vehicle Deleted successfully.' );
+            return redirect()->back()->with('success_message',
+                'Successfully Deleted.',
+            );
         } catch ( Exception $e ) {
             // Handle the case when the vehicle request is not found
             return redirect()->back()->with('error_message',
