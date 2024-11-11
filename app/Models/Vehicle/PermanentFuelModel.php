@@ -13,35 +13,35 @@ class PermanentFuelModel extends Model {
     use HasFactory, SoftDeletes;
 
     protected $table = 'permanent_fuelings';
-    protected $primaryKey = 'fueling_id';
+    protected $primaryKey = ['fueling_id'];
     public $incrementing = false;
     protected $keyType = 'uuid';
 
     protected $fillable = [
+        'fueling_id',
         'driver_id',
+        'vehicle_id',
         'finance_approved_by',
         'permanent_id',
         'reject_reason',
         'fuiling_date',
         'month',
+        'year',
         'fuel_amount',
         'fuel_cost',
         'reciet_attachment',
         'created_at'
     ];
-    protected static function boot() {
-        parent::boot();
-        static::creating( function ( $model ) {
-            if ( empty( $model-> {
-                $model->getKeyName()}
-            ) ) {
-                $model-> {
-                    $model->getKeyName()}
-                    = ( string ) Str::uuid();
+    protected static function boot()
+        {
+            parent::boot();
+
+            static::creating(function ($model) {
+                if (!$model->fueling_id) {
+                    $model->fueling_id = (string) Str::uuid();
                 }
-            }
-        );
-    }
+            });
+        }
     public function vehicle() {
         return $this->belongsTo( VehiclesModel::class, 'vehicle_id', 'vehicle_id' );
     }

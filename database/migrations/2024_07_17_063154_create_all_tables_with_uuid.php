@@ -290,13 +290,9 @@ class CreateAllTablesWithUuid extends Migration
         $table->integer('fuel_amount');
         $table->decimal('fuel_cost', 8, 2);
         $table->string('reciet_attachment');
-
         $table->timestamps();
         $table->softDeletes();
-    
         // Add a unique constraint on the combination of fueling_id and month
-        // $table->primary([ 'fueling_id','month', 'vehicle_id']);  // Composite primary key to avoid duplication
-
     });
         // GPS Tracking Table
         Schema::create('gps_tracking', function (Blueprint $table) {
