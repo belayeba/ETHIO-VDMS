@@ -23,12 +23,25 @@ class PermanentFuelController extends Controller {
     }
     public function index() {
         $logged_user = Auth::id();
+        $vehicles = VehiclePermanentlyRequestModel::select('vehicle_id')->where('requested_by',$logged_user)
+                                                        ->where('status' , 1)
+                                                        ->get();
         $get_driver = DriversModel::where('user_id',$logged_user)->first();
+<<<<<<< HEAD
         $fuelings = PermanentFuelModel::select('fueling_id','month','year','vehicle_id')
                                        ->where('driver_id',$get_driver->driver_id)
                                        ->groupBy('fueling_id')
                                        ->latest()->get();
         return view( 'Fuelling.ParmanententRequestPage',compact('fuelings'));
+=======
+        $fuelings = PermanentFuelModel::select('fueling_id','vehicle_id','driver_id','month','year','finance_approved_by')
+                                        ->where('driver_id', $get_driver->driver_id)
+                                        ->distinct()
+                                        ->latest()
+                                        ->get();
+                                    //    dd($vehicles); 
+        return view( 'Fuelling.ParmanententRequestPage',compact('fuelings','vehicles'));
+>>>>>>> e2cc36d4f40b84778b3eac7528cc668a1ac21ae4
     }
     public function my_request()
       {
@@ -38,7 +51,7 @@ class PermanentFuelController extends Controller {
         return response()->json(['my_requests' => $get_my_request]);
       }
     public function store( Request $request ) {
-        // dd($request); 
+        // dd($request->input('fuel_amount')); 
         // Validate input
         $validator = Validator::make($request->all(), [
             'vehicle_id' => 'required|uuid|exists:vehicles,vehicle_id',
@@ -85,8 +98,10 @@ class PermanentFuelController extends Controller {
         $today = \Carbon\Carbon::today();
         $files = $request->file( "reciet_attachment_" );
         $fueling_date = $request->input('fuiling_date');
+        // $fuel_amount = $request->input('fuel_amount');
         $ethiopianDate = $this->dailyKmCalculation->ConvertToEthiopianDate($today); 
         foreach ( $request->fuel_amount as $index => $fuel_amount ) {
+            // dd($fuel_amount);
             $fueling = new PermanentFuelModel();
             $fueling->fueling_id = $fuel;
             $fueling->vehicle_id = $request->input('vehicle_id');
@@ -96,7 +111,7 @@ class PermanentFuelController extends Controller {
             $fueling->fuiling_date = $fueling_date[ $index ];
             $fueling->month = $request->month;
             $fueling->year = $request->year;
-            $fueling->fuel_amount = $fuel_amount[ $index ];
+            $fueling->fuel_amount = $fuel_amount;
             $fueling->fuel_cost = $request->fuel_cost[ $index ];
             
             if ($files[$index] )  {
@@ -118,7 +133,11 @@ class PermanentFuelController extends Controller {
         }
         return redirect()->route( 'permanenet_fuel_request' )->with( 'success', 'Fueling records created successfully.' );
     }
+<<<<<<< HEAD
    public function show( $id ) {
+=======
+    public function show( $id ) {
+>>>>>>> e2cc36d4f40b84778b3eac7528cc668a1ac21ae4
         $fueling = PermanentFuelModel::where('fueling_id',$id );
         return redirect()->back()->with('data',
         $fueling,

@@ -35,10 +35,17 @@
                                         <label>Vehicle</label>
                                         <select name="vehicle_id" class="form-select mb-3">
                                             <option selected>Open this select menu</option>
-                                            <option value="07ab6812-25ba-47fc-809a-8bb226bf4d74">Monthly Fuel Request</option>
-                                            <option value="07ab6812-25ba-47fc-809a-8bb226bf4d74">Other Fuel Request</option>
+                                            @foreach($vehicles as $vehicle)
+                                            <option value="{{$vehicle->vehicle_id}}">{{$vehicle->vehicle->plate_number}}</option>
+                                            @endforeach
                                         </select>
                                     </div>
+
+                                    <div>
+                                        <label>Vehicle</label>
+                                        <input name="year" type="number" placeholder="Enter year (2010 - 2050)" class="form-control mb-3" min="2010" max="2050"/>
+                                    </div>
+
                                     <div class="mb-3 position-relative">
                                         <label class="form-label">Select Month</label>
                                         <select class="form-select mb-3" name="month">
@@ -145,6 +152,24 @@
                                         </thead>
                                         <tbody>
                                             <!-- Table rows will be populated here -->
+                                            @foreach($fuelings as $request)
+                                            {{-- {{dd($fuelings)}} --}}
+                                                <tbody>
+                                                    <tr>
+                                                        <td>{{$loop->iteration}}</td>
+                                                        <td>{{$request->vehicle->plate_number}}</td>
+                                                        <td>status</td>
+                                                        <td>{{$request->month}}/{{$request->year}}</td>
+                                                        <td>
+                                                            <button type="button" class="btn btn-info rounded-pill" data-bs-toggle="modal" data-bs-target="#standard-modal-{{ $loop->index }}" title="Show"><i class=" ri-eye-line"></i></button>
+                                                            @if($request->dir_approved_by === Null && $request->director_reject_reason === Null)
+                                                            <button id="acceptButton" type="button" class="btn btn-primary rounded-pill" title="Accept" onclick="confirmFormSubmission('approvalForm-{{ $loop->index }}')"><i class="ri-checkbox-circle-line"></i></button>
+                                                            <button type="button" class="btn btn-danger rounded-pill" data-bs-toggle="modal" data-bs-target="#staticBackdrop-{{ $loop->index }}" title="Reject"><i class=" ri-close-circle-fill"></i></button>
+                                                            @endif
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            @endforeach
                                         </tbody>
                                     </table>
                                 </div>

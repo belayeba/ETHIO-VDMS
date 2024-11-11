@@ -38,8 +38,12 @@ class usercontroller extends Controller
             ->addColumn('phone_number', function($row){
                 return $row->phone_number;
             })
-            ->addColumn('department_id', function($row){
-                return $row->department_id;
+            ->addColumn('department_id', function($row) {
+                if ($row->department) {
+                    return $row->department->name;
+                } else {
+                    return 'No Department'; 
+                }
             })
             ->addColumn('created_at', function($row){
                 return $row->created_at;

@@ -220,12 +220,12 @@ class InspectionController extends Controller
         
             if ($deleted) {
                 return redirect()->back()->with('success_message',
-                'Deleted successfully',
-            );
+                "Inspection deleted successfully",
+                 );
             } else {
                 return redirect()->back()->with('error_message',
-                'Sorry, Something went wrong',
-                );
+                "Inspection not found or not deleted",
+                 );
             }
         }
         

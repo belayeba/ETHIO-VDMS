@@ -63,6 +63,17 @@
                                     <div class="row">
                                         <div class="position-relative mb-3">
                                             <div class="mb-6 position-relative" >
+                                                <label class="form-label">Type</label>
+                                                <select name="type" class="form-control" >
+                                                    <option>Select Part Type</option>
+                                                    <option value="spare_part">Spare Part</option>
+                                                    <option value="normal_part">Vehicle Part</option>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div class="position-relative mb-3">
+                                            <div class="mb-6 position-relative" >
                                                 <label class="form-label">Name</label>
                                                 <input type="text" name="name" class="form-control" placeholder="Enter Name of vehicle part">
 
@@ -113,12 +124,8 @@
                                     <td>{{$request->name}}</td>
                                     <td>{{$request->notes}}</td>
                                     <td>
-                                        <form method="POST" action="{{ route('vehicle_parts.destroy', ['id' => $request->vehicle_parts_id]) }}">
-                                            @csrf
-                                            @method('DELETE')
                                             <a href="" class="btn btn-secondary rounded-pill" data-bs-toggle="modal" data-bs-target="#standard-modal-{{ $loop->index }}" title="edit"><i class=" ri-edit-line"></i></a>
-                                            <button type="submit" class="btn btn-danger rounded-pill" title="Delete"><i class="ri-close-circle-line"></i></button>
-                                        </form>
+                                            <button type="button" class="btn btn-danger rounded-pill reject-btn" data-bs-toggle="modal" data-bs-target="#confirmationModal-{{ $loop->index }}" title="Reject"><i class=" ri-close-circle-fill"></i></button>
                                     </td>
                                 </tr>
                             </tbody>
@@ -136,6 +143,17 @@
                                                 @csrf
                                                 <div class="tab-pane" id="account-2">
                                                     <div class="row">
+                                                        <div class="position-relative mb-3">
+                                                            <div class="mb-6 position-relative" >
+                                                                <label class="form-label">Type</label>
+                                                                <select name="type" class="form-control" >
+                                                                    <option>Select Part Type</option>
+                                                                    <option value="spare_part" {{ $request->type === 'spare_part' ? 'selected' : '' }}>Spare Part</option>
+                                                                    <option value="norma_part" {{ $request->type !== 'spare_part' ? 'selected' : '' }}>Vehicle Part</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+
                                                         <div class="position-relative mb-3">
                                                             <div class="mb-6 position-relative" id="datepicker1">
                                                                 <label class="form-label">Name</label>
@@ -160,6 +178,35 @@
                                     </div><!-- /.modal-dialog -->
                                 </div>
                             <!-- end show modal -->
+
+                            <div class="modal fade" id="confirmationModal-{{ $loop->index }}" tabindex="-1" role="dialog"
+                                aria-labelledby="confirmationModalLabel"aria-hidden="true">
+                                <div class="modal-dialog modal-sm">
+                                    <div class="modal-content">
+                                        <form method="POST" action="{{ route('vehicle_parts.destroy', ['id' => $request->vehicle_parts_id]) }}">
+                                            @csrf
+                                            @method('DELETE')
+                                            <input type="hidden" name="request_id" id="request_id">
+                                            <div class="modal-body p-4">
+                                                <div class="text-center">
+                                                    <i class="ri-alert-line h1 text-danger"></i>
+                                                    <h4 class="mt-2">Warning</h4>
+                                                    <h5 class="mt-3">
+                                                        Are you sure you want to DELETE this Inspection Form?</br> This action
+                                                        cannot be
+                                                        undone.
+                                                    </h5>
+                                                    <button type="button" class="btn btn-secondary"
+                                                        data-bs-dismiss="modal">Cancel</button>
+                                                    <button type="submit" class="btn btn-danger"
+                                                        id="confirmDelete">Yes,
+                                                        DELETE</button>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div><!-- /.modal-content -->
+                                </div><!-- /.modal-dialog -->
+                            </div><!-- /.modal -->
 
                         @endforeach             
                     </table>

@@ -93,31 +93,55 @@
                                             <input type="file" name="inspection_image" class="form-control">  
                                         </div> 
                                     {{-- </div> --}}
-                                    @foreach($parts as $part)
-                                    <div class="row align-items-center mb-3">
-                                        <div class="col-md-3">
-                                            <strong>{{$part->name}}</strong>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div class="row">
-                                                <div class="col-3">
-                                                    <div class="form-check">
-                                                        <input type="checkbox" class="form-check-input ok-checkbox" id="ok_{{$loop->index}}" name="damaged_parts[{{$part->id}}]" value="1" data-row="{{$loop->index}}">
-                                                        <input type="hidden" name="parts[{{$part->id}}]" value="{{$part->vehicle_parts_id}}">
-                                                        <label class="form-check-label" for="ok_{{$loop->index}}">OK</label>
+                                    @foreach($parts->where('type', 'normal_part') as $part)
+                                        <div class="row align-items-center mb-3">
+                                            <div class="col-md-3">
+                                                <strong>{{$part->name}}</strong>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="row">
+                                                    <div class="col-3">
+                                                        <div class="form-check">
+                                                            <input type="checkbox" class="form-check-input ok-checkbox"  name="damaged_parts[{{$part->id}}]" value="1" >
+                                                            <label class="form-check-label" for="ok_{{$loop->index}}">Yes</label>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                                <div class="col-3">
-                                                    <div class="form-check form-checkbox-danger">
-                                                        <input type="checkbox" class="form-check-input damaged-checkbox" id="damaged_{{$loop->index}}" name="damaged_parts[{{$part->id}}]" value="0" data-row="{{$loop->index}}">
-                                                        <label class="form-check-label" for="damaged_{{$loop->index}}">Damaged</label>
-                                                        <input type="text" name="damage_descriptions[{{$part->id}}]" class="d-none damaged-notes" placeholder="Add Description" data-row="{{$loop->index}}">
+                                                    <div class="col-3">
+                                                        <div class="form-check form-checkbox-danger">
+                                                            <input type="checkbox" class="form-check-input damaged-checkbox"  name="damaged_parts[{{$part->id}}]" value="0" >
+                                                            <label class="form-check-label" for="damaged_{{$loop->index}}">No</label>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-                                @endforeach
+                                    @endforeach
+
+                                    @foreach($parts->where('type', 'spare_part') as $part)
+                                        <div class="row align-items-center mb-3">
+                                            <div class="col-md-3">
+                                                <strong>{{$part->name}}</strong>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="row">
+                                                    <div class="col-3">
+                                                        <div class="form-check">
+                                                            <input type="checkbox" class="form-check-input ok-checkbox" id="ok_{{$loop->index}}" name="damaged_parts[{{$part->id}}]" value="1" data-row="{{$loop->index}}">
+                                                            <input type="hidden" name="parts[{{$part->id}}]" value="{{$part->vehicle_parts_id}}">
+                                                            <label class="form-check-label" for="ok_{{$loop->index}}">OK</label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-3">
+                                                        <div class="form-check form-checkbox-danger">
+                                                            <input type="checkbox" class="form-check-input damaged-checkbox" id="damaged_{{$loop->index}}" name="damaged_parts[{{$part->id}}]" value="0" data-row="{{$loop->index}}">
+                                                            <label class="form-check-label" for="damaged_{{$loop->index}}">Damaged</label>
+                                                            <input type="text" name="damage_descriptions[{{$part->id}}]" class="d-none damaged-notes" placeholder="Add Description" data-row="{{$loop->index}}">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @endforeach
                                 <script>
                                     document.addEventListener('DOMContentLoaded', function () {
                                         const okCheckboxes = document.querySelectorAll('.ok-checkbox');
@@ -319,38 +343,38 @@
                                         <div class="modal-footer">
                                             <button type="submit" class="btn btn-secondary"  data-bs-dismiss="modal" aria-label="Close">close</button>
                                         </div> <!-- end modal footer -->
-                                                                                                    
+                                    </div>                                                              
                                 </div> <!-- end modal content-->
                             </div> <!-- end modal dialog-->
-                         <!-- Accept Alert Modal -->
-                         <div class="modal fade" id="confirmationModal-{{ $loop->index }}" tabindex="-1" role="dialog"
+                         <!-- reject Alert Modal -->
+                        <div class="modal fade" id="confirmationModal-{{ $loop->index }}" tabindex="-1" role="dialog"
                          aria-labelledby="confirmationModalLabel"aria-hidden="true">
-                         <div class="modal-dialog modal-sm">
-                             <div class="modal-content">
-                                 <form method="POST" action="{{ route('inspection.delete', ['inspectionId' => $data->inspection_id]) }}">
-                                     @csrf
-                                     @method('DELETE')
-                                     <input type="hidden" name="request_id" id="request_id">
-                                     <div class="modal-body p-4">
-                                         <div class="text-center">
-                                             <i class="ri-alert-line h1 text-danger"></i>
-                                             <h4 class="mt-2">Warning</h4>
-                                             <h5 class="mt-3">
-                                                 Are you sure you want to DELETE this Inspection Form?</br> This action
-                                                 cannot be
-                                                 undone.
-                                             </h5>
-                                             <button type="button" class="btn btn-secondary"
-                                                 data-bs-dismiss="modal">Cancel</button>
-                                             <button type="submit" class="btn btn-danger"
-                                                 id="confirmDelete">Yes,
-                                                 DELETE</button>
-                                         </div>
-                                     </div>
-                                 </form>
-                             </div><!-- /.modal-content -->
-                         </div><!-- /.modal-dialog -->
-                     </div><!-- /.modal -->
+                            <div class="modal-dialog modal-sm">
+                                <div class="modal-content">
+                                    <form method="POST" action="{{ route('inspection.delete', ['inspectionId' => $data->inspection_id]) }}">
+                                        @csrf
+                                        @method('DELETE')
+                                        <input type="hidden" name="request_id" id="request_id">
+                                        <div class="modal-body p-4">
+                                            <div class="text-center">
+                                                <i class="ri-alert-line h1 text-danger"></i>
+                                                <h4 class="mt-2">Warning</h4>
+                                                <h5 class="mt-3">
+                                                    Are you sure you want to DELETE this Inspection Form?</br> This action
+                                                    cannot be
+                                                    undone.
+                                                </h5>
+                                                <button type="button" class="btn btn-secondary"
+                                                    data-bs-dismiss="modal">Cancel</button>
+                                                <button type="submit" class="btn btn-danger"
+                                                    id="confirmDelete">Yes,
+                                                    DELETE</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div><!-- /.modal-content -->
+                            </div><!-- /.modal-dialog -->
+                         </div><!-- /.modal -->
                     @endforeach
                     </table>
                 </div> <!-- end card body-->

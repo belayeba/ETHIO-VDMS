@@ -16,7 +16,7 @@ class VehiclePartsController extends Controller
                 $rules = [
                     'name' => 'required|string|unique:vehicle_parts,name',
                     'notes' => 'nullable|string',
-                    //'type' => "required|in:spare_part,norma_part"
+                    'type' => "required|in:spare_part,norma_part"
                 ];
         
                 $validator = Validator::make($request->all(), $rules);
@@ -29,7 +29,7 @@ class VehiclePartsController extends Controller
                 $logged_user = Auth::id();
                 $vehiclePart = VehiclePart::create([
                     'name' => $request->input('name'),
-                    'type' => "spare_part",//$request->input('type'),
+                    'type' => $request->input('type'),
                     'created_by' =>$logged_user,
                     'notes' => $request->input('notes'),
                 ]);
