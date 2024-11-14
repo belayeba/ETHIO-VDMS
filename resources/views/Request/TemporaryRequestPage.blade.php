@@ -365,15 +365,6 @@
                     <div class="col-7">
                         <div class="card">
                             <div class="card-body">
-                                <iframe
-                                width="100%"
-                                height="600"
-                                seamless
-                                frameBorder="0"
-                               scrolling="auto"
-                                src="http://localhost:8089/superset/dashboard/9/?standalone=1&height=1000&width=800"
-                              >
-                              </iframe>
                                 <table id="basic-datatable"
                                     class="Temporary_datatable table table-centered mb-0 table-nowrap">
                                     <thead>
@@ -386,22 +377,7 @@
                                     </thead>
 
                                     <tbody>
-                                        {{-- <tr>
-                                                <td>{{ $loop->iteration }}</td>
-                                                <td>{{ $request->start_date }}</td>
-                                                <td>From:{{ $request->start_location }},</br>To:{{ $request->end_locations }} </td>
-                                                <td>
-                                                    <button type="button" class="btn btn-info rounded-pill"
-                                                        data-bs-toggle="modal"
-                                                        data-bs-target="#standard-modal-{{ $loop->index }}"
-                                                        title="show"><i class=" ri-eye-line"></i></button>
-                                                    @if ($request->approved_by === null && $request->director_reject_reason === null)
-                                                        <a href="{{ route('editRequestPage', ['id' => $request->request_id]) }}"
-                                                            class="btn btn-secondary rounded-pill" title="edit"><i
-                                                                class=" ri-edit-line"></i></a>
-                                                    @endif
-                                                </td>
-                                            </tr> --}}
+                                           
                                     </tbody>
                                 </table>
 

@@ -1,84 +1,56 @@
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/maptalks/dist/maptalks.css">
-<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/maptalks/dist/maptalks.min.js"></script>
-
 <!DOCTYPE html>
 <html>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>User Interactions - Distance tool to measure distance</title>
+  <title>Animation - map-view-follow animation</title>
   <style type="text/css">
-    html,body{margin:0px;height:100%;width:100%}
-    .container{width:50%;height:50%}
+    html,body{margin:0px;height:50%;width:50%}
+    .container{width:100%;height:100%}
+    .pane{background:#34495e;line-height:28px;color:#fff;z-index:10;position:absolute;top:20px;right:20px}
+    .pane a{display:block;color:#fff;text-align:left;padding:0 10px;min-width:28px;min-height:28px;float:left}
   </style>
   <link rel="stylesheet" href="https://unpkg.com/maptalks/dist/maptalks.css">
   <script type="text/javascript" src="https://unpkg.com/maptalks/dist/maptalks.min.js"></script>
   <body>
-
+    <script type="text/javascript" src="https://unpkg.com/turf@3.0.14/turf.min.js"></script>
     <div id="map" class="container"></div>
-    <script>
 
+    <script>
+      var center = new maptalks.Coordinate(118.846825, 32.046534);
       var map = new maptalks.Map('map', {
-        center: [38.763611,9.005401],
-        zoom: 20,
+        center: center,
+        zoom: 18,
+        seamlessZoom: true,
+        pitch: 65,
+        // centerCross: true,
         baseLayer: new maptalks.TileLayer('base', {
-          urlTemplate: 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png',
-          subdomains: ["a","b","c","d"],
-          attribution: '&copy; <a href="http://osm.org">OpenStreetMap</a> contributors, &copy; <a href="https://carto.com/">CARTO</a>'
+          urlTemplate:
+            'https://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
+          subdomains: ['a', 'b', 'c', 'd'],
+          attribution: '&copy; <a href="https://www.esri.com/en-us/home">esri</a>'
         })
       });
 
-      var distanceTool = new maptalks.DistanceTool({
-        'symbol': {
-          'lineColor' : '#34495e',
-          'lineWidth' : 2
-        },
-        'vertexSymbol' : {
-          'markerType'        : 'ellipse',
-          'markerFill'        : '#1bbc9b',
-          'markerLineColor'   : '#000',
-          'markerLineWidth'   : 3,
-          'markerWidth'       : 10,
-          'markerHeight'      : 10
-        },
-
-        'labelOptions' : {
-          'textSymbol': {
-            'textFaceName': 'monospace',
-            'textFill' : '#fff',
-            'textLineSpacing': 1,
-            'textHorizontalAlignment': 'right',
-            'textDx': 15,
-            'markerLineColor': '#b4b3b3',
-            'markerFill' : '#000'
-          },
-          'boxStyle' : {
-            'padding' : [6, 2],
-            'symbol' : {
-              'markerType' : 'square',
-              'markerFill' : '#000',
-              'markerFillOpacity' : 0.9,
-              'markerLineColor' : '#b4b3b3'
-            }
-          }
-        },
-        'clearButtonSymbol' :[{
-          'markerType': 'square',
-          'markerFill': '#000',
-          'markerLineColor': '#b4b3b3',
-          'markerLineWidth': 2,
-          'markerWidth': 15,
-          'markerHeight': 15,
-          'markerDx': 20
-        }, {
-          'markerType': 'x',
-          'markerWidth': 10,
-          'markerHeight': 10,
-          'markerLineColor' : '#fff',
-          'markerDx': 20
-        }],
-        'language' : 'en-US'
+      var layer = new maptalks.VectorLayer('layer', {
+        hitDetect: true,
+        geometryEvents: true
       }).addTo(map);
 
+      var line = new maptalks.LineString(coordiantes, {
+        symbol: {
+          lineWidth: 5,
+          lineColor: 'yellow'
+        }
+      });
+      line.addTo(layer);
+      map.setCenter(line.getCoordinates()[0]);
+      var point = new maptalks.Marker(coordiantes[0], {
+        symbol: {
+          markerFile: markerFile,
+          markerWidth: 50,
+          markerHeight: 50
+        }
+      }).addTo(layer);
     </script>
   </body>
 </html>

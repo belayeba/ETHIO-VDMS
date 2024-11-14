@@ -25,6 +25,6 @@ class HomeController extends Controller
     public function index()
         {
             $user= Auth::id();
-            return view('layouts.navigation',compact('user'));
+            return view('home',compact('user'));
         }
 }

@@ -179,8 +179,18 @@
                                                                                                                                     
                                                                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                                 </div> <!-- end modal header -->
-                                                                <div class="modal-body">
-                                                                    <div class="row mt-3" id="inspectionCardsContainer-{{$loop->iteration}}" class="table table-striped"> 
+                                                                <div class="modal-body d-flex flex-column align-items-center">
+                                                                    <div class="row mt-3 w-100" id="inspectionCardsContainer-{{$loop->iteration}}">
+                                                                    </div>
+                                                                    
+                                                                    <!-- Image Preview Section -->
+                                                                    <div>
+                                                                        <iframe id="filePreview-{{$loop->iteration}}" 
+                                                                             style="width: 100%;
+                                                                                    height: 500px; 
+                                                                                    display: none;
+                                                                                    ">
+                                                                        </iframe>
                                                                     </div>
                                                                 </div>
                                                                 <div class="modal-footer">
@@ -190,7 +200,6 @@
                                                         </div> <!-- end modal content-->
                                                     </div> <!-- end modal dialog-->
 
-                                                    
                                                     <script>
                                                         document.getElementById('assignBtn-{{$loop->iteration}}').addEventListener('click', function() {
                                                         var selectedCarId = document.getElementById('IdSelection-{{$loop->iteration}}').value;
@@ -240,12 +249,17 @@
                                                                         response.data.forEach(function(fueling,index) {
                                                                             var row = document.createElement('tr');
                                                                              count = count +1;
+                                                                             
                                                                             row.innerHTML = `
                                                                                 <td>${count}</td>
                                                                                 <td>${fueling.fuel_amount}</td>
                                                                                 <td>${fueling.fuel_cost}</td>
-                                                                                <td>${fueling.fuiling_date }</td>
-                                                                                <td>${fueling.reciet_attachement }</td>
+                                                                                <td>${fueling.fuiling_date}</td>
+                                                                                <td>
+                                                                                    <a href="javascript:void(0);" onclick="showFileInIframe('{{ asset('storage/vehicles/reciept/') }}/${fueling.reciet_attachment}', '{{$loop->iteration}}')">
+                                                                                        ${fueling.reciet_attachment}
+                                                                                    </a>
+                                                                                </td>
                                                                             `;
                                                                             table.querySelector('tbody').appendChild(row); // Append row to the table body
                                                                         });
@@ -264,6 +278,12 @@
                                                                 }
                                                             });
                                                         });
+
+                                                        function showFileInIframe(fileUrl, iteration) {
+                                                            var filePreview = document.getElementById('filePreview-' + iteration);
+                                                            filePreview.src = fileUrl;  // Set the file URL to the iframe's src
+                                                            filePreview.style.display = 'block';  // Display the iframe
+                                                        }
                                                     </script>
 
                                             @endforeach
