@@ -116,6 +116,12 @@
 
                     <li class="side-nav-title">Main</li>
                     <li class="side-nav-item">
+                        <li class="side-nav-item">
+                            <a href="{{ route('home') }}" class="side-nav-link">
+                                <i class="ri-dashboard-3-line"></i>
+                                <span> Dashboard </span>
+                            </a>
+                        </li>
                         <a data-bs-toggle="collapse" href="#sidebarRequest" aria-expanded="false"
                             aria-controls="sidebarRequest" class="side-nav-link">
                             <i class=" ri-questionnaire-line"></i>

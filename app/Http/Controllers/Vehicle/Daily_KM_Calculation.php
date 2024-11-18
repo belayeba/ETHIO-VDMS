@@ -33,10 +33,11 @@ class Daily_KM_Calculation extends Controller
             }
         public function ReportPage()
             {
-                    $dailkms = DailyKMCalculationModel::with('driver','vehicle','created')
-                                ->latest()
-                                ->take(50)
-                                ->get();
+                $dailkms = DailyKMCalculationModel::with('driver','vehicle')
+                    ->latest()
+                    ->take(50)
+                    ->get();
+
                 return view('Vehicle.dailyReport',compact('dailkms'));
             }
            //getting today's info

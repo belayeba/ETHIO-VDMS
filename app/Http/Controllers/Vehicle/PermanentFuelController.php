@@ -266,9 +266,55 @@ class PermanentFuelController extends Controller {
                                         ->get();
         return view('Fuelling.financeApprove',compact('fuels'));
     }
+    //finance fetch
+
+    public function finance_fetch()
+    {
+        $data = PermanentFuelModel:: select('vehicle_id','fueling_id','driver_id','month','year','finance_approved_by')
+                                    ->distinct()
+                                    ->latest()
+                                    ->get();
+                
+                return datatables()->of($data)
+                ->addIndexColumn()
+                ->addColumn('counter', function($row) use ($data){
+                    static $counter = 0;
+                    $counter++;
+                    return $counter;
+                })
+
+                ->addColumn('name', function ($row) {
+                    return $row->driver->user->first_name;
+                })
+
+                ->addColumn('Request', function ($row) {
+                    return  $row->month . '/' . $row->year;
+                })
+
+                ->addColumn('vehicle', function ($row) {
+                    return  $row->vehicle->plate_number;
+                })
+
+                ->addColumn('approver', function ($row) {
+                    return  $row->finance_appprove_by ? $row->financeAppprove->first_name : "Not Approved Yet";
+                })
+
+                ->addColumn('action', function ($row) {
+                    $actions = '<button type="button" class="btn btn-info rounded-pill view-btn" data-id="' . $row->fueling_id . '"><i class="ri-eye-line"></i></button>
+                                <button type="button" class="btn btn-primary rounded-pill accept-btn" data-id="' . $row->fueling_id . '" title="Accept"><i class="ri-checkbox-circle-line"></i></button>
+                                <button type="button" class="btn btn-danger rounded-pill reject-btn" data-id="' . $row->fueling_id . '" data-bs-toggle="modal" data-bs-target="#staticBackdrop" title="Reject"><i class="ri-close-circle-fill"></i></button>';
+                    
+                    return $actions;
+                })
+
+                ->rawColumns(['counter','name','Request','approver','action'])
+                ->toJson();
+    }
+    
     // Finance Approval
     public function finance_appprove($id)
      {
+
         // try
         //     {
                 $logged_user = Auth::id();
@@ -320,6 +366,7 @@ class PermanentFuelController extends Controller {
      }
      public function finance_reject(Request $request,$id)
         {
+        
                 $validator = Validator::make($request->all(), [
                     'reason' => 'required|string|max:500',
                 ] );
@@ -329,8 +376,8 @@ class PermanentFuelController extends Controller {
                         $validator->errors(),
                     );
                 }
-            try
-                {
+            // try
+            //     {
                     $logged_user = Auth::id();
                     $get_fuel_requests = PermanentFuelModel::where('fueling_id', $id)->get();
                     $get_one_fuel_request = PermanentFuelModel::where('fueling_id', $id)->first();
@@ -358,12 +405,12 @@ class PermanentFuelController extends Controller {
                     return redirect()->back()->with('success_message',
                     "You have successfully Rejected the Request",
                     );
-                }
-            catch(Exception $e)
-                {
-                    return redirect()->back()->with('error_message',
-                    "Warning! You are denied the service",
-                    );
-                }
+            //     }
+            // catch(Exception $e)
+            //     {
+            //         return redirect()->back()->with('error_message',
+            //         "Warning! You are denied the service",
+            //         );
+            //     }
         }
 }
