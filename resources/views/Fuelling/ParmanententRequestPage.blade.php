@@ -33,12 +33,14 @@
                                     @csrf
                                     <div>
                                         <label>Vehicle</label>
-                                        <select name="vehicle_id" class="form-select mb-3">
-                                            <option selected>Open this select menu</option>
-                                            @foreach($vehicles as $vehicle)
-                                            <option value="{{$vehicle->vehicle_id}}">{{$vehicle->vehicle->plate_number}}</option>
-                                            @endforeach
-                                        </select>
+                                        @if ($vehicles)
+                                            <select name="vehicle_id" class="form-select mb-3">
+                                                <option selected>Open this select menu</option>
+                                                    @foreach($vehicles as $vehicle)
+                                                        <option value="{{$vehicle->vehicle_id}}">{{$vehicle->vehicle->plate_number}}</option>
+                                                    @endforeach
+                                            </select> 
+                                        @endif
                                     </div>
 
                                     <div>

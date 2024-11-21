@@ -354,12 +354,12 @@
                                     @endcan()
                                     @can('Permananet Vehicle Request')
                                         <li>
-                                            <a href="#">Permanent</a>
+                                            <a href="{{ route('dailyreport.permanentReport') }}">Permanent</a>
                                         </li>
                                     @endcan()
                                     @can('Temporary Vehicle Request')
                                         <li>
-                                            <a href="#">Temporary</a>
+                                            <a href="{{ route('dailyreport.temporaryReport') }}">Temporary</a>
                                         </li>
                                     @endcan()
                                 </ul>
@@ -397,7 +397,7 @@
 
         @include('layouts.footer')
 
-        @include('layouts.setting')
+        {{-- @include('layouts.setting') --}}
     </div>
 
     <!-- <script src="{{ asset('assets/js/app.min.js') }}"></script> -->

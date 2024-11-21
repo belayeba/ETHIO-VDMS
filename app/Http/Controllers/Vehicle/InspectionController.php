@@ -35,7 +35,7 @@ class InspectionController extends Controller
         //Insert Data
     public function storeInspection(Request $request)
         {
-           // dd($request);
+        //    dd($request);
             $rules = [
                 'vehicle_id' => 'required|uuid|exists:vehicles,vehicle_id',
                 'parts' => 'required|array',

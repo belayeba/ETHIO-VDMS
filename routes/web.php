@@ -140,6 +140,7 @@ Route::group(['middleware' => ['auth']], function()
                     Route::post('/Perm_user_delete_request', 'deleteRequest')->name('user_perm_delet');
                     Route::post('/perm_user_update_info', 'update_perm_request')->name('perm_vec_update');
                     Route::get('/director_approve_page/perm', 'DirectorApprovalPage')->name('perm_vec_director_page');
+                    Route::get('fetch_permanent_request_director', 'FetchForPermanenetDirector')->name('FetchForPermanenetDirector');
                     Route::post('/perm_director_approve_request', 'DirectorApproveRequest')->name('perm_vec_director_approve');
                     Route::post('/perm_director_reject_request', 'DirectorRejectRequest')->name('perm_vec_direct_reject');
                     Route::get('/perm_simirit_approve_page', 'Dispatcher_page')->name('perm_vec_simirit_page');
@@ -267,6 +268,14 @@ Route::group(['middleware' => ['auth']], function()
             Route::controller(Daily_KM_Calculation::class)->group(function ()
                 {
                     Route::get('/daily','ReportPage')->name('dailyreport.index');
+                    Route::get('/daily/fetchReport','FetchDailyReport')->name('FetchDailyReport');
+                    Route::get('/vehicle/report/permanent', 'permanentReport')->name('dailyreport.permanentReport');
+                    Route::get('/vehicle/report/temporary', 'temporaryReport')->name('dailyreport.temporaryReport');
+
+                    Route::get('/vehicle/report/filter',  'filterReport')->name('dailyreport.filterReport');
+                    Route::get('/vehicle/report/permanent/filter',  'filterPermanentReport')->name('dailyreport.filterPermanentReport');
+                    Route::get('/vehicle/report/temporary/filter', 'filterTemporaryReport')->name('dailyreport.filterTemporaryReport');
+
                     Route::get('/daily_km/check', 'CheckVehicle')->name('daily_km.page.check');
                     Route::post('/daily_km/store', 'displayForm')->name('daily_km.page.store'); // Create a new inspection
                     Route::post('/daily_km/morning', 'morning_km')->name('daily_km.page.morning'); // Show a specific inspection
@@ -391,4 +400,9 @@ Route::group(['middleware' => ['auth']], function()
         Route::post('/{department}/update', [DepartmentController::class,'update'])->name('department.update');
         Route::delete('/delete/{department}',[DepartmentController::class,'destroy'])->name('department.destroy');
     });
+
+
+    //filters
+        
+
 });

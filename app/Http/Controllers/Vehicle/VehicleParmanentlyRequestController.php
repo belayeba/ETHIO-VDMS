@@ -53,7 +53,21 @@ class VehicleParmanentlyRequestController extends Controller
             })
 
             ->addColumn('status', function ($row) {
-                return $row->status == 1 ? 'Approved' : 'Pending';
+                if (is_null($row->approved_by)) {
+                    return 'Pending';
+                } elseif (!is_null($row->director_reject_reason)) {
+                    return 'Rejected by Dir';
+                } elseif (!is_null($row->approved_by)){
+                    return 'Approved by Dir';
+                }
+                elseif (is_null($row->vec_director_reject_reason )) {
+                    return 'Rejected by simirit';
+                } elseif (!is_null($row->vehicle_id)){
+                    return 'Approved by simirit';
+                }
+                else {
+                    return 'Approved';
+                }
             })
 
             ->addColumn('vehicle', function ($row) {
@@ -225,16 +239,76 @@ class VehicleParmanentlyRequestController extends Controller
     // Directors Page
     public function DirectorApprovalPage()
         {
-            $id = Auth::id();
-           // $directors_data = User::where('id',$id)->get('department_id');
-           // $dept_id = $directors_data->department_id;
-            $vehicle_requests = VehiclePermanentlyRequestModel::latest()->get();
-           // $vehicle_requests = VehiclePermanentlyRequestModel::whereHas('requestedBy', function ($query) use ($dept_id) {
-                //$query->where('department_id', $dept_id);
-            //})->get();
 
-            return view("Request.PermanentDirectorPage", compact('vehicle_requests'));
+            return view("Request.PermanentDirectorPage");
         }
+
+    // datatable for the director request
+    public function FetchForPermanenetDirector()
+        {
+            
+            $id = Auth::id();
+            // $directors_data = User::where('id',$id)->get('department_id');
+            // $dept_id = $directors_data->department_id;
+             $data = VehiclePermanentlyRequestModel::latest()->get();
+            // $data = VehiclePermanentlyRequestModel::whereHas('requestedBy', function ($query) use ($dept_id) {
+                 //$query->where('department_id', $dept_id);
+             //})->get();
+            
+            return datatables()->of($data)
+            ->addIndexColumn()
+            ->addColumn('counter', function($row) use ($data){
+                static $counter = 0;
+                $counter++;
+                return $counter;
+            })
+
+            ->addColumn('requested_by', function ($row) {
+                return $row->requestedBy->first_name;
+            })
+
+            ->addColumn('reason', function ($row) {
+                return $row->purpose;
+            })
+
+            ->addColumn('start_date', function ($row) {
+                return $row->created_at->format('M j, Y,');
+            })
+
+            ->addColumn('status', function ($row) {
+                if (is_null($row->approved_by)) {
+                    return '<button  class="btn btn-warning" style="pointer-events: none;">Pending</button>';
+                } elseif (!is_null($row->director_reject_reason)) {
+                    return '<button type="button" class="btn btn-danger" style="pointer-events: none;">Rejected</button>';
+                } else {
+                    return '<button type="button" class="btn btn-success" style="pointer-events: none;">Approved</button>';
+                }
+            })
+
+
+            ->addColumn('actions', function ($row){
+                $action = '';
+
+                $action .= '<button type="button" class="btn btn-info rounded-pill show-btn" data-bs-toggle="modal" data-bs-target="#standard-modal-{{ $loop->index }}" title="Show"><i class=" ri-eye-line"></i></button>';
+
+                if (is_null($row->approved_by) && is_null($row->director_reject_reason)) {
+                    $action .= '
+                            <button id="acceptButton" type="button" class="btn btn-primary rounded-pill accept-btn" data-id="' . $row->vehicle_request_permanent_id . '" 
+                            title="Accept"><i class="ri-checkbox-circle-line"></i></button>
+
+                            <button type="button" class="btn btn-danger rounded-pill reject-btn" 
+                            data-id="' . $row->vehicle_request_permanent_id . '" title="Reject">
+                            <i class=" ri-close-circle-fill"></i></button>';
+                }
+
+                return $action;
+            })
+
+            ->rawColumns(['requested_by','reason','start_date','status','counter','actions'])
+            ->toJson();
+    
+        }
+
     // DIRECTOR APPROVE THE REQUESTS
     public function DirectorApproveRequest(Request $request)
         {
@@ -316,7 +390,7 @@ class VehicleParmanentlyRequestController extends Controller
     // Vehicle Director Page
     public function Dispatcher_page()
         {
-            $Vehicle_Request = VehiclePermanentlyRequestModel::whereNotNull('approved_by')->get();
+            $Vehicle_Request = VehiclePermanentlyRequestModel::whereNotNull('approved_by')->whereNull('director_reject_reason')->get();
             $Vehicle = VehiclesModel::where('status', 1)->get();
             return view("Request.PermanentVehicleDirector", compact('Vehicle_Request', 'Vehicle'));
         }
