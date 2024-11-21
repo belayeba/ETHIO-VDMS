@@ -105,30 +105,32 @@
                                                         </div>
 
                                                         <!-- Date Range Picker -->
-                                                        <div class="col-lg-2 z-3">
+                                                        <div class="col-lg-1 z-3">
                                                             <label for="daterangetime" class="form-label">Date Range</label>
-                                                            <input type="text" class="form-control date" id="datepicker"
-                                                                name="date_range" data-toggle="date-picker"
-                                                                data-time-picker="true"
-                                                                data-locale='{"format": "DD/MM hh:mm A"}'>
+                                                            <input type="text" class="form-control date" id="start_date"
+                                                                name="start_date">
+                                                            <script>
+                                                                $('#start_date').calendarsPicker({
+                                                                    calendar: $.calendars.instance('ethiopian', 'am'),
+                                                                    pickerClass: 'myPicker',
+                                                                    dateFormat: 'yyyy-mm-dd'
+                                                                });
+                                                            </script>
                                                         </div>
 
+                                                        <div class="col-lg-1 z-3">
+                                                            <label for="daterangetime" class="form-label">Date Range</label>
+                                                            <input type="text" class="form-control date" id="end_date"
+                                                                name="end_date">
+                                                            <script>
+                                                                $('#end_date').calendarsPicker({
+                                                                    calendar: $.calendars.instance('ethiopian', 'am'),
+                                                                    pickerClass: 'myPicker',
+                                                                    dateFormat: 'yyyy-mm-dd'
+                                                                });
+                                                            </script>
+                                                        </div>
                                                       
-
-                                                        {{-- <div class="col-md-3">
-                                                <div class="position-relative">
-                                                    <label for="driving-license" class="form-label">Date</label>
-                                                    <input id="fill_date" name="Driving_license" class="form-control" placeholder="When" type="text">
-                                                </div>
-                                            </div>
-                                             <script> 
-                                                $('#fill_date').calendarsPicker({ 
-                                                    calendar: $.calendars.instance('ethiopian', 'am'), 
-                                                    pickerClass: 'myPicker', 
-                                                    dateFormat: 'yyyy-mm-dd' 
-                                                });
-                                             </script> --}}
-
                                                         <div class="col-lg-2 mt-3">
                                                             <button type="submit" class="btn btn-info">Filter <i
                                                                     class="ri-arrow-right-line ms-1"></i></button>

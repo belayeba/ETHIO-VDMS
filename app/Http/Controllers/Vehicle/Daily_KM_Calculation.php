@@ -91,7 +91,7 @@ class Daily_KM_Calculation extends Controller
                         'purpose' => $km->purpose,
                         'mileage' => $km->mileage,
                         'department_name' => $km->requestedBy->department->name ?? 'N/A',
-                        'cluster_name' => $km->department->cluster->name ?? 'N/A',
+                        'cluster_name' => $km->requestedBy->department->cluster->name ?? 'N/A',
         
                     ];
                 });
@@ -113,7 +113,7 @@ class Daily_KM_Calculation extends Controller
                     ->latest()
                     ->take(50)
                     ->get();
-        
+        // dd($dailkms);
         
                     $dailkms = $dailkms->map(function ($km) {
                         return (object) [
@@ -133,7 +133,7 @@ class Daily_KM_Calculation extends Controller
                             'start_location' => $km->start_location,
                             'end_locations' => $km->end_locations,
                             'department_name' => $km->requestedBy->department->name ?? 'N/A',
-                            'cluster_name' => $km->department->cluster->name ?? 'N/A',
+                            'cluster_name' => $km->requestedBy->department->cluster->name ?? 'N/A',
             
                         ];
                     });
@@ -144,20 +144,21 @@ class Daily_KM_Calculation extends Controller
         
             public function filterReport(Request $request)
             {
-                dd($request);
                 // Validate input filters
                 $validator = Validator::make($request->all(), [
                     'plate_number' => 'nullable|string',
                     'name' => 'nullable|string',
                     'department' => 'nullable|string',
                     'start_date' => 'nullable|date',
-                    'end_date' => 'nullable|date',
+                    'end_date' => 'nullable|date|after_or_equal:start_date',
                 ]);
         
                 if ($validator->fails()) {
-                    return redirect()->back()->withErrors($validator)->withInput();
+                    return redirect()->back()->with('error_message',
+                                 $validator->errors(),
+                            );
                 }
-        
+        // dd('hello');
                 if ($request->has('export')) {
                     session([
                         'plate_number' => $request->input('plate_number'),
@@ -172,11 +173,12 @@ class Daily_KM_Calculation extends Controller
                 $department = $request->input('department');
                 $cluster = $request->input('cluster');
         
-                $dateRange = $request->input('date_range');
+                $startDate = $request->input('start_date');
+                $endDate = $request->input('end_date');
         
                 $filter = $request->input('filter');
         
-                $dates = explode(' - ', $dateRange);
+               
                 // Query the daily KM data with filters
                 $query = DailyKMCalculationModel::with('vehicle', 'driver');
                 if ($plateNumber) {
@@ -185,12 +187,13 @@ class Daily_KM_Calculation extends Controller
                     });
         
                 }
-        
-                if (count($dates) == 2) {
-                    $startDate = $dates[0];
-                    $endDate = $dates[1];
-                    $query->whereBetween('date', [$startDate, $endDate]);
+
+                if ($startDate && $endDate) {
+                    $query->whereBetween('created_at', [$startDate, $endDate]);
                 }
+                
+        
+                
         
                 $dailkms = $query->latest()->get();
         
@@ -234,11 +237,13 @@ class Daily_KM_Calculation extends Controller
                     'name' => 'nullable|string',
                     'department' => 'nullable|string',
                     'start_date' => 'nullable|date',
-                    'end_date' => 'nullable|date',
+                    'end_date' => 'nullable|date|after_or_equal:start_date',
                 ]);
         
                 if ($validator->fails()) {
-                    return redirect()->back()->withErrors($validator)->withInput();
+                    return redirect()->back()->with('error_message',
+                                 $validator->errors(),
+                            );
                 }
                 // Get filter parameters
                 if ($request->has('export')) {
@@ -256,9 +261,10 @@ class Daily_KM_Calculation extends Controller
                 $driverName = session('driver_name');
                 $department = session('department');
                 $cluster = session('cluster');
-                $dateRange = session('date_range');
-        
-                $dates = explode(' - ', $dateRange);
+
+                $startDate = $request->input('start_date');
+                $endDate = $request->input('end_date');
+
                 // Query the daily KM data with filters
                 $query = VehiclePermanentlyRequestModel::with('vehicle', 'requestedBy')
                     ->where('status', 1);
@@ -268,12 +274,9 @@ class Daily_KM_Calculation extends Controller
                         $q->where('plate_number', 'LIKE', "%{$plateNumber}%");
                     });
         
-                } elseif (count($dates) == 2) {
-                    $startDate = $dates[0];
-                    $endDate = $dates[1];
+                } elseif ($startDate && $endDate) {
                     $query->whereBetween('given_date', [$startDate, $endDate]);
                 }
-        
                 // return response()->json([
                 //     // 'vehicles' => $vehicles,
                 //     // 'drivers' => $drivers,
@@ -282,12 +285,12 @@ class Daily_KM_Calculation extends Controller
                 //  ]);
         
                 elseif ($department) {
-                    $query->whereHas('department', function ($q) use ($department) {
+                    $query->whereHas('requestedBy.department', function ($q) use ($department) {
                         $q->where('department_id', 'LIKE', "%{$department}%");
                     });
                 } elseif ($cluster) {
         
-                    $query->whereHas('department.department.cluster', function ($q) use ($cluster) {
+                    $query->whereHas('requestedBy.department.cluster', function ($q) use ($cluster) {
                         $q->where('cluster_id', 'LIKE', "%{$cluster}%");
                     });
                 } elseif ($driverName) {
@@ -306,7 +309,7 @@ class Daily_KM_Calculation extends Controller
                         'purpose' => $km->purpose,
                         'mileage' => $km->mileage,
                         'department_name' => $km->requestedBy->department->name ?? 'N/A',
-                        'cluster_name' => $km->department->cluster->name ?? 'N/A',
+                        'cluster_name' => $km->requestedBy->department->cluster->name ?? 'N/A',
                     ];
                 });
         
@@ -334,11 +337,12 @@ class Daily_KM_Calculation extends Controller
                     'name' => 'nullable|string',
                     'department' => 'nullable|string',
                     'start_date' => 'nullable|date',
-                    'end_date' => 'nullable|date',
+                    'end_date' => 'nullable|date|after_or_equal:start_date',
                 ]);
-        
                 if ($validator->fails()) {
-                    return redirect()->back()->withErrors($validator)->withInput();
+                    return redirect()->back()->with('error_message',
+                                    $validator->errors(),
+                            );
                 }
                 // Get filter parameters
                 if ($request->has('export')) {
@@ -357,9 +361,9 @@ class Daily_KM_Calculation extends Controller
                 $driverName = session('driver_name');
                 $department = session('department');
                 $cluster = session('cluster');
-                $dateRange = session('date_range');
-        
-                $dates = explode(' - ', $dateRange);
+
+                $startDate = $request->input('start_date');
+                $endDate = $request->input('end_date');
                 // Query the daily KM data with filters
                 $query = VehicleTemporaryRequestModel::with('vehicle', 'requestedBy')
                     ->where('status', 'Approved');
@@ -374,11 +378,10 @@ class Daily_KM_Calculation extends Controller
                             $q->where('username', 'LIKE', "%{$driverName}%");
                         });
         
-                    }elseif (count($dates) == 2) {
-                        $startDate = $dates[0];
-                        $endDate = $dates[1];
+                    }elseif ($startDate && $endDate) {
                         $query->whereBetween('start_date', [$startDate, $endDate]);
                     }
+                    
             
                     // return response()->json([
                     //     // 'vehicles' => $vehicles,
@@ -388,12 +391,12 @@ class Daily_KM_Calculation extends Controller
                     //  ]);
             
                     elseif ($department) {
-                        $query->whereHas('department', function ($q) use ($department) {
+                        $query->whereHas('requestedBy.department', function ($q) use ($department) {
                             $q->where('department_id', 'LIKE', "%{$department}%");
                         });
                     } elseif ($cluster) {
             
-                        $query->whereHas('department.department.cluster', function ($q) use ($cluster) {
+                        $query->whereHas('requestedBy.department.cluster', function ($q) use ($cluster) {
                             $q->where('cluster_id', 'LIKE', "%{$cluster}%");
                         });
                     } elseif ($driverName) {
@@ -422,7 +425,7 @@ class Daily_KM_Calculation extends Controller
                             'start_location' => $km->start_location,
                             'end_locations' => $km->end_locations,
                             'department_name' => $km->requestedBy->department->name ?? 'N/A',
-                            'cluster_name' => $km->department->cluster->name ?? 'N/A',
+                            'cluster_name' => $km->requestedBy->department->cluster->name ?? 'N/A',
             
                         ];
                     });

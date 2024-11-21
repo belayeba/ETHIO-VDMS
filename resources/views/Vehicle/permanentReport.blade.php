@@ -106,13 +106,30 @@
                                                         </div>
 
                                                         <!-- Date Range Picker -->
-                                                        <div class="col-lg-2 z-3">
-                                                            <label for="daterangetime" class="form-label">Date Range</label>
-                                                            <input type="text" class="form-control date" id="datepicker"
-                                                                name="date_range" data-toggle="date-picker"
-                                                                data-time-picker="true"
-                                                                data-locale='{"format": "DD/MM hh:mm A"}'>
-                                                                
+                                                        <div class="col-lg-1">
+                                                            <label for="daterangetime" class="form-label">Date: &nbsp; From</label>
+                                                            <input type="text" class="form-control date" id="startdate"
+                                                                name="start_date">
+                                                                <script>
+                                                                    $('#startdate').calendarsPicker({
+                                                                        calendar: $.calendars.instance('ethiopian', 'am'),
+                                                                        pickerClass: 'myPicker',
+                                                                        dateFormat: 'yyyy-mm-dd'
+                                                                    });
+                                                                </script>
+                                                        </div>
+
+                                                        <div class="col-lg-1">
+                                                            <label for="daterangetime" class="form-label">To</label>
+                                                            <input type="text" class="form-control date" id="end_date"
+                                                                name="end_date">  
+                                                                <script>
+                                                                    $('#end_date').calendarsPicker({
+                                                                        calendar: $.calendars.instance('ethiopian', 'am'),
+                                                                        pickerClass: 'myPicker',
+                                                                        dateFormat: 'yyyy-mm-dd'
+                                                                    });
+                                                                </script>  
                                                         </div>
 
                                                         <div class="col-lg-2 mt-3">

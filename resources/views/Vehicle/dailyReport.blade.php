@@ -68,7 +68,7 @@
                                                 <!-- Date Range Picker -->
                                                 <div class="col-lg-2">
                                                     <label for="daterangetime" class="form-label">Date Range: &nbsp;&nbsp;&nbsp;&nbsp; From</label>
-                                                    <input type="text" class="form-control date" id="startdate" name="startdate">
+                                                    <input type="text" class="form-control date" id="startdate" name="start_date">
                                                     <script>
                                                         $('#startdate').calendarsPicker({
                                                             calendar: $.calendars.instance('ethiopian', 'am'),
