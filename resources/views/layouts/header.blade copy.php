@@ -226,8 +226,8 @@
                     <div class="notify-icon bg-primary-subtle">
                         <i class="mdi mdi-comment-account-outline text-primary"></i>
                     </div>
+                    <h1 class="noti-time">${notification.subject}</h1>
                     <p class="notify-details">${notification.message}
-                        <small class="noti-time">${notification.subject}</small>
                     </p>
                 </a>
             `;

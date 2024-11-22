@@ -329,7 +329,7 @@ class VehicleTemporaryRequestController extends Controller
                     // })->latest()->get();
                     //$vehicle_requests=VehicleTemporaryRequestModel::get();
                     return view("Request.DirectorPage");
-        }
+            }
 
             // fetching director approval requests
         public function FetchForDirector(Request $request)
@@ -1142,12 +1142,12 @@ class VehicleTemporaryRequestController extends Controller
                         $Vehicle_Request = VehicleTemporaryRequestModel::findOrFail($id);
                         if($Vehicle_Request->start_km > $end_km)
                           {
-                            return redirect()->back()->with('error_message',
-                            "End KM should be greater than Start KM!",); 
+                              return redirect()->back()->with('error_message',
+                                "End KM should be greater than Start KM!",); 
                           }
                         $vehicle = VehiclesModel::findOrFail($Vehicle_Request->vehicle_id);
-                        $inspection = InspectionModel::where('vehicle_id',$Vehicle_Request->vehicle_id)->latest->first();
-                        $latest_inspection = $inspection->vehicle_id;
+                        $inspection = InspectionModel::where('vehicle_id', $Vehicle_Request->vehicle_id)->latest()->first();
+                        $latest_inspection = $inspection->inspection_id;
                         $Vehicle_Request->taken_by = $user_id;
                         $Vehicle_Request->end_km = $end_km;
                         $vehicle->status = true;
@@ -1160,8 +1160,8 @@ class VehicleTemporaryRequestController extends Controller
                     }
                 catch (Exception $e) 
                     {
-                        // Handle the case when the vehicle request is not found
-                      return redirect()->back()->with('error_message',
+                           // Handle the case when the vehicle request is not found
+                          return redirect()->back()->with('error_message',
                                  "Sorry, Something went wrong",
                             );
                     }
