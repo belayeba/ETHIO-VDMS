@@ -173,7 +173,7 @@
     <script>
         var table = $('.Transportdirector_datatable').DataTable({
             processing: true,
-            pageLength: 3,
+            pageLength: 5,
             serverSide: true,
             ajax: {
                     url: "{{ route('FetchForDirector') }}",

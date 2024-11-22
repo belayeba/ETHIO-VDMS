@@ -27,15 +27,51 @@ class PermanentFuelController extends Controller {
                                                         ->where('status' , 1)
                                                         ->whereNotNull('vehicle_id')
                                                         ->get();
+
+        return view( 'Fuelling.ParmanententRequestPage',compact('vehicles'));
+    }
+
+    public function fuel_request_fetch() 
+    {
+        $logged_user = Auth::id();
         $get_driver = DriversModel::where('user_id',$logged_user)->first();
-        $fuelings = PermanentFuelModel::select('fueling_id','vehicle_id','driver_id','month','year','finance_approved_by')
+        $data = PermanentFuelModel::select('fueling_id','vehicle_id','driver_id','month','year','finance_approved_by')
                                         ->where('driver_id', $get_driver->driver_id)
                                         ->distinct()
                                         ->latest()
                                         ->get();
-                                    //   dd($vehicles); 
-        return view( 'Fuelling.ParmanententRequestPage',compact('fuelings','vehicles'));
+
+                return datatables()->of($data)
+                ->addIndexColumn()
+                ->addColumn('counter', function($row) use ($data){
+                    static $counter = 0;
+                    $counter++;
+                    return $counter;
+                })
+
+                ->addColumn('vehicle', function ($row) {
+                    return $row->vehicle->plate_number;
+                })
+
+                ->addColumn('status', function ($row) {
+                    return "pending";
+                })
+
+                ->addColumn('month', function ($row) {
+                    return $row->month . '/' . $row->year;
+                })
+                ->addColumn('action', function ($row) {
+                    $actions = '<button type="button" class="btn btn-info rounded-pill view-btn" data-id="' . $row->fueling_id . '"><i class="ri-eye-line"></i></button>
+                                <button type="button" class="btn btn-danger rounded-pill reject-btn" data-id="' . $row->fueling_id . '" data-bs-toggle="modal" data-bs-target="#staticBackdrop" title="Reject"><i class="ri-close-circle-fill"></i></button>';
+                    
+                    return $actions;
+                })
+
+                ->rawColumns(['counter','vehicle','status','month','action'])
+                ->toJson();
     }
+
+
     public function my_request()
       {
         $logged_user = Auth::id();
@@ -344,7 +380,7 @@ class PermanentFuelController extends Controller {
                         $fuel_request->finance_approved_by = $logged_user;
                         $fuel_request->update(); // Save the updated model to the database
                     }         
-                    dd($logged_user);      
+                    // dd($logged_user);      
                 $total_fuel = $get_fuel_requests->sum('fuel_amount');
                 $total_from_prev = $permanent->feul_left_from_prev + $permanent->quata;
                 $left_for_next = $total_from_prev - $total_fuel;

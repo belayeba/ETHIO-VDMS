@@ -34,8 +34,9 @@
 
             <!-- Start Content-->
             <div class="container-fluid">
-                <div class="row">
-                    <div class="col-lg-5">
+                <div class="row g-3">
+                    <!-- Form Section -->
+                    <div class="col-12 col-lg-5">
                         <div class="card">
                             <div class="card-header">
                                 <h4 class="header-title">Request Permanent Vehicle</h4>
@@ -100,23 +101,25 @@
                         </div> <!-- end col-->
                     </div>
 
-                    <div class="col-7">
-                        <div class="card">
+                    <div class="col-12 col-lg-7">
+                        <div class="card h-100">
                             <div class="card-body">
-                                <table class="table Permanent_datatable table-striped dt-responsive nowrap w-100">
-                                    <thead>
-                                        <tr>
-                                            <th>Roll.no</th>
-                                            <th>Date Requested</th>
-                                            <th>status</th>
-                                            <th>Vehicle</th>
-                                            <th>Actions</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
+                                <div class="table-responsive">
+                                    <table class="table Permanent_datatable table-striped dt-responsive nowrap w-100">
+                                        <thead>
+                                            <tr>
+                                                <th>Roll.no</th>
+                                                <th>Date Requested</th>
+                                                <th>status</th>
+                                                <th>Vehicle</th>
+                                                <th>Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
 
-                                    </tbody>
-                                </table>
+                                        </tbody>
+                                    </table>
+                                </div>
 
                                 <!-- Warning Alert Modal -->
                                 <div class="modal fade" id="confirmationModal" tabindex="-1" role="dialog"
@@ -276,7 +279,7 @@
             <script>
                 var table = $('.Permanent_datatable').DataTable({
                     processing: true,
-                    pageLength: 3,
+                    pageLength: 5,
                     serverSide: true,
                     ajax: "{{ route('FetchPermanentRequest') }}",
                     columns: [{

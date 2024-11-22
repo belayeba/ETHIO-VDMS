@@ -142,7 +142,7 @@
                             </div>
                             <div class="card-body">
                                 <div class="table-responsive">
-                                    <table id="lms_table" class="table">
+                                    <table class="table fuel_datatable table-centered mb-0 table-nowrap" id="inline-editable">
                                         <thead>
                                             <tr>
                                                 <th scope="col">#</th>
@@ -154,10 +154,10 @@
                                         </thead>
                                         <tbody>
                                             <!-- Table rows will be populated here -->
-                                            @foreach($fuelings as $request)
+                                            {{-- @foreach($fuelings as $request) --}}
                                             {{-- {{dd($fuelings)}} --}}
                                                 <tbody>
-                                                    <tr>
+                                                    {{-- <tr>
                                                         <td>{{$loop->iteration}}</td>
                                                         <td>{{$request->vehicle->plate_number}}</td>
                                                         <td>status</td>
@@ -169,11 +169,12 @@
 
                                                             <button type="button" class="btn btn-danger rounded-pill" data-bs-toggle="modal" data-bs-target="#staticBackdrop-{{ $loop->index }}" title="Reject"><i class=" ri-close-circle-fill"></i></button>
                                                            
-                                                        </td>
+                                                        </td> --}}
                                                     </tr>
                                                 </tbody>
+                                            </table>
                                                 <!-- this is for the assign  modal -->
-                                                <div class="modal fade" id="staticaccept-{{$loop->iteration}}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                                                {{-- <div class="modal fade" id="staticaccept-{{$loop->iteration}}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                                                     <div class="modal-dialog modal-lg modal-dialog-scrollable">
                                                         <div class="modal-content">
                                                             
@@ -200,97 +201,38 @@
                                                                 </div> <!-- end modal footer -->
                                                             </div>                                                              
                                                         </div> <!-- end modal content-->
-                                                    </div> <!-- end modal dialog-->
+                                                    </div> <!-- end modal dialog--> --}}
 
-                                                    <script>
-                                                        document.getElementById('assignBtn-{{$loop->iteration}}').addEventListener('click', function() {
-                                                        var selectedCarId = document.getElementById('IdSelection-{{$loop->iteration}}').value;
-                                                            
-                                                            // Perform an Ajax request to fetch data based on the selected car ID
-                                                            $.ajax({
-                                                                url: '/show_detail/' + selectedCarId,
-                                                                type: 'get',
-                                                               
-                                                                data: { id: selectedCarId },
-                                                                success: function(response) {
-                                                                    $('#staticaccept-{{$loop->iteration}}').modal('show');
-                                                                    var cardsContainer = document.getElementById('inspectionCardsContainer-{{$loop->iteration}}');
-                                                                    cardsContainer.innerHTML = ''; // Clear previous cards
-                                                    
-                                                                    if (response.status === 'success' && Array.isArray(response.data) && response.data.length > 0) {
-                                                                        // Create the table
-                                                                       
-                                                                    // Create a section to display "Inspected By" and "Created At" at the top right corner
-                                                                        var infoSection = document.createElement('div');
-                                                                        infoSection.className = 'd-flex justify-content-end mb-4'; // Flexbox to align right and add margin-bottom
-                                                                        infoSection.innerHTML = `
-                                                                            <p><strong>Inspected By:</strong>  </br>
-                                                                            <strong>Created At:</strong> </br>
-                                                                        <strong>Image:</strong> 
-                                                                       
-                                                                        `;
-                                                                        cardsContainer.appendChild(infoSection); // Append the info section before the table
-                                                    
-                                                                        var table = document.createElement('table');
-                                                                        table.className = 'table table-striped'; // Add Bootstrap classes for styling
-                                                                        table.innerHTML = `
-                                                                            <thead>
-                                                                                <tr>
-                                                                                    <th>Roll no</th>
-                                                                                    <th>Fuel Ammount</th>
-                                                                                    <th>Fuel Cost</th>
-                                                                                    <th>Fueling Date</th>
-                                                                                    <th>Receit</th>
-                                                                                </tr>
-                                                                            </thead>
-                                                                            <tbody>
-                                                                            </tbody>
-                                                                        `;
-                                                                            
-                                                                       var count = 0;
-                                                                        response.data.forEach(function(fueling,index) {
-                                                                            var row = document.createElement('tr');
-                                                                             count = count +1;
-                                                                             
-                                                                            row.innerHTML = `
-                                                                                <td>${count}</td>
-                                                                                <td>${fueling.fuel_amount}</td>
-                                                                                <td>${fueling.fuel_cost}</td>
-                                                                                <td>${fueling.fuiling_date}</td>
-                                                                                <td>
-                                                                                    <a href="javascript:void(0);" onclick="showFileInIframe('{{ asset('storage/vehicles/reciept/') }}/${fueling.reciet_attachment}', '{{$loop->iteration}}')">
-                                                                                        ${fueling.reciet_attachment}
-                                                                                    </a>
-                                                                                </td>
-                                                                            `;
-                                                                            table.querySelector('tbody').appendChild(row); // Append row to the table body
-                                                                        });
-                                                    
-                                                                        cardsContainer.appendChild(table);
-                                                    
-                                                                    } else {
-                                                                        // Handle the case where no data is available
-                                                                        cardsContainer.innerHTML = '<p>No inspection data available.</p>';
-                                                                    }
-                                                                },
-                                                                error: function() {
-                                                                    var cardsContainer = document.getElementById('inspectionCardsContainer');
-                                                                    cardsContainer.innerHTML = ''; // Clear previous cards
-                                                                    cardsContainer.innerHTML = '<p>No inspection data available at the moment. Please check the Plate number!</p>';
-                                                                }
-                                                            });
-                                                        });
 
-                                                        function showFileInIframe(fileUrl, iteration) {
-                                                            var filePreview = document.getElementById('filePreview-' + iteration);
-                                                            filePreview.src = fileUrl;  // Set the file URL to the iframe's src
-                                                            filePreview.style.display = 'block';  // Display the iframe
-                                                        }
-                                                    </script>
-
-                                            @endforeach
-                                        </tbody>
-                                    </table>
+                                {{-- modal for displaying the data --}}
+                                <div class="modal fade" id="staticaccept" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                                    <div class="modal-dialog modal-lg modal-dialog-scrollable">
+                                        <div class="modal-content">
+                                            
+                                                <div class="modal-header">
+                                                                                                                    
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                </div> <!-- end modal header -->
+                                                <div class="modal-body d-flex flex-column align-items-center">
+                                                    <div class="row mt-3 w-100" id="inspectionCardsContainer">
+                                                    </div>
+                                                    
+                                                    <!-- Image Preview Section -->
+                                                    <div>
+                                                        <iframe id="filePreview" 
+                                                                style="width: 100%;
+                                                                    height: 500px; 
+                                                                    display: none;
+                                                                    ">
+                                                        </iframe>
+                                                    </div>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="submit" class="btn btn-secondary"  data-bs-dismiss="modal" aria-label="Close">close</button>
+                                                </div> <!-- end modal footer -->
+                                            </div>                                                              
+                                        </div> <!-- end modal content-->
+                                    </div> <!-- end modal dialog-->
                                 </div>
                             </div>
                         </div>
@@ -298,30 +240,157 @@
                 </div>
 
                 <!-- Confirmation Modal -->
-                <div class="modal fade" id="confirm-delete" tabindex="-1" role="dialog"
-                    aria-labelledby="confirmDeleteLabel" aria-hidden="true">
-                    <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal fade" id="confirmationModal" tabindex="-1" role="dialog"
+                    aria-labelledby="confirmationModalLabel"aria-hidden="true">
+                    <div class="modal-dialog modal-sm">
                         <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="confirmDeleteLabel">Delete Confirmation</h5>
-                                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                            </div>
-                            <div class="modal-body">
-                                <p class="text-center">Are you sure to delete ?</p>
-                                <div class="d-flex justify-content-between">
-                                    <button type="button" class="btn btn-secondary"
-                                        data-bs-dismiss="modal">Cancel</button>
-                                    <a id="delete_link" class="btn btn-danger">Delete</a>
+                            <form method="POST" action="{{ route('perm_vec_director_approve') }}">
+                                @csrf
+                                <input type="hidden" name="request_id" id="request_id">
+                                <div class="modal-body p-4">
+                                    <div class="text-center">
+                                        <i class="ri-alert-line h1 text-danger"></i>
+                                        <h4 class="mt-2">Warning</h4>
+                                        <h5 class="mt-3">
+                                            Are you sure you want to accept this request?</br> This action
+                                            cannot be
+                                            undone.
+                                        </h5>
+                                        <button type="button" class="btn btn-secondary"
+                                            data-bs-dismiss="modal">Cancel</button>
+                                        <button type="submit" class="btn btn-danger"
+                                            id="confirmDelete">Yes,
+                                            Accept</button>
+                                    </div>
                                 </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                            </form>
+                        </div><!-- /.modal-content -->
+                    </div><!-- /.modal-dialog -->
+                </div><!-- /.modal -->
 
-                <!-- Vendor js -->
-                <script src="assets/js/vendor.min.js"></script>
-                <!-- App js -->
-                <script src="assets/js/app.min.js"></script>
-            @endsection
+        <script src="{{ asset('assets/vendor/datatables.net/js/jquery.dataTables.min.js') }}"></script>
+                
+        <script>
+
+            var table = $('.fuel_datatable').DataTable({
+                processing: true,
+                pageLength: 3,
+                serverSide: true,
+                ajax: "{{ route('perm_fuel_page_fetch') }}",
+                columns: [{
+                        data: 'counter',
+                        name: 'counter'
+                    },
+                    {
+                        data: 'vehicle',
+                        name: 'vehicle'
+                    },
+                    {
+                        data: 'month',
+                        name: 'month'
+                    },
+                    {
+                        data: 'status',
+                        name: 'status'
+                    },
+                    {
+                        data: 'action',
+                        name: 'action',
+                        orderable: false,
+                        searchable: false
+                    },
+                ]
+            });
+
+            $(document).on('click', '.view-btn', function() {
+                    // Get the request ID from the data attribute
+                var selectedCarId = $(this).data('id');
+
+                // Perform the Ajax request to fetch data based on the selected car ID
+                $.ajax({
+                    url: '/show_detail/' + selectedCarId,
+                    type: 'get',
+                    data: { id: selectedCarId },
+                    success: function(response) {
+                        $('#staticaccept').modal('show');
+
+                        // Clear previous cards and image preview
+                        var cardsContainer = $('#inspectionCardsContainer');
+                        cardsContainer.empty(); 
+                        clearFilePreview(); 
+
+                        if (response.status === 'success' && Array.isArray(response.data) && response.data.length > 0) {
+                            // Populate the table and info section
+                            var table = $('<table class="table table-striped">').append(`
+                                <thead>
+                                    <tr>
+                                        <th>Roll no</th>
+                                        <th>Fuel Amount</th>
+                                        <th>Fuel Cost</th>
+                                        <th>Fueling Date</th>
+                                        <th>Receipt</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            `);
+
+                            var count = 0;
+                            response.data.forEach(function(fueling) {
+                                count++;
+                                var row = $(`
+                                    <tr>
+                                        <td>${count}</td>
+                                        <td>${fueling.fuel_amount}</td>
+                                        <td>${fueling.fuel_cost}</td>
+                                        <td>${fueling.fuiling_date}</td>
+                                        <td>
+                                            <a href="javascript:void(0);" onclick="showFileInIframe('{{ asset('storage/vehicles/reciept/') }}/${fueling.reciet_attachment}')">
+                                                ${fueling.reciet_attachment}
+                                            </a>
+                                        </td>
+                                    </tr>
+                                `);
+                                table.find('tbody').append(row);
+                            });
+
+                            cardsContainer.append(table);
+                        } else {
+                            cardsContainer.html('<p>No inspection data available.</p>');
+                        }
+                    },
+                    error: function() {
+                        var cardsContainer = $('#inspectionCardsContainer');
+                        cardsContainer.html('<p>No inspection data available at the moment. Please check the Plate number!</p>');
+                    }
+                });
+            });
+
+            function showFileInIframe(fileUrl) {
+                clearFilePreview(); 
+                var filePreview = document.getElementById('filePreview');
+                filePreview.src = fileUrl; // Set the file URL to the iframe's src
+                filePreview.style.display = 'block'; // Display the iframe
+            }
+
+            function clearFilePreview() {
+                var filePreview = document.getElementById('filePreview');
+                filePreview.src = ''; // Clear the src to "erase" the previous image
+                filePreview.style.display = 'none'; // Optionally hide the iframe
+            }
+
+            $(document).ready(function() {
+            $(document).on('click', '.reject-btn', function() {
+                AcceptedId = $(this).data('id');
+
+                $('#request_id').val(AcceptedId);
+                $('#confirmationModal').modal('show');
+                });
+        });
+
+        </script>
+        <!-- Vendor js -->
+        <script src="assets/js/vendor.min.js"></script>
+        <!-- App js -->
+        <script src="assets/js/app.min.js"></script>
+    @endsection

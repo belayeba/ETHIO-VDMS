@@ -151,7 +151,7 @@
     <script>
         var table = $('.perm_director_datatable').DataTable({
         processing: true,
-        pageLength: 3,
+        pageLength: 5,
         serverSide: true,
         ajax: "{{ route('FetchForPermanenetDirector') }}",
         columns: [{

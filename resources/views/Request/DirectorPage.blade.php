@@ -173,7 +173,7 @@
     <script>
         var table = $('.director_datatable').DataTable({
             processing: true,
-            pageLength: 3,
+            pageLength: 5,
             serverSide: true,
             ajax: "{{ route('FetchForDirector') }}",
             columns: [{
@@ -348,7 +348,7 @@
         });
     </script>
 
-    <!-- App js -->
-    <script src="{{ asset('assets/js/app.min.js') }}"></script>
-@endsection
-<script src="{{ asset('assets/js/vendor.min.js') }}"></script>
+   <!-- App js -->
+   <script src="{{ asset('assets/js/app.min.js') }}"></script>
+   @endsection
+   <script src="{{ asset('assets/js/vendor.min.js') }}"></script>

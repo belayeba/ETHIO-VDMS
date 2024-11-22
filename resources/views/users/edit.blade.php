@@ -187,4 +187,8 @@
                             </div> <!-- end card-->
                         </div> <!-- end col-->
 
-@endsection
+        <script src="{{ asset('assets/js/app.min.js') }}"></script>
+        @endsection
+        
+        <script src="{{ asset('assets/js/vendor.min.js') }}"></script>
+                        

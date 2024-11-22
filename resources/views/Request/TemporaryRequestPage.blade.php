@@ -34,16 +34,16 @@
 
             <!-- Start Content-->
             <div class="container-fluid">
-                <div class="row">
-                    <div class="col-lg-5">
+                <div class="row g-3">
+                    <!-- Form Section -->
+                    <div class="col-12 col-lg-5">
                         <div class="card">
                             <div class="card-header">
                                 <h4 class="header-title">Request Vehicle Service</h4>
                             </div>
                             <div class="card-body">
+                                <!-- Form content -->
 
-                                {{--  --}}
-                                <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate">
                                 <form method="POST" action="{{ route('temp_request_post') }}">
                                     @csrf
 
@@ -354,34 +354,32 @@
                                             </script>
                                         </div></br> <!-- end card-body-->
                                     </div>
-
-
                                 </form>
-
-                            </div> <!-- end card-->
-                        </div> <!-- end col-->
+                            </div>
+                        </div>
                     </div>
-
-                    <div class="col-7">
-                        <div class="card">
+            
+                    <!-- Table Section -->
+                    <div class="col-12 col-lg-7">
+                        <div class="card h-100">
                             <div class="card-body">
-                                <table id="basic-datatable"
-                                    class="Temporary_datatable table table-centered mb-0 table-nowrap">
-                                    <thead>
-                                        <tr>
-                                            <th>Roll.no</th>
-                                            <th>Date</th>
-                                            <th>location</th>
-                                            <th>Actions</th>
-                                        </tr>
-                                    </thead>
+                                <div class="table-responsive">
+                                    <table id="basic-datatable" class="Temporary_datatable table table-centered mb-0 table-nowrap">
+                                        <thead>
+                                            <tr>
+                                                <th>Roll.no</th>
+                                                <th>Date</th>
+                                                <th>location</th>
+                                                <th>Actions</th>
+                                            </tr>
+                                        </thead>
 
-                                    <tbody>
-                                           
-                                    </tbody>
-                                </table>
+                                        <tbody>
+                                            
+                                        </tbody>
+                                    </table>
 
-
+                                </div>
                                 
 
                                 <!-- show all the information about the request modal -->
@@ -441,7 +439,7 @@
                 <script>
                     var table = $('.Temporary_datatable').DataTable({
                         processing: true,
-                        pageLength: 3,
+                        pageLength: 5,
                         serverSide: true,
                         ajax: "{{ route('FetchTemporaryRequest') }}",
                         columns: [{

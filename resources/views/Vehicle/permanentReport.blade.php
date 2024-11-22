@@ -139,6 +139,8 @@
                                                             <button type="submit" class="btn btn-success" onclick="document.getElementById('export').value=1">Export</button>
                                                             <input type="hidden" id="export" name="export" value="0">
                                                         </div>
+
+                                                        
                                                     </div>
                                                     <div class="col-lg-4 mt-3">
                                                         <!-- Set export to 1 when exporting -->

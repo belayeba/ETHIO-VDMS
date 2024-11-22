@@ -52,7 +52,7 @@ class VehicleRegistrationController extends Controller {
             'plate_number' => 'required|string|max:255',
             'capacity' => 'required|integer',
             'mileage' => 'required|integer',
-            'fuel_amount' => 'required|numeric|float',
+            'fuel_amount' => 'required|numeric',
             'last_service' => 'nullable|numeric',
             'next_service' => 'nullable|numeric',
             'registered_by' => 'nullable|uuid|exists:users,id',
@@ -64,6 +64,7 @@ class VehicleRegistrationController extends Controller {
             'libre' => 'nullable|file|mimes:pdf,jpg,jpeg',
             'insurance' => 'nullable|file|mimes:pdf,jpg,jpeg',
         ] );
+        
         if ( $validator->fails() ) {
             return redirect()->back()->with('error_message',
             'All field should be field',

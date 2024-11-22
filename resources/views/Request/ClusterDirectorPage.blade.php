@@ -3,22 +3,22 @@
 
         <div class="content-page">
             <div class="content">
-                @if(Session::has('error_message'))
-                <div class="alert alert-danger alert-dismissible text-bg-danger border-0 fade show col-lg-5" 
-                    role="alert">
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="Close"></button>
-                    <strong>Error - </strong> {!! session('error_message') !!}
-                </div>
-                @endif
-                
-                @if(Session::has('success_message'))
-                <div class="alert alert-primary alert-dismissible text-bg-primary border-0 fade show col-lg-5"
-                    role="alert">
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="Close"></button>
-                    <strong> Success- </strong> {!! session('success_message') !!} 
-                </div>
-                @endif
-                <!-- <h4 class="header-title mb-4">DIRECTOR PAGE</h4> -->
+                    @if(Session::has('error_message'))
+                    <div class="alert alert-danger alert-dismissible text-bg-danger border-0 fade show col-lg-5" 
+                        role="alert">
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="Close"></button>
+                        <strong>Error - </strong> {!! session('error_message') !!}
+                    </div>
+                    @endif
+                    
+                    @if(Session::has('success_message'))
+                    <div class="alert alert-primary alert-dismissible text-bg-primary border-0 fade show col-lg-5"
+                        role="alert">
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="Close"></button>
+                        <strong> Success- </strong> {!! session('success_message') !!} 
+                    </div>
+                    @endif
+                    <!-- <h4 class="header-title mb-4">DIRECTOR PAGE</h4> -->
                     <div class="row">
                         <div class="col-12">
                             <div class="card">
@@ -174,7 +174,7 @@
             <script>
                 var table = $('.cluster_director_datatable').DataTable({
                     processing: true,
-                    pageLength: 3,
+                    pageLength: 5,
                     serverSide: true,
                     ajax: {
                             url: "{{ route('FetchForDirector') }}",
