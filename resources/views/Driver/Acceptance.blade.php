@@ -47,7 +47,7 @@
                                                         <td>{{$loop->iteration}}</td>
                                                         <td id="plate">{{$request->vehicle->plate_number}}</td>
                                                         <td>{{$request->newDriver->user->first_name}}</td>
-                                                        <td>{{$request->oldDriver->user->first_name}}</td>
+                                                        <td>{{ $request->oldDriver && $request->user ? $request->user->first_name : "No older" }}</td>
                                                         <td>
                                                             <button type="button" class="btn btn-secondary"  id="assignBtn">Get Inspection</button>
                                                         </td>
