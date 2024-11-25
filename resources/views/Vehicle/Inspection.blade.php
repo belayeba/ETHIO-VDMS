@@ -95,7 +95,7 @@
                                     {{-- </div> --}}
                                     <div class="text-center mb-4">
                                         <label class="form-label fw-bold fs-4" for="spareParts" style="color: #333;">
-                                            Spare Parts
+                                            Vehicle Parts
                                         </label>
                                     </div>
                                     @foreach($parts->where('type', 'normal_part') as $part)
@@ -107,16 +107,16 @@
                                             <div class="row">
                                                 <div class="col-3">
                                                     <div class="form-check">
-                                                        <input type="checkbox" class="form-check-input yes-checkbox" id="yes_{{ $loop->index }}" name="damaged_parts[{{ $part->id }}]" value="1" data-row="{{ $loop->index }}">
-                                                        <label class="form-check-label" for="yes_{{ $loop->index }}">Yes</label>
-                                                        <input type="text" name="damage_descriptions[{{ $part->id }}]" id="input_{{ $loop->index }}" class="d-none quantity-notes" placeholder="How many" data-row="{{ $loop->index }}">
+                                                        <input type="checkbox" class="form-check-input ok-checkbox" id="yes_{{ $loop->index }}" name="damaged_parts[{{ $part->id }}]" value="1" data-row="{{ $loop->index }}">
+                                                        <label class="form-check-label" for="yes_{{ $loop->index }}">Ok</label>
+                                                        <input type="text" name="damage_descriptions[{{ $part->id }}]" id="notes_{{ $loop->index }}" class="d-none damaged-notes" placeholder="Add Description" data-row="{{ $loop->index }}">
                                                     </div>
                                                 </div>
                                                 <div class="col-3">
                                                     <div class="form-check form-checkbox-danger">
-                                                        <input type="checkbox" class="form-check-input none-checkbox" id="no_{{ $loop->index }}" name="damaged_parts[{{ $part->id }}]" value="0" data-row="{{ $loop->index }}">
+                                                        <input type="checkbox" class="form-check-input damaged-checkbox" id="no_{{ $loop->index }}" name="damaged_parts[{{ $part->id }}]" value="0" data-row="{{ $loop->index }}">
                                                         <input type="hidden" name="parts[{{ $part->id }}]" value="{{ $part->vehicle_parts_id }}">
-                                                        <label class="form-check-label" for="no_{{ $loop->index }}">No</label>
+                                                        <label class="form-check-label" for="no_{{ $loop->index }}">Damaged</label>
                                                     </div>
                                                 </div>
                                             </div>
@@ -126,7 +126,8 @@
                                 
                                 <div class="text-center mb-4">
                                     <label class="form-label fw-bold fs-4" for="spareParts" style="color: #333;">
-                                        Vehicle Parts
+                                        Spare Parts
+
                                     </label>
                                 </div>
 
@@ -140,16 +141,16 @@
                                             <div class="row">
                                                 <div class="col-3">
                                                     <div class="form-check">
-                                                        <input type="checkbox" class="form-check-input ok-checkbox" id="ok_{{ $loop->index }}" name="damaged_parts[{{ $part->id }}]" value="1" data-row="{{ $loop->index }}">
+                                                        <input type="checkbox" class="form-check-input yes-checkbox" id="ok_{{ $loop->index }}" name="damaged_parts[{{ $part->id }}]" value="1" data-row="{{ $loop->index }}">
                                                         <input type="hidden" name="parts[{{ $part->id }}]" value="{{ $part->vehicle_parts_id }}">
-                                                        <label class="form-check-label" for="ok_{{ $loop->index }}">OK</label>
+                                                        <label class="form-check-label" for="ok_{{ $loop->index }}">Yes</label>
                                                     </div>
                                                 </div>
                                                 <div class="col-3">
                                                     <div class="form-check form-checkbox-danger">
-                                                        <input type="checkbox" class="form-check-input damaged-checkbox" id="damaged_{{ $loop->index }}" name="damaged_parts[{{ $part->id }}]" value="0" data-row="{{ $loop->index }}">
-                                                        <label class="form-check-label" for="damaged_{{ $loop->index }}">Damaged</label>
-                                                        <input type="text" name="damage_descriptions[{{ $part->id }}]" id="notes_{{ $loop->index }}" class="d-none damaged-notes" placeholder="Add Description" data-row="{{ $loop->index }}">
+                                                        <input type="checkbox" class="form-check-input none-checkbox" id="damaged_{{ $loop->index }}" name="damaged_parts[{{ $part->id }}]" value="0" data-row="{{ $loop->index }}">
+                                                        <label class="form-check-label" for="damaged_{{ $loop->index }}">No</label>
+                                                        <input type="text" name="damage_descriptions[{{ $part->id }}]" id="input_{{ $loop->index }}" class="d-none quantity-notes" placeholder="How many" data-row="{{ $loop->index }}">
                                                     </div>
                                                 </div>
                                             </div>
