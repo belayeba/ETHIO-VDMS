@@ -111,6 +111,7 @@ Route::group(['middleware' => ['auth']], function()
                 });
             Route::controller(usercontroller::class)->group(function()
                 {
+                    Route::post('/search-users', 'searchUsers')->name('search.users');
                     Route::get('/users', 'list')->name('user_list');
                     Route::get('/users/list', 'list_show')->name('users.list.show');
                     Route::get('/users/create','create')->name('user_create');

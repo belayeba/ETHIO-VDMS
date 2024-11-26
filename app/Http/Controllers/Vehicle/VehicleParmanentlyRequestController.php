@@ -114,6 +114,8 @@ class VehicleParmanentlyRequestController extends Controller
             $validator = Validator::make($request->all(), [
                 'purpose' => 'required|string|max:255',
                 'position_letter' => 'required|file|mimes:pdf,jpeg,png,jpg', // For PDF and common image types
+                'Driving_license' => 'required|file|mimes:pdf,jpeg,png,jpg', // For PDF and common image types
+
             ]);
             // If validation fails, return an error response
             if ($validator->fails()) 
@@ -127,11 +129,32 @@ class VehicleParmanentlyRequestController extends Controller
             {
                 $today = \Carbon\Carbon::today();
                 $ethiopianDate = $this->dailyKmCalculation->ConvertToEthiopianDate($today); 
+                $postion_letter = $request->file( "position_letter" );
+                $driving_license = $request->file( "Driving_license" );
+                $postion_letterfileName = time() . '_' . $postion_letter->getClientOriginalName(); // Generate unique filename
+                $postion_letterstoragePath = storage_path( 'app/public/PermanentVehicle/PositionLetter' ); // Define storage path
+                // Check if directory exists, if not create it
+                if ( !file_exists( $postion_letterstoragePath ) ) {
+                    mkdir( $postion_letterstoragePath, 0755, true );
+                }
+                // Move file to the storage path
+                $postion_letter->move( $postion_letterstoragePath, $postion_letterfileName );
+                $driving_licensefileName = time() . '_' . $driving_license->getClientOriginalName(); // Generate unique filename
+                $driving_licensestoragePath = storage_path( 'app/public/PermanentVehicle/Driving_license' ); // Define storage path
+                // Check if directory exists, if not create it
+                if ( !file_exists( $driving_licensestoragePath ) ) {
+                    mkdir( $driving_licensestoragePath, 0755, true );
+                }
+                // Move file to the storage path
+                $driving_license->move( $driving_licensestoragePath, $driving_licensefileName );
+                // Assign file name to the model
+                // Assign file name to the model
                 // Create the user
                 VehiclePermanentlyRequestModel::create([
                     'requested_by' => $id,
                     'purpose' => $request->purpose,
-                    'position_letter' => $request->position_letter,
+                    'position_letter' => $postion_letterfileName,
+                    'driving_license' => $driving_licensefileName,
                     'created_at' => $ethiopianDate
                 ]);
                 // Success: Record was created
@@ -242,7 +265,6 @@ class VehicleParmanentlyRequestController extends Controller
 
             return view("Request.PermanentDirectorPage");
         }
-
     // datatable for the director request
     public function FetchForPermanenetDirector()
         {
@@ -486,15 +508,13 @@ class VehicleParmanentlyRequestController extends Controller
         {
 
             $logged_user = Auth::id();
-            $check_request = VehiclePermanentlyRequestModel::select('vehicle_id','accepted_by_requestor')
-                            ->where('vehicle_request_permanent_id',$id)
+            $check_request = VehiclePermanentlyRequestModel::where('vehicle_request_permanent_id',$id)
                             ->where('requested_by',$logged_user)
                             ->whereNotNull('given_by')
                             ->whereNull('vec_director_reject_reason')
                             ->whereNull('accepted_by_requestor')
                             ->latest()
                             ->first();
-                           
             if(!$check_request)
             {
                 return redirect()->back()->with('error_message',
