@@ -26,7 +26,6 @@ class DriverChangeController extends Controller {
         $vehicles = VehiclesModel::all();
         $drivers = DriversModel::all();
         $driverChange = DriverDriverChangeModel::all();
-    
         return view( 'Driver.switch', compact( 'vehicles', 'drivers', 'driverChange' ) );
     }
     // Store a new Driver Change
@@ -149,6 +148,12 @@ class DriverChangeController extends Controller {
             $logged_user = Auth::id();
             // dd($logged_user);
             $Driver = DriversModel::where('user_id', $logged_user)->first();
+            if(!$Driver)
+                {
+                    return redirect()->back()->with('error_message',
+                    "You Are not driver",
+                    );
+                }
             $driver_id = $Driver->driver_id;
             // dd($driver_id);
             $get_request = DriverDriverChangeModel::where('new_driver_id',$driver_id)->latest()->get();

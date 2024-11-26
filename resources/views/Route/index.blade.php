@@ -63,6 +63,13 @@
                                         <div class="card-body">
                                             <form method="POST" action="{{ route('route.store') }}" accept-charset="UTF-8" name="route_registration_form" id="route_registration_form" enctype="multipart/form-data">
                                                 @csrf
+                                                <div class="position-relative mb-3">
+                                                    <div class="mb-6 position-relative" >
+                                                        <label class="form-label">Route Name</label>
+                                                        <input type="text" name="route_name" class="form-control" placeholder="Enter Route Name">
+        
+                                                    </div>
+                                                </div>
                                                 <div class="row mb-3">
                                                     <label class="form-label" for="vehicle">Vehicle</label>
                                                     <div class="col-mb-6">
@@ -72,13 +79,6 @@
                                                                 <option value="{{ $vehicle->vehicle_id }}">{{ $vehicle->plate_number }}</option>
                                                             @endforeach
                                                         </select>
-                                                    </div>
-                                                </div>
-                                                <div class="position-relative mb-3">
-                                                    <div class="mb-6 position-relative" >
-                                                        <label class="form-label">Name</label>
-                                                        <input type="text" name="route_name" class="form-control" placeholder="Enter Route Name">
-        
                                                     </div>
                                                 </div>
                                                 <div class="position-relative mb-3">

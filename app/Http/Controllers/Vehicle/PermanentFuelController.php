@@ -22,11 +22,18 @@ class PermanentFuelController extends Controller {
         $this->dailyKmCalculation = $dailyKmCalculation;
     }
     public function index() {
+
         $logged_user = Auth::id();
         $vehicles = VehiclePermanentlyRequestModel::select('vehicle_id')->where('requested_by',$logged_user)
                                                         ->where('status' , 1)
                                                         ->whereNotNull('vehicle_id')
-                                                        ->get();
+                                                        ->get();                                  
+        if($vehicles->isEmpty())
+          {
+            return redirect()->back()->with('error_message',
+            "You have not taken vehicle",
+            );
+          }
         $get_driver = DriversModel::where('user_id',$logged_user)->first();
         $fuelings = PermanentFuelModel::select('fueling_id','vehicle_id','driver_id','month','year','finance_approved_by')
                                         ->where('driver_id', $get_driver->driver_id)
