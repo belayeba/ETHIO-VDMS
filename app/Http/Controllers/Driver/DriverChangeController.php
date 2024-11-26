@@ -149,7 +149,7 @@ class DriverChangeController extends Controller {
             $logged_user = Auth::id();
             // dd($logged_user);
             $Driver = DriversModel::where('user_id', $logged_user)->first();
-            $driver_id = $Driver->driver_id;
+            $driver_id = $Driver->driver_id ?? null ;
             // dd($driver_id);
             $get_request = DriverDriverChangeModel::where('new_driver_id',$driver_id)->latest()->get();
             // dd($get_request);
