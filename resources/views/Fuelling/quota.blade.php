@@ -132,7 +132,7 @@
                                                 <i class="ri-eye-line"></i>
                                             </button>
 
-                                            <button type="button" class="btn btn-info rounded-pill" title="Edit Fuel Quota"
+                                            <button type="button" class="btn btn-secondary rounded-pill" title="Edit Fuel Quota"
                                             data-bs-toggle="modal" 
                                             data-bs-target="#quota_modal_{{$loop->index}}"
                                             data-vehicle="{{ $fuelQuata->vehicle->plate_number }}"

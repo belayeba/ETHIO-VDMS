@@ -598,7 +598,7 @@
                                     aria-labelledby="confirmationModalLabel"aria-hidden="true">
                                     <div class="modal-dialog modal-sm">
                                         <div class="modal-content">
-                                            <form method="POST" action="{{ route('vehicle.destroy',$item) }}">
+                                            {{-- <form method="POST" action="{{ route('vehicle.destroy',$item) }}"> --}}
                                                 @csrf
                                                 @method('DELETE')
                                                 <input type="hidden" name="request_id" id="request_id">
