@@ -202,38 +202,36 @@
 
                    <style>
                     @media only screen and (max-width: 768px) {
-    .col-md-4 {
-        width: 100%;
-    }
+                        .col-md-4 {
+                            width: 100%;
+                        }
+                        .col-md-8 {
+                            width: 100%;
+                        }
 
-    .col-md-8 {
-        width: 100%;
-    }
+                        .card {
+                            margin-bottom: 20px;
+                        }
 
-    .card {
-        margin-bottom: 20px;
-    }
+                        .table-responsive {
+                            overflow-x: auto;
+                        }
 
-    .table-responsive {
-        overflow-x: auto;
-    }
+                        .modal-dialog {
+                            max-width: 90%;
+                        }
+                    }
 
-    .modal-dialog {
-        max-width: 90%;
-    }
-}
+                    @media only screen and (max-width: 480px) {
+                        .card {
+                            padding: 10px;
+                        }
 
-@media only screen and (max-width: 480px) {
-    .card {
-        padding: 10px;
-    }
-
-    .modal-dialog {
-        max-width: 100%;
-    }
-}
+                        .modal-dialog {
+                            max-width: 100%;
+                        }
+                    }
                    </style>
-
                 </div>
             </div>
         </div>
