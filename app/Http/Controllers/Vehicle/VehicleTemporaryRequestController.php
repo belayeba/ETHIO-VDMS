@@ -952,7 +952,7 @@ class VehicleTemporaryRequestController extends Controller
                     $vehicles = VehiclesModel::where('status',1)->get();
                     $vehicle_requests = VehicleTemporaryRequestModel::
                                     whereNotNull('transport_director_id')
-                                     //->whereNull('vec_director_reject_reason')
+                                     ->whereNull('vec_director_reject_reason')
                                      //->whereNull('assigned_by')
                                     ->get();
                     return view("Request.VehicleDirectorPage", compact('vehicle_requests','vehicles'));     

@@ -22,7 +22,26 @@ class usercontroller extends Controller
         return  view ('users.list',compact('users'));
     }
 
-
+    public function searchUsers(Request $request)
+    {
+        $request->validate([
+            'query' => 'required|string|max:255',
+        ]);
+    
+        $query = $request->input('query');
+    
+        // Perform the search
+        $users = User::where('username', 'like', "%$query%")
+            ->orWhere('first_name', 'like', "%$query%")
+            ->orWhere('middle_name', 'like', "%$query%")
+            ->orWhere('last_name', 'like', "%$query%")
+            ->orWhere('email', 'like', "%$query%")
+            ->orWhere('phone_number', 'like', "%$query%")
+            ->get();
+    
+        return response()->json($users);
+    }
+    
     public function list_show(Request $request)
     {
         $users = User::get();

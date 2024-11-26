@@ -27,6 +27,7 @@ class VehiclePermanentlyRequestModel extends Model {
         'fuel_quata',
         'feul_left_from_prev',
         'position_letter',
+        'driving_license',
         'purpose',
         'approved_by',
         'director_reject_reason',

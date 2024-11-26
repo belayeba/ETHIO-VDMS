@@ -170,6 +170,7 @@ class CreateAllTablesWithUuid extends Migration
             $table->uuid('requested_by');
             $table->foreign('requested_by')->references('id')->on('users')->onDelete('restrict');
             $table->string('position_letter');
+            $table->string('driving_license');
             $table->integer('fuel_quata')->nullable();
             $table->integer('feul_left_from_prev')->nullable();
             $table->string('purpose');
@@ -270,6 +271,7 @@ class CreateAllTablesWithUuid extends Migration
         });
       // Fueling Table
       Schema::create('Permanent_fuelings', function (Blueprint $table) {
+        $table->uuid('make_primary')->primary();  
         $table->uuid('fueling_id');  
         $table->uuid('vehicle_id');
         $table->foreign('vehicle_id')->references('vehicle_id')->on('vehicles')->onDelete('restrict');
