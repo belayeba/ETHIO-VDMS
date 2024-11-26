@@ -171,33 +171,33 @@
                                     </div>
                                     {{-- modal for displaying the data --}}
                                     <div class="modal fade" id="staticaccept" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                                        <div class="modal-dialog modal-lg modal-dialog-scrollable">
-                                            <div class="modal-content">
-                                                
-                                                    <div class="modal-header">
-                                                                                                                        
-                                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                    </div> <!-- end modal header -->
-                                                    <div class="modal-body d-flex flex-column align-items-center">
-                                                        <div class="row mt-3 w-100" id="inspectionCardsContainer">
-                                                        </div>
-                                                        
-                                                        <!-- Image Preview Section -->
-                                                        <div>
-                                                            <iframe id="filePreview" 
-                                                                 style="width: 100%;
-                                                                        height: 500px; 
-                                                                        display: none;
-                                                                        ">
-                                                            </iframe>
-                                                        </div>
+                                    <div class="modal-dialog modal-lg modal-dialog-scrollable">
+                                        <div class="modal-content">
+                                            
+                                                <div class="modal-header">
+                                                                                                                    
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                </div> <!-- end modal header -->
+                                                <div class="modal-body d-flex flex-column align-items-center">
+                                                    <div class="row mt-3 w-100" id="inspectionCardsContainer">
                                                     </div>
-                                                    <div class="modal-footer">
-                                                        <button type="submit" class="btn btn-secondary"  data-bs-dismiss="modal" aria-label="Close">close</button>
-                                                    </div> <!-- end modal footer -->
-                                                </div>                                                              
-                                            </div> <!-- end modal content-->
-                                        </div> <!-- end modal dialog-->
+                                                    
+                                                    <!-- Image Preview Section -->
+                                                    <div>
+                                                        <iframe id="filePreview" 
+                                                                style="width: 100%;
+                                                                    height: 500px; 
+                                                                    display: none;
+                                                                    ">
+                                                        </iframe>
+                                                    </div>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="submit" class="btn btn-secondary"  data-bs-dismiss="modal" aria-label="Close">close</button>
+                                                </div> <!-- end modal footer -->
+                                            </div>                                                              
+                                        </div> <!-- end modal content-->
+                                    </div> <!-- end modal dialog-->
 
                                           <!-- Accept Alert Modal -->
                                           <div class="modal fade" id="confirmationModal" tabindex="-1" role="dialog"
@@ -319,65 +319,65 @@
         // Get the request ID from the data attribute
         var selectedCarId = $(this).data('id');
 
-    // Perform the Ajax request to fetch data based on the selected car ID
-    $.ajax({
-        url: '/show_detail/' + selectedCarId,
-        type: 'get',
-        data: { id: selectedCarId },
-        success: function(response) {
-            $('#staticaccept').modal('show');
+        // Perform the Ajax request to fetch data based on the selected car ID
+        $.ajax({
+            url: '/show_detail/' + selectedCarId,
+            type: 'get',
+            data: { id: selectedCarId },
+            success: function(response) {
+                $('#staticaccept').modal('show');
 
-             // Clear previous cards and image preview
-            var cardsContainer = $('#inspectionCardsContainer');
-            cardsContainer.empty(); 
-            clearFilePreview(); 
+                // Clear previous cards and image preview
+                var cardsContainer = $('#inspectionCardsContainer');
+                cardsContainer.empty(); 
+                clearFilePreview(); 
 
-            if (response.status === 'success' && Array.isArray(response.data) && response.data.length > 0) {
-                // Populate the table and info section
-                var table = $('<table class="table table-striped">').append(`
-                    <thead>
-                        <tr>
-                            <th>Roll no</th>
-                            <th>Fuel Amount</th>
-                            <th>Fuel Cost</th>
-                            <th>Fueling Date</th>
-                            <th>Receipt</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                    </tbody>
-                `);
-
-                var count = 0;
-                response.data.forEach(function(fueling) {
-                    count++;
-                    var row = $(`
-                        <tr>
-                            <td>${count}</td>
-                            <td>${fueling.fuel_amount}</td>
-                            <td>${fueling.fuel_cost}</td>
-                            <td>${fueling.fuiling_date}</td>
-                            <td>
-                                <a href="javascript:void(0);" onclick="showFileInIframe('{{ asset('storage/vehicles/reciept/') }}/${fueling.reciet_attachment}')">
-                                    ${fueling.reciet_attachment}
-                                </a>
-                            </td>
-                        </tr>
+                if (response.status === 'success' && Array.isArray(response.data) && response.data.length > 0) {
+                    // Populate the table and info section
+                    var table = $('<table class="table table-striped">').append(`
+                        <thead>
+                            <tr>
+                                <th>Roll no</th>
+                                <th>Fuel Amount</th>
+                                <th>Fuel Cost</th>
+                                <th>Fueling Date</th>
+                                <th>Receipt</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
                     `);
-                    table.find('tbody').append(row);
-                });
 
-                cardsContainer.append(table);
-            } else {
-                cardsContainer.html('<p>No inspection data available.</p>');
+                    var count = 0;
+                    response.data.forEach(function(fueling) {
+                        count++;
+                        var row = $(`
+                            <tr>
+                                <td>${count}</td>
+                                <td>${fueling.fuel_amount}</td>
+                                <td>${fueling.fuel_cost}</td>
+                                <td>${fueling.fuiling_date}</td>
+                                <td>
+                                    <a href="javascript:void(0);" onclick="showFileInIframe('{{ asset('storage/vehicles/reciept/') }}/${fueling.reciet_attachment}')">
+                                        ${fueling.reciet_attachment}
+                                    </a>
+                                </td>
+                            </tr>
+                        `);
+                        table.find('tbody').append(row);
+                    });
+
+                    cardsContainer.append(table);
+                } else {
+                    cardsContainer.html('<p>No inspection data available.</p>');
+                }
+            },
+            error: function() {
+                var cardsContainer = $('#inspectionCardsContainer');
+                cardsContainer.html('<p>No inspection data available at the moment. Please check the Plate number!</p>');
             }
-        },
-        error: function() {
-            var cardsContainer = $('#inspectionCardsContainer');
-            cardsContainer.html('<p>No inspection data available at the moment. Please check the Plate number!</p>');
-        }
+        });
     });
-});
 
 function showFileInIframe(fileUrl) {
     clearFilePreview(); 

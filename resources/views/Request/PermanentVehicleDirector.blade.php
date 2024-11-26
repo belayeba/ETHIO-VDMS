@@ -195,6 +195,8 @@ document.getElementById('assignBtn').addEventListener('click', function() {
 
                 if (response.status === 'success' && Array.isArray(response.data) && response.data.length > 0) {
                     // Create the table
+                    var Image = response.data[0].image_path;
+                    var imageUrl = Image ? "{{ asset('storage/vehicles/Inspections/') }}" + '/' + Image : null;    
                     var inspectedBy = response.data[0].inspected_by;
                     var createdAt = new Date(response.data[0].created_at).toLocaleDateString('en-US', {
                         year: 'numeric',
@@ -206,7 +208,12 @@ document.getElementById('assignBtn').addEventListener('click', function() {
                     infoSection.className = 'd-flex justify-content-end mb-3'; // Flexbox to align right and add margin-bottom
                     infoSection.innerHTML = `
                         <p><strong>Inspected By:</strong> ${inspectedBy} </br>
-                        <strong>Created At:</strong> ${createdAt}</p>
+                        <strong>Created At:</strong> ${createdAt}</br>
+                        <strong>Image:</strong> 
+                        ${ imageUrl 
+                            ? `<a href="${imageUrl}" target="_blank"> Click to View </a>` 
+                            : 'No image'
+                        }
                     `;
                     cardsContainer.appendChild(infoSection); // Append the info section before the table
 

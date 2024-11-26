@@ -127,8 +127,8 @@ class VehicleTemporaryRequestController extends Controller
                 if ($validator->fails()) 
                         {
                             return redirect()->back()->with('error_message',
-                                 $validator->errors(),
-                            );
+                            'All field required.',
+                            );  
                         }
                     try 
                         {

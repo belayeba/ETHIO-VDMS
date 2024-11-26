@@ -40,8 +40,6 @@
                                 <h4 class="header-title">Add vehicle part for inspection</h4>
                             </div>
                             <div class="card-body">
-                                <!-- <form action="" method="post" enctype="multipart/form-data">
-                                                            @csrf -->
                                 <div id="progressbarwizard">
                                     <ul class="nav nav-pills nav-justified form-wizard-header mb-3">
                                         <li class="nav-item">
@@ -125,17 +123,15 @@
                                                 </form>
                                             </div>
 
-                                            <!-- <ul class="list-inline wizard mb-0">
-                                                                            <li class="next list-inline-item float-end">
-                                                                                <button type="submit" class="btn btn-info">Submit</button>
-                                                                            </li>
-                                                                        </ul> -->
+                                        <!-- <ul class="list-inline wizard mb-0">
+                                                <li class="next list-inline-item float-end">
+                                                    <button type="submit" class="btn btn-info">Submit</button>
+                                                </li>
+                                            </ul> -->
+
                                         </div>
                                     </div>
                                 </div>
-
-                                </form>
-
                             </div> <!-- end card-->
                         </div> <!-- end col-->
                     </div>
@@ -306,11 +302,12 @@
         <!-- Dropzone File Upload js -->
         <script src="{{ asset('assets/vendor/dropzone/min/dropzone.min.js') }}"></script>
 
-        <!-- File Upload Demo js -->
-        <script src="{{ asset('assets/js/app.min.js') }}"></script>
-        <script src="{{ asset('assets/js/vendor.min.js') }}"></script> 
+       
 
         <script src="{{ asset('assets/js/pages/fileupload.init.js') }}"></script>
-        <script src="assets/js/vendor.min.js"></script>
-        <script src="assets/js/app.min.js"></script>
+     
+    <script src="{{ asset('assets/js/app.min.js') }}"></script>
     @endsection
+    
+    <script src="{{ asset('assets/js/vendor.min.js') }}"></script>
+    

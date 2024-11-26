@@ -93,22 +93,15 @@
             <!-- Brand Logo Light -->
             <a href="index.html" class="logo logo-light">
                 <span class="logo-md">
-                    <img src="assets/images/Aii.jpg" alt="logo" style="max-width: 100%; max-height: 90%;">
+                    <img src="{{ asset('assets/images/Aii.jpg') }}" alt="logo" style="max-width: 100%; max-height: 90%;">
                 </span>
-                <span class="logo-sm">
+                {{-- <span class="logo-sm">
                     <img src="assets/images/Aii.jpg" alt="logo" style="max-width: 100%; max-height: 90%;">
-                </span>
+                </span> --}}
             </a>
 
             <!-- Brand Logo Dark -->
-            <a href="index.html" class="logo logo-dark">
-                <span class="logo-lg">
-                    <img src="assets/images/logo-dark.png" alt="dark logo">
-                </span>
-                <span class="logo-sm">
-                    <img src="assets/images/logo-sm.png" alt="small logo">
-                </span>
-            </a>
+            {{--  --}}
 
             <div class="h-100" id="leftside-menu-container" data-simplebar>
                 <!--- Sidemenu -->

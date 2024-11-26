@@ -94,7 +94,7 @@ class VehicleParmanentlyRequestController extends Controller
             
                 }
 
-                if (!is_null($row->vehicle_id) && !is_null($row->accepted_by_requestor)) {
+                if (!is_null($row->vehicle_id) && is_null($row->accepted_by_requestor)) {
                     $action .= '<a href="' . route('accept_assigned_vehicle', ['id' => $row->vehicle_request_permanent_id]) . '" class="btn btn-primary rounded-pill" title="Accept">Accept</a>
                             <button type="button" class="btn btn-danger rounded-pill reject-btn" data-bs-toggle="modal" data-bs-target="#staticBackdrop" data-id="' . $row->vehicle_request_permanent_id . '" title="Reject">Reject</button>';
                 }
@@ -494,7 +494,7 @@ class VehicleParmanentlyRequestController extends Controller
                             ->whereNull('accepted_by_requestor')
                             ->latest()
                             ->first();
-                            dd($check_request);
+                           
             if(!$check_request)
             {
                 return redirect()->back()->with('error_message',
@@ -508,9 +508,11 @@ class VehicleParmanentlyRequestController extends Controller
                     'Reject the request because assigned vehicle is not active',
                     );
                 }
+ 
             $fuel_quata = $get_the_vehilce->fuel_amount;
             $check_request->accepted_by_requestor = $logged_user;
             $get_the_vehilce->status = false;
+            
             $get_the_vehilce->save();
             $check_request->fuel_quata =  $fuel_quata;
             $check_request->save();

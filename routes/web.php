@@ -100,6 +100,7 @@ Route::group(['middleware' => ['auth']], function()
             Route::controller(PermanentFuelController::class)->group(function()
                 {
                         Route::get('/permanent_fuel_request_page', 'index')->name('permanenet_fuel_request');
+                        Route::get('/perm_fuel_page_fetch', 'fuel_request_fetch')->name('perm_fuel_page_fetch');
                         Route::post('/fuel_post_request', 'store')->name('store_fuel_request');
                         Route::get('/finance_approve_page', 'finance_get_page')->name('finance_approve_fuel_page');
                         Route::get('/finance_page_fetch', 'finance_fetch')->name('finance_page_fetch');

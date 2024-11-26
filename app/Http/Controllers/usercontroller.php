@@ -30,7 +30,7 @@ class usercontroller extends Controller
         return DataTables::of($users)
             ->addIndexColumn()
             ->addColumn('first_name', function($row){
-                return $row->first_name;
+                return $row->first_name.' '.$row->middle_name.' '.$row->last_name;
             })
             ->addColumn('email', function($row){
                 return $row->email;
@@ -49,7 +49,7 @@ class usercontroller extends Controller
                 return $row->created_at;
             })
             ->addColumn('action', function($row){
-                return '<button id="acceptButton" type="button" class="btn btn-info rounded-pill" title="show"><i class=" ri-eye-line"></i></button>
+                return '
                          <a href="' . route('user.update', ['id' => $row->id]) . '" class="btn btn-secondary rounded-pill" title="Edit"><i class="ri-edit-box-line"></i></a>
                         <button type="button" class="btn btn-danger rounded-pill" title="Delete"><i class="ri-close-circle-line"></i></button>';
             })
@@ -110,7 +110,7 @@ class usercontroller extends Controller
             $user = User::create($data);
             $user->assignRole($request->input('roles'));
 
-            return ridrect()->route('user_list')->with('success_message', 'User is registered successfully');
+            return redirect()->route('user_list')->with('success_message', 'User is registered successfully');
 
         }
         catch (Exception $exception) {
@@ -129,7 +129,9 @@ class usercontroller extends Controller
      */
     public function update($id)
     {
+        
         $users = user::findOrFail($id);
+        // dd($users);
         $roles = Role::pluck('name','name')->all();
         $department= DepartmentsModel::get();
         // $Requested = VehicleTemporaryRequestModel::with('peoples', 'materials')
@@ -173,7 +175,7 @@ class usercontroller extends Controller
             $user = User::create($data);
             $user->assignRole($request->input('roles'));
 
-            dd('success');
+            // dd('success');
 
         }
         catch (Exception $exception) {

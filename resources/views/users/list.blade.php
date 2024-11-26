@@ -69,7 +69,7 @@
         $(function() {
             var table = $('.user_datatable').DataTable({
 
-                // pageLength: 1,
+                pageLength: 5,
                 ajax: "{{ route('users.list.show') }}",
                 columns: [{
                         data: 'first_name',
