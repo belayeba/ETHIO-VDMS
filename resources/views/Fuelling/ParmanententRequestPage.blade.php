@@ -44,7 +44,7 @@
                                     </div>
 
                                     <div>
-                                        <label>Vehicle</label>
+                                        <label>Year</label>
                                         <input name="year" type="number" placeholder="Enter year (2010 - 2050)" class="form-control mb-3" min="2010" max="2050"/>
                                     </div>
 

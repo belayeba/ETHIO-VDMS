@@ -10,6 +10,7 @@ use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Controllers\Vehicle\Daily_KM_Calculation;
+use Exception;
 
 class DepartmentController extends Controller
 {
@@ -107,9 +108,17 @@ class DepartmentController extends Controller
      */
     public function destroy(DepartmentsModel $department)
     {
+    try
+    {
         // Delete the department
         $department->delete();
         // Redirect to the index page with a success message
         return redirect()->back()->with('success', 'Department deleted successfully.');
+    }
+    catch (Exception $e)
+    {
+        return redirect()->back()->with('error_message',
+        'Sorry, Something Went Wrong.',);
+    }
     }
 }
