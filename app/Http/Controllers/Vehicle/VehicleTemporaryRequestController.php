@@ -320,6 +320,7 @@ class VehicleTemporaryRequestController extends Controller
             }
         public function DirectorApprovalPage()
             {
+                //dd("coming");
                     // $id = Auth::id();
                     // $directors_data = User::select('department_id')->where('id',$id)->first();
                     // $dept_id = $directors_data->department_id;
@@ -468,7 +469,6 @@ class VehicleTemporaryRequestController extends Controller
                 $user = User::with('department')->find($id);
 
                 $clusterId = $user->department->cluster_id;
-                
                 $data = VehicleTemporaryRequestModel::
                 with('approvedBy','requestedBy.department')->whereHas('requestedBy.department', function ($query) use ($clusterId) {
                     $query->where('cluster_id', $clusterId);
@@ -621,7 +621,7 @@ class VehicleTemporaryRequestController extends Controller
                 $userId = Auth::id();
 
                 // Fetch the user with the department and cluster information
-                $user = User::with('department')->find($userId);
+                $user = User::where('id',$userId)->first();
 
                 // Get the cluster_id from the user's department
                 $clusterId = $user->department->cluster_id;
@@ -1150,6 +1150,7 @@ class VehicleTemporaryRequestController extends Controller
                         $Vehicle_Request->status = false;
                         $Vehicle_Request->returning_inspection = $latest_inspection;
                         $Vehicle_Request->save();
+                        $vehicle->save();
                         return redirect()->back()->with('success_message',
                                  "Return Successfully Done!",
                             );               

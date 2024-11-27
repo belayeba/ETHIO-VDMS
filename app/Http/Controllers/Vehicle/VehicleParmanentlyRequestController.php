@@ -523,7 +523,7 @@ class VehicleParmanentlyRequestController extends Controller
                                 );
             }
             $get_the_vehilce = VehiclesModel::find($check_request->vehicle_id);
-            if($get_the_vehilce->status = false)
+            if($get_the_vehilce->status == false)
                 {
                     return redirect()->back()->with('error_message',
                     'Reject the request because assigned vehicle is not active',
@@ -533,7 +533,6 @@ class VehicleParmanentlyRequestController extends Controller
             $fuel_quata = $get_the_vehilce->fuel_amount;
             $check_request->accepted_by_requestor = $logged_user;
             $get_the_vehilce->status = false;
-            
             $get_the_vehilce->save();
             $check_request->fuel_quata =  $fuel_quata;
             $check_request->save();
