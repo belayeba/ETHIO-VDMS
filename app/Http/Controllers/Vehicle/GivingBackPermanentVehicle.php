@@ -29,8 +29,9 @@ public function displayReturnPermRequestPage()
     {
         $id = Auth::id();
         $Requested = VehiclePermanentlyRequestModel::where('requested_by',$id)->where('accepted_by_requestor', $id)->get();
+        $Return = GivingBackVehiclePermanently::where('requested_by', $id)->get();
         // dd($Requested);
-        return view("Return.ReturnPermanentVehiclePage",compact('Requested'));
+        return view("Return.ReturnPermanentVehiclePage",compact('Requested','Return'));
     }
     // Send Vehicle Return Request Parmananently
 public function ReturntVehiclePerm(Request $request) 
@@ -39,6 +40,7 @@ public function ReturntVehiclePerm(Request $request)
             $validator = Validator::make($request->all(), [
                 'purpose' => 'required|string|max:1000',
                 'request_id' => 'required|exists:vehicle_requests_parmanently,vehicle_request_permanent_id'
+                
             ]);            
                   // If validation fails, return an error response
             if ($validator->fails()) 
@@ -47,21 +49,24 @@ public function ReturntVehiclePerm(Request $request)
                     'All field is required',
                     );
                 }
+                // dd($request);
             $logged_user = Auth::id();
-            $get_permanent_request = VehiclePermanentlyRequestModel::find('request_id');
-            if($get_permanent_request->requested_by != $logged_user || $get_permanent_request->status = false)
+            $request_id= $request->input('request_id');
+            $get_permanent_request = VehiclePermanentlyRequestModel::find($request_id);
+            
+            if($get_permanent_request->requested_by != $logged_user || $get_permanent_request->status == false)
               {
                 return redirect()->back()->with('error_message',
                     'Warning! You are denied the service',
                     );
               }
-            try
-                {
+            // try
+            //     {
                     $today = \Carbon\Carbon::today();
                      $ethiopianDate = $this->dailyKmCalculation->ConvertToEthiopianDate($today); 
                     // Create the user
                     GivingBackVehiclePermanently::create([
-                        'vehicle_id'=>$get_permanent_request->vehicle_id,
+                        // 'vehicle_id'=>$get_permanent_request->vehicle_id,
                         'purpose' =>$request->purpose,
                         'requested_by' => $logged_user,
                         'permanent_request' =>$get_permanent_request->vehicle_request_permanent_id,
@@ -73,14 +78,14 @@ public function ReturntVehiclePerm(Request $request)
                     'Request sent successfully',
                     );
                         
-                }
-            catch (Exception $e) 
-                {
-                    // Handle the case when the vehicle request is not found
-                    return redirect()->back()->with('error_message',
-                    'Sorry, Something Went Wrong.',
-                    );
-                }
+            //     }
+            // catch (Exception $e) 
+            //     {
+            //         // Handle the case when the vehicle request is not found
+            //         return redirect()->back()->with('error_message',
+            //         'Sorry, Something Went Wrong.',
+            //         );
+            //     }
     }
 public function update_return_request(Request $request) 
     {
@@ -184,7 +189,7 @@ public function deleteRequest(Request $request)
     }
 // Vehicle Director Page
 public function VehicleDirector_page() 
-    {    
+    {   
             $vehicle_requests = GivingBackVehiclePermanently::latest()->get();
             return view("Return.vehicle_requests", compact('vehicle_requests'));     
     }
@@ -201,6 +206,7 @@ public function VehicleDirectorApproveRequest(Request $request)
                                 'Warning! You are denied the service.',
                                 );
                 }
+                // dd($request);
             // Check if it is not approved before
             $id = $request->input('request_id');
             $user_id = Auth::id();
@@ -240,7 +246,7 @@ public function Vec_DirectorRejectRequest(Request $request)
                 return redirect()->back()->with('error_message',
                 'Sorry, Something Went Wrong.',
                 );
-            }
+            // }dd($request);
           // Check if it is not approved before
         $id = $request->input('request_id');
         $reason = $request->input('reason');
@@ -274,13 +280,14 @@ public function Vec_DirectorRejectRequest(Request $request)
                 );
             }
     }
+}
 // Dispatcher Page
 public function Dispatcher_page() 
     {    
             $vehicle_requests = GivingBackVehiclePermanently::whereNotNull('approved_by')
                                 ->whereNull('reject_reason_vec_director')
                                 ->get();
-            return view("Return.vehicle_requests", compact('vehicle_requests'));     
+            return view("Return.DirectorPage", compact('vehicle_requests'));     
     }
     // VEHICLE DIRECTOR APPROVE THE REQUESTS
 public function DispatcherApproveRequest(Request $request)

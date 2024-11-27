@@ -158,12 +158,12 @@ Route::group(['middleware' => ['auth']], function()
                     Route::post('/return-vehicle-permanent', 'ReturntVehiclePerm')->name('return_vehicle_permanent');
                     Route::put('/update-return-request', 'update_return_request')->name('update_return_request');
                     Route::delete('/delete-request', 'deleteRequest')->name('delete_request');
-                    Route::get('/director-approval-page', 'DirectorApprovalPage')->name('director_approval_page');
-                    Route::post('/director-approve-request', 'DirectorApproveRequest')->name('director_approve_givingback_request');
-                    Route::post('/director-reject-request', 'DirectorRejectRequest')->name('director_reject_requesting');
-                    Route::get('/vehicle-director-page', 'VehicleDirector_page')->name('vehicle_director_page');
-                    Route::post('/vehicle-director-approve-request', 'VehicleDirectorApproveRequest')->name('vehicle_director_approve_request');
-                    Route::post('/vehicle-director-reject-request', 'VehicleDirectorRejectRequest')->name('vehicle_director_reject_request');
+                    Route::get('/director-approval-page', 'VehicleDirector_page')->name('director_approval_page');
+                    Route::post('/director-approve-request', 'VehicleDirectorApproveRequest')->name('director_approve_givingback_request');
+                    Route::post('/director-reject-request', 'Vec_DirectorRejectRequest')->name('director_reject_requesting');
+                    Route::get('/vehicle-director-page', 'Dispatcher_page')->name('vehicle_director_page');
+                    Route::post('/vehicle-director-approve-request', 'DispatcherApproveRequest')->name('vehicle_director_approve_request');
+                    Route::post('/vehicle-director-reject-request', 'DispatcherRejectRequest')->name('vehicle_director_reject_request');
                 });
                 //Report Tinsae
             Route::controller(DailyReportController::class)->group(function () 
