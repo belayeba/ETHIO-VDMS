@@ -144,13 +144,13 @@
                                                         <input type="checkbox" class="form-check-input yes-checkbox" id="ok_{{ $loop->index }}" name="damaged_parts[{{ $part->id }}]" value="1" data-row="{{ $loop->index }}">
                                                         <input type="hidden" name="parts[{{ $part->id }}]" value="{{ $part->vehicle_parts_id }}">
                                                         <label class="form-check-label" for="ok_{{ $loop->index }}">Yes</label>
+                                                        <input type="text" name="damage_descriptions[{{ $part->id }}]" id="input_{{ $loop->index }}" class="d-none quantity-notes" placeholder="How many" data-row="{{ $loop->index }}">
                                                     </div>
                                                 </div>
                                                 <div class="col-3">
                                                     <div class="form-check form-checkbox-danger">
                                                         <input type="checkbox" class="form-check-input none-checkbox" id="damaged_{{ $loop->index }}" name="damaged_parts[{{ $part->id }}]" value="0" data-row="{{ $loop->index }}">
                                                         <label class="form-check-label" for="damaged_{{ $loop->index }}">No</label>
-                                                        <input type="text" name="damage_descriptions[{{ $part->id }}]" id="input_{{ $loop->index }}" class="d-none quantity-notes" placeholder="How many" data-row="{{ $loop->index }}">
                                                     </div>
                                                 </div>
                                             </div>
@@ -160,64 +160,70 @@
                                 
                                 <script>
                                     document.addEventListener('DOMContentLoaded', function () {
-                                        const checkboxGroups = [
-                                            {
-                                                primaryClass: '.ok-checkbox',
-                                                oppositeClass: '#damaged_{index}',
-                                                inputClass: 'input.damaged-notes[data-row="{index}"]',
-                                                showInput: false
-                                            },
-                                            {
-                                                primaryClass: '.damaged-checkbox',
-                                                oppositeClass: '#ok_{index}',
-                                                inputClass: 'input.damaged-notes[data-row="{index}"]',
-                                                showInput: true
-                                            },
-                                            {
-                                                primaryClass: '.yes-checkbox',
-                                                oppositeClass: '#no_{index}',
-                                                inputClass: '#input_{index}',
-                                                showInput: true
-                                            },
-                                            {
-                                                primaryClass: '.none-checkbox',
-                                                oppositeClass: '#yes_{index}',
-                                                inputClass: '#input_{index}',
-                                                showInput: false
-                                            }
-                                        ];
-                                
-                                        function handleCheckboxChange(checkbox, group) {
-                                            const rowIndex = checkbox.dataset.row;
-                                            const oppositeCheckbox = document.querySelector(group.oppositeClass.replace('{index}', rowIndex));
-                                            const inputField = document.querySelector(group.inputClass.replace('{index}', rowIndex));
-                                
-                                            if (checkbox.checked) {
-                                                oppositeCheckbox.checked = false;
-                                                if (group.showInput) {
-                                                    inputField.classList.remove('d-none');
-                                                    inputField.required = true;
-                                                } else {
-                                                    inputField.classList.add('d-none');
-                                                    inputField.value = '';
-                                                    inputField.required = false;
-                                                }
-                                            } else if (group.showInput) {
-                                                inputField.classList.add('d-none');
-                                                inputField.value = '';
-                                                inputField.required = false;
-                                            }
+                                    // Define checkbox groups
+                                    const checkboxGroups = [
+                                        {
+                                            primaryClass: '.ok-checkbox',
+                                            oppositeClass: '.damaged-checkbox',
+                                            inputClass: '.damaged-notes',
+                                            showInput: false
+                                        },
+                                        {
+                                            primaryClass: '.damaged-checkbox',
+                                            oppositeClass: '.ok-checkbox',
+                                            inputClass: '.damaged-notes',
+                                            showInput: true
+                                        },
+                                        {
+                                            primaryClass: '.yes-checkbox',
+                                            oppositeClass: '.none-checkbox',
+                                            inputClass: '.quantity-notes',
+                                            showInput: true
+                                        },
+                                        {
+                                            primaryClass: '.none-checkbox',
+                                            oppositeClass: '.yes-checkbox',
+                                            inputClass: '.quantity-notes',
+                                            showInput: false
                                         }
-                                
-                                        checkboxGroups.forEach(group => {
-                                            const checkboxes = document.querySelectorAll(group.primaryClass);
-                                            checkboxes.forEach(checkbox => {
-                                                checkbox.addEventListener('change', function () {
-                                                    handleCheckboxChange(this, group);
-                                                });
+                                    ];
+
+                                    // Handle checkbox changes
+                                    function handleCheckboxChange(checkbox, group) {
+                                        const rowIndex = checkbox.dataset.row; // Get the row index
+                                        const oppositeCheckbox = document.querySelector(`${group.oppositeClass}[data-row="${rowIndex}"]`);
+                                        const inputField = document.querySelector(`${group.inputClass}[data-row="${rowIndex}"]`);
+
+                                        // When the primary checkbox is checked
+                                        if (checkbox.checked) {
+                                            oppositeCheckbox.checked = false; // Uncheck the opposite checkbox
+
+                                            if (group.showInput) {
+                                                inputField.classList.remove('d-none'); // Show the input field
+                                                inputField.required = true; // Make input required
+                                            } else {
+                                                inputField.classList.add('d-none'); // Hide the input field
+                                                inputField.value = ''; // Clear the value
+                                                inputField.required = false; // Remove required
+                                            }
+                                        } else if (group.showInput) {
+                                            inputField.classList.add('d-none'); // Hide the input field if unchecked
+                                            inputField.value = ''; // Clear the value
+                                            inputField.required = false; // Remove required
+                                        }
+                                    }
+
+                                    // Attach event listeners to checkboxes
+                                    checkboxGroups.forEach(group => {
+                                        const checkboxes = document.querySelectorAll(group.primaryClass);
+                                        checkboxes.forEach(checkbox => {
+                                            checkbox.addEventListener('change', function () {
+                                                handleCheckboxChange(this, group);
                                             });
                                         });
                                     });
+                                });
+
                                 </script>
                                 
                                     
