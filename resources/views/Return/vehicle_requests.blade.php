@@ -41,7 +41,7 @@
                                                     <th>Action</th>
                                                 </tr>
                                             </thead>
-                                            @foreach($vehicle_requests->where('received_by', '==', null)->where('reject_reason_director','==',null) as $request)
+                                            @foreach($vehicle_requests->where('approved_by', '==', null)->where('reject_reason_vec_director','==',null) as $request)
                                                 <tbody>
                                                     <tr>
                                                         <td>{{$loop->iteration}}</td>

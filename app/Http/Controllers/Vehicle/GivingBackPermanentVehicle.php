@@ -306,7 +306,7 @@ public function DispatcherApproveRequest(Request $request)
             $id = $request->input('request_id');
             $user_id = Auth::id();
             $Vehicle_Request = GivingBackVehiclePermanently::findOrFail($id);
-            $the_vehicle = VehiclesModel::find($Vehicle_Request->vehicle_id);
+            $the_vehicle = VehiclesModel::find($Vehicle_Request->permanentRequest->vehicle_id);
             $get_permanent_request = VehiclePermanentlyRequestModel::find($Vehicle_Request->permanent_request );
             if($Vehicle_Request->received_by)
                 {
@@ -318,6 +318,7 @@ public function DispatcherApproveRequest(Request $request)
             $get_permanent_request->status = false;
             $Vehicle_Request->received_by = $user_id;
             $Vehicle_Request->returned_date = $todayDateTime;
+            
             $the_vehicle->status = true;
             $the_vehicle->save();
             $Vehicle_Request->save();

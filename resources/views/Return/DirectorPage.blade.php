@@ -41,7 +41,7 @@
                                                     <th>Action</th>
                                                 </tr>
                                             </thead>
-                                            @foreach($vehicle_requests->where('approved_by', '!==', null) as $request)
+                                            @foreach($vehicle_requests->where('received_by', '==', null) as $request)
                                                 <tbody>
                                                     <tr>
                                                         <td>{{$loop->iteration}}</td>
@@ -51,10 +51,10 @@
                                                         <td>{{$request->created_at->format('Y-m-j')}}</td>
                                                         <td>
                                                             {{-- <button type="button" class="btn btn-info rounded-pill" data-bs-toggle="modal" data-bs-target="#standard-modal-{{ $loop->index }}" title="Show"><i class=" ri-eye-line"></i></button> --}}
-                                                            {{-- @if($request->approved_by === Null && $request->reject_reason_director === Null) --}}
+                                                            @if($request->received_by === Null && $request->reject_reason_dispatcher === Null)
                                                             <button id="acceptButton" type="button" class="btn btn-primary rounded-pill" title="Accept" onclick="confirmFormSubmission('approvalForm-{{ $loop->index }}')"><i class="ri-checkbox-circle-line"></i></button>
                                                             <button type="button" class="btn btn-danger rounded-pill" data-bs-toggle="modal" data-bs-target="#staticBackdrop-{{ $loop->index }}" title="Reject"><i class=" ri-close-circle-fill"></i></button>
-                                                            {{-- @endif --}}
+                                                            @endif
                                                         </td>
                                                     </tr>
                                                 </tbody>
