@@ -16,7 +16,8 @@ use Illuminate\Support\Facades\Validator;
 class NotificationController extends Controller {
     function clear_all_notifications() {
         NotificationModel::where( 'user_id', Auth::id() )->delete();
-        return response()->json( 'success', 200 );
+        return redirect()->back()->with('success_message',
+                    'cleared successfully');
 
     }
 
@@ -51,26 +52,30 @@ class NotificationController extends Controller {
             'route' => 'required|string|max:100|url',
         ] );
 
-        if ( $validator->fails() ) {
+        if ( $validator->fails() ) 
+        {
             return redirect()->back()->withErrors( $validator )->withInput();
         }
 
         // Retrieve the notification and verify it exists
         $notification = NotificationModel::find( $request->notification_id );
-        if ( !$notification ) {
+        if ( !$notification ) 
+        {
             return redirect()->back()->with( 'error_message', 'Notification not found.' );
         }
-
         // Ensure that the notification is not already marked as read
-        if ( $notification->is_read ) {
+        if ( $notification->is_read ) 
+        {
             return redirect()->back()->with( 'error_message', 'Notification is already marked as read.' );
         }
-
         // Try to mark the notification as read and handle potential issues
-        try {
+        try 
+        {
             $notification->is_read = 1;
             $notification->save();
-        } catch ( \Exception $e ) {
+        } 
+        catch ( \Exception $e ) 
+        {
             return redirect()->back()->with( 'error_message', 'Failed to update notification status.' );
         }
         // Perform the redirection if everything is valid

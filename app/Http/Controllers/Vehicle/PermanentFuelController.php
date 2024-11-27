@@ -109,11 +109,11 @@ class PermanentFuelController extends Controller {
         //Get driver based on the logged-in user
         $get_driver = DriversModel::select( 'driver_id' )->where( 'user_id', $logged_user )->first();
         // Ensure that the driver exists
-        if ( !$get_driver ) {
-            return redirect()->back()->with('error_message',
-            "You should be registered as driver.",
-            );
-        }
+        // if ( !$get_driver ) {
+        //     return redirect()->back()->with('error_message',
+        //     "You should be registered as driver.",
+        //     );
+        // }
         $the_driver_id = $get_driver->driver_id;
         // Get permanent vehicle request associated with driver and vehicle
         $permanent = VehiclePermanentlyRequestModel::select( 'vehicle_request_permanent_id','fuel_quata','feul_left_from_prev' )
@@ -343,9 +343,12 @@ class PermanentFuelController extends Controller {
                 })
 
                 ->addColumn('action', function ($row) {
-                    $actions = '<button type="button" class="btn btn-info rounded-pill view-btn" data-id="' . $row->fueling_id . '"><i class="ri-eye-line"></i></button>
-                                <button type="button" class="btn btn-primary rounded-pill accept-btn" data-id="' . $row->fueling_id . '" title="Accept"><i class="ri-checkbox-circle-line"></i></button>
-                                <button type="button" class="btn btn-danger rounded-pill reject-btn" data-id="' . $row->fueling_id . '" data-bs-toggle="modal" data-bs-target="#staticBackdrop" title="Reject"><i class="ri-close-circle-fill"></i></button>';
+                    $actions =  '<button type="button" class="btn btn-info rounded-pill view-btn" data-id="' . $row->fueling_id . '"><i class="ri-eye-line"></i></button>';
+                    
+                    if ($row->finance_approved_by == null){
+                        $actions .= ' <button type="button" class="btn btn-primary rounded-pill accept-btn" data-id="' . $row->fueling_id . '" title="Accept"><i class="ri-checkbox-circle-line"></i></button>
+                                    <button type="button" class="btn btn-danger rounded-pill reject-btn" data-id="' . $row->fueling_id . '" data-bs-toggle="modal" data-bs-target="#staticBackdrop" title="Reject"><i class="ri-close-circle-fill"></i></button>';
+                    }
                     
                     return $actions;
                 })
@@ -369,7 +372,6 @@ class PermanentFuelController extends Controller {
                                 "Warning! You are denied the service",
                                 );
                         }
-                        
                     $get_one_fuel_request = PermanentFuelModel::where('fueling_id', $id)->first();
                     //dd($get_one_fuel_request);
                     $permanent = VehiclePermanentlyRequestModel::select( 'vehicle_request_permanent_id','fuel_quata','feul_left_from_prev' )

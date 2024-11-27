@@ -51,7 +51,8 @@ class InspectionController extends Controller
         
             if ($validator->fails()) 
             {
-                return response()->json(['status' => 'error', 'errors' => $validator->errors()], 422);
+                return redirect()->back()->with('error_message',
+                $validator->errors());
             }
             $inspectionId = Str::uuid();
             $vehicleId = $request->input('vehicle_id');
@@ -91,7 +92,7 @@ class InspectionController extends Controller
 
             });
                 return redirect()->back()->with('success_message',
-                    'Inspection saved successfully.',);
+                    'Inspection saved successfully');
                }
         // Show a specific inspection
     public function showInspection(Request $request)

@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use App\Http\Controllers\Vehicle\Daily_KM_Calculation;
+use Exception;
 
 class ClusterController extends Controller {
     protected $dailyKmCalculation;
@@ -45,15 +46,23 @@ class ClusterController extends Controller {
                $validation->errors(),
             );
         }
-        $user = Auth::id();
-        // Get the authenticated user's ID
-        $today = \Carbon\Carbon::today();
-        $ethiopianDate = $this->dailyKmCalculation->ConvertToEthiopianDate($today); 
-        $request->merge(['created_by' => $user,'created_at' => $ethiopianDate]); 
-        
-        ClustersModel::create( $request->all() );
-        return redirect()->back()->with('success_message',
-        'Cluster created successfully.',);
+        try
+        {
+            $user = Auth::id();
+            // Get the authenticated user's ID
+            $today = \Carbon\Carbon::today();
+            $ethiopianDate = $this->dailyKmCalculation->ConvertToEthiopianDate($today); 
+            $request->merge(['created_by' => $user,'created_at' => $ethiopianDate]); 
+            
+            ClustersModel::create( $request->all() );
+            return redirect()->back()->with('success_message',
+            'Cluster created successfully.',);
+        }
+        catch (Exception $e)
+        {
+            return redirect()->back()->with('error_message',
+            'Sorry, Something Went Wrong.',);
+        }
        // return redirect()->route( 'cluster.index' )->with( 'success', 'Cluster created successfully.' );
 
     }
@@ -91,10 +100,16 @@ class ClusterController extends Controller {
     // Remove the specified resource from storage.
 
     public function destroy( ClustersModel $cluster ) {
-
+    try
+    {
         $cluster->delete();
-
         return redirect()->back()->with( 'success', 'Cluster deleted successfully.' );
+    }
+    catch (Exception $e)
+    {
+        return redirect()->back()->with('error_message',
+        'Sorry, Something Went Wrong.',);
+    }
     }
 
 }
