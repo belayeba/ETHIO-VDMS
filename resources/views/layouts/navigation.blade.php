@@ -239,7 +239,7 @@
                                             <a href="{{ route('driver.switch') }}">Driver Change</a>
                                         </li>
                                     @endcan()
-                                    @can('Change Driver')
+                                    @can('Accept Driver Change')
                                         <li>
                                             <a href="{{ route('driverchange.request') }}">Driver Accept</a>
                                         </li>
