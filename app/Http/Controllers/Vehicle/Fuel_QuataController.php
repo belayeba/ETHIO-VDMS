@@ -40,7 +40,7 @@ class Fuel_QuataController extends Controller
             $validation = Validator::make($request->all(),[
            
                 'vehicle_id' => 'required|uuid|exists:vehicles,vehicle_id',
-                'Fuel_Quota' => 'required|integer',
+                'Fuel_Quota' => 'required|integer|min:0',
             ]);
             if ($validation->fails()) 
             {

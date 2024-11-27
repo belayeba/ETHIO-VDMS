@@ -541,9 +541,7 @@ class VehicleTemporaryRequestController extends Controller
                             );
                         }
                     // Check if it is not approved before
-                    $id = $request->input( 'request_id');
                     $id = $request->input('request_id');
-                    
                     $user_id = Auth::id();
                 try
                     {
@@ -554,7 +552,7 @@ class VehicleTemporaryRequestController extends Controller
                             {
                                return redirect()->back()->with('error_message',
                                  "Warning, You are denied the service",
-                            );
+                                );
                             }
                         $Vehicle_Request->dir_approved_by = $user_id;
                         $Vehicle_Request->save();
@@ -640,8 +638,6 @@ class VehicleTemporaryRequestController extends Controller
                     // ->whereNull('div_approved_by')
                     ->whereNotNull('dir_approved_by')
                     ->get();
-                    //dd($vehicleRequests);
-                // Return the results, for example, passing them to a view
                 return view('Request.ClusterDirectorPage', compact('vehicleRequests'));
             }
         // DIRECTOR APPROVE THE REQUESTS

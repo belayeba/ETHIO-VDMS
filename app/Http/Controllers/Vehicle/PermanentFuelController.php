@@ -369,7 +369,6 @@ class PermanentFuelController extends Controller {
                                 "Warning! You are denied the service",
                                 );
                         }
-                        
                     $get_one_fuel_request = PermanentFuelModel::where('fueling_id', $id)->first();
                     //dd($get_one_fuel_request);
                     $permanent = VehiclePermanentlyRequestModel::select( 'vehicle_request_permanent_id','fuel_quata','feul_left_from_prev' )
