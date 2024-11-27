@@ -102,7 +102,7 @@
                                                     </div>
                                                     <div class="col-md-2">
                                                         <label>Date</label>
-                                                        <input name="fuiling_date[${index}]" class="form-control datepicker" placeholder="When" id="fill_date" type="date" required>
+                                                        <input name="fuiling_date[${index}]" class="form-control" placeholder="When" id="ethiopian_datepicker_${index}" type="text" required>
                                                     </div>
                                                     <div class="col-md-3">
                                                         <label>Attachment</label>
@@ -118,6 +118,13 @@
                                             entriesContainer.appendChild(entryDiv);
                                 
                                         });
+
+                                       $('#ethiopian_datepicker_${index}').calendarsPicker({
+                                        calendar: $.calendars.instance('ethiopian', 'am'),
+                                        pickerClass: 'myPicker',
+                                        dateFormat: 'yyyy-mm-dd'
+                                    });
+                                        // Event delegation for delete 
                                 
                                         // Event delegation for delete buttons (remove entry)
                                         entriesContainer.addEventListener('click', function(e) {

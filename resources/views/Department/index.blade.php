@@ -225,16 +225,7 @@
                     </div>
                 </div>
 
-                <!-- Footer -->
-                <footer class="footer-area">
-                    <div class="container">
-                        <div class="row">
-                            <div class="col-lg-12 text-center mt-5">
-                                <p class="p-3 mb-0">Copyright © 2024. All rights reserved | Made By Ai</p>
-                            </div>
-                        </div>
-                    </div>
-                </footer>
+                
             </div>
         </div>
     </div>

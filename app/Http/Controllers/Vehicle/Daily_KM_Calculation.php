@@ -56,7 +56,7 @@ class Daily_KM_Calculation extends Controller
         
                     $dailkms = $dailkms->map(function ($km) {
                         return (object) [
-                            'date' => $km->date,
+                            'date' => $km->created_at->format('Y-m-d'),
                             'plate_number' => $km->vehicle->plate_number ?? 'N?A',
                             'morning_km' => $km->morning_km ?? 'N/A',
                             'afternoon_km' => $km->afternoon_km,

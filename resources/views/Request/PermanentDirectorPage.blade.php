@@ -109,29 +109,51 @@
                                         <!-- end assign modal -->
 
 
-                                        <!-- show all the information about the request modal -->
+                                                                                <!-- show all the information about the request modal -->
                                         <div id="standard-modal" class="modal fade" tabindex="-1" role="dialog"
-                                            aria-labelledby="standard-modalLabel" aria-hidden="true">
-                                            <div class="modal-dialog">
-                                                <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <h4 class="modal-title">Request Details</h4>
-                                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                            aria-label="Close"></button>
+                                        aria-labelledby="standard-modalLabel" aria-hidden="true">
+                                        <div class="modal-dialog modal-lg">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h4 class="modal-title">Request Details</h4>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                        aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <div class="row">
+                                                        <!-- Left Card -->
+                                                        <div class="col-md-6">
+                                                            <div class="card">
+                                                                <div class="card-header">
+                                                                    <h5 class="card-title">Position Letter</h5>
+                                                                </div>
+                                                                <div class="card-body">
+                                                                    <img id="image1" src="" alt="Position Letter" class="img-fluid">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                
+                                                        <!-- Right Card -->
+                                                        <div class="col-md-6">
+                                                            <div class="card">
+                                                                <div class="card-header">
+                                                                    <h5 class="card-title">Driving License</h5>
+                                                                </div>
+                                                                <div class="card-body">
+                                                                    <img id="image2" src="" alt="Driving License" class="img-fluid">
+                                                                </div>
+                                                            </div>
+                                                        </div>
                                                     </div>
-                                                    <div class="modal-body">
-                                                        <dl class="row mb-0">
-
-                                                        </dl>
-                                                    </div>
-                                                    <div class="modal-footer">
-                                                        <button type="button" class="btn btn-light"
-                                                            data-bs-dismiss="modal">Close</button>
-                                                    </div>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
                                                 </div>
                                             </div>
                                         </div>
+                                        </div>
                                         <!-- end show modal -->
+
 
                                     </div>
                                     <!-- end .table-responsive-->
@@ -210,7 +232,18 @@
 
         $(document).on('click', '.show-btn', function() {
             RejectedId = $(this).data('id');
+            PositionLetter = $(this).data('position_letter');
+            DrivingLicense = $(this).data('driving_license');
 
+            console.log(PositionLetter, DrivingLicense)
+
+            // Construct file paths for the iframes
+            const positionLetterPath = '/storage/PermanentVehicle/PositionLetter/' + PositionLetter;
+            const drivingLicensePath = '/storage/PermanentVehicle/Driving_license/' + DrivingLicense;
+
+            // Populate the iframes with the file paths
+            $('#image1').attr('src', positionLetterPath);
+            $('#image').attr('src', drivingLicensePath);
             $('#Reject_request_id').val(RejectedId);
             $('#standard-modal').modal('toggle');
         });

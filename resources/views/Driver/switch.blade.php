@@ -112,12 +112,13 @@
                                                         </tr>
                                                     </thead>
                                                     <tbody>
+                                                        @if ($driverChange->isNotEmpty())
                                                         @foreach ($driverChange as $item)
                                                             <tr>
                                                                 <td>{{ $loop->iteration }}</td>
                                                                 <td>{{ $item->vehicle->plate_number }}</td>
                                                                 <td>{{ $item->oldDriver?$item->oldDriver->user->username:"No previous Driver" }}</td> 
-                                                                <td>{{ $item->newDriver->user->username }}</td>
+                                                                <td>{{ $item->newDriver->user->username ?? null }}</td>
                                                                 <td>
                                                                     <button type="button" class="btn btn-info rounded-pill" data-bs-toggle="modal" title="View Driver Change" data-bs-target="#viewDriverChangeModal{{ $item->id }}">
                                                                         <i class="ri-eye-line"></i>
@@ -128,7 +129,7 @@
                                                                         data-bs-target="#editDriverChangeModal_{{ $loop->index }}"
                                                                         data-vehicle="{{ $item->vehicle->model }}"
                                                                         data-old-driver="{{ $item->oldDriver?$item->oldDriver->user->username:'No previous driver' }}"
-                                                                        data-new-driver="{{ $item->newDriver->user->username }}">
+                                                                        data-new-driver="{{ $item->newDriver->user->username ?? "None" }}">
                                                                         <i class="ri-edit-line"></i> 
                                                                     </button>
                                                     
@@ -142,41 +143,44 @@
                                                                     </form>
                                                                 </td>
                                                             </tr>
+
+                                                            <div id="warning_alert" class="modal fade" id="confirmationModal" tabindex="-1" role="dialog"
+                                                            aria-labelledby="confirmationModalLabel"aria-hidden="true">
+                                                            <div class="modal-dialog modal-sm">
+                                                                <div class="modal-content">
+                                                                    <form method="POST" action="{{ route('driverchange.destroy',$item->driver_change_id) }}">
+                                                                        @csrf
+                                                                        @method('DELETE')
+                                                                        <input type="hidden" name="request_id" id="request_id">
+                                                                        <div class="modal-body p-4">
+                                                                            <div class="text-center">
+                                                                                <i class="ri-alert-line h1 text-warning"></i>
+                                                                                <h4 class="mt-2">Warning</h4>
+                                                                                <h5 class="mt-3">
+                                                                                    Are you sure you want to delete this driver change?</br> This action
+                                                                                    cannot be
+                                                                                    undone.
+                                                                                </h5>
+                                                                                <button type="button" class="btn btn-secondary"
+                                                                                    data-bs-dismiss="modal">Cancel</button>
+                                                                                <button type="submit" class="btn btn-primary"
+                                                                                    id="confirmDelete">Yes,
+                                                                                    Accept</button>
+                                                                            </div>
+                                                                        </div>
+                                                                    </form>
+                                                                </div><!-- /.modal-content -->
+                                                            </div><!-- /.modal-dialog -->
+                                                        </div><!-- /.modal -->
                                                         @endforeach
+                                                        @endif
                                                     </tbody>
                                                 </table>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                                <div id="warning_alert" class="modal fade" id="confirmationModal" tabindex="-1" role="dialog"
-                   aria-labelledby="confirmationModalLabel"aria-hidden="true">
-                   <div class="modal-dialog modal-sm">
-                       <div class="modal-content">
-                           <form method="POST" action="{{ route('driverchange.destroy',$item) }}">
-                               @csrf
-                               @method('DELETE')
-                               <input type="hidden" name="request_id" id="request_id">
-                               <div class="modal-body p-4">
-                                   <div class="text-center">
-                                       <i class="ri-alert-line h1 text-warning"></i>
-                                       <h4 class="mt-2">Warning</h4>
-                                       <h5 class="mt-3">
-                                           Are you sure you want to delete this driver change?</br> This action
-                                           cannot be
-                                           undone.
-                                       </h5>
-                                       <button type="button" class="btn btn-secondary"
-                                           data-bs-dismiss="modal">Cancel</button>
-                                       <button type="submit" class="btn btn-primary"
-                                           id="confirmDelete">Yes,
-                                           Accept</button>
-                                   </div>
-                               </div>
-                           </form>
-                       </div><!-- /.modal-content -->
-                   </div><!-- /.modal-dialog -->
-               </div><!-- /.modal -->
+                                
 
                                 <!-- View Modal for Driver Change -->
                             @foreach ($driverChange as $item)
@@ -200,7 +204,7 @@
 
                                     <div class="mb-3">
                                     <label for="newDriver" class="form-label">New Driver</label>
-                                    <input type="text" class="form-control" id="newDriver" value="{{ $item->newDriver->user->username }}" readonly>
+                                    <input type="text" class="form-control" id="newDriver" value="{{ $item->newDriver->user->username ?? "None" }}" readonly>
                                     </div>
                                 </div>
                                 <div class="modal-footer">
@@ -212,6 +216,7 @@
                             @endforeach
 
                             <!-- Edit Modal for Driver Change -->
+                            @if ($driverChange->isNotEmpty())
                             @foreach ($driverChange as $item)
                             <div class="modal fade" id="editDriverChangeModal_{{ $loop->index }}" tabindex="-1" aria-labelledby="editDriverChangeLabel{{ $loop->index }}" aria-hidden="true">
                             <div class="modal-dialog">
@@ -258,20 +263,12 @@
                             </div>
                             </div>
                             @endforeach
+                        @endif
                         </div>
                         </div>
                     </section>
 
-                    <!-- Footer -->
-                    <footer class="footer-area">
-                        <div class="container">
-                            <div class="row">
-                                <div class="col-lg-12 text-center mt-5">
-                                    <p class="p-3 mb-0">Copyright © 2024. All rights reserved | Made By Ai</p>
-                                </div>
-                            </div>
-                        </div>
-                    </footer>
+                    
                 </div>
             </div>
         </div>

@@ -134,6 +134,7 @@ class VehicleParmanentlyRequestController extends Controller
                 $postion_letterfileName = time() . '_' . $postion_letter->getClientOriginalName(); // Generate unique filename
                 $postion_letterstoragePath = storage_path( 'app/public/PermanentVehicle/PositionLetter' ); // Define storage path
                 // Check if directory exists, if not create it
+
                 if ( !file_exists( $postion_letterstoragePath ) ) {
                     mkdir( $postion_letterstoragePath, 0755, true );
                 }
@@ -311,7 +312,7 @@ class VehicleParmanentlyRequestController extends Controller
             ->addColumn('actions', function ($row){
                 $action = '';
 
-                $action .= '<button type="button" class="btn btn-info rounded-pill show-btn" data-bs-toggle="modal" data-bs-target="#standard-modal-{{ $loop->index }}" title="Show"><i class=" ri-eye-line"></i></button>';
+                $action .= '<button type="button" class="btn btn-info rounded-pill show-btn" data-bs-toggle="modal" data-position_letter="' . $row->position_letter . '" data-driving_license="' . $row->driving_license . '" data-bs-target="#standard-modal-{{ $loop->index }}" title="Show"><i class=" ri-eye-line"></i></button>';
 
                 if (is_null($row->approved_by) && is_null($row->director_reject_reason)) {
                     $action .= '

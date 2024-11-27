@@ -202,47 +202,36 @@
 
                    <style>
                     @media only screen and (max-width: 768px) {
-    .col-md-4 {
-        width: 100%;
-    }
+                        .col-md-4 {
+                            width: 100%;
+                        }
+                        .col-md-8 {
+                            width: 100%;
+                        }
 
-    .col-md-8 {
-        width: 100%;
-    }
+                        .card {
+                            margin-bottom: 20px;
+                        }
 
-    .card {
-        margin-bottom: 20px;
-    }
+                        .table-responsive {
+                            overflow-x: auto;
+                        }
 
-    .table-responsive {
-        overflow-x: auto;
-    }
+                        .modal-dialog {
+                            max-width: 90%;
+                        }
+                    }
 
-    .modal-dialog {
-        max-width: 90%;
-    }
-}
+                    @media only screen and (max-width: 480px) {
+                        .card {
+                            padding: 10px;
+                        }
 
-@media only screen and (max-width: 480px) {
-    .card {
-        padding: 10px;
-    }
-
-    .modal-dialog {
-        max-width: 100%;
-    }
-}
+                        .modal-dialog {
+                            max-width: 100%;
+                        }
+                    }
                    </style>
-
-                    <footer class="footer-area">
-                        <div class="container">
-                            <div class="row">
-                                <div class="col-lg-12 text-center mt-5">
-                                    <p class="p-3 mb-0">Copyright © 2024. All rights reserved | Made By Ai</p>
-                                </div>
-                            </div>
-                        </div>
-                    </footer>
                 </div>
             </div>
         </div>
