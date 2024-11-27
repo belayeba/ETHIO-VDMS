@@ -115,6 +115,7 @@
                                 <span> Dashboard </span>
                             </a>
                         </li>
+                    <li class="side-nav-item">  
                         <a data-bs-toggle="collapse" href="#sidebarRequest" aria-expanded="false"
                             aria-controls="sidebarRequest" class="side-nav-link">
                             <i class=" ri-questionnaire-line"></i>
