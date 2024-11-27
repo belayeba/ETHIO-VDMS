@@ -45,15 +45,15 @@
                                                         <td>{{$request->driver->user->first_name}}</td>
                                                         <td>{{$request->month}}/{{$request->year}}</td>
                                                         <td>{{$request->vehicle->plate_number}}</td>
-                                                        <td>{{$request->finance_approved_by ? $request->financeApprover->first_name : "Not Approved Yet"}}</td>
+                                                        <td>{{$request->finance_approved_by ? $request->financeApprover->first_name : "Not Approved Yetggg"}}</td>
                                                         <td>
                                                             <button type="button" class="btn btn-info rounded-pill" title="Inspect" id="assignBtn-{{$loop->iteration}}">Show</button>
                                   
                                                             <input type="hidden" name="id" id="IdSelection-{{$loop->iteration}}" value="{{$request->fueling_id}}" id="vehicleselection">
-
-                                                            <button id="acceptButton" type="button" class="btn btn-primary rounded-pill" data-bs-toggle="modal" data-bs-target="#confirmationModal-{{$loop->iteration}}" title="Accept"><i class="ri-checkbox-circle-line"></i></button>
-                                                            <button type="button" class="btn btn-danger rounded-pill" data-bs-toggle="modal" data-bs-target="#staticBackdrop-{{ $loop->index }}" title="Reject"><i class=" ri-close-circle-fill"></i></button>
-
+                                                            @if($request->finance_approved_by)
+                                                                <button id="acceptButton" type="button" class="btn btn-primary rounded-pill" data-bs-toggle="modal" data-bs-target="#confirmationModal-{{$loop->iteration}}" title="Accept"><i class="ri-checkbox-circle-line"></i></button>
+                                                                <button type="button" class="btn btn-danger rounded-pill" data-bs-toggle="modal" data-bs-target="#staticBackdrop-{{ $loop->index }}" title="Reject"><i class=" ri-close-circle-fill"></i></button>
+                                                            @endif
                                                         </td>
                                                     </tr>
                                                 </tbody>
