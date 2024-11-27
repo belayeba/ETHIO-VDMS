@@ -28,7 +28,8 @@ class RouteController extends Controller {
     }
     public function displayRoute() {
         $routes = Route::get();
-        $users = User::all();
+        $assignedUserIds = RouteUser::pluck('employee_id'); // Get all user IDs already in RouteUser
+        $users = User::whereNotIn('id', $assignedUserIds)->get(); // Exclude these users
         $routeUser = RouteUser::all();
         $routeUser = $routeUser->groupBy( 'route_id' );
 

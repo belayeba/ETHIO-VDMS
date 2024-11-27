@@ -36,6 +36,7 @@ class permissionseeder extends Seeder {
                     'Create User',
                     'Create Driver',
                     'Change Driver',
+                    'Accept Driver Change',
                 ]
             ],
             [

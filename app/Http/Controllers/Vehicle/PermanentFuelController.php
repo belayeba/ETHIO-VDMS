@@ -339,7 +339,7 @@ class PermanentFuelController extends Controller {
                 })
 
                 ->addColumn('approver', function ($row) {
-                    return  $row->finance_appprove_by ? $row->financeAppprove->first_name : "Not Approved Yet";
+                    return  $row->finance_approved_by ? $row->financeApprover->first_name : "Not Approved Yet";
                 })
 
                 ->addColumn('action', function ($row) {
