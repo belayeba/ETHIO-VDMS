@@ -356,93 +356,89 @@ class PermanentFuelController extends Controller {
                     ->rawColumns(['counter','name','Request','approver','action'])
                     ->toJson();
         }
-    // Finance Approval
-    public function finance_appprove(Request $request,$id)
+   // Finance Approval
+    public function finance_approve(Request $request, $id)
         {
+            try {
+                // Retrieve request inputs
+                $approved = $request->input('approved_reciet', []); // Default to an empty array if not provided
+                $rejected = $request->input('rejected_reciet', []); // Default to an empty array if not provided
 
-            try
-                {
-                    $approved = $request->input('approved_reciet'); // Access approved_reciet array
-                    $rejected = $request->input('rejected_reciet'); // Access rejected_reciet associative array                    
-                    $logged_user = Auth::id();
-                    $get_fuel_requests = PermanentFuelModel::where('fueling_id', $id)->get();
-                    $get_one_fuel_request = PermanentFuelModel::where('fueling_id', $id)->first();
-                    if($get_one_fuel_request->final_approved_by)
-                        {
-                            return redirect()->back()->with('error_message',
-                                "Warning! You are denied the service",
-                                );
-                        }
-                    $get_vehicle = VehiclesModel:: select('fuel_type')->where('vehicle_id',$get_one_fuel_request->vehicle_id)->first();
-                    $latest_feul_price = FeulCosts::select('new_cost')->where('fuel_type',$get_vehicle->fuel_type)->latest()->first();
-                    $permanent = VehiclePermanentlyRequestModel::select( 'vehicle_request_permanent_id','fuel_quata','feul_left_from_prev' )
-                    // ->where( 'requested_by', $get_one_fuel_request->driver_id )
-                    ->where( 'vehicle_id', $get_one_fuel_request->vehicle_id )
-                    ->where( 'status', true )
+                $logged_user = Auth::id();
+                $get_fuel_requests = PermanentFuelModel::where('fueling_id', $id)->get();
+                $get_one_fuel_request = PermanentFuelModel::where('fueling_id', $id)->first();
+
+                // Check if already approved
+                if ($get_one_fuel_request->final_approved_by) {
+                    return redirect()->back()->with('error_message', "Warning! You are denied the service");
+                }
+
+                // Get vehicle and fuel price information
+                $get_vehicle = VehiclesModel::select('fuel_type')
+                    ->where('vehicle_id', $get_one_fuel_request->vehicle_id)
                     ->first();
 
-                    // Ensure that the permanent vehicle request exists
-                        if ( !$permanent ) 
-                            {
-                                return back()->withErrors( [ 'error' => 'No active permanent vehicle request found for this driver and vehicle.' ] );
-                            }
-                        $number_of_attachment = $get_fuel_requests->count();
-                        $check_reject = 0;
-                        foreach ($get_fuel_requests as $fuel_request) {
-                            if(in_array($fuel_request->make_primary,$approved))
-                                {
-                                    $fuel_request->setAttribute('finance_approved_by', $logged_user);
-                                    $fuel_request->accepted = true;
-                                    $check_reject = $check_reject + 1;
-                                    $fuel_request->save();
-                                }
-                              else if(array_key_exists($fuel_request->make_primary, $rejected))
-                                {
-                                    if(empty($rejected[$fuel_request->make_primary]))
-                                        {
-                                            return redirect()->back()->with('error_message',
-                                                " Write Reason For Rejection!",
-                                                );
-                                        }
-                                     $fuel_request->setAttribute('finance_approved_by', $logged_user);
-                                     $fuel_request->reject_reason = $rejected[$fuel_request->make_primary];
-                                     $fuel_request->save();                                     
-                                }
-                              else
-                                {
-                                    if($fuel_request->accepted || $fuel_request->reject_reason)
-                                      {
-                                        $check_reject =  $check_reject + 1;
-                                      }
-                                    else
-                                      {
-                                        return redirect()->back()->with('error_message',
-                                        " Take action on all attached reciet",
-                                        );
+                $latest_fuel_price = FeulCosts::select('new_cost')
+                    ->where('fuel_type', $get_vehicle->fuel_type)
+                    ->latest()
+                    ->first();
 
-                                      }
-                                }
-                        }
-                    if($check_reject == $number_of_attachment)
-                        {
-                            foreach ($get_fuel_requests as $fuel_request) {
-                                        $fuel_request->setAttribute('final_approved_by', $logged_user);
-                                        $fuel_request->one_litre_price = $latest_feul_price->new_cost;
-                                        $fuel_request->quata = $permanent->fuel_quata;
-                                        $fuel_request->save();
-                                    }                         
-                                return redirect()->back()->with('success_message',
-                                " You approve the Request!",
-                                );
-                        }
-                        
+                $permanent = VehiclePermanentlyRequestModel::select('vehicle_request_permanent_id', 'fuel_quata', 'feul_left_from_prev')
+                    ->where('vehicle_id', $get_one_fuel_request->vehicle_id)
+                    ->where('status', true)
+                    ->first();
+
+                // Ensure that the permanent vehicle request exists
+                if (!$permanent) {
+                    return back()->withErrors(['error' => 'No active permanent vehicle request found for this driver and vehicle.']);
                 }
-            catch(Exception $e)
-                {
-                    return redirect()->back()->with('error_message',
-                    "Warning! You are denied the service".$e,
-                    );
+
+                // Process fuel requests
+                $number_of_attachment = $get_fuel_requests->count();
+                $check_reject = 0;
+
+                foreach ($get_fuel_requests as $fuel_request) {
+                    if (in_array($fuel_request->make_primary, $approved)) {
+                        // Approve request
+                        $fuel_request->finance_approved_by = $logged_user;
+                        $fuel_request->accepted = true;
+                        $check_reject++;
+                        $fuel_request->save();
+                    } elseif (array_key_exists($fuel_request->make_primary, $rejected)) {
+                        // Check for rejection reason
+                        if (empty($rejected[$fuel_request->make_primary])) {
+                            return redirect()->back()->with('error_message', "Write Reason For Rejection!");
+                        }
+
+                        // Reject request
+                        $fuel_request->finance_approved_by = $logged_user;
+                        $fuel_request->reject_reason = $rejected[$fuel_request->make_primary];
+                        $fuel_request->save();
+                    } else {
+                        // Ensure all receipts are acted upon
+                        if (!$fuel_request->accepted && !$fuel_request->reject_reason) {
+                            return redirect()->back()->with('error_message', "Take action on all attached receipts.");
+                        }
+
+                        $check_reject++;
+                    }
                 }
+
+                // Final approval
+                if ($check_reject == $number_of_attachment) {
+                    foreach ($get_fuel_requests as $fuel_request) {
+                        $fuel_request->final_approved_by = $logged_user;
+                        $fuel_request->one_litre_price = $latest_fuel_price->new_cost;
+                        $fuel_request->quata = $permanent->fuel_quata;
+                        $fuel_request->save();
+                    }
+
+                    return redirect()->back()->with('success_message', "You approved the request!");
+                }
+            } catch (Exception $e) {
+                // Handle any unexpected errors
+                return redirect()->back()->with('error_message', "An error occurred: " . $e->getMessage());
+            }
         }
     public function finance_appprove_reciet($id)
         {
