@@ -148,7 +148,7 @@
                                             <tr>
                                                 <th scope="col">#</th>
                                                 <th scope="col">Vehicle Plate</th>
-                                                <th scope="col">Fuel Amount</th>
+                                                <th scope="col">Month</th>
                                                 <th scope="col">Status</th>
                                                 <th scope="col">Action</th>
                                             </tr>

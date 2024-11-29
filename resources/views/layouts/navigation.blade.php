@@ -201,6 +201,9 @@
                         </a>
                         <div class="collapse" id="sidebarFuel">
                             <ul class="side-nav-second-level">
+                                    <li>
+                                        <a href="{{ route('all_fuel_cost') }}">Set Feul Cost</a>
+                                    </li>
                                 @can('Request Fuel')
                                     <li>
                                         <a href="{{ route('permanenet_fuel_request') }}">Request</a>
