@@ -72,12 +72,32 @@
                                                                 placeholder="Enter purpose of Request">
                                                         </div>
                                                     </div>
-
+                                                    <div class="mb-3">
+                                                        <label for="nameInput" class="form-label">Position <strong class="text-danger">*</strong></label>
+                                                        <input type="text" class="form-control" id="position" name="position" placeholder="Enter Your Position">
+                                                    </div>
                                                     <div class="position-relative mb-3">
                                                         <label class="form-label">Upload Position Latter</label>
                                                         <input name="position_letter" class="form-control" type="file">
                                                     </div>
-
+                                                    <div class="mb-3">
+                                                        <label for="nameInput" class="form-label">License Number <strong class="text-danger">*</strong></label>
+                                                        <input type="text" class="form-control" id="license_number" name="license_number" placeholder="Enter License Number">
+                                                    </div>
+                                                    <div class="position-relative mb-3">
+                                                        <div class="mb-6 position-relative" id="datepicker1">
+                                                            <label class="form-label">License expiry date </label>
+                                                            <input type="text" class="form-control" name="expiry_date"
+                                                                placeholder="Enter license expiry date" id="expirydate">
+                                                        </div>
+                                                        <script>
+                                                            $('#expirydate').calendarsPicker({
+                                                                calendar: $.calendars.instance('ethiopian', 'am'),
+                                                                pickerClass: 'myPicker',
+                                                                dateFormat: 'yyyy-mm-dd'
+                                                            });
+                                                        </script>
+                                                    </div>
                                                     <div class="position-relative mb-3">
                                                         <label class="form-label">Upload Driving License</label>
                                                         <input name="Driving_license" class="form-control" type="file">
@@ -202,6 +222,10 @@
 
                                                     <div class="tab-pane" id="account-2">
                                                         <div class="row">
+                                                            <div class="mb-3">
+                                                                <label for="nameInput" class="form-label">Position <strong class="text-danger">*</strong></label>
+                                                                <input type="text" class="form-control" id="position" name="position" placeholder="Enter Your Position">
+                                                            </div>
                                                             <div class="position-relative mb-3">
                                                                 <div class="mb-6 position-relative" id="datepicker1">
                                                                     <label class="form-label">Reason</label>
@@ -218,7 +242,24 @@
                                                                 <input name="position_letter" class="form-control"
                                                                     type="file" required>
                                                             </div>
-
+                                                            <div class="mb-3">
+                                                        <label for="nameInput" class="form-label">License Number <strong class="text-danger">*</strong></label>
+                                                        <input type="text" class="form-control" id="license_number" name="license_number" placeholder="Enter License Number">
+                                                    </div>
+                                                    <div class="position-relative mb-3">
+                                                        <div class="mb-6 position-relative" id="datepicker1">
+                                                            <label class="form-label">License expiry date </label>
+                                                            <input type="text" class="form-control" name="expiry_date"
+                                                                placeholder="Enter license expiry date" id="expirydate">
+                                                        </div>
+                                                        <script>
+                                                            $('#expirydate').calendarsPicker({
+                                                                calendar: $.calendars.instance('ethiopian', 'am'),
+                                                                pickerClass: 'myPicker',
+                                                                dateFormat: 'yyyy-mm-dd'
+                                                            });
+                                                        </script>
+                                                    </div>
                                                             <div class="position-relative mb-3">
                                                                 <label class="form-label">Upload Driving
                                                                     License</label>

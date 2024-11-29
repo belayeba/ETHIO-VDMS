@@ -21,14 +21,6 @@
                         <strong> Success- </strong> {!! session('success_message') !!}
                     </div>
                 @endif
-                <div class="container-fluid">
-                    <div class="row">
-                        <div class="col-12">
-                                <h4 class="page-title">Temporary Vehicle Request Report</h4>
-                            </div>
-                        </div>
-                    </div>
-
                     <div class="row">
                         <div class="col-12">
                             <div class="card">

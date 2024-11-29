@@ -164,6 +164,16 @@ class CreateAllTablesWithUuid extends Migration
             $table->timestamps();
             $table->softDeletes();
         });
+         // Fuel Cost
+         Schema::create('fuel_costs', function (Blueprint $table) {
+            $table->uuid('fuel_cost_id')->primary();
+            $table->integer('new_cost');
+            $table->string('fuel_type');
+            $table->uuid('changed_by');
+            $table->foreign('changed_by')->references('id')->on('users')->onDelete('restrict');
+            $table->timestamps();
+            $table->softDeletes();
+        });
         // Vehicle Request Permanently
         Schema::create('vehicle_requests_parmanently', function (Blueprint $table) {
             $table->uuid('vehicle_request_permanent_id')->primary();
@@ -174,6 +184,8 @@ class CreateAllTablesWithUuid extends Migration
             $table->integer('fuel_quata')->nullable();
             $table->integer('feul_left_from_prev')->nullable();
             $table->string('purpose');
+            $table->string('position');
+            $table->string('license_number');
             $table->uuid('approved_by')->nullable();
             $table->foreign('approved_by')->references('id')->on('users')->onDelete('restrict');
             $table->string('director_reject_reason', 1000)->nullable();
@@ -184,6 +196,7 @@ class CreateAllTablesWithUuid extends Migration
             $table->foreign('accepted_by_requestor')->references('id')->on('users')->onDelete('restrict');
             $table->string('reject_reason_by_requestor', 1000)->nullable();
             $table->date('given_date')->nullable();
+            $table->date('expiry_date')->nullable();
             $table->uuid('vehicle_id')->nullable();
             $table->foreign('vehicle_id')->references('vehicle_id')->on('vehicles')->onDelete('restrict');
             $table->integer('mileage')->nullable();
@@ -281,7 +294,10 @@ class CreateAllTablesWithUuid extends Migration
         
         $table->uuid('finance_approved_by')->nullable();
         $table->foreign('finance_approved_by')->references('id')->on('users')->onDelete('restrict');
-        
+
+        $table->uuid('final_approved_by')->nullable();
+        $table->foreign('final_approved_by')->references('id')->on('users')->onDelete('restrict');
+
         $table->uuid('permanent_id')->nullable();
         $table->foreign('permanent_id')->references('vehicle_request_permanent_id')->on('vehicle_requests_parmanently')->onDelete('restrict');
         
@@ -290,6 +306,9 @@ class CreateAllTablesWithUuid extends Migration
         $table->integer('year')->nullable();
         $table->string('month');
         $table->integer('fuel_amount');
+        $table->boolean('accepted')->default(false);
+        $table->integer('one_litre_price')->nullable();
+        $table->integer('quata')->nullable();
         $table->decimal('fuel_cost', 8, 2);
         $table->string('reciet_attachment');
         $table->timestamps();

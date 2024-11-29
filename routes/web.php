@@ -14,6 +14,7 @@ use App\Http\Controllers\Organization\ClusterController;
 use App\Http\Controllers\Route\RouteController;
 use App\Http\Controllers\Notification\NotificationController;
 use App\Http\Controllers\Vehicle\DailyReportController;
+use App\Http\Controllers\Vehicle\FeulCostController;
 use App\Http\Controllers\Vehicle\Fuel_QuataController;
 use App\Http\Controllers\Vehicle\GivingBackPermanentVehicle;
 use App\Http\Controllers\Vehicle\VehicleParmanentlyRequestController;
@@ -105,7 +106,7 @@ Route::group(['middleware' => ['auth']], function()
                         Route::post('/fuel_post_request', 'store')->name('store_fuel_request');
                         Route::get('/finance_approve_page', 'finance_get_page')->name('finance_approve_fuel_page');
                         Route::get('/finance_page_fetch', 'finance_fetch')->name('finance_page_fetch');
-                        Route::post('/finance_appprove/{id}', 'finance_appprove')->name('finance_approve');
+                        Route::post('/finance_appprove/{id}', 'finance_approve')->name('finance_approve');
                         Route::get('/show_detail/{id}', 'show');
                         Route::get('/get_my_request', 'my_request')->name('my_request');
                         Route::post('/reject_request/{id}', 'finance_reject')->name('finance_reject');
@@ -290,8 +291,14 @@ Route::group(['middleware' => ['auth']], function()
                 {
                     Route::get('/get_all','index')->name('all_fuel_quota');
                     Route::get('/get_one/{id}', 'show')->name('select_one');
-                    Route::post('/save_change', 'store')->name('save_quota_change'); 
+                    Route::post('/save_quota_change', 'store')->name('save_quota_change');
                     Route::post('/save_update/{id}', 'update')->name('save_quota_update');
+                });
+                Route::controller(FeulCostController::class)->group(function ()
+                {
+                    Route::get('/get_all_feul_costs','index')->name('all_fuel_cost');
+                    Route::get('/get_one/{id}', 'show')->name('select_one');
+                    Route::post('/save_change', 'store')->name('save_cost_change'); 
                 });
 
                 Route::group([

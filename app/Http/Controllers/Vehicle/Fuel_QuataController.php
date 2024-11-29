@@ -24,7 +24,6 @@ class Fuel_QuataController extends Controller
         {
             $vehicles = VehiclesModel::all();
             $fuelQuatas = Fuel_QuataModel::latest()->get();
-            // dd($fuelQuatas);
             return view( 'Fuelling.quota', compact( 'fuelQuatas','vehicles' ) );
         }
     // Show a single fuel quota
@@ -77,7 +76,7 @@ class Fuel_QuataController extends Controller
         {
             
             $fuelQuata = Fuel_QuataModel::findOrFail($id);
-// dd($fuelQuata);
+           // dd($fuelQuata);
             $validation = Validator::make($request->all(),[
                 'fuel_quata_id' => 'required|uuid|exists:fuel_quatas,fuel_quata_id',
                 'new_quata' => 'required|integer',

@@ -20,13 +20,6 @@
             </div>
             @endif
             <div class="container-fluid">
-                <div class="row">
-                    <div class="col-12">
-                        <div class="page-title-box">
-                            <h4 class="page-title">Daily km Report</h4>
-                        </div>
-                    </div>
-                </div>
 
                 <div class="row">
                   
@@ -179,7 +172,7 @@
     <!-- Wizard Form Demo js -->
     <script src="assets/js/pages/form-wizard.init.js"></script>
     <script>
-        src = "{{ asset('assets/vendor/datatables.net-bs5/js/dataTables.bootstrap5.min.js') }}" >
+        src = "{{ asset('assets/vendor/datatables.net-bs5/js/dataTables.bootstrap5.min.js') }}" 
     </script>
 
 @endsection

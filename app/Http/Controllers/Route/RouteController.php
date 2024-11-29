@@ -86,7 +86,6 @@ class RouteController extends Controller {
             $route->driver_phone = $request->driver_phone;
             $route->save();
         }
-
         // Reassign new users
         if ( $request->user_ids ) {
             foreach ( $request->user_ids as $user_id ) {
