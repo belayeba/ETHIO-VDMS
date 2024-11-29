@@ -300,11 +300,11 @@ class VehicleParmanentlyRequestController extends Controller
 
             ->addColumn('status', function ($row) {
                 if (is_null($row->approved_by)) {
-                    return '<button  class="btn btn-warning" style="pointer-events: none;">Pending</button>';
+                    return 'PENDING';
                 } elseif (!is_null($row->director_reject_reason)) {
-                    return '<button type="button" class="btn btn-danger" style="pointer-events: none;">Rejected</button>';
+                    return 'REJECTED';
                 } else {
-                    return '<button type="button" class="btn btn-success" style="pointer-events: none;">Approved</button>';
+                    return 'APPROVED';
                 }
             })
 
