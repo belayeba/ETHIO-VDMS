@@ -60,8 +60,13 @@ class Daily_KM_Calculation extends Controller
                             'plate_number' => $km->vehicle->plate_number ?? 'N?A',
                             'morning_km' => $km->morning_km ?? 'N/A',
                             'afternoon_km' => $km->afternoon_km,
+<<<<<<< HEAD
                             'daily_km' => 342,
                             'night_km' => 400,
+=======
+                            'daily_km' => $km->afternoon_km - $km->morning_km,
+                            'night_km' => $km->night_km,
+>>>>>>> 183f743eea171b1f0f5c5e19ffae196452ba0278
                         ];
                     });
         
@@ -203,7 +208,7 @@ class Daily_KM_Calculation extends Controller
                         'plate_number' => $km->vehicle->plate_number ?? 'N?A',
                         'morning_km' => $km->morning_km ?? 'N/A',
                         'afternoon_km' => $km->afternoon_km,
-                        'daily_km' => $km->daily_km,
+                        'daily_km' => $km->afternoon_km - $km->morning_km,
                         'night_km' => $km->night_km,
                     ];
                 });
