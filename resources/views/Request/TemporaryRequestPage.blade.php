@@ -105,9 +105,14 @@
 
                                                     <div class="position-relative mb-3">
                                                         <div class="mb-6 position-relative" id="datepicker1">
-                                                            <label class="form-label">Vehicle type</label>
-                                                            <input type="text" class="form-control" name="vehicle_type"
-                                                                placeholder="Select vehicle type">
+                                                               <label class="form-label">Vehicle Type</label>
+                                                                <select id="vehicle_type" name="vehicle_type" class="form-select" required>
+                                                                    <option value="">Select</option>
+                                                                    <option value="Human">Human</option>
+                                                                    <option value="Load">Load</option>
+                                                                    <option value="Load">Both</option>
+                                                                    <option value="Load">Neither</option>
+                                                                </select>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -164,13 +169,6 @@
                                                             <label class="form-label">Return Time</label>
                                                             <input type="time" class="form-control" name="return_time"
                                                                 placeholder="Enter Time of arrival">
-                                                        </div>
-                                                    </div>
-                                                    <div class="position-relative mb-3">
-                                                        <div class="mb-6 position-relative" id="datepicker1">
-                                                            <label class="form-label">How many Days</label>
-                                                            <input type="number" class="form-control"
-                                                                name="how_many_days" placeholder="Enter the Duration">
                                                         </div>
                                                     </div>
                                                 </div>
