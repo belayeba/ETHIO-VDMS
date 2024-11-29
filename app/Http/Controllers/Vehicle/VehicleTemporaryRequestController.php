@@ -384,17 +384,17 @@ class VehicleTemporaryRequestController extends Controller
                 })
 
                 ->addColumn('date', function ($row) {
-                    return $row->created_at;
+                    return $row->created_at->format('d,m,Y');
                 })
 
                 ->addColumn('status', function ($row) use ($data_drawer_value) {
                     if ($data_drawer_value == 1) {
                         if ($row->div_approved_by !== null && $row->cluster_director_reject_reason === null) {
-                            return 'CLUSTER ACCEPTED';
+                            return 'ACCEPTED';
                         } elseif ($row->div_approved_by !== null && $row->cluster_director_reject_reason !== null) {
-                            return 'CLUSTER REJECTED';
+                            return 'REJECTED';
                         }
-                        return 'CLUSTER PENDING';
+                        return 'PENDING';
                     } elseif ($data_drawer_value == 2) {
                         if ($row->hr_div_approved_by !== null && $row->hr_director_reject_reason === null) {
                             return 'ACCEPTED';
@@ -411,11 +411,11 @@ class VehicleTemporaryRequestController extends Controller
                         return 'PENDING';
                     } else {
                         if ($row->dir_approved_by !== null && $row->director_reject_reason === null) {
-                            return 'DIRECTOR ACCEPTED';
+                            return 'ACCEPTED';
                         } elseif ($row->dir_approved_by !== null && $row->director_reject_reason !== null) {
-                            return 'DIRECTOR REJECTED';
+                            return 'REJECTED';
                         }
-                        return 'DIRECTOR PENDING';
+                        return 'PENDING';
                     }
                 })
 
@@ -969,6 +969,173 @@ class VehicleTemporaryRequestController extends Controller
                                     ->get();
                     return view("Request.VehicleDirectorPage", compact('vehicle_requests','vehicles'));     
             }
+
+
+             // fetching director approval requests
+        public function FetchForDispatcher(Request $request)
+        {
+            // dd($request->input('customDataValue'));
+            $id = Auth::id();
+          
+            $data_drawer_value = $request->input('customDataValue');
+
+            $vehicles = VehiclesModel::where('status',1)->get();
+            if($data_drawer_value == 1)
+            {
+                $data = VehicleTemporaryRequestModel::
+                            whereNotNull('transport_director_id')
+                            ->whereNull('vec_director_reject_reason')
+                            ->whereNull('start_km')
+                            ->whereNull('assigned_by')
+                            // ->whereNotNull('vehicle_id')
+                            ->get();
+            }
+            elseif($data_drawer_value == 2)
+            {
+                $data = VehicleTemporaryRequestModel::
+                            whereNotNull('transport_director_id')
+                            ->whereNull('vec_director_reject_reason')
+                            ->whereNull('start_km')
+                            ->whereNotNull('assigned_by')
+                            ->whereNotNull('vehicle_id')
+                            ->get();
+            }
+            elseif($data_drawer_value == 3){
+                $data = VehicleTemporaryRequestModel::
+                     whereNotNull('transport_director_id')
+                    ->whereNull('vec_director_reject_reason')
+                    ->whereNotNull('assigned_by')
+                    ->whereNotNull('start_km')
+                    ->whereNull('end_km')
+                    ->get();
+            }else{
+                $data = VehicleTemporaryRequestModel::
+                     whereNotNull('transport_director_id')
+                    ->whereNull('vec_director_reject_reason')
+                    // ->whereNull('assigned_by')
+                    ->get();
+                    
+            }
+
+           
+            return datatables()->of($data)
+            ->addIndexColumn()
+            ->addColumn('counter', function($row) use ($data){
+                static $counter = 0;
+                $counter++;
+                return $counter;
+            })
+
+            ->addColumn('requested_by', function ($row) {
+                return $row->requestedBy->first_name;
+            })
+
+            ->addColumn('vehicle_type', function ($row) {
+                return $row->vehicle_type;
+            })
+
+            ->addColumn('start_location', function ($row) {
+                return $row->start_location;
+            })
+
+            ->addColumn('end_location', function ($row) {
+                return $row->end_locations;
+            })
+
+            ->addColumn('date', function ($row) {
+                return $row->created_at->format('d,m,Y');
+            })
+
+            ->addColumn('status', function ($row) use ($data_drawer_value) {
+                if ($data_drawer_value == 1) {
+                    if ($row->div_approved_by !== null && $row->cluster_director_reject_reason === null) {
+                        return 'ACCEPTED';
+                    } elseif ($row->div_approved_by !== null && $row->cluster_director_reject_reason !== null) {
+                        return 'REJECTED';
+                    }
+                    return 'PENDING';
+                } elseif ($data_drawer_value == 2) {
+                    if ($row->hr_div_approved_by !== null && $row->hr_director_reject_reason === null) {
+                        return 'ACCEPTED';
+                    } elseif ($row->hr_div_approved_by !== null && $row->hr_director_reject_reason !== null) {
+                        return 'REJECTED';
+                    }
+                    return 'PENDING';
+                } elseif ($data_drawer_value == 3) {
+                    if ($row->transport_director_id !== null && $row->vec_director_reject_reason === null) {
+                        return 'ACCEPTED';
+                    } elseif ($row->transport_director_id !== null && $row->vec_director_reject_reason !== null) {
+                        return 'REJECTED';
+                    }
+                    return 'PENDING';
+                } else {
+                    if ($row->dir_approved_by !== null && $row->director_reject_reason === null) {
+                        return 'ACCEPTED';
+                    } elseif ($row->dir_approved_by !== null && $row->director_reject_reason !== null) {
+                        return 'REJECTED';
+                    }
+                    return 'PENDING';
+                }
+            })
+
+            ->addColumn('actions', function ($row)  use ($data_drawer_value) {
+                $actions = '<button type="button" class="btn btn-info rounded-pill" 
+                data-bs-toggle="modal" 
+                data-bs-target="#standard-modal"
+                data-purpose="' . $row->purpose . '"
+                data-vehicle_type="' . $row->vehicle_type . '"
+                data-start_date="' . $row->start_date . '"
+                data-start_time="' . $row->start_time . '"
+                data-end_date="' . $row->end_date . '"
+                data-end_time="' . $row->end_time . '"
+                data-start_location="' . $row->start_location . '&nbsp;&nbsp;&nbsp;' . $row->end_locations . '"
+                data-passengers=\'' . json_encode($row->peoples) . '\'
+                data-materials=\'' . json_encode($row->materials) . '\'
+                data-dir_approved_by="' . $row->dir_approved_by . '"
+                data-director_reject_reason="' . $row->director_reject_reason . '"
+                data-div_approved_by="' . $row->div_approved_by . '"
+                data-cluster_director_reject_reason="' . $row->cluster_director_reject_reason . '"
+                data-hr_div_approved_by="' . $row->hr_div_approved_by . '"
+                data-hr_director_reject_reason="' . $row->hr_director_reject_reason . '"
+                data-transport_director_id="' . $row->transport_director_id . '"
+                data-vec_director_reject_reason="' . $row->vec_director_reject_reason . '"
+                data-assigned_by="' . $row->assigned_by . '"
+                data-assigned_by_reject_reason="' . $row->assigned_by_reject_reason . '"
+                data-vehicle_id="' . $row->vehicle_id . '"
+                data-vehicle_plate="' . ($row->vehicle ? $row->vehicle->plate_number : '') . '"
+                data-start_km="' . $row->start_km . '"
+                data-end_km="' . $row->end_km . '"
+                title="Show Details">
+                <i class="ri-eye-line"></i></button>'; 
+                // if ($data_drawer_value == 1 || $data_drawer_value == 0) {
+                    if ($row->assigned_by == null) {
+                        $actions .= '<button type="button" class="btn btn-primary rounded-pill accept-btn"  data-id="' . $row->request_id . '"  title="accept"><i class=" ri-checkbox-circle-line"></i></button>';
+                        $actions .= '<button type="button" class="btn btn-danger rounded-pill reject-btn" data-id="' . $row->request_id . '"  title="reject"><i class=" ri-close-circle-fill"></i></button>';
+                    }
+                // }
+                //  elseif ($data_drawer_value == 2 || $data_drawer_value == 0) {
+                    if ($row->start_km == null && $row->assigned_by != null ) {
+                        $actions .= '<button type="button" class="btn btn-warning rounded-pill dispatch-btn" data-id="' . $row->request_id . '" title="Dispatch"><i class="  ri-contract-right-fill"></i></button>';
+                    }
+                // } 
+                // elseif ($data_drawer_value == 3 || $data_drawer_value == 0) {
+                    if ($row->start_km != null) {
+                        $actions .= '<button type="button" class="btn btn-secondary rounded-pill" data-bs-toggle="modal" data-bs-target="#staticreturn-{{ $loop->index }}" title="Return"><i class="  ri-contract-left-fill"></i></button>';
+                    }
+                // }
+                //  else{              
+                // if ($row->dir_approved_by == null && $row->director_reject_reason == null) {
+                    // $actions .= '<button  type="button" class="btn btn-primary rounded-pill accept-btn"  data-id="' . $row->request_id . '" title="Accept"><i class="ri-checkbox-circle-line"></i></button>';
+                    // $actions .= '<button type="button" class="btn btn-danger rounded-pill reject-btn" data-id="' . $row->request_id . '" data-bs-toggle="modal" data-bs-target="#staticBackdrop" title="Reject"><i class=" ri-close-circle-fill"></i></button>';
+                // }
+            // }
+                return $actions;
+            })
+
+            ->rawColumns(['actions','start_date','location','counter'])
+            ->toJson();
+    
+        }
             // VEHICLE DIRECTOR APPROVE THE REQUESTS
         public function simiritApproveRequest(Request $request)
             {
@@ -1046,6 +1213,7 @@ class VehicleTemporaryRequestController extends Controller
                         {
                             return response()->json($validation->errors(), 201);
                         }
+                        
                     // Check if it is not approved before
                     $id = $request->input('request_id');
                     $start_km = $request->input('start_km');
@@ -1055,18 +1223,20 @@ class VehicleTemporaryRequestController extends Controller
                     {
                         $Vehicle_Request = VehicleTemporaryRequestModel::findOrFail($id);
                         $vehicle = VehiclesModel::findOrFail($Vehicle_Request->vehicle_id);
+                        dd($vehicle);
                         if(!$vehicle->status)
-                        {
+                        { 
                             return redirect()->back()->with('error_message',
                                 'The vehicle is not active',
                                 );
                         }
                         if($Vehicle_Request->start_km)
-                            {
+                            { dd("request22");
                                 return redirect()->back()->with('error_message',
                                 'Warning! You are denied the service.',
                                 );
                             }
+                            dd("request333");
                         $Vehicle_Request->start_km = $start_km;
                         // $Vehicle_Request->km_per_litre = $km_per_litre;
                         $vehicle->status = false;
@@ -1110,7 +1280,7 @@ class VehicleTemporaryRequestController extends Controller
                                 return redirect()->back()->with('error_message',
                                 'Sorry, Something Went Wrong.',
                                 );
-                            }        
+                            }     
                         $Vehicle_Request->assigned_by = $user_id;
                         $Vehicle_Request->assigned_by_reject_reason = $reason;
                         $Vehicle_Request->save();

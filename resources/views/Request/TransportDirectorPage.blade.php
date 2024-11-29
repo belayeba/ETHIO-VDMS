@@ -31,8 +31,6 @@
                                             <th>#</th>
                                             <th>Requested By</th>
                                             <th>Vehicle Type</th>
-                                            <th>Location From</th>
-                                            <th>Location To</th>
                                             <th>Requested At</th>
                                             <th>Status</th>
                                             <th>Action</th>
@@ -192,14 +190,6 @@
                 {
                     data: 'vehicle_type',
                     name: 'vehicle_type'
-                },
-                {
-                    data: 'start_location',
-                    name: 'start_location'
-                },
-                {
-                    data: 'end_location',
-                    name: 'end_location'
                 },
                 {
                     data: 'date',

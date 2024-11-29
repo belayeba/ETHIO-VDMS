@@ -78,6 +78,7 @@ Route::group(['middleware' => ['auth']], function()
                         Route::post('/TransportDirector_approve_requesta', 'TransportDirectorApproveRequest')->name('TransportDirector_approve_request');
                         Route::post('/TransportDirector_reject_request', 'TransportDirectorRejectRequest')->name('TransportDirector_reject_request');
                         Route::get('/simirit_approve_page', 'SimiritPage')->name('simirit_page');
+                        Route::get('/FetchForDispatchery/temp', 'FetchForDispatcher')->name('FetchForDispatcher');
                         Route::post('/simirit_approve_request', 'simiritApproveRequest')->name('simirit_approve');
                         Route::post('/simirit_fill_start_km/store', 'simiritFillstartKm')->name('simirit_fill_start_km');
                         Route::post('/simirit_reject_request', 'simiritRejectRequest')->name('simirit_reject');
@@ -213,10 +214,10 @@ Route::group(['middleware' => ['auth']], function()
                     Route::get('/temp26', 'temp26');
                     Route::get('/temp27', 'temp27');
                     Route::get('/temp28', 'temp28');
-                    Route::group(['middleware' => ['role:admin']], function () {
+                    // Route::group(['middleware' => ['role:admin']], function () {
 
                     Route::get('/temp29', 'temp29');
-                    });
+                    // });
                     Route::get('/temp30', 'temp30');
                     Route::get('/temp31', 'temp31');
                     Route::get('/temp32', 'temp32');
