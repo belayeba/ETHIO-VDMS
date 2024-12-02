@@ -73,12 +73,12 @@ class DailyKMCalculationModel extends Model
 
     public function getNightKmAttribute()
     {
-        $yesterdayRecord = self::where('vehicle_id', $this->vehicle_id)
-            ->where('date', '=', \Carbon\Carbon::parse($this->date)->subDay()->format('Y-m-d'))
-            ->first();
+        $lastRecorded = self::where('vehicle_id', $this->vehicle_id) 
+        ->where('date', '<', \Carbon\Carbon::parse($this->date)->format('Y-m-d')) 
+        ->first();
 
-        if ($yesterdayRecord) {
-            return $this->morning_km - $yesterdayRecord->afternoon_km;
+        if ($lastRecorded) {
+            return $this->morning_km - $lastRecorded->afternoon_km;
         }
 
         return null;
