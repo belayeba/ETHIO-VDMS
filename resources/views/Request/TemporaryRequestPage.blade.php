@@ -219,13 +219,33 @@
                                                     <div class="mt-2">
                                                         <div class="form-check form-check-inline">
                                                             <input type="checkbox" class="form-check-input"
-                                                                name="with_driver" value="1">
+                                                                name="with_driver" value="withDriver">
                                                             <label class="form-check-label">Yes</label>
                                                         </div>
                                                         <div class="form-check form-check-inline">
                                                             <input type="checkbox" class="form-check-input"
-                                                                name="with_driver" value="0">
+                                                                name="with_driver" value="NoDriver">
                                                             <label class="form-check-label">No</label>
+                                                        </div>
+                                                    </div>
+                                                    <div id="ToggleWithDriver" style="display:none">
+                                                        <div class="row">
+
+                                                            <p class="mb-1 fw-bold text-muted">Select Driver</p>
+                                                            <select id="multiSelect" name="driver_id"
+                                                                class="select2 form-control select2-multiple"
+                                                                data-toggle="select2" multiple="multiple"
+                                                                data-placeholder="Select People ...">
+                                                                <optgroup label="Users/Employees">
+                                                                    @foreach ($users as $user)
+                                                                        ;
+                                                                        <option value="{{ $user->id }}">
+                                                                            <p style="color:black">{{ $user->first_name }}
+                                                                        </option>
+                                                                    @endforeach
+                                                                </optgroup>
+                                                            </select>
+                                                            <div id="selectedValues" class="mt-2"></div>
                                                         </div>
                                                     </div>
                                                     <h6 class="fs-15 mt-3">In/Out Town</h6>
@@ -322,7 +342,9 @@
                                                 const checkboxes = document.querySelectorAll(
                                                     'input[name="with_driver"], input[name="in_out_town"], input[name="package"]');
                                                 const packageCheckbox = document.querySelector('input[name="package"]');
+                                                const withdriverCheckbox = document.querySelector('input[name="with_driver"]');
                                                 const divToToggle = document.getElementById('TogglePackage');
+                                                const withDriverToggle = document.getElementById('ToggleWithDriver');
 
                                                 checkboxes.forEach((checkbox) => {
                                                     checkbox.addEventListener('change', function() {
@@ -342,6 +364,15 @@
                                                             divToToggle.style.display = 'block'; // Display the div if the checkbox value is 1
                                                         } else {
                                                             divToToggle.style.display = 'none';
+                                                        }
+                                                    }
+                                                });
+                                                withdriverCheckbox.addEventListener('change', function() {
+                                                    if (withDriverToggle) {
+                                                        if (withdriverCheckbox.value === 'withDriver') {
+                                                            withDriverToggle.style.display = 'none'; // Display the div if the checkbox value is 1
+                                                        } else {
+                                                            withDriverToggle.style.display = 'block';
                                                         }
                                                     }
                                                 });

@@ -98,21 +98,22 @@ class VehicleTemporaryRequestController extends Controller
         // Send Vehicle Request Temporary
         public function RequestVehicleTemp(Request $request) 
             {
-                // Custom validation rule to check equal number of material_name and weight entries
                 Validator::extend('equal_count', function ($attribute, $value, $parameters, $validator) use ($request) {
                     $countMaterialName = count($request->input('material_name', []));
                     $countWeight = count($request->input('weight', []));
                     return $countMaterialName === $countWeight;
                 }, 'The number of material names and weights must be equal.');
+                $today = \Carbon\Carbon::today();
+                $ethiopianDate = $this->dailyKmCalculation->ConvertToEthiopianDate($today); 
                 // Validate the request
                 $validator = Validator::make($request->all(), [
                     'purpose' => 'required|string|max:255',
                     'vehicle_type' => 'required|string',
-                    'in_out_town'=>'required|boolean',
-                    'with_driver'=>'required|integer|in:1,0',
+                    'in_out_town' => 'required|boolean',
+                    'with_driver' => 'required|integer|in:1,0',
                     'start_date' => 'required|date',
-                    'start_time' => 'required|date_format:H:i',
-                    'return_date' => 'required|date|after_or_equal:start_date',
+                    'start_time' => 'required|date_format:H:i|after_or_equal:$today',
+                    'return_date' => 'required|date|after_or_equal:start_date', // Ensure return_date is after or equal to start_date
                     'return_time' => 'required|date_format:H:i',
                     'start_location' => 'required|string|max:255',
                     'end_location' => 'required|string|max:255',
@@ -123,13 +124,13 @@ class VehicleTemporaryRequestController extends Controller
                     'itemNames' => 'nullable|equal_count',
                     'itemWeights' => 'nullable|equal_count',
                 ]);
-                // If validation fails, return an rerror response
-                if ($validator->fails()) 
-                        {
-                            return redirect()->back()->with('error_message',
-                            'All field required.',
-                            );  
-                        }
+                
+                // If validation fails, return an error response
+                if ($validator->fails()) {
+                    $errorMessages = implode(', ', $validator->errors()->all());
+                    return redirect()->back()->with('error_message', $errorMessages);
+                }
+                
                     try 
                         {
                             DB::beginTransaction();

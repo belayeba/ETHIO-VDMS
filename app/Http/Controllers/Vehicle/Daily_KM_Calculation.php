@@ -62,8 +62,8 @@ class Daily_KM_Calculation extends Controller
                             'afternoon_km' => $km->afternoon_km,
                             'daily_km' => 342,
                             'night_km' => 400,
-                            'daily_km' => $km->afternoon_km - $km->morning_km,
-                            'night_km' => $km->night_km,
+                            'daily_km' => $km->getDailyKmAttribute($km->vehicle->vehicle_id),
+                            'night_km' => $km->getNightKmAttribute($km->vehicle->vehicle_id),
                         ];
                     });
         
