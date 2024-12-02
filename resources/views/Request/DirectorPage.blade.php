@@ -186,7 +186,6 @@
                     data: 'vehicle_type',
                     name: 'vehicle_type'
                 },
-               
                 {
                     data: 'date',
                     name: 'date'

@@ -73,7 +73,7 @@
                                                 
                                             <select class="form-control select" id="vehicleCategory" name="fuel_type" data-fouc required>
                                                 <option value="">Select Fuel Type</option>
-                                                <option value="benzene">Benzene</option>
+                                                <option value="Benzene">Benzene</option>
                                                 <option value="Diesel">Diesel</option>
                                             </select>
 

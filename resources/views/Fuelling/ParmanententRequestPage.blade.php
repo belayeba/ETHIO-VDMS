@@ -92,19 +92,16 @@
                                             
                                             entryDiv.innerHTML = `
                                                 <div class="row">
-                                                    <div class="col-md-3">
-                                                        <label>Fuel</label>
-                                                        <input name="fuel_amount[${index}]" class="form-control" placeholder="In Liters" type="number" required>
-                                                    </div>
-                                                    <div class="col-md-3">
+                                                    
+                                                    <div class="col-md-4">
                                                         <label>Price</label>
                                                         <input name="fuel_cost[${index}]" class="form-control" placeholder="In Birr" type="number" required>
                                                     </div>
-                                                    <div class="col-md-2">
+                                                    <div class="col-md-4">
                                                         <label>Date</label>
                                                         <input name="fuiling_date[${index}]" class="form-control" placeholder="When" type="date" required>
                                                     </div>
-                                                    <div class="col-md-3">
+                                                    <div class="col-md-4">
                                                         <label>Attachment</label>
                                                         <input name="reciet_attachment [${index}]" class="form-control" type="file" required>
                                                     </div>

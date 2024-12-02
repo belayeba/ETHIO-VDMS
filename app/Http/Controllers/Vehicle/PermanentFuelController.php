@@ -188,6 +188,7 @@ class PermanentFuelController extends Controller {
 
             ->map(function ($fueling) {
                 return [
+                    'make_primary'       => $fueling->make_primary, 
                     'fueling_id'         => $fueling->fueling_id,
                     'year'               => $fueling->year,
                     'month'              => $fueling->month,
@@ -367,12 +368,12 @@ class PermanentFuelController extends Controller {
                 $logged_user = Auth::id();
                 $get_fuel_requests = PermanentFuelModel::where('fueling_id', $id)->get();
                 $get_one_fuel_request = PermanentFuelModel::where('fueling_id', $id)->first();
-
+                
                 // Check if already approved
                 if ($get_one_fuel_request->final_approved_by) {
                     return redirect()->back()->with('error_message', "Warning! You are denied the service");
                 }
-
+               
                 // Get vehicle and fuel price information
                 $get_vehicle = VehiclesModel::select('fuel_type')
                     ->where('vehicle_id', $get_one_fuel_request->vehicle_id)
@@ -382,15 +383,18 @@ class PermanentFuelController extends Controller {
                     ->where('fuel_type', $get_vehicle->fuel_type)
                     ->latest()
                     ->first();
+                
+                if (!$latest_fuel_price) {
+                    return redirect()->back()->with(['error_message' => 'Fuel Price is not set please Check!']);
+                }
 
                 $permanent = VehiclePermanentlyRequestModel::select('vehicle_request_permanent_id', 'fuel_quata', 'feul_left_from_prev')
                     ->where('vehicle_id', $get_one_fuel_request->vehicle_id)
                     ->where('status', true)
                     ->first();
-
                 // Ensure that the permanent vehicle request exists
                 if (!$permanent) {
-                    return back()->withErrors(['error' => 'No active permanent vehicle request found for this driver and vehicle.']);
+                    return redirect()->back()->with(['error_message' => 'No active permanent vehicle request found for this driver and vehicle.']);
                 }
 
                 // Process fuel requests

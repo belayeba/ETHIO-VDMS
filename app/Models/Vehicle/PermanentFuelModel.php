@@ -32,7 +32,6 @@ class PermanentFuelModel extends Model {
         'one_litre_price',
         'quata',
         'accepted',
-        'one_litre_price',
         'reciet_attachment',
         'created_at'
     ];
