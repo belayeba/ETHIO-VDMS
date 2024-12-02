@@ -94,7 +94,6 @@ class PermanentFuelController extends Controller {
                 'fuiling_date.*' => 'required|date',
                 'month' => 'required|In:1,2,3,4,5,6,7,8,9,10,11,12,13',
                 'year' => 'required|integer',
-                'fuel_amount.*' => 'required|integer',
                 'fuel_cost.*' => 'required|numeric',
                 'reciet_attachment.*' => 'required|file|mimes:jpeg,png,pdf|max:2048'
             ] );
@@ -136,7 +135,7 @@ class PermanentFuelController extends Controller {
             $fueling_date = $request->input('fuiling_date');
             // $fuel_amount = $request->input('fuel_amount');
             $ethiopianDate = $this->dailyKmCalculation->ConvertToEthiopianDate($today); 
-            foreach ( $request->fuel_amount as $index => $fuel_amount ) {
+            foreach ( $request->fuel_cost as $index => $fuel_amount ) {
                 // dd($fuel_amount);
                 $fueling = new PermanentFuelModel();
                 $fueling->fueling_id = $fuel;
@@ -147,7 +146,7 @@ class PermanentFuelController extends Controller {
                 $fueling->fuiling_date = $fueling_date[ $index ];
                 $fueling->month = $request->month;
                 $fueling->year = $request->year;
-                $fueling->fuel_amount = $fuel_amount;
+                //$fueling->fuel_amount = $fuel_amount;
                 $fueling->fuel_cost = $request->fuel_cost[ $index ];
                 
                 if ($files[$index] )  {
