@@ -38,7 +38,7 @@ class DriverChangeController extends Controller {
             // 'inspection_id' => 'required|uuid|exists:vehicle_inspections,inspection_id',
         ] );
         if ( $validator->fails() ) {
-            return response()->json( [ 'errors' => $validator->errors() ], 422 );
+            return redirect()->back()->with('error_message','All field required.',);
         }
         //dd( $request->vehicle_id );
         $vehicle_info = VehiclesModel::findOrFail( $request->vehicle_id );
@@ -67,7 +67,7 @@ class DriverChangeController extends Controller {
         $user = User::find($the_driver->user_id);
         $message = "Vehicle with $the_vehicle->plate_number plate number is assigned to you, click here to see its detail";
         $subject = "Vehicle Assigned";
-        $url = "{{ route('driver.requestPage') }}";
+        $url = "driver_change/my_request";
         $user->NotifyUser($message,$subject,$url);
         return redirect()->back()->with('success_message','Driver Change Successfully Requested .',);
     }
@@ -78,8 +78,7 @@ class DriverChangeController extends Controller {
             'request_id' => 'required|uuid|exists:driver_changes,driver_change_id'
         ] );
         if ( $validator->fails() ) {
-            return response()->json( [ 'success' => false,
-            'message' => 'Warning! You are denied the service' ], 422 );
+            return redirect()->back()->with('error_message','Warning! You are denied the service',);
         }
         $driverChange = DriverDriverChangeModel::findOrFail( $request->request_id );
         return response()->json( [
@@ -97,25 +96,15 @@ class DriverChangeController extends Controller {
             'inspection_id' => 'required|uuid|exists:vehicle_inspections,inspection_id',
         ] );
         if ( $validator->fails() ) {
-            return response()->json( [
-                'success' => false,
-                'message' => 'Warning! You are denied the service',
-            ] );
+            return redirect()->back()->with('error_message','Warning! You are denied the service',);
         }
         $driverChange = DriverDriverChangeModel::findOrFail( $request->request_id );
         if ( $driverChange->driver_accepted == true ) {
-            return response()->json( [
-                'success' => false,
-                'message' => 'Warning! You are denied the service',
-            ] );
+            return redirect()->back()->with('error_message','Warning! You are denied the service',);
         }
         $driverChange->update( $request->all() );
         // return redirect()->back()->with('success_message','Driver change successfully updated.',);
-        return response()->json( [
-            'success' => true,
-            'message' => 'Driver change successfully updated',
-            'data' =>$driverChange,
-        ] );
+        return redirect()->back()->with('success_message','Driver Changed Successfully',);
     }
     // Delete a Driver Change
 
@@ -124,24 +113,19 @@ class DriverChangeController extends Controller {
             'request_id' => 'required|uuid|exists:driver_changes,driver_change_id'
         ] );
         if ( $validator->fails() ) {
-            return response()->json( [ 'success' => false,
-            'message' => 'Warning! You are denied the service' ], 422 );
+            return redirect()->back()->with('error_message','Warning! You are denied the service',);
         }
         $driverChange = DriverDriverChangeModel::findOrFail( $request->request_id );
         if ( $driverChange->driver_accepted == true ) {
-            return response()->json( [
-                'success' => false,
-                'message' => 'Warning! You are denied the service',
-            ] );
+            return redirect()->back()->with('error_message','Warning! You are denied the service',);
+
         }
         if ( $driverChange->driver_accepted == true ) {
-            return response()->json( [
-                'success' => false,
-                'message' => 'Warning! You are denied the service',
-            ] );
+            return redirect()->back()->with('error_message','Warning! You are denied the service',);
+
         }
         $driverChange->delete();
-        return redirect()->back()->with('success_message','Driver change deleted successfully.',);
+        return redirect()->back()->with('success_message','Driver Chage deleted Successfully',);
     }
     public function driver_get_request()
         {
@@ -167,8 +151,7 @@ class DriverChangeController extends Controller {
                 'request_id' => 'required|uuid|exists:driver_changes,driver_change_id',
             ] );
             if ( $validator->fails() ) {
-                return response()->json( [ 'success' => false,
-                'message' => 'Warning! You are denied the service' ], 422 );
+                return redirect()->back()->with('error_message','Warning! You are denied the service',);
             }
             $logged_user = Auth::id();
             $get_request = DriverDriverChangeModel::find($request->request_id);
@@ -183,9 +166,9 @@ class DriverChangeController extends Controller {
             $plate_number = $get_request->vehicle->plate_number;
             $message = "$driver_name accepted that he is assigned to vehicle with $plate_number plate number, click here to see its detail";
             $subject = "Driver Assignment";
-            $url = "{{ route('driver.switch') }}";
+            $url = "/driver_change";
             $user->NotifyUser($message,$subject,$url);
-            return response()->json(['success_message'=>"Vehicle Successfully Transfered to you"]);
+            return redirect()->back()->with('success_message','Vehicle Successfully Transfered',);
         }
     public function driver_reject(Request $request)
         {
@@ -194,7 +177,7 @@ class DriverChangeController extends Controller {
                 'reason' => 'required|string'
             ] );
             if ( $validator->fails() ) {
-                return response()->json( [ 'success' => false,
+                return response()->json( [ 'success_message' => false,
                 'message' => 'Warning! You are denied the service' ], 422 );
             }
             $logged_user = Auth::id();
@@ -211,8 +194,8 @@ class DriverChangeController extends Controller {
             $plate_number = $get_request->vehicle->plate_number;
             $message = "$driver_name rejected that he is assigned to vehicle with $plate_number plate number, click here to see its detail";
             $subject = "Driver Assignment";
-            $url = "{{ route('driver.switch') }}";
+            $url = "driver_change/";
             $user->NotifyUser($message,$subject,$url);
-            return response()->json(['success_message'=>"Vehicle Successfully Transfered to you"]);
+            return redirect()->back()->with('success_message','Vehicle Transfer is rejected',);
         }
 }

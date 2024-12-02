@@ -50,10 +50,7 @@ class DepartmentController extends Controller
         // If validation fails, return an error response
         if ($validator->fails()) 
             {
-                return response()->json([
-                    'success' => false,
-                    'message' => $validator->errors(),
-                ]);
+                return redirect()->back()->with('error_message','All fields are required',);
             }
 
         $user = auth()->user()->id; // Get the authenticated user's ID

@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use App\Notifications\TaskCompleted;
 use App\Http\Controllers\Vehicle\Daily_KM_Calculation;
+use Carbon\Carbon;
 
 class VehicleTemporaryRequestController extends Controller
     {
@@ -108,7 +109,6 @@ class VehicleTemporaryRequestController extends Controller
                     'purpose' => 'required|string|max:255',
                     'vehicle_type' => 'required|string',
                     'in_out_town'=>'required|boolean',
-                    'how_many_days'=>'required|integer',
                     'with_driver'=>'required|integer|in:1,0',
                     'start_date' => 'required|date',
                     'start_time' => 'required|date_format:H:i',
@@ -138,11 +138,27 @@ class VehicleTemporaryRequestController extends Controller
                             // Create the vehicle request
                             $today = \Carbon\Carbon::today();
                             $ethiopianDate = $this->dailyKmCalculation->ConvertToEthiopianDate($today); 
+                            $startDate = Carbon::parse($request->start_date);
+                            $returnDate = Carbon::parse($request->return_date);
+                            // Calculate the difference in days
+                            $how_many_days = $startDate->diffInDays($returnDate);
+                            if($request->start_date < $ethiopianDate)
+                                {
+                                        return redirect()->back()->with('error_message',
+                                        'Please! Check Start Date',
+                                    );
+                                } 
+                            if($how_many_days < 0)
+                                {
+                                        return redirect()->back()->with('error_message',
+                                        'Return Date should be greater than Start Date',
+                                    );
+                                }                     
                             $Vehicle_Request = VehicleTemporaryRequestModel::create([
                                 'purpose' => $request->purpose,
                                 'in_out_town' =>$request->in_out_town,
                                 'with_driver' =>$request->with_driver,
-                                'how_many_days' =>$request->how_many_days,
+                                'how_many_days' =>$how_many_days,
                                 'vehicle_type' => $request->vehicle_type,
                                 'requested_by_id'=> $id,
                                 'start_location' => $request->start_location,
@@ -602,7 +618,7 @@ class VehicleTemporaryRequestController extends Controller
                         $user = User::find($Vehicle_Request->requested_by_id);
                         $message = "Your Vehicle Temporary Request Rejected, click here to see its detail";
                         $subject = "Vehicle Temporary";
-                        $url = "{{ route('displayRequestPage') }}";
+                        $url = "/temp_request_page";
                         $user->NotifyUser($message,$subject,$url);
                         return redirect()->back()->with('success_message',
                                  "The request rejected successfully",
@@ -712,7 +728,7 @@ class VehicleTemporaryRequestController extends Controller
                         $user = User::find($Vehicle_Request->requested_by_id);
                         $message = "Your Vehicle Temporary Request Rejected, click here to see its detail";
                         $subject = "Vehicle Temporary";
-                        $url = "{{ route('displayRequestPage') }}";
+                        $url = "/temp_request_page";
                         $user->NotifyUser($message,$subject,$url);
                         return redirect()->back()->with('success_message',
                                  "The request rejected successfully",
@@ -815,7 +831,7 @@ class VehicleTemporaryRequestController extends Controller
                         $user = User::find($Vehicle_Request->requested_by_id);
                         $message = "Your Vehicle Temporary Request Rejected, click here to see its detail";
                         $subject = "Vehicle Temporary";
-                        $url = "{{ route('displayRequestPage') }}";
+                        $url = "/temp_request_page";
                         $user->NotifyUser($message,$subject,$url);
                         return redirect()->back()->with('success_message',
                                  "The request rejected successfully",
@@ -928,7 +944,7 @@ class VehicleTemporaryRequestController extends Controller
                         $user = User::find($Vehicle_Request->requested_by_id);
                         $message = "Your Vehicle Temporary Request Rejected, click here to see its detail";
                         $subject = "Vehicle Temporary";
-                        $url = "{{ route('displayRequestPage') }}";
+                        $url = "/temp_request_page";
                         $user->NotifyUser($message,$subject,$url);
                         return redirect()->back()->with('success_message',
                                  "The request rejected successfully",
@@ -1150,7 +1166,7 @@ class VehicleTemporaryRequestController extends Controller
                         $user = User::find($Vehicle_Request->requested_by_id);
                         $message = "Vehicle is assigned for your Vehicle Temporary Request, click here to see its detail";
                         $subject = "Vehicle Temporary";
-                        $url = "{{ route('displayRequestPage') }}";
+                        $url = "/temp_request_page";
                         $user->NotifyUser($message,$subject,$url);
                        return redirect()->back()->with('success_message',
                                  "ou are successfully Approved the request",
@@ -1175,7 +1191,7 @@ class VehicleTemporaryRequestController extends Controller
                     // Check validation error
                     if ($validation->fails()) 
                         {
-                            return response()->json($validation->errors(), 201);
+                            return redirect()->back()->with('error_message','Fill start km',);
                         }
                         
                     // Check if it is not approved before
@@ -1251,7 +1267,7 @@ class VehicleTemporaryRequestController extends Controller
                         $user = User::find($Vehicle_Request->requested_by_id);
                         $message = "Your Vehicle Temporary Request Rejected, click here to see its detail";
                         $subject = "Vehicle Temporary";
-                        $url = "{{ route('displayRequestPage') }}";
+                        $url = "/temp_request_page";
                         $user->NotifyUser($message,$subject,$url);
                         return redirect()->back()->with('success_message',
                                  "The request rejected successfully",

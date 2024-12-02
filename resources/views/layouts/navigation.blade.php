@@ -19,7 +19,7 @@
         text-align: center;
         text-decoration: none !important;
         cursor: pointer;
-        *cursor: hand;
+        cursor: hand;
         color: #333 !important;
         border: 1px solid transparent;
         border-radius: 2px;
@@ -202,9 +202,11 @@
                         </a>
                         <div class="collapse" id="sidebarFuel">
                             <ul class="side-nav-second-level">
+                                @can('Set Feul Cost')
                                     <li>
                                         <a href="{{ route('all_fuel_cost') }}">Set Feul Cost</a>
                                     </li>
+                                @endcan()
                                 @can('Request Fuel')
                                     <li>
                                         <a href="{{ route('permanenet_fuel_request') }}">Request</a>

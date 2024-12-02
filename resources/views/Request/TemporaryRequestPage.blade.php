@@ -114,15 +114,20 @@
 
                                                     <div class="position-relative mb-3">
                                                         <div class="mb-6 position-relative" id="datepicker1">
-                                                            <label class="form-label">Vehicle type</label>
-                                                            <input type="text" class="form-control" name="vehicle_type"
-                                                                placeholder="Select vehicle type">
+                                                               <label class="form-label">Vehicle Type</label>
+                                                                <select id="vehicle_type" name="vehicle_type" class="form-select" required>
+                                                                    <option value="">Select</option>
+                                                                    <option value="Human">Human</option>
+                                                                    <option value="Load">Load</option>
+                                                                    <option value="Load">Both</option>
+                                                                    <option value="Load">Neither</option>
+                                                                </select>
                                                         </div>
                                                     </div>
                                                 </div>
                                                 <ul class="list-inline wizard mb-0">
                                                     <li class="next list-inline-item float-end">
-                                                        <a href="javascript:void(0);" class="btn btn-info">Add More Info <i
+                                                        <a href="javascript:void(0);" class="btn btn-info">Next <i
                                                                 class="ri-arrow-right-line ms-1"></i></a>
                                                     </li>
                                                 </ul>
@@ -175,22 +180,14 @@
                                                                 placeholder="Enter Time of arrival">
                                                         </div>
                                                     </div>
-                                                    <div class="position-relative mb-3">
-                                                        <div class="mb-6 position-relative" id="datepicker1">
-                                                            <label class="form-label">How many Days</label>
-                                                            <input type="number" class="form-control"
-                                                                name="how_many_days" placeholder="Enter the Duration">
-                                                        </div>
-                                                    </div>
                                                 </div>
                                                 <ul class="pager wizard mb-0 list-inline">
                                                     <li class="previous list-inline-item">
                                                         <button type="button" class="btn btn-light"><i
-                                                                class="ri-arrow-left-line me-1"></i> Back to
-                                                            Account</button>
+                                                                class="ri-arrow-left-line me-1"></i> Back</button>
                                                     </li>
                                                     <li class="next list-inline-item float-end">
-                                                        <button type="button" class="btn btn-info">Add More Info <i
+                                                        <button type="button" class="btn btn-info">Next <i
                                                                 class="ri-arrow-right-line ms-1"></i></button>
                                                     </li>
                                                 </ul>
@@ -218,12 +215,10 @@
                                                 <ul class="pager wizard mb-0 list-inline mt-1">
                                                     <li class="previous list-inline-item">
                                                         <button type="button" class="btn btn-light"><i
-                                                                class="ri-arrow-left-line me-1"></i> Back to
-                                                            Profile</button>
+                                                                class="ri-arrow-left-line me-1"></i> Back</button>
                                                     </li>
                                                     <li class="next list-inline-item float-end">
-                                                        <a href="#finish-3" type="button" class="btn btn-info">Add More
-                                                            Info <i class="ri-arrow-right-line ms-1"></i></a>
+                                                        <a href="#finish-3" type="button" class="btn btn-info">Next <i class="ri-arrow-right-line ms-1"></i></a>
                                                     </li>
                                                 </ul>
                                             </div>
@@ -321,8 +316,7 @@
                                                 <ul class="pager wizard mb-0 list-inline mt-1">
                                                     <li class="previous list-inline-item">
                                                         <button type="button" class="btn btn-light"><i
-                                                                class="ri-arrow-left-line me-1"></i> Back to
-                                                            Profile</button>
+                                                                class="ri-arrow-left-line me-1"></i> Back</button>
                                                     </li>
                                                     <li class="next list-inline-item float-end">
                                                         <button type="submit" class="btn btn-info">Submit</button>

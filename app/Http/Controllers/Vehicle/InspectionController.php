@@ -104,9 +104,9 @@ class InspectionController extends Controller
                 $inspection = InspectionModel::where('inspection_id', $inspectionId)->get();
             
                 if ($inspection->isEmpty()) {
-                    return response()->json(['status' => 'error', 'message' => 'Inspection not found'], 404);
+                    return redirect()->back()->with('error_message','Inspection Not Found',);
                 } 
-                $latest_inspection = InspectionModel::with('inspector:id,first_name','part:vehicle_parts_id,name')
+                $latest_inspection = InspectionModel::with('inspector:id,first_name','part:vehicle_parts_id,name,type')
                 ->select('inspection_id','inspected_by','part_name','created_at','is_damaged','inspection_image','damage_description')
                 ->where('inspection_id', $inspectionId)
                 ->get()                   //dd($inspection->isEmpty());
@@ -117,6 +117,7 @@ class InspectionController extends Controller
                         'part_name'          => $inspection->part->name,
                         'created_at'         => $inspection->created_at,
                         'is_damaged'         => $inspection->is_damaged,
+                        'type'               => $inspection->part->type,
                         'image_path'         => $inspection->inspection_image,
                         'damage_description'  => $inspection->damage_description,
                     ];
@@ -125,7 +126,7 @@ class InspectionController extends Controller
             }
             catch(Exception $e)
                 {
-                    return response()->json(['status' => 'error', 'message' => "Sorry, Something Went Wrong"], 404);
+                    return redirect()->back()->with('error_message','Sorry, Something Went Wrong',);
                 }
         }
     public function showInspectionbyVehicle(Request $request)
@@ -138,7 +139,7 @@ class InspectionController extends Controller
                     $inspection_id = $inspection->inspection_id;
                     // dd($inspection_id);
 
-                    $latest_inspection = InspectionModel::with('inspector:id,first_name','part:vehicle_parts_id,name')
+                    $latest_inspection = InspectionModel::with('inspector:id,first_name','part:vehicle_parts_id,name,type')
                     ->select('inspection_id','inspected_by','part_name','created_at','is_damaged','inspection_image','damage_description')
                     ->where('inspection_id', $inspection_id)
                     ->get()                   //dd($inspection->isEmpty());
@@ -147,6 +148,7 @@ class InspectionController extends Controller
                             'inspection_id'      => $inspection->inspection_id,
                             'inspected_by'       => $inspection->inspector->first_name,
                             'part_name'          => $inspection->part->name,
+                            'type'               => $inspection->part->type,
                             'created_at'         => $inspection->created_at,
                             'is_damaged'         => $inspection->is_damaged,
                             'image_path'         => $inspection->inspection_image,
@@ -158,7 +160,7 @@ class InspectionController extends Controller
                 }
             catch(Exception $e)
                 {
-                    return response()->json(['status' => 'error', 'message' => "Sorry, Something Went Wrong"], 404);
+                    return redirect()->back()->with('error_message','Sorry, Something Went Wrong',);
                 }
         }
      public function send_photo_data($inspection_id)
@@ -193,7 +195,7 @@ class InspectionController extends Controller
             $validator = Validator::make($request->all(), $rules);
         
             if ($validator->fails()) {
-                return response()->json(['status' => 'error', 'errors' => $validator->errors()], 422);
+                return redirect()->back()->with('error_message','All fields are required',);
             }
             $updated = InspectionModel::where('inspection_id', $inspectionId)
                                         ->where('part_name', $partName)
@@ -211,7 +213,7 @@ class InspectionController extends Controller
             } 
             else 
             {
-                return response()->json(['status' => 'error', 'message' => 'Inspection not found or not updated'], 404);
+                return redirect()->back()->with('error_message','Inspection Not found',);
             }
         }
     public function deleteInspection($inspectionId)

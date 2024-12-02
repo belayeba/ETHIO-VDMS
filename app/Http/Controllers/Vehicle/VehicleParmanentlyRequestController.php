@@ -402,7 +402,7 @@ class VehicleParmanentlyRequestController extends Controller
                 $user = User::find($Vehicle_Request->requested_by);
                 $message = "Your Vehicle Permanent Request Rejected, click here to see its detail";
                 $subject = "Vehicle Permanent";
-                $url = "{{ route('vec_perm_request') }}";
+                $url = "/perm_request_page";
                 $user->NotifyUser($message,$subject,$url);
                 return redirect()->back()->with('success_message',
                 'Successfully Rejected.',
@@ -483,7 +483,7 @@ class VehicleParmanentlyRequestController extends Controller
             $user = User::find($Vehicle_Request->requested_by);
             $message = "Your Vehicle Permanent Request Approved, click here to see its detail";
             $subject = "Vehicle Permanent";
-            $url = "{{ route('vec_perm_request') }}";
+            $url = "/perm_request_page";
             $user->NotifyUser($message,$subject,$url);
             return redirect()->back()->with('success_message',
                 'Successfully Approved.',
@@ -518,7 +518,7 @@ class VehicleParmanentlyRequestController extends Controller
             $user = User::find($Vehicle_Request->requested_by);
             $message = "Your Vehicle Permanent Request Rejected, click here to see its detail";
             $subject = "Vehicle Permanent";
-            $url = "{{ route('vec_perm_request') }}";
+            $url = "/perm_request_page";
             $user->NotifyUser($message,$subject,$url);
             return redirect()->back()->with('success_message',
                 'Successfully Rejected.',
