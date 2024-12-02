@@ -47,13 +47,22 @@
                                 <form method="POST" action="{{ route('temp_request_post') }}">
                                     @csrf
 
-                                    <div id="progressbarwizard">
+                                    <ul class="nav nav-pills nav-justified form-wizard-header mb-3">
+                                        <li class="nav-item">
+                                            <a class="nav-link rounded-0 py-2" id="displayprogresive">
+                                                <i class="ri-car-fill fw-normal fs-20 align-middle me-1"></i>
+                                                <span class="d-none d-sm-inline">Request</span>
+                                            </a>
+                                        </li>
+                                    </ul>
+
+                                    <div id="progressbarwizard" style="display: none">
                                         <ul class="nav nav-pills nav-justified form-wizard-header mb-3">
                                             <li class="nav-item">
                                                 <a href="#account-2" data-bs-toggle="tab" data-toggle="tab"
                                                     class="nav-link rounded-0 py-2">
                                                     <i class="ri-car-fill fw-normal fs-20 align-middle me-1"></i>
-                                                    <span class="d-none d-sm-inline">Request</span>
+                                                    <span class="d-none d-sm-inline">Reason</span>
                                                 </a>
                                             </li>
                                             <li class="nav-item">
@@ -78,11 +87,11 @@
                                                 </a>
                                             </li>
                                             <!-- <li class="nav-item">
-                                                                        <a href="#finish-4" data-bs-toggle="tab" data-toggle="tab" class="nav-link rounded-0 py-2">
-                                                                            <i class=" ri-suitcase-3-fill fw-normal fs-20 align-middle me-1"></i>
-                                                                            <span class="d-none d-sm-inline">Extras</span>
-                                                                        </a>
-                                                                    </li> -->
+                                                <a href="#finish-4" data-bs-toggle="tab" data-toggle="tab" class="nav-link rounded-0 py-2">
+                                                    <i class=" ri-suitcase-3-fill fw-normal fs-20 align-middle me-1"></i>
+                                                    <span class="d-none d-sm-inline">Extras</span>
+                                                </a>
+                                            </li> -->
                                         </ul>
 
                                         <div class="tab-content b-0 mb-0">
@@ -354,6 +363,7 @@
                                             </script>
                                         </div></br> <!-- end card-body-->
                                     </div>
+
                                 </form>
                             </div>
                         </div>
@@ -643,6 +653,18 @@
                         // Populate progress
                         modal.find('[data-field="progress"]').html(buildProgressMessage(button));
 
+                    });
+
+                    document.getElementById('displayprogresive').addEventListener('click', function() {
+                        // Retrieve the div element to be toggled
+                        var targetDiv = document.getElementById('progressbarwizard');
+                        
+                        // Toggle the visibility of the div
+                        if (targetDiv.style.display === 'none') {
+                            targetDiv.style.display = 'block';
+                        } else {
+                            targetDiv.style.display = 'none';
+                        }
                     });
                 </script>
 

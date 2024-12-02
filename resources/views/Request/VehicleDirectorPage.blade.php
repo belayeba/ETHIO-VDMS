@@ -5,6 +5,22 @@
 <div class="content-page">
     <div class="content">
 
+        @if(Session::has('error_message'))
+                <div class="alert alert-danger alert-dismissible text-bg-danger border-0 fade show col-lg-5" 
+                    role="alert">
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="Close"></button>
+                    <strong>Error - </strong> {!! session('error_message') !!}
+                </div>
+                @endif
+                
+                @if(Session::has('success_message'))
+                <div class="alert alert-primary alert-dismissible text-bg-primary border-0 fade show col-lg-5"
+                    role="alert">
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="Close"></button>
+                    <strong> Success- </strong> {!! session('success_message') !!} 
+                </div>
+                @endif
+                
         <!-- <h4 class="header-title mb-4">DIRECTOR PAGE</h4> -->
             <div class="row">
                 <div class="col-12">
@@ -34,8 +50,8 @@
                                             <th>#</th>
                                             <th>Requested By</th>
                                             <th>Vehicle Type</th>
-                                            <th>Purpose</th>
                                             <th>Requested At</th>
+                                            <th>Status</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
@@ -158,7 +174,7 @@
                                     <div class="modal-content">
                                         <div class="modal-header">
                                             <h4 class="modal-title" id="staticBackdropLabel">Assigned Vehicle</h4>&nbsp;&nbsp;
-                                            <h3  class="text-info"></h3>
+                                            <h3  class="text-info"><span id="Display_plate_accepted"></span></h3>
                                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                         </div> <!-- end modal header -->
                                         <form method="POST" action="{{route('simirit_fill_start_km')}}">
@@ -180,6 +196,36 @@
                                 </div> <!-- end modal dialog-->
                             </div>
                             {{-- end dispatch modal --}}
+
+                             {{-- return modal for the request --}}
+                            <div class="modal fade" id="staticreturn" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h4 class="modal-title" id="staticBackdropLabel">Assigned Vehicle</h4>&nbsp;&nbsp;
+                                            <h3  class="text-info"><span id="Display_plate"></span></h3>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div> <!-- end modal header -->
+                                        <form method="POST" action="{{route('simirit_return_vehicle')}}">
+                                            @csrf
+                                            <div class="modal-body">
+                                                <div class="mb-6 position-relative">
+                                                    <label class="form-label">End KM</label>
+                                                    <input type="number" class="form-control" name="end_km"
+                                                        placeholder="Enter Return KM">
+                                                </div>
+                                                <input type="hidden" name="request_id" id="return_id">
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                <button type="submit" class="btn btn-warning">Return</button>
+                                            </div> <!-- end modal footer -->
+                                        </form>                                                                    
+                                    </div> <!-- end modal content-->
+                                </div> <!-- end modal dialog-->
+                            </div>
+                            {{-- end return modal --}}
+
                         </div>
                         <!-- end card-body -->
                     </div>
@@ -241,6 +287,83 @@
                     searchable: false
                 },
             ]
+        });
+
+
+        document.getElementById('assignBtn').addEventListener('click', function() {
+           
+            var selectedCarId = document.getElementById('vehicleselection').value;
+            console.log(selectedCarId);
+            // Perform an Ajax request to fetch data based on the selected car ID
+            $.ajax({
+                url: "{{ route('inspection.ByVehicle') }}",
+                type: 'GET',
+                data: { id: selectedCarId },
+                success: function(response) {
+                    var cardsContainer = document.getElementById('inspectionCardsContainer');
+                    cardsContainer.innerHTML = ''; // Clear previous cards
+
+                    if (response.status === 'success' && Array.isArray(response.data) && response.data.length > 0) {
+                        // Create the table
+                        var Image = response.data[0].image_path;
+                        var imageUrl = Image ? "{{ asset('storage/vehicles/Inspections/') }}" + '/' + Image : null; 
+                        var inspectedBy = response.data[0].inspected_by;
+                        var createdAt = new Date(response.data[0].created_at).toLocaleDateString('en-US', {
+                            year: 'numeric',
+                            month: '2-digit',
+                            day: '2-digit'
+                        });
+                    // Create a section to display "Inspected By" and "Created At" at the top right corner
+                        var infoSection = document.createElement('div');
+                        infoSection.className = 'd-flex justify-content-end mb-4'; // Flexbox to align right and add margin-bottom
+                        infoSection.innerHTML = `
+                            <p><strong>Inspected By:</strong> ${inspectedBy} </br>
+                            <strong>Created At:</strong> ${createdAt}</br>
+                            <strong>Image:</strong> 
+                            ${ imageUrl 
+                                ? `<a href="${imageUrl}" target="_blank"> Click to View </a>` 
+                                : 'No image'
+                            }
+                        `;
+                        cardsContainer.appendChild(infoSection); // Append the info section before the table
+
+                        var table = document.createElement('table');
+                        table.className = 'table table-striped'; // Add Bootstrap classes for styling
+                        table.innerHTML = `
+                            <thead>
+                                <tr>
+                                    <th>Part Name</th>
+                                    <th>Is Damaged</th>
+                                    <th>Damage Description</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        `;
+
+                        response.data.forEach(function(inspection) {
+                            var row = document.createElement('tr');
+                            row.innerHTML = `
+                                <td>${inspection.part_name}</td>
+                                <td>${inspection.is_damaged ? 'No' : 'Yes'}</td>
+                                <td>${inspection.damage_description ? inspection.damage_description : 'N/A'}</td>
+                            `;
+                            table.querySelector('tbody').appendChild(row); // Append row to the table body
+                        });
+
+                        cardsContainer.appendChild(table);
+
+                    } else {
+                        // Handle the case where no data is available
+                        cardsContainer.innerHTML = '<p>No inspection data available.</p>';
+                    }
+                },
+                error: function() {
+                    var cardsContainer = document.getElementById('inspectionCardsContainer');
+                    cardsContainer.innerHTML = ''; // Clear previous cards
+                    cardsContainer.innerHTML = '<p>No inspection data available at the moment. Please check the Plate number!</p>';
+                }
+            });
         });
         
 
@@ -371,10 +494,26 @@
 
             $(document).on('click', '.dispatch-btn', function() {
                 AcceptedId = $(this).data('id');
+                aceeptedPlate = $(this).data('plate')
                 // console.log(AcceptedId);
 
                 $('#dispatch_id').val(AcceptedId);
+                $('#Display_plate_accepted').text(aceeptedPlate);
                 $('#staticdispatch').modal('show');
+            });
+        });
+
+        $(document).ready(function() {
+            var AcceptedId;
+
+            $(document).on('click', '.return-btn', function() {
+                returnId = $(this).data('id');
+                returnPlate = $(this).data('plate');
+                // console.log(returnId, returnPlate);
+
+                $('#return_id').val(returnId);
+                $('#Display_plate').text(returnPlate);
+                $('#staticreturn').modal('show');
             });
         });
 
@@ -388,24 +527,6 @@
                 $('#staticreject').modal('show');
             });
         });
-
-function confirmFormSubmission(formId) {
-if (confirm("Are you sure you want to accept this request?")) {
-    var form = document.getElementById(formId);
-    form.submit();
-}
-}
-
-function toggleDiv(targetId) {
-const allDivs = document.querySelectorAll('.table-responsive');
-allDivs.forEach(div => {
-    if (div.id === targetId) {
-        div.style.display = 'block';// Show the target div
-    } else {
-        div.style.display = 'none';// Hide other divs
-    }
-});
-}
 </script>
 <script src="{{ asset('assets/js/app.min.js') }}"></script>
 @endsection

@@ -1030,34 +1030,14 @@ class VehicleTemporaryRequestController extends Controller
                 return $row->created_at->format('d,m,Y');
             })
 
-            ->addColumn('status', function ($row) use ($data_drawer_value) {
-                if ($data_drawer_value == 1) {
-                    if ($row->div_approved_by !== null && $row->cluster_director_reject_reason === null) {
-                        return 'ACCEPTED';
-                    } elseif ($row->div_approved_by !== null && $row->cluster_director_reject_reason !== null) {
-                        return 'REJECTED';
-                    }
-                    return 'PENDING';
-                } elseif ($data_drawer_value == 2) {
-                    if ($row->hr_div_approved_by !== null && $row->hr_director_reject_reason === null) {
-                        return 'ACCEPTED';
-                    } elseif ($row->hr_div_approved_by !== null && $row->hr_director_reject_reason !== null) {
-                        return 'REJECTED';
-                    }
-                    return 'PENDING';
-                } elseif ($data_drawer_value == 3) {
-                    if ($row->transport_director_id !== null && $row->vec_director_reject_reason === null) {
-                        return 'ACCEPTED';
-                    } elseif ($row->transport_director_id !== null && $row->vec_director_reject_reason !== null) {
-                        return 'REJECTED';
-                    }
-                    return 'PENDING';
-                } else {
-                    if ($row->dir_approved_by !== null && $row->director_reject_reason === null) {
-                        return 'ACCEPTED';
-                    } elseif ($row->dir_approved_by !== null && $row->director_reject_reason !== null) {
-                        return 'REJECTED';
-                    }
+            ->addColumn('status', function ($row) {
+                if ($row->vehicle_id !== null && $row->start_km == null) {
+                    return 'ASSIGNED';
+                } elseif ($row->end_km == null && $row->start_km !== null) {
+                    return 'DISPATCHED';
+                } elseif ($row->start_km !== null && $row->end_km !== null) {
+                    return 'RETURNED';
+                } elseif ($row->transport_director_id !== null && $row->vehicle_id == null) {
                     return 'PENDING';
                 }
             })
@@ -1099,12 +1079,12 @@ class VehicleTemporaryRequestController extends Controller
                 // }
                 //  elseif ($data_drawer_value == 2 || $data_drawer_value == 0) {
                     if ($row->start_km == null && $row->assigned_by != null ) {
-                        $actions .= '<button type="button" class="btn btn-warning rounded-pill dispatch-btn" data-id="' . $row->request_id . '" title="Dispatch"><i class="  ri-contract-right-fill"></i></button>';
+                        $actions .= '<button type="button" class="btn btn-warning rounded-pill dispatch-btn" data-id="' . $row->request_id . '" data-plate="' . $row->vehicle->plate_number . '" title="Dispatch"><i class="  ri-contract-right-fill"></i></button>';
                     }
                 // } 
                 // elseif ($data_drawer_value == 3 || $data_drawer_value == 0) {
-                    if ($row->start_km != null) {
-                        $actions .= '<button type="button" class="btn btn-secondary rounded-pill" data-bs-toggle="modal" data-bs-target="#staticreturn-{{ $loop->index }}" title="Return"><i class="  ri-contract-left-fill"></i></button>';
+                    if ($row->start_km != null && $row->end_km == null) {
+                        $actions .= '<button type="button" class="btn btn-secondary rounded-pill return-btn" data-id="' . $row->request_id . '" data-plate="' . $row->vehicle->plate_number . '"  title="Return"><i class="  ri-contract-left-fill"></i></button>';
                     }
                 // }
                 //  else{              
@@ -1207,7 +1187,7 @@ class VehicleTemporaryRequestController extends Controller
                     {
                         $Vehicle_Request = VehicleTemporaryRequestModel::findOrFail($id);
                         $vehicle = VehiclesModel::findOrFail($Vehicle_Request->vehicle_id);
-                        dd($vehicle);
+
                         if(!$vehicle->status)
                         { 
                             return redirect()->back()->with('error_message',
@@ -1215,19 +1195,19 @@ class VehicleTemporaryRequestController extends Controller
                                 );
                         }
                         if($Vehicle_Request->start_km)
-                            { dd("request22");
+                            {
                                 return redirect()->back()->with('error_message',
                                 'Warning! You are denied the service.',
                                 );
                             }
-                            dd("request333");
+
                         $Vehicle_Request->start_km = $start_km;
                         // $Vehicle_Request->km_per_litre = $km_per_litre;
                         $vehicle->status = false;
                         $vehicle->save();
                         $Vehicle_Request->save();
                         return redirect()->back()->with('success_message',
-                        "You are successfully Approved the request",
+                        "You are successfully Dispatched the Vehicle",
                      );
                     }
                 catch (Exception $e) 

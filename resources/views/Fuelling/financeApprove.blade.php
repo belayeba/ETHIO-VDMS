@@ -29,7 +29,7 @@
                                         <table class="table director_datatable table-centered mb-0 table-nowrap" id="inline-editable">
                                             <thead>
                                                 <tr>
-                                                    <th>Roll number</th>
+                                                    <th>#</th>
                                                     <th>Requested By</th>
                                                     <th>Requested Month</th>
                                                     <th>Vehicle</th>
@@ -37,7 +37,9 @@
                                                     <th>Action</th>
                                                 </tr>
                                             </thead>
+                                            <tbody>
 
+                                            </tbody>
                                             {{-- @foreach($fuels as $request)
                                                 <tbody>
                                                     <tr>
@@ -171,14 +173,15 @@
                                     </div>
                                     {{-- modal for displaying the data --}}
                                     <div class="modal fade" id="staticaccept" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                                    <div class="modal-dialog modal-lg modal-dialog-scrollable">
+                                    <div class="modal-dialog modal-lg modal-dialog-scrollable" style="overflow-x: auto;">
                                         <div class="modal-content">
                                             
                                                 <div class="modal-header">
                                                                                                                     
                                                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                 </div> <!-- end modal header -->
-                                                <div class="modal-body d-flex flex-column align-items-center">
+                                                
+                                                <div class="modal-body d-flex flex-column align-items-center" >
                                                     <div class="row mt-3 w-100" id="inspectionCardsContainer">
                                                     </div>
                                                     
@@ -193,11 +196,13 @@
                                                     </div>
                                                 </div>
                                                 <div class="modal-footer">
+                                                    <button type="submit" class="btn btn-primary rounded-pill view" id="InspectionSubmitButton" title="Submit"><i class="ri-checkbox-circle-line"></i></button>
                                                     <button type="submit" class="btn btn-secondary"  data-bs-dismiss="modal" aria-label="Close">close</button>
                                                 </div> <!-- end modal footer -->
                                             </div>                                                              
                                         </div> <!-- end modal content-->
                                     </div> <!-- end modal dialog-->
+                                    
 
                                           <!-- Accept Alert Modal -->
                                           <div class="modal fade" id="confirmationModal" tabindex="-1" role="dialog"
@@ -315,7 +320,7 @@
         });
 
 
-        $(document).on('click', '.view-btn', function() {
+    $(document).on('click', '.view-btn', function () {
         // Get the request ID from the data attribute
         var selectedCarId = $(this).data('id');
 
@@ -324,13 +329,13 @@
             url: '/show_detail/' + selectedCarId,
             type: 'get',
             data: { id: selectedCarId },
-            success: function(response) {
+            success: function (response) {
                 $('#staticaccept').modal('show');
 
                 // Clear previous cards and image preview
                 var cardsContainer = $('#inspectionCardsContainer');
-                cardsContainer.empty(); 
-                clearFilePreview(); 
+                cardsContainer.empty();
+                clearFilePreview();
 
                 if (response.status === 'success' && Array.isArray(response.data) && response.data.length > 0) {
                     // Populate the table and info section
@@ -338,29 +343,52 @@
                         <thead>
                             <tr>
                                 <th>Roll no</th>
-                                <th>Fuel Amount</th>
                                 <th>Fuel Cost</th>
                                 <th>Fueling Date</th>
                                 <th>Receipt</th>
+                                <th>make primary</th>
+                                <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
                         </tbody>
                     `);
 
+                    let actionData = []; // Array to hold final data
                     var count = 0;
-                    response.data.forEach(function(fueling) {
+
+                    response.data.forEach(function (fueling, index) {
                         count++;
                         var row = $(`
                             <tr>
                                 <td>${count}</td>
-                                <td>${fueling.fuel_amount}</td>
                                 <td>${fueling.fuel_cost}</td>
                                 <td>${fueling.fuiling_date}</td>
+                                <td>${fueling.make_primary}</td>
                                 <td>
                                     <a href="javascript:void(0);" onclick="showFileInIframe('{{ asset('storage/vehicles/reciept/') }}/${fueling.reciet_attachment}')">
-                                        ${fueling.reciet_attachment}
+                                        <button class="btn btn-outline-info rounded-pill">View Receipt</button>
                                     </a>
+                                </td>
+                                <td>
+                                    <div class="row">
+                                        <div class="col-4">
+                                            <div class="form-check">
+                                                <input type="checkbox" class="form-check-input yes-checkbox" id="ok-${index}" data-row="${index}">
+                                                <label class="form-check-label" for="ok-${index}">Accept</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-4">
+                                            <div class="form-check form-checkbox-danger">
+                                                <input type="checkbox" class="form-check-input none-checkbox"  id="damaged-${index}" data-row="${index}">
+                                                <label class="form-check-label" for="damaged-${index}">Reject</label>
+                                            </div>
+                                        </div>
+                                    </div></br>
+                                        <div class="col-8">
+                                            <input type="text" id="reason-${index}" class="form-control reason-input d-none" placeholder="Provide reason" data-row="${index}">
+                                        </div>
+                                    
                                 </td>
                             </tr>
                         `);
@@ -368,16 +396,75 @@
                     });
 
                     cardsContainer.append(table);
+
+                    // Attach dynamic behavior
+                    $(document).on('change', '.yes-checkbox, .none-checkbox', function () {
+                        const rowId = $(this).data('row');
+                        const isAccept = $(this).hasClass('yes-checkbox');
+                        const reasonInput = $(`#reason-${rowId}`);
+
+                        if (isAccept) {
+                            // If "Accept" is checked
+                            $(`#damaged-${rowId}`).prop('checked', false);
+                            reasonInput.addClass('d-none').val('');
+                            updateActionData('rowId', 'accept', null);
+                        } else {
+                            // If "Reject" is checked
+                            $(`#ok-${rowId}`).prop('checked', false);
+                            reasonInput.removeClass('d-none');
+                            updateActionData(rowId, 'reject', reasonInput.val());
+                        }
+                    });
+
+                    $(document).on('input', '.reason-input', function () {
+                        const rowId = $(this).data('row');
+                        const reason = $(this).val();
+                        updateActionData(rowId, 'reject', reason);
+                    });
+
+                    function updateActionData(rowId, action, reason) {
+                        const existingEntry = actionData.find(entry => entry.id === rowId);
+                        console.log(existingEntry);
+                        if (existingEntry) {
+                            existingEntry.action = action;
+                            existingEntry.reason = reason || null;
+                        } else {
+                            actionData.push({
+                                id: rowId,
+                                action: action,
+                                reason: reason || null
+                            });
+                        }
+                    }
+
+                    $('#InspectionSubmitButton').on('click', function () {
+                        console.log('Final action data:', actionData);
+
+                        // Example: Send action data to the server
+                        $.ajax({
+                            url: '/submit-action',
+                            type: 'POST',
+                            data: JSON.stringify(actionData),
+                            contentType: 'application/json',
+                            success: function (response) {
+                                alert('Data submitted successfully!');
+                            },
+                            error: function () {
+                                alert('Error submitting data.');
+                            }
+                        });
+                    });
                 } else {
                     cardsContainer.html('<p>No inspection data available.</p>');
                 }
             },
-            error: function() {
+            error: function () {
                 var cardsContainer = $('#inspectionCardsContainer');
                 cardsContainer.html('<p>No inspection data available at the moment. Please check the Plate number!</p>');
             }
         });
     });
+
 
 function showFileInIframe(fileUrl) {
     clearFilePreview(); 
