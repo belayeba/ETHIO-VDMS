@@ -60,4 +60,5 @@ class PermanentFuelModel extends Model {
     public function permanentRequest() {
         return $this->belongsTo( VehiclePermanentlyRequestModel::class, 'permanent_id', 'vehicle_request_permanent_id' );
     }
+ 
 }

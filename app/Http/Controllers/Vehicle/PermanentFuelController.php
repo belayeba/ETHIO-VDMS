@@ -39,16 +39,45 @@ class PermanentFuelController extends Controller {
             }
             return view( 'Fuelling.ParmanententRequestPage',compact('vehicles'));
         }
+    public function get_previos_cost($driver_id,$year,$month)
+        {
+          $fueling_of_one = PermanentFuelModel::where('driver_id',$driver_id)->where('year',$year)->where('month',$month)->first();
+                      if($month == 1)
+                          {
+                              $year = $fueling_of_one->year-1;
+                              $get_previous_feul = PermanentFuelModel::where('year',$year )->where('month',12)->where('vehicle_id',$fueling_of_one->vehicle_id)->latest()->first();
+                          }
+                      else
+                          {
+                              $month = $month - 1;
+                              $get_previous_feul = PermanentFuelModel::where('year',$fueling_of_one->year)->where('month',$month)->where('vehicle_id',$fueling_of_one->vehicle_id)->latest()->first();
+          
+                          }
+                      if($get_previous_feul)
+                          {
+                              $expected_total = $get_previous_feul->one_litre_price * $get_previous_feul->quata;
+                          }
+                      else
+                          {
+                          $expected_total = "No previos cost";
+                          }
+              return $expected_total;
+        }
     public function fuel_request_fetch() 
         {
             $logged_user = Auth::id();
             $get_driver = DriversModel::where('user_id',$logged_user)->first();
+            $fueling = PermanentFuelModel::where('driver_id',$get_driver->driver_id)->get();
             $data = PermanentFuelModel::select('fueling_id','vehicle_id','driver_id','month','year','finance_approved_by')
                                             ->where('driver_id', $get_driver->driver_id)
                                             ->distinct()
                                             ->latest()
                                             ->get();
-
+                    // dd($fueling);
+        
+                    if ($fueling->isEmpty()) {
+                        return redirect()->back()->with('error_message','Request Not found',);
+                    } 
                     return datatables()->of($data)
                     ->addIndexColumn()
                     ->addColumn('counter', function($row) use ($data){
@@ -56,11 +85,10 @@ class PermanentFuelController extends Controller {
                         $counter++;
                         return $counter;
                     })
-
+                   
                     ->addColumn('vehicle', function ($row) {
                         return $row->vehicle->plate_number;
                     })
-
                     ->addColumn('status', function ($row) {
                         return "pending";
                     })
@@ -98,22 +126,23 @@ class PermanentFuelController extends Controller {
                 'reciet_attachment.*' => 'required|file|mimes:jpeg,png,pdf|max:2048'
             ] );
             if ($validator->fails()) 
-            {
-                return redirect()->back()->with('error_message',
-                    $validator->errors(),
-                );
-            }
+                {
+                    return redirect()->back()->with('error_message',
+                        $validator->errors(),
+                    );
+                }
             // Get logged-in user ID
             $logged_user = Auth::id();
 
             //Get driver based on the logged-in user
             $get_driver = DriversModel::select( 'driver_id' )->where( 'user_id', $logged_user )->first();
             // Ensure that the driver exists
-            if ( !$get_driver ) {
-                return redirect()->back()->with('error_message',
-                "You should be registered as driver.",
-                );
-            }
+            if ( !$get_driver ) 
+                {
+                    return redirect()->back()->with('error_message',
+                    "You should be registered as driver.",
+                    );
+                }
             $the_driver_id = $get_driver->driver_id;
             // Get permanent vehicle request associated with driver and vehicle
             $permanent = VehiclePermanentlyRequestModel::select( 'vehicle_request_permanent_id','fuel_quata','feul_left_from_prev' )
@@ -173,17 +202,37 @@ class PermanentFuelController extends Controller {
             
             // dd($id);
             $fueling = PermanentFuelModel::where('fueling_id',$id )->get();
+            $fueling_of_one = PermanentFuelModel::where('fueling_id',$id )->first();
             // dd($fueling);
 
             if ($fueling->isEmpty()) {
                 return redirect()->back()->with('error_message','Request Not found',);
             } 
+            //dd($fueling_of_one->month);
+            if($fueling_of_one->month == 1)
+                {
+                    $year = $fueling_of_one->year-1;
+                    $get_previous_feul = PermanentFuelModel::where('year',$year )->where('month',12)->where('vehicle_id',$fueling_of_one->vehicle_id)->latest()->first();
+                }
+            else
+                {
+                    $month = $fueling_of_one->month - 1;
+                    $get_previous_feul = PermanentFuelModel::where('year',$fueling_of_one->year)->where('month',$month)->where('vehicle_id',$fueling_of_one->vehicle_id)->latest()->first();
 
+                }
+            if($get_previous_feul)
+                {
+                    $expected_total = $get_previous_feul->one_litre_price * $get_previous_feul->quata;
+                }
+            else
+               {
+                $expected_total = "No previos cost";
+               }
+            $total_feul =  $fueling->sum('fuel_cost');
             $fueling_data= PermanentFuelModel::with('vehicle:vehicle_id,plate_number','financeApprover:id,first_name')
             ->select('driver_id','finance_approved_by','fuel_amount','fuel_cost','fuiling_date','reciet_attachment','year','month')
             ->where('fueling_id', $id)
             ->get()                
-        
 
             ->map(function ($fueling) {
                 return [
@@ -199,8 +248,8 @@ class PermanentFuelController extends Controller {
                 ];
             });
 
-
-            return response()->json(['status' => 'success', 'data' => $fueling_data]);
+            //dd("coming");
+            return response()->json(['status' => 'success', 'data' => $fueling_data,'total_fuel'=>$total_feul,'expected_fuel' =>$expected_total]);
     
         }
     public function update(Request $request, $id)
