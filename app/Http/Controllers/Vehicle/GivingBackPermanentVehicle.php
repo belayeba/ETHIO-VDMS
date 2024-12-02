@@ -265,7 +265,7 @@ public function Vec_DirectorRejectRequest(Request $request)
                 $user = User::find($Vehicle_Request->requested_by);
                 $message = "Your Vehicle Return Request Rejected, click here to see its detail";
                 $subject = "Vehicle Returning";
-                $url = "{{ route('return_permanent_request_page') }}";
+                $url = "/return-permanent-request-page";
                 $user->NotifyUser($message,$subject,$url);
                 $Vehicle_Request->save();
                 return redirect()->back()->with('success_message',
@@ -326,7 +326,7 @@ public function DispatcherApproveRequest(Request $request)
             $user = User::find($get_permanent_request->requested_by);
             $message = "Your Vehicle Successfully Returned";
             $subject = "Vehicle Returning";
-            $url = "{{ route('return_permanent_request_page') }}";
+            $url = "/return-permanent-request-page";
             $user->NotifyUser($message,$subject,$url);
             return redirect()->back()->with('success_message',
                                 'Vehicle Successfully Returned',
@@ -365,7 +365,7 @@ public function DispatcherRejectRequest(Request $request)
                 $user = User::find($Vehicle_Request->requested_by);
                 $message = "Your Vehicle Return Request Rejected click here to see its detail";
                 $subject = "Vehicle Returning";
-                $url = "{{ route('return_permanent_request_page') }}";
+                $url = "/return-permanent-request-page";
                 $user->NotifyUser($message,$subject,$url);
                 return redirect()->back()->with('success_message',
                 'You have successfully Rejected the request.',

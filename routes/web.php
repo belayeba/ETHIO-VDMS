@@ -124,7 +124,6 @@ Route::group(['middleware' => ['auth']], function()
                     Route::post('/profile/store','profile_save')->name('user.profile.store');
 
                 });
-
                 // Vehicle registration 
                 Route::group([
                     'prefix'=>'vehicle',
@@ -294,7 +293,7 @@ Route::group(['middleware' => ['auth']], function()
                     Route::post('/save_quota_change', 'store')->name('save_quota_change');
                     Route::post('/save_update/{id}', 'update')->name('save_quota_update');
                 });
-                Route::controller(FeulCostController::class)->group(function ()
+            Route::controller(FeulCostController::class)->group(function ()
                 {
                     Route::get('/get_all_feul_costs','index')->name('all_fuel_cost');
                     Route::get('/get_one/{id}', 'show')->name('select_one');

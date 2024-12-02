@@ -177,7 +177,7 @@ class PermanentFuelController extends Controller {
             // dd($fueling);
 
             if ($fueling->isEmpty()) {
-                return response()->json(['status' => 'error', 'message' => 'Request not found'], 404);
+                return redirect()->back()->with('error_message','Request Not found',);
             } 
 
             $fueling_data= PermanentFuelModel::with('vehicle:vehicle_id,plate_number','financeApprover:id,first_name')

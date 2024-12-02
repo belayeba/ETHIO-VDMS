@@ -118,7 +118,7 @@
                                                 </div>
                                                 <ul class="list-inline wizard mb-0">
                                                     <li class="next list-inline-item float-end">
-                                                        <a href="javascript:void(0);" class="btn btn-info">Add More Info <i
+                                                        <a href="javascript:void(0);" class="btn btn-info">Next <i
                                                                 class="ri-arrow-right-line ms-1"></i></a>
                                                     </li>
                                                 </ul>
@@ -175,11 +175,10 @@
                                                 <ul class="pager wizard mb-0 list-inline">
                                                     <li class="previous list-inline-item">
                                                         <button type="button" class="btn btn-light"><i
-                                                                class="ri-arrow-left-line me-1"></i> Back to
-                                                            Account</button>
+                                                                class="ri-arrow-left-line me-1"></i> Back</button>
                                                     </li>
                                                     <li class="next list-inline-item float-end">
-                                                        <button type="button" class="btn btn-info">Add More Info <i
+                                                        <button type="button" class="btn btn-info">Next <i
                                                                 class="ri-arrow-right-line ms-1"></i></button>
                                                     </li>
                                                 </ul>
@@ -207,12 +206,10 @@
                                                 <ul class="pager wizard mb-0 list-inline mt-1">
                                                     <li class="previous list-inline-item">
                                                         <button type="button" class="btn btn-light"><i
-                                                                class="ri-arrow-left-line me-1"></i> Back to
-                                                            Profile</button>
+                                                                class="ri-arrow-left-line me-1"></i> Back</button>
                                                     </li>
                                                     <li class="next list-inline-item float-end">
-                                                        <a href="#finish-3" type="button" class="btn btn-info">Add More
-                                                            Info <i class="ri-arrow-right-line ms-1"></i></a>
+                                                        <a href="#finish-3" type="button" class="btn btn-info">Next <i class="ri-arrow-right-line ms-1"></i></a>
                                                     </li>
                                                 </ul>
                                             </div>
@@ -310,8 +307,7 @@
                                                 <ul class="pager wizard mb-0 list-inline mt-1">
                                                     <li class="previous list-inline-item">
                                                         <button type="button" class="btn btn-light"><i
-                                                                class="ri-arrow-left-line me-1"></i> Back to
-                                                            Profile</button>
+                                                                class="ri-arrow-left-line me-1"></i> Back</button>
                                                     </li>
                                                     <li class="next list-inline-item float-end">
                                                         <button type="submit" class="btn btn-info">Submit</button>

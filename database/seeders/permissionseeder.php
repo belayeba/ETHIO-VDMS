@@ -93,6 +93,7 @@ class permissionseeder extends Seeder {
                 'permissions' => [
                     'Request Fuel',
                     'Finance Accept',
+                    'Set Feul Cost',
                 ]
             ],
             [
