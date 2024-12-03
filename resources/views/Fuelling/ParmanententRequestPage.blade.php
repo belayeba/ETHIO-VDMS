@@ -379,7 +379,7 @@
                                         <td>${fueling.fuiling_date}</td>
                                         <td>
                                             <a href="javascript:void(0);" onclick="showFileInIframe('{{ asset('storage/vehicles/reciept/') }}/${fueling.reciet_attachment}')">
-                                                ${fueling.reciet_attachment}
+                                                Click to View
                                             </a>
                                         </td>
                                     </tr>

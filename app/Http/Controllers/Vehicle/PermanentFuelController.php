@@ -122,7 +122,7 @@ class PermanentFuelController extends Controller {
                         return $row->vehicle->plate_number;
                     })
                     ->addColumn('status', function ($row) {
-                        return "pending";
+                        return $row->status_check;
                     })
 
                     ->addColumn('month', function ($row) {
@@ -229,6 +229,7 @@ class PermanentFuelController extends Controller {
             }
             return redirect()->route( 'permanenet_fuel_request' )->with( 'success', 'Fueling records created successfully.' );
         }
+        
     public function show( $id ) 
         {
             
@@ -262,13 +263,14 @@ class PermanentFuelController extends Controller {
                }
             $total_feul =  $fueling->sum('fuel_cost');
             $fueling_data= PermanentFuelModel::with('vehicle:vehicle_id,plate_number','financeApprover:id,first_name')
-            ->select('driver_id','finance_approved_by','fuel_amount','fuel_cost','fuiling_date','reciet_attachment','year','month')
+            ->select('driver_id','finance_approved_by','fuel_amount','fuel_cost','fuiling_date','reciet_attachment','year','month','make_primary','accepted')
             ->where('fueling_id', $id)
             ->get()                
 
             ->map(function ($fueling) {
                 return [
-                    'make_primary'       => $fueling->make_primary, 
+                    'primary'            => $fueling->make_primary,
+                    'accepted'            => $fueling->accepted, 
                     'fueling_id'         => $fueling->fueling_id,
                     'year'               => $fueling->year,
                     'month'              => $fueling->month,
@@ -279,11 +281,15 @@ class PermanentFuelController extends Controller {
                     'finance_approved_by'=> $fueling->finance_approved_by? $fueling->financeApprover->first_name : 'not approved',
                 ];
             });
+// dd($fueling);
+
+            return response()->json(['status' => 'success', 'data' => $fueling_data]);
 
             //dd("coming");
             return response()->json(['status' => 'success', 'data' => $fueling_data,'total_fuel'=>$total_feul,'expected_fuel' =>$expected_total]);
     
         }
+
     public function update(Request $request, $id)
         {
             // Validate input
@@ -420,8 +426,8 @@ class PermanentFuelController extends Controller {
                         return  $row->vehicle->plate_number;
                     })
 
-                    ->addColumn('approver', function ($row) {
-                        return  $row->finance_approved_by ? $row->financeApprover->first_name : "Not Approved Yet";
+                    ->addColumn('approver', function ($row)  {
+                        return $row->final_approved_by !== null ? 'Approved' : "Not Approved Yet";
                     })
 
                     ->addColumn('action', function ($row) {
@@ -440,11 +446,12 @@ class PermanentFuelController extends Controller {
    // Finance Approval
     public function finance_approve(Request $request, $id)
         {
-            try {
+            // try {
                 // Retrieve request inputs
                 $approved = $request->input('approved_reciet', []); // Default to an empty array if not provided
                 $rejected = $request->input('rejected_reciet', []); // Default to an empty array if not provided
 
+                // dd($rejected);
                 $logged_user = Auth::id();
                 $get_fuel_requests = PermanentFuelModel::where('fueling_id', $id)->get();
                 $get_one_fuel_request = PermanentFuelModel::where('fueling_id', $id)->first();
@@ -453,7 +460,7 @@ class PermanentFuelController extends Controller {
                 if ($get_one_fuel_request->final_approved_by) {
                     return redirect()->back()->with('error_message', "Warning! You are denied the service");
                 }
-               
+              
                 // Get vehicle and fuel price information
                 $get_vehicle = VehiclesModel::select('fuel_type')
                     ->where('vehicle_id', $get_one_fuel_request->vehicle_id)
@@ -464,6 +471,8 @@ class PermanentFuelController extends Controller {
                     ->latest()
                     ->first();
                 
+                    
+
                 if (!$latest_fuel_price) {
                     return redirect()->back()->with(['error_message' => 'Fuel Price is not set please Check!']);
                 }
@@ -484,22 +493,30 @@ class PermanentFuelController extends Controller {
                 foreach ($get_fuel_requests as $fuel_request) {
                     if (in_array($fuel_request->make_primary, $approved)) {
                         // Approve request
+                        // dd('here');
                         $fuel_request->finance_approved_by = $logged_user;
                         $fuel_request->accepted = true;
-                        $check_reject++;
+                       
                         $fuel_request->save();
+
+                        $check_reject++;
+
                     } elseif (array_key_exists($fuel_request->make_primary, $rejected)) {
                         // Check for rejection reason
+                       
                         if (empty($rejected[$fuel_request->make_primary])) {
                             return redirect()->back()->with('error_message', "Write Reason For Rejection!");
                         }
-
+                        
                         // Reject request
+                        
                         $fuel_request->finance_approved_by = $logged_user;
                         $fuel_request->reject_reason = $rejected[$fuel_request->make_primary];
                         $fuel_request->save();
+                        
                     } else {
                         // Ensure all receipts are acted upon
+                        // dd('test check');
                         if (!$fuel_request->accepted && !$fuel_request->reject_reason) {
                             return redirect()->back()->with('error_message', "Take action on all attached receipts.");
                         }
@@ -507,22 +524,25 @@ class PermanentFuelController extends Controller {
                         $check_reject++;
                     }
                 }
-
+                // dd('test check');
                 // Final approval
                 if ($check_reject == $number_of_attachment) {
+                    // dd('test check q');
                     foreach ($get_fuel_requests as $fuel_request) {
                         $fuel_request->final_approved_by = $logged_user;
                         $fuel_request->one_litre_price = $latest_fuel_price->new_cost;
                         $fuel_request->quata = $permanent->fuel_quata;
                         $fuel_request->save();
                     }
-
-                    return redirect()->back()->with('success_message', "You approved the request!");
+                    
                 }
-            } catch (Exception $e) {
-                // Handle any unexpected errors
-                return redirect()->back()->with('error_message', "An error occurred: " . $e->getMessage());
-            }
+
+                return redirect()->back()->with('success_message', "You approved the request!");
+
+            // } catch (Exception $e) {
+            //     // Handle any unexpected errors
+            //     return redirect()->back()->with('error_message', "An error occurred: " . $e->getMessage());
+            // }
         }
     public function finance_appprove_reciet($id)
         {
