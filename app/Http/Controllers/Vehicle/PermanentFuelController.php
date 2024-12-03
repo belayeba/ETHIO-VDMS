@@ -260,7 +260,7 @@ class PermanentFuelController extends Controller {
                 }
             else
                {
-                $expected_total = "No previos cost";
+                $expected_total = "None";
                }
             $total_feul =  $fueling->sum('fuel_cost');
             $fueling_data= PermanentFuelModel::with('vehicle:vehicle_id,plate_number','financeApprover:id,first_name')
@@ -282,9 +282,9 @@ class PermanentFuelController extends Controller {
                     'finance_approved_by'=> $fueling->finance_approved_by? $fueling->financeApprover->first_name : 'not approved',
                 ];
             });
-// dd($fueling);
+            // dd($fueling);
 
-            return response()->json(['status' => 'success', 'data' => $fueling_data]);
+            // return response()->json(['status' => 'success', 'data' => $fueling_data]);
 
             //dd("coming");
             return response()->json(['status' => 'success', 'data' => $fueling_data,'total_fuel'=>$total_feul,'expected_fuel' =>$expected_total]);

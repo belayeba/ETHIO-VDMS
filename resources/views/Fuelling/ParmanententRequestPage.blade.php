@@ -244,7 +244,8 @@
                                             
                                                 <div class="modal-header">
                                                                                                                     
-                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+
                                                 </div> <!-- end modal header -->
                                                 <div class="modal-body d-flex flex-column align-items-center">
                                                     <div class="row mt-3 w-100" id="inspectionCardsContainer">
@@ -307,7 +308,7 @@
 
             var table = $('.fuel_datatable').DataTable({
                 processing: true,
-                pageLength: 3,
+                pageLength: 5,
                 serverSide: true,
                 ajax: "{{ route('perm_fuel_page_fetch') }}",
                 columns: [{
@@ -358,10 +359,10 @@
                                 <thead>
                                     <tr>
                                         <th>Roll no</th>
-                                        <th>Fuel Amount</th>
                                         <th>Fuel Cost</th>
                                         <th>Fueling Date</th>
                                         <th>Receipt</th>
+                                        <th></th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -374,13 +375,23 @@
                                 var row = $(`
                                     <tr>
                                         <td>${count}</td>
-                                        <td>${fueling.expected_cost}</td>
                                         <td>${fueling.fuel_cost}</td>
                                         <td>${fueling.fuiling_date}</td>
                                         <td>
                                             <a href="javascript:void(0);" onclick="showFileInIframe('{{ asset('storage/vehicles/reciept/') }}/${fueling.reciet_attachment}')">
                                                 Click to View
                                             </a>
+                                        </td>
+                                        <td>
+                                           ${fueling.accepted == 1 ? `
+                                                <div class="row">
+                                                    <div class="col-6">
+                                                        <div class="form-check">
+                                                            <a class="btn btn-secondary btn-sm rounded-pill" title="edit"><i class="ri-edit-line"></i></a>   
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            ` : ''} 
                                         </td>
                                     </tr>
                                 `);
