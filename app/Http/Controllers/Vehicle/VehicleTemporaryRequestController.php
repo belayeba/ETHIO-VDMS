@@ -384,7 +384,7 @@ class VehicleTemporaryRequestController extends Controller
                 })
 
                 ->addColumn('date', function ($row) {
-                    return $row->created_at->format('d,m,Y');
+                    return $row->created_at->format('d/m/Y');
                 })
 
                 ->addColumn('status', function ($row) use ($data_drawer_value) {
@@ -1043,7 +1043,7 @@ class VehicleTemporaryRequestController extends Controller
             })
 
             ->addColumn('date', function ($row) {
-                return $row->created_at->format('d,m,Y');
+                return $row->created_at->format('d/m/Y');
             })
 
             ->addColumn('status', function ($row) {

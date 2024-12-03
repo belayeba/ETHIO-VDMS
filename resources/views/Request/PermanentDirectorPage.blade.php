@@ -31,7 +31,6 @@
                                                 <tr>
                                                     <th>#</th>
                                                     <th>Requested By</th>
-                                                    <th>Reason</th>
                                                     <th>Date </th>
                                                     <th>Status </th>
                                                     <th>Action</th>
@@ -120,6 +119,12 @@
                                                         aria-label="Close"></button>
                                                 </div>
                                                 <div class="modal-body">
+                                                    <div class="col-md-6">
+                                                        <dl class="row mb-1">
+                                                            <dt class="col-sm-5">Request reason:</dt>
+                                                            <dd class="col-sm-7" id="reason"></dd>
+                                                        </dl>
+                                                    </div></br></br>
                                                     <div class="row">
                                                         <!-- Left Card -->
                                                         <div class="col-md-6">
@@ -128,7 +133,7 @@
                                                                     <h5 class="card-title">Position Letter</h5>
                                                                 </div>
                                                                 <div class="card-body">
-                                                                    <img id="image1" src="" alt="Position Letter" class="img-fluid">
+                                                                <iframe id="image1" class="img-fluid" style="width: 100%; height: 100%;"></iframe>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -140,7 +145,7 @@
                                                                     <h5 class="card-title">Driving License</h5>
                                                                 </div>
                                                                 <div class="card-body">
-                                                                    <img id="image2" src="" alt="Driving License" class="img-fluid">
+                                                                    <iframe id="image2" src="" alt="Driving License" class="img-fluid"></iframe>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -183,10 +188,6 @@
             {
                 data: 'requested_by',
                 name: 'requested_by'
-            },
-            {
-                data: 'reason',
-                name: 'reason'
             },
             {
                 data: 'start_date',
@@ -232,18 +233,20 @@
 
         $(document).on('click', '.show-btn', function() {
             RejectedId = $(this).data('id');
+            Reason = $(this).data('reason');
             PositionLetter = $(this).data('position_letter');
             DrivingLicense = $(this).data('driving_license');
 
-            console.log(PositionLetter, DrivingLicense)
+            // console.log(PositionLetter, DrivingLicense)
 
             // Construct file paths for the iframes
             const positionLetterPath = '/storage/PermanentVehicle/PositionLetter/' + PositionLetter;
             const drivingLicensePath = '/storage/PermanentVehicle/Driving_license/' + DrivingLicense;
 
             // Populate the iframes with the file paths
+            $('#reason').text(Reason);
             $('#image1').attr('src', positionLetterPath);
-            $('#image').attr('src', drivingLicensePath);
+            $('#image2').attr('src', drivingLicensePath);
             $('#Reject_request_id').val(RejectedId);
             $('#standard-modal').modal('toggle');
         });

@@ -357,38 +357,39 @@
                     let actionData = []; // Array to hold final data
                     var count = 0;
 
-                    response.data.forEach(function (fueling, index) {
+                    response.data.forEach(function (fueling) {
                         count++;
                         var row = $(`
                             <tr>
                                 <td>${count}</td>
                                 <td>${fueling.fuel_cost}</td>
                                 <td>${fueling.fuiling_date}</td>
-                                <td>${fueling.make_primary}</td>
+                                <td>${fueling.primary} hell</td>
                                 <td>
                                     <a href="javascript:void(0);" onclick="showFileInIframe('{{ asset('storage/vehicles/reciept/') }}/${fueling.reciet_attachment}')">
                                         <button class="btn btn-outline-info rounded-pill">View Receipt</button>
                                     </a>
                                 </td>
                                 <td>
+                                    ${fueling.accepted == 0 ? `
                                     <div class="row">
-                                        <div class="col-4">
+                                        <div class="col-6">
                                             <div class="form-check">
-                                                <input type="checkbox" class="form-check-input yes-checkbox" id="ok-${index}" data-row="${index}">
-                                                <label class="form-check-label" for="ok-${index}">Accept</label>
+                                                <input type="checkbox" class="form-check-input yes-checkbox" id="ok-${fueling.primary}" data-row="${fueling.primary}">
+                                                <label class="form-check-label" for="ok-${fueling.primary}">Accept</label>
                                             </div>
                                         </div>
-                                        <div class="col-4">
+                                        <div class="col-6">
                                             <div class="form-check form-checkbox-danger">
-                                                <input type="checkbox" class="form-check-input none-checkbox"  id="damaged-${index}" data-row="${index}">
-                                                <label class="form-check-label" for="damaged-${index}">Reject</label>
+                                                <input type="checkbox" class="form-check-input none-checkbox"  id="damaged-${fueling.primary}" data-row="${fueling.primary}">
+                                                <label class="form-check-label" for="damaged-${fueling.primary}">Reject</label>
                                             </div>
                                         </div>
-                                    </div></br>
-                                        <div class="col-8">
-                                            <input type="text" id="reason-${index}" class="form-control reason-input d-none" placeholder="Provide reason" data-row="${index}">
-                                        </div>
-                                    
+                                    </div>
+                                    <div class="col-8">
+                                        <input type="text" id="reason-${fueling.primary}" class="form-control reason-input d-none" placeholder="Provide reason" data-row="${fueling.primary}">
+                                    </div>
+                                ` : ''} 
                                 </td>
                             </tr>
                         `);
@@ -396,63 +397,88 @@
                     });
 
                     cardsContainer.append(table);
+                    let approvedReceipts = [];
+                    let rejectedReceipts = [];
 
-                    // Attach dynamic behavior
-                    $(document).on('change', '.yes-checkbox, .none-checkbox', function () {
-                        const rowId = $(this).data('row');
-                        const isAccept = $(this).hasClass('yes-checkbox');
-                        const reasonInput = $(`#reason-${rowId}`);
+                    
+                        // Event handler for checkbox changes
+                        $(document).on('change', '.yes-checkbox, .none-checkbox', function () {
+                            const rowId = $(this).data('row');
+                            const isAccept = $(this).hasClass('yes-checkbox');
+                            const reasonInput = $(`#reason-${rowId}`);
 
-                        if (isAccept) {
-                            // If "Accept" is checked
-                            $(`#damaged-${rowId}`).prop('checked', false);
-                            reasonInput.addClass('d-none').val('');
-                            updateActionData('rowId', 'accept', null);
-                        } else {
-                            // If "Reject" is checked
-                            $(`#ok-${rowId}`).prop('checked', false);
-                            reasonInput.removeClass('d-none');
-                            updateActionData(rowId, 'reject', reasonInput.val());
-                        }
-                    });
-
-                    $(document).on('input', '.reason-input', function () {
-                        const rowId = $(this).data('row');
-                        const reason = $(this).val();
-                        updateActionData(rowId, 'reject', reason);
-                    });
-
-                    function updateActionData(rowId, action, reason) {
-                        const existingEntry = actionData.find(entry => entry.id === rowId);
-                        console.log(existingEntry);
-                        if (existingEntry) {
-                            existingEntry.action = action;
-                            existingEntry.reason = reason || null;
-                        } else {
-                            actionData.push({
-                                id: rowId,
-                                action: action,
-                                reason: reason || null
-                            });
-                        }
-                    }
-
-                    $('#InspectionSubmitButton').on('click', function () {
-                        console.log('Final action data:', actionData);
-
-                        // Example: Send action data to the server
-                        $.ajax({
-                            url: '/submit-action',
-                            type: 'POST',
-                            data: JSON.stringify(actionData),
-                            contentType: 'application/json',
-                            success: function (response) {
-                                alert('Data submitted successfully!');
-                            },
-                            error: function () {
-                                alert('Error submitting data.');
+                            if (isAccept) {
+                                // If "Accept" is checked
+                                $(`#damaged-${rowId}`).prop('checked', false);
+                                reasonInput.addClass('d-none').val('');
+                                updateReceiptData(rowId, 'accept', null);
+                            } else {
+                                // If "Reject" is checked
+                                $(`#ok-${rowId}`).prop('checked', false);
+                                reasonInput.removeClass('d-none').focus();
+                                updateReceiptData(rowId, 'reject', reasonInput.val());
                             }
                         });
+
+                        // Event handler for reason input changes
+                        $(document).on('input', '.reason-input', function () {
+                            const rowId = $(this).data('row');
+                            const reason = $(this).val();
+                            updateReceiptData(rowId, 'reject', reason);
+                        });
+
+                        // Function to update receipt data
+                        function updateReceiptData(rowId, action, reason) {
+                            // Remove rowId from both arrays to prevent duplicates
+                            approvedReceipts = approvedReceipts.filter(id => id !== rowId);
+                            rejectedReceipts = rejectedReceipts.filter(entry => entry.id !== rowId);
+
+                            if (action === 'accept') {
+                                approvedReceipts.push(rowId);
+                            } else if (action === 'reject') {
+                                rejectedReceipts.push({ id: rowId, reason: reason || '' });
+                            }
+
+                            // console.log('Approved:', approvedReceipts.map(id => id));
+                            // console.log('Rejected:', rejectedReceipts.map(item => ({ id: item.id, reason: item.reason })));
+                        }
+
+                        $('#InspectionSubmitButton').on('click', function () {
+                        console.log('Preparing data for form submission...');
+
+                        // Convert the arrays into the required format
+                        const approvedData = approvedReceipts.map(id => id); // Only IDs for approved
+                        const rejectedData = rejectedReceipts.map(item => ({ id: item.id, reason: item.reason }));
+                        
+                        
+
+                        // Dynamically create a hidden form
+                        const form = $('<form>', {
+                            action: `/finance_appprove/${selectedCarId}`, // Dynamically set the fueling ID in the URL
+                            method: 'get',
+                            style: 'display: none;'
+                        });
+
+                        // Add CSRF token if required (for Laravel applications)
+                        // form.append($('<input>', { type: 'hidden', name: '_token', value: $('meta[name="csrf-token"]').attr('content') }));
+
+                        // Add approved data
+                        approvedData.forEach(id => {
+                            form.append($('<input>', {  name: 'approved_reciet[]',value: id }));
+                        });
+
+                        // Add rejected data (send id as key and reason as value for rejected items)
+                        rejectedData.forEach(item => {
+                            // First input: the id for rejected as key
+                            // form.append($('<input>', { type: 'hidden', name: 'rejected_reciet[' + item.id + '][id]', value: item.id }));
+
+                            // Second input: the reason for rejection as value for that id
+                            form.append($('<input>', {name: 'rejected_reciet[' + item.id + ']', value: item.reason }));
+                        });
+
+                        // Append the form to the body and submit
+                        $('body').append(form);
+                        form.submit();
                     });
                 } else {
                     cardsContainer.html('<p>No inspection data available.</p>');

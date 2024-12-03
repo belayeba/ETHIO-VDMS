@@ -49,7 +49,7 @@ class VehicleParmanentlyRequestController extends Controller
             })
 
             ->addColumn('start_date', function ($row) {
-                return $row->created_at->format('M j, Y,');
+                return $row->created_at->format('d/m/Y');
             })
 
             ->addColumn('status', function ($row) {
@@ -295,12 +295,9 @@ class VehicleParmanentlyRequestController extends Controller
                 return $row->requestedBy->first_name;
             })
 
-            ->addColumn('reason', function ($row) {
-                return $row->purpose;
-            })
 
             ->addColumn('start_date', function ($row) {
-                return $row->created_at->format('M j, Y,');
+                return $row->created_at->format('d/m/Y');
             })
 
             ->addColumn('status', function ($row) {
@@ -317,7 +314,11 @@ class VehicleParmanentlyRequestController extends Controller
             ->addColumn('actions', function ($row){
                 $action = '';
 
-                $action .= '<button type="button" class="btn btn-info rounded-pill show-btn" data-bs-toggle="modal" data-position_letter="' . $row->position_letter . '" data-driving_license="' . $row->driving_license . '" data-bs-target="#standard-modal-{{ $loop->index }}" title="Show"><i class=" ri-eye-line"></i></button>';
+                $action .= '<button type="button" class="btn btn-info rounded-pill show-btn" data-bs-toggle="modal" 
+                data-reason="' . $row->purpose . '" 
+                data-position_letter="' . $row->position_letter . '" 
+                data-driving_license="' . $row->driving_license . '" 
+                data-bs-target="#standard-modal-{{ $loop->index }}" title="Show"><i class=" ri-eye-line"></i></button>';
 
                 if (is_null($row->approved_by) && is_null($row->director_reject_reason)) {
                     $action .= '

@@ -57,6 +57,18 @@ class PermanentFuelModel extends Model {
     public function finalApprover() {
         return $this->belongsTo( User::class, 'final_approved_by', 'id' );
     }
+    public function status_check($id) {
+        $fueling = PermanentFuelModel::findOrFail($id);
+        $pending = false;
+        foreach($fueling as $fuel){
+            if($fuel->finance_approved_by){
+                return "COMMENTED";
+            }
+        }
+
+        return "Pending";
+    }
+
     public function permanentRequest() {
         return $this->belongsTo( VehiclePermanentlyRequestModel::class, 'permanent_id', 'vehicle_request_permanent_id' );
     }
