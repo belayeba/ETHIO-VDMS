@@ -107,7 +107,7 @@ Route::group(['middleware' => ['auth']], function()
                         Route::get('/finance_approve_page', 'finance_get_page')->name('finance_approve_fuel_page');
                         Route::get('/finance_page_fetch', 'finance_fetch')->name('finance_page_fetch');
                         Route::post('/get_each_cost', 'getPreviousCost')->name('get_each_cost');
-                        Route::post('/finance_appprove/{id}', 'finance_approve')->name('finance_approve');
+                        Route::get('/finance_appprove/{id}', 'finance_approve')->name('finance_approve');
                         Route::get('/show_detail/{id}', 'show');
                         Route::get('/get_my_request', 'my_request')->name('my_request');
                         Route::post('/reject_request/{id}', 'finance_reject')->name('finance_reject');
@@ -126,7 +126,7 @@ Route::group(['middleware' => ['auth']], function()
 
                 });
                 // Vehicle registration 
-                Route::group([
+            Route::group([
                     'prefix'=>'vehicle',
                 ], function (){
                     Route::get('/',[VehicleVehicleRegistrationController::class, 'index'])->name('vehicleRegistration.index');
