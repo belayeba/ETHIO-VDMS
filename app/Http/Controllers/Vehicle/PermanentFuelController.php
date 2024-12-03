@@ -39,30 +39,62 @@ class PermanentFuelController extends Controller {
             }
             return view( 'Fuelling.ParmanententRequestPage',compact('vehicles'));
         }
-    public function get_previos_cost($driver_id,$year,$month)
+        public function getPreviousCost(Request $request)
         {
-          $fueling_of_one = PermanentFuelModel::where('driver_id',$driver_id)->where('year',$year)->where('month',$month)->first();
-                      if($month == 1)
-                          {
-                              $year = $fueling_of_one->year-1;
-                              $get_previous_feul = PermanentFuelModel::where('year',$year )->where('month',12)->where('vehicle_id',$fueling_of_one->vehicle_id)->latest()->first();
-                          }
-                      else
-                          {
-                              $month = $month - 1;
-                              $get_previous_feul = PermanentFuelModel::where('year',$fueling_of_one->year)->where('month',$month)->where('vehicle_id',$fueling_of_one->vehicle_id)->latest()->first();
-          
-                          }
-                      if($get_previous_feul)
-                          {
-                              $expected_total = $get_previous_feul->one_litre_price * $get_previous_feul->quata;
-                          }
-                      else
-                          {
-                          $expected_total = "No previos cost";
-                          }
-              return $expected_total;
+            dd("coming");
+            $logged_user = Auth::id();
+            $get_driver = DriversModel::where('user_id',$logged_user)->first();
+            // Fetch the current month's fuel record for the given driver
+            $fueling_of_one = PermanentFuelModel::where('driver_id', $get_driver->driver_id)
+                ->where('year', $year)
+                ->where('month', $month)
+                ->first();
+
+            if (!$fueling_of_one) {
+                // Return an error response if no record is found
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Fuel record not found for the given driver, year, and month.'
+                ], 404);
+            }
+        
+            // Determine the previous month and year
+            if ($month == 1) {
+                $year = $fueling_of_one->year - 1;
+                $month = 12;
+            } else {
+                $month = $month - 1;
+            }
+        
+            // Fetch the previous month's fuel record
+            $get_previous_feul = PermanentFuelModel::where('year', $year)
+                ->where('month', $month)
+                ->where('vehicle_id', $fueling_of_one->vehicle_id)
+                ->latest()
+                ->first();
+        
+            if ($get_previous_feul) {
+                // Calculate the expected total if the previous record exists
+                $expected_total = $get_previous_feul->one_litre_price * $get_previous_feul->quata;
+        
+                return response()->json([
+                    'status' => 'success',
+                    'message' => 'Previous cost calculated successfully.',
+                    'data' => [
+                        'expected_total' => $expected_total,
+                        'previous_fuel' => $get_previous_feul
+                    ]
+                ], 200);
+            } else {
+                // Return a response indicating no previous cost is available
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'No previous cost available.',
+                    'data' => null
+                ], 404);
+            }
         }
+        
     public function fuel_request_fetch() 
         {
             $logged_user = Auth::id();

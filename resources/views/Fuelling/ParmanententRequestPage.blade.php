@@ -45,12 +45,12 @@
 
                                     <div>
                                         <label>Year</label>
-                                        <input name="year" type="number" placeholder="Enter year (2010 - 2050)" class="form-control mb-3" min="2010" max="2050"/>
+                                        <input name="year" id="year" type="number" placeholder="Enter year (2010 - 2050)" class="form-control mb-3" min="2010" max="2050"/>
                                     </div>
 
                                     <div class="mb-3 position-relative">
                                         <label class="form-label">Select Month</label>
-                                        <select class="form-select mb-3" name="month">
+                                        <select class="form-select mb-3" name="month" id="month">
                                             <option value="">Select</option>
                                             <option value="1">መስከረም</option>
                                             <option value="2">ጥቅምት</option>
@@ -73,7 +73,7 @@
                                     
                                     <!-- Buttons: Add and Submit (aligned to the right) -->
                                     <div class="d-flex justify-content-end mt-3">
-                                        <button type="button" id="addItem" class="btn btn-primary rounded-pill">Add</button>
+                                        <button type="button" id="addItem" class="btn btn-primary rounded-pill">Attach Reciet</button>
                                         <button type="submit" class="btn btn-info ms-3">Submit</button>
                                     </div>
                                 </form>
@@ -85,39 +85,74 @@
                                         let entryCount = 0;
                                 
                                         // Add button event listener
-                                        addButton.addEventListener('click', function() {
-                                            const index = entryCount++;
-                                            const entryDiv = document.createElement('div');
-                                            entryDiv.classList.add('entry', 'mt-3');
+                                        addButton.addEventListener('click', function(e) {
+                                            e.preventDefault();
+                                            // Get values from the form
                                             
-                                            entryDiv.innerHTML = `
-                                                <div class="row">
-                                                    
-                                                    <div class="col-md-4">
-                                                        <label>Price</label>
-                                                        <input name="fuel_cost[${index}]" class="form-control" placeholder="In Birr" type="number" required>
-                                                    </div>
-                                                    <div class="col-md-4">
-                                                        <label>Date</label>
-                                                        <input name="fuiling_date[${index}]" class="form-control" placeholder="When" type="date" required>
-                                                    </div>
-                                                    <div class="col-md-4">
-                                                        <label>Attachment</label>
-                                                        <input name="reciet_attachment [${index}]" class="form-control" type="file" required>
-                                                    </div>
-                                                    <div class="col-md-1">
-                                                        <button type="button" class="btn btn-danger btn-sm removeEntry">x</button>
-                                                    </div>
-                                                </div>
-                                            `;
+                                            var year = document.getElementById('year').value;
+                                            var month = document.getElementById('month').value;
                                             
-                                            // Append new entry to the container
-                                            entriesContainer.appendChild(entryDiv);
-                                
+                                            // Validate inputs (optional)
+                                            if (!year || !month) 
+                                            {
+                                                alert('Please select both year and month.');
+                                                return;
+                                            }
+                                            //Send data to the backend using AJAX
+                                            // $.ajax({
+                                            //         url: "{{ route('get_each_cost') }}", // Laravel named route
+                                            //         type: "POST",
+                                            //         data: {
+                                            //             driver_id: driver_id,
+                                            //             year: year,
+                                            //             month: month,
+                                            //             _token: "{{ csrf_token() }}" // CSRF token for security
+                                            //         },
+                                            //         success: function (response) {
+                                            //             // Handle success
+                                            //             console.log(response);
+                                            //             if (response.status === 'success') {
+                                                        const index = entryCount++;
+                                                        const entryDiv = document.createElement('div');
+                                                        entryDiv.classList.add('entry', 'mt-3');
+                                                        
+                                                        entryDiv.innerHTML = `
+                                                            <div class="row">
+                                                                
+                                                                <div class="col-md-4">
+                                                                    <label>Price</label>
+                                                                    <input name="fuel_cost[${index}]" class="form-control" placeholder="In Birr" type="number" required>
+                                                                </div>
+                                                                <div class="col-md-4">
+                                                                    <label>Date</label>
+                                                                    <input name="fuiling_date[${index}]" class="form-control" placeholder="When" type="date" required>
+                                                                </div>
+                                                                <div class="col-md-4">
+                                                                    <label>Attachment</label>
+                                                                    <input name="reciet_attachment [${index}]" class="form-control" type="file" required>
+                                                                </div>
+                                                                <div class="col-md-1">
+                                                                    <button type="button" class="btn btn-danger btn-sm removeEntry">x</button>
+                                                                </div>
+                                                            </div>
+                                                        `;
+                                                        
+                                                        // Append new entry to the container
+                                                        entriesContainer.appendChild(entryDiv);
+                                                //         alert('Expected Total: ' + response.data.expected_total);
+                                                //         } else {
+                                                //             alert(response.message);
+                                                //         }
+                                                //     },
+                                                //     error: function () {
+                                                //         // Handle error
+                                                //         alert("coming");
+                                                //         console.error(xhr.responseText);
+                                                //         alert('An error occurred: ' + xhr.responseText);
+                                                //     }
+                                                // });                              
                                         });
-
-                                      
-                                        // Event delegation for delete buttons (remove entry)
+                                        //Event delegation for delete buttons (remove entry)
                                         entriesContainer.addEventListener('click', function(e) {
                                             if (e.target.classList.contains('removeEntry')) {
                                                 const entryDiv = e.target.closest('.entry');
