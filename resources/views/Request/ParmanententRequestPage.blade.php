@@ -479,23 +479,26 @@
                                         </tbody>
                                     `;
 
-                                response.data.forEach(function(inspection) {
+                                response.data.forEach(function(inspection) 
+                                {
                                     if(inspection.type == "spare_part")
-                                    {
-                                        var row = document.createElement('tr');
-                                        row.innerHTML = `
-                                        <td>${inspection.part_name}</td>
-                                        <td>${inspection.is_damaged == "0"? 'No' : 'Yes'}</td>
-                                        <td>${inspection.damage_description ? inspection.damage_description : '-'}</td>
-                                        `;
-                                            table.querySelector('tbody').appendChild(
-                                                row); // Append row to the table body
-                                    }
+                                        {
+                                            var row = document.createElement('tr');
+                                            row.innerHTML = `
+                                            <td>${inspection.part_name}</td>
+                                            <td>${inspection.is_damaged == "0"? 'No' : 'Yes'}</td>
+                                            <td>${inspection.damage_description ? inspection.damage_description : '-'}</td>
+                                            `;
+                                                table.querySelector('tbody').appendChild(
+                                                    row); // Append row to the table body
+                                        }
                                 });
                                 cardsContainer.appendChild(h2);
                                 cardsContainer.appendChild(table);
 
-                            } else {
+                            } 
+                            else 
+                            {
                                 // Handle the case where no data is available
                                 cardsContainer.innerHTML = '<p>No inspection data available.</p>';
                             }

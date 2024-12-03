@@ -47,7 +47,7 @@
                                                         <td>{{$request->driver->user->first_name}}</td>
                                                         <td>{{$request->month}}/{{$request->year}}</td>
                                                         <td>{{$request->vehicle->plate_number}}</td>
-                                                        <td>{{$request->finance_approved_by ? $request->financeApprover->first_name : "Not Approved Yetggg"}}</td>
+                                                        <td>{{$request->finance_approved_by ? $request->financeApprover->first_name : "Not Approved Yet"}}</td>
                                                         <td>
                                                             <button type="button" class="btn btn-info rounded-pill" title="Inspect" id="assignBtn-{{$loop->iteration}}">Show</button>
                                   
@@ -342,11 +342,10 @@
                     var table = $('<table class="table table-striped">').append(`
                         <thead>
                             <tr>
-                                <th>Roll no</th>
+                                <th>#</th>
                                 <th>Fuel Cost</th>
                                 <th>Fueling Date</th>
-                                <th>Receipt</th>
-                                <th>make primary</th>
+                                <th>View Reciept</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -356,15 +355,18 @@
 
                     let actionData = []; // Array to hold final data
                     var count = 0;
-
-                    response.data.forEach(function (fueling) {
+                    
+                    var total_fuel =  response.total_fuel;
+                    var expected_fuel = response.expected_fuel;
+                    var h1 = $('<h4>').append('Total Attached Fuel Cost :'+total_fuel);
+                    var h2 = $('<h4>').append('Total Expected Fuel Cost :'+expected_fuel);
+                    response.data.forEach(function (fueling, index) {
                         count++;
                         var row = $(`
                             <tr>
                                 <td>${count}</td>
                                 <td>${fueling.fuel_cost}</td>
                                 <td>${fueling.fuiling_date}</td>
-                                <td>${fueling.primary} hell</td>
                                 <td>
                                     <a href="javascript:void(0);" onclick="showFileInIframe('{{ asset('storage/vehicles/reciept/') }}/${fueling.reciet_attachment}')">
                                         <button class="btn btn-outline-info rounded-pill">View Receipt</button>
@@ -395,7 +397,8 @@
                         `);
                         table.find('tbody').append(row);
                     });
-
+                    cardsContainer.append(h1);
+                    cardsContainer.append(h2);
                     cardsContainer.append(table);
                     let approvedReceipts = [];
                     let rejectedReceipts = [];

@@ -342,7 +342,7 @@
                                 var row = $(`
                                     <tr>
                                         <td>${count}</td>
-                                        <td>${fueling.fuel_amount}</td>
+                                        <td>${fueling.expected_cost}</td>
                                         <td>${fueling.fuel_cost}</td>
                                         <td>${fueling.fuiling_date}</td>
                                         <td>

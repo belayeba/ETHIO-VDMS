@@ -54,4 +54,23 @@ class DailyKMCalculationModel extends Model {
     public function created_by(): BelongsTo {
         return $this->belongsTo( User::class, 'created_by', 'id' );
     }
+    public function getNightKmAttribute($id)
+    {
+        $lastRecorded = self::where('vehicle_id', $id) 
+        ->where('created_at', '<', $this->created_at) 
+        ->first();
+
+        if ($lastRecorded) {
+            return $this->morning_km - $lastRecorded->afternoon_km;
+        }
+
+        return $this->morning_km;
+    }
+    
+    public function getDailyKmAttribute()
+    {
+        // Calculate the difference between afternoon_km and morning_km
+        return $this->afternoon_km - $this->morning_km;
+    }
+
 }
