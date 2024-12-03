@@ -343,28 +343,22 @@ class PermanentFuelController extends Controller {
                 return back()->withErrors(['error' => 'No active permanent vehicle request found for this driver and vehicle.']);
             }
         
-            $get_permanent_id = $permanent->vehicle_request_permanent_id;
         
             // Fetch the existing fueling record by ID (could be the main record, e.g., $id)
             $fueling = PermanentFuelModel::findOrFail($request->make_primary);
-            if($fueling->driver_id != $logged_user || $fueling->finance_approved_by)
+            if($fueling->driver_id != $get_driver_id || $fueling->finance_approved_by)
             {
                     return redirect()->back()->with('error_message',
                     "Warning! You are denied the service",
                     );
             } 
-            foreach ($request->fuel_amount as $index => $fuel_amount) {
-                $fueling->vehicle_id = $request->vehicle_id;
-                $fueling->driver_id = $get_driver_id;
-                $fueling->permanent_id = $get_permanent_id;
                 
-                $fueling->fuiling_date = $request->fuiling_date[$index];  // Array for fueling date
+                $fueling->fuiling_date = $request->fuiling_date;  // Array for fueling date
                 $fueling->month = $request->month;  // Month is the same for all records
-                $fueling->fuel_amount = $fuel_amount;  // Fuel amount at this index
-                $fueling->fuel_cost = $request->fuel_cost[$index];  // Fuel cost at this index
+                $fueling->fuel_cost = $request->fuel_cost;  // Fuel cost at this index
         
-                if ($request->hasFile("reciet_attachment[$index]")) {
-                    $file = $request->file( "reciet_attachment[$index]" );
+                if ($request->hasFile("reciet_attachment")) {
+                    $file = $request->file( "reciet_attachment" );
                     $fileName = time() . '_' . $file->getClientOriginalName();
                     $storagePath = storage_path( 'app/public/vehicles/reciept' );
                     if (!file_exists( $storagePath ) ) {
@@ -374,8 +368,9 @@ class PermanentFuelController extends Controller {
                     $fueling->reciet_attachment = $fileName;
                 }
                 $fueling->update();
-            }
-            return redirect()->route('fuelings.index')->with('success', 'Fueling records updated successfully.');
+                return redirect()->back()->with('success_message',
+                "Successfully Updated",
+                );
         }
     public function destroy( $id ) 
         {
