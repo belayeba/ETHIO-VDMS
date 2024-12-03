@@ -135,8 +135,9 @@ class PermanentFuelController extends Controller {
                     ->addColumn('vehicle', function ($row) {
                         return $row->vehicle->plate_number;
                     })
+
                     ->addColumn('status', function ($row) {
-                        return $row->status_check;
+                        return 'PENDING';
                     })
 
                     ->addColumn('month', function ($row) {
