@@ -31,7 +31,6 @@
                     <strong> Success- </strong> {!! session('success_message') !!}
                 </div>
             @endif
-
             <!-- Start Content-->
             <div class="container-fluid">
                 <div class="row g-3">
@@ -46,7 +45,6 @@
 
                                 <form method="POST" action="{{ route('temp_request_post') }}">
                                     @csrf
-
                                     <ul class="nav nav-pills nav-justified form-wizard-header mb-3">
                                         <li class="nav-item">
                                             <a class="nav-link rounded-0 py-2" id="displayprogresive">
@@ -228,12 +226,12 @@
                                                     <div class="mt-2">
                                                         <div class="form-check form-check-inline">
                                                             <input type="checkbox" class="form-check-input"
-                                                                name="with_driver" value="withDriver">
+                                                                name="with_driver" value="1">
                                                             <label class="form-check-label">Yes</label>
                                                         </div>
                                                         <div class="form-check form-check-inline">
                                                             <input type="checkbox" class="form-check-input"
-                                                                name="with_driver" value="NoDriver">
+                                                                name="with_driver" value="0">
                                                             <label class="form-check-label">No</label>
                                                         </div>
                                                     </div>
@@ -241,13 +239,12 @@
                                                         <div class="row">
 
                                                             <p class="mb-1 fw-bold text-muted">Select Driver</p>
-                                                            <select id="multiSelect" name="driver_id"
+                                                            <select id="multiSelect1" name="driver_id"
                                                                 class="select2 form-control select2-multiple"
                                                                 data-toggle="select2" multiple="multiple"
                                                                 data-placeholder="Select People ...">
                                                                 <optgroup label="Users/Employees">
                                                                     @foreach ($users as $user)
-                                                                        ;
                                                                         <option value="{{ $user->id }}">
                                                                             <p style="color:black">{{ $user->first_name }}
                                                                         </option>
@@ -293,7 +290,7 @@
                                                                 data-placeholder="Select People ...">
                                                                 <optgroup label="Users/Employees">
                                                                     @foreach ($users as $user)
-                                                                        ;
+                                                                        
                                                                         <option value="{{ $user->id }}">
                                                                             <p style="color:black">{{ $user->first_name }}
                                                                         </option>
@@ -361,7 +358,7 @@
                                                             if (cb !== this && cb.name === this.name) {
                                                                 cb.checked = false;
                                                                 divToToggle.style.display = 'none';
-
+                                                                withDriverToggle.style.display = 'none';
                                                             }
                                                         });
                                                     });
@@ -378,7 +375,7 @@
                                                 });
                                                 withdriverCheckbox.addEventListener('change', function() {
                                                     if (withDriverToggle) {
-                                                        if (withdriverCheckbox.value === 'withDriver') {
+                                                        if (withdriverCheckbox.value === 1) {
                                                             withDriverToggle.style.display = 'none'; // Display the div if the checkbox value is 1
                                                         } else {
                                                             withDriverToggle.style.display = 'block';
@@ -497,7 +494,6 @@
                             },
                         ]
                     });
-
                     document.addEventListener('DOMContentLoaded', function() {
                         const select = document.getElementById('multiSelect');
                         const selectedValuesDiv = document.getElementById('selectedValues');
