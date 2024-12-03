@@ -372,6 +372,80 @@ class PermanentFuelController extends Controller {
                 "Successfully Updated",
                 );
         }
+    public function attach_new_reciet(Request $request)
+        {
+            // Validate input
+            $validator = Validator::make($request->all(), [
+                'id' => 'required|string',
+                'fuiling_date' => 'required|date',        // Fueling date is an array
+                'fuel_cost' => 'required|numeric',        // Fuel cost is an array
+                'reciet_attachment' => 'sometimes|file|mimes:pdf,jpg,jpeg,png' // Receipt attachment is an array, optional
+            ]);
+            if ($validator->fails()) 
+            {
+                return redirect()->back()->with('error_message',
+                     $validator->errors(),
+                );
+            }
+            // Get logged-in user ID
+            $logged_user = Auth::id();
+        
+            // Get driver based on the logged-in user
+            $get_driver = DriversModel::select('driver_id')->where('user_id', $logged_user)->first();
+        
+            // Ensure that the driver exists
+            if (!$get_driver) {
+                return redirect()->back()->with('error_message',
+                "You are not Registered as Driver",
+           );
+            }
+        
+            $get_driver_id = $get_driver->driver_id;
+        
+            // Fetch the existing fueling record by ID (could be the main record, e.g., $id)
+            $fueling = PermanentFuelModel::select('final_approved_by','vehicle_id','driver_id','permanent_id')->where('fueling_id',$request->id)->first();
+            if(!$fueling)
+              {
+                return redirect()->back()->with('error_message',
+                    "Warning! You are denied the service",
+                    );
+              }
+            if($fueling->driver_id != $get_driver_id || $fueling->final_approved_by)
+            {
+                    return redirect()->back()->with('error_message',
+                    "Warning! You are denied the service",
+                    );
+            } 
+            $today = \Carbon\Carbon::today();
+            $ethiopianDate = $this->dailyKmCalculation->ConvertToEthiopianDate($today); 
+            $fueling = new PermanentFuelModel();
+            $fueling->fueling_id = $request->id;
+            $fueling->vehicle_id = $fueling->vehicle_id;
+            $fueling->driver_id = $fueling->driver_id;
+            $fueling->permanent_id = $fueling->permanent_id;
+            // dd($request->fuiling_date[ $index ]);
+            $fueling->fuiling_date = $request->fueling_date;
+            $fueling->month = $request->month;
+            $fueling->year = $request->year;
+            //$fueling->fuel_amount = $fuel_amount;
+            $fueling->fuel_cost = $request->fuel_cost;
+            
+            if ($request->hasFile("reciet_attachment")) {
+                $file = $request->file( "reciet_attachment" );
+                $fileName = time() . '_' . $file->getClientOriginalName();
+                $storagePath = storage_path( 'app/public/vehicles/reciept' );
+                if (!file_exists( $storagePath ) ) {
+                    mkdir( $storagePath, 0755, true );
+                }
+                $file->move( $storagePath, $fileName );
+                $fueling->reciet_attachment = $fileName;
+            }
+            $fueling->created_at = $ethiopianDate;
+            $fueling->save();
+                return redirect()->back()->with('success_message',
+                "Successfully attached",
+                );
+        }
     public function destroy( $id ) 
         {
             $logged_user = Auth::id();
@@ -386,7 +460,7 @@ class PermanentFuelController extends Controller {
                 );
             }        
             $fueling = PermanentFuelModel::findOrFail( $id );
-            if($fueling->driver_id != $logged_user || $fueling->final_approved_by)
+            if($fueling->driver_id != $get_driver->driver_id || $fueling->final_approved_by)
                 {
                     return redirect()->back()->with('error_message',
                        "Warning! You are denied the service",
