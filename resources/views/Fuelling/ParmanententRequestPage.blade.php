@@ -34,7 +34,7 @@
                                     <div>
                                         <label>Vehicle</label>
                                         @if ($vehicles)
-                                            <select name="vehicle_id" class="form-select mb-3">
+                                            <select name="vehicle_id" id = "vehicle_id" class="form-select mb-3">
                                                 <option selected>Open this select menu</option>
                                                     @foreach($vehicles as $vehicle)
                                                         <option value="{{$vehicle->vehicle_id}}">{{$vehicle->vehicle->plate_number}}</option>
@@ -67,7 +67,9 @@
                                             <option value="13">ጳጉሜ</option>
                                         </select>
                                     </div>
-                                    
+                                    <div id = "hidden_div" hidden>
+                                        <h4 id="display_cost">Yea Displayed</h4>
+                                    </div>
                                     <!-- Entries Container -->
                                     <div id="entriesContainer"></div>
                                     
@@ -83,7 +85,7 @@
                                         const addButton = document.getElementById('addItem');
                                         const entriesContainer = document.getElementById('entriesContainer');
                                         let entryCount = 0;
-                                
+                                        const csrfToken = "{{ csrf_token() }}";
                                         // Add button event listener
                                         addButton.addEventListener('click', function(e) {
                                             e.preventDefault();
@@ -91,29 +93,28 @@
                                             
                                             var year = document.getElementById('year').value;
                                             var month = document.getElementById('month').value;
-                                            
+                                            var vehicle_id = document.getElementById('vehicle_id').value;
                                             // Validate inputs (optional)
                                             if (!year || !month) 
                                             {
                                                 alert('Please select both year and month.');
                                                 return;
                                             }
-                                            //Send data to the backend using AJAX
-                                            // $.ajax({
-                                            //         url: "{{ route('get_each_cost') }}", // Laravel named route
-                                            //         type: "POST",
-                                            //         data: {
-                                            //             driver_id: driver_id,
-                                            //             year: year,
-                                            //             month: month,
-                                            //             _token: "{{ csrf_token() }}" // CSRF token for security
-                                            //         },
-                                            //         success: function (response) {
-                                            //             // Handle success
-                                            //             console.log(response);
-                                            //             if (response.status === 'success') {
+                                           // Send data to the backend using AJAX
+                                           $.ajax({
+                                                    url: '/get_each_cost',
+                                                    type: 'POST',
+                                                    data: { year: year,month:month,vehicle_id:vehicle_id, _token: csrfToken },
+                                                    
+                                                    success: function(response) {
+
+                                                        // Handle success
+                                                        if (response.status === 'success') {
                                                         const index = entryCount++;
                                                         const entryDiv = document.createElement('div');
+                                                        const hiddenDiv = document.getElementById('hidden_div');
+                                                        const h1_of_display_cost = document.getElementById('display_cost');
+                                                        //expected_cost.innerHTML = response.data.expected_total;
                                                         entryDiv.classList.add('entry', 'mt-3');
                                                         
                                                         entryDiv.innerHTML = `
@@ -138,19 +139,22 @@
                                                         `;
                                                         
                                                         // Append new entry to the container
+                                                        // if(entryCount == 1) 
+                                                        //   {
+                                                        //     entriesContainer.appendChild(expected_cost);
+                                                        //   }
+                                                        hiddenDiv.innerHTML = "<h4>Expected total Fuel Cost : " +response.data.expected_total+ "</h4>";
+                                                        hiddenDiv.removeAttribute("hidden");
                                                         entriesContainer.appendChild(entryDiv);
-                                                //         alert('Expected Total: ' + response.data.expected_total);
-                                                //         } else {
-                                                //             alert(response.message);
-                                                //         }
-                                                //     },
-                                                //     error: function () {
-                                                //         // Handle error
-                                                //         alert("coming");
-                                                //         console.error(xhr.responseText);
-                                                //         alert('An error occurred: ' + xhr.responseText);
-                                                //     }
-                                                // });                              
+                                                        } else {
+                                                            alert(response.message);
+                                                        }
+                                                    },
+                                                    error: function() {
+                                                        var cardsContainer = $('#inspectionCardsContainer');
+                                                        cardsContainer.html('<p>No inspection data available at the moment. Please check the Plate number!</p>');
+                                                    }
+                                                });                              
                                         });
                                         //Event delegation for delete buttons (remove entry)
                                         entriesContainer.addEventListener('click', function(e) {
