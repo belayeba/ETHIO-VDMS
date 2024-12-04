@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Validator;
 use App\Http\Controllers\Vehicle\Daily_KM_Calculation;
 use App\Models\Driver\DriversModel;
 use App\Models\Vehicle\GivingBackVehiclePermanently;
-
+use Illuminate\Support\Facades\DB;
 class VehicleParmanentlyRequestController extends Controller
 {
     protected $dailyKmCalculation;
@@ -35,8 +35,6 @@ class VehicleParmanentlyRequestController extends Controller
     // show list of permanent request
     public function FetchPermanentRequest()
         {
-            
-
             $id = Auth::id();        
             $data = VehiclePermanentlyRequestModel::where('requested_by', $id)->get();
             
@@ -181,8 +179,8 @@ class VehicleParmanentlyRequestController extends Controller
             // Validate the request
             $validator = Validator::make($request->all(), [
                 'request_id' => 'required|uuid|exists:vehicle_requests_parmanently,vehicle_request_permanent_id', // Check if UUID exists in the 'vehicle_requests_parmanently' table
-                'purpose' => 'sometimes|string|max:255',
-                'position_letter' => 'sometimes|file|mimes:pdf,jpeg,png,jpg|max:2048', // 2MB max size for file
+                'purpose' => 'required|string|max:255',
+                'position_letter' => 'required|file|mimes:pdf,jpeg,png,jpg|max:2048', // 2MB max size for file
             ]);
             // Check if validation fails
             if ($validator->fails()) {
@@ -439,13 +437,14 @@ class VehicleParmanentlyRequestController extends Controller
             // Check if it is not approved before
             $id = $request->input('request_id');
             $vehicle_id = $request->vehicle_id;
+        try {
             $the_vehicle = VehiclesModel::findOrFail($vehicle_id);
             if(!$the_vehicle->status)
-            {
-                return redirect()->back()->with('error_message',
-                                'Vehicle Not active.',
-                                );
-            }
+                {
+                    return redirect()->back()->with('error_message',
+                                    'Vehicle Not active.',
+                                    );
+                }
             $latest_inspection = InspectionModel::where('vehicle_id', $vehicle_id)->latest()->first();
             if (!$latest_inspection) {
                 return redirect()->back()->with('error_message',
@@ -462,6 +461,7 @@ class VehicleParmanentlyRequestController extends Controller
             $check_driver = DriversModel::where('user_id',$Vehicle_Request->requested_by)->first();
             if(!$check_driver)
                 {
+                    DB::beginTransaction(); // Begin a transaction
                     $today = \Carbon\Carbon::today();
                     $ethiopianDate = $this->dailyKmCalculation->ConvertToEthiopianDate($today);
                     DriversModel::create( [
@@ -481,6 +481,7 @@ class VehicleParmanentlyRequestController extends Controller
             $Vehicle_Request->inspection_id = $latest_inspection->inspection_id;
             $Vehicle_Request->given_date =  $today;
             $Vehicle_Request->save();
+            DB::commit();
             $user = User::find($Vehicle_Request->requested_by);
             $message = "Your Vehicle Permanent Request Approved, click here to see its detail";
             $subject = "Vehicle Permanent";
@@ -489,6 +490,12 @@ class VehicleParmanentlyRequestController extends Controller
             return redirect()->back()->with('success_message',
                 'Successfully Approved.',
             );
+        }
+    catch(Exception $e)
+        {
+            DB::rollBack();
+            return redirect()->back()->with('error_message','Sorry, Something Went Wrong',);
+        }
         }
     //vehicle Director Reject the request
     public function DispatcherRejectRequest(Request $request)

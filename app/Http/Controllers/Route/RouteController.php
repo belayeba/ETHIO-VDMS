@@ -11,6 +11,7 @@ use App\Models\Vehicle\VehiclesModel as Vehicle;
 use App\Models\Vehicle\VehiclesModel;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Controllers\Vehicle\Daily_KM_Calculation;
+use Exception;
 
 class RouteController extends Controller {
     //
@@ -54,6 +55,7 @@ class RouteController extends Controller {
         if ( $validator->fails() ) {
             return redirect()->back()->with('error_message','All field is required.',);
         }
+        try {
         $today = \Carbon\Carbon::today();
         $ethiopianDate = $this->dailyKmCalculation->ConvertToEthiopianDate($today); 
         Route::create( [
@@ -64,6 +66,11 @@ class RouteController extends Controller {
             'created_at' => $ethiopianDate
         ] );
         return redirect()->back()->with('success_message','Route registered successfully.',);
+        }
+        catch(Exception $e)
+        {
+            return redirect()->back()->with('error_message','Sorry, Something Went Wrong',);
+        }
     }
 
     public function assignUsersToRoute( Request $request ) {
