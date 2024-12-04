@@ -60,13 +60,13 @@ public function ReturntVehiclePerm(Request $request)
                     'Warning! You are denied the service',
                     );
               }
-            // try
-            //     {
+            try
+                {
                     $today = \Carbon\Carbon::today();
                      $ethiopianDate = $this->dailyKmCalculation->ConvertToEthiopianDate($today); 
                     // Create the user
                     GivingBackVehiclePermanently::create([
-                        // 'vehicle_id'=>$get_permanent_request->vehicle_id,
+                        'vehicle_id'=>$get_permanent_request->vehicle_id,
                         'purpose' =>$request->purpose,
                         'requested_by' => $logged_user,
                         'permanent_request' =>$get_permanent_request->vehicle_request_permanent_id,
@@ -78,14 +78,14 @@ public function ReturntVehiclePerm(Request $request)
                     'Request sent successfully',
                     );
                         
-            //     }
-            // catch (Exception $e) 
-            //     {
-            //         // Handle the case when the vehicle request is not found
-            //         return redirect()->back()->with('error_message',
-            //         'Sorry, Something Went Wrong.',
-            //         );
-            //     }
+                }
+            catch (Exception $e) 
+                {
+                    // Handle the case when the vehicle request is not found
+                    return redirect()->back()->with('error_message',
+                    'Sorry, Something Went Wrong.',
+                    );
+                }
     }
 public function update_return_request(Request $request) 
     {

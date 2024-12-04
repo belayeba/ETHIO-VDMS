@@ -73,27 +73,37 @@ class InspectionController extends Controller
                 $file->move( $storagePath, $fileinspection );
             }
             $damageDescriptions = $request->input('damage_descriptions', []);
-            DB::transaction(function () use ($inspectionId, $vehicleId, $inspectedBy, $inspectionDate, $parts, $damagedParts, $damageDescriptions,$fileinspection) {
-                $today = \Carbon\Carbon::today();
-                $ethiopianDate = $this->dailyKmCalculation->ConvertToEthiopianDate($today); 
-                foreach ($parts as $partId => $partName) {
-                    InspectionModel::create([
-                        'inspection_id' => $inspectionId,
-                        'vehicle_id' => $vehicleId,
-                        'inspected_by' => $inspectedBy,
-                        'part_name' => $partName,
-                        'inspection_image' => $fileinspection,
-                        'is_damaged' => $damagedParts[$partId],
-                        'damage_description' => $damageDescriptions[$partId],
-                        'inspection_date' => $inspectionDate,
-                        'created_at' => $ethiopianDate
-                    ]);
-                }
+            try
+                {
+                    DB::transaction(function () use ($inspectionId, $vehicleId, $inspectedBy, $inspectionDate, $parts, $damagedParts, $damageDescriptions,$fileinspection) {
+                        $today = \Carbon\Carbon::today();
+                        $ethiopianDate = $this->dailyKmCalculation->ConvertToEthiopianDate($today); 
+                        foreach ($parts as $partId => $partName) {
+                            InspectionModel::create([
+                                'inspection_id' => $inspectionId,
+                                'vehicle_id' => $vehicleId,
+                                'inspected_by' => $inspectedBy,
+                                'part_name' => $partName,
+                                'inspection_image' => $fileinspection,
+                                'is_damaged' => $damagedParts[$partId],
+                                'damage_description' => $damageDescriptions[$partId],
+                                'inspection_date' => $inspectionDate,
+                                'created_at' => $ethiopianDate
+                            ]);
+                        }
 
-            });
-                return redirect()->back()->with('success_message',
-                    'Inspection saved successfully');
-               }
+                    });
+                    DB::commit();
+                        return redirect()->back()->with('success_message',
+                            'Inspection saved successfully');
+                }
+            catch(Exception $e)
+                {
+                    DB::rollBack();
+                    return redirect()->back()->with('error_message','Sorry, Something Went Wrong',);
+                }
+        }
+            
         // Show a specific inspection
     public function showInspection(Request $request)
         {

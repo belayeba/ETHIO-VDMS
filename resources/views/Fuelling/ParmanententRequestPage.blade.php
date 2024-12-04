@@ -143,7 +143,7 @@
                                                         //   {
                                                         //     entriesContainer.appendChild(expected_cost);
                                                         //   }
-                                                        hiddenDiv.innerHTML = "<h4>Expected total Fuel Cost : " +response.data.expected_total+ "</h4>";
+                                                        hiddenDiv.innerHTML = "<h4>Expected total Fuel Cost in ETB : " +response.data.expected_total+ "</h4>";
                                                         hiddenDiv.removeAttribute("hidden");
                                                         entriesContainer.appendChild(entryDiv);
                                                         } else {

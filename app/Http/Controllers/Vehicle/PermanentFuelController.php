@@ -486,7 +486,7 @@ class PermanentFuelController extends Controller {
     //finance fetch
     public function finance_fetch()
         {
-            $data = PermanentFuelModel:: select('vehicle_id','fueling_id','driver_id','month','year','finance_approved_by')
+            $data = PermanentFuelModel:: select('vehicle_id','fueling_id','driver_id','month','year','finance_approved_by','final_approved_by')
                                         ->distinct()
                                         ->latest()
                                         ->get();
@@ -512,7 +512,11 @@ class PermanentFuelController extends Controller {
                     })
 
                     ->addColumn('approver', function ($row)  {
-                        return $row->final_approved_by !== null ? 'Approved' : "Not Approved Yet";
+                        return $row->final_approved_by != null ? $row->finalApprover->first_name : "Not Approved Yet";
+                    })
+
+                    ->addColumn('status', function ($row)  {
+                        return $row->status_check($row->fueling_id) ;
                     })
 
                     ->addColumn('action', function ($row) {
@@ -525,7 +529,7 @@ class PermanentFuelController extends Controller {
 
                         return $actions;
                     })
-                    ->rawColumns(['counter','name','Request','approver','action'])
+                    ->rawColumns(['counter','name','Request','approver','status','action'])
                     ->toJson();
         }
    // Finance Approval

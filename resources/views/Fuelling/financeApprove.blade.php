@@ -33,6 +33,7 @@
                                                     <th>Requested By</th>
                                                     <th>Requested Month</th>
                                                     <th>Vehicle</th>
+                                                    <th>Approved By</th>
                                                     <th>Status</th>
                                                     <th>Action</th>
                                                 </tr>
@@ -311,6 +312,10 @@
                     name: 'approver'
                 },
                 {
+                    data: 'status',
+                    name: 'status'
+                },
+                {
                     data: 'action',
                     name: 'action',
                     orderable: false,
@@ -358,8 +363,8 @@
                     
                     var total_fuel =  response.total_fuel;
                     var expected_fuel = response.expected_fuel;
-                    var h1 = $('<h4>').append('Total: <span style="text-decoration: underline;font-size:16px;">' + total_fuel + '</span>');
-                    var h2 = $('<h4>').append('Expected Fuel Cost : <span style="text-decoration: underline;font-size:16px;">'+expected_fuel+ '</span>');
+                    var h1 = $('<h4>').append('Attached Total cost in ETB : <span style="text-decoration: underline;font-size:16px;">' + total_fuel + '</span>');
+                    var h2 = $('<h4>').append('Expected Fuel Cost in ETB : <span style="text-decoration: underline;font-size:16px;">'+expected_fuel+ '</span>');
                     response.data.forEach(function (fueling, index) {
                         count++;
                         var row = $(`
