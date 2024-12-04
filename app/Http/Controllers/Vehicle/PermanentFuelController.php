@@ -379,14 +379,14 @@ class PermanentFuelController extends Controller {
                 'id' => 'required|string',
                 'fuiling_date' => 'required|date',        // Fueling date is an array
                 'fuel_cost' => 'required|numeric',        // Fuel cost is an array
-                'reciet_attachment' => 'sometimes|file|mimes:pdf,jpg,jpeg,png' // Receipt attachment is an array, optional
+                'reciet_attachment' => 'required|file|mimes:pdf,jpg,jpeg,png' // Receipt attachment is an array, optional
             ]);
             if ($validator->fails()) 
-            {
-                return redirect()->back()->with('error_message',
-                     $validator->errors(),
-                );
-            }
+                {
+                    return redirect()->back()->with('error_message',
+                        $validator->errors(),
+                    );
+                }
             // Get logged-in user ID
             $logged_user = Auth::id();
         
@@ -411,11 +411,11 @@ class PermanentFuelController extends Controller {
                     );
               }
             if($fueling->driver_id != $get_driver_id || $fueling->final_approved_by)
-            {
-                    return redirect()->back()->with('error_message',
-                    "Warning! You are denied the service",
-                    );
-            } 
+                {
+                        return redirect()->back()->with('error_message',
+                        "Warning! You are denied the service",
+                        );
+                } 
             $today = \Carbon\Carbon::today();
             $ethiopianDate = $this->dailyKmCalculation->ConvertToEthiopianDate($today); 
             $fueling = new PermanentFuelModel();
