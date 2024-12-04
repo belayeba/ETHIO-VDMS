@@ -464,7 +464,6 @@
             $(document).on('click', '.submitAttached-btn', function () {
                     var rowId = $(this).data('row'); // Assuming `data-row` attribute is set on the button
                     const parentRow = $(this).closest('.row'); // Get the parent row container
-
                     // Retrieve input values
                     const fuelCost = parentRow.find('input[name="fuel_cost"]').val();
                     const fuelingDate = parentRow.find('input[name="fuiling_date"]').val();
@@ -494,7 +493,7 @@
                     processData: false, 
                     contentType: false, 
                     success: function (response) {
-                        if (response.status === 'success') {
+                        if (response.success === true) {
                             alert('Data submitted');
                             
                             parentRow.remove(); 
@@ -621,13 +620,13 @@
             }
 
             $(document).ready(function() {
-            $(document).on('click', '.reject-btn', function() {
+                 $(document).on('click', '.reject-btn', function() {
                 AcceptedId = $(this).data('id');
 
                 $('#request_id').val(AcceptedId);
                 $('#confirmationModal').modal('show');
                 });
-        });
+            });
 
         </script>
         <!-- Vendor js -->
