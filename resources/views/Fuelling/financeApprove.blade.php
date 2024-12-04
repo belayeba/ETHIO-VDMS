@@ -408,8 +408,6 @@
                     cardsContainer.append(h1);
                     let approvedReceipts = [];
                     let rejectedReceipts = [];
-
-                    
                         // Event handler for checkbox changes
                         $(document).on('change', '.yes-checkbox, .none-checkbox', function () {
                             const rowId = $(this).data('row');

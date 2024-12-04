@@ -356,7 +356,8 @@ Route::group(['middleware' => ['auth']], function()
                     Route::put('/inspection/{inspectionId}/{partName}', 'updateInspection')->name('inspection.update'); // Update a specific inspection
                     Route::delete('/inspection/{inspectionId}', 'deleteInspection')->name('inspection.delete'); // Delete a specific inspection
                  });
-                 Route::controller(NotificationController::class)->group(function () {
+            Route::controller(NotificationController::class)->group(function () 
+                {
                     Route::post('/delete_notification', 'delete_notification')->name('delete_all_notification');
                     Route::get('/read_all_notifications', 'read_all_notifications')->name('read_all_notification');
                     Route::get('/get_all_notifications', 'get_all_notifications')->name('get_all_notifications');
@@ -365,14 +366,13 @@ Route::group(['middleware' => ['auth']], function()
                     Route::post('/change_status', 'redirect_to_inteded');
                 });
                  // SAMIR
-                 Route::group([
+            Route::group([
                     'prefix'=>'vehicle',
                 ], function (){
-                Route::get('/',[VehicleRegistrationController::class, 'index'])->name('vehicleRegistration.index');
-                Route::post('/store',[VehicleRegistrationController::class, 'store'])->name('vehicleRegistration.store');
-                Route::delete('/delete/{vehicle}',[VehicleRegistrationController::class,'destroy'])->name('vehicle.destroy');
-                Route::put('/update/{vehicle}', [VehicleRegistrationController::class, 'update'])->name('vehicle.update');
-            
+                    Route::get('/',[VehicleRegistrationController::class, 'index'])->name('vehicleRegistration.index');
+                    Route::post('/store',[VehicleRegistrationController::class, 'store'])->name('vehicleRegistration.store');
+                    Route::delete('/delete/{vehicle}',[VehicleRegistrationController::class,'destroy'])->name('vehicle.destroy');
+                    Route::put('/update/{vehicle}', [VehicleRegistrationController::class, 'update'])->name('vehicle.update');
                 });
             // Route::controller(VehicleRegistrationController::class)->group(function () 
             //     {

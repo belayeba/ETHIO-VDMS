@@ -35,7 +35,7 @@ class InspectionController extends Controller
         //Insert Data
     public function storeInspection(Request $request)
         {
-        //    dd($request);
+            //    dd($request);
             $rules = [
                 'vehicle_id' => 'required|uuid|exists:vehicles,vehicle_id',
                 'parts' => 'required|array',
@@ -103,7 +103,6 @@ class InspectionController extends Controller
                     return redirect()->back()->with('error_message','Sorry, Something Went Wrong',);
                 }
         }
-            
         // Show a specific inspection
     public function showInspection(Request $request)
         {

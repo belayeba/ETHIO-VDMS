@@ -360,7 +360,8 @@
                         if (response.status === 'success' && Array.isArray(response.data) && response.data.length > 0) {
                             // Populate the table and info section
                             var total_fuel =  response.total_fuel;
-                            var h1 = $('<h4>').append('Total: <span style="text-decoration: underline;font-size:16px;">' + total_fuel + '</span>');
+                            var h2 = $('<h4>').append('Expected Fuel Cost in ETB : <span style="text-decoration: underline;font-size:16px;">'+response.expected_fuel+ '</span>');
+                            var h1 = $('<h4>').append('Attached Total cost in ETB: <span style="text-decoration: underline;font-size:16px;">' + total_fuel + '</span>');
                             var input = $('<div id="entriesInputContainer"></div>')
                             var attach = $(` <div class="row"><div class="col-2"> <button class="btn btn-info btn-sm attach-btn" style="position: absolute; right: 10px; top: 10px;" data-id="${selectedCarId}">+</button></div>`);
                             var table = $('<table class="table table-striped">').append(`
@@ -405,7 +406,7 @@
                                 `);
                                 table.find('tbody').append(row);
                             });
-                            
+                                                        cardsContainer.append(h2);
                             cardsContainer.append(attach);
                             cardsContainer.append(table);
                             cardsContainer.append(h1);

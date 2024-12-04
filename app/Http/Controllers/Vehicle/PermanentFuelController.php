@@ -15,14 +15,15 @@ use Illuminate\Support\Str;
 use App\Http\Controllers\Vehicle\Daily_KM_Calculation;
 use App\Models\Vehicle\FeulCosts;
 use App\Models\Vehicle\VehiclesModel;
+use Illuminate\Support\Facades\DB;
 
 class PermanentFuelController extends Controller {
     protected $dailyKmCalculation;
 
     public function __construct(Daily_KM_Calculation $dailyKmCalculation)
-    {
-        $this->dailyKmCalculation = $dailyKmCalculation;
-    }
+        {
+            $this->dailyKmCalculation = $dailyKmCalculation;
+        }
     public function index() 
         {
 
@@ -182,6 +183,18 @@ class PermanentFuelController extends Controller {
                         $validator->errors(),
                     );
                 }
+            try
+            {
+                $check_request = PermanentFuelModel::where('vehicle_id',$request->input('vehicle_id'))
+                                                      ->where('year',$request->input('year'))
+                                                      ->where('month',$request->input('month'))
+                                                      ->first();
+                if($check_request)
+                  {
+                        return redirect()->back()->with('error_message',
+                            "Already Requested for this month",
+                        );
+                  }
             // Get logged-in user ID
             $logged_user = Auth::id();
 
@@ -197,11 +210,10 @@ class PermanentFuelController extends Controller {
             $the_driver_id = $get_driver->driver_id;
             // Get permanent vehicle request associated with driver and vehicle
             $permanent = VehiclePermanentlyRequestModel::select( 'vehicle_request_permanent_id','fuel_quata','feul_left_from_prev' )
-            ->where( 'requested_by', $logged_user )
-            ->where( 'vehicle_id',$request->vehicle_id)// $request->vehicle_id )
-            ->where( 'status', true )
-            ->first();
-            
+                    ->where( 'requested_by', $logged_user )
+                    ->where( 'vehicle_id',$request->vehicle_id)// $request->vehicle_id )
+                    ->where( 'status', true )
+                    ->first();
             // Ensure that the permanent vehicle request exists
             if ( !$permanent ) {
                 return redirect()->back()->with('error_message','No active permanent vehicle request found for this driver and vehicle.');
@@ -215,7 +227,9 @@ class PermanentFuelController extends Controller {
             $fueling_date = $request->input('fuiling_date');
             // $fuel_amount = $request->input('fuel_amount');
             $ethiopianDate = $this->dailyKmCalculation->ConvertToEthiopianDate($today); 
-            foreach ( $request->fuel_cost as $index => $fuel_amount ) {
+            DB::beginTransaction(); // Begin a transaction
+            foreach ( $request->fuel_cost as $index => $fuel_amount ) 
+            {
                 // dd($fuel_amount);
                 $fueling = new PermanentFuelModel();
                 $fueling->fueling_id = $fuel;
@@ -229,24 +243,32 @@ class PermanentFuelController extends Controller {
                 //$fueling->fuel_amount = $fuel_amount;
                 $fueling->fuel_cost = $request->fuel_cost[ $index ];
                 
-                if ($files[$index] )  {
-                    $file = $files[$index];
-                    $fileName = time() . '_' . $file->getClientOriginalName(); // Generate unique filename
-                    $storagePath = storage_path( 'app/public/vehicles/reciept' ); // Define storage path
-                    // Check if directory exists, if not create it
-                    if ( !file_exists( $storagePath ) ) {
-                        mkdir( $storagePath, 0755, true );
+                if ($files[$index] )  
+                    {
+                        $file = $files[$index];
+                        $fileName = time() . '_' . $file->getClientOriginalName(); // Generate unique filename
+                        $storagePath = storage_path( 'app/public/vehicles/reciept' ); // Define storage path
+                        // Check if directory exists, if not create it
+                        if ( !file_exists( $storagePath ) ) {
+                            mkdir( $storagePath, 0755, true );
+                        }
+                        // Move file to the storage path
+                        $file->move( $storagePath, $fileName );
+                        // Assign file name to the model
+                        $fueling->reciet_attachment = $fileName; 
+                        
                     }
-                    // Move file to the storage path
-                    $file->move( $storagePath, $fileName );
-                    // Assign file name to the model
-                    $fueling->reciet_attachment = $fileName; 
-                    
-                }
                 $fueling->created_at = $ethiopianDate;
                 $fueling->save();
             }
+            DB::commit();
             return redirect()->route( 'permanenet_fuel_request' )->with( 'success', 'Fueling records created successfully.' );
+            }
+            catch(Exception $e)
+                {
+                    DB::rollBack();
+                    return redirect()->back()->with('error_message','Sorry, Something Went Wrong',);
+                }
         }
         
     public function show( $id ) 
@@ -285,7 +307,6 @@ class PermanentFuelController extends Controller {
             ->select('driver_id','fueling_id','finance_approved_by','fuel_amount','fuel_cost','fuiling_date','reciet_attachment','year','month','make_primary','accepted')
             ->where('fueling_id', $id)
             ->get()                
-
             ->map(function ($fueling) {
                 return [
                     'primary'            => $fueling->make_primary,
@@ -300,11 +321,9 @@ class PermanentFuelController extends Controller {
                     'finance_approved_by'=> $fueling->finance_approved_by? $fueling->financeApprover->first_name : 'not approved',
                 ];
             });
-
             return response()->json(['status' => 'success', 'data' => $fueling_data,'total_fuel'=>$total_feul,'expected_fuel' =>$expected_total]);
     
         }
-
     public function update(Request $request)
         {
            
@@ -408,7 +427,7 @@ class PermanentFuelController extends Controller {
             $get_driver_id = $get_driver->driver_id;
         
             // Fetch the existing fueling record by ID (could be the main record, e.g., $id)
-            $fueling = PermanentFuelModel::select('final_approved_by','vehicle_id','driver_id','permanent_id')->where('fueling_id',$request->id)->first();
+            $former_fueling = PermanentFuelModel::select('final_approved_by','vehicle_id','driver_id','permanent_id')->where('fueling_id',$request->id)->first();
             if(!$fueling)
               {
                 return redirect()->back()->with('error_message',
@@ -535,13 +554,14 @@ class PermanentFuelController extends Controller {
    // Finance Approval
     public function finance_approve(Request $request, $id)
         {
-            // try {
-                // Retrieve request inputs
+           
+                //Retrieve request inputs
                 $approved = $request->input('approved_reciet', []); // Default to an empty array if not provided
                 $rejected = $request->input('rejected_reciet', []); // Default to an empty array if not provided
 
                 // dd($rejected);
                 $logged_user = Auth::id();
+            try {
                 $get_fuel_requests = PermanentFuelModel::where('fueling_id', $id)->get();
                 $get_one_fuel_request = PermanentFuelModel::where('fueling_id', $id)->first();
                 
@@ -559,9 +579,6 @@ class PermanentFuelController extends Controller {
                     ->where('fuel_type', $get_vehicle->fuel_type)
                     ->latest()
                     ->first();
-                
-                    
-
                 if (!$latest_fuel_price) {
                     return redirect()->back()->with(['error_message' => 'Fuel Price is not set please Check!']);
                 }
@@ -578,7 +595,7 @@ class PermanentFuelController extends Controller {
                 // Process fuel requests
                 $number_of_attachment = $get_fuel_requests->count();
                 $check_reject = 0;
-
+                DB::beginTransaction(); // Begin a transaction
                 foreach ($get_fuel_requests as $fuel_request) {
                     if (in_array($fuel_request->make_primary, $approved)) {
                         // Approve request
@@ -625,13 +642,16 @@ class PermanentFuelController extends Controller {
                     }
                     
                 }
-
+                DB::commit();
                 return redirect()->back()->with('success_message', "You approved the request!");
 
-            // } catch (Exception $e) {
-            //     // Handle any unexpected errors
-            //     return redirect()->back()->with('error_message', "An error occurred: " . $e->getMessage());
-            // }
+            } 
+            catch (Exception $e) 
+            {
+                // Handle any unexpected errors
+                DB::rollBack();
+                return redirect()->back()->with('error_message', "An error occurred: " . $e->getMessage());
+            }
         }
     public function finance_appprove_reciet($id)
         {
@@ -688,12 +708,12 @@ class PermanentFuelController extends Controller {
                 $validator = Validator::make($request->all(), [
                     'reason' => 'required|string|max:500',
                 ] );
-                if ($validator->fails()) 
-                    {
-                        return redirect()->back()->with('error_message',
-                            $validator->errors(),
-                        );
-                    }
+            if ($validator->fails()) 
+                {
+                    return redirect()->back()->with('error_message',
+                        $validator->errors(),
+                    );
+                }
             try
                 {
                     $logged_user = Auth::id();
@@ -715,17 +735,20 @@ class PermanentFuelController extends Controller {
                         {
                             return back()->withErrors( [ 'error' => 'No active permanent vehicle request found for this driver and vehicle.' ] );
                         }
+                        DB::beginTransaction(); // Begin a transaction
                     foreach ($get_fuel_requests as $fuel_request) {
                             $fuel_request->finance_approved_by = $logged_user;
                             $fuel_request->reject_reason = $request->reason;
                             $fuel_request->save(); // Save the updated model to the database
-                        }                
+                        }  
+                        DB::commit();              
                     return redirect()->back()->with('success_message',
                     "You have successfully Rejected the Request",
                     );
                 }
             catch(Exception $e)
                 {
+                    DB::rollBack();
                     return redirect()->back()->with('error_message',
                     "Warning! You are denied the service",
                     );
