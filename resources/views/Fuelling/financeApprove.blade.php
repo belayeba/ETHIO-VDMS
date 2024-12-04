@@ -358,8 +358,8 @@
                     
                     var total_fuel =  response.total_fuel;
                     var expected_fuel = response.expected_fuel;
-                    var h1 = $('<h4>').append('Total Attached Fuel Cost :'+total_fuel);
-                    var h2 = $('<h4>').append('Total Expected Fuel Cost :'+expected_fuel);
+                    var h1 = $('<h4>').append('Total: <span style="text-decoration: underline;font-size:16px;">' + total_fuel + '</span>');
+                    var h2 = $('<h4>').append('Expected Fuel Cost : <span style="text-decoration: underline;font-size:16px;">'+expected_fuel+ '</span>');
                     response.data.forEach(function (fueling, index) {
                         count++;
                         var row = $(`
@@ -397,9 +397,10 @@
                         `);
                         table.find('tbody').append(row);
                     });
-                    cardsContainer.append(h1);
                     cardsContainer.append(h2);
+                    cardsContainer.append($('<br><br>'));
                     cardsContainer.append(table);
+                    cardsContainer.append(h1);
                     let approvedReceipts = [];
                     let rejectedReceipts = [];
 

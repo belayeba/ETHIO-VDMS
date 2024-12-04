@@ -67,9 +67,13 @@ class PermanentFuelController extends Controller {
             if (!$fueling_of_one) {
                 // Return an error response if no record is found
                 return response()->json([
-                    'status' => 'error',
-                    'message' => 'Fuel record not found for the given driver, year, and month.'
-                ], 404);
+                    'status' => 'success',
+                    'message' => 'Previous cost calculated successfully.',
+                    'data' => [
+                        'expected_total' => null,
+                        'previous_fuel' => null
+                    ]
+                ], 200);
             }
         
             // Determine the previous month and year
@@ -145,7 +149,7 @@ class PermanentFuelController extends Controller {
                     })
                     ->addColumn('action', function ($row) {
                         $actions = '<button type="button" class="btn btn-info rounded-pill view-btn" data-id="' . $row->fueling_id . '"><i class="ri-eye-line"></i></button>
-                                    <button type="button" class="btn btn-danger rounded-pill reject-btn" data-id="' . $row->fueling_id . '" data-bs-toggle="modal" data-bs-target="#staticBackdrop" title="Reject"><i class="ri-close-circle-fill"></i></button>';
+                                    ';
                         
                         return $actions;
                     })
@@ -274,7 +278,7 @@ class PermanentFuelController extends Controller {
                 }
             else
                {
-                $expected_total = "No previos cost";
+                $expected_total = "None";
                }
             $total_feul =  $fueling->sum('fuel_cost');
             $fueling_data= PermanentFuelModel::with('vehicle:vehicle_id,plate_number','financeApprover:id,first_name')
@@ -303,9 +307,10 @@ class PermanentFuelController extends Controller {
 
     public function update(Request $request)
         {
+           
             // Validate input
             $validator = Validator::make($request->all(), [
-                'make_primary' => 'required|uuid|exists:giving_back_vehicles_parmanently,make_primary',
+                'make_primary' => 'required|uuid|exists:permanent_fuelings,make_primary',
                 'fuiling_date' => 'required|date',        // Fueling date is an array
                 'fuel_cost' => 'required|numeric',        // Fuel cost is an array
                 'reciet_attachment' => 'sometimes|file|mimes:pdf,jpg,jpeg,png' // Receipt attachment is an array, optional
