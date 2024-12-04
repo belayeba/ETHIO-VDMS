@@ -362,7 +362,9 @@
                             var total_fuel =  response.total_fuel;
                             var h1 = $('<h4>').append('Total: <span style="text-decoration: underline;font-size:16px;">' + total_fuel + '</span>');
                             var input = $('<div id="entriesInputContainer"></div>')
+                            var attach = $(` <div class="row"><div class="col-2"> <button class="btn btn-info btn-sm attach-btn" style="position: absolute; right: 10px; top: 10px;" data-id="${selectedCarId}">+</button></div>`);
                             var table = $('<table class="table table-striped">').append(`
+                                
                                 <thead>
                                     <tr>
                                         <th>Roll no</th>
@@ -390,7 +392,7 @@
                                             </a>
                                         </td>
                                         <td>
-                                           ${fueling.accepted == 1 ? `
+                                           ${fueling.accepted == 0 ? `
                                                 <div class="row">
                                                     <div class="col-6">
                                                         <div class="form-check">
@@ -403,7 +405,8 @@
                                 `);
                                 table.find('tbody').append(row);
                             });
-
+                            
+                            cardsContainer.append(attach);
                             cardsContainer.append(table);
                             cardsContainer.append(h1);
                             cardsContainer.append(input);
@@ -418,6 +421,93 @@
                     }
                 });
             });
+
+            $(document).on('click', '.attach-btn', function () {
+                var rowId = $(this).data('id');
+                console.log(rowId);
+        
+                const entriesInputContainer = document.getElementById('entriesInputContainer');
+
+                const entryDiv = document.createElement('div');
+
+                entryDiv.classList.add('entry', 'mt-3');
+                entryDiv.id = `entry-${rowId}`;
+                                                        
+                entryDiv.innerHTML = `
+                    <div class="row">
+                        
+                        <div class="col-md-4">
+                            <label>Price</label>
+                            <input name="fuel_cost" class="form-control" placeholder="In Birr" type="number"  required>
+                        </div>
+                        <div class="col-md-4">
+                            <label>Date</label>
+                            <input name="fuiling_date" class="form-control" placeholder="When" type="date"  required>
+                        </div>
+                        <div class="col-md-4">
+                            <label>Attachment</label>
+                            <input name="reciet_attachment" class="form-control" type="file" required>
+                        </div>
+                        <div class="col-md-2">
+                             <button type="button" class="btn btn-info btn-sm submitAttached-btn" data-row="${rowId}">+</button>
+                            <button type="button" class="btn btn-danger btn-sm removeInputEntry">x</button>
+                        </div>
+                    </div>
+                `;
+                
+                
+                entriesInputContainer.appendChild(entryDiv);
+
+            });
+
+            $(document).on('click', '.submitAttached-btn', function () {
+                    var rowId = $(this).data('row'); // Assuming `data-row` attribute is set on the button
+                    const parentRow = $(this).closest('.row'); // Get the parent row container
+
+                    // Retrieve input values
+                    const fuelCost = parentRow.find('input[name="fuel_cost"]').val();
+                    const fuelingDate = parentRow.find('input[name="fuiling_date"]').val();
+                    const receiptInput = parentRow.find('input[name="reciet_attachment"]'); 
+                    const csrfToken = "{{ csrf_token() }}";
+
+                    const receiptAttachment = receiptInput[0].files[0];
+                    
+                    if (!fuelCost || !fuelingDate || !receiptAttachment) {
+                        alert('Please fill all the fields and attach a receipt.');
+                        return;
+                    }
+
+                    const formData = new FormData();
+                    formData.append('_token', csrfToken); 
+                    formData.append('id', rowId); 
+                    formData.append('fuel_cost', fuelCost);
+                    formData.append('fuiling_date', fuelingDate);
+                    formData.append('reciet_attachment', receiptAttachment);
+                  
+
+                    // AJAX request
+                    $.ajax({
+                    url: '/attach_new_reciet', 
+                    type: 'POST',
+                    data: formData,
+                    processData: false, 
+                    contentType: false, 
+                    success: function (response) {
+                        if (response.status === 'success') {
+                            alert('Data submitted');
+                            
+                            parentRow.remove(); 
+                        } else {
+                            alert(response.message || 'An error occurred.');
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        console.error('AJAX Error:', error);
+                        alert('Failed to submit data. Please try again.');
+                    }
+                });
+            });
+
 
             $(document).on('click', '.update-btn', function () {
                 var rowId = $(this).data('row');
@@ -513,7 +603,7 @@
                         alert('Failed to submit data. Please try again.');
                     }
                 });
-                });
+            });
 
 
             function showFileInIframe(fileUrl) {

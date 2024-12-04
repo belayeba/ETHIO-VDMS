@@ -140,8 +140,8 @@ class PermanentFuelController extends Controller {
                         return $row->vehicle->plate_number;
                     })
 
-                    ->addColumn('status', function ($row) {
-                        return 'PENDING';
+                    ->addColumn('status', function ($row)  {
+                        return $row->status_check($row->fueling_id) ;
                     })
 
                     ->addColumn('month', function ($row) {
@@ -282,7 +282,7 @@ class PermanentFuelController extends Controller {
                }
             $total_feul =  $fueling->sum('fuel_cost');
             $fueling_data= PermanentFuelModel::with('vehicle:vehicle_id,plate_number','financeApprover:id,first_name')
-            ->select('driver_id','finance_approved_by','fuel_amount','fuel_cost','fuiling_date','reciet_attachment','year','month','make_primary','accepted')
+            ->select('driver_id','fueling_id','finance_approved_by','fuel_amount','fuel_cost','fuiling_date','reciet_attachment','year','month','make_primary','accepted')
             ->where('fueling_id', $id)
             ->get()                
 
