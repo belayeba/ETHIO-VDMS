@@ -38,7 +38,6 @@ class VehicleRegistrationController extends Controller {
     public function create() {
         return view( 'vehicles.create' );
     }
-
     public function store( Request $request ) {
         // dd($request->mileage);
         $user = Auth::id();

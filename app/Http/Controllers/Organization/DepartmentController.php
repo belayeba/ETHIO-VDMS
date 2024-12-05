@@ -63,7 +63,7 @@ class DepartmentController extends Controller
         // Create the department
         DepartmentsModel::create($request->all());
         // Redirect to the index page with a success message
-        return redirect()->back()->with('success', 'Department created successfully.');
+        return redirect()->back()->with('success_message', 'Department created successfully.');
     }
 
     /**

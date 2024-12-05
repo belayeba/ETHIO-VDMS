@@ -76,7 +76,7 @@
         </div>
         
                                             
-    <script>
+<script>
   
 
   function confirmFormSubmission(formId) {
