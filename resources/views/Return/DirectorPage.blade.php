@@ -50,9 +50,8 @@
                                                         <td>{{$request->permanentRequest->vehicle->plate_number}}</td>
                                                         <td>{{$request->purpose}}</td>
                                                         <td>{{$request->created_at->format('Y-m-j')}}</td>
-                                                        <td>
-                                                            <button type="button" class="btn btn-info rounded-pill" data-bs-toggle="modal" data-bs-target="#standard-modal-{{ $loop->index }}" title="Show"><i class=" ri-eye-line"></i></button>
-                                                            @if($request->received_by === Null && $request->reject_reason_dispatcher === Null)
+                                                        <td><button type="button" class="btn btn-info rounded-pill" title="Inspect" id="showInspectionModal" data-value="{{$request->permanentRequest->inspection_id}}">Show</button></td>
+                                                        <td>@if($request->received_by === Null && $request->reject_reason_dispatcher === Null)
                                                             <button id="acceptButton" type="button" class="btn btn-primary rounded-pill" title="Accept" onclick="confirmFormSubmission('approvalForm-{{ $loop->index }}')"><i class="ri-checkbox-circle-line"></i></button>
                                                             <button type="button" class="btn btn-danger rounded-pill" data-bs-toggle="modal" data-bs-target="#staticBackdrop-{{ $loop->index }}" title="Reject"><i class=" ri-close-circle-fill"></i></button>
                                                             @endif
@@ -149,26 +148,25 @@
                 </div> <!-- container -->
             </div> <!-- content --> 
          <!-- this is for the assign  modal -->
-            <div class="modal fade" id="showInspection" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                <div class="modal-dialog modal-lg modal-dialog-scrollable">
-                <div class="modal-content">
-                        
-                        <div class="modal-header">
-                                                                                            
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div> <!-- end modal header -->
-                        <div class="modal-body">
-                            <div class="row mt-3" id="inspectionCardsContainer" class="table table-striped"> 
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="submit" class="btn btn-secondary"  data-bs-dismiss="modal" aria-label="Close">close</button>
-                        </div> <!-- end modal footer -->
-                    </div>                                                              
-                </div> <!-- end modal content-->
-            </div> <!-- end modal dialog-->
-    <script>
-
+                           <div class="modal fade" id="showInspection" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                              <div class="modal-dialog modal-lg modal-dialog-scrollable">
+                                <div class="modal-content">
+                                     
+                                        <div class="modal-header">
+                                                                                                            
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div> <!-- end modal header -->
+                                        <div class="modal-body">
+                                            <div class="row mt-3" id="inspectionCardsContainer" class="table table-striped"> 
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="submit" class="btn btn-secondary"  data-bs-dismiss="modal" aria-label="Close">close</button>
+                                        </div> <!-- end modal footer -->
+                                    </div>                                                              
+                                </div> <!-- end modal content-->
+                            </div> <!-- end modal dialog-->
+                <script>
               document.getElementById('showInspectionModal').addEventListener('click', function() {
             var inspection = this.getAttribute('data-value');                                
             // Perform an Ajax request to fetch data based on the selected car ID

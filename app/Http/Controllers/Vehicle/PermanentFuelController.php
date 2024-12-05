@@ -33,11 +33,11 @@ class PermanentFuelController extends Controller {
                                                             ->whereNotNull('accepted_by_requestor')
                                                             ->get();                                  
             if($vehicles->isEmpty())
-            {
-                return redirect()->back()->with('error_message',
-                "You have not taken vehicle",
-                );
-            }
+                {
+                    return redirect()->back()->with('error_message',
+                    "You have not taken vehicle",
+                    );
+                }
             return view( 'Fuelling.ParmanententRequestPage',compact('vehicles'));
         }
     public function getPreviousCost(Request $request)
@@ -124,11 +124,9 @@ class PermanentFuelController extends Controller {
                                             ->distinct()
                                             ->latest()
                                             ->get();
-                    // dd($fueling);
-        
-                    if ($fueling->isEmpty()) {
-                        return redirect()->back()->with('error_message','Request Not found',);
-                    } 
+                    // if ($fueling->isEmpty()) {
+                    //     return redirect()->back()->with('error_message','Request Not found',);
+                    // } 
                     return datatables()->of($data)
                     ->addIndexColumn()
                     ->addColumn('counter', function($row) use ($data){
@@ -267,7 +265,7 @@ class PermanentFuelController extends Controller {
             catch(Exception $e)
                 {
                     DB::rollBack();
-                    return redirect()->back()->with('error_message','Sorry, Something Went Wrong',);
+                    return redirect()->back()->with('error_message','Sorry, Something Went Wrong'.$e);
                 }
         }
         
@@ -354,12 +352,10 @@ class PermanentFuelController extends Controller {
             }
         
             $get_driver_id = $get_driver->driver_id;
-
-            $fueling = PermanentFuelModel::findOrFail($request->input('make_primary'));        
             // Get permanent vehicle request associated with driver and vehicle
             $permanent = VehiclePermanentlyRequestModel::select('vehicle_request_permanent_id')
-                ->where('requested_by', $get_driver_id)
-                ->where('vehicle_id', $fueling->vehicle_id)
+                ->where('driver_id', $get_driver_id)
+                ->where('vehicle_id', $request->vehicle_id)
                 ->where('status', true)
                 ->first();
                 

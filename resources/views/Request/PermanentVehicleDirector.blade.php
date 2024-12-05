@@ -48,7 +48,7 @@
                                                         <td>{{$request->purpose}}</td>
                                                         <td>{{$request->created_at}}</td>
                                                         <td>
-                                                            <button type="button" class="btn btn-info rounded-pill" data-bs-toggle="modal" data-bs-target="#standard-modal-{{ $loop->index }}" title="Show"><i class=" ri-eye-line"></i></button>
+                                                            <button type="button" class="btn btn-info rounded-pill" data-bs-toggle="modal" data-bs-target="#standard-modal" id = "showInspectionModal" data-reason="{{$request->purpose}}" data-driving_license="{{$request->driving_license}}" data-position_letter="{{$request->position_letter}}" title="Show"><i class=" ri-eye-line"></i></button>
                                                             {{-- @if($request->approved_by === Null && $request->director_reject_reason === Null) --}}
                                                             <button type="button" class="btn btn-primary rounded-pill" data-bs-toggle="modal" data-bs-target="#staticaccept-{{ $loop->index }}" title="accept"><i class=" ri-checkbox-circle-line"></i></button>
                                                             <button type="button" class="btn btn-danger rounded-pill" data-bs-toggle="modal" data-bs-target="#staticreject-{{ $loop->index }}" title="Reject"><i class=" ri-close-circle-fill"></i></button>
@@ -151,7 +151,7 @@
                                                             @endif
                                                         </td>
                                                         <td>
-                                                            <button type="button" class="btn btn-info rounded-pill" data-bs-toggle="modal" data-bs-target="#archived-modal-{{ $loop->index }}" title="Show"><i class=" ri-eye-line"></i></button>
+                                                        <button type="button" class="btn btn-info rounded-pill" data-bs-toggle="modal" data-bs-target="#standard-modal" id = "showInspectionModal" data-reason="{{$request->purpose}}" data-driving_license="{{$request->driving_license}}" data-position_letter="{{$request->position_letter}}" title="Show"><i class=" ri-eye-line"></i></button>
                                                         </td>
                                                     </tr>
                                                 </tbody>
@@ -168,8 +168,71 @@
                     <!-- end row -->
                 </div> <!-- container -->
             </div> <!-- content --> 
+            <div id="standard-modal" class="modal fade" tabindex="-1" role="dialog"
+                                        aria-labelledby="standard-modalLabel" aria-hidden="true">
+                                        <div class="modal-dialog modal-lg">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h4 class="modal-title">Request Details</h4>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                        aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <div class="col-md-6">
+                                                        <dl class="row mb-1">
+                                                            <dt class="col-sm-5">Request reason:</dt>
+                                                            <dd class="col-sm-7" id="reason"></dd>
+                                                        </dl>
+                                                    </div></br></br>
+                                                    <div class="row">
+                                                        <!-- Left Card -->
+                                                        <div class="col-md-6">
+                                                            <div class="card">
+                                                                <div class="card-header">
+                                                                    <h5 class="card-title">Position Letter</h5>
+                                                                </div>
+                                                                <div class="card-body">
+                                                                <iframe id="image1" class="img-fluid" style="width: 100%; height: 100%;"></iframe>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                
+                                                        <!-- Right Card -->
+                                                        <div class="col-md-6">
+                                                            <div class="card">
+                                                                <div class="card-header">
+                                                                    <h5 class="card-title">Driving License</h5>
+                                                                </div>
+                                                                <div class="card-body">
+                                                                    <iframe id="image2" src="" alt="Driving License" class="img-fluid"></iframe>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        </div>
     <script>
-  
+              document.getElementById('showInspectionModal').addEventListener('click', function() {
+                Reason = $(this).data('reason');
+                PositionLetter = $(this).data('position_letter');
+                DrivingLicense = $(this).data('driving_license');
+
+                // console.log(PositionLetter, DrivingLicense)
+
+                // Construct file paths for the iframes
+                const positionLetterPath = '/storage/PermanentVehicle/PositionLetter/' + PositionLetter;
+                const drivingLicensePath = '/storage/PermanentVehicle/Driving_license/' + DrivingLicense;
+
+                // Populate the iframes with the file paths
+                $('#reason').text(Reason);
+                $('#image1').attr('src', positionLetterPath);
+                $('#image2').attr('src', drivingLicensePath);
+              });
     function toggleDiv(targetId) {
         const allDivs = document.querySelectorAll('.table-responsive');
         allDivs.forEach(div => {

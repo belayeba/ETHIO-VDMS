@@ -28,7 +28,7 @@ class PermanentFuelModel extends Model {
         'fuiling_date',
         'month',
         'year',
-        'fuel_amount',
+        //'fuel_amount',
         'one_litre_price',
         'quata',
         'accepted',
