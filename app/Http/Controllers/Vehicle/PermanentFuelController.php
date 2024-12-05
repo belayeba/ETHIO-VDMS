@@ -139,8 +139,8 @@ class PermanentFuelController extends Controller {
                         return $row->vehicle->plate_number;
                     })
 
-                    ->addColumn('status', function ($row) {
-                        return 'PENDING';
+                    ->addColumn('status', function ($row)  {
+                        return $row->status_check($row->fueling_id) ;
                     })
 
                     ->addColumn('month', function ($row) {
@@ -302,7 +302,7 @@ class PermanentFuelController extends Controller {
                }
             $total_feul =  $fueling->sum('fuel_cost');
             $fueling_data= PermanentFuelModel::with('vehicle:vehicle_id,plate_number','financeApprover:id,first_name')
-            ->select('driver_id','finance_approved_by','fuel_amount','fuel_cost','fuiling_date','reciet_attachment','year','month','make_primary','accepted')
+            ->select('driver_id','fueling_id','finance_approved_by','fuel_amount','fuel_cost','fuiling_date','reciet_attachment','year','month','make_primary','accepted')
             ->where('fueling_id', $id)
             ->get()                
             ->map(function ($fueling) {
@@ -354,19 +354,19 @@ class PermanentFuelController extends Controller {
             $get_driver_id = $get_driver->driver_id;
             // Get permanent vehicle request associated with driver and vehicle
             $permanent = VehiclePermanentlyRequestModel::select('vehicle_request_permanent_id')
-                ->where('requested_by', $get_driver_id)
+                ->where('driver_id', $get_driver_id)
                 ->where('vehicle_id', $request->vehicle_id)
                 ->where('status', true)
                 ->first();
-        
+                
             // Ensure that the permanent vehicle request exists
             if (!$permanent) {
-                return back()->withErrors(['error' => 'No active permanent vehicle request found for this driver and vehicle.']);
+                return  response()->json(['error' => 'No active permanent vehicle request found for this driver and vehicle.']);
             }
         
         
             // Fetch the existing fueling record by ID (could be the main record, e.g., $id)
-            $fueling = PermanentFuelModel::findOrFail($request->make_primary);
+            
             if($fueling->driver_id != $get_driver_id || $fueling->finance_approved_by)
             {
                     return redirect()->back()->with('error_message',
@@ -404,9 +404,8 @@ class PermanentFuelController extends Controller {
             ]);
             if ($validator->fails()) 
                 {
-                    return redirect()->back()->with('error_message',
-                        $validator->errors(),
-                    );
+                    return response()->json(['error_message' =>  $validator->errors(),], 500);
+                  
                 }
             // Get logged-in user ID
             $logged_user = Auth::id();
@@ -416,27 +415,26 @@ class PermanentFuelController extends Controller {
         
             // Ensure that the driver exists
             if (!$get_driver) {
-                return redirect()->back()->with('error_message',
-                "You are not Registered as Driver",
+                return  response()->json(['error_message',
+                "You are not Registered as Driver"],400
            );
             }
         
             $get_driver_id = $get_driver->driver_id;
         
             // Fetch the existing fueling record by ID (could be the main record, e.g., $id)
-            $former_fueling = PermanentFuelModel::select('final_approved_by','vehicle_id','driver_id','permanent_id')->where('fueling_id',$request->id)->first();
+            $former_fueling = PermanentFuelModel::select('final_approved_by','vehicle_id','driver_id','month','year','permanent_id')->where('fueling_id',$request->id)->first();
             if(!$former_fueling)
               {
-                return redirect()->back()->with('error_message',
-                    "Warning! You are denied the service",
-                    );
+                return  response()->json(['error_message',
+                    "Warning! You are denied the service",]);
               }
             if($former_fueling->driver_id != $get_driver_id || $former_fueling->final_approved_by)
                 {
-                        return redirect()->back()->with('error_message',
-                        "Warning! You are denied the service",
-                        );
+                        return  response()->json(['error_message',
+                        "Warning! You are denied the service",],400);
                 } 
+                
             $today = \Carbon\Carbon::today();
             $ethiopianDate = $this->dailyKmCalculation->ConvertToEthiopianDate($today); 
             $fueling = new PermanentFuelModel();
@@ -445,11 +443,11 @@ class PermanentFuelController extends Controller {
             $fueling->driver_id = $former_fueling->driver_id;
             $fueling->permanent_id = $former_fueling->permanent_id;
             // dd($request->fuiling_date[ $index ]);
-            $fueling->fuiling_date = $request->fueling_date;
+            $fueling->fuiling_date = $request->input('fuiling_date');
             $fueling->month = $former_fueling->month;
             $fueling->year = $former_fueling->year;
             //$fueling->fuel_amount = $fuel_amount;
-            $fueling->fuel_cost = $request->fuel_cost;
+            $fueling->fuel_cost = $request->input('fuel_cost');
             
             if ($request->hasFile("reciet_attachment")) {
                 $file = $request->file( "reciet_attachment" );
@@ -463,9 +461,8 @@ class PermanentFuelController extends Controller {
             }
             $fueling->created_at = $ethiopianDate;
             $fueling->save();
-                return redirect()->back()->with('success_message',
-                "Successfully attached",
-                );
+                return  response()->json(['success'=>true,
+                "message"=>"Successfully attached"], 200);
         }
     public function destroy( $id ) 
         {

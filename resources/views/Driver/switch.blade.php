@@ -233,7 +233,7 @@
                                         <label for="vehicle" class="form-label">Vehicle</label>
                                         <select id="vehicle" name="vehicle_id" class="form-select" required>
                                         @foreach($vehicles as $vehicle)
-                                            <option value="{{ $vehicle->vehicle_id }}" {{ $vehicle->vehicle_id == $item->vehicle_id ? 'selected' : '' }}>{{ $vehicle->model }}</option>
+                                            <option value="{{ $vehicle->vehicle_id }}" {{ $vehicle->vehicle_id == $item->vehicle_id ? 'selected' : '' }}>{{ $vehicle->plate_number }}</option>
                                         @endforeach
                                         </select>
                                     </div>

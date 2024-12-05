@@ -18,6 +18,7 @@
                 <strong> Success- </strong> {!! session('success_message') !!} 
             </div>
             @endif
+            
         <div class="preloader" dir="ltr">
             <!-- Preloader HTML here -->
         </div>
