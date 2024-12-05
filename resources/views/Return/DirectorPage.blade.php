@@ -50,9 +50,8 @@
                                                         <td>{{$request->permanentRequest->vehicle->plate_number}}</td>
                                                         <td>{{$request->purpose}}</td>
                                                         <td>{{$request->created_at->format('Y-m-j')}}</td>
-                                                        <td>
-                                                            <button type="button" class="btn btn-info rounded-pill" data-bs-toggle="modal" data-bs-target="#standard-modal-{{ $loop->index }}" title="Show"><i class=" ri-eye-line"></i></button>
-                                                            @if($request->received_by === Null && $request->reject_reason_dispatcher === Null)
+                                                        <td><button type="button" class="btn btn-info rounded-pill" title="Inspect" id="showInspectionModal" data-value="{{$request->permanentRequest->inspection_id}}">Show</button></td>
+                                                        <td>@if($request->received_by === Null && $request->reject_reason_dispatcher === Null)
                                                             <button id="acceptButton" type="button" class="btn btn-primary rounded-pill" title="Accept" onclick="confirmFormSubmission('approvalForm-{{ $loop->index }}')"><i class="ri-checkbox-circle-line"></i></button>
                                                             <button type="button" class="btn btn-danger rounded-pill" data-bs-toggle="modal" data-bs-target="#staticBackdrop-{{ $loop->index }}" title="Reject"><i class=" ri-close-circle-fill"></i></button>
                                                             @endif
@@ -167,8 +166,7 @@
                                     </div>                                                              
                                 </div> <!-- end modal content-->
                             </div> <!-- end modal dialog-->
-    <script>
-
+                <script>
               document.getElementById('showInspectionModal').addEventListener('click', function() {
                               var inspection = this.getAttribute('data-value');                                
                                 // Perform an Ajax request to fetch data based on the selected car ID

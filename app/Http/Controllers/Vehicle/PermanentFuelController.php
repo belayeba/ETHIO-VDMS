@@ -33,11 +33,11 @@ class PermanentFuelController extends Controller {
                                                             ->whereNotNull('accepted_by_requestor')
                                                             ->get();                                  
             if($vehicles->isEmpty())
-            {
-                return redirect()->back()->with('error_message',
-                "You have not taken vehicle",
-                );
-            }
+                {
+                    return redirect()->back()->with('error_message',
+                    "You have not taken vehicle",
+                    );
+                }
             return view( 'Fuelling.ParmanententRequestPage',compact('vehicles'));
         }
     public function getPreviousCost(Request $request)
@@ -124,11 +124,9 @@ class PermanentFuelController extends Controller {
                                             ->distinct()
                                             ->latest()
                                             ->get();
-                    // dd($fueling);
-        
-                    if ($fueling->isEmpty()) {
-                        return redirect()->back()->with('error_message','Request Not found',);
-                    } 
+                    // if ($fueling->isEmpty()) {
+                    //     return redirect()->back()->with('error_message','Request Not found',);
+                    // } 
                     return datatables()->of($data)
                     ->addIndexColumn()
                     ->addColumn('counter', function($row) use ($data){
@@ -267,7 +265,7 @@ class PermanentFuelController extends Controller {
             catch(Exception $e)
                 {
                     DB::rollBack();
-                    return redirect()->back()->with('error_message','Sorry, Something Went Wrong',);
+                    return redirect()->back()->with('error_message','Sorry, Something Went Wrong'.$e);
                 }
         }
         
@@ -354,10 +352,9 @@ class PermanentFuelController extends Controller {
             }
         
             $get_driver_id = $get_driver->driver_id;
-        
             // Get permanent vehicle request associated with driver and vehicle
             $permanent = VehiclePermanentlyRequestModel::select('vehicle_request_permanent_id')
-                ->where('driver_id', $get_driver_id)
+                ->where('requested_by', $get_driver_id)
                 ->where('vehicle_id', $request->vehicle_id)
                 ->where('status', true)
                 ->first();
@@ -428,13 +425,13 @@ class PermanentFuelController extends Controller {
         
             // Fetch the existing fueling record by ID (could be the main record, e.g., $id)
             $former_fueling = PermanentFuelModel::select('final_approved_by','vehicle_id','driver_id','permanent_id')->where('fueling_id',$request->id)->first();
-            if(!$fueling)
+            if(!$former_fueling)
               {
                 return redirect()->back()->with('error_message',
                     "Warning! You are denied the service",
                     );
               }
-            if($fueling->driver_id != $get_driver_id || $fueling->final_approved_by)
+            if($former_fueling->driver_id != $get_driver_id || $former_fueling->final_approved_by)
                 {
                         return redirect()->back()->with('error_message',
                         "Warning! You are denied the service",
@@ -444,13 +441,13 @@ class PermanentFuelController extends Controller {
             $ethiopianDate = $this->dailyKmCalculation->ConvertToEthiopianDate($today); 
             $fueling = new PermanentFuelModel();
             $fueling->fueling_id = $request->id;
-            $fueling->vehicle_id = $fueling->vehicle_id;
-            $fueling->driver_id = $fueling->driver_id;
-            $fueling->permanent_id = $fueling->permanent_id;
+            $fueling->vehicle_id = $former_fueling->vehicle_id;
+            $fueling->driver_id = $former_fueling->driver_id;
+            $fueling->permanent_id = $former_fueling->permanent_id;
             // dd($request->fuiling_date[ $index ]);
             $fueling->fuiling_date = $request->fueling_date;
-            $fueling->month = $request->month;
-            $fueling->year = $request->year;
+            $fueling->month = $former_fueling->month;
+            $fueling->year = $former_fueling->year;
             //$fueling->fuel_amount = $fuel_amount;
             $fueling->fuel_cost = $request->fuel_cost;
             

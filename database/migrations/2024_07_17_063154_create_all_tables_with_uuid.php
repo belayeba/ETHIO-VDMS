@@ -305,7 +305,7 @@ class CreateAllTablesWithUuid extends Migration
         $table->date('fuiling_date');
         $table->integer('year')->nullable();
         $table->string('month');
-        $table->integer('fuel_amount');
+       // $table->integer('fuel_amount');
         $table->boolean('accepted')->default(false);
         $table->integer('one_litre_price')->nullable();
         $table->integer('quata')->nullable();

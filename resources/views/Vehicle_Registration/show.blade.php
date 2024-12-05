@@ -143,6 +143,7 @@
                                                     <option value="">Select Fuel Type</option>
                                                     <option value="Benzene">Benzene</option>
                                                     <option value="Diesel">Diesel</option>
+                                                    <option value="Electric">Electric</option>
                                                 </select>
                                             </div>
                                         </div>

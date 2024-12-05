@@ -49,15 +49,14 @@ class VehicleRegistrationController extends Controller {
             'make' => 'required|string|max:255',
             'model' => 'required|string|max:255',
             'year' => 'required|integer',
-            'plate_number' => 'required|string|max:255',
-            'capacity' => 'required|integer',
+            'plate_number' => 'required|string|max:255|unique:vehicles,plate_number',  
+             'capacity' => 'required|integer',
             'mileage' => 'required|integer',
             'fuel_amount' => 'required|numeric',
-            'last_service' => 'nullable|numeric',
-            'next_service' => 'nullable|numeric',
-            'registered_by' => 'nullable|uuid|exists:users,id',
+            'Last_Service' => 'required|numeric||lt:Next_Service',
+            'Next_Service' => 'required|numeric|gt:Last_Service',
             'driver_id' => 'nullable|uuid|exists:drivers,driver_id',
-            'fuel_type' => 'required|string|max:255',
+            'fuel_type' => 'required|string|In:Electric,Diesel,Benzene',
             'notes' => 'nullable|string',
             'vehicle_type' => 'required|string|max:255',
             'vehicle_category' => 'required|string|max:255',
@@ -67,7 +66,7 @@ class VehicleRegistrationController extends Controller {
         
         if ( $validator->fails() ) {
             return redirect()->back()->with('error_message',
-            'All field should be field',
+            $validator->errors(),
             );
         }
         $filelibre = '';
