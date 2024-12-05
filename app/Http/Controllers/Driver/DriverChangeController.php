@@ -155,11 +155,12 @@ class DriverChangeController extends Controller {
             }
             $logged_user = Auth::id();
             $get_request = DriverDriverChangeModel::find($request->request_id);
-            if($get_request->new_driver != $logged_user || !$get_request->driver_accepted || !$get_request->driver_reject_reason)
+            // dd($get_request->driver_accepted != 1 );
+            if(($get_request->newDriver->user_id) != ($logged_user) || $get_request->driver_accepted != 0 || $get_request->driver_reject_reason != null )
                 {
                     return response()->json(['error_message'=>"Warning! You are denied the service"]);
                 }
-            $get_request->driver_accepted = $logged_user;
+            $get_request->driver_accepted = 1;
             $get_request->save();
             $user = User::find($get_request->changed_by);
             $driver_name = $get_request->newDriver->user->first_name;

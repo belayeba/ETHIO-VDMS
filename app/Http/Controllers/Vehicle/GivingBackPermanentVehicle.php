@@ -74,9 +74,7 @@ public function ReturntVehiclePerm(Request $request)
                     ]);
                     // Success: Record was created
                     // Redirect page to Permananet
-                    return redirect()->back()->with('success_message',
-                    'Request sent successfully',
-                    );
+                    return redirect()->back()->with('success_message','Request sent successfully',);
                         
                 }
             catch (Exception $e) 
@@ -139,15 +137,15 @@ public function update_return_request(Request $request)
                                 'Request updated successfully.',
                                 );
                         }
+                    }
+                catch (Exception $e) 
+                    {
+                        // Handle the case when the vehicle request is not found
+                        return redirect()->back()->with('error_message',
+                                        'Sorry, Something went wrong.',
+                                        );
+                    }
             }
-        catch (Exception $e) 
-            {
-                // Handle the case when the vehicle request is not found
-                return redirect()->back()->with('error_message',
-                                'Sorry, Something went wrong.',
-                                );
-            }
-    }
      // User can delete Request
 public function deleteRequest(Request $request)
     {
@@ -284,10 +282,10 @@ public function Vec_DirectorRejectRequest(Request $request)
 // Dispatcher Page
 public function Dispatcher_page() 
     {    
-            $vehicle_requests = GivingBackVehiclePermanently::whereNotNull('approved_by')
-                                ->whereNull('reject_reason_vec_director')
-                                ->get();
-            return view("Return.DirectorPage", compact('vehicle_requests'));     
+    $vehicle_requests = GivingBackVehiclePermanently::whereNotNull('approved_by')
+                        ->whereNull('reject_reason_vec_director')
+                        ->get();
+    return view("Return.DirectorPage", compact('vehicle_requests'));     
     }
     // VEHICLE DIRECTOR APPROVE THE REQUESTS
 public function DispatcherApproveRequest(Request $request)

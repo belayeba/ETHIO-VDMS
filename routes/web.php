@@ -329,6 +329,7 @@ Route::group(['middleware' => ['auth']], function()
         Route::get('/request',[DriverChangeController::class, 'driver_get_request'])->name('driverchange.request');
         Route::get('/my_request',[DriverChangeController::class, 'driver_get_request'])->name('driver.requestPage');
         Route::post('/store',[DriverChangeController::class, 'store'])->name('driver_change.store');
+        Route::post('/accept',[DriverChangeController::class, 'driver_accept'])->name('driver_change.accept');
         Route::put('/update/{request_id}', [DriverChangeController::class, 'update'])->name('driverchange.update');
         Route::delete('/delete/{request_id}', [DriverChangeController::class, 'destroy'])->name('driverchange.destroy');
         });

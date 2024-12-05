@@ -41,148 +41,263 @@
                                                     <th>Action</th>
                                                 </tr>
                                             </thead>
-                                            @foreach($get_request->where('dir_approved_by', '===', null) as $request)
+                                            @foreach($get_request->where('driver_accepted', '===', 0) as $request)
                                                 <tbody>
                                                     <tr>
                                                         <td>{{$loop->iteration}}</td>
-                                                        <td id="plate">{{$request->vehicle->plate_number}}</td>
+                                                        <td>{{$request->vehicle->plate_number}}</td>
                                                         <td>{{$request->newDriver->user->first_name}}</td>
                                                         <td>{{ $request->oldDriver && $request->user ? $request->user->first_name : "No older" }}</td>
                                                         <td>
-                                                            <button type="button" class="btn btn-secondary"  id="assignBtn">Get Inspection</button>
-                                                        </td>
-                                                        {{-- <td>{{$request->created_at}}</td> --}}
-                                                        {{-- <td>
-                                                            <button type="button" class="btn btn-info rounded-pill" data-bs-toggle="modal" data-bs-target="#standard-modal-{{ $loop->index }}" title="Show"><i class=" ri-eye-line"></i></button>
-                                                            @if($request->dir_approved_by === Null && $request->director_reject_reason === Null)
+                                                            <button type="button" class="btn btn-info rounded-pill" title="Inspect" id="showInspectionModal" data-value="{{$request->inspection_id}}">Show</button>
+                                                          </td> 
+                                                        <td>
+                                                            {{-- <button type="button" class="btn btn-info rounded-pill" data-bs-toggle="modal" data-bs-target="#standard-modal-{{ $loop->index }}" title="Show"><i class=" ri-eye-line"></i></button> --}}
+                                                            @if($request->driver_accepted === 0 && $request->driver_reject_reason === Null)
                                                             <button id="acceptButton" type="button" class="btn btn-primary rounded-pill" title="Accept" onclick="confirmFormSubmission('approvalForm-{{ $loop->index }}')"><i class="ri-checkbox-circle-line"></i></button>
                                                             <button type="button" class="btn btn-danger rounded-pill" data-bs-toggle="modal" data-bs-target="#staticBackdrop-{{ $loop->index }}" title="Reject"><i class=" ri-close-circle-fill"></i></button>
                                                             @endif
-                                                        </td> --}}
+                                                        </td>
                                                     </tr>
                                                 </tbody>
-                                                <form id="approvalForm-{{ $loop->index }}" method="POST" action="{{ route('director_approve_request') }}" style="display: none;">
+                                                <form id="approvalForm-{{ $loop->index }}" method="POST" action="{{ route('driver_change.accept') }}" style="display: none;">
                                                     @csrf
-                                                    <input type="hidden" name="request_id" value="{{ $request->request_id }}">
+                                                    <input type="hidden" name="request_id" value="{{ $request->driver_change_id }}">
                                                 </form>
+
+                                                <!-- this is for the Reject  modal -->
+                                                <div class="modal fade" id="staticBackdrop-{{ $loop->index }}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                                                    <div class="modal-dialog">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <h5 class="modal-title" id="staticBackdropLabel">Reject reason</h5>
+                                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                            </div> <!-- end modal header -->
+                                                            <form method="POST" action="{{route('vehicle_director_reject_request')}}">
+                                                                @csrf
+                                                                <div class="modal-body">
+                                                                    <div class="col-lg-6">
+                                                                        <h5 class="mb-3"></h5>
+                                                                        <div class="form-floating">
+                                                                        <input type="hidden" name="request_id" value="{{$request->giving_back_vehicle_id}}">
+                                                                        <textarea class="form-control" name="reason" style="height: 60px;" required></textarea>
+                                                                        <label for="floatingTextarea">Reason</label>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="modal-footer">
+                                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                                    <button type="submit" class="btn btn-danger">Reject</button>
+                                                                </div> <!-- end modal footer -->
+                                                            </form>                                                                    
+                                                        </div> <!-- end modal content-->
+                                                    </div> <!-- end modal dialog-->
+                                                </div>
                                                 @endforeach
                                         </table>
                                     </div>
+                                    <!-- end .table-responsive-->
+                                    <div class="table-responsive"  id="table2" style="display:none">
+                                        <h4 class="header-title mb-4" >ARCHIVED REQUEST</h4>
+                                        <div class="toggle-tables">
+                                            <button type="button" class="btn btn-outline-secondary rounded-pill"  onclick="toggleDiv('table1')">PENDING REQUEST</button>
+                                            <button type="button" class="btn btn-secondary rounded-pill"  onclick="toggleDiv('table2')">ARCHIVED REQUEST</button>
+                                            <!-- Add more buttons for additional tables if needed -->
+                                        </div></br>
+                                        <table class="table table-centered mb-0 table-nowrap" id="inline-editable">
+                                            <thead>
+                                                <tr>
+                                                    <th>#</th>
+                                                    <th>Vehicle</th>
+                                                    <th>New Driver</th>
+                                                    <th>Old Driver</th>
+                                                    <th>Status</th>
+                                                    <th>Inspection</th>
+                                                </tr>
+                                            </thead>
+                                            @foreach($get_request->where('driver_accepted', '!==', 0) as $request)
+                                                <tbody>
+                                                    <tr>
+                                                        <td>{{$loop->iteration}}</td>
+                                                        <td>{{$request->vehicle->plate_number}}</td>
+                                                        <td>{{$request->newDriver->user->first_name}}</td>
+                                                        <td>{{ $request->oldDriver && $request->user ? $request->user->first_name : "No older" }}</td>
+                                                        <td> @if($request->driver_accepted === 0 && $request->driver_reject_reason === null)
+                                                                <p class="btn btn-primary ">ACCEPTED</p>
+                                                             @elseif($request->driver_accepted !== 0 && $request->driver_reject_reason !== null)
+                                                                <p class="btn btn-danger">REJECTED
+                                                            @endif
+                                                        </td> 
+                                                        <td>
+                                                          <button type="button" class="btn btn-info rounded-pill" title="Inspect" id="showInspectionModal" data-value="{{$request->inspection_id}}">Show</button>
+                                                        </td> 
+                                                    </tr>
+                                                </tbody>
+                                            @endforeach
+                                        </table>
+                                    </div> 
                                 </div>
                             </div>
                         </div>
                     </div>
             </div>
         </div>
-        
-                                            
-<script>
+        <!-- this is for the assign  modal -->
+        <div class="modal fade" id="showInspection" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg modal-dialog-scrollable">
+            <div class="modal-content">
+                    
+                    <div class="modal-header">
+                                                                                        
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div> <!-- end modal header -->
+                    <div class="modal-body">
+                        <div class="row mt-3" id="inspectionCardsContainer" class="table table-striped"> 
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-secondary"  data-bs-dismiss="modal" aria-label="Close">close</button>
+                    </div> <!-- end modal footer -->
+                </div>                                                              
+            </div> <!-- end modal content-->
+        </div> <!-- end modal dialog-->
+
+        <script>
+
+            document.getElementById('showInspectionModal').addEventListener('click', function() {
+          var inspection = this.getAttribute('data-value');                                
+          // Perform an Ajax request to fetch data based on the selected car ID
+          $.ajax({
+              url: "{{ route('inspection.show.specific') }}",
+              type: 'post',
+              headers: {
+                  'X-CSRF-TOKEN': "{{ csrf_token() }}"
+              },
+              data: { id: inspection },
+              success: function(response) {
+                  $('#showInspection').modal('show');
+                  var cardsContainer = document.getElementById('inspectionCardsContainer');
+                  cardsContainer.innerHTML = ''; // Clear previous cards
   
+                  if (response.status === 'success' && Array.isArray(response.data) && response.data.length > 0) {
+                      // Create the table
+                      var Image = response.data[0].image_path;
+                      var imageUrl = Image ? "{{ asset('storage/vehicles/Inspections/') }}" + '/' + Image : null;    
+                      var inspectedBy = response.data[0].inspected_by;
+                      var createdAt = new Date(response.data[0].created_at).toLocaleDateString('en-US', {
+                          year: 'numeric',
+                          month: '2-digit',
+                          day: '2-digit'
+                      });
+                  // Create a section to display "Inspected By" and "Created At" at the top right corner
+                      var infoSection = document.createElement('div');
+                      infoSection.className = 'd-flex justify-content-end mb-4'; // Flexbox to align right and add margin-bottom
+                      infoSection.innerHTML = `
+                          <p><strong>Inspected By:</strong> ${inspectedBy} </br>
+                          <strong>Created At:</strong> ${createdAt}</br>
+                          <strong>Image:</strong> 
+                          ${ imageUrl 
+                              ? `<a href="${imageUrl}" target="_blank"> Click to View </a>` 
+                              : 'No image'
+                          }
+                      `;
+                      cardsContainer.appendChild(infoSection); // Append the info section before the table
+                      var h1 = document.createElement('h4');
+                      h1.style.textAlign = 'center';
+                      h1.innerHTML = 'Vehilce parts';
+                      var h2 = document.createElement('h4');
+                      h2.style.textAlign = 'center';
+                      h2.innerHTML = 'Spare parts';
+                      var table = document.createElement('table');
+                      table.className = 'table table-striped'; // Add Bootstrap classes for styling
+                      table.innerHTML = `
+                          <thead>
+                              <tr>
+                                  <th>Vehicle Part</th>
+                                  <th>Is Damaged</th>
+                                  <th>Damage Description</th>
+                              </tr>
+                          </thead>
+                          <tbody>
+                          </tbody>
+                      `;
+  
+                      response.data.forEach(function(inspection) {
+                          if(inspection.type == 'normal_part')
+                              {
+                                  var row = document.createElement('tr');
+                                  row.innerHTML = `
+                                      <td>${inspection.part_name}</td>
+                                      <td>${inspection.is_damaged ? 'No' : 'Yes'}</td>
+                                      <td>${inspection.damage_description ? inspection.damage_description : '-'}</td>
+                                  `;
+                                  table.querySelector('tbody').appendChild(row); // Append row to the table body
+                              }
+                      });
+                      cardsContainer.appendChild(h1);
+                      cardsContainer.appendChild(table);
 
-  function confirmFormSubmission(formId) {
-        if (confirm("Are you sure you want to accept this request?")) {
-            var form = document.getElementById(formId);
-            form.submit();
-        }
-    }
-   
-    function toggleDiv(targetId) {
-        const allDivs = document.querySelectorAll('.table-responsive');
-        allDivs.forEach(div => {
-            if (div.id === targetId) {
-                div.style.display = 'block';// Show the target div
-            } else {
-                div.style.display = 'none';// Hide other divs
-            }
-        });
-    }
-</script>
+                      var table1 = document.createElement('table');
+                      table1.className = 'table table-striped'; // Add Bootstrap classes for styling
+                      table1.innerHTML = `
+                          <thead>
+                              <tr>
+                                  <th>Spare part</th>
+                                  <th>Is available</th>
+                                  <th>Quantity</th>
+                              </tr>
+                          </thead>
+                          <tbody>
+                          </tbody>
+                      `;
+  
+                      response.data.forEach(function(inspection) {
+                          if(inspection.type == 'spare_part')
+                              {
+                                  var row = document.createElement('tr');
+                                  row.innerHTML = `
+                                      <td>${inspection.part_name}</td>
+                                      <td>${inspection.is_damaged == "0" ? 'No' : 'Yes'}</td>
+                                      <td>${inspection.damage_description ? inspection.damage_description : '-'}</td>
+                                  `;
+                                  table1.querySelector('tbody').appendChild(row); // Append row to the table body
+                              }
+                      });
+                      cardsContainer.appendChild(h2);
+                      cardsContainer.appendChild(table1);
+  
+                  } 
+              else 
+                  {
+                      // Handle the case where no data is available
+                      cardsContainer.innerHTML = '<p>No inspection data available.</p>';
+                  }
+              },
+              error: function() {
+                  var cardsContainer = document.getElementById('inspectionCardsContainer');
+                  cardsContainer.innerHTML = ''; // Clear previous cards
+                  cardsContainer.innerHTML = '<p>No inspection data available at the moment. Please check the Plate number!</p>';
+              }
+          });
+      });
 
-<script>
-document.getElementById('assignBtn').addEventListener('click', function() {
-    // Check if vehicleselection exists
-    var vehicleSelectionElement = document.getElementById('vehicleselection');
-    var selectedCarId = vehicleSelectionElement ? vehicleSelectionElement.value : "vehicleselection not found";
-    console.log("Selected Car ID:", selectedCarId);
-
-    // Check if Gridinline-editableView2 exists
-    var container = document.getElementById("Gridinline-editableView2");
-    if (container) {
-        // Attempt to get the specific <td> content if it exists
-        var vehicleTd = container.getElementsByTagName("td")[2];
-        var vehicle = vehicleTd ? vehicleTd.textContent.trim() : "No <td> found at index 2";
-        console.log("Vehicle:", vehicle);
-    } else {
-        console.log("Gridinline-editableView2 container not found");
-    }
-// });
-
-
-
-        // Perform an Ajax request to fetch data based on the selected car ID
-        $.ajax({
-            url: "{{ route('inspection.ByVehicle') }}",
-            type: 'GET',
-            data: { id: selectedCarId },
-            success: function(response) {
-                var cardsContainer = document.getElementById('inspectionCardsContainer');
-                cardsContainer.innerHTML = ''; // Clear previous cards
-
-                if (response.status === 'success' && Array.isArray(response.data) && response.data.length > 0) {
-                    // Create the table
-                    var inspectedBy = response.data[0].inspected_by;
-                    var createdAt = new Date(response.data[0].created_at).toLocaleDateString('en-US', {
-                        year: 'numeric',
-                        month: '2-digit',
-                        day: '2-digit'
-                    });
-                // Create a section to display "Inspected By" and "Created At" at the top right corner
-                    var infoSection = document.createElement('div');
-                    infoSection.className = 'd-flex justify-content-end mb-3'; // Flexbox to align right and add margin-bottom
-                    infoSection.innerHTML = `
-                        <p><strong>Inspected By:</strong> ${inspectedBy} </br>
-                        <strong>Created At:</strong> ${createdAt}</p>
-                    `;
-                    cardsContainer.appendChild(infoSection); // Append the info section before the table
-
-                    var table = document.createElement('table');
-                    table.className = 'table table-striped'; // Add Bootstrap classes for styling
-                    table.innerHTML = `
-                        <thead>
-                            <tr>
-                                <th>Part Name</th>
-                                <th>Is Damaged</th>
-                                <th>Damage Description</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                        </tbody>
-                    `;
-
-                    response.data.forEach(function(inspection) {
-                        var row = document.createElement('tr');
-                        row.innerHTML = `
-                            <td>${inspection.part_name}</td>
-                            <td>${inspection.is_damaged ? 'No' : 'Yes'}</td>
-                            <td>${inspection.damage_description ? inspection.damage_description : 'N/A'}</td>
-                        `;
-                        table.querySelector('tbody').appendChild(row); // Append row to the table body
-                    });
-
-                    cardsContainer.appendChild(table);
-
-                } else {
-                    // Handle the case where no data is available
-                    cardsContainer.innerHTML = '<p>No inspection data available.</p>';
-                }
-            },
-            error: function() {
-                var cardsContainer = document.getElementById('inspectionCardsContainer');
-                cardsContainer.innerHTML = ''; // Clear previous cards
-                cardsContainer.innerHTML = '<p>No inspection data available at the moment. Please check the Plate number!</p>';
-            }
-        });
-    });
+      function confirmFormSubmission(formId) {
+              if (confirm("Are you sure you want to accept this request?")) {
+                  var form = document.getElementById(formId);
+                  form.submit();
+              }
+          }
+      
+          function toggleDiv(targetId) {
+              const allDivs = document.querySelectorAll('.table-responsive');
+              allDivs.forEach(div => {
+                  if (div.id === targetId) {
+                      div.style.display = 'block';// Show the target div
+                  } else {
+                      div.style.display = 'none';// Hide other divs
+                  }
+              });
+          }
 </script>
 
 <script src="{{ asset('assets/js/vendor.min.js') }}"></script>
