@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use App\Notifications\TaskCompleted;
 use App\Http\Controllers\Vehicle\Daily_KM_Calculation;
+use Carbon\Carbon;
 
 class VehicleTemporaryRequestController extends Controller
     {
@@ -97,22 +98,22 @@ class VehicleTemporaryRequestController extends Controller
         // Send Vehicle Request Temporary
         public function RequestVehicleTemp(Request $request) 
             {
-                // Custom validation rule to check equal number of material_name and weight entries
                 Validator::extend('equal_count', function ($attribute, $value, $parameters, $validator) use ($request) {
                     $countMaterialName = count($request->input('material_name', []));
                     $countWeight = count($request->input('weight', []));
                     return $countMaterialName === $countWeight;
                 }, 'The number of material names and weights must be equal.');
+                $today = \Carbon\Carbon::today();
+                $ethiopianDate = $this->dailyKmCalculation->ConvertToEthiopianDate($today); 
                 // Validate the request
                 $validator = Validator::make($request->all(), [
                     'purpose' => 'required|string|max:255',
                     'vehicle_type' => 'required|string',
-                    'in_out_town'=>'required|boolean',
-                    'how_many_days'=>'required|integer',
-                    'with_driver'=>'required|integer|in:1,0',
+                    'in_out_town' => 'required|boolean',
+                    'with_driver' => 'required|integer|in:1,0',
                     'start_date' => 'required|date',
-                    'start_time' => 'required|date_format:H:i',
-                    'return_date' => 'required|date|after_or_equal:start_date',
+                    'start_time' => 'required|date_format:H:i|after_or_equal:$today',
+                    'return_date' => 'required|date|after_or_equal:start_date', // Ensure return_date is after or equal to start_date
                     'return_time' => 'required|date_format:H:i',
                     'start_location' => 'required|string|max:255',
                     'end_location' => 'required|string|max:255',
@@ -123,13 +124,13 @@ class VehicleTemporaryRequestController extends Controller
                     'itemNames' => 'nullable|equal_count',
                     'itemWeights' => 'nullable|equal_count',
                 ]);
-                // If validation fails, return an rerror response
-                if ($validator->fails()) 
-                        {
-                            return redirect()->back()->with('error_message',
-                            'All field required.',
-                            );  
-                        }
+                
+                // If validation fails, return an error response
+                if ($validator->fails()) {
+                    $errorMessages = implode(', ', $validator->errors()->all());
+                    return redirect()->back()->with('error_message', $errorMessages);
+                }
+                
                     try 
                         {
                             DB::beginTransaction();
@@ -138,11 +139,27 @@ class VehicleTemporaryRequestController extends Controller
                             // Create the vehicle request
                             $today = \Carbon\Carbon::today();
                             $ethiopianDate = $this->dailyKmCalculation->ConvertToEthiopianDate($today); 
+                            $startDate = Carbon::parse($request->start_date);
+                            $returnDate = Carbon::parse($request->return_date);
+                            // Calculate the difference in days
+                            $how_many_days = $startDate->diffInDays($returnDate);
+                            if($request->start_date < $ethiopianDate)
+                                {
+                                        return redirect()->back()->with('error_message',
+                                        'Please! Check Start Date',
+                                    );
+                                } 
+                            if($how_many_days < 0)
+                                {
+                                        return redirect()->back()->with('error_message',
+                                        'Return Date should be greater than Start Date',
+                                    );
+                                }                     
                             $Vehicle_Request = VehicleTemporaryRequestModel::create([
                                 'purpose' => $request->purpose,
                                 'in_out_town' =>$request->in_out_town,
                                 'with_driver' =>$request->with_driver,
-                                'how_many_days' =>$request->how_many_days,
+                                'how_many_days' =>$how_many_days,
                                 'vehicle_type' => $request->vehicle_type,
                                 'requested_by_id'=> $id,
                                 'start_location' => $request->start_location,
@@ -368,17 +385,17 @@ class VehicleTemporaryRequestController extends Controller
                 })
 
                 ->addColumn('date', function ($row) {
-                    return $row->created_at;
+                    return $row->created_at->format('d/m/Y');
                 })
 
                 ->addColumn('status', function ($row) use ($data_drawer_value) {
                     if ($data_drawer_value == 1) {
                         if ($row->div_approved_by !== null && $row->cluster_director_reject_reason === null) {
-                            return 'CLUSTER ACCEPTED';
+                            return 'ACCEPTED';
                         } elseif ($row->div_approved_by !== null && $row->cluster_director_reject_reason !== null) {
-                            return 'CLUSTER REJECTED';
+                            return 'REJECTED';
                         }
-                        return 'CLUSTER PENDING';
+                        return 'PENDING';
                     } elseif ($data_drawer_value == 2) {
                         if ($row->hr_div_approved_by !== null && $row->hr_director_reject_reason === null) {
                             return 'ACCEPTED';
@@ -395,11 +412,11 @@ class VehicleTemporaryRequestController extends Controller
                         return 'PENDING';
                     } else {
                         if ($row->dir_approved_by !== null && $row->director_reject_reason === null) {
-                            return 'DIRECTOR ACCEPTED';
+                            return 'ACCEPTED';
                         } elseif ($row->dir_approved_by !== null && $row->director_reject_reason !== null) {
-                            return 'DIRECTOR REJECTED';
+                            return 'REJECTED';
                         }
-                        return 'DIRECTOR PENDING';
+                        return 'PENDING';
                     }
                 })
 
@@ -462,68 +479,69 @@ class VehicleTemporaryRequestController extends Controller
         
             }
 
-        protected function fetchDirectorData($id, $data_drawer_value){
+        protected function fetchDirectorData($id, $data_drawer_value)
+            {
 
-            if($data_drawer_value == 1){
-                
-                $user = User::with('department')->find($id);
+                if($data_drawer_value == 1){
+                    
+                    $user = User::with('department')->find($id);
 
-                $clusterId = $user->department->cluster_id;
-                $data = VehicleTemporaryRequestModel::
-                with('approvedBy','requestedBy.department')->whereHas('requestedBy.department', function ($query) use ($clusterId) {
-                    $query->where('cluster_id', $clusterId);
-                })
-                    ->where(function($query) {
-                        $query->orWhere('how_many_days', '>', 1)
-                            ->orWhere('in_out_town', false);
+                    $clusterId = $user->department->cluster_id;
+                    $data = VehicleTemporaryRequestModel::
+                    with('approvedBy','requestedBy.department')->whereHas('requestedBy.department', function ($query) use ($clusterId) {
+                        $query->where('cluster_id', $clusterId);
                     })
-                    // ->whereNull('div_approved_by')
-                    ->whereNotNull('dir_approved_by')
+                        ->where(function($query) {
+                            $query->orWhere('how_many_days', '>', 1)
+                                ->orWhere('in_out_town', false);
+                        })
+                        // ->whereNull('div_approved_by')
+                        ->whereNotNull('dir_approved_by')
+                        ->get();
+                }
+                elseif($data_drawer_value == 2){
+
+                    $data = VehicleTemporaryRequestModel::
+                    where(function($query) {
+                        $query->orWhere('how_many_days', '>', 0)
+                            ->orWhere('in_out_town', true);
+                    })
+                    ->whereNull('cluster_director_reject_reason')
+                    ->whereNotNull('div_approved_by')
                     ->get();
-            }
-            elseif($data_drawer_value == 2){
+                }
+                elseif($data_drawer_value == 3){
 
-                $data = VehicleTemporaryRequestModel::
-                where(function($query) {
-                    $query->orWhere('how_many_days', '>', 0)
-                        ->orWhere('in_out_town', true);
-                })
-                ->whereNull('cluster_director_reject_reason')
-                ->whereNotNull('div_approved_by')
-                ->get();
-            }
-            elseif($data_drawer_value == 3){
-
-                $data = VehicleTemporaryRequestModel::with('approvedBy', 'requestedBy')
-                ->where(function ($query) {
-                    // Check if how_many_days > 1 OR in_out_town is true
-                    $query->where(function ($q) {
-                        $q->where('how_many_days', '>', 1)
-                        ->orWhere('in_out_town', false);
+                    $data = VehicleTemporaryRequestModel::with('approvedBy', 'requestedBy')
+                    ->where(function ($query) {
+                        // Check if how_many_days > 1 OR in_out_town is true
+                        $query->where(function ($q) {
+                            $q->where('how_many_days', '>', 1)
+                            ->orWhere('in_out_town', false);
+                        })
+                        // Apply condition for hr_div_approved_by
+                        ->whereNotNull('hr_div_approved_by');
                     })
-                    // Apply condition for hr_div_approved_by
-                    ->whereNotNull('hr_div_approved_by');
-                })
-                // Fallback to dir_approved_by if the first condition isn't true
-                ->orWhere(function ($query) {
-                    $query->where('how_many_days', '<=', 1)
-                        ->where('in_out_town', true)
-                        ->whereNotNull('dir_approved_by');
-                })
-                ->get();
-            }
-            else{
-                
-                $directors_data = User::select('department_id')->where('id',$id)->first();
-                $dept_id = $directors_data->department_id;
-    
-                $data = VehicleTemporaryRequestModel::whereHas('requestedBy', function ($query) use ($dept_id) {
-                        $query->where('department_id', $dept_id);
-                    })->latest()->get();;
-            }
+                    // Fallback to dir_approved_by if the first condition isn't true
+                    ->orWhere(function ($query) {
+                        $query->where('how_many_days', '<=', 1)
+                            ->where('in_out_town', true)
+                            ->whereNotNull('dir_approved_by');
+                    })
+                    ->get();
+                }
+                else{
+                    
+                    $directors_data = User::select('department_id')->where('id',$id)->first();
+                    $dept_id = $directors_data->department_id;
+        
+                    $data = VehicleTemporaryRequestModel::whereHas('requestedBy', function ($query) use ($dept_id) {
+                            $query->where('department_id', $dept_id);
+                        })->latest()->get();;
+                }
 
-            return $data;
-        }
+                return $data;
+            }
 
         // Directors Page
         public function DirectorApproveRequest(Request $request)
@@ -602,7 +620,7 @@ class VehicleTemporaryRequestController extends Controller
                         $user = User::find($Vehicle_Request->requested_by_id);
                         $message = "Your Vehicle Temporary Request Rejected, click here to see its detail";
                         $subject = "Vehicle Temporary";
-                        $url = "{{ route('displayRequestPage') }}";
+                        $url = "/temp_request_page";
                         $user->NotifyUser($message,$subject,$url);
                         return redirect()->back()->with('success_message',
                                  "The request rejected successfully",
@@ -712,7 +730,7 @@ class VehicleTemporaryRequestController extends Controller
                         $user = User::find($Vehicle_Request->requested_by_id);
                         $message = "Your Vehicle Temporary Request Rejected, click here to see its detail";
                         $subject = "Vehicle Temporary";
-                        $url = "{{ route('displayRequestPage') }}";
+                        $url = "/temp_request_page";
                         $user->NotifyUser($message,$subject,$url);
                         return redirect()->back()->with('success_message',
                                  "The request rejected successfully",
@@ -815,7 +833,7 @@ class VehicleTemporaryRequestController extends Controller
                         $user = User::find($Vehicle_Request->requested_by_id);
                         $message = "Your Vehicle Temporary Request Rejected, click here to see its detail";
                         $subject = "Vehicle Temporary";
-                        $url = "{{ route('displayRequestPage') }}";
+                        $url = "/temp_request_page";
                         $user->NotifyUser($message,$subject,$url);
                         return redirect()->back()->with('success_message',
                                  "The request rejected successfully",
@@ -836,7 +854,7 @@ class VehicleTemporaryRequestController extends Controller
                 ->where(function ($query) {
                     // Check if how_many_days > 1 OR in_out_town is true
                     $query->where(function ($q) {
-                        $q->where('how_many_days', '>', 1)
+                        $q->where('how_many_days', '>', 3)
                         ->orWhere('in_out_town', false);
                     })
                     // Apply condition for hr_div_approved_by
@@ -856,7 +874,6 @@ class VehicleTemporaryRequestController extends Controller
                 // Return the results, for example, passing them to a view
                 return view('Request.TransportDirectorPage', compact('vehicleRequests'));
             }
-
         public function TransportDirectorApproveRequest(Request $request)
             {
                     $validation = Validator::make($request->all(),[
@@ -928,7 +945,7 @@ class VehicleTemporaryRequestController extends Controller
                         $user = User::find($Vehicle_Request->requested_by_id);
                         $message = "Your Vehicle Temporary Request Rejected, click here to see its detail";
                         $subject = "Vehicle Temporary";
-                        $url = "{{ route('displayRequestPage') }}";
+                        $url = "/temp_request_page";
                         $user->NotifyUser($message,$subject,$url);
                         return redirect()->back()->with('success_message',
                                  "The request rejected successfully",
@@ -952,6 +969,151 @@ class VehicleTemporaryRequestController extends Controller
                                      //->whereNull('assigned_by')
                                     ->get();
                     return view("Request.VehicleDirectorPage", compact('vehicle_requests','vehicles'));     
+            }
+             // fetching director approval requests
+        public function FetchForDispatcher(Request $request)
+            {
+                // dd($request->input('customDataValue'));
+                $id = Auth::id();
+            
+                $data_drawer_value = $request->input('customDataValue');
+
+                $vehicles = VehiclesModel::where('status',1)->get();
+                if($data_drawer_value == 1)
+                {
+                    $data = VehicleTemporaryRequestModel::
+                                whereNotNull('transport_director_id')
+                                ->whereNull('vec_director_reject_reason')
+                                ->whereNull('start_km')
+                                ->whereNull('assigned_by')
+                                // ->whereNotNull('vehicle_id')
+                                ->get();
+                }
+                elseif($data_drawer_value == 2)
+                {
+                    $data = VehicleTemporaryRequestModel::
+                                whereNotNull('transport_director_id')
+                                ->whereNull('vec_director_reject_reason')
+                                ->whereNull('start_km')
+                                ->whereNotNull('assigned_by')
+                                ->whereNotNull('vehicle_id')
+                                ->get();
+                }
+                elseif($data_drawer_value == 3){
+                    $data = VehicleTemporaryRequestModel::
+                        whereNotNull('transport_director_id')
+                        ->whereNull('vec_director_reject_reason')
+                        ->whereNotNull('assigned_by')
+                        ->whereNotNull('start_km')
+                        ->whereNull('end_km')
+                        ->get();
+                }else{
+                    $data = VehicleTemporaryRequestModel::
+                        whereNotNull('transport_director_id')
+                        ->whereNull('vec_director_reject_reason')
+                        // ->whereNull('assigned_by')
+                        ->get();
+                        
+                }
+
+            
+                return datatables()->of($data)
+                ->addIndexColumn()
+                ->addColumn('counter', function($row) use ($data){
+                    static $counter = 0;
+                    $counter++;
+                    return $counter;
+                })
+
+                ->addColumn('requested_by', function ($row) {
+                    return $row->requestedBy->first_name;
+                })
+
+                ->addColumn('vehicle_type', function ($row) {
+                    return $row->vehicle_type;
+                })
+
+                ->addColumn('start_location', function ($row) {
+                    return $row->start_location;
+                })
+
+                ->addColumn('end_location', function ($row) {
+                    return $row->end_locations;
+                })
+
+                ->addColumn('date', function ($row) {
+                    return $row->created_at->format('d/m/Y');
+                })
+
+                ->addColumn('status', function ($row) {
+                    if ($row->vehicle_id !== null && $row->start_km == null) {
+                        return 'ASSIGNED';
+                    } elseif ($row->end_km == null && $row->start_km !== null) {
+                        return 'DISPATCHED';
+                    } elseif ($row->start_km !== null && $row->end_km !== null) {
+                        return 'RETURNED';
+                    } elseif ($row->transport_director_id !== null && $row->vehicle_id == null) {
+                        return 'PENDING';
+                    }
+                })
+
+                ->addColumn('actions', function ($row)  use ($data_drawer_value) {
+                    $actions = '<button type="button" class="btn btn-info rounded-pill" 
+                    data-bs-toggle="modal" 
+                    data-bs-target="#standard-modal"
+                    data-purpose="' . $row->purpose . '"
+                    data-vehicle_type="' . $row->vehicle_type . '"
+                    data-start_date="' . $row->start_date . '"
+                    data-start_time="' . $row->start_time . '"
+                    data-end_date="' . $row->end_date . '"
+                    data-end_time="' . $row->end_time . '"
+                    data-start_location="' . $row->start_location . '&nbsp;&nbsp;&nbsp;' . $row->end_locations . '"
+                    data-passengers=\'' . json_encode($row->peoples) . '\'
+                    data-materials=\'' . json_encode($row->materials) . '\'
+                    data-dir_approved_by="' . $row->dir_approved_by . '"
+                    data-director_reject_reason="' . $row->director_reject_reason . '"
+                    data-div_approved_by="' . $row->div_approved_by . '"
+                    data-cluster_director_reject_reason="' . $row->cluster_director_reject_reason . '"
+                    data-hr_div_approved_by="' . $row->hr_div_approved_by . '"
+                    data-hr_director_reject_reason="' . $row->hr_director_reject_reason . '"
+                    data-transport_director_id="' . $row->transport_director_id . '"
+                    data-vec_director_reject_reason="' . $row->vec_director_reject_reason . '"
+                    data-assigned_by="' . $row->assigned_by . '"
+                    data-assigned_by_reject_reason="' . $row->assigned_by_reject_reason . '"
+                    data-vehicle_id="' . $row->vehicle_id . '"
+                    data-vehicle_plate="' . ($row->vehicle ? $row->vehicle->plate_number : '') . '"
+                    data-start_km="' . $row->start_km . '"
+                    data-end_km="' . $row->end_km . '"
+                    title="Show Details">
+                    <i class="ri-eye-line"></i></button>'; 
+                    // if ($data_drawer_value == 1 || $data_drawer_value == 0) {
+                        if ($row->assigned_by == null) {
+                            $actions .= '<button type="button" class="btn btn-primary rounded-pill accept-btn"  data-id="' . $row->request_id . '"  title="accept"><i class=" ri-checkbox-circle-line"></i></button>';
+                            $actions .= '<button type="button" class="btn btn-danger rounded-pill reject-btn" data-id="' . $row->request_id . '"  title="reject"><i class=" ri-close-circle-fill"></i></button>';
+                        }
+                    // }
+                    //  elseif ($data_drawer_value == 2 || $data_drawer_value == 0) {
+                        if ($row->start_km == null && $row->assigned_by != null ) {
+                            $actions .= '<button type="button" class="btn btn-warning rounded-pill dispatch-btn" data-id="' . $row->request_id . '" data-plate="' . $row->vehicle->plate_number . '" title="Dispatch"><i class="  ri-contract-right-fill"></i></button>';
+                        }
+                    // } 
+                    // elseif ($data_drawer_value == 3 || $data_drawer_value == 0) {
+                        if ($row->start_km != null && $row->end_km == null) {
+                            $actions .= '<button type="button" class="btn btn-secondary rounded-pill return-btn" data-id="' . $row->request_id . '" data-plate="' . $row->vehicle->plate_number . '"  title="Return"><i class="  ri-contract-left-fill"></i></button>';
+                        }
+                    // }
+                    //  else{              
+                    // if ($row->dir_approved_by == null && $row->director_reject_reason == null) {
+                        // $actions .= '<button  type="button" class="btn btn-primary rounded-pill accept-btn"  data-id="' . $row->request_id . '" title="Accept"><i class="ri-checkbox-circle-line"></i></button>';
+                        // $actions .= '<button type="button" class="btn btn-danger rounded-pill reject-btn" data-id="' . $row->request_id . '" data-bs-toggle="modal" data-bs-target="#staticBackdrop" title="Reject"><i class=" ri-close-circle-fill"></i></button>';
+                    // }
+                // }
+                    return $actions;
+                })
+
+                ->rawColumns(['actions','start_date','location','counter'])
+                ->toJson();
+        
             }
             // VEHICLE DIRECTOR APPROVE THE REQUESTS
         public function simiritApproveRequest(Request $request)
@@ -1003,7 +1165,7 @@ class VehicleTemporaryRequestController extends Controller
                         $user = User::find($Vehicle_Request->requested_by_id);
                         $message = "Vehicle is assigned for your Vehicle Temporary Request, click here to see its detail";
                         $subject = "Vehicle Temporary";
-                        $url = "{{ route('displayRequestPage') }}";
+                        $url = "/temp_request_page";
                         $user->NotifyUser($message,$subject,$url);
                        return redirect()->back()->with('success_message',
                                  "ou are successfully Approved the request",
@@ -1028,8 +1190,9 @@ class VehicleTemporaryRequestController extends Controller
                     // Check validation error
                     if ($validation->fails()) 
                         {
-                            return response()->json($validation->errors(), 201);
+                            return redirect()->back()->with('error_message','Fill start km',);
                         }
+                        
                     // Check if it is not approved before
                     $id = $request->input('request_id');
                     $start_km = $request->input('start_km');
@@ -1039,8 +1202,9 @@ class VehicleTemporaryRequestController extends Controller
                     {
                         $Vehicle_Request = VehicleTemporaryRequestModel::findOrFail($id);
                         $vehicle = VehiclesModel::findOrFail($Vehicle_Request->vehicle_id);
+
                         if(!$vehicle->status)
-                        {
+                        { 
                             return redirect()->back()->with('error_message',
                                 'The vehicle is not active',
                                 );
@@ -1051,13 +1215,14 @@ class VehicleTemporaryRequestController extends Controller
                                 'Warning! You are denied the service.',
                                 );
                             }
+
                         $Vehicle_Request->start_km = $start_km;
                         // $Vehicle_Request->km_per_litre = $km_per_litre;
                         $vehicle->status = false;
                         $vehicle->save();
                         $Vehicle_Request->save();
                         return redirect()->back()->with('success_message',
-                        "You are successfully Approved the request",
+                        "You are successfully Dispatched the Vehicle",
                      );
                     }
                 catch (Exception $e) 
@@ -1094,14 +1259,14 @@ class VehicleTemporaryRequestController extends Controller
                                 return redirect()->back()->with('error_message',
                                 'Sorry, Something Went Wrong.',
                                 );
-                            }        
+                            }     
                         $Vehicle_Request->assigned_by = $user_id;
                         $Vehicle_Request->assigned_by_reject_reason = $reason;
                         $Vehicle_Request->save();
                         $user = User::find($Vehicle_Request->requested_by_id);
                         $message = "Your Vehicle Temporary Request Rejected, click here to see its detail";
                         $subject = "Vehicle Temporary";
-                        $url = "{{ route('displayRequestPage') }}";
+                        $url = "/temp_request_page";
                         $user->NotifyUser($message,$subject,$url);
                         return redirect()->back()->with('success_message',
                                  "The request rejected successfully",

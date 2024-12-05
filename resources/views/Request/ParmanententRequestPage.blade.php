@@ -72,12 +72,32 @@
                                                                 placeholder="Enter purpose of Request">
                                                         </div>
                                                     </div>
-
+                                                    <div class="mb-3">
+                                                        <label for="nameInput" class="form-label">Position <strong class="text-danger">*</strong></label>
+                                                        <input type="text" class="form-control" id="position" name="position" placeholder="Enter Your Position">
+                                                    </div>
                                                     <div class="position-relative mb-3">
                                                         <label class="form-label">Upload Position Latter</label>
                                                         <input name="position_letter" class="form-control" type="file">
                                                     </div>
-
+                                                    <div class="mb-3">
+                                                        <label for="nameInput" class="form-label">License Number <strong class="text-danger">*</strong></label>
+                                                        <input type="text" class="form-control" id="license_number" name="license_number" placeholder="Enter License Number">
+                                                    </div>
+                                                    <div class="position-relative mb-3">
+                                                        <div class="mb-6 position-relative" id="datepicker1">
+                                                            <label class="form-label">License expiry date </label>
+                                                            <input type="text" class="form-control" name="expiry_date"
+                                                                placeholder="Enter license expiry date" id="expirydate">
+                                                        </div>
+                                                        <script>
+                                                            $('#expirydate').calendarsPicker({
+                                                                calendar: $.calendars.instance('ethiopian', 'am'),
+                                                                pickerClass: 'myPicker',
+                                                                dateFormat: 'yyyy-mm-dd'
+                                                            });
+                                                        </script>
+                                                    </div>
                                                     <div class="position-relative mb-3">
                                                         <label class="form-label">Upload Driving License</label>
                                                         <input name="Driving_license" class="form-control" type="file">
@@ -202,6 +222,10 @@
 
                                                     <div class="tab-pane" id="account-2">
                                                         <div class="row">
+                                                            <div class="mb-3">
+                                                                <label for="nameInput" class="form-label">Position <strong class="text-danger">*</strong></label>
+                                                                <input type="text" class="form-control" id="position" name="position" placeholder="Enter Your Position">
+                                                            </div>
                                                             <div class="position-relative mb-3">
                                                                 <div class="mb-6 position-relative" id="datepicker1">
                                                                     <label class="form-label">Reason</label>
@@ -218,7 +242,24 @@
                                                                 <input name="position_letter" class="form-control"
                                                                     type="file" required>
                                                             </div>
-
+                                                            <div class="mb-3">
+                                                        <label for="nameInput" class="form-label">License Number <strong class="text-danger">*</strong></label>
+                                                        <input type="text" class="form-control" id="license_number" name="license_number" placeholder="Enter License Number">
+                                                    </div>
+                                                    <div class="position-relative mb-3">
+                                                        <div class="mb-6 position-relative" id="datepicker1">
+                                                            <label class="form-label">License expiry date </label>
+                                                            <input type="text" class="form-control" name="expiry_date"
+                                                                placeholder="Enter license expiry date" id="expirydate">
+                                                        </div>
+                                                        <script>
+                                                            $('#expirydate').calendarsPicker({
+                                                                calendar: $.calendars.instance('ethiopian', 'am'),
+                                                                pickerClass: 'myPicker',
+                                                                dateFormat: 'yyyy-mm-dd'
+                                                            });
+                                                        </script>
+                                                    </div>
                                                             <div class="position-relative mb-3">
                                                                 <label class="form-label">Upload Driving
                                                                     License</label>
@@ -388,35 +429,76 @@
                                 `;
                                 cardsContainer.appendChild(
                                     infoSection); // Append the info section before the table
-
+                                var h1 = document.createElement('h4');
+                                h1.style.textAlign = 'center';
+                                h1.innerHTML = 'Vehilce parts';
+                                var h2 = document.createElement('h4');
+                                h2.style.textAlign = 'center';
+                                h2.innerHTML = 'Spare parts';
                                 var table = document.createElement('table');
                                 table.className = 'table table-striped'; // Add Bootstrap classes for styling
                                 table.innerHTML = `
-                        <thead>
-                            <tr>
-                                <th>Part Name</th>
-                                <th>Is Damaged</th>
-                                <th>Damage Description</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                        </tbody>
-                    `;
+                                <thead>
+                                    <tr>
+                                        <th>Vehicle Part</th>
+                                        <th>Is Damaged</th>
+                                        <th>Damage Description</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            `;
 
-                                response.data.forEach(function(inspection) {
-                                    var row = document.createElement('tr');
-                                    row.innerHTML = `
-                            <td>${inspection.part_name}</td>
-                            <td>${inspection.is_damaged ? 'No' : 'Yes'}</td>
-                            <td>${inspection.damage_description ? inspection.damage_description : 'N/A'}</td>
-                        `;
-                                    table.querySelector('tbody').appendChild(
-                                        row); // Append row to the table body
+                                    response.data.forEach(function(inspection) {
+                                        if(inspection.type == "normal_part")
+                                         {
+                                            var row = document.createElement('tr');
+                                            row.innerHTML = `
+                                            <td>${inspection.part_name}</td>
+                                            <td>${inspection.is_damaged ? 'No' : 'Yes'}</td>
+                                            <td>${inspection.damage_description ? inspection.damage_description : '-'}</td>
+                                            `;
+                                            table.querySelector('tbody').appendChild(
+                                                row); // Append row to the table body
+                                        }
                                 });
+                                cardsContainer.appendChild(h1);
+                                cardsContainer.appendChild(table);
+                                // Spare Part
+                                var table = document.createElement('table');
+                                table.className = 'table table-striped'; // Add Bootstrap classes for styling
+                                table.innerHTML = `
+                                        <thead>
+                                            <tr>
+                                                <th>Spare Part</th>
+                                                <th>Is Available</th>
+                                                <th>Quantity</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        </tbody>
+                                    `;
 
+                                response.data.forEach(function(inspection) 
+                                {
+                                    if(inspection.type == "spare_part")
+                                        {
+                                            var row = document.createElement('tr');
+                                            row.innerHTML = `
+                                            <td>${inspection.part_name}</td>
+                                            <td>${inspection.is_damaged == "0"? 'No' : 'Yes'}</td>
+                                            <td>${inspection.damage_description ? inspection.damage_description : '-'}</td>
+                                            `;
+                                                table.querySelector('tbody').appendChild(
+                                                    row); // Append row to the table body
+                                        }
+                                });
+                                cardsContainer.appendChild(h2);
                                 cardsContainer.appendChild(table);
 
-                            } else {
+                            } 
+                            else 
+                            {
                                 // Handle the case where no data is available
                                 cardsContainer.innerHTML = '<p>No inspection data available.</p>';
                             }

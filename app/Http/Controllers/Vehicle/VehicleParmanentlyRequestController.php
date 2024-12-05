@@ -13,8 +13,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Controllers\Vehicle\Daily_KM_Calculation;
+use App\Models\Driver\DriversModel;
 use App\Models\Vehicle\GivingBackVehiclePermanently;
-
+use Illuminate\Support\Facades\DB;
 class VehicleParmanentlyRequestController extends Controller
 {
     protected $dailyKmCalculation;
@@ -31,12 +32,9 @@ class VehicleParmanentlyRequestController extends Controller
             //$check_permanent = GivingBackVehiclePermanently::where()
             return view("Request.ParmanententRequestPage", compact('Requested'));
         }
-
     // show list of permanent request
     public function FetchPermanentRequest()
         {
-            
-
             $id = Auth::id();        
             $data = VehiclePermanentlyRequestModel::where('requested_by', $id)->get();
             
@@ -49,7 +47,7 @@ class VehicleParmanentlyRequestController extends Controller
             })
 
             ->addColumn('start_date', function ($row) {
-                return $row->created_at->format('M j, Y,');
+                return $row->created_at->format('d/m/Y');
             })
 
             ->addColumn('status', function ($row) {
@@ -106,15 +104,17 @@ class VehicleParmanentlyRequestController extends Controller
             ->toJson();
     
         }
-
     // Send Vehicle Request Parmananently
     public function RequestVehiclePerm(Request $request)
         {
             // Validate the request
             $validator = Validator::make($request->all(), [
                 'purpose' => 'required|string|max:255',
+                'position'=>'required|string|max:255',
                 'position_letter' => 'required|file|mimes:pdf,jpeg,png,jpg', // For PDF and common image types
                 'Driving_license' => 'required|file|mimes:pdf,jpeg,png,jpg', // For PDF and common image types
+                'license_number' => 'required|string|max:255',
+                'expiry_date' => 'required|date',
 
             ]);
             // If validation fails, return an error response
@@ -156,6 +156,9 @@ class VehicleParmanentlyRequestController extends Controller
                     'purpose' => $request->purpose,
                     'position_letter' => $postion_letterfileName,
                     'driving_license' => $driving_licensefileName,
+                    'position'=> $request->input('position'),
+                    'license_number' => $request->input('license_number'),
+                    'expiry_date' => $request->input('expiry_date'),
                     'created_at' => $ethiopianDate
                 ]);
                 // Success: Record was created
@@ -176,8 +179,8 @@ class VehicleParmanentlyRequestController extends Controller
             // Validate the request
             $validator = Validator::make($request->all(), [
                 'request_id' => 'required|uuid|exists:vehicle_requests_parmanently,vehicle_request_permanent_id', // Check if UUID exists in the 'vehicle_requests_parmanently' table
-                'purpose' => 'sometimes|string|max:255',
-                'position_letter' => 'sometimes|file|mimes:pdf,jpeg,png,jpg|max:2048', // 2MB max size for file
+                'purpose' => 'required|string|max:255',
+                'position_letter' => 'required|file|mimes:pdf,jpeg,png,jpg|max:2048', // 2MB max size for file
             ]);
             // Check if validation fails
             if ($validator->fails()) {
@@ -290,21 +293,18 @@ class VehicleParmanentlyRequestController extends Controller
                 return $row->requestedBy->first_name;
             })
 
-            ->addColumn('reason', function ($row) {
-                return $row->purpose;
-            })
 
             ->addColumn('start_date', function ($row) {
-                return $row->created_at->format('M j, Y,');
+                return $row->created_at->format('d/m/Y');
             })
 
             ->addColumn('status', function ($row) {
                 if (is_null($row->approved_by)) {
-                    return '<button  class="btn btn-warning" style="pointer-events: none;">Pending</button>';
+                    return 'PENDING';
                 } elseif (!is_null($row->director_reject_reason)) {
-                    return '<button type="button" class="btn btn-danger" style="pointer-events: none;">Rejected</button>';
+                    return 'REJECTED';
                 } else {
-                    return '<button type="button" class="btn btn-success" style="pointer-events: none;">Approved</button>';
+                    return 'APPROVED';
                 }
             })
 
@@ -312,7 +312,11 @@ class VehicleParmanentlyRequestController extends Controller
             ->addColumn('actions', function ($row){
                 $action = '';
 
-                $action .= '<button type="button" class="btn btn-info rounded-pill show-btn" data-bs-toggle="modal" data-position_letter="' . $row->position_letter . '" data-driving_license="' . $row->driving_license . '" data-bs-target="#standard-modal-{{ $loop->index }}" title="Show"><i class=" ri-eye-line"></i></button>';
+                $action .= '<button type="button" class="btn btn-info rounded-pill show-btn" data-bs-toggle="modal" 
+                data-reason="' . $row->purpose . '" 
+                data-position_letter="' . $row->position_letter . '" 
+                data-driving_license="' . $row->driving_license . '" 
+                data-bs-target="#standard-modal-{{ $loop->index }}" title="Show"><i class=" ri-eye-line"></i></button>';
 
                 if (is_null($row->approved_by) && is_null($row->director_reject_reason)) {
                     $action .= '
@@ -331,7 +335,6 @@ class VehicleParmanentlyRequestController extends Controller
             ->toJson();
     
         }
-
     // DIRECTOR APPROVE THE REQUESTS
     public function DirectorApproveRequest(Request $request)
         {
@@ -398,7 +401,7 @@ class VehicleParmanentlyRequestController extends Controller
                 $user = User::find($Vehicle_Request->requested_by);
                 $message = "Your Vehicle Permanent Request Rejected, click here to see its detail";
                 $subject = "Vehicle Permanent";
-                $url = "{{ route('vec_perm_request') }}";
+                $url = "/perm_request_page";
                 $user->NotifyUser($message,$subject,$url);
                 return redirect()->back()->with('success_message',
                 'Successfully Rejected.',
@@ -434,13 +437,14 @@ class VehicleParmanentlyRequestController extends Controller
             // Check if it is not approved before
             $id = $request->input('request_id');
             $vehicle_id = $request->vehicle_id;
+        try {
             $the_vehicle = VehiclesModel::findOrFail($vehicle_id);
             if(!$the_vehicle->status)
-            {
-                return redirect()->back()->with('error_message',
-                                'Vehicle Not active.',
-                                );
-            }
+                {
+                    return redirect()->back()->with('error_message',
+                                    'Vehicle Not active.',
+                                    );
+                }
             $latest_inspection = InspectionModel::where('vehicle_id', $vehicle_id)->latest()->first();
             if (!$latest_inspection) {
                 return redirect()->back()->with('error_message',
@@ -454,6 +458,22 @@ class VehicleParmanentlyRequestController extends Controller
                 'Sorry, something went wrong',
                 );
             }
+            $check_driver = DriversModel::where('user_id',$Vehicle_Request->requested_by)->first();
+            if(!$check_driver)
+                {
+                    DB::beginTransaction(); // Begin a transaction
+                    $today = \Carbon\Carbon::today();
+                    $ethiopianDate = $this->dailyKmCalculation->ConvertToEthiopianDate($today);
+                    DriversModel::create( [
+                        'user_id' => $Vehicle_Request->requested_by,
+                        'license_number' =>$Vehicle_Request->license_number,
+                        'license_expiry_date' => $Vehicle_Request->expiry_date,
+                        'license_file' => $Vehicle_Request->driving_license,
+                        'register_by' => $user_id,
+                        'notes' => "Registered by System",
+                        'created_at' => $ethiopianDate
+                    ] );
+                }
             // dd($Vehicle_Request);
             $today = Carbon::today()->toDateString();
             $Vehicle_Request->given_by = $user_id;
@@ -461,14 +481,21 @@ class VehicleParmanentlyRequestController extends Controller
             $Vehicle_Request->inspection_id = $latest_inspection->inspection_id;
             $Vehicle_Request->given_date =  $today;
             $Vehicle_Request->save();
+            DB::commit();
             $user = User::find($Vehicle_Request->requested_by);
             $message = "Your Vehicle Permanent Request Approved, click here to see its detail";
             $subject = "Vehicle Permanent";
-            $url = "{{ route('vec_perm_request') }}";
+            $url = "/perm_request_page";
             $user->NotifyUser($message,$subject,$url);
             return redirect()->back()->with('success_message',
                 'Successfully Approved.',
             );
+        }
+    catch(Exception $e)
+        {
+            DB::rollBack();
+            return redirect()->back()->with('error_message','Sorry, Something Went Wrong',);
+        }
         }
     //vehicle Director Reject the request
     public function DispatcherRejectRequest(Request $request)
@@ -499,7 +526,7 @@ class VehicleParmanentlyRequestController extends Controller
             $user = User::find($Vehicle_Request->requested_by);
             $message = "Your Vehicle Permanent Request Rejected, click here to see its detail";
             $subject = "Vehicle Permanent";
-            $url = "{{ route('vec_perm_request') }}";
+            $url = "/perm_request_page";
             $user->NotifyUser($message,$subject,$url);
             return redirect()->back()->with('success_message',
                 'Successfully Rejected.',
@@ -529,7 +556,7 @@ class VehicleParmanentlyRequestController extends Controller
                     'Reject the request because assigned vehicle is not active',
                     );
                 }
- 
+        
             $fuel_quata = $get_the_vehilce->fuel_amount;
             $check_request->accepted_by_requestor = $logged_user;
             $get_the_vehilce->status = false;
@@ -538,7 +565,7 @@ class VehicleParmanentlyRequestController extends Controller
             $check_request->save();
             return redirect()->back()->with('success_message',
             'Vehicle successfully Given to you.',
-        );
+         );
         }
     public function reject_assigned_vehicle(Request $request)
         {

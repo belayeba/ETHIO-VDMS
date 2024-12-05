@@ -42,7 +42,7 @@ class VehiclePartsController extends Controller
                 $vehiclePart = VehiclePart::find($id);
         
                 if (!$vehiclePart) {
-                    return response()->json(['status' => 'error', 'message' => 'Vehicle part not found'], 404);
+                    return redirect()->back()->with('error_message','Vehicle Part not found',);
                 }
         
                 return response()->json(['status' => 'success', 'data' => $vehiclePart]);
@@ -67,13 +67,13 @@ class VehiclePartsController extends Controller
                 $validator = Validator::make($request->all(), $rules);
         
                 if ($validator->fails()) {
-                    return response()->json(['status' => 'error', 'errors' => $validator->errors()], 422);
+                    return redirect()->back()->with('error_message','All fields are required',);
                 }
         
                 $vehiclePart = VehiclePart::find($id);
         
                 if (!$vehiclePart) {
-                    return response()->json(['status' => 'error', 'message' => 'Vehicle part not found'], 404);
+                    return redirect()->back()->with('error_message','Vehicle Part not found',);
                 }
         
                 $vehiclePart->update([
@@ -89,7 +89,7 @@ class VehiclePartsController extends Controller
                 $vehiclePart = VehiclePart::find($id);
         
                 if (!$vehiclePart) {
-                    return response()->json(['status' => 'error', 'message' => 'Vehicle part not found'], 404);
+                    return redirect()->back()->with('error_message','Vehicle part not found',);
                 }
         
                 $vehiclePart->delete();

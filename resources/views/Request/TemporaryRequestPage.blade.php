@@ -31,7 +31,6 @@
                     <strong> Success- </strong> {!! session('success_message') !!}
                 </div>
             @endif
-
             <!-- Start Content-->
             <div class="container-fluid">
                 <div class="row g-3">
@@ -46,14 +45,22 @@
 
                                 <form method="POST" action="{{ route('temp_request_post') }}">
                                     @csrf
+                                    <ul class="nav nav-pills nav-justified form-wizard-header mb-3">
+                                        <li class="nav-item">
+                                            <a class="nav-link rounded-0 py-2" id="displayprogresive">
+                                                <i class="ri-car-fill fw-normal fs-20 align-middle me-1"></i>
+                                                <span class="d-none d-sm-inline">Request</span>
+                                            </a>
+                                        </li>
+                                    </ul>
 
-                                    <div id="progressbarwizard">
+                                    <div id="progressbarwizard" style="display: none">
                                         <ul class="nav nav-pills nav-justified form-wizard-header mb-3">
                                             <li class="nav-item">
                                                 <a href="#account-2" data-bs-toggle="tab" data-toggle="tab"
                                                     class="nav-link rounded-0 py-2">
                                                     <i class="ri-car-fill fw-normal fs-20 align-middle me-1"></i>
-                                                    <span class="d-none d-sm-inline">Request</span>
+                                                    <span class="d-none d-sm-inline">Reason</span>
                                                 </a>
                                             </li>
                                             <li class="nav-item">
@@ -78,11 +85,11 @@
                                                 </a>
                                             </li>
                                             <!-- <li class="nav-item">
-                                                                        <a href="#finish-4" data-bs-toggle="tab" data-toggle="tab" class="nav-link rounded-0 py-2">
-                                                                            <i class=" ri-suitcase-3-fill fw-normal fs-20 align-middle me-1"></i>
-                                                                            <span class="d-none d-sm-inline">Extras</span>
-                                                                        </a>
-                                                                    </li> -->
+                                                <a href="#finish-4" data-bs-toggle="tab" data-toggle="tab" class="nav-link rounded-0 py-2">
+                                                    <i class=" ri-suitcase-3-fill fw-normal fs-20 align-middle me-1"></i>
+                                                    <span class="d-none d-sm-inline">Extras</span>
+                                                </a>
+                                            </li> -->
                                         </ul>
 
                                         <div class="tab-content b-0 mb-0">
@@ -105,15 +112,20 @@
 
                                                     <div class="position-relative mb-3">
                                                         <div class="mb-6 position-relative" id="datepicker1">
-                                                            <label class="form-label">Vehicle type</label>
-                                                            <input type="text" class="form-control" name="vehicle_type"
-                                                                placeholder="Select vehicle type">
+                                                               <label class="form-label">Vehicle Type</label>
+                                                                <select id="vehicle_type" name="vehicle_type" class="form-select" required>
+                                                                    <option value="">Select</option>
+                                                                    <option value="Human">Human</option>
+                                                                    <option value="Load">Load</option>
+                                                                    <option value="Load">Both</option>
+                                                                    <option value="Load">Neither</option>
+                                                                </select>
                                                         </div>
                                                     </div>
                                                 </div>
                                                 <ul class="list-inline wizard mb-0">
                                                     <li class="next list-inline-item float-end">
-                                                        <a href="javascript:void(0);" class="btn btn-info">Add More Info <i
+                                                        <a href="javascript:void(0);" class="btn btn-info">Next <i
                                                                 class="ri-arrow-right-line ms-1"></i></a>
                                                     </li>
                                                 </ul>
@@ -166,22 +178,14 @@
                                                                 placeholder="Enter Time of arrival">
                                                         </div>
                                                     </div>
-                                                    <div class="position-relative mb-3">
-                                                        <div class="mb-6 position-relative" id="datepicker1">
-                                                            <label class="form-label">How many Days</label>
-                                                            <input type="number" class="form-control"
-                                                                name="how_many_days" placeholder="Enter the Duration">
-                                                        </div>
-                                                    </div>
                                                 </div>
                                                 <ul class="pager wizard mb-0 list-inline">
                                                     <li class="previous list-inline-item">
                                                         <button type="button" class="btn btn-light"><i
-                                                                class="ri-arrow-left-line me-1"></i> Back to
-                                                            Account</button>
+                                                                class="ri-arrow-left-line me-1"></i> Back</button>
                                                     </li>
                                                     <li class="next list-inline-item float-end">
-                                                        <button type="button" class="btn btn-info">Add More Info <i
+                                                        <button type="button" class="btn btn-info">Next <i
                                                                 class="ri-arrow-right-line ms-1"></i></button>
                                                     </li>
                                                 </ul>
@@ -209,12 +213,10 @@
                                                 <ul class="pager wizard mb-0 list-inline mt-1">
                                                     <li class="previous list-inline-item">
                                                         <button type="button" class="btn btn-light"><i
-                                                                class="ri-arrow-left-line me-1"></i> Back to
-                                                            Profile</button>
+                                                                class="ri-arrow-left-line me-1"></i> Back</button>
                                                     </li>
                                                     <li class="next list-inline-item float-end">
-                                                        <a href="#finish-3" type="button" class="btn btn-info">Add More
-                                                            Info <i class="ri-arrow-right-line ms-1"></i></a>
+                                                        <a href="#finish-3" type="button" class="btn btn-info">Next <i class="ri-arrow-right-line ms-1"></i></a>
                                                     </li>
                                                 </ul>
                                             </div>
@@ -231,6 +233,25 @@
                                                             <input type="checkbox" class="form-check-input"
                                                                 name="with_driver" value="0">
                                                             <label class="form-check-label">No</label>
+                                                        </div>
+                                                    </div>
+                                                    <div id="ToggleWithDriver" style="display:none">
+                                                        <div class="row">
+
+                                                            <p class="mb-1 fw-bold text-muted">Select Driver</p>
+                                                            <select id="multiSelect1" name="driver_id"
+                                                                class="select2 form-control select2-multiple"
+                                                                data-toggle="select2" multiple="multiple"
+                                                                data-placeholder="Select People ...">
+                                                                <optgroup label="Users/Employees">
+                                                                    @foreach ($users as $user)
+                                                                        <option value="{{ $user->id }}">
+                                                                            <p style="color:black">{{ $user->first_name }}
+                                                                        </option>
+                                                                    @endforeach
+                                                                </optgroup>
+                                                            </select>
+                                                            <div id="selectedValues" class="mt-2"></div>
                                                         </div>
                                                     </div>
                                                     <h6 class="fs-15 mt-3">In/Out Town</h6>
@@ -269,7 +290,7 @@
                                                                 data-placeholder="Select People ...">
                                                                 <optgroup label="Users/Employees">
                                                                     @foreach ($users as $user)
-                                                                        ;
+                                                                        
                                                                         <option value="{{ $user->id }}">
                                                                             <p style="color:black">{{ $user->first_name }}
                                                                         </option>
@@ -312,8 +333,7 @@
                                                 <ul class="pager wizard mb-0 list-inline mt-1">
                                                     <li class="previous list-inline-item">
                                                         <button type="button" class="btn btn-light"><i
-                                                                class="ri-arrow-left-line me-1"></i> Back to
-                                                            Profile</button>
+                                                                class="ri-arrow-left-line me-1"></i> Back</button>
                                                     </li>
                                                     <li class="next list-inline-item float-end">
                                                         <button type="submit" class="btn btn-info">Submit</button>
@@ -328,7 +348,9 @@
                                                 const checkboxes = document.querySelectorAll(
                                                     'input[name="with_driver"], input[name="in_out_town"], input[name="package"]');
                                                 const packageCheckbox = document.querySelector('input[name="package"]');
+                                                const withdriverCheckbox = document.querySelector('input[name="with_driver"]');
                                                 const divToToggle = document.getElementById('TogglePackage');
+                                                const withDriverToggle = document.getElementById('ToggleWithDriver');
 
                                                 checkboxes.forEach((checkbox) => {
                                                     checkbox.addEventListener('change', function() {
@@ -336,7 +358,7 @@
                                                             if (cb !== this && cb.name === this.name) {
                                                                 cb.checked = false;
                                                                 divToToggle.style.display = 'none';
-
+                                                                withDriverToggle.style.display = 'none';
                                                             }
                                                         });
                                                     });
@@ -351,9 +373,19 @@
                                                         }
                                                     }
                                                 });
+                                                withdriverCheckbox.addEventListener('change', function() {
+                                                    if (withDriverToggle) {
+                                                        if (withdriverCheckbox.value === 1) {
+                                                            withDriverToggle.style.display = 'none'; // Display the div if the checkbox value is 1
+                                                        } else {
+                                                            withDriverToggle.style.display = 'block';
+                                                        }
+                                                    }
+                                                });
                                             </script>
                                         </div></br> <!-- end card-body-->
                                     </div>
+
                                 </form>
                             </div>
                         </div>
@@ -462,7 +494,6 @@
                             },
                         ]
                     });
-
                     document.addEventListener('DOMContentLoaded', function() {
                         const select = document.getElementById('multiSelect');
                         const selectedValuesDiv = document.getElementById('selectedValues');
@@ -643,6 +674,18 @@
                         // Populate progress
                         modal.find('[data-field="progress"]').html(buildProgressMessage(button));
 
+                    });
+
+                    document.getElementById('displayprogresive').addEventListener('click', function() {
+                        // Retrieve the div element to be toggled
+                        var targetDiv = document.getElementById('progressbarwizard');
+                        
+                        // Toggle the visibility of the div
+                        if (targetDiv.style.display === 'none') {
+                            targetDiv.style.display = 'block';
+                        } else {
+                            targetDiv.style.display = 'none';
+                        }
                     });
                 </script>
 

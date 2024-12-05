@@ -39,7 +39,7 @@ class DriverRegistrationController extends Controller {
             ] );
 
             if ( $validator->fails() ) {
-                return response()->json( [ 'errors' => $validator->errors() ], 422 );
+                return redirect()->back()->with('error_message','Warning! You are denied the service',);
             }
             $loged_user = Auth::id();
 
@@ -69,8 +69,8 @@ class DriverRegistrationController extends Controller {
             $user->NotifyUser($message,$subject,$url);
             return redirect()->back()->with('success_message','Driver created successfully.',);
         } catch ( Exception $e ) {
-            return response()->json( [ 'message' => $e ], 500 );
-            //return redirect()->back()->with( 'error', 'Driver creation failed.' );
+            return redirect()->back()->with('error_message','Sorry, Something went wrong',);
+    
         }
     }
 
@@ -81,7 +81,7 @@ class DriverRegistrationController extends Controller {
             $drivers = DriversModel::all();
             return response()->json( $drivers );
         } catch ( \Exception $e ) {
-            return response()->json( [ 'message' => 'Fetching drivers failed' ], 500 );
+            return redirect()->back()->with('error_message','Fetching Drivers failed',);
         }
     }
 
@@ -92,7 +92,7 @@ class DriverRegistrationController extends Controller {
             $driver = DriversModel::findOrFail( $id );
             return response()->json( $driver );
         } catch ( Exception $e ) {
-            return response()->json( [ 'message' => 'Driver not found' ], 404 );
+            return redirect()->back()->with('error_message','Driver not found',);
         }
 
     }
@@ -113,7 +113,7 @@ class DriverRegistrationController extends Controller {
             ] );
 
             if ( $validator->fails() ) {
-                return response()->json( [ 'errors' => $validator->errors() ], 422 );
+                return redirect()->back()->with('error_message','All fields are required',);
             }
 
             $file = $request->file( 'license_file' );
@@ -135,7 +135,7 @@ class DriverRegistrationController extends Controller {
             ] );
             return redirect()->back()->with('success_message','Driver updated successfully.',);
         } catch ( Exception $e ) {
-            return response()->json( [ 'message' => 'Driver not found' ], 404 );
+            return redirect()->back()->with('error_message','Driver not found',);
         }
 
     }
@@ -148,7 +148,7 @@ class DriverRegistrationController extends Controller {
             $driver->delete();
             return redirect()->back()->with('success_message','Driver deleted successfully.',);
         } catch ( Exception $e ) {
-            return response()->json( [ 'message' => 'Driver not found' ], 404 );
+            return redirect()->back()->with('error_message','Driver not found',);
         }
 
     }

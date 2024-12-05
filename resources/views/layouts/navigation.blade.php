@@ -19,7 +19,7 @@
         text-align: center;
         text-decoration: none !important;
         cursor: pointer;
-        *cursor: hand;
+        cursor: hand;
         color: #333 !important;
         border: 1px solid transparent;
         border-radius: 2px;
@@ -115,6 +115,7 @@
                                 <span> Dashboard </span>
                             </a>
                         </li>
+                    <li class="side-nav-item">  
                         <a data-bs-toggle="collapse" href="#sidebarRequest" aria-expanded="false"
                             aria-controls="sidebarRequest" class="side-nav-link">
                             <i class=" ri-questionnaire-line"></i>
@@ -201,6 +202,11 @@
                         </a>
                         <div class="collapse" id="sidebarFuel">
                             <ul class="side-nav-second-level">
+                                @can('Set Feul Cost')
+                                    <li>
+                                        <a href="{{ route('all_fuel_cost') }}">Set Feul Cost</a>
+                                    </li>
+                                @endcan()
                                 @can('Request Fuel')
                                     <li>
                                         <a href="{{ route('permanenet_fuel_request') }}">Request</a>
@@ -239,7 +245,7 @@
                                             <a href="{{ route('driver.switch') }}">Driver Change</a>
                                         </li>
                                     @endcan()
-                                    @can('Change Driver')
+                                    @can('Accept Driver Change')
                                         <li>
                                             <a href="{{ route('driverchange.request') }}">Driver Accept</a>
                                         </li>

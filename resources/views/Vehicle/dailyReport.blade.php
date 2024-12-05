@@ -20,99 +20,69 @@
             </div>
             @endif
             <div class="container-fluid">
-                <div class="row">
-                    <div class="col-12">
-                        <div class="page-title-box">
-                            <h4 class="page-title">Daily km Report</h4>
-                        </div>
-                    </div>
-                </div>
 
                 <div class="row">
-                    <div class="col-12">
-                        <div class="card">
-                            <div class="card-body">
-                                <div class="row">
+                  
+                 
 
-                                    <div class="col-12">
-                                        <div class="box_header common_table_header">
-                                            <div class="main-title d-md-flex">
-                                                <h3 class="mb-0 mr-30 mb_xs_15px mb_sm_20px">Filter Report</h3>
-                                            </div>
-                                        </div>
-                                    </div>
+                                    
 
                                     <div class="col-lg-12 mb-3">
                                         <form action="{{ route('dailyreport.filterReport') }}" method="GET">
 
-                                        <div class="">
-
-                                            <div class="row">
-                                                <div class="col-lg-12">
-                                                    </br>
-                                                </div>
-                                            </div>
-                                            <div class="row">
-                                                <form action="{{ route('dailyreport.filterReport') }}" method="GET">
-                                                <!-- Plate Number Filter -->
-                                                <div class="col-lg-4">
-                                                    <label for="selectPlateNumber" class="form-label">Plate Number</label>
-                                                    <select id="selectPlateNumber" name="plate_number" class="form-select">
-                                                        <option value="">Select Plate Number</option>
-                                                        @foreach($vehicles as $vehicle)
-                                                            <option value="{{ $vehicle->plate_number }}">{{ $vehicle->plate_number }}</option>
-                                                        @endforeach
-                                                    </select>
-                                                </div>
-                                            
-                                                <!-- Date Range Picker -->
-                                                <div class="col-lg-2">
-                                                    <label for="daterangetime" class="form-label">Date Range: &nbsp;&nbsp;&nbsp;&nbsp; From</label>
-                                                    <input type="text" class="form-control date" id="startdate" name="start_date">
-                                                    <script>
-                                                        $('#startdate').calendarsPicker({
-                                                            calendar: $.calendars.instance('ethiopian', 'am'),
-                                                            pickerClass: 'myPicker',
-                                                            dateFormat: 'yyyy-mm-dd'
-                                                        });
-                                                    </script>
-                                                </div>
-                                                <div class="col-lg-2 ">
-                                                    <label for="daterangetime" class="form-label">To</label>
-                                                    <input type="text" class="form-control date" id="end_date" name="end_date">
-                                                    <script>
-                                                        $('#end_date').calendarsPicker({
-                                                            calendar: $.calendars.instance('ethiopian', 'am'),
-                                                            pickerClass: 'myPicker',
-                                                            dateFormat: 'yyyy-mm-dd'
-                                                        });
-                                                    </script>
-                                                </div>
-                                              
-                                             <div class="col-lg-4 mt-3">
-                                                <button type="submit" class="btn btn-info">Filter <i
-                                                        class="ri-arrow-right-line ms-1"></i></button>
-                                                
-                                                        <button type="submit" class="btn btn-success" onclick="document.getElementById('export').value=1">Export</button>
-                                                        <input type="hidden" id="export" name="export" value="0">
-                                            </div>
-                                        </form>
-                    
-                                    
-                                </div>
-                                
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
 
                 <div class="row">
                     <div class="col-12">
                         <div class="card">
                             <div class="card-header">
-                                <h4 class="header-title">Daily km Report</h4>
+                                <div class="row">
+                                    <form action="{{ route('dailyreport.filterReport') }}" method="GET">
+                                    <!-- Plate Number Filter -->
+                                    <div class="col-lg-4">
+                                        <label for="selectPlateNumber" class="form-label">Plate Number</label>
+                                        <select id="selectPlateNumber" name="plate_number" class="form-select">
+                                            <option value="">Select Plate Number</option>
+                                            @foreach($vehicles as $vehicle)
+                                                <option value="{{ $vehicle->plate_number }}">{{ $vehicle->plate_number }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                
+                                    <!-- Date Range Picker -->
+                                    <div class="col-lg-2">
+                                        <label for="daterangetime" class="form-label">Date Range: &nbsp;&nbsp;&nbsp;&nbsp; From</label>
+                                        <input type="text" class="form-control date" id="startdate" name="start_date">
+                                        <script>
+                                            $('#startdate').calendarsPicker({
+                                                calendar: $.calendars.instance('ethiopian', 'am'),
+                                                pickerClass: 'myPicker',
+                                                dateFormat: 'yyyy-mm-dd'
+                                            });
+                                        </script>
+                                    </div>
+                                    <div class="col-lg-2 ">
+                                        <label for="daterangetime" class="form-label">To</label>
+                                        <input type="text" class="form-control date" id="end_date" name="end_date">
+                                        <script>
+                                            $('#end_date').calendarsPicker({
+                                                calendar: $.calendars.instance('ethiopian', 'am'),
+                                                pickerClass: 'myPicker',
+                                                dateFormat: 'yyyy-mm-dd'
+                                            });
+                                        </script>
+                                    </div>
+                                  
+                                 <div class="col-lg-4 mt-3">
+                                    <button type="submit" class="btn btn-info">Filter <i
+                                        class="ri-arrow-right-line ms-1"></i></button>
+                                
+                                        <button type="submit" class="btn btn-success" onclick="document.getElementById('export').value=1">Export</button>
+                                        <input type="hidden" id="export" name="export" value="0">
+                                </div>
+                            </div> 
+                            </form>
                             </div>
+
                             
                             <div class="card-body">
                                 <table id="basic-datatable" class="table table-striped dt-responsive nowrap w-100">
@@ -202,7 +172,7 @@
     <!-- Wizard Form Demo js -->
     <script src="assets/js/pages/form-wizard.init.js"></script>
     <script>
-        src = "{{ asset('assets/vendor/datatables.net-bs5/js/dataTables.bootstrap5.min.js') }}" >
+        src = "{{ asset('assets/vendor/datatables.net-bs5/js/dataTables.bootstrap5.min.js') }}" 
     </script>
 
 @endsection

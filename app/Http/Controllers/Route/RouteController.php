@@ -11,6 +11,7 @@ use App\Models\Vehicle\VehiclesModel as Vehicle;
 use App\Models\Vehicle\VehiclesModel;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Controllers\Vehicle\Daily_KM_Calculation;
+use Exception;
 
 class RouteController extends Controller {
     //
@@ -52,8 +53,9 @@ class RouteController extends Controller {
             'vehicle_id' => 'required|uuid|exists:vehicles,vehicle_id',
         ] );
         if ( $validator->fails() ) {
-            return response()->json( [ 'errors' => $validator->errors() ], 422 );
+            return redirect()->back()->with('error_message','All field is required.',);
         }
+        try {
         $today = \Carbon\Carbon::today();
         $ethiopianDate = $this->dailyKmCalculation->ConvertToEthiopianDate($today); 
         Route::create( [
@@ -64,6 +66,11 @@ class RouteController extends Controller {
             'created_at' => $ethiopianDate
         ] );
         return redirect()->back()->with('success_message','Route registered successfully.',);
+        }
+        catch(Exception $e)
+        {
+            return redirect()->back()->with('error_message','Sorry, Something Went Wrong',);
+        }
     }
 
     public function assignUsersToRoute( Request $request ) {
@@ -86,7 +93,6 @@ class RouteController extends Controller {
             $route->driver_phone = $request->driver_phone;
             $route->save();
         }
-
         // Reassign new users
         if ( $request->user_ids ) {
             foreach ( $request->user_ids as $user_id ) {
@@ -97,7 +103,7 @@ class RouteController extends Controller {
                 ] );
             }
         }
-        return response()->json( [ 'message' => 'Route assignments updated successfully' ] );
+        return redirect()->back()->with('success_message','Route Assignment successfull.',);
     }
 
         public function removeRoute( $route_id ) {
@@ -118,14 +124,13 @@ class RouteController extends Controller {
             $routeUser->delete();
             return redirect()->back()->with('success_message','User removed from route successfully.',);
         } else {
-            return response()->json(['error' => 'User not found in route'], 404);
+            return redirect()->back()->with('error_message','User Not found',);
         }
     }
     public function removeAllUsersFromRoute($route_id)
     {
         RouteUser::where('route_id', $route_id)->delete();
-
-        return response()->json(['message' => 'All users removed from route successfully' ] );
+        return redirect()->back()->with('success_message','All user removed successfullly.',);
         }
 
     }

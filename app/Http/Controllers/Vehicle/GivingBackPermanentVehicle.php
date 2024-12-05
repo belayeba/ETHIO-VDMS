@@ -29,8 +29,9 @@ public function displayReturnPermRequestPage()
     {
         $id = Auth::id();
         $Requested = VehiclePermanentlyRequestModel::where('requested_by',$id)->where('accepted_by_requestor', $id)->get();
+        $Return = GivingBackVehiclePermanently::where('requested_by', $id)->get();
         // dd($Requested);
-        return view("Return.ReturnPermanentVehiclePage",compact('Requested'));
+        return view("Return.ReturnPermanentVehiclePage",compact('Requested','Return'));
     }
     // Send Vehicle Return Request Parmananently
 public function ReturntVehiclePerm(Request $request) 
@@ -39,6 +40,7 @@ public function ReturntVehiclePerm(Request $request)
             $validator = Validator::make($request->all(), [
                 'purpose' => 'required|string|max:1000',
                 'request_id' => 'required|exists:vehicle_requests_parmanently,vehicle_request_permanent_id'
+                
             ]);            
                   // If validation fails, return an error response
             if ($validator->fails()) 
@@ -47,9 +49,12 @@ public function ReturntVehiclePerm(Request $request)
                     'All field is required',
                     );
                 }
+                // dd($request);
             $logged_user = Auth::id();
-            $get_permanent_request = VehiclePermanentlyRequestModel::find('request_id');
-            if($get_permanent_request->requested_by != $logged_user || $get_permanent_request->status = false)
+            $request_id= $request->input('request_id');
+            $get_permanent_request = VehiclePermanentlyRequestModel::find($request_id);
+            
+            if($get_permanent_request->requested_by != $logged_user || $get_permanent_request->status == false)
               {
                 return redirect()->back()->with('error_message',
                     'Warning! You are denied the service',
@@ -184,7 +189,7 @@ public function deleteRequest(Request $request)
     }
 // Vehicle Director Page
 public function VehicleDirector_page() 
-    {    
+    {   
             $vehicle_requests = GivingBackVehiclePermanently::latest()->get();
             return view("Return.vehicle_requests", compact('vehicle_requests'));     
     }
@@ -201,6 +206,7 @@ public function VehicleDirectorApproveRequest(Request $request)
                                 'Warning! You are denied the service.',
                                 );
                 }
+                // dd($request);
             // Check if it is not approved before
             $id = $request->input('request_id');
             $user_id = Auth::id();
@@ -240,7 +246,7 @@ public function Vec_DirectorRejectRequest(Request $request)
                 return redirect()->back()->with('error_message',
                 'Sorry, Something Went Wrong.',
                 );
-            }
+            // }dd($request);
           // Check if it is not approved before
         $id = $request->input('request_id');
         $reason = $request->input('reason');
@@ -259,7 +265,7 @@ public function Vec_DirectorRejectRequest(Request $request)
                 $user = User::find($Vehicle_Request->requested_by);
                 $message = "Your Vehicle Return Request Rejected, click here to see its detail";
                 $subject = "Vehicle Returning";
-                $url = "{{ route('return_permanent_request_page') }}";
+                $url = "/return-permanent-request-page";
                 $user->NotifyUser($message,$subject,$url);
                 $Vehicle_Request->save();
                 return redirect()->back()->with('success_message',
@@ -274,13 +280,14 @@ public function Vec_DirectorRejectRequest(Request $request)
                 );
             }
     }
+}
 // Dispatcher Page
 public function Dispatcher_page() 
     {    
             $vehicle_requests = GivingBackVehiclePermanently::whereNotNull('approved_by')
                                 ->whereNull('reject_reason_vec_director')
                                 ->get();
-            return view("Return.vehicle_requests", compact('vehicle_requests'));     
+            return view("Return.DirectorPage", compact('vehicle_requests'));     
     }
     // VEHICLE DIRECTOR APPROVE THE REQUESTS
 public function DispatcherApproveRequest(Request $request)
@@ -299,7 +306,7 @@ public function DispatcherApproveRequest(Request $request)
             $id = $request->input('request_id');
             $user_id = Auth::id();
             $Vehicle_Request = GivingBackVehiclePermanently::findOrFail($id);
-            $the_vehicle = VehiclesModel::find($Vehicle_Request->vehicle_id);
+            $the_vehicle = VehiclesModel::find($Vehicle_Request->permanentRequest->vehicle_id);
             $get_permanent_request = VehiclePermanentlyRequestModel::find($Vehicle_Request->permanent_request );
             if($Vehicle_Request->received_by)
                 {
@@ -311,6 +318,7 @@ public function DispatcherApproveRequest(Request $request)
             $get_permanent_request->status = false;
             $Vehicle_Request->received_by = $user_id;
             $Vehicle_Request->returned_date = $todayDateTime;
+            
             $the_vehicle->status = true;
             $the_vehicle->save();
             $Vehicle_Request->save();
@@ -318,7 +326,7 @@ public function DispatcherApproveRequest(Request $request)
             $user = User::find($get_permanent_request->requested_by);
             $message = "Your Vehicle Successfully Returned";
             $subject = "Vehicle Returning";
-            $url = "{{ route('return_permanent_request_page') }}";
+            $url = "/return-permanent-request-page";
             $user->NotifyUser($message,$subject,$url);
             return redirect()->back()->with('success_message',
                                 'Vehicle Successfully Returned',
@@ -357,7 +365,7 @@ public function DispatcherRejectRequest(Request $request)
                 $user = User::find($Vehicle_Request->requested_by);
                 $message = "Your Vehicle Return Request Rejected click here to see its detail";
                 $subject = "Vehicle Returning";
-                $url = "{{ route('return_permanent_request_page') }}";
+                $url = "/return-permanent-request-page";
                 $user->NotifyUser($message,$subject,$url);
                 return redirect()->back()->with('success_message',
                 'You have successfully Rejected the request.',

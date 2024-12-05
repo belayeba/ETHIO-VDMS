@@ -36,6 +36,7 @@ class permissionseeder extends Seeder {
                     'Create User',
                     'Create Driver',
                     'Change Driver',
+                    'Accept Driver Change',
                 ]
             ],
             [
@@ -92,6 +93,7 @@ class permissionseeder extends Seeder {
                 'permissions' => [
                     'Request Fuel',
                     'Finance Accept',
+                    'Set Feul Cost',
                 ]
             ],
             [

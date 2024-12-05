@@ -22,13 +22,16 @@ class PermanentFuelModel extends Model {
         'driver_id',
         'vehicle_id',
         'finance_approved_by',
+        'final_approved_by',
         'permanent_id',
         'reject_reason',
         'fuiling_date',
         'month',
         'year',
         'fuel_amount',
-        'fuel_cost',
+        'one_litre_price',
+        'quata',
+        'accepted',
         'reciet_attachment',
         'created_at'
     ];
@@ -51,7 +54,26 @@ class PermanentFuelModel extends Model {
     public function financeApprover() {
         return $this->belongsTo( User::class, 'finance_approved_by', 'id' );
     }
+    public function finalApprover() {
+        return $this->belongsTo( User::class, 'final_approved_by', 'id' );
+    }
+    public function status_check($id) {
+        $fueling = PermanentFuelModel::select('final_approved_by','finance_approved_by')->where('fueling_id',$id)->get();
+        foreach($fueling as $fuel){
+            if($fuel->final_approved_by)
+            {
+                return "APPOVED";
+            }
+            else if($fuel->finance_approved_by){
+                return "COMMENTED";
+            }
+        }
+
+        return "PENDING";
+    }
+
     public function permanentRequest() {
         return $this->belongsTo( VehiclePermanentlyRequestModel::class, 'permanent_id', 'vehicle_request_permanent_id' );
     }
+ 
 }

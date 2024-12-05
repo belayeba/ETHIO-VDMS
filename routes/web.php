@@ -14,6 +14,7 @@ use App\Http\Controllers\Organization\ClusterController;
 use App\Http\Controllers\Route\RouteController;
 use App\Http\Controllers\Notification\NotificationController;
 use App\Http\Controllers\Vehicle\DailyReportController;
+use App\Http\Controllers\Vehicle\FeulCostController;
 use App\Http\Controllers\Vehicle\Fuel_QuataController;
 use App\Http\Controllers\Vehicle\GivingBackPermanentVehicle;
 use App\Http\Controllers\Vehicle\VehicleParmanentlyRequestController;
@@ -77,6 +78,7 @@ Route::group(['middleware' => ['auth']], function()
                         Route::post('/TransportDirector_approve_requesta', 'TransportDirectorApproveRequest')->name('TransportDirector_approve_request');
                         Route::post('/TransportDirector_reject_request', 'TransportDirectorRejectRequest')->name('TransportDirector_reject_request');
                         Route::get('/simirit_approve_page', 'SimiritPage')->name('simirit_page');
+                        Route::get('/FetchForDispatchery/temp', 'FetchForDispatcher')->name('FetchForDispatcher');
                         Route::post('/simirit_approve_request', 'simiritApproveRequest')->name('simirit_approve');
                         Route::post('/simirit_fill_start_km/store', 'simiritFillstartKm')->name('simirit_fill_start_km');
                         Route::post('/simirit_reject_request', 'simiritRejectRequest')->name('simirit_reject');
@@ -102,9 +104,12 @@ Route::group(['middleware' => ['auth']], function()
                         Route::get('/permanent_fuel_request_page', 'index')->name('permanenet_fuel_request');
                         Route::get('/perm_fuel_page_fetch', 'fuel_request_fetch')->name('perm_fuel_page_fetch');
                         Route::post('/fuel_post_request', 'store')->name('store_fuel_request');
+                        Route::post('/update_entries', 'update')->name('update_entries');
+                        Route::post('/attach_new_reciet', 'attach_new_reciet')->name('attach_new_reciet');
                         Route::get('/finance_approve_page', 'finance_get_page')->name('finance_approve_fuel_page');
                         Route::get('/finance_page_fetch', 'finance_fetch')->name('finance_page_fetch');
-                        Route::post('/finance_appprove/{id}', 'finance_appprove')->name('finance_approve');
+                        Route::post('/get_each_cost', 'getPreviousCost')->name('get_each_cost');
+                        Route::get('/finance_appprove/{id}', 'finance_approve')->name('finance_approve');
                         Route::get('/show_detail/{id}', 'show');
                         Route::get('/get_my_request', 'my_request')->name('my_request');
                         Route::post('/reject_request/{id}', 'finance_reject')->name('finance_reject');
@@ -122,9 +127,8 @@ Route::group(['middleware' => ['auth']], function()
                     Route::post('/profile/store','profile_save')->name('user.profile.store');
 
                 });
-
                 // Vehicle registration 
-                Route::group([
+            Route::group([
                     'prefix'=>'vehicle',
                 ], function (){
                     Route::get('/',[VehicleVehicleRegistrationController::class, 'index'])->name('vehicleRegistration.index');
@@ -158,12 +162,12 @@ Route::group(['middleware' => ['auth']], function()
                     Route::post('/return-vehicle-permanent', 'ReturntVehiclePerm')->name('return_vehicle_permanent');
                     Route::put('/update-return-request', 'update_return_request')->name('update_return_request');
                     Route::delete('/delete-request', 'deleteRequest')->name('delete_request');
-                    Route::get('/director-approval-page', 'DirectorApprovalPage')->name('director_approval_page');
-                    Route::post('/director-approve-request', 'DirectorApproveRequest')->name('director_approve_givingback_request');
-                    Route::post('/director-reject-request', 'DirectorRejectRequest')->name('director_reject_requesting');
-                    Route::get('/vehicle-director-page', 'VehicleDirector_page')->name('vehicle_director_page');
-                    Route::post('/vehicle-director-approve-request', 'VehicleDirectorApproveRequest')->name('vehicle_director_approve_request');
-                    Route::post('/vehicle-director-reject-request', 'VehicleDirectorRejectRequest')->name('vehicle_director_reject_request');
+                    Route::get('/director-approval-page', 'VehicleDirector_page')->name('director_approval_page');
+                    Route::post('/director-approve-request', 'VehicleDirectorApproveRequest')->name('director_approve_givingback_request');
+                    Route::post('/director-reject-request', 'Vec_DirectorRejectRequest')->name('director_reject_requesting');
+                    Route::get('/vehicle-director-page', 'Dispatcher_page')->name('vehicle_director_page');
+                    Route::post('/vehicle-director-approve-request', 'DispatcherApproveRequest')->name('vehicle_director_approve_request');
+                    Route::post('/vehicle-director-reject-request', 'DispatcherRejectRequest')->name('vehicle_director_reject_request');
                 });
                 //Report Tinsae
             Route::controller(DailyReportController::class)->group(function () 
@@ -212,10 +216,10 @@ Route::group(['middleware' => ['auth']], function()
                     Route::get('/temp26', 'temp26');
                     Route::get('/temp27', 'temp27');
                     Route::get('/temp28', 'temp28');
-                    Route::group(['middleware' => ['role:admin']], function () {
+                    // Route::group(['middleware' => ['role:admin']], function () {
 
                     Route::get('/temp29', 'temp29');
-                    });
+                    // });
                     Route::get('/temp30', 'temp30');
                     Route::get('/temp31', 'temp31');
                     Route::get('/temp32', 'temp32');
@@ -289,8 +293,14 @@ Route::group(['middleware' => ['auth']], function()
                 {
                     Route::get('/get_all','index')->name('all_fuel_quota');
                     Route::get('/get_one/{id}', 'show')->name('select_one');
-                    Route::post('/save_change', 'store')->name('save_quota_change'); 
+                    Route::post('/save_quota_change', 'store')->name('save_quota_change');
                     Route::post('/save_update/{id}', 'update')->name('save_quota_update');
+                });
+            Route::controller(FeulCostController::class)->group(function ()
+                {
+                    Route::get('/get_all_feul_costs','index')->name('all_fuel_cost');
+                    Route::get('/get_one/{id}', 'show')->name('select_one');
+                    Route::post('/save_change', 'store')->name('save_cost_change'); 
                 });
 
                 Route::group([
@@ -346,7 +356,8 @@ Route::group(['middleware' => ['auth']], function()
                     Route::put('/inspection/{inspectionId}/{partName}', 'updateInspection')->name('inspection.update'); // Update a specific inspection
                     Route::delete('/inspection/{inspectionId}', 'deleteInspection')->name('inspection.delete'); // Delete a specific inspection
                  });
-                 Route::controller(NotificationController::class)->group(function () {
+            Route::controller(NotificationController::class)->group(function () 
+                {
                     Route::post('/delete_notification', 'delete_notification')->name('delete_all_notification');
                     Route::get('/read_all_notifications', 'read_all_notifications')->name('read_all_notification');
                     Route::get('/get_all_notifications', 'get_all_notifications')->name('get_all_notifications');
@@ -355,14 +366,13 @@ Route::group(['middleware' => ['auth']], function()
                     Route::post('/change_status', 'redirect_to_inteded');
                 });
                  // SAMIR
-                 Route::group([
+            Route::group([
                     'prefix'=>'vehicle',
                 ], function (){
-                Route::get('/',[VehicleRegistrationController::class, 'index'])->name('vehicleRegistration.index');
-                Route::post('/store',[VehicleRegistrationController::class, 'store'])->name('vehicleRegistration.store');
-                Route::delete('/delete/{vehicle}',[VehicleRegistrationController::class,'destroy'])->name('vehicle.destroy');
-                Route::put('/update/{vehicle}', [VehicleRegistrationController::class, 'update'])->name('vehicle.update');
-            
+                    Route::get('/',[VehicleRegistrationController::class, 'index'])->name('vehicleRegistration.index');
+                    Route::post('/store',[VehicleRegistrationController::class, 'store'])->name('vehicleRegistration.store');
+                    Route::delete('/delete/{vehicle}',[VehicleRegistrationController::class,'destroy'])->name('vehicle.destroy');
+                    Route::put('/update/{vehicle}', [VehicleRegistrationController::class, 'update'])->name('vehicle.update');
                 });
             // Route::controller(VehicleRegistrationController::class)->group(function () 
             //     {

@@ -29,15 +29,18 @@
                                         <table class="table director_datatable table-centered mb-0 table-nowrap" id="inline-editable">
                                             <thead>
                                                 <tr>
-                                                    <th>Roll number</th>
+                                                    <th>#</th>
                                                     <th>Requested By</th>
                                                     <th>Requested Month</th>
                                                     <th>Vehicle</th>
+                                                    <th>Approved By</th>
                                                     <th>Status</th>
                                                     <th>Action</th>
                                                 </tr>
                                             </thead>
+                                            <tbody>
 
+                                            </tbody>
                                             {{-- @foreach($fuels as $request)
                                                 <tbody>
                                                     <tr>
@@ -45,7 +48,7 @@
                                                         <td>{{$request->driver->user->first_name}}</td>
                                                         <td>{{$request->month}}/{{$request->year}}</td>
                                                         <td>{{$request->vehicle->plate_number}}</td>
-                                                        <td>{{$request->finance_approved_by ? $request->financeApprover->first_name : "Not Approved Yetggg"}}</td>
+                                                        <td>{{$request->finance_approved_by ? $request->financeApprover->first_name : "Not Approved Yet"}}</td>
                                                         <td>
                                                             <button type="button" class="btn btn-info rounded-pill" title="Inspect" id="assignBtn-{{$loop->iteration}}">Show</button>
                                   
@@ -171,14 +174,15 @@
                                     </div>
                                     {{-- modal for displaying the data --}}
                                     <div class="modal fade" id="staticaccept" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                                    <div class="modal-dialog modal-lg modal-dialog-scrollable">
+                                    <div class="modal-dialog modal-lg modal-dialog-scrollable" style="overflow-x: auto;">
                                         <div class="modal-content">
                                             
                                                 <div class="modal-header">
                                                                                                                     
                                                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                 </div> <!-- end modal header -->
-                                                <div class="modal-body d-flex flex-column align-items-center">
+                                                
+                                                <div class="modal-body d-flex flex-column align-items-center" >
                                                     <div class="row mt-3 w-100" id="inspectionCardsContainer">
                                                     </div>
                                                     
@@ -193,11 +197,13 @@
                                                     </div>
                                                 </div>
                                                 <div class="modal-footer">
+                                                    <button type="submit" class="btn btn-primary rounded-pill view" id="InspectionSubmitButton" title="Submit"><i class="ri-checkbox-circle-line"></i></button>
                                                     <button type="submit" class="btn btn-secondary"  data-bs-dismiss="modal" aria-label="Close">close</button>
                                                 </div> <!-- end modal footer -->
                                             </div>                                                              
                                         </div> <!-- end modal content-->
                                     </div> <!-- end modal dialog-->
+                                    
 
                                           <!-- Accept Alert Modal -->
                                           <div class="modal fade" id="confirmationModal" tabindex="-1" role="dialog"
@@ -282,7 +288,7 @@
   
   var table = $('.director_datatable').DataTable({
             processing: true,
-            pageLength: 3,
+            pageLength: 5,
             serverSide: true,
             ajax: "{{ route('finance_page_fetch') }}",
             columns: [{
@@ -306,6 +312,10 @@
                     name: 'approver'
                 },
                 {
+                    data: 'status',
+                    name: 'status'
+                },
+                {
                     data: 'action',
                     name: 'action',
                     orderable: false,
@@ -315,7 +325,7 @@
         });
 
 
-        $(document).on('click', '.view-btn', function() {
+    $(document).on('click', '.view-btn', function () {
         // Get the request ID from the data attribute
         var selectedCarId = $(this).data('id');
 
@@ -324,60 +334,170 @@
             url: '/show_detail/' + selectedCarId,
             type: 'get',
             data: { id: selectedCarId },
-            success: function(response) {
+            success: function (response) {
                 $('#staticaccept').modal('show');
 
                 // Clear previous cards and image preview
                 var cardsContainer = $('#inspectionCardsContainer');
-                cardsContainer.empty(); 
-                clearFilePreview(); 
+                cardsContainer.empty();
+                clearFilePreview();
 
                 if (response.status === 'success' && Array.isArray(response.data) && response.data.length > 0) {
                     // Populate the table and info section
                     var table = $('<table class="table table-striped">').append(`
                         <thead>
                             <tr>
-                                <th>Roll no</th>
-                                <th>Fuel Amount</th>
+                                <th>#</th>
                                 <th>Fuel Cost</th>
                                 <th>Fueling Date</th>
-                                <th>Receipt</th>
+                                <th>View Reciept</th>
+                                <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
                         </tbody>
                     `);
 
+                    let actionData = []; // Array to hold final data
                     var count = 0;
-                    response.data.forEach(function(fueling) {
+                    
+                    var total_fuel =  response.total_fuel;
+                    var expected_fuel = response.expected_fuel;
+                    var h1 = $('<h4>').append('Attached Total cost in ETB : <span style="text-decoration: underline;font-size:16px;">' + total_fuel + '</span>');
+                    var h2 = $('<h4>').append('Expected Fuel Cost in ETB : <span style="text-decoration: underline;font-size:16px;">'+expected_fuel+ '</span>');
+                    response.data.forEach(function (fueling, index) {
                         count++;
                         var row = $(`
                             <tr>
                                 <td>${count}</td>
-                                <td>${fueling.fuel_amount}</td>
                                 <td>${fueling.fuel_cost}</td>
                                 <td>${fueling.fuiling_date}</td>
                                 <td>
                                     <a href="javascript:void(0);" onclick="showFileInIframe('{{ asset('storage/vehicles/reciept/') }}/${fueling.reciet_attachment}')">
-                                        ${fueling.reciet_attachment}
+                                        <button class="btn btn-outline-info rounded-pill">View Receipt</button>
                                     </a>
+                                </td>
+                                <td>
+                                    ${fueling.accepted == 0 ? `
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <div class="form-check">
+                                                <input type="checkbox" class="form-check-input yes-checkbox" id="ok-${fueling.primary}" data-row="${fueling.primary}">
+                                                <label class="form-check-label" for="ok-${fueling.primary}">Accept</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-6">
+                                            <div class="form-check form-checkbox-danger">
+                                                <input type="checkbox" class="form-check-input none-checkbox"  id="damaged-${fueling.primary}" data-row="${fueling.primary}">
+                                                <label class="form-check-label" for="damaged-${fueling.primary}">Reject</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-8">
+                                        <input type="text" id="reason-${fueling.primary}" class="form-control reason-input d-none" placeholder="Provide reason" data-row="${fueling.primary}">
+                                    </div>
+                                ` : ''} 
                                 </td>
                             </tr>
                         `);
                         table.find('tbody').append(row);
                     });
-
+                    cardsContainer.append(h2);
+                    cardsContainer.append($('<br><br>'));
                     cardsContainer.append(table);
+                    cardsContainer.append(h1);
+                    let approvedReceipts = [];
+                    let rejectedReceipts = [];
+                        // Event handler for checkbox changes
+                        $(document).on('change', '.yes-checkbox, .none-checkbox', function () {
+                            const rowId = $(this).data('row');
+                            const isAccept = $(this).hasClass('yes-checkbox');
+                            const reasonInput = $(`#reason-${rowId}`);
+
+                            if (isAccept) {
+                                // If "Accept" is checked
+                                $(`#damaged-${rowId}`).prop('checked', false);
+                                reasonInput.addClass('d-none').val('');
+                                updateReceiptData(rowId, 'accept', null);
+                            } else {
+                                // If "Reject" is checked
+                                $(`#ok-${rowId}`).prop('checked', false);
+                                reasonInput.removeClass('d-none').focus();
+                                updateReceiptData(rowId, 'reject', reasonInput.val());
+                            }
+                        });
+
+                        // Event handler for reason input changes
+                        $(document).on('input', '.reason-input', function () {
+                            const rowId = $(this).data('row');
+                            const reason = $(this).val();
+                            updateReceiptData(rowId, 'reject', reason);
+                        });
+
+                        // Function to update receipt data
+                        function updateReceiptData(rowId, action, reason) {
+                            // Remove rowId from both arrays to prevent duplicates
+                            approvedReceipts = approvedReceipts.filter(id => id !== rowId);
+                            rejectedReceipts = rejectedReceipts.filter(entry => entry.id !== rowId);
+
+                            if (action === 'accept') {
+                                approvedReceipts.push(rowId);
+                            } else if (action === 'reject') {
+                                rejectedReceipts.push({ id: rowId, reason: reason || '' });
+                            }
+
+                            // console.log('Approved:', approvedReceipts.map(id => id));
+                            // console.log('Rejected:', rejectedReceipts.map(item => ({ id: item.id, reason: item.reason })));
+                        }
+
+                        $('#InspectionSubmitButton').on('click', function () {
+                        console.log('Preparing data for form submission...');
+
+                        // Convert the arrays into the required format
+                        const approvedData = approvedReceipts.map(id => id); // Only IDs for approved
+                        const rejectedData = rejectedReceipts.map(item => ({ id: item.id, reason: item.reason }));
+                        
+                        
+
+                        // Dynamically create a hidden form
+                        const form = $('<form>', {
+                            action: `/finance_appprove/${selectedCarId}`, // Dynamically set the fueling ID in the URL
+                            method: 'get',
+                            style: 'display: none;'
+                        });
+
+                        // Add CSRF token if required (for Laravel applications)
+                        // form.append($('<input>', { type: 'hidden', name: '_token', value: $('meta[name="csrf-token"]').attr('content') }));
+
+                        // Add approved data
+                        approvedData.forEach(id => {
+                            form.append($('<input>', {  name: 'approved_reciet[]',value: id }));
+                        });
+
+                        // Add rejected data (send id as key and reason as value for rejected items)
+                        rejectedData.forEach(item => {
+                            // First input: the id for rejected as key
+                            // form.append($('<input>', { type: 'hidden', name: 'rejected_reciet[' + item.id + '][id]', value: item.id }));
+
+                            // Second input: the reason for rejection as value for that id
+                            form.append($('<input>', {name: 'rejected_reciet[' + item.id + ']', value: item.reason }));
+                        });
+
+                        // Append the form to the body and submit
+                        $('body').append(form);
+                        form.submit();
+                    });
                 } else {
                     cardsContainer.html('<p>No inspection data available.</p>');
                 }
             },
-            error: function() {
+            error: function () {
                 var cardsContainer = $('#inspectionCardsContainer');
                 cardsContainer.html('<p>No inspection data available at the moment. Please check the Plate number!</p>');
             }
         });
     });
+
 
 function showFileInIframe(fileUrl) {
     clearFilePreview(); 

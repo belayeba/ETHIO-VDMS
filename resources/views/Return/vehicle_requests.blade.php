@@ -41,24 +41,24 @@
                                                     <th>Action</th>
                                                 </tr>
                                             </thead>
-                                            @foreach($vehicle_requests->where('received_by', '==', null)->where('reject_reason_director','==',null) as $request)
+                                            @foreach($vehicle_requests->where('approved_by', '==', null)->where('reject_reason_vec_director','==',null) as $request)
                                                 <tbody>
                                                     <tr>
                                                         <td>{{$loop->iteration}}</td>
                                                         <td>{{$request->requestedBy->first_name}}</td>
-                                                        <td>{{$request->vehicle->plate_number}}</td>
+                                                        <td>{{$request->permanentRequest->vehicle->plate_number}}</td>
                                                         <td>{{$request->purpose}}</td>
-                                                        <td>{{$request->created_at}}</td>
+                                                        <td>{{$request->created_at->format('Y-m-j')}}</td>
                                                         <td>
                                                             {{-- <button type="button" class="btn btn-info rounded-pill" data-bs-toggle="modal" data-bs-target="#standard-modal-{{ $loop->index }}" title="Show"><i class=" ri-eye-line"></i></button> --}}
-                                                            @if($request->received_by === Null && $request->reject_reason_vec_dire === Null)
+                                                            @if($request->approved_by === Null && $request->reject_reason_vec_director === Null)
                                                             <button id="acceptButton" type="button" class="btn btn-primary rounded-pill" title="Accept" onclick="confirmFormSubmission('approvalForm-{{ $loop->index }}')"><i class="ri-checkbox-circle-line"></i></button>
                                                             <button type="button" class="btn btn-danger rounded-pill" data-bs-toggle="modal" data-bs-target="#staticBackdrop-{{ $loop->index }}" title="Reject"><i class=" ri-close-circle-fill"></i></button>
                                                             @endif
                                                         </td>
                                                     </tr>
                                                 </tbody>
-                                                <form id="approvalForm-{{ $loop->index }}" method="POST" action="{{ route('vehicle_director_approve_request') }}" style="display: none;">
+                                                <form id="approvalForm-{{ $loop->index }}" method="POST" action="{{ route('director_approve_givingback_request') }}" style="display: none;">
                                                     @csrf
                                                     <input type="hidden" name="request_id" value="{{ $request->giving_back_vehicle_id }}">
                                                 </form>
@@ -71,7 +71,7 @@
                                                                 <h5 class="modal-title" id="staticBackdropLabel">Reject reason</h5>
                                                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                             </div> <!-- end modal header -->
-                                                            <form method="POST" action="{{route('vehicle_director_reject_request')}}">
+                                                            <form method="POST" action="{{route('director_reject_requesting')}}">
                                                                 @csrf
                                                                 <div class="modal-body">
                                                                     <div class="col-lg-6">
@@ -114,17 +114,17 @@
                                                     <th>Status</th>
                                                 </tr>
                                             </thead>
-                                            @foreach($vehicle_requests->where('received_by', '!==', null) as $request)
+                                            @foreach($vehicle_requests->where('approved_by', '!==', null) as $request)
                                                 <tbody>
                                                     <tr>
                                                         <td>{{$loop->iteration}}</td>
                                                         <td>{{$request->requestedBy->first_name}}</td>
-                                                        <td>{{$request->vehicle->plate_number}}</td>
+                                                        <td>{{$request->permanentRequest->vehicle->plate_number}}</td>
                                                         <td>{{$request->purpose}}</td>
-                                                        <td>{{$request->created_at}}</td>
-                                                        <td> @if($request->approved_by !== null && $request->reject_reason_vec_dire === null)
-                                                                <p class="btn btn-primary ">RETURNED</p>
-                                                             @elseif($request->approved_by !== null && $request->reject_reason_vec_dire !== null)
+                                                        <td>{{$request->created_at->format('Y-m-j')}}</td>
+                                                        <td> @if($request->approved_by !== null && $request->reject_reason_vec_director === null)
+                                                                <p class="btn btn-primary ">ACCEPTED</p>
+                                                             @elseif($request->approved_by !== null && $request->reject_reason_vec_director !== null)
                                                                 <p class="btn btn-danger">REJECTED
                                                             @endif
                                                         </td> 

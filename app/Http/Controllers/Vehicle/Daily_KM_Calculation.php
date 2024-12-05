@@ -60,8 +60,10 @@ class Daily_KM_Calculation extends Controller
                             'plate_number' => $km->vehicle->plate_number ?? 'N?A',
                             'morning_km' => $km->morning_km ?? 'N/A',
                             'afternoon_km' => $km->afternoon_km,
-                            'daily_km' => $km->daily_km,
-                            'night_km' => $km->night_km,
+                            'daily_km' => 342,
+                            'night_km' => 400,
+                            'daily_km' => $km->getDailyKmAttribute($km->vehicle->vehicle_id),
+                            'night_km' => $km->getNightKmAttribute($km->vehicle->vehicle_id),
                         ];
                     });
         
@@ -199,11 +201,11 @@ class Daily_KM_Calculation extends Controller
         
                 $dailkms = $dailkms->map(function ($km) {
                     return (object) [
-                        'date' => $km->date,
+                        'date' => $km->created_at->format('Y-m-d'),
                         'plate_number' => $km->vehicle->plate_number ?? 'N?A',
                         'morning_km' => $km->morning_km ?? 'N/A',
                         'afternoon_km' => $km->afternoon_km,
-                        'daily_km' => $km->daily_km,
+                        'daily_km' => $km->afternoon_km - $km->morning_km,
                         'night_km' => $km->night_km,
                     ];
                 });

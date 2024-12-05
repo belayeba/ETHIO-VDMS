@@ -335,15 +335,20 @@
                                                 }
                                             `;
                                             cardsContainer.appendChild(infoSection); // Append the info section before the table
-                        
+                                            var h1 = document.createElement('h4');
+                                            h1.style.textAlign = 'center';
+                                            h1.innerHTML = 'Vehilce parts';
+                                            var h2 = document.createElement('h4');
+                                            h2.style.textAlign = 'center';
+                                            h2.innerHTML = 'Spare parts';
                                             var table = document.createElement('table');
                                             table.className = 'table table-striped'; // Add Bootstrap classes for styling
                                             table.innerHTML = `
                                                 <thead>
                                                     <tr>
-                                                        <th>Part Name</th>
-                                                        <th>Is Damaged / Is Available</th>
-                                                        <th>Damage Description / Quantity</th>
+                                                        <th>Vehicle Part</th>
+                                                        <th>Is Damaged</th>
+                                                        <th>Damage Description</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -351,18 +356,50 @@
                                             `;
                         
                                             response.data.forEach(function(inspection) {
+                                                if(inspection.type == 'normal_part')
+                                                    {
                                                 var row = document.createElement('tr');
                                                 row.innerHTML = `
                                                     <td>${inspection.part_name}</td>
                                                     <td>${inspection.is_damaged ? 'No' : 'Yes'}</td>
-                                                    <td>${inspection.damage_description ? inspection.damage_description : 'N/A'}</td>
+                                                    <td>${inspection.damage_description ? inspection.damage_description : '-'}</td>
                                                 `;
                                                 table.querySelector('tbody').appendChild(row); // Append row to the table body
+                                            }
                                             });
-                        
+                                            cardsContainer.appendChild(h1);
                                             cardsContainer.appendChild(table);
+
+                                            var table1 = document.createElement('table');
+                                            table1.className = 'table table-striped'; // Add Bootstrap classes for styling
+                                            table1.innerHTML = `
+                                                <thead>
+                                                    <tr>
+                                                        <th>Spare part</th>
+                                                        <th>Is available</th>
+                                                        <th>Quantity</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                </tbody>
+                                            `;
                         
-                                        } else {
+                                            response.data.forEach(function(inspection) {
+                                                if(inspection.type == 'spare_part')
+                                                    {
+                                                        var row = document.createElement('tr');
+                                                        row.innerHTML = `
+                                                            <td>${inspection.part_name}</td>
+                                                            <td>${inspection.is_damaged == "0" ? 'No' : 'Yes'}</td>
+                                                            <td>${inspection.damage_description ? inspection.damage_description : '-'}</td>
+                                                        `;
+                                                        table1.querySelector('tbody').appendChild(row); // Append row to the table body
+                                                    }
+                                            });
+                                            cardsContainer.appendChild(h2);
+                                            cardsContainer.appendChild(table1);
+                        
+                                     } else {
                                             // Handle the case where no data is available
                                             cardsContainer.innerHTML = '<p>No inspection data available.</p>';
                                         }

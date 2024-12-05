@@ -29,7 +29,7 @@ class NotificationController extends Controller {
 
     function delete_notification( Request $request ) {
         NotificationModel::where( 'user_id', Auth::id() )->delete();
-        return response()->json( 'success', 200 );
+        return redirect()->back()->with('success_message','Notification Deleted successfully',);
     }
     function read_all_notifications( Request $request ) {
         NotificationModel::where( 'user_id', Auth::id() )->update( [
