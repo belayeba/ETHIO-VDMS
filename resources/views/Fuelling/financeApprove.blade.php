@@ -67,7 +67,7 @@
                                                             
                                                                 <div class="modal-header">
                                                                                                                                     
-                                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                                 </div> <!-- end modal header -->
                                                                 <div class="modal-body d-flex flex-column align-items-center">
                                                                     <div class="row mt-3 w-100" id="inspectionCardsContainer-{{$loop->iteration}}">
@@ -232,7 +232,7 @@
                                                     </form>
                                                 </div><!-- /.modal-content -->
                                             </div><!-- /.modal-dialog -->
-                                        </div><!-- /.modal -->
+                                          </div><!-- /.modal -->
 
                                          <!-- this is for the assign  modal -->
                                             <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static"

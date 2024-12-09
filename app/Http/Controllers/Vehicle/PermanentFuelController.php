@@ -91,7 +91,7 @@ class PermanentFuelController extends Controller {
                 ->where('vehicle_id', $fueling_of_one->vehicle_id)
                 ->latest()
                 ->first();
-        
+                $expected_total = 0;
             if ($get_previous_feul) {
                 // Calculate the expected total if the previous record exists
                 $expected_total = $get_previous_feul->one_litre_price * $get_previous_feul->quata;
@@ -107,10 +107,13 @@ class PermanentFuelController extends Controller {
             } else {
                 // Return a response indicating no previous cost is available
                 return response()->json([
-                    'status' => 'error',
+                    'status' => 'success',
                     'message' => 'No previous cost available.',
-                    'data' => null
-                ], 404);
+                    'data' => [
+                        'expected_total' => $expected_total,
+                        'previous_fuel' => $get_previous_feul
+                    ]
+                ], 200);
             }
         }
         
@@ -302,7 +305,7 @@ class PermanentFuelController extends Controller {
                }
             $total_feul =  $fueling->sum('fuel_cost');
             $fueling_data= PermanentFuelModel::with('vehicle:vehicle_id,plate_number','financeApprover:id,first_name')
-            ->select('driver_id','fueling_id','finance_approved_by','fuel_amount','fuel_cost','fuiling_date','reciet_attachment','year','month','make_primary','accepted')
+            ->select('driver_id','fueling_id','finance_approved_by','fuel_cost','fuiling_date','reciet_attachment','year','month','make_primary','accepted')
             ->where('fueling_id', $id)
             ->get()                
             ->map(function ($fueling) {
@@ -312,7 +315,7 @@ class PermanentFuelController extends Controller {
                     'fueling_id'         => $fueling->fueling_id,
                     'year'               => $fueling->year,
                     'month'              => $fueling->month,
-                    'fuel_amount'        => $fueling->fuel_amount,
+                    //'fuel_amount'        => $fueling->fuel_amount,
                     'fuel_cost'          => $fueling->fuel_cost,
                     'fuiling_date'       => $fueling->fuiling_date,
                     'reciet_attachment'  => $fueling->reciet_attachment,
@@ -366,7 +369,7 @@ class PermanentFuelController extends Controller {
         
         
             // Fetch the existing fueling record by ID (could be the main record, e.g., $id)
-            
+            $fueling = PermanentFuelModel::findOrFail($request->input('make_primary'));
             if($fueling->driver_id != $get_driver_id || $fueling->finance_approved_by)
             {
                     return redirect()->back()->with('error_message',
@@ -535,11 +538,6 @@ class PermanentFuelController extends Controller {
                     ->addColumn('action', function ($row) {
                         $actions =  '<button type="button" class="btn btn-info rounded-pill view-btn" data-id="' . $row->fueling_id . '"><i class="ri-eye-line"></i></button>';
                         
-                        if ($row->finance_approved_by == null){
-                            $actions .= ' <button type="button" class="btn btn-primary rounded-pill accept-btn" data-id="' . $row->fueling_id . '" title="Accept"><i class="ri-checkbox-circle-line"></i></button>
-                                        <button type="button" class="btn btn-danger rounded-pill reject-btn" data-id="' . $row->fueling_id . '" data-bs-toggle="modal" data-bs-target="#staticBackdrop" title="Reject"><i class="ri-close-circle-fill"></i></button>';
-                        }
-
                         return $actions;
                     })
                     ->rawColumns(['counter','name','Request','approver','status','action'])
@@ -568,7 +566,6 @@ class PermanentFuelController extends Controller {
                 $get_vehicle = VehiclesModel::select('fuel_type')
                     ->where('vehicle_id', $get_one_fuel_request->vehicle_id)
                     ->first();
-
                 $latest_fuel_price = FeulCosts::select('new_cost')
                     ->where('fuel_type', $get_vehicle->fuel_type)
                     ->latest()
@@ -576,7 +573,6 @@ class PermanentFuelController extends Controller {
                 if (!$latest_fuel_price) {
                     return redirect()->back()->with(['error_message' => 'Fuel Price is not set please Check!']);
                 }
-
                 $permanent = VehiclePermanentlyRequestModel::select('vehicle_request_permanent_id', 'fuel_quata', 'feul_left_from_prev')
                     ->where('vehicle_id', $get_one_fuel_request->vehicle_id)
                     ->where('status', true)

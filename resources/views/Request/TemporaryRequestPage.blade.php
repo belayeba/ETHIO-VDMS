@@ -696,7 +696,7 @@
                 <!-- Wizard Form Demo js -->
                 <script src="assets/js/pages/form-wizard.init.js"></script>
                 <script>
-                    src = "{{ asset('assets/vendor/datatables.net-bs5/js/dataTables.bootstrap5.min.js') }}" >
+                    src = "{{ asset('assets/vendor/datatables.net-bs5/js/dataTables.bootstrap5.min.js') }}" 
                 </script>
 
                 {{-- 

@@ -46,19 +46,19 @@
                             <a href="#first" data-bs-toggle="tab" data-toggle="tab"
                                 class="nav-link rounded-0 py-2">
                                 <i class="ri-car-fill fw-normal fs-20 align-middle me-1"></i>
-                                <span class="d-none d-sm-inline">Vehicle Info</span>
+                                <span class="d-none d-sm-inline">Basic</span>
                             </a>
                         </li>
                         <li class="nav-item" data-target-form="#profileForm">
                             <a href="#second" data-bs-toggle="tab" data-toggle="tab"  class="nav-link rounded-0 py-2">
                                 <i class="ri-profile-line fw-normal fs-20 align-middle me-1"></i>
-                                <span class="d-none d-sm-inline">Vehicle Profile</span>
+                                <span class="d-none d-sm-inline">Profile</span>
                             </a>
                         </li>
                         <li class="nav-item" data-target-form="#otherForm">
                             <a href="#third" data-bs-toggle="tab" data-toggle="tab" class="nav-link rounded-0 py-2">
                                 <i class="ri-check-double-line fw-normal fs-20 align-middle me-1"></i>
-                                <span class="d-none d-sm-inline">Vehicle form</span>
+                                <span class="d-none d-sm-inline">Type</span>
                             </a>
                         </li>
                     </ul>
@@ -205,24 +205,24 @@
                                         </div>
                                        
                                         <div class="row mb-3">
-                                            <label class="col-md-3 col-form-label" for="vehicle_category">Vehicle Category</label>
+                                            <label class="col-md-3 col-form-label" for="vehicle_category">Service</label>
                                             <div class="col-md-9">
                                                 <select id="vehicleCategory" name="vehicle_category" class="form-select" required>
-                                                    <option value="">Select Vehicle Category</option>
-                                                    <option value="Service">Service</option>
+                                                    <option value="">Select Vehicle service</option>
+                                                    <option value="human">Human</option>
                                                     <option value="load">Load</option>
                                                     <option value="both">Both</option>
-                                                    <option value="neither">Neither</option>
+                                                    <option value="position">Position</option>
                                                 </select>
                                             </div>
                                         </div>
 
                                         
                                         <div class="row mb-3">
-                                            <label class="col-md-3 col-form-label" for="vehicle_type">Vehicle Type</label>
+                                            <label class="col-md-3 col-form-label" for="vehicle_type">Owner</label>
                                             <div class="col-md-9">
                                                 <select id="vehicleType" name="vehicle_type" class="form-select" required onchange="toggleFields()">
-                                                    <option value="">Select Vehicle Type</option>
+                                                    <option value="">Select owner</option>
                                                     <option value="Organizational">Organizational</option>
                                                     <option value="other">Rental</option>
                                                 </select>

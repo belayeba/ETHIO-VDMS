@@ -484,27 +484,34 @@ class VehicleTemporaryRequestController extends Controller
 
                 if($data_drawer_value == 1){
                     
-                    $user = User::with('department')->find($id);
+                       $user = User::with('department')->find($id);
 
-                    $clusterId = $user->department->cluster_id;
-                    $data = VehicleTemporaryRequestModel::
-                    with('approvedBy','requestedBy.department')->whereHas('requestedBy.department', function ($query) use ($clusterId) {
-                        $query->where('cluster_id', $clusterId);
-                    })
-                        ->where(function($query) {
-                            $query->orWhere('how_many_days', '>', 1)
-                                ->orWhere('in_out_town', false);
-                        })
-                        // ->whereNull('div_approved_by')
-                        ->whereNotNull('dir_approved_by')
-                        ->get();
+                        if ($user && $user->department) {
+                            $clusterId = $user->department->cluster_id;
+
+                            $data = VehicleTemporaryRequestModel::with(['approvedBy', 'requestedBy.department'])
+                                ->whereHas('requestedBy.department', function ($query) use ($clusterId) {
+                                    $query->where('cluster_id', $clusterId);
+                                })
+                                ->where(function ($query) {
+                                    // Add conditions for how_many_days or in_out_town
+                                    $query->orWhere('in_out_town', false);
+                                })
+                                ->whereNull('director_reject_reason') // Fixed trailing space
+                                ->whereNotNull('dir_approved_by')
+                                ->get();
+                        } else {
+                            // Handle case where the user or department is not found
+                            $data = collect(); // Empty collection
+                        }
+
                 }
                 elseif($data_drawer_value == 2){
 
                     $data = VehicleTemporaryRequestModel::
                     where(function($query) {
-                        $query->orWhere('how_many_days', '>', 0)
-                            ->orWhere('in_out_town', true);
+                       // $query->orWhere('how_many_days', '>', 2)
+                       $query->Where('in_out_town', false);
                     })
                     ->whereNull('cluster_director_reject_reason')
                     ->whereNotNull('div_approved_by')
@@ -512,23 +519,23 @@ class VehicleTemporaryRequestController extends Controller
                 }
                 elseif($data_drawer_value == 3){
 
-                    $data = VehicleTemporaryRequestModel::with('approvedBy', 'requestedBy')
-                    ->where(function ($query) {
-                        // Check if how_many_days > 1 OR in_out_town is true
-                        $query->where(function ($q) {
-                            $q->where('how_many_days', '>', 1)
-                            ->orWhere('in_out_town', false);
-                        })
-                        // Apply condition for hr_div_approved_by
-                        ->whereNotNull('hr_div_approved_by');
-                    })
-                    // Fallback to dir_approved_by if the first condition isn't true
-                    ->orWhere(function ($query) {
-                        $query->where('how_many_days', '<=', 1)
-                            ->where('in_out_town', true)
-                            ->whereNotNull('dir_approved_by');
-                    })
-                    ->get();
+                    $data = VehicleTemporaryRequestModel::
+                            where(function ($query) {
+                                // Condition 1: Check in_out_town and hr_div_approved_by
+                                $query->where(function ($q) {
+                                        $q->where('in_out_town', false);
+                                    })
+                                    ->whereNull('hr_director_reject_reason') // Removed the extra space
+                                    ->whereNotNull('hr_div_approved_by');
+                            })
+                            ->orWhere(function ($query) {
+                                // Condition 2: Fallback for how_many_days > 2 and dir_approved_by
+                                $query->where('how_many_days', '>', 2)
+                                    ->where('in_out_town', true)
+                                    ->whereNotNull('dir_approved_by');
+                            })
+                            ->get();
+
                 }
                 else{
                     
@@ -539,7 +546,6 @@ class VehicleTemporaryRequestController extends Controller
                             $query->where('department_id', $dept_id);
                         })->latest()->get();;
                 }
-
                 return $data;
             }
 
@@ -650,8 +656,8 @@ class VehicleTemporaryRequestController extends Controller
                     $query->where('cluster_id', $clusterId);
                 })
                     ->where(function($query) {
-                        $query->orWhere('how_many_days', '>', 1)
-                            ->orWhere('in_out_town', false);
+                        //$query->orWhere('how_many_days', '>', 1)
+                        $query->orWhere('in_out_town', false);
                     })
                     // ->whereNull('div_approved_by')
                     ->whereNotNull('dir_approved_by')
@@ -862,10 +868,11 @@ class VehicleTemporaryRequestController extends Controller
                 })
                 // Fallback to dir_approved_by if the first condition isn't true
                 ->orWhere(function ($query) {
-                    $query->where('how_many_days', '<=', 1)
+                    $query->where('how_many_days', '<=', 2)
                         ->where('in_out_town', true)
                         ->whereNotNull('dir_approved_by');
                 })
+                ->latest()
                 ->get();
 
             
@@ -974,11 +981,9 @@ class VehicleTemporaryRequestController extends Controller
         public function FetchForDispatcher(Request $request)
             {
                 // dd($request->input('customDataValue'));
-                $id = Auth::id();
             
                 $data_drawer_value = $request->input('customDataValue');
 
-                $vehicles = VehiclesModel::where('status',1)->get();
                 if($data_drawer_value == 1)
                 {
                     $data = VehicleTemporaryRequestModel::
@@ -986,7 +991,7 @@ class VehicleTemporaryRequestController extends Controller
                                 ->whereNull('vec_director_reject_reason')
                                 ->whereNull('start_km')
                                 ->whereNull('assigned_by')
-                                // ->whereNotNull('vehicle_id')
+                                ->latest()
                                 ->get();
                 }
                 elseif($data_drawer_value == 2)
@@ -997,6 +1002,7 @@ class VehicleTemporaryRequestController extends Controller
                                 ->whereNull('start_km')
                                 ->whereNotNull('assigned_by')
                                 ->whereNotNull('vehicle_id')
+                                ->latest()
                                 ->get();
                 }
                 elseif($data_drawer_value == 3){
@@ -1006,17 +1012,30 @@ class VehicleTemporaryRequestController extends Controller
                         ->whereNotNull('assigned_by')
                         ->whereNotNull('start_km')
                         ->whereNull('end_km')
+                        ->latest()
                         ->get();
                 }else{
-                    $data = VehicleTemporaryRequestModel::
-                        whereNotNull('transport_director_id')
-                        ->whereNull('vec_director_reject_reason')
-                        // ->whereNull('assigned_by')
-                        ->get();
-                        
+                    $data = VehicleTemporaryRequestModel::with('approvedBy', 'requestedBy')
+                    ->where(function ($query) {
+                        // Check if how_many_days > 1 OR in_out_town is true
+                        $query->where(function ($q) {
+                            $q->where('how_many_days', '>', 2)
+                            ->OrWhere('in_out_town', false);
+                        })
+                        // Apply condition for hr_div_approved_by
+                        ->whereNotNull('transport_director_id')
+                        ->whereNull('vec_director_reject_reason');
+                    })
+                    // Fallback to dir_approved_by if the first condition isn't true
+                    ->orWhere(function ($query) {
+                        $query->where('how_many_days', '<=', 2)
+                            ->where('in_out_town', true)
+                            ->whereNull('director_reject_reason')
+                            ->whereNotNull('dir_approved_by');
+                    })
+                    ->latest()
+                    ->get();
                 }
-
-            
                 return datatables()->of($data)
                 ->addIndexColumn()
                 ->addColumn('counter', function($row) use ($data){
@@ -1050,10 +1069,12 @@ class VehicleTemporaryRequestController extends Controller
                         return 'ASSIGNED';
                     } elseif ($row->end_km == null && $row->start_km !== null) {
                         return 'DISPATCHED';
-                    } elseif ($row->start_km !== null && $row->end_km !== null) {
+                    } elseif ($row->end_km !== null) {
                         return 'RETURNED';
-                    } elseif ($row->transport_director_id !== null && $row->vehicle_id == null) {
+                    } elseif ($row->assigned_by == null) {
                         return 'PENDING';
+                    }elseif ($row->assigned_by_reject_reason != null){
+                        return 'REJECTED';
                     }
                 })
 
@@ -1093,12 +1114,12 @@ class VehicleTemporaryRequestController extends Controller
                         }
                     // }
                     //  elseif ($data_drawer_value == 2 || $data_drawer_value == 0) {
-                        if ($row->start_km == null && $row->assigned_by != null ) {
+                        elseif ($row->start_km == null && $row->assigned_by != null && $row->assigned_by_reject_reason  == null ) {
                             $actions .= '<button type="button" class="btn btn-warning rounded-pill dispatch-btn" data-id="' . $row->request_id . '" data-plate="' . $row->vehicle->plate_number . '" title="Dispatch"><i class="  ri-contract-right-fill"></i></button>';
                         }
                     // } 
                     // elseif ($data_drawer_value == 3 || $data_drawer_value == 0) {
-                        if ($row->start_km != null && $row->end_km == null) {
+                        elseif ($row->start_km != null && $row->end_km == null  ) {
                             $actions .= '<button type="button" class="btn btn-secondary rounded-pill return-btn" data-id="' . $row->request_id . '" data-plate="' . $row->vehicle->plate_number . '"  title="Return"><i class="  ri-contract-left-fill"></i></button>';
                         }
                     // }
@@ -1168,7 +1189,7 @@ class VehicleTemporaryRequestController extends Controller
                         $url = "/temp_request_page";
                         $user->NotifyUser($message,$subject,$url);
                        return redirect()->back()->with('success_message',
-                                 "ou are successfully Approved the request",
+                                 "You are successfully Assigned Vehicle for this request",
                             );
                     }   
                 catch (Exception $e) 

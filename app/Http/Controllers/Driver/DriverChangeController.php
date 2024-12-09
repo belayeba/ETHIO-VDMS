@@ -159,6 +159,9 @@ class DriverChangeController extends Controller {
                 {
                     return response()->json(['error_message'=>"Warning! You are denied the service"]);
                 }
+            $the_vehicle = VehiclesModel::find($get_request->vehicle_id);
+            $the_vehicle->driver_id = $logged_user;
+            $the_vehicle->save();
             $get_request->driver_accepted = $logged_user;
             $get_request->save();
             $user = User::find($get_request->changed_by);

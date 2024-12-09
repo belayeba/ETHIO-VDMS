@@ -126,8 +126,11 @@
                                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                             </div> <!-- end modal header -->
                                             <div class="modal-body">
-                                                <div class="row mt-3" id="inspectionCardsContainer" class="table table-striped"> 
+                                                <div class="table-responsive">
+                                                    <div class="row mt-3" id="inspectionCardsContainer" class="table table-striped"> 
+                                                    </div>
                                                 </div>
+                                                
                                             </div>
                                             <div class="modal-footer">
                                                 <button type="button" class="btn btn-secondary"  id="assignBtn">Get Inspection</button>
@@ -300,69 +303,117 @@
                 type: 'GET',
                 data: { id: selectedCarId },
                 success: function(response) {
-                    var cardsContainer = document.getElementById('inspectionCardsContainer');
-                    cardsContainer.innerHTML = ''; // Clear previous cards
+                           // $('#showinspection-modal').modal('show');
+                            var cardsContainer = document.getElementById('inspectionCardsContainer');
+                            cardsContainer.innerHTML = ''; // Clear previous cards
 
-                    if (response.status === 'success' && Array.isArray(response.data) && response.data.length > 0) {
-                        // Create the table
-                        var Image = response.data[0].image_path;
-                        var imageUrl = Image ? "{{ asset('storage/vehicles/Inspections/') }}" + '/' + Image : null; 
-                        var inspectedBy = response.data[0].inspected_by;
-                        var createdAt = new Date(response.data[0].created_at).toLocaleDateString('en-US', {
-                            year: 'numeric',
-                            month: '2-digit',
-                            day: '2-digit'
-                        });
-                    // Create a section to display "Inspected By" and "Created At" at the top right corner
-                        var infoSection = document.createElement('div');
-                        infoSection.className = 'd-flex justify-content-end mb-4'; // Flexbox to align right and add margin-bottom
-                        infoSection.innerHTML = `
-                            <p><strong>Inspected By:</strong> ${inspectedBy} </br>
-                            <strong>Created At:</strong> ${createdAt}</br>
-                            <strong>Image:</strong> 
-                            ${ imageUrl 
-                                ? `<a href="${imageUrl}" target="_blank"> Click to View </a>` 
-                                : 'No image'
-                            }
-                        `;
-                        cardsContainer.appendChild(infoSection); // Append the info section before the table
-
-                        var table = document.createElement('table');
-                        table.className = 'table table-striped'; // Add Bootstrap classes for styling
-                        table.innerHTML = `
-                            <thead>
-                                <tr>
-                                    <th>Part Name</th>
-                                    <th>Is Damaged</th>
-                                    <th>Damage Description</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                            </tbody>
-                        `;
-
-                        response.data.forEach(function(inspection) {
-                            var row = document.createElement('tr');
-                            row.innerHTML = `
-                                <td>${inspection.part_name}</td>
-                                <td>${inspection.is_damaged ? 'No' : 'Yes'}</td>
-                                <td>${inspection.damage_description ? inspection.damage_description : 'N/A'}</td>
+                            if (response.status === 'success' && Array.isArray(response.data) && response.data
+                                .length > 0) {
+                                // Create the table
+                                var Image = response.data[0].image_path;
+                                var imageUrl = Image ? "{{ asset('storage/vehicles/Inspections/') }}" + '/' + Image : null;
+                                var inspectedBy = response.data[0].inspected_by;
+                                var createdAt = new Date(response.data[0].created_at).toLocaleDateString(
+                                    'en-US', {
+                                        year: 'numeric',
+                                        month: '2-digit',
+                                        day: '2-digit'
+                                    });
+                                // Create a section to display "Inspected By" and "Created At" at the top right corner
+                                var infoSection = document.createElement('div');
+                                infoSection.className = 'd-flex justify-content-end mb-4'; // Flexbox to align right and add margin-bottom
+                                infoSection.innerHTML = `
+                                    <p><strong>Inspected By:</strong> ${inspectedBy} </br>
+                                    <strong>Created At:</strong> ${createdAt}</br>
+                                    <strong>Image:</strong> 
+                                    ${ imageUrl 
+                                        ? `<a href="${imageUrl}" target="_blank"> Click to View </a>` 
+                                        : 'No image'
+                                    }
+                                `;
+                                cardsContainer.appendChild(
+                                    infoSection); // Append the info section before the table
+                                var h1 = document.createElement('h4');
+                                h1.style.textAlign = 'center';
+                                h1.innerHTML = 'Vehilce parts';
+                                var h2 = document.createElement('h4');
+                                h2.style.textAlign = 'center';
+                                h2.innerHTML = 'Spare parts';
+                                var table = document.createElement('table');
+                                table.className = 'table table-striped'; // Add Bootstrap classes for styling
+                                table.innerHTML = `
+                                <thead>
+                                    <tr>
+                                        <th>Vehicle Part</th>
+                                        <th>Is Damaged</th>
+                                        <th>Damage Description</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
                             `;
-                            table.querySelector('tbody').appendChild(row); // Append row to the table body
-                        });
 
-                        cardsContainer.appendChild(table);
+                                    response.data.forEach(function(inspection) {
+                                        if(inspection.type == "normal_part")
+                                         {
+                                            var row = document.createElement('tr');
+                                            row.innerHTML = `
+                                            <td>${inspection.part_name}</td>
+                                            <td>${inspection.is_damaged ? 'No' : 'Yes'}</td>
+                                            <td>${inspection.damage_description ? inspection.damage_description : '-'}</td>
+                                            `;
+                                            table.querySelector('tbody').appendChild(
+                                                row); // Append row to the table body
+                                        }
+                                });
+                                cardsContainer.appendChild(h1);
+                                cardsContainer.appendChild(table);
+                                // Spare Part
+                                var table = document.createElement('table');
+                                table.className = 'table table-striped'; // Add Bootstrap classes for styling
+                                table.innerHTML = `
+                                        <thead>
+                                            <tr>
+                                                <th>Spare Part</th>
+                                                <th>Is Available</th>
+                                                <th>Quantity</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        </tbody>
+                                    `;
 
-                    } else {
-                        // Handle the case where no data is available
-                        cardsContainer.innerHTML = '<p>No inspection data available.</p>';
-                    }
-                },
-                error: function() {
-                    var cardsContainer = document.getElementById('inspectionCardsContainer');
-                    cardsContainer.innerHTML = ''; // Clear previous cards
-                    cardsContainer.innerHTML = '<p>No inspection data available at the moment. Please check the Plate number!</p>';
-                }
+                                response.data.forEach(function(inspection) 
+                                {
+                                    if(inspection.type == "spare_part")
+                                        {
+                                            var row = document.createElement('tr');
+                                            row.innerHTML = `
+                                            <td>${inspection.part_name}</td>
+                                            <td>${inspection.is_damaged == "0"? 'No' : 'Yes'}</td>
+                                            <td>${inspection.damage_description ? inspection.damage_description : '-'}</td>
+                                            `;
+                                                table.querySelector('tbody').appendChild(
+                                                    row); // Append row to the table body
+                                        }
+                                });
+                                cardsContainer.appendChild(h2);
+                                cardsContainer.appendChild(table);
+
+                            } 
+                            else 
+                            {
+                                // Handle the case where no data is available
+                                cardsContainer.innerHTML = '<p>No inspection data available.</p>';
+                            }
+                        },
+                        error: function() {
+                            $('#showinspection-modal').modal('show');
+                            var cardsContainer = document.getElementById('inspectionCardsContainer');
+                            cardsContainer.innerHTML = ''; // Clear previous cards
+                            cardsContainer.innerHTML =
+                                '<p>No inspection data available at the moment. Please check the Plate number!</p>';
+                        }
             });
         });
         
