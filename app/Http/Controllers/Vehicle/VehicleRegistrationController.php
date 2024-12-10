@@ -151,6 +151,7 @@ class VehicleRegistrationController extends Controller {
             'notes' => 'nullable|string|max:255',
             'vehicle_category' => 'required|string|max:255',
             'vehicle_type' => 'required|string|max:255',
+            'rental_type' => 'nullable|string|max:255',
             'inspection_id' => 'nullable|uuid|exists:vehicle_inspections,inspection_id',
             'libre' => 'required|file',
             'insurance' => 'required|file',
@@ -240,12 +241,11 @@ class VehicleRegistrationController extends Controller {
             'notes' => $request->Notes,
             'vehicle_type' => $request->vehicle_type,
             'vehicle_category' => $request->vehicle_category,
+            'rental_type' => $request->rental_type,
             'libre' => $filelibre,
             'insurance' => $fileinsurance,
         ] );
-        return redirect()->back()->with('success_message',
-        'Successfully Updated.',
-    );
+        return redirect()->back()->with('success_message','Successfully Updated.');
     }
 
     public function destroy( Request $request ) {
