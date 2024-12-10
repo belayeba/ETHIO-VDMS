@@ -157,14 +157,14 @@
                                         <div class="row mb-3">
                                             <label class="col-md-3 col-form-label" for="Last Service">Last Service</label>
                                             <div class="col-md-9">
-                                                <input type="number" id="Last Service" name="Last Service" placeholder="Enter the last service KM" class="form-control" required>
+                                                <input type="number" id="Last Service" name="Last_Service" placeholder="Enter the last service KM" class="form-control" required>
                                             </div>
                                         </div>
 
                                         <div class="row mb-3">
                                             <label class="col-md-3 col-form-label" for="Next Service">Next Service</label>
                                             <div class="col-md-9">
-                                                <input type="number" id="Next Service" name="Next Service" placeholder="Enter the next service KM" class="form-control" required>
+                                                <input type="number" id="Next Service" name="Next_Service" placeholder="Enter the next service KM" class="form-control" required>
                                             </div>
                                         </div>
 
@@ -216,7 +216,19 @@
                                                 </select>
                                             </div>
                                         </div>
-
+                                        <div class="row mb-3">
+                                            <label class="col-md-3 col-form-label" for="Libre">Libre</label>
+                                            <div class="col-md-9">
+                                                <input type="file" id="Libre" name="libre" class="form-control" required>
+                                            </div>
+                                        </div>
+                                    
+                                        <div class="row mb-3">
+                                            <label class="col-md-3 col-form-label" for="Insurance">Insurance</label>
+                                            <div class="col-md-9">
+                                                <input type="file" id="Insurance" name="insurance" class="form-control" required>
+                                            </div>
+                                        </div>
                                         
                                         <div class="row mb-3">
                                             <label class="col-md-3 col-form-label" for="vehicle_type">Owner</label>
@@ -228,21 +240,17 @@
                                                 </select>
                                             </div>
                                         </div>
-                                        
 
-                                        <div id="organizationalFields" style="display: none;">
-                                            <div class="row mb-3">
-                                                <label class="col-md-3 col-form-label" for="Libre">Libre</label>
-                                                <div class="col-md-9">
-                                                    <input type="file" id="Libre" name="libre" class="form-control">
-                                                </div>
-                                            </div>
-                                        
-                                            <div class="row mb-3">
-                                                <label class="col-md-3 col-form-label" for="Insurance">Insurance</label>
-                                                <div class="col-md-9">
-                                                    <input type="file" id="Insurance" name="insurance" class="form-control">
-                                                </div>
+                                        <div class="row mb-3" id="rentalDiv" style="display: none;">
+                                            <label class="col-md-3 col-form-label" for="rental_type">Rental Type</label>
+                                            <div class="col-md-9">
+                                                <select id="rentalType" name="rental_type" class="form-select" required>
+                                                    <option value="">Select Type</option>
+                                                    <option value="whole_day">Whole Day</option>
+                                                    <option value="position">Position</option>
+                                                    <option value="40/60">40/60</option>
+                                                    <option value="morning_afternoon_minibus">Morning Afternoon</option>
+                                                </select>
                                             </div>
                                         </div>
 
@@ -383,15 +391,23 @@
                                 <label for="editCapacity" class="form-label">Capacity</label>
                                 <input type="number" class="form-control" id="editCapacity" name="capacity" value="{{ $item->capacity }}" required>
                             </div>
-                        </div>
-                
-                        <!-- Second Column -->
-                        <div class="col-md-6">
                             <div class="mb-3">
                                 <label for="editFuelAmount" class="form-label">Fuel Amount</label>
                                 <input type="number" class="form-control" id="editFuelAmount" name="fuel_amount" value="{{ $item->fuel_amount }}" required>
                             </div>
+                            {{-- <div class="mb-3">
+                                <label for="editRentalType_{{ $item->vehicle_id }}" class="form-label">Rental Type</label>
+                                <select id="editRentalType_{{ $item->vehicle_id }}" name="rental_type" class="form-select" required>
+                                    <option value="40/60" {{ $item->rental_type == '40/60' ? 'selected' : '' }}>40/60</option>
+                                    <option value="Position" {{ $item->rental_type == 'Position' ? 'selected' : '' }}>Position</option>
+                                    <option value="morning_afternoon_minibus" {{ $item->rental_type == 'morning_afternoon_minibus' ? 'selected' : '' }}>Morning Afternoon</option>
+                                    <option value="whole_day" {{ $item->rental_type == 'whole_day' ? 'selected' : '' }}>Whole Day</option>
+                                </select>
+                            </div> --}}
+                        </div>
                 
+                        <!-- Second Column -->
+                        <div class="col-md-6">
                             <div class="mb-3">
                                 <label for="editFuelType" class="form-label">Fuel Type</label>
                                 <input type="text" class="form-control" id="editFuelType" name="fuel_type" value="{{ $item->fuel_type }}" required>
@@ -409,12 +425,26 @@
                 
                             <div class="mb-3">
                                 <label for="editDriver" class="form-label">Driver</label>
-                                <select id="editDriver" name="driver_id" class="form-select" required>
+                                <select id="editDriver" name="driver_id" class="form-select">
                                     <option value="">Select Driver</option>
                                     @foreach($drivers as $driver)
-                                        <option value="{{ $driver->id }}" {{ $item->driver_id == $driver->id ? 'selected' : '' }}>{{ $driver->user->username }}</option>
+                                        <option value="{{ $item->driver->user->first_name }}  {{ $item->driver->user->middle_name }}" {{ $item->driver->user->first_name }}  {{ $item->driver->user->middle_name  ? 'selected' : ''  }}>{{ $driver->user->username }}</option>
                                     @endforeach
                                 </select>
+                            </div>
+
+                            <div class="mb-3">
+                                <div class="mb-6">
+                                    <label for="editLibre" class="form-label">Libre</label>
+                                    <input type="file" class="form-control" id="editLibre" name="libre">
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <div class="mb-3">
+                                    <label for="editInsurance" class="form-label">Insurance</label>
+                                    <input type="file" class="form-control" id="editInsurance" name="insurance">
+                                </div>
                             </div>
                 
                             <div class="mb-3">
@@ -436,27 +466,6 @@
                             </div>
                         </div>
                     </div>
-                
-                    <!-- Files section (still within the two-column structure) -->
-                    <div class="row">
-                        <div class="col-md-6">
-                            @if($item->libre)
-                            <div class="mb-3">
-                                <label for="editLibre" class="form-label">Libre</label>
-                                <input type="file" class="form-control" id="editLibre" name="libre">
-                            </div>
-                            @endif
-                        </div>
-                
-                        <div class="col-md-6">
-                            @if($item->insurance)
-                            <div class="mb-3">
-                                <label for="editInsurance" class="form-label">Insurance</label>
-                                <input type="file" class="form-control" id="editInsurance" name="insurance">
-                            </div>
-                            @endif
-                        </div>
-                    </div>
                 </div>
                 
 
@@ -468,6 +477,7 @@
         </div>
     </div>
 </div>
+
 <div class="modal fade" id="viewModal{{ $item->vehicle_id }}" tabindex="-1" aria-labelledby="viewModalLabel{{ $item->vehicle_id }}" aria-hidden="true">
     <div class="modal-dialog modal-lg">
     <div class="modal-dialog modal-lg">
@@ -513,16 +523,16 @@
                             <dd class="col-sm-8">
                                 <p>{{ $item->capacity }}</p>
                             </dd>
+                            <dt class="col-sm-4">Fuel Amount:</dt>
+                            <dd class="col-sm-8">
+                                <p>{{ $item->fuel_amount }}</p>
+                            </dd>
                         </dl>
                     </div>
             
                     <!-- Second Column -->
                     <div class="col-md-6">
                         <dl class="row mb-0">
-                            <dt class="col-sm-4">Fuel Amount:</dt>
-                            <dd class="col-sm-8">
-                                <p>{{ $item->fuel_amount }}</p>
-                            </dd>
             
                             <dt class="col-sm-4">Fuel Type:</dt>
                             <dd class="col-sm-8">
@@ -541,7 +551,7 @@
             
                             <dt class="col-sm-4">Driver:</dt>
                             <dd class="col-sm-8">
-                                <p>{{ $item->driver_id }}</p>
+                                <p>{{ $item->driver->user->first_name }}  {{ $item->driver->user->middle_name }}</p>
                             </dd>
             
                             <dt class="col-sm-4">Vehicle Category:</dt>
@@ -552,6 +562,10 @@
                             <dt class="col-sm-4">Vehicle Type:</dt>
                             <dd class="col-sm-8">
                                 <p>{{ $item->vehicle_type }}</p>
+                            </dd>
+                            <dt class="col-sm-4">Rental Type:</dt>
+                            <dd class="col-sm-8">
+                                <p>{{ $item->rental_type }}</p>
                             </dd>
                         </dl>
                     </div>
@@ -648,23 +662,24 @@
 </div>
 
 <script>
-   function toggleFields() {
-    var vehicleType = document.getElementById("vehicleType").value;
-    var organizationalFields = document.getElementById("organizationalFields");
-
-    if (vehicleType === "Organizational") {
-        organizationalFields.style.display = "block"; // Show the fields
-    } else {
-        organizationalFields.style.display = "none";  // Hide the fields
-    }
-}
-</script>
-
-<script>
     document.getElementById('nextBtn').addEventListener('click', function(event) {
         event.preventDefault(); // Prevent default link behavior
         document.getElementById('second').scrollIntoView({ behavior: 'smooth' }); // Scroll to the form
     });
+</script>
+
+<script>
+    function toggleFields() {
+        const vehicleType = document.getElementById('vehicleType').value; // Get the selected value
+        const rentalDiv = document.getElementById('rentalDiv'); // Get the rental type div
+
+        // Show or hide the rental type div based on the selected value
+        if (vehicleType === 'other') {
+            rentalDiv.style.display = 'block'; // Show when "Rental" is selected
+        } else {
+            rentalDiv.style.display = 'none'; // Hide for other options
+        }
+    }
 </script>
 
 <script>
@@ -691,23 +706,7 @@
     document.getElementById('editVehicleCategory').value = data.vehicle_category;
     document.getElementById('editVehicleType').value = data.vehicle_type;
 
-    // Show or hide the organizational fields based on vehicle type
-    toggleEditFields();
-
-    // Additional fields like file inputs can be handled as needed
 }
-
-function toggleEditFields() {
-    var vehicleType = document.getElementById("editVehicleType").value;
-    var organizationalFields = document.getElementById("editOrganizationalFields");
-
-    if (vehicleType === "Organizational") {
-        organizationalFields.style.display = "block"; // Show additional fields
-    } else {
-        organizationalFields.style.display = "none"; // Hide additional fields
-    }
-}
-
 </script>
 
 <script src="assets/js/vendor.min.js"></script>

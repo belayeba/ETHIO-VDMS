@@ -65,14 +65,15 @@ class CreateAllTablesWithUuid extends Migration
             $table->string('insurance', 255)->nullable();
             $table->string('vehicle_category', 255); // THE VEHICLE SERVICE
             $table->string('rental_type', 255); // (45/60)(Position)(wholeDay)(morning_afternoon_minibus)
-            $table->string('rental_type', 255); // (MorningAfternoon)(Position)(wholeDay)
             $table->decimal('fuel_amount', 10, 2);
             $table->integer('last_service')->nullable();
             $table->integer('next_service')->nullable();
             $table->uuid('registered_by')->nullable();
             $table->foreign('registered_by')->references('id')->on('users')->onDelete('restrict');
-            // $table->uuid('driver_id')->nullable();
-            // $table->foreign('driver_id')->references('driver_id')->on('drivers')->onDelete('restrict');
+            $table->uuid('driver_id')->nullable();
+            $table->foreign('driver_id')->references('driver_id')->on('drivers')->onDelete('restrict');
+            $table->uuid('driver_id')->nullable();
+            $table->foreign('driver_id')->references('driver_id')->on('drivers')->onDelete('restrict');
             $table->string('fuel_type', 255);
             $table->boolean('status')->default(true);
             $table->text('notes')->nullable();
@@ -348,26 +349,26 @@ class CreateAllTablesWithUuid extends Migration
         $table->softDeletes();
     });
         // GPS Tracking Table
-        Schema::create('gps_tracking', function (Blueprint $table) {
-            $table->uuid('tracking_id')->primary();
-            $table->uuid('vehicle_id');
-            $table->foreign('vehicle_id')->references('vehicle_id')->on('vehicles')->onDelete('restrict');
-            $table->dateTime('tracking_date');
-            $table->decimal('latitude', 10, 8);
-            $table->decimal('longitude', 11, 8);
-            $table->timestamps();
-            $table->softDeletes();
-        });
-        Schema::create('gps_tracking', function (Blueprint $table) {
-            $table->uuid('tracking_id')->primary();
-            $table->uuid('vehicle_id');
-            $table->foreign('vehicle_id')->references('vehicle_id')->on('vehicles')->onDelete('restrict');
-            $table->dateTime('tracking_date');
-            $table->decimal('latitude', 10, 8);
-            $table->decimal('longitude', 11, 8);
-            $table->timestamps();
-            $table->softDeletes();
-        });
+        // Schema::create('gps_tracking', function (Blueprint $table) {
+        //     $table->uuid('tracking_id')->primary();
+        //     $table->uuid('vehicle_id');
+        //     $table->foreign('vehicle_id')->references('vehicle_id')->on('vehicles')->onDelete('restrict');
+        //     $table->dateTime('tracking_date');
+        //     $table->decimal('latitude', 10, 8);
+        //     $table->decimal('longitude', 11, 8);
+        //     $table->timestamps();
+        //     $table->softDeletes();
+        // });
+        // Schema::create('gps_tracking', function (Blueprint $table) {
+        //     $table->uuid('tracking_id')->primary();
+        //     $table->uuid('vehicle_id');
+        //     $table->foreign('vehicle_id')->references('vehicle_id')->on('vehicles')->onDelete('restrict');
+        //     $table->dateTime('tracking_date');
+        //     $table->decimal('latitude', 10, 8);
+        //     $table->decimal('longitude', 11, 8);
+        //     $table->timestamps();
+        //     $table->softDeletes();
+        // });
         // Trips Table
        
         // Route

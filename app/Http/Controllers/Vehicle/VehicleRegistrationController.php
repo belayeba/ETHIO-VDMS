@@ -31,7 +31,7 @@ class VehicleRegistrationController extends Controller {
     }
     public function index() {
         $drivers = DriversModel::all();
-        $vehicle = VehiclesModel::paginate( 6 );
+        $vehicle = VehiclesModel::paginate( 6 ); 
         return view( 'Vehicle_Registration.show', compact( 'vehicle', 'drivers' ) );
     }
 
@@ -39,7 +39,7 @@ class VehicleRegistrationController extends Controller {
         return view( 'vehicles.create' );
     }
     public function store( Request $request ) {
-        // dd($request->mileage);
+        // dd($request);
         $user = Auth::id();
         $capacity = (int) $request->capacity;
 
@@ -59,9 +59,11 @@ class VehicleRegistrationController extends Controller {
             'notes' => 'nullable|string',
             'vehicle_type' => 'required|string|max:255',
             'vehicle_category' => 'required|string|max:255',
-            'libre' => 'nullable|file|mimes:pdf,jpg,jpeg',
-            'insurance' => 'nullable|file|mimes:pdf,jpg,jpeg',
+            'rental_type' => 'nullable|string|max:255',
+            'libre' => 'required|file|mimes:pdf,jpg,jpeg',
+            'insurance' => 'required|file|mimes:pdf,jpg,jpeg',
         ] );
+        // dd($validator);
         
         if ( $validator->fails() ) {
             return redirect()->back()->with('error_message',
@@ -101,8 +103,8 @@ class VehicleRegistrationController extends Controller {
             'plate_number' => $request->plate_number,
             'mileage' => $request->mileage,
             'fuel_amount' => $request->fuel_amount,
-            'Last_Service' => $request->Last_Service,
-            'Next_Service' => $request->Next_Service,
+            'last_service' => $request->Last_Service,
+            'next_service' => $request->Next_Service,
             'registered_by' => $user,
             'driver_id' => $request->driver,
             'fuel_type' => $request->fuel_type,
@@ -110,15 +112,12 @@ class VehicleRegistrationController extends Controller {
             'vehicle_type' => $request->vehicle_type,
             'capacity' => $capacity,
             'vehicle_category' => $request->vehicle_category,
+            'rental_type' => $request->rental_type,
             'libre' => $filelibre,
             'insurance' => $fileinsurance,
             'created_at' => $ethiopianDate
         ] );
 
-        // return response()->json( [
-        //     'success' => true,
-        //     'message' => 'Vehicle created successfully.',
-        // ] );
         return redirect()->back()->with( 'success_message', 'Vehicle created successfully.' );
 
     }
@@ -152,9 +151,10 @@ class VehicleRegistrationController extends Controller {
             'notes' => 'nullable|string|max:255',
             'vehicle_category' => 'required|string|max:255',
             'vehicle_type' => 'required|string|max:255',
+            'rental_type' => 'nullable|string|max:255',
             'inspection_id' => 'nullable|uuid|exists:vehicle_inspections,inspection_id',
-            'libre' => 'nullable|file',
-            'insurance' => 'nullable|file',
+            'libre' => 'required|file',
+            'insurance' => 'required|file',
         ] );
         // dd( $validator );
         if ( $validator->fails() ) {
@@ -241,12 +241,11 @@ class VehicleRegistrationController extends Controller {
             'notes' => $request->Notes,
             'vehicle_type' => $request->vehicle_type,
             'vehicle_category' => $request->vehicle_category,
+            'rental_type' => $request->rental_type,
             'libre' => $filelibre,
             'insurance' => $fileinsurance,
         ] );
-        return redirect()->back()->with('success_message',
-        'Successfully Updated.',
-    );
+        return redirect()->back()->with('success_message','Successfully Updated.');
     }
 
     public function destroy( Request $request ) {

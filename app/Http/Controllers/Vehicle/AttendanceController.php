@@ -93,17 +93,17 @@ class AttendanceController extends Controller
         return redirect()->back()->with('success_message', 'Attendance Saved');
     }
     public function show($id)
-    {
-        $attendance = AttendanceModel::with(['vehicle', 'route', 'registeredBy'])->find($id);
+        {
+            $attendance = AttendanceModel::with(['vehicle', 'route', 'registeredBy'])->find($id);
 
-        if (!$attendance) {
-            return redirect()->back()->with('error_message',
-                    "Attendance Not found",
-            );
+            if (!$attendance) {
+                return redirect()->back()->with('error_message',
+                        "Attendance Not found",
+                );
+            }
+
+            return response()->json($attendance);
         }
-
-        return response()->json($attendance);
-    }
 
     public function update(Request $request, $id)
     {
