@@ -91,6 +91,7 @@
                                                         </tr>
                                                     </thead>
                                                     <tbody>
+                                                    @if(!is_null($clusters))
                                                         @foreach ($clusters as $item)
                                                         <tr>
                                                         <!-- Table rows will be populated here -->
@@ -139,7 +140,7 @@
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                        @endforeach
+                                                        
                                                     </tbody>
                                                 </table>
                                                 <!-- Accept Alert Modal -->
@@ -199,7 +200,9 @@
                             </div>
                         </div>
                     </div>
-
+                    @endforeach
+                                                   
+                    @endif
                    <style>
                     @media only screen and (max-width: 768px) {
                         .col-md-4 {

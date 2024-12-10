@@ -387,7 +387,7 @@ class CreateAllTablesWithUuid extends Migration
             $table->uuid('vehicle_id');
             $table->foreign('vehicle_id')->references('vehicle_id')->on('vehicles')->onDelete('restrict');
             $table->uuid('route_id');
-            $table->foreign('route_id')->references('route_id')->on('route_id')->onDelete('restrict');
+            $table->foreign('route_id')->references('route_id')->on('routes')->onDelete('restrict');
             $table->uuid('register_by');
             $table->boolean('morning');
             $table->boolean('afternoon');
