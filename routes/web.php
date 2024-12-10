@@ -28,6 +28,7 @@ use App\Http\Controllers\Vehicle\VehiclePartsController;
 use App\Http\Controllers\Vehicle\VehicleRegistrationController;
 use App\Http\Controllers\Vehicle\PermanentFuelController;
 use App\Http\Controllers\Vehicle\AttendanceController;
+use App\Http\Controllers\Letter\LetterController;
 
 Route::get('/', function () 
 {
@@ -374,10 +375,19 @@ Route::group(['middleware' => ['auth']], function()
                 {
                     Route::get('/attendance', 'index')->name('attendance.index');
                     Route::get('/attendance/fetch', 'FetchAttendance')->name('FetchAttendance');
-
                     Route::post('/attendance/store', 'store')->name('attendance.store');
                     Route::post('/attendance/update/{id}', 'update')->name('attendance.update');
                     Route::delete('/attendance/delete', 'destroy')->name('attendance.destroy');
+                });
+
+                // letter 
+            Route::controller(LetterController::class)->group(function () 
+                {
+                    Route::get('/letter', 'index')->name('letter.index');
+                    Route::get('/letter/review', 'review')->name('letter.review');
+                    Route::post('/letter/approve', 'approve')->name('letter.approve');
+                    Route::post('/letter/accept', 'accept')->name('letter.accept');
+                    Route::delete('/letter/delete', 'destroy')->name('attendance.destroy');
                 });
 
                  // SAMIR
