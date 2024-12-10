@@ -4,7 +4,6 @@ namespace App\Models\Letter;
 
 use App\Models\User;
 use App\Models\Vehicle\VehiclesModel;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Str;
@@ -14,7 +13,7 @@ class LetterModel extends Model
 {
     use SoftDeletes;
 
-    /**
+    /** 
      * The table associated with the model.
      *
      * @var string

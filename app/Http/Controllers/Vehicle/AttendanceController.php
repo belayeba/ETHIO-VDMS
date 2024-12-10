@@ -11,46 +11,46 @@ use Illuminate\Support\Facades\Auth;
 class AttendanceController extends Controller
 {
     public function index()
-    {
-        $attendances = AttendanceModel::with(['vehicle', 'route', 'registeredBy'])->latest()->get();
-        return response()->json($attendances);
-    }
+        {
+            $attendances = AttendanceModel::with(['vehicle', 'route', 'registeredBy'])->latest()->get();
+            return response()->json($attendances);
+        }
     public function store(Request $request)
-    {
-        $validator = Validator::make($request->all(), [
-            'vehicle_id' => 'required|exists:vehicles,vehicle_id',
-            'route_id' => 'required|exists:routes,route_id',
-            'morning' => 'required|boolean',
-            'afternoon' => 'required|boolean',
-            'notes' => 'nullable|string|max:200',
-        ]);
+        {
+            $validator = Validator::make($request->all(), [
+                'vehicle_id' => 'required|exists:vehicles,vehicle_id',
+                'route_id' => 'required|exists:routes,route_id',
+                'morning' => 'required|boolean',
+                'afternoon' => 'required|boolean',
+                'notes' => 'nullable|string|max:200',
+            ]);
 
-        if ($validator->fails()) {
-            return response()->json(['errors' => $validator->errors()], 422);
+            if ($validator->fails()) {
+                return response()->json(['errors' => $validator->errors()], 422);
+            }
+            $attendance = AttendanceModel::create([
+                'vehicle_id' => $request->vehicle_id,
+                'route_id' => $request->route_id,
+                'register_by' => Auth::id(),
+                'morning' => $request->morning,
+                'afternoon' => $request->afternoon,
+                'notes' => $request->notes,
+            ]);
+
+            return response()->json($attendance, 201);
         }
-        $attendance = AttendanceModel::create([
-            'vehicle_id' => $request->vehicle_id,
-            'route_id' => $request->route_id,
-            'register_by' => Auth::id(),
-            'morning' => $request->morning,
-            'afternoon' => $request->afternoon,
-            'notes' => $request->notes,
-        ]);
-
-        return response()->json($attendance, 201);
-    }
     public function show($id)
-    {
-        $attendance = AttendanceModel::with(['vehicle', 'route', 'registeredBy'])->find($id);
+        {
+            $attendance = AttendanceModel::with(['vehicle', 'route', 'registeredBy'])->find($id);
 
-        if (!$attendance) {
-            return redirect()->back()->with('error_message',
-                    "Attendance Not found",
-            );
+            if (!$attendance) {
+                return redirect()->back()->with('error_message',
+                        "Attendance Not found",
+                );
+            }
+
+            return response()->json($attendance);
         }
-
-        return response()->json($attendance);
-    }
 
     public function update(Request $request, $id)
     {
