@@ -2,6 +2,7 @@
 
 namespace App\Models\Vehicle;
 
+use App\Models\Driver\DriversModel;
 use App\Models\User;
 use App\Models\Vehicle\FuelsModel;
 use App\Models\Vehicle\MaintenancesModel;
@@ -22,7 +23,7 @@ class VehiclesModel extends Model {
 
     protected $fillable = [
         'vin', 'make', 'model', 'year', 'plate_number', 'registered_by', 'mileage', 'vehicle_type',
-        'vehicle_category', 'fuel_amount', 'last_service', 'libre', 'insurance',
+        'vehicle_category', 'fuel_amount', 'last_service', 'libre', 'insurance','rental_type',
         'next_service', 'driver_id', 'capacity','inspection_id', 'fuel_type', 'status', 'notes', 'created_at',
 
     ];
@@ -54,7 +55,7 @@ class VehiclesModel extends Model {
     }
 
     public function driver():BelongsTo {
-        return $this->belongsTo( User::class, 'driver_id', 'id' );
+        return $this->belongsTo( DriversModel::class, 'driver_id', 'driver_id' );
     }
 
     public function inspection():BelongsTo {
