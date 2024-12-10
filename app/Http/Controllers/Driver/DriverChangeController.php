@@ -155,15 +155,20 @@ class DriverChangeController extends Controller {
             }
             $logged_user = Auth::id();
             $get_request = DriverDriverChangeModel::find($request->request_id);
+            $getDriver = DriversModel::select('driver_id')->where('user_id',$logged_user)->first();
+            if(!$getDriver )
+                {
+                    return response()->json(['error_message'=>"Warning! You are denied the service"]);
+                }
             // dd($get_request->driver_accepted != 1 );
             if(($get_request->newDriver->user_id) != ($logged_user) || $get_request->driver_accepted != 0 || $get_request->driver_reject_reason != null )
                 {
                     return response()->json(['error_message'=>"Warning! You are denied the service"]);
                 }
             $the_vehicle = VehiclesModel::find($get_request->vehicle_id);
-            $the_vehicle->driver_id = $logged_user;
+            $the_vehicle->driver_id = $getDriver->driver_id;
             $the_vehicle->save();
-            $get_request->driver_accepted = $logged_user;
+            $get_request->driver_accepted = true;
             $get_request->save();
             $user = User::find($get_request->changed_by);
             $driver_name = $get_request->newDriver->user->first_name;
@@ -180,10 +185,11 @@ class DriverChangeController extends Controller {
                 'request_id' => 'required|uuid|exists:driver_changes,driver_change_id',
                 'reason' => 'required|string'
             ] );
-            if ( $validator->fails() ) {
-                return response()->json( [ 'success_message' => false,
-                'message' => 'Warning! You are denied the service' ], 422 );
-            }
+            if ( $validator->fails() ) 
+                {
+                    return response()->json( [ 'success_message' => false,
+                    'message' => 'Warning! You are denied the service' ], 422 );
+                }
             $logged_user = Auth::id();
             $get_request = DriverDriverChangeModel::find($request->request_id);
             if($get_request->new_driver != $logged_user || !$get_request->driver_accepted || !$get_request->driver_reject_reason)
