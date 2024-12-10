@@ -405,19 +405,19 @@
                             <ul class="side-nav-second-level">
                                 
                                     <li>
-                                        <a href="{{ route('route.index') }}">Letter Request</a>
+                                        <a href="{{ route('letter.index') }}">Letter Request</a>
                                     </li>
                               
                                     <li>
-                                        <a href="{{ route('route.show') }}">Letter Review</a>
+                                        <a href="{{ route('letter.review') }}">Letter Review</a>
                                     </li>
 
                                     <li>
-                                        <a href="{{ route('route.show') }}">Letter Approve</a>
+                                        <a href="{{ route('letter.approve') }}">Letter Approve</a>
                                     </li>
 
                                     <li>
-                                        <a href="{{ route('route.show') }}">Letter Accept</a>
+                                        <a href="{{ route('letter.accept') }}">Letter Accept</a>
                                     </li>
                              
                             </ul>
