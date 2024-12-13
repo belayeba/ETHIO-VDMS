@@ -238,7 +238,7 @@ class PermanentFuelController extends Controller {
                 $fueling->driver_id = $the_driver_id;
                 $fueling->permanent_id = $get_permanent_id;
                 // dd($request->fuiling_date[ $index ]);
-                $fueling->fuiling_date = $fueling_date[ $index ];
+                $fueling->fuiling_date = $this->dailyKmCalculation->ConvertToEthiopianDate($fueling_date[ $index ]);
                 $fueling->month = $request->month;
                 $fueling->year = $request->year;
                 //$fueling->fuel_amount = $fuel_amount;

@@ -72,8 +72,6 @@ class CreateAllTablesWithUuid extends Migration
             $table->foreign('registered_by')->references('id')->on('users')->onDelete('restrict');
             $table->uuid('driver_id')->nullable();
             $table->foreign('driver_id')->references('driver_id')->on('drivers')->onDelete('restrict');
-            $table->uuid('driver_id')->nullable();
-            $table->foreign('driver_id')->references('driver_id')->on('drivers')->onDelete('restrict');
             $table->string('fuel_type', 255);
             $table->boolean('status')->default(true);
             $table->text('notes')->nullable();
@@ -253,8 +251,8 @@ class CreateAllTablesWithUuid extends Migration
             $table->foreign('approved_by')->references('id')->on('users')->onDelete('restrict');
             $table->string('director_reject_reason', 1000)->nullable();
             $table->uuid('sim_approved_by')->nullable();
-            $table->foreign('sim_approved_by')->references('id')->on('users')->onDelete('restrict');
-            $table->string('simirit_reject_reason', 1000)->nullable();
+            // $table->foreign('sim_approved_by')->references('id')->on('users')->onDelete('restrict');
+            // $table->string('simirit_reject_reason', 1000)->nullable();
             $table->string('maintenance_type', 255);
             $table->uuid('maintained_by')->nullable();
             $table->foreign('maintained_by')->references('id')->on('users')->onDelete('restrict');

@@ -240,20 +240,18 @@
                                                 </select>
                                             </div>
                                         </div>
-
                                         <div class="row mb-3" id="rentalDiv" style="display: none;">
-                                            <label class="col-md-3 col-form-label" for="rental_type">Rental Type</label>
                                             <div class="col-md-9">
+                                                <label class="col-md-3 col-form-label" for="rental_type">Rental Type</label>
                                                 <select id="rentalType" name="rental_type" class="form-select" required>
                                                     <option value="">Select Type</option>
                                                     <option value="whole_day">Whole Day</option>
                                                     <option value="position">Position</option>
-                                                    <option value="40/60">40/60</option>
-                                                    <option value="morning_afternoon_minibus">Morning Afternoon</option>
+                                                    <option value="40/60">45/60</option>
+                                                    <option value="morning_afternoon_minibus">Morning Afternoon Minibus</option>
                                                 </select>
                                             </div>
                                         </div>
-
                                     </div>
                                     <!-- end col -->
                                 </div>
