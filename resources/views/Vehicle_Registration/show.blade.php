@@ -389,15 +389,23 @@
                                 <label for="editCapacity" class="form-label">Capacity</label>
                                 <input type="number" class="form-control" id="editCapacity" name="capacity" value="{{ $item->capacity }}" required>
                             </div>
-                        </div>
-                
-                        <!-- Second Column -->
-                        <div class="col-md-6">
                             <div class="mb-3">
                                 <label for="editFuelAmount" class="form-label">Fuel Amount</label>
                                 <input type="number" class="form-control" id="editFuelAmount" name="fuel_amount" value="{{ $item->fuel_amount }}" required>
                             </div>
+                            {{-- <div class="mb-3">
+                                <label for="editRentalType_{{ $item->vehicle_id }}" class="form-label">Rental Type</label>
+                                <select id="editRentalType_{{ $item->vehicle_id }}" name="rental_type" class="form-select" required>
+                                    <option value="40/60" {{ $item->rental_type == '40/60' ? 'selected' : '' }}>40/60</option>
+                                    <option value="Position" {{ $item->rental_type == 'Position' ? 'selected' : '' }}>Position</option>
+                                    <option value="morning_afternoon_minibus" {{ $item->rental_type == 'morning_afternoon_minibus' ? 'selected' : '' }}>Morning Afternoon</option>
+                                    <option value="whole_day" {{ $item->rental_type == 'whole_day' ? 'selected' : '' }}>Whole Day</option>
+                                </select>
+                            </div> --}}
+                        </div>
                 
+                        <!-- Second Column -->
+                        <div class="col-md-6">
                             <div class="mb-3">
                                 <label for="editFuelType" class="form-label">Fuel Type</label>
                                 <input type="text" class="form-control" id="editFuelType" name="fuel_type" value="{{ $item->fuel_type }}" required>
@@ -418,9 +426,23 @@
                                 <select id="editDriver" name="driver_id" class="form-select">
                                     <option value="">Select Driver</option>
                                     @foreach($drivers as $driver)
-                                        <option value="{{ $driver->id }}" {{ $item->driver_id == $driver->id ? 'selected' : '' }}>{{ $driver->user->username }}</option>
+                                        <option value="{{ $item->driver->user->first_name }}  {{ $item->driver->user->middle_name }}" {{ $item->driver->user->first_name }}  {{ $item->driver->user->middle_name  ? 'selected' : ''  }}>{{ $driver->user->username }}</option>
                                     @endforeach
                                 </select>
+                            </div>
+
+                            <div class="mb-3">
+                                <div class="mb-6">
+                                    <label for="editLibre" class="form-label">Libre</label>
+                                    <input type="file" class="form-control" id="editLibre" name="libre">
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <div class="mb-3">
+                                    <label for="editInsurance" class="form-label">Insurance</label>
+                                    <input type="file" class="form-control" id="editInsurance" name="insurance">
+                                </div>
                             </div>
                 
                             <div class="mb-3">
@@ -440,29 +462,6 @@
                                     <option value="Other" {{ $item->vehicle_type == 'Other' ? 'selected' : '' }}>Other</option>
                                 </select>
                             </div>
-
-                            
-                        </div>
-                    </div>
-                
-                    <!-- Files section (still within the two-column structure) -->
-                    <div class="row">
-                        <div class="col-md-6">
-                            @if($item->libre)
-                            <div class="mb-3">
-                                <label for="editLibre" class="form-label">Libre</label>
-                                <input type="file" class="form-control" id="editLibre" name="libre">
-                            </div>
-                            @endif
-                        </div>
-                
-                        <div class="col-md-6">
-                            @if($item->insurance)
-                            <div class="mb-3">
-                                <label for="editInsurance" class="form-label">Insurance</label>
-                                <input type="file" class="form-control" id="editInsurance" name="insurance">
-                            </div>
-                            @endif
                         </div>
                     </div>
                 </div>

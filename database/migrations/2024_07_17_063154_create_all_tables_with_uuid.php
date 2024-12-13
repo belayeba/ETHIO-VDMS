@@ -381,20 +381,20 @@ class CreateAllTablesWithUuid extends Migration
             $table->timestamps();
             $table->softDeletes();
         });
-        // Schema::create('attendances', function (Blueprint $table) {
-        //     $table->uuid('attendance_id');
-        //     $table->uuid('vehicle_id');
-        //     $table->foreign('vehicle_id')->references('vehicle_id')->on('vehicles')->onDelete('restrict');
-        //     $table->uuid('route_id');
-        //     $table->foreign('route_id')->references('route_id')->on('route_id')->onDelete('restrict');
-        //     $table->uuid('register_by');
-        //     $table->boolean('morning');
-        //     $table->boolean('afternoon');
-        //     $table->foreign('register_by')->references('id')->on('users')->onDelete('restrict');
-        //     $table->string('notes', 1000)->nullable();
-        //     $table->timestamps();
-        //     $table->softDeletes();
-        // });
+        Schema::create('attendances', function (Blueprint $table) {
+            $table->uuid('attendance_id');
+            $table->uuid('vehicle_id');
+            $table->foreign('vehicle_id')->references('vehicle_id')->on('vehicles')->onDelete('restrict');
+            $table->uuid('route_id');
+            $table->foreign('route_id')->references('route_id')->on('routes')->onDelete('restrict');
+            $table->uuid('register_by');
+            $table->boolean('morning');
+            $table->boolean('afternoon');
+            $table->foreign('register_by')->references('id')->on('users')->onDelete('restrict');
+            $table->string('notes', 1000)->nullable();
+            $table->timestamps();
+            $table->softDeletes();
+        });
         Schema::create('route_user', function (Blueprint $table) {
             $table->uuid('route_user_id')->primary();
             $table->uuid('employee_id');
