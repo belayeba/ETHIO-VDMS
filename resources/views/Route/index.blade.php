@@ -119,8 +119,8 @@
                                                         <tr>
                                                             <td>{{ $loop->iteration }}</td>
                                                             <td>{{ $data->route_name }}</td>
-                                                            <td>{{ $data->driver_phone }}</td>
                                                             <td>{{ $data->vehicle->plate_number }}</td>
+                                                            <td>{{ $data->driver_phone }}</td>
                                                             <td>
                                                                 <form method="POST" action="{{ route('route.destroy',$data ) }}"accept-charset="UTF-8">
                                                                     @csrf

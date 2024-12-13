@@ -363,7 +363,7 @@
                             var h2 = $('<h4>').append('Expected Fuel Cost in ETB : <span style="text-decoration: underline;font-size:16px;">'+response.expected_fuel+ '</span>');
                             var h1 = $('<h4>').append('Attached Total cost in ETB: <span style="text-decoration: underline;font-size:16px;">' + total_fuel + '</span>');
                             var input = $('<div id="entriesInputContainer"></div>')
-                            var attach = $(` <div class="row"><div class="col-2"> <button class="btn btn-info btn-sm attach-btn" style="position: absolute; right: 10px; top: 10px;" data-id="${selectedCarId}">+</button></div>`);
+                            var attach = $(` <div class="row"><div class="col-2"> <button class="btn btn-info btn-sm attach-btn" style="position: absolute; right: 10px; top: 10px;" data-id="${selectedCarId}">Attach New Reciet</button></div>`);
                             var table = $('<table class="table table-striped">').append(`
                                 
                                 <thead>

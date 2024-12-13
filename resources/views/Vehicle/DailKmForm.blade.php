@@ -37,7 +37,7 @@
                     <div class="col-lg-5">
                         <div class="card">
                             <div class="card-header">
-                                <h4 class="header-title">Add vehicle part for inspection</h4>
+                                <h4 class="header-title">Daily KM Registration</h4>
                             </div>
                             <div class="card-body">
                                 <div id="progressbarwizard">
@@ -139,23 +139,33 @@
                     <div class="col-7">
                         <div class="card">
                             <div class="card-body">
-                                <table id="basic-datatable" class="table table-striped dt-responsive nowrap w-100">
+                                <table id="basic-datatable" class="table table-striped table-responsive dt-responsive nowrap w-100">
                                     <thead>
                                         <tr>
-                                            <th>Roll.no</th>
                                             <th>Vehicle</th>
                                             <th>Morning Km</th>
                                             <th>Evening km</th>
+                                            <th>Difference</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>                                  
                                     @foreach ($TodaysDate as $data)
                                         <tbody>
                                             <tr>
-                                                <td>{{ $loop->iteration }}</td>
                                                 <td>{{ $data->vehicle->plate_number }}</td>
                                                 <td>{{ $data->morning_km }}</td>
                                                 <td>{{ $data->afternoon_km }}</td>
+                                                <td>
+                                                    <button type="button" class="btn btn-info rounded-pill"
+                                                            data-bs-toggle="modal"
+                                                            data-bs-target="#DisplayDifference"
+                                                            data-morning_difference="{{ $data->getNightKmAttribute($data->vehicle->plate_number) }}"
+                                                            data-day_difference="{{ $data->getDailyKmAttribute($data->vehicle->plate_number) }}"
+                                                            title="Show">
+                                                        <i class="ri-eye-line"></i>
+                                                    </button>
+                                                </td>
+
                                                 <td>
                                                     <button type="button" class="btn btn-info rounded-pill"
                                                         data-bs-toggle="modal"
@@ -221,6 +231,34 @@
                                                 </div><!-- /.modal-content -->
                                             </div><!-- /.modal-dialog -->
                                         </div>
+                                        <div id="DisplayDifference" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="standard-modalLabel" aria-hidden="true">
+                                                <div class="modal-dialog">
+                                                    <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h4 class="modal-title" id="standard-modalLabel">KM Difference</h4>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <div class="tab-pane" id="account2">
+                                                        <div class="row">
+                                                            <div class="position-relative mb-3">
+                                                            <label class="form-label">Morning Difference</label>
+                                                            <input type="text" id="morningDifferenceInput" class="form-control" readonly>
+                                                            </div>
+                                                            <div class="position-relative mb-3">
+                                                            <label class="form-label">Afternoon Difference</label>
+                                                            <input type="text" id="dayDifferenceInput" class="form-control" readonly>
+                                                            </div>
+                                                        </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
+                                                    </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
                                         <!-- end show modal -->
                                     @endforeach
 
@@ -236,6 +274,16 @@
 
 
         <script>
+                var displayDifferenceModal = document.getElementById('DisplayDifference');
+                    displayDifferenceModal.addEventListener('show.bs.modal', function (event) {
+                    var button = event.relatedTarget;
+                    var morningDifference = button.getAttribute('data-morning_difference');
+                    var dayDifference = button.getAttribute('data-day_difference');
+
+                    // Update the modal's input fields
+                    document.getElementById('morningDifferenceInput').value = morningDifference;
+                    document.getElementById('dayDifferenceInput').value = dayDifference;
+                });
             document.addEventListener('DOMContentLoaded', function() {
                 const selectTime = document.getElementById('time');
                 const morning = document.getElementById('morning');

@@ -52,6 +52,7 @@ class Daily_KM_Calculation extends Controller
                 $dailkms = DailyKMCalculationModel::with('vehicle', 'driver')
                     ->latest()
                     ->take(50)
+                    ->oldest()
                     ->get();
         
                     $dailkms = $dailkms->map(function ($km) {
@@ -60,8 +61,8 @@ class Daily_KM_Calculation extends Controller
                             'plate_number' => $km->vehicle->plate_number ?? 'N?A',
                             'morning_km' => $km->morning_km ?? 'N/A',
                             'afternoon_km' => $km->afternoon_km,
-                            'daily_km' => 342,
-                            'night_km' => 400,
+                            // 'daily_km' => 342,
+                            // 'night_km' => 400,
                             'daily_km' => $km->getDailyKmAttribute($km->vehicle->vehicle_id),
                             'night_km' => $km->getNightKmAttribute($km->vehicle->vehicle_id),
                         ];
@@ -82,7 +83,7 @@ class Daily_KM_Calculation extends Controller
                 // Fetch the daily KM data
                 $dailkms = VehiclePermanentlyRequestModel::with('vehicle', 'requestedBy')
                     ->where('status', 1)
-                    ->latest()
+                    ->oldest()
                     ->take(50)
                     ->get();
                 $dailkms = $dailkms->map(function ($km) {
@@ -197,7 +198,7 @@ class Daily_KM_Calculation extends Controller
         
                 
         
-                $dailkms = $query->latest()->get();
+                $dailkms = $query->oldest()->get();
         
                 $dailkms = $dailkms->map(function ($km) {
                     return (object) [
@@ -301,7 +302,7 @@ class Daily_KM_Calculation extends Controller
                     });
                 }
         
-                $dailkms = $query->get();
+                $dailkms = $query->oldest()->get();
         
                 $dailkms = $dailkms->map(function ($km) {
                     return (object) [
@@ -331,8 +332,7 @@ class Daily_KM_Calculation extends Controller
                 return view('Vehicle.permanentReport', compact('vehicles', 'drivers', 'departments', 'clusters', 'dailkms'));
         
             }
-        
-            public function filterTemporaryReport(Request $request)
+        public function filterTemporaryReport(Request $request)
             {
                 $validator = Validator::make($request->all(), [
                     'plate_number' => 'nullable|string',
