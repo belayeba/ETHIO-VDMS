@@ -409,15 +409,19 @@
                                     </li>
                               
                                     <li>
-                                        <a href="{{ route('letter.review') }}">Letter Review</a>
+                                        <a href="{{ route('letter.review.page') }}">Letter Review</a>
                                     </li>
 
                                     <li>
-                                        <a href="{{ route('letter.approve') }}">Letter Approve</a>
+                                        <a href="{{ route('letter.approve.page') }}">Letter Approve</a>
                                     </li>
 
                                     <li>
-                                        <a href="{{ route('letter.accept') }}">Letter Accept</a>
+                                        <a href="{{ route('purchase.accept.page') }}">Purchase Accept</a>
+                                    </li>
+
+                                    <li>
+                                        <a href="{{ route('finance.accept.page') }}">Finanace Accept</a>
                                     </li>
                              
                             </ul>

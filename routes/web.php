@@ -384,9 +384,16 @@ Route::group(['middleware' => ['auth']], function()
             Route::controller(LetterController::class)->group(function () 
                 {
                     Route::get('/letter', 'index')->name('letter.index');
-                    Route::get('/letter/review', 'review')->name('letter.review');
-                    Route::post('/letter/approve', 'approve')->name('letter.approve');
-                    Route::post('/letter/accept', 'accept')->name('letter.accept');
+                    Route::get('/letter/fetch', 'FetchLetter')->name('FetchLetter');
+                    Route::post('/letter/store', 'store')->name('letter.store');
+                    Route::get('/letter/review', 'review_page')->name('letter.review.page');
+                    Route::get('/letter/fetch/department', 'FetchLetterApprove')->name('FetchForLetterRequest');
+                    Route::post('/letter/review/{id}', 'review')->name('letter.review');
+                    Route::get('/letter/approve', 'approve_page')->name('letter.approve.page');
+                    Route::post('/letter/approve/{id}', 'approve')->name('letter.approve');
+                    Route::get('/letter/accept/purchase', 'accept_page_purchase')->name('purchase.accept.page');
+                    Route::get('/letter/accept/finance', 'accept_page_finance')->name('finance.accept.page');
+                    Route::post('/letter/accept/{id}', 'accept')->name('letter.accept');
                     Route::delete('/letter/delete', 'destroy')->name('attendance.destroy');
                 });
 
