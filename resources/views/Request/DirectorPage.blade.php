@@ -23,8 +23,6 @@
                     <div class="card">
                         <div class="card-body">
                             <div class="table-responsive" id="table1">
-                                <h4 class="header-title mb-4">REQUESTS</h4>
-
                                 <table class="table director_datatable table-striped dt-responsive nowrap w-100">
                                     <thead>
                                         <tr>

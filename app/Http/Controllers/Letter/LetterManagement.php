@@ -1,15 +1,15 @@
 <?php
 
 namespace App\Http\Controllers\Letter;
-namespace App\Http\Controllers;
 
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use App\Models\Letter;
 use App\Models\Letter\LetterModel;
 
-class LetterController extends Controller
+class LetterManagement extends Controller
 {
   
     public function index()

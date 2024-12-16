@@ -24,7 +24,6 @@
                             <div class="card">
                                 <div class="card-body">
                                     <div class="table-responsive"  id="table1">
-                                        <h4 class="header-title mb-4">NEW REQUEST</h4>
                                         <div class="toggle-tables">
                                             <button type="button" class="btn btn-secondary rounded-pill" autofocus  onclick="toggleDiv('table1')">PENDING REQUEST</button>
                                             <button type="button" class="btn btn-outline-secondary rounded-pill"  onclick="toggleDiv('table2')">ARCHIVED REQUEST</button>
@@ -97,7 +96,6 @@
                                     </div>
                                     <!-- end .table-responsive-->
                                     <div class="table-responsive"  id="table2" style="display:none">
-                                        <h4 class="header-title mb-4" >ARCHIVED REQUEST</h4>
                                         <div class="toggle-tables">
                                             <button type="button" class="btn btn-outline-secondary rounded-pill"  onclick="toggleDiv('table1')">PENDING REQUEST</button>
                                             <button type="button" class="btn btn-secondary rounded-pill"  onclick="toggleDiv('table2')">ARCHIVED REQUEST</button>

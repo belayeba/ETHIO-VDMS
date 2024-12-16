@@ -202,9 +202,7 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    @endforeach
-                                                   
+                    </div>                                                   
                     @endif
                    <style>
                     @media only screen and (max-width: 768px) {

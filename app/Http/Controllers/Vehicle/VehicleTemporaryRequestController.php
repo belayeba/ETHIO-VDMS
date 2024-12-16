@@ -48,7 +48,7 @@ class VehicleTemporaryRequestController extends Controller
                 })
 
                 ->addColumn('start_date', function ($row) {
-                    return $row->start_date;
+                    return $row->created_at->format('d/m/y');
                 })
 
                 ->addColumn('location', function ($row) {

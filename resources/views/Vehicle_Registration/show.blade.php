@@ -171,7 +171,7 @@
                                         <div class="row mb-3">
                                             <label class="col-md-3 col-form-label" for="Notes">Notes</label>
                                             <div class="col-md-9">
-                                                <input type="text" id="Notes" name="Notes" placeholder="Enter your notes here" class="form-control" required>
+                                                <input type="text" id="Notes" name="Notes" placeholder="Enter your notes here" class="form-control">
                                             </div>
                                         </div>
 
@@ -195,10 +195,10 @@
                                         <div class="row mb-3">
                                             <label class="col-md-3 col-form-label" for="driver">Driver</label>
                                             <div class="col-md-9">
-                                                <select id="driver" name="driver" class="form-select" required>
+                                                <select id="driver" name="driver" class="form-select">
                                                     <option value="">Select Driver</option>
                                                     @foreach($drivers as $driver)
-                                                        <option value="{{ $driver->driver_id }}">{{ $driver->user->username }}</option>
+                                                        <option value="{{ $driver->driver_id }}">{{ $driver->user->first_name." ". $driver->user->middle_name}}</option>
                                                     @endforeach
                                                 </select>
                                             </div>
@@ -243,7 +243,7 @@
                                         <div class="row mb-3" id="rentalDiv" style="display: none;">
                                             <div class="col-md-9">
                                                 <label class="col-md-3 col-form-label" for="rental_type">Rental Type</label>
-                                                <select id="rentalType" name="rental_type" class="form-select" required>
+                                                <select id="rentalType" name="rental_type" class="form-select">
                                                     <option value="">Select Type</option>
                                                     <option value="whole_day">Whole Day</option>
                                                     <option value="position">Position</option>
@@ -395,7 +395,7 @@
                             </div>
                             {{-- <div class="mb-3">
                                 <label for="editRentalType_{{ $item->vehicle_id }}" class="form-label">Rental Type</label>
-                                <select id="editRentalType_{{ $item->vehicle_id }}" name="rental_type" class="form-select" required>
+                                <select id="editRentalType_{{ $item->vehicle_id }}" name="rental_type" class="form-select">
                                     <option value="40/60" {{ $item->rental_type == '40/60' ? 'selected' : '' }}>40/60</option>
                                     <option value="Position" {{ $item->rental_type == 'Position' ? 'selected' : '' }}>Position</option>
                                     <option value="morning_afternoon_minibus" {{ $item->rental_type == 'morning_afternoon_minibus' ? 'selected' : '' }}>Morning Afternoon</option>
@@ -426,7 +426,7 @@
                                 <select id="editDriver" name="driver_id" class="form-select">
                                     <option value="">Select Driver</option>
                                     @foreach($drivers as $driver)
-                                        <option value="{{ $item->driver->user->first_name }}  {{ $item->driver->user->middle_name }}" {{ $item->driver->user->first_name }}  {{ $item->driver->user->middle_name  ? 'selected' : ''  }}>{{ $driver->user->username }}</option>
+                                        <option value="{{$driver->driver_id}}">{{$driver->user->first_name}} + {{$driver->user->second_name}}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -549,7 +549,7 @@
             
                             <dt class="col-sm-4">Driver:</dt>
                             <dd class="col-sm-8">
-                                <p>{{ $item->driver->user->first_name }}  {{ $item->driver->user->middle_name }}</p>
+                                <p>{{ $item->driver_id ? $item->driver->user->first_name : "No driver" }}  {{ $item->driver_id ? $driver->user->middle_name : "" }}</p>
                             </dd>
             
                             <dt class="col-sm-4">Vehicle Category:</dt>

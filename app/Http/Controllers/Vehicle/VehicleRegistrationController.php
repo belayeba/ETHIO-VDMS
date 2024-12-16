@@ -72,7 +72,6 @@ class VehicleRegistrationController extends Controller {
         }
         $filelibre = '';
         $fileinsurance = '';
-
         if ( $request->hasFile( 'libre' ) ) {
             $file = $request->file( 'libre' );
             $storagePath = storage_path( 'app/public/vehicles' );
