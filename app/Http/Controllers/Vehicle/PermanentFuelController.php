@@ -305,7 +305,7 @@ class PermanentFuelController extends Controller {
                }
             $total_feul =  $fueling->sum('fuel_cost');
             $fueling_data= PermanentFuelModel::with('vehicle:vehicle_id,plate_number','financeApprover:id,first_name')
-            ->select('driver_id','fueling_id','finance_approved_by','fuel_cost','fuiling_date','reciet_attachment','year','month','make_primary','accepted')
+            ->select('driver_id','fueling_id','finance_approved_by','fuel_cost','fuiling_date','reciet_attachment','year','month','make_primary','accepted','final_approved_by')
             ->where('fueling_id', $id)
             ->get()                
             ->map(function ($fueling) {
@@ -315,7 +315,7 @@ class PermanentFuelController extends Controller {
                     'fueling_id'         => $fueling->fueling_id,
                     'year'               => $fueling->year,
                     'month'              => $fueling->month,
-                    //'fuel_amount'        => $fueling->fuel_amount,
+                    'final_approved'     => $fueling->finalApprover ? $fueling->finalApprover->first_name : null,
                     'fuel_cost'          => $fueling->fuel_cost,
                     'fuiling_date'       => $fueling->fuiling_date,
                     'reciet_attachment'  => $fueling->reciet_attachment,

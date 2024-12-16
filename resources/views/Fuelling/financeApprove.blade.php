@@ -197,7 +197,9 @@
                                                     </div>
                                                 </div>
                                                 <div class="modal-footer">
-                                                    <button type="submit" class="btn btn-primary rounded-pill view" id="InspectionSubmitButton" title="Submit"><i class="ri-checkbox-circle-line"></i></button>
+                                                    <div id="final_accept" style="display: none">
+                                                        <button type="submit" class="btn btn-primary rounded-pill view" id="InspectionSubmitButton" title="Submit"><i class="ri-checkbox-circle-line"></i></button>
+                                                    </div>
                                                     <button type="submit" class="btn btn-secondary"  data-bs-dismiss="modal" aria-label="Close">close</button>
                                                 </div> <!-- end modal footer -->
                                             </div>                                                              
@@ -335,6 +337,7 @@
             type: 'get',
             data: { id: selectedCarId },
             success: function (response) {
+                var final = document.getElementById('final_accept');
                 $('#staticaccept').modal('show');
 
                 // Clear previous cards and image preview
@@ -344,6 +347,8 @@
 
                 if (response.status === 'success' && Array.isArray(response.data) && response.data.length > 0) {
                     // Populate the table and info section
+                    
+                    console.log('final',response.data);
                     var table = $('<table class="table table-striped">').append(`
                         <thead>
                             <tr>
@@ -367,6 +372,10 @@
                     var h2 = $('<h4>').append('Expected Fuel Cost in ETB : <span style="text-decoration: underline;font-size:16px;">'+expected_fuel+ '</span>');
                     response.data.forEach(function (fueling, index) {
                         count++;
+                        if(fueling.final_approved == null){
+                        final.style.display = 'block'
+                        }
+                        console.log('final',fueling.final_approved);
                         var row = $(`
                             <tr>
                                 <td>${count}</td>
@@ -451,7 +460,6 @@
                         }
 
                         $('#InspectionSubmitButton').on('click', function () {
-                        console.log('Preparing data for form submission...');
 
                         // Convert the arrays into the required format
                         const approvedData = approvedReceipts.map(id => id); // Only IDs for approved
