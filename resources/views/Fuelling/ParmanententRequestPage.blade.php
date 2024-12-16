@@ -393,7 +393,7 @@
                                             </a>
                                         </td>
                                         <td>
-                                           ${fueling.accepted == 0 ? `
+                                           ${fueling.accepted == 0 && $fueling.final_approved == null ? `
                                                 <div class="row">
                                                     <div class="col-6">
                                                         <div class="form-check">
@@ -406,8 +406,12 @@
                                 `);
                                 table.find('tbody').append(row);
                             });
-                                                        cardsContainer.append(h2);
-                            cardsContainer.append(attach);
+                            cardsContainer.append(h2);
+                            
+                            if($fueling.final_approved == null){
+                                 cardsContainer.append(attach);
+                            }
+                           
                             cardsContainer.append(table);
                             cardsContainer.append(h1);
                             cardsContainer.append(input);
