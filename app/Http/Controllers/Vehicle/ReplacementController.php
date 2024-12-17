@@ -1,11 +1,10 @@
 <?php
-
-namespace App\Http\Controllers\Vehicle;
-
 namespace App\Http\Controllers\Vehicle;
 
 use App\Http\Controllers\Controller;
 use App\Models\Vehicle\ReplacementModel;
+use App\Models\Vehicle\VehiclesModel;
+use App\Models\Vehicle\VehiclePermanentlyRequestModel;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
@@ -15,15 +14,16 @@ class ReplacementController extends Controller
 {
     public function index()
     {
-        $replacements = ReplacementModel::with(['newVehicle', 'permanentRequest', 'registeredBy'])->get();
-        return response()->json($replacements);
+        $vehicles = VehiclesModel::get();
+        $permanent = vehiclePermanentlyRequestModel::get();
+        return view('Vehicle.Replacement', compact('vehicles','permanent' ));
     }
 
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
             'new_vehicle_id' => 'required|exists:vehicles,vehicle_id',
-            'permanent_id' => 'required|exists:vehicle_permanently_requests,vehicle_request_permanent_id',
+            'permanent_id' => 'required|exists:vehicle_requests_parmanently,vehicle_request_permanent_id',
         ]);
 
         if ($validator->fails()) {
@@ -37,7 +37,51 @@ class ReplacementController extends Controller
             'status' => false, // Default value
         ]);
 
-        return response()->json($replacement, 201);
+        return redirect()->back()->with('success_message', "Successfully Replaced!",);
+    }
+
+    public function FetchReplacement()
+    {
+        $data = ReplacementModel::with(['newVehicle', 'permanentRequest', 'registeredBy'])->get();
+                
+                return datatables()->of($data)
+                ->addIndexColumn()
+
+                ->addColumn('counter', function($row) use ($data){
+                    static $counter = 0;
+                    $counter++;
+                    return $counter;
+                })
+
+                ->addColumn('oldCar', function ($row) {
+                    return $row->permanentRequest->vehicle->plate_number;
+                })
+
+                ->addColumn('newCar', function ($row) {
+                    return $row->newVehicle->plate_number;
+                })
+
+                ->addColumn('registerBy', function ($row) {
+                    return $row->registeredBy->first_name .' '.$row->registeredBy->last_name ;
+                })
+
+                ->addColumn('date', function ($row) {
+                    return $row->created_at->format('d/m/Y');
+                })
+
+                ->addColumn('actions', function ($row) {
+                    $actions = '';                    
+
+                    if ($row->reviewed_by == null) {
+                        $actions .= '<button class="btn btn-secondary rounded-pill update-btn" title="edit"><i class="ri-edit-line"></i></button>';
+                        $actions .= '<button class="btn btn-danger rounded-pill reject-btn"  data-id="' . $row->replacement_id. '" title="delete"><i class=" ri-close-circle-fill"></i></button>';
+                    }
+
+                    return $actions;
+                })
+
+                ->rawColumns(['counter','oldCar','newCar','registerBy','date','actions'])
+                ->toJson();
     }
     
     public function show($id)
@@ -87,6 +131,6 @@ class ReplacementController extends Controller
 
             $replacement->delete();
 
-            return response()->json(['message' => 'Replacement deleted successfully']);
+            return redirect()->back()->with('success_message', "Successfully Deleted!");
         }
 }

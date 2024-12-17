@@ -25,10 +25,10 @@
                     <div class="col-12 col-lg-5">
                         <div class="card">
                             <div class="card-header">
-                                <h4 class="header-title">Letter Request</h4>
+                                <h4 class="header-title">Replace Permanent Vehicle</h4>
                             </div>
                             <div class="card-body">
-                                <form action="{{ route('letter.store') }}" method="post" enctype="multipart/form-data">
+                                <form action="{{ route('Replacement.store') }}" method="post" enctype="multipart/form-data">
                                     @csrf
 
                                     <div id="progressbarwizard">
@@ -37,7 +37,7 @@
                                                 <a href="#account-2" data-bs-toggle="tab" data-toggle="tab"
                                                     class="nav-link rounded-0 py-2">
                                                     <i class="ri-car-fill fw-normal fs-20 align-middle me-1"></i>
-                                                    <span class="d-none d-sm-inline">Request</span>
+                                                    <span class="d-none d-sm-inline">Replace</span>
                                                 </a>
                                             </li>
                                         </ul>
@@ -51,14 +51,25 @@
 
                                             <div class="tab-pane" id="account-2">
                                                 <div class="row">
-
                                                     <div class="position-relative mb-3">
-                                                        <div class="mb-6 position-relative" >
-                                                            <label class="form-label">Upload Letter</label>
-                                                            <input type="file" name="letter_file" class="form-control">
-                                                        </div>
+                                                        <label class="form-label" for="validationTooltip02">Select old vehicle</label>
+                                                        <select class="form-control" id="vehicleSelect" name="permanent_id">
+                                                            <option value="">Select old vehicle</option>
+                                                            @foreach ($permanent as $perm)
+                                                            <option value="{{$perm->vehicle_request_permanent_id}}">{{$perm->vehicle->plate_number}}</option>
+                                                        @endforeach 
+                                                        </select>
                                                     </div>
-
+                                                    
+                                                    <div class="position-relative mb-3">
+                                                        <label class="form-label" for="validationTooltip02">Select Replacemen</label>
+                                                        <select class="form-control" id="routeSelect" name="new_vehicle_id">
+                                                            <option value="">Select Replacement</option>
+                                                            @foreach ($vehicles as $vec)
+                                                                <option value="{{$vec->vehicle_id}}">{{$vec->plate_number}}</option>
+                                                            @endforeach 
+                                                        </select>
+                                                    </div>
                                                 </div>
 
                                                 <ul class="list-inline wizard mb-0">
@@ -85,7 +96,9 @@
                                         <thead>
                                             <tr>
                                                 <th>#</th>
-                                                <th>Prepared By</th>
+                                                <th>Old Car</th>
+                                                <th>New Car</th>
+                                                <th>Registered By</th>
                                                 <th>Date</th>
                                                 <th>Action</th>
                                             </tr>
@@ -101,7 +114,7 @@
                                     aria-labelledby="confirmationModalLabel"aria-hidden="true">
                                     <div class="modal-dialog modal-sm">
                                         <div class="modal-content">
-                                            <form method="POST" action="{{ route('attendance.destroy') }}">
+                                            <form method="POST" id="delete-form">
                                                 @csrf
                                                 @method('DELETE')
                                                 <input type="hidden" name="request_id" id="Reject_attendance_id">
@@ -124,43 +137,6 @@
                                         </div><!-- /.modal-content -->
                                     </div><!-- /.modal-dialog -->
                                 </div><!-- /.modal -->
-
-                                 <!-- show all the information about the request modal -->
-                                    <div id="standard-modal-view" class="modal fade" tabindex="-1" role="dialog"
-                                        aria-labelledby="standard-modalLabel" aria-hidden="true">
-                                        <div class="modal-dialog">
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <h4 class="modal-title">Request Details</h4>
-                                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                        aria-label="Close"></button>
-                                                </div>
-                                                <div class="modal-body">
-                                                    <dl class="row mb-0">
-                                                        <dt class="col-sm-5">Reviewed By</dt>
-                                                        <dd class="col-sm-7" id="review_view"></dd>
-                                                    
-                                                        <dt class="col-sm-5">Approved By</dt>
-                                                        <dd class="col-sm-7" id="approved_view"></dd>
-                                                    
-                                                        <dt class="col-sm-5">Sent to Department</dt>
-                                                        <dd class="col-sm-7" id="department_view"></dd>
-
-                                                        <dt class="col-sm-5">Accepted By</dt>
-                                                        <dd class="col-sm-7" id="accepted_view"></dd>
-                                                    
-                                                        <dt class="col-sm-5">Document</dt>
-                                                        <dd class="col-sm-7"><a href="" id="image">Click to View</a></dd>
-                                                    </dl>                                                    
-                                                </div>
-                                                <div class="modal-footer">
-                                                    <button type="button" class="btn btn-light"
-                                                        data-bs-dismiss="modal">Close</button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                <!-- end show modal -->
 
                                 <!-- show all the information about the request modal -->
                                 <div id="update-modal" class="modal fade" tabindex="-1" role="dialog"
@@ -238,14 +214,23 @@
             processing: true,
             pageLength: 5,
             serverSide: true,
-            ajax: "{{ route('FetchLetter') }}",
+            ajax: "{{ route('Replacement.fetch') }}",
             columns: [{
                     data: 'counter',
                     name: 'counter'
                 },
                 {
-                    data: 'preparedBy',
-                    name: 'preparedBy'
+                    data: 'oldCar',
+                    name: 'oldCar'
+                },
+               
+                {
+                    data: 'newCar',
+                    name: 'newCar'
+                },
+                {
+                    data: 'registerBy',
+                    name: 'registerBy'
                 },
                 {
                     data: 'date',
@@ -258,36 +243,6 @@
                     searchable: false
                 },
             ]
-        });
-
-        $(document).ready(function() {
-           
-
-            $(document).on('click', '.view-btn', function() {
-         
-                reviewedBy = $(this).data('reviewedby') || 'Pending';
-                approvedBy = $(this).data('approvedby') || 'Pending';
-                department = $(this).data('department') || 'Not Assigned';
-                acceptedBy = $(this).data('acceptedBy') || 'Pending';
-                pdfFile = $(this).data('image');
-                storagePath = "{{ asset('storage/Letters') }}" +'/'+ pdfFile;
-            
-                // pdfFile = $(this).data('pdf');
-                // storagePath = 'storage/app/public/Letters/' + pdfFile;
-                // console.log(pdfFile);
-
-             
-                
-                
-                $('#review_view').text(reviewedBy);
-                $('#approved_view').text(approvedBy);
-                $('#department_view').text(department);
-                $('#accepted_view').text(acceptedBy);
-                $('#image').html('<a href="' + storagePath + '" target="_blank">Open PDF</a>');
-
-
-                $('#standard-modal-view').modal('show');
-            });
         });
 
         $(document).ready(function() {
@@ -310,12 +265,14 @@
         });
 
         $(document).ready(function() {
-            var RejectedId;
+            var deletedId;
 
             $(document).on('click', '.reject-btn', function() {
-                RejectedId = $(this).data('id');
+                deletedId = $(this).data('id');
 
-                $('#Reject_attendance_id').val(RejectedId);
+                $('#delete-form').attr('action', '{{ route('Replacement.delete', ['id' => ':id']) }}'.replace(':id', deletedId));
+
+                $('#Reject_attendance_id').val(deletedId);
                 $('#confirmationModal').modal('toggle');
             });
         });

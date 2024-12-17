@@ -28,7 +28,9 @@ use App\Http\Controllers\Vehicle\VehiclePartsController;
 use App\Http\Controllers\Vehicle\VehicleRegistrationController;
 use App\Http\Controllers\Vehicle\PermanentFuelController;
 use App\Http\Controllers\Vehicle\AttendanceController;
+use App\Http\Controllers\Vehicle\ReplacementController;
 use App\Http\Controllers\Letter\LetterController;
+
 
 Route::get('/', function () 
 {
@@ -378,6 +380,8 @@ Route::group(['middleware' => ['auth']], function()
                     Route::post('/attendance/store', 'store')->name('attendance.store');
                     Route::post('/attendance/update/{id}', 'update')->name('attendance.update');
                     Route::delete('/attendance/delete', 'destroy')->name('attendance.destroy');
+                    Route::get('/attendance/report','ReportPage')->name('attendancereport.index');
+                    Route::post('/attendance/report/filter','filterReport')->name('attendancereport.filter');
                 });
 
                 // letter 
@@ -396,6 +400,18 @@ Route::group(['middleware' => ['auth']], function()
                     Route::post('/letter/accept/{id}', 'accept')->name('letter.accept');
                     Route::delete('/letter/delete', 'destroy')->name('attendance.destroy');
                 });
+
+                // Replacement
+
+                Route::controller(ReplacementController::class)->group(function () 
+                {
+                    Route::get('/Replacement', 'index')->name('Replacement.index');
+                    Route::get('/Replacement/fetch', 'FetchReplacement')->name('Replacement.fetch');
+                    Route::post('/Replacement/store', 'store')->name('Replacement.store');
+                    Route::delete('/Replacement/delete/{id}', 'destroy')->name('Replacement.delete');
+                   
+                });
+
 
                  // SAMIR
             Route::group([
