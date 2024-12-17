@@ -30,11 +30,16 @@ class ReplacementController extends Controller
             return response()->json(['errors' => $validator->errors()], 422);
         }
         $id = Auth::id();
+        $check_other_replacement = ReplacementModel::select('status')->where('permanent_id',$request->permanent_id)->where('status',true)->first();
+        if($check_other_replacement)
+            {
+                $check_other_replacement->status = false;
+                $check_other_replacement->update();
+            }
         $replacement = ReplacementModel::create([
             'new_vehicle_id' => $request->new_vehicle_id,
             'permanent_id' => $request->permanent_id,
             'register_by' =>  $id,
-            'status' => false, // Default value
         ]);
 
         return response()->json($replacement, 201);
@@ -54,7 +59,7 @@ class ReplacementController extends Controller
 
     public function update(Request $request, $id)
         {
-            $replacement = ReplacementModel::find($id);
+            $replacement = ReplacementModel::findOrFail($id);
 
             if (!$replacement) {
                 return response()->json(['message' => 'Replacement not found'], 404);
@@ -63,15 +68,12 @@ class ReplacementController extends Controller
             $validator = Validator::make($request->all(), [
                 'new_vehicle_id' => 'nullable|exists:vehicles,vehicle_id',
                 'permanent_id' => 'nullable|exists:vehicle_permanently_requests,vehicle_request_permanent_id',
-                'register_by' => 'nullable|exists:users,id',
-                'status' => 'nullable|boolean',
             ]);
 
             if ($validator->fails()) {
                 return response()->json(['errors' => $validator->errors()], 422);
             }
-
-            $replacement->update($request->only(['new_vehicle_id', 'permanent_id', 'register_by', 'status']));
+            $replacement->update($request->only(['new_vehicle_id', 'permanent_id']));
 
             return response()->json($replacement);
         }

@@ -221,7 +221,7 @@ class PermanentFuelController extends Controller {
             $get_permanent_id = $permanent->vehicle_request_permanent_id;
             // Loop through each set of fueling data
             $fuel=Str::uuid();
-            $today = \Carbon\Carbon::today();
+            $today = Carbon::now();
             $files = $request->file( "reciet_attachment_" );
             $fueling_date = $request->input('fuiling_date');
             // $fuel_amount = $request->input('fuel_amount');
@@ -438,7 +438,7 @@ class PermanentFuelController extends Controller {
                         "Warning! You are denied the service",],400);
                 } 
                 
-            $today = \Carbon\Carbon::today();
+            $today = Carbon::now();
             $ethiopianDate = $this->dailyKmCalculation->ConvertToEthiopianDate($today); 
             $fueling = new PermanentFuelModel();
             $fueling->fueling_id = $request->id;

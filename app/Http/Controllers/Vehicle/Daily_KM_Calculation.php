@@ -24,7 +24,7 @@ class Daily_KM_Calculation extends Controller
     {
         public function displayPage()
             {
-                $today = Carbon::today();
+                $today = Carbon::now();
                 $ethio_date = $this->ConvertToEthiopianDate($today);
                 $vehicle = VehiclesModel::get();
                 $TodaysDate = DailyKMCalculationModel::where('created_at',$ethio_date)->latest()->get();
@@ -35,8 +35,7 @@ class Daily_KM_Calculation extends Controller
                 $ethiopianDate = new DateTime($today);
         
                 // Format the Ethiopian date
-                $formattedDate = $ethiopianDate->format('Y-m-d');
-        
+                $formattedDate = $ethiopianDate->format('Y-m-d H:i:s');        
                 // Display the Ethiopian date
                 return $formattedDate;
             }
@@ -451,7 +450,7 @@ class Daily_KM_Calculation extends Controller
            //getting today's info
         public function displayForm()
             {
-                    $today = Carbon::today();
+                    $today = Carbon::now();
                     $ethio_date = $this->ConvertToEthiopianDate($today);
                     $TodaysDate = DailyKMCalculationModel::where('created_at',$ethio_date)->latest()->get();
                     return view('DailKmForm',compact('TodaysDate'));
@@ -471,7 +470,7 @@ class Daily_KM_Calculation extends Controller
                                  $validator->errors(),
                             );
                         }
-                    $today = Carbon::today();
+                    $today = Carbon::now();
                     $ethio_date = $this->ConvertToEthiopianDate($today);
                     $id = Auth::id();
                     try
@@ -529,7 +528,7 @@ class Daily_KM_Calculation extends Controller
                                  $validator->errors(),
                             );
                         }
-                    $today = Carbon::today();
+                    $today = Carbon::now();
                     $ethio_date = $this->ConvertToEthiopianDate($today);
 
                     $id = Auth::id();
@@ -584,7 +583,7 @@ class Daily_KM_Calculation extends Controller
                             );
                         }
                     $id = $request->input('vehicle_id');
-                    $today = Carbon::today();
+                    $today = Carbon::now();
                     $ethio_date = $this->ConvertToEthiopianDate($today);
                     $vehicle = DailyKMCalculationModel::where('created_at',$ethio_date)->where('vehicle_id',$id)->first();
                     
@@ -598,7 +597,7 @@ class Daily_KM_Calculation extends Controller
                try {
                 //code...
                 $id = $request->input('id');
-                $today = Carbon::today();
+                $today = Carbon::now();
                 $ethio_date = $this->ConvertToEthiopianDate($today);
                 $vehicle = DailyKMCalculationModel::where('created_at',$ethio_date)->where('vehicle_id',$id)->first();
                 if($vehicle->morning_km !== null){
