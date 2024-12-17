@@ -15,6 +15,7 @@ use Illuminate\Support\Str;
 use App\Http\Controllers\Vehicle\Daily_KM_Calculation;
 use App\Models\Vehicle\FeulCosts;
 use App\Models\Vehicle\VehiclesModel;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 
 class PermanentFuelController extends Controller {
@@ -58,13 +59,19 @@ class PermanentFuelController extends Controller {
             $year = $request->input('year');
             $month = $request->input('month');
             $vehicle_id = $request->input('vehicle_id');
+            if ($month == 1) {
+                $year = $year - 1;
+                $month = 12;
+            } else {
+                $month = $month - 1;
+            }
             // Fetch the current month's fuel record for the given driver
             $fueling_of_one = PermanentFuelModel::where('driver_id', $get_driver->driver_id)
                 ->where('year', $year)
                 ->where('month', $month)
                 ->where('vehicle_id', $vehicle_id)
                 ->first();
-
+            
             if (!$fueling_of_one) {
                 // Return an error response if no record is found
                 return response()->json([
@@ -75,16 +82,7 @@ class PermanentFuelController extends Controller {
                         'previous_fuel' => null
                     ]
                 ], 200);
-            }
-        
-            // Determine the previous month and year
-            if ($month == 1) {
-                $year = $fueling_of_one->year - 1;
-                $month = 12;
-            } else {
-                $month = $month - 1;
-            }
-        
+            }    
             // Fetch the previous month's fuel record
             $get_previous_feul = PermanentFuelModel::where('year', $year)
                 ->where('month', $month)
@@ -223,7 +221,7 @@ class PermanentFuelController extends Controller {
             $get_permanent_id = $permanent->vehicle_request_permanent_id;
             // Loop through each set of fueling data
             $fuel=Str::uuid();
-            $today = \Carbon\Carbon::today();
+            $today = Carbon::now();
             $files = $request->file( "reciet_attachment_" );
             $fueling_date = $request->input('fuiling_date');
             // $fuel_amount = $request->input('fuel_amount');
@@ -237,8 +235,9 @@ class PermanentFuelController extends Controller {
                 $fueling->vehicle_id = $request->input('vehicle_id');
                 $fueling->driver_id = $the_driver_id;
                 $fueling->permanent_id = $get_permanent_id;
-                // dd($request->fuiling_date[ $index ]);
-                $fueling->fuiling_date = $this->dailyKmCalculation->ConvertToEthiopianDate($fueling_date[ $index ]);
+                $date = Carbon::parse($fueling_date[$index])->toDateTime(); 
+                // Call your ConvertToEthiopianDate function
+                $fueling->fuiling_date = $this->dailyKmCalculation->ConvertToEthiopianDate($date);
                 $fueling->month = $request->month;
                 $fueling->year = $request->year;
                 //$fueling->fuel_amount = $fuel_amount;
@@ -293,6 +292,7 @@ class PermanentFuelController extends Controller {
                 {
                     $month = $fueling_of_one->month - 1;
                     $get_previous_feul = PermanentFuelModel::where('year',$fueling_of_one->year)->where('month',$month)->where('vehicle_id',$fueling_of_one->vehicle_id)->latest()->first();
+                    //dd( $get_previous_feul->one_litre_price * $get_previous_feul->quata);
 
                 }
             if($get_previous_feul)
@@ -438,7 +438,7 @@ class PermanentFuelController extends Controller {
                         "Warning! You are denied the service",],400);
                 } 
                 
-            $today = \Carbon\Carbon::today();
+            $today = Carbon::now();
             $ethiopianDate = $this->dailyKmCalculation->ConvertToEthiopianDate($today); 
             $fueling = new PermanentFuelModel();
             $fueling->fueling_id = $request->id;

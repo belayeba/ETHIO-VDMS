@@ -30,6 +30,7 @@ use App\Http\Controllers\Vehicle\PermanentFuelController;
 use App\Http\Controllers\Vehicle\AttendanceController;
 use App\Http\Controllers\Vehicle\ReplacementController;
 use App\Http\Controllers\Letter\LetterController;
+use App\Http\Controllers\Letter\LetterManagement;
 
 
 Route::get('/', function () 
@@ -131,7 +132,7 @@ Route::group(['middleware' => ['auth']], function()
                     Route::post('/profile/store','profile_save')->name('user.profile.store');
 
                 });
-                // Vehicle registration 
+            //     // Vehicle registration 
             Route::group([
                     'prefix'=>'vehicle',
                 ], function (){
@@ -385,7 +386,7 @@ Route::group(['middleware' => ['auth']], function()
                 });
 
                 // letter 
-            Route::controller(LetterController::class)->group(function () 
+            Route::controller(LetterManagement::class)->group(function () 
                 {
                     Route::get('/letter', 'index')->name('letter.index');
                     Route::get('/letter/fetch', 'FetchLetter')->name('FetchLetter');
@@ -414,14 +415,14 @@ Route::group(['middleware' => ['auth']], function()
 
 
                  // SAMIR
-            Route::group([
-                    'prefix'=>'vehicle',
-                ], function (){
-                    Route::get('/',[VehicleRegistrationController::class, 'index'])->name('vehicleRegistration.index');
-                    Route::post('/store',[VehicleRegistrationController::class, 'store'])->name('vehicleRegistration.store');
-                    Route::delete('/delete/{vehicle}',[VehicleRegistrationController::class,'destroy'])->name('vehicle.destroy');
-                    Route::put('/update/{vehicle}', [VehicleRegistrationController::class, 'update'])->name('vehicle.update');
-                });
+            // Route::group([
+            //         'prefix'=>'vehicle',
+            //     ], function (){
+            //         Route::get('/',[VehicleRegistrationController::class, 'index'])->name('vehicleRegistration.index');
+            //         Route::post('/store',[VehicleRegistrationController::class, 'store'])->name('vehicleRegistration.store');
+            //         Route::delete('/delete/{vehicle}',[VehicleRegistrationController::class,'destroy'])->name('vehicle.destroy');
+            //         Route::put('/update/{vehicle}', [VehicleRegistrationController::class, 'update'])->name('vehicle.update');
+            //     });
             // Route::controller(VehicleRegistrationController::class)->group(function () 
             //     {
             //          Route::get('/xx', 'index')->name('vehicleRegistration.index'); 

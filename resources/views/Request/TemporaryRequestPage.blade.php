@@ -400,7 +400,7 @@
                                         <thead>
                                             <tr>
                                                 <th>Roll.no</th>
-                                                <th>Date</th>
+                                                <th>Requested Date</th>
                                                 <th>location</th>
                                                 <th>Actions</th>
                                             </tr>

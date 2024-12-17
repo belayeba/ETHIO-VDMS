@@ -52,6 +52,7 @@ class LetterModel extends Model
         'accepted_by',
         'accepted_by_reject_reason',
         'status',
+        'created_at'
     ];
 
     /**

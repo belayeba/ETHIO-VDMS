@@ -24,8 +24,6 @@
                             <div class="card">
                                 <div class="card-body">
                                     <div class="table-responsive"  id="table1">
-                                        <h4 class="header-title mb-4">NEW HR Director REQUEST</h4>
-
                                         <table class="table HRdirector_datatable table-centered mb-0 table-nowrap" id="inline-editable">
                                             <thead>
                                                 <tr>

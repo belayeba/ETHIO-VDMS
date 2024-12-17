@@ -3,14 +3,14 @@
 namespace App\Http\Controllers\Letter;
 
 use App\Http\Controllers\Controller;
-
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use App\Models\Letter;
 use App\Models\Letter\LetterModel;
-
-class LetterController extends Controller
+use Andegna\DateTime;
+use Carbon\Carbon;
+class LetterManagement extends Controller
 {
 
   
@@ -20,7 +20,16 @@ class LetterController extends Controller
         // return response()->json($letters);
         return view('Letter.request');
     }
+    public function ConvertToEthiopianDate($today)
+        {
+            $ethiopianDate = new DateTime($today);
 
+            // Format the Ethiopian date
+            $formattedDate = $ethiopianDate->format('Y-m-d');
+
+            // Display the Ethiopian date
+            return $formattedDate;
+        }
     public function FetchLetter()
     {
         $data = LetterModel::with(['preparedBy', 'reviewedBy', 'approvedBy', 'acceptedBy'])->get();
@@ -68,13 +77,19 @@ class LetterController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'letter_file' => 'required|mimes:pdf|max:2048', // Ideally a file upload with validation rules
+            'letter_file' => 'required|mimes:pdf|max:2048', // File upload rules
+        ], [
+            'letter_file.required' => 'Attach drafts of the letter.',
+            'letter_file.mimes' => 'The letter file must be a PDF.',
+            'letter_file.max' => 'The letter file must not exceed 2MB.',
         ]);
-
+        
         if ($validator->fails()) {
-            return redirect()->back()->with('error_message',
-            "Attach drafts of the letter",);
+            $errorMessage = $validator->errors()->first('letter_file');
+            // Pass the actual error message to the session
+            return redirect()->back()->with('error_message', $errorMessage);
         }
+        
         $the_letter = '';    
         if ( $request->hasFile( 'letter_file') ) {
             $file = $request->file( 'letter_file' );
@@ -86,13 +101,17 @@ class LetterController extends Controller
             $the_letter = time() . '_' . $file->getClientOriginalName();
             $file->move( $storagePath, $the_letter );
         }
+        $today = Carbon::today();
+        $ethio_date = $this->ConvertToEthiopianDate($today);
         $letter = LetterModel::create([
             'letter_file' => $the_letter,
             'prepared_by' => Auth::id(),
+            'created_at' =>$ethio_date,
             'status' => 0, // Default status
         ]);
         return redirect()->back()->with('success_message', "Success!",);
     }
+
 
     public function update(Request $request, $id)
     {
@@ -371,8 +390,8 @@ class LetterController extends Controller
             'accepted_by' => Auth::id(),
             'accepted_by_reject_reason' => $request->accepted_by_reject_reason,
         ]);
-
-        return response()->json($letter);
+        return redirect()->back()->with('error_message',
+        "The letter successfully Accepted",);
     }
 
  
