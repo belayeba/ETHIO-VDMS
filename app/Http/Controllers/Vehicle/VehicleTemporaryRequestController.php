@@ -48,7 +48,7 @@ class VehicleTemporaryRequestController extends Controller
                 })
 
                 ->addColumn('start_date', function ($row) {
-                    return $row->start_date;
+                    return $row->created_at->format('d/m/y');
                 })
 
                 ->addColumn('location', function ($row) {
@@ -103,7 +103,7 @@ class VehicleTemporaryRequestController extends Controller
                     $countWeight = count($request->input('weight', []));
                     return $countMaterialName === $countWeight;
                 }, 'The number of material names and weights must be equal.');
-                $today = \Carbon\Carbon::today();
+                $today = \Carbon\Carbon::now();
                 $ethiopianDate = $this->dailyKmCalculation->ConvertToEthiopianDate($today); 
                 // Validate the request
                 $validator = Validator::make($request->all(), [
@@ -137,7 +137,7 @@ class VehicleTemporaryRequestController extends Controller
                             $id = Auth::id();
                             // dd($request->return_time);
                             // Create the vehicle request
-                            $today = \Carbon\Carbon::today();
+                            $today = \Carbon\Carbon::now();
                             $ethiopianDate = $this->dailyKmCalculation->ConvertToEthiopianDate($today); 
                             $startDate = Carbon::parse($request->start_date);
                             $returnDate = Carbon::parse($request->return_date);

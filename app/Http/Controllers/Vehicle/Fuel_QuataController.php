@@ -46,7 +46,7 @@ class Fuel_QuataController extends Controller
             }
 
             $logged_user = Auth::id();
-            $today = \Carbon\Carbon::today();
+            $today = \Carbon\Carbon::now();
             $ethiopianDate = $this->dailyKmCalculation->ConvertToEthiopianDate($today);
 
             DB::beginTransaction(); // Begin a transaction

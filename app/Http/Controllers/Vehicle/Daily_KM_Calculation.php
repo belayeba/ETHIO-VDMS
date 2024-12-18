@@ -26,7 +26,7 @@ class Daily_KM_Calculation extends Controller
             {
                 $today = Carbon::today();
                 $ethio_date = $this->ConvertToEthiopianDate($today);
-                $vehicle = VehiclesModel::get();
+                $vehicle = VehiclesModel::whereNot('rental_type','position')->whereNot('rental_type','morning_afternoon_minibus')->whereNot('rental_type','40/60')->whereNot('status',false)->get();
                 $TodaysDate = DailyKMCalculationModel::where('created_at',$ethio_date)->latest()->get();
                 return view('Vehicle.DailKmForm',compact('vehicle','TodaysDate'));
             }
@@ -35,8 +35,7 @@ class Daily_KM_Calculation extends Controller
                 $ethiopianDate = new DateTime($today);
         
                 // Format the Ethiopian date
-                $formattedDate = $ethiopianDate->format('Y-m-d');
-        
+                $formattedDate = $ethiopianDate->format('Y-m-d H:i:s');        
                 // Display the Ethiopian date
                 return $formattedDate;
             }
@@ -52,6 +51,7 @@ class Daily_KM_Calculation extends Controller
                 $dailkms = DailyKMCalculationModel::with('vehicle', 'driver')
                     ->latest()
                     ->take(50)
+                    ->oldest()
                     ->get();
         
                     $dailkms = $dailkms->map(function ($km) {
@@ -60,8 +60,8 @@ class Daily_KM_Calculation extends Controller
                             'plate_number' => $km->vehicle->plate_number ?? 'N?A',
                             'morning_km' => $km->morning_km ?? 'N/A',
                             'afternoon_km' => $km->afternoon_km,
-                            'daily_km' => 342,
-                            'night_km' => 400,
+                            // 'daily_km' => 342,
+                            // 'night_km' => 400,
                             'daily_km' => $km->getDailyKmAttribute($km->vehicle->vehicle_id),
                             'night_km' => $km->getNightKmAttribute($km->vehicle->vehicle_id),
                         ];
@@ -82,7 +82,7 @@ class Daily_KM_Calculation extends Controller
                 // Fetch the daily KM data
                 $dailkms = VehiclePermanentlyRequestModel::with('vehicle', 'requestedBy')
                     ->where('status', 1)
-                    ->latest()
+                    ->oldest()
                     ->take(50)
                     ->get();
                 $dailkms = $dailkms->map(function ($km) {
@@ -197,7 +197,7 @@ class Daily_KM_Calculation extends Controller
         
                 
         
-                $dailkms = $query->latest()->get();
+                $dailkms = $query->oldest()->get();
         
                 $dailkms = $dailkms->map(function ($km) {
                     return (object) [
@@ -301,7 +301,7 @@ class Daily_KM_Calculation extends Controller
                     });
                 }
         
-                $dailkms = $query->get();
+                $dailkms = $query->oldest()->get();
         
                 $dailkms = $dailkms->map(function ($km) {
                     return (object) [
@@ -331,8 +331,7 @@ class Daily_KM_Calculation extends Controller
                 return view('Vehicle.permanentReport', compact('vehicles', 'drivers', 'departments', 'clusters', 'dailkms'));
         
             }
-        
-            public function filterTemporaryReport(Request $request)
+        public function filterTemporaryReport(Request $request)
             {
                 $validator = Validator::make($request->all(), [
                     'plate_number' => 'nullable|string',
@@ -451,7 +450,7 @@ class Daily_KM_Calculation extends Controller
            //getting today's info
         public function displayForm()
             {
-                    $today = Carbon::today();
+                    $today = Carbon::now();
                     $ethio_date = $this->ConvertToEthiopianDate($today);
                     $TodaysDate = DailyKMCalculationModel::where('created_at',$ethio_date)->latest()->get();
                     return view('DailKmForm',compact('TodaysDate'));
@@ -471,7 +470,7 @@ class Daily_KM_Calculation extends Controller
                                  $validator->errors(),
                             );
                         }
-                    $today = Carbon::today();
+                    $today = Carbon::now();
                     $ethio_date = $this->ConvertToEthiopianDate($today);
                     $id = Auth::id();
                     try
@@ -529,7 +528,7 @@ class Daily_KM_Calculation extends Controller
                                  $validator->errors(),
                             );
                         }
-                    $today = Carbon::today();
+                    $today = Carbon::now();
                     $ethio_date = $this->ConvertToEthiopianDate($today);
 
                     $id = Auth::id();
@@ -584,7 +583,7 @@ class Daily_KM_Calculation extends Controller
                             );
                         }
                     $id = $request->input('vehicle_id');
-                    $today = Carbon::today();
+                    $today = Carbon::now();
                     $ethio_date = $this->ConvertToEthiopianDate($today);
                     $vehicle = DailyKMCalculationModel::where('created_at',$ethio_date)->where('vehicle_id',$id)->first();
                     
@@ -598,7 +597,7 @@ class Daily_KM_Calculation extends Controller
                try {
                 //code...
                 $id = $request->input('id');
-                $today = Carbon::today();
+                $today = Carbon::now();
                 $ethio_date = $this->ConvertToEthiopianDate($today);
                 $vehicle = DailyKMCalculationModel::where('created_at',$ethio_date)->where('vehicle_id',$id)->first();
                 if($vehicle->morning_km !== null){

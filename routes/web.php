@@ -27,6 +27,11 @@ use App\Http\Controllers\Vehicle\InspectionController;
 use App\Http\Controllers\Vehicle\VehiclePartsController;
 use App\Http\Controllers\Vehicle\VehicleRegistrationController;
 use App\Http\Controllers\Vehicle\PermanentFuelController;
+use App\Http\Controllers\Vehicle\AttendanceController;
+use App\Http\Controllers\Vehicle\ReplacementController;
+use App\Http\Controllers\Letter\LetterController;
+use App\Http\Controllers\Letter\LetterManagement;
+
 
 Route::get('/', function () 
 {
@@ -127,7 +132,7 @@ Route::group(['middleware' => ['auth']], function()
                     Route::post('/profile/store','profile_save')->name('user.profile.store');
 
                 });
-                // Vehicle registration 
+            //     // Vehicle registration 
             Route::group([
                     'prefix'=>'vehicle',
                 ], function (){
@@ -340,7 +345,7 @@ Route::group(['middleware' => ['auth']], function()
                 Route::get('/user',[RouteController::class, 'displayRoute'])->name('route.show');
                 Route::post('/store',[RouteController::class, 'registerRoute'])->name('route.store');
                 Route::post('/employee/store',[RouteController::class, 'assignUsersToRoute'])->name('employeeService.store');
-                Route::put('/update/{request_id}', [RouteController::class, 'update'])->name('route.update');
+                Route::put('/update/{request_id}', [RouteController::class, 'updateRoute'])->name('route.update');
                 Route::delete('/delete/{request_id}', [RouteController::class, 'removeRoute'])->name('route.destroy');
                 Route::delete('/user/delete/{request_id}', [RouteController::class, 'removeUserFromRoute'])->name('routeUser.destroy');
                 });
@@ -366,15 +371,58 @@ Route::group(['middleware' => ['auth']], function()
                     Route::get('/get_new_message_count', 'get_new_message_count');
                     Route::post('/change_status', 'redirect_to_inteded');
                 });
-                 // SAMIR
-            Route::group([
-                    'prefix'=>'vehicle',
-                ], function (){
-                    Route::get('/',[VehicleRegistrationController::class, 'index'])->name('vehicleRegistration.index');
-                    Route::post('/store',[VehicleRegistrationController::class, 'store'])->name('vehicleRegistration.store');
-                    Route::delete('/delete/{vehicle}',[VehicleRegistrationController::class,'destroy'])->name('vehicle.destroy');
-                    Route::put('/update/{vehicle}', [VehicleRegistrationController::class, 'update'])->name('vehicle.update');
+
+                // Vehicle attendance controller
+
+            Route::controller(AttendanceController::class)->group(function () 
+                {
+                    Route::get('/attendance', 'index')->name('attendance.index');
+                    Route::get('/attendance/fetch', 'FetchAttendance')->name('FetchAttendance');
+                    Route::post('/attendance/store', 'store')->name('attendance.store');
+                    Route::post('/attendance/update/{id}', 'update')->name('attendance.update');
+                    Route::delete('/attendance/delete', 'destroy')->name('attendance.destroy');
+                    Route::get('/attendance/report','ReportPage')->name('attendancereport.index');
+                    Route::post('/attendance/report/filter','filterReport')->name('attendancereport.filter');
                 });
+
+                // letter 
+            Route::controller(LetterManagement::class)->group(function () 
+                {
+                    Route::get('/letter', 'index')->name('letter.index');
+                    Route::get('/letter/fetch', 'FetchLetter')->name('FetchLetter');
+                    Route::post('/letter/store', 'store')->name('letter.store');
+                    Route::get('/letter/review', 'review_page')->name('letter.review.page');
+                    Route::get('/letter/fetch/department', 'FetchLetterApprove')->name('FetchForLetterRequest');
+                    Route::post('/letter/review/{id}', 'review')->name('letter.review');
+                    Route::get('/letter/approve', 'approve_page')->name('letter.approve.page');
+                    Route::post('/letter/approve/{id}', 'approve')->name('letter.approve');
+                    Route::get('/letter/accept/purchase', 'accept_page_purchase')->name('purchase.accept.page');
+                    Route::get('/letter/accept/finance', 'accept_page_finance')->name('finance.accept.page');
+                    Route::post('/letter/accept/{id}', 'accept')->name('letter.accept');
+                    Route::delete('/letter/delete', 'destroy')->name('attendance.destroy');
+                });
+
+                // Replacement
+
+                Route::controller(ReplacementController::class)->group(function () 
+                {
+                    Route::get('/Replacement', 'index')->name('Replacement.index');
+                    Route::get('/Replacement/fetch', 'FetchReplacement')->name('Replacement.fetch');
+                    Route::post('/Replacement/store', 'store')->name('Replacement.store');
+                    Route::delete('/Replacement/delete/{id}', 'destroy')->name('Replacement.delete');
+                   
+                });
+
+
+                 // SAMIR
+            // Route::group([
+            //         'prefix'=>'vehicle',
+            //     ], function (){
+            //         Route::get('/',[VehicleRegistrationController::class, 'index'])->name('vehicleRegistration.index');
+            //         Route::post('/store',[VehicleRegistrationController::class, 'store'])->name('vehicleRegistration.store');
+            //         Route::delete('/delete/{vehicle}',[VehicleRegistrationController::class,'destroy'])->name('vehicle.destroy');
+            //         Route::put('/update/{vehicle}', [VehicleRegistrationController::class, 'update'])->name('vehicle.update');
+            //     });
             // Route::controller(VehicleRegistrationController::class)->group(function () 
             //     {
             //          Route::get('/xx', 'index')->name('vehicleRegistration.index'); 

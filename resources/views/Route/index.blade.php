@@ -119,8 +119,8 @@
                                                         <tr>
                                                             <td>{{ $loop->iteration }}</td>
                                                             <td>{{ $data->route_name }}</td>
-                                                            <td>{{ $data->driver_phone }}</td>
                                                             <td>{{ $data->vehicle->plate_number }}</td>
+                                                            <td>{{ $data->driver_phone }}</td>
                                                             <td>
                                                                 <form method="POST" action="{{ route('route.destroy',$data ) }}"accept-charset="UTF-8">
                                                                     @csrf
@@ -186,7 +186,7 @@
                                                                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                                     </div>
                                                                     <div class="modal-body">
-                                                                        <form id="editRouteForm" method="POST">
+                                                                        <form action="{{ route('route.store') }}" id="editRouteForm" method="POST">
                                                                             @csrf
                                                                             @method('PUT') <!-- Assuming you're using RESTful update -->
                                                                             <input type="hidden" name="route_id" id="edit_route_id">
@@ -273,8 +273,7 @@
             document.getElementById('edit_route_name').value = routeName;
             document.getElementById('edit_vehicle_id').value = vehicleId;
             document.getElementById('edit_driver_phone').value = driverPhone;
-
-            document.getElementById('editRouteForm').action = `/routes/${routeId}`;
+            document.getElementById('editRouteForm').action = `/routes/update/${routeId}`;
         });
     });
 });

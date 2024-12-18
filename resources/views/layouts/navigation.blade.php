@@ -258,7 +258,7 @@
                         <li class="side-nav-item">
                             <a data-bs-toggle="collapse" href="#sidebarVehicle" aria-expanded="false"
                                 aria-controls="sidebarVehicle" class="side-nav-link">
-                                <i class="  ri-user-fill"></i>
+                                <i class=" ri-taxi-fill"></i>
                                 <span>Vehicle Management</span>
                                 <span class="menu-arrow"></span>
                             </a>
@@ -267,6 +267,16 @@
                                     @can('Vehicle Registration')
                                         <li>
                                             <a href="{{ route('vehicleRegistration.index') }}">Registration </a>
+                                        </li>
+                                    @endcan()
+                                    @can('Vehicle Registration')
+                                        <li>
+                                            <a href="{{ route('attendance.index') }}">Vehicle Attendance</a>
+                                        </li>
+                                    @endcan()
+                                    @can('Vehicle Registration')
+                                        <li>
+                                            <a href="{{ route('Replacement.index') }}">Vehicle Replacement</a>
                                         </li>
                                     @endcan()
                                     @can('Vehicle Part Registration')
@@ -340,7 +350,7 @@
                         <li class="side-nav-item">
                             <a data-bs-toggle="collapse" href="#sidebarReport" aria-expanded="false"
                                 aria-controls="sidebarReport" class="side-nav-link">
-                                <i class="ri-user-fill"></i>
+                                <i class=" ri-file-fill"></i>
                                 <span>Report</span>
                                 <span class="menu-arrow"></span>
                             </a>
@@ -349,6 +359,11 @@
                                     @can('Daily KM Report')
                                         <li>
                                             <a href="{{ route('dailyreport.index') }}">Daily KM</a>
+                                        </li>
+                                    @endcan()
+                                    @can('Daily KM Report')
+                                        <li>
+                                            <a href="{{ route('attendancereport.index') }}">Attendance Report</a>
                                         </li>
                                     @endcan()
                                     @can('Permananet Vehicle Request')
@@ -369,7 +384,7 @@
                         <li class="side-nav-item">
                             <a data-bs-toggle="collapse" href="#routeManagement" aria-expanded="false"
                                 aria-controls="routeManagement" class="side-nav-link">
-                                <i class="ri-user-fill"></i>
+                                <i class=" ri-route-fill"></i>
                                 <span>Route Management</span>
                                 <span class="menu-arrow"></span>
                             </a>
@@ -389,6 +404,39 @@
                             </div>
                         </li>
                     @endcan()
+                    <li class="side-nav-item">
+                        <a data-bs-toggle="collapse" href="#letterManagement" aria-expanded="false"
+                            aria-controls="letterManagement" class="side-nav-link">
+                            <i class=" ri-file-paper-fill"></i>
+                            <span>Letter Management</span>
+                            <span class="menu-arrow"></span>
+                        </a>
+                        <div class="collapse" id="letterManagement">
+                            <ul class="side-nav-second-level">
+                                
+                                    <li>
+                                        <a href="{{ route('letter.index') }}">Letter Request</a>
+                                    </li>
+                              
+                                    <li>
+                                        <a href="{{ route('letter.review.page') }}">Letter Review</a>
+                                    </li>
+
+                                    <li>
+                                        <a href="{{ route('letter.approve.page') }}">Letter Approve</a>
+                                    </li>
+
+                                    <li>
+                                        <a href="{{ route('purchase.accept.page') }}">Purchase Accept</a>
+                                    </li>
+
+                                    <li>
+                                        <a href="{{ route('finance.accept.page') }}">Finanace Accept</a>
+                                    </li>
+                             
+                            </ul>
+                        </div>
+                    </li>
             </div>
         </div>
         </br></br>

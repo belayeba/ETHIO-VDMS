@@ -23,13 +23,14 @@
                     <div class="card">
                         <div class="card-body">
                             <div class="table-responsive" id="table1">
+                                <h4 class="header-title mb-4">REQUESTS</h4>
+
                                 <table class="table director_datatable table-striped dt-responsive nowrap w-100">
                                     <thead>
                                         <tr>
                                             <th>#</th>
-                                            <th>Requested By</th>
-                                            <th>Vehicle Type</th>
-                                            <th>Requested At</th>
+                                            <th>Prepared By</th>
+                                            <th>Date</th>
                                             <th>Status</th>
                                             <th>Action</th>
                                         </tr>
@@ -40,49 +41,40 @@
                                 </table>
 
                                 <!-- show all the information about the request modal -->
-                                <div id="standard-modal" class="modal fade" tabindex="-1" role="dialog"
-                                    aria-labelledby="standard-modalLabel" aria-hidden="true">
-                                    <div class="modal-dialog">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h4 class="modal-title">Request Details</h4>
-                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                    aria-label="Close"></button>
-                                            </div>
-                                            <div class="modal-body">
-                                                <dl class="row mb-0">
-                                                    <dt class="col-sm-5">Request reason</dt>
-                                                    <dd class="col-sm-7" data-field="purpose"></dd>
+                                    <div id="standard-modal-view" class="modal fade" tabindex="-1" role="dialog"
+                                        aria-labelledby="standard-modalLabel" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h4 class="modal-title">Request Details</h4>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                        aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <dl class="row mb-0">
+                                                        <dt class="col-sm-5">Reviewed By</dt>
+                                                        <dd class="col-sm-7" id="review_view"></dd>
+                                                    
+                                                        <dt class="col-sm-5">Approved By</dt>
+                                                        <dd class="col-sm-7" id="approved_view"></dd>
+                                                    
+                                                        <dt class="col-sm-5">Sent to Department</dt>
+                                                        <dd class="col-sm-7" id="department_view"></dd>
 
-                                                    <dt class="col-sm-5">Requested vehicle</dt>
-                                                    <dd class="col-sm-7" data-field="vehicle_type"></dd>
-
-                                                    <dt class="col-sm-5">Start date and Time</dt>
-                                                    <dd class="col-sm-7" data-field="start_date"></dd>
-
-                                                    <dt class="col-sm-5">Return date and Time</dt>
-                                                    <dd class="col-sm-7" data-field="end_date"></dd>
-
-                                                    <dt class="col-sm-5">Location From and To</dt>
-                                                    <dd class="col-sm-7" data-field="start_location"></dd>
-
-                                                    <dt class="col-sm-5">Passengers</dt>
-                                                    <dd class="col-sm-7" data-field="passengers"></dd>
-
-                                                    <dt class="col-sm-5">Materials</dt>
-                                                    <dd class="col-sm-7" data-field="materials"></dd>
-
-                                                    <dt class="col-sm-5">Progress</dt>
-                                                    <dd class="col-sm-7" data-field="progress"></dd>
-                                                </dl>
-                                            </div>
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-light"
-                                                    data-bs-dismiss="modal">Close</button>
+                                                        <dt class="col-sm-5">Accepted By</dt>
+                                                        <dd class="col-sm-7" id="accepted_view"></dd>
+                                                    
+                                                        <dt class="col-sm-5">Document</dt>
+                                                        <dd class="col-sm-7"><a href="" id="image">Click to View</a></dd>
+                                                    </dl>                                                    
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-light"
+                                                        data-bs-dismiss="modal">Close</button>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
                                 <!-- end show modal -->
 
                                 <!-- Accept Alert Modal -->
@@ -90,7 +82,7 @@
                                     aria-labelledby="confirmationModalLabel"aria-hidden="true">
                                     <div class="modal-dialog modal-sm">
                                         <div class="modal-content">
-                                            <form method="POST" action="{{ route('director_approve_request') }}">
+                                            <form method="POST" id="accept-form">
                                                 @csrf
                                                 <input type="hidden" name="request_id" id="request_id">
                                                 <div class="modal-body p-4">
@@ -126,7 +118,7 @@
                                                 <button type="button" class="btn-close" data-bs-dismiss="modal"
                                                     aria-label="Close"></button>
                                             </div> <!-- end modal header -->
-                                            <form method="POST" action="{{ route('director_reject_request') }}">
+                                            <form method="POST" id="reject-form">
                                                 @csrf
                                                 <div class="modal-body">
                                                     <div class="col-lg-6">
@@ -134,7 +126,7 @@
                                                         <div class="form-floating">
                                                             <input type="hidden" name="request_id"
                                                                 id="Reject_request_id">
-                                                            <textarea class="form-control" name="reason" style="height: 60px;" required></textarea>
+                                                            <textarea class="form-control" name="reviewed_by_reject_reason" style="height: 60px;" required></textarea>
                                                             <label for="floatingTextarea">Reason</label>
                                                         </div>
                                                     </div>
@@ -171,18 +163,19 @@
             processing: true,
             pageLength: 5,
             serverSide: true,
-            ajax: "{{ route('FetchForDirector') }}",
+            ajax: {
+                    url: "{{ route('FetchForLetterRequest') }}",
+                    data: function (d) {
+                        d.customDataValue = 1;
+                    }
+                }, 
             columns: [{
                     data: 'counter',
                     name: 'counter'
                 },
                 {
-                    data: 'requested_by',
-                    name: 'requested_by'
-                },
-                {
-                    data: 'vehicle_type',
-                    name: 'vehicle_type'
+                    data: 'preparedBy',
+                    name: 'preparedBy'
                 },
                 {
                     data: 'date',
@@ -202,122 +195,43 @@
         });
 
 
-        $('#standard-modal').on('show.bs.modal', function(event) {
-            var button = $(event.relatedTarget); // Button that triggered the modal
-            var modal = $(this); // The modal
+        $(document).ready(function() {
+           
 
-            // Populate basic request details
-            modal.find('.modal-title').text('Request Details');
-            modal.find('[data-field="purpose"]').text(button.data('purpose'));
-            modal.find('[data-field="vehicle_type"]').text(button.data('vehicle_type'));
-            modal.find('[data-field="start_date"]').text(button.data('start_date') + ', ' + button.data(
-                'start_time'));
-            modal.find('[data-field="end_date"]').text(button.data('end_date') + ', ' + button.data('end_time'));
-            modal.find('[data-field="start_location"]').text(button.data('start_location'));
-            modal.find('[data-field="end_locations"]').text(button.data('end_locations'));
+           $(document).on('click', '.view-btn', function() {
+        
+               reviewedBy = $(this).data('reviewedby') || 'Pending';
+               approvedBy = $(this).data('approvedby') || 'Pending';
+               department = $(this).data('department') || 'Not Assigned';
+               acceptedBy = $(this).data('acceptedBy') || 'Pending';
+               pdfFile = $(this).data('image');
+               storagePath = "{{ asset('storage/Letters') }}" +'/'+ pdfFile;
+           
+               // pdfFile = $(this).data('pdf');
+               // storagePath = 'storage/app/public/Letters/' + pdfFile;
+               console.log(reviewedBy);
 
-            // Populate passengers
-            var passengers = button.data('passengers');
-            var passengerList = '';
-            if (passengers) {
-                passengers.forEach(function(person) {
-                    passengerList += person.user.first_name + '<br>';
-                });
-            }
-            modal.find('[data-field="passengers"]').html(passengerList);
-
-            // Populate materials
-            var materials = button.data('materials');
-            var materialList = '';
-            if (materials) {
-                materials.forEach(function(material) {
-                    materialList += 'Material name: ' + material.material_name + ',<br>' +
-                        'Material Weight: ' + material.weight + '.<br>';
-                });
-            }
-            modal.find('[data-field="materials"]').html(materialList);
-
-            // Function to build progress messages
-            function buildProgressMessage(button) {
-                let progressMessages = [];
-
-                const messages = [{
-                        condition: button.data('dir_approved_by'),
-                        message: 'Approved by Director'
-                    },
-                    {
-                        condition: button.data('director_reject_reason'),
-                        message: 'Rejected by Director'
-                    },
-                    {
-                        condition: button.data('div_approved_by'),
-                        message: 'Approved by Division-Director'
-                    },
-                    {
-                        condition: button.data('cluster_director_reject_reason'),
-                        message: 'Rejected by Division-Director'
-                    },
-                    {
-                        condition: button.data('hr_div_approved_by'),
-                        message: 'Approved by HR-Director'
-                    },
-                    {
-                        condition: button.data('hr_director_reject_reason'),
-                        message: 'Rejected by HR-Director'
-                    },
-                    {
-                        condition: button.data('transport_director_id'),
-                        message: 'Approved by Dispatcher-Director'
-                    },
-                    {
-                        condition: button.data('vec_director_reject_reason'),
-                        message: 'Rejected by Dispatcher-Director'
-                    },
-                    {
-                        condition: button.data('assigned_by'),
-                        message: 'Approved by Dispatcher'
-                    },
-                    {
-                        condition: button.data('assigned_by_reject_reason'),
-                        message: 'Rejected by Dispatcher'
-                    },
-                    {
-                        condition: button.data('vehicle_id'),
-                        message: 'Assigned Vehicle <u>' + button.data('vehicle_plate') + '</u>'
-                    },
-                    {
-                        condition: button.data('start_km'),
-                        message: 'Vehicle Request <u>' + button.data('vehicle_plate') + '</u> Dispatched'
-                    },
-                    {
-                        condition: button.data('end_km'),
-                        message: 'Request completed'
-                    },
-                ];
-                messages.forEach(item => {
-                    if (item.condition) {
-                        progressMessages.push(item.message);
-                    }
-                });
-
-                // If no conditions were met, set progress to 'Pending'
-                let progress = progressMessages.length > 0 ? progressMessages.join('<br>') : 'Pending';
+            
+               
+               
+               $('#review_view').text(reviewedBy);
+               $('#approved_view').text(approvedBy);
+               $('#department_view').text(department);
+               $('#accepted_view').text(acceptedBy);
+               $('#image').html('<a href="' + storagePath + '" target="_blank">Open PDF</a>');
 
 
-
-                return progress;
-            }
-
-            // Populate progress
-            modal.find('[data-field="progress"]').html(buildProgressMessage(button));
-
-        });
+               $('#standard-modal-view').modal('show');
+           });
+       });
 
         $(document).ready(function() {
             var AcceptedId;
 
             $(document).on('click', '.accept-btn', function() {
                 AcceptedId = $(this).data('id');
+
+                $('#accept-form').attr('action', '{{ route('letter.review', ['id' => ':id']) }}'.replace(':id', AcceptedId));
 
                 $('#request_id').val(AcceptedId);
                 $('#confirmationModal').modal('show');
@@ -329,6 +243,8 @@
 
             $(document).on('click', '.reject-btn', function() {
                 RejectedId = $(this).data('id');
+
+                $('#reject-form').attr('action', '{{ route('letter.review', ['id' => ':id']) }}'.replace(':id', RejectedId));
 
                 $('#Reject_request_id').val(RejectedId);
                 $('#staticBackdrop').modal('toggle');

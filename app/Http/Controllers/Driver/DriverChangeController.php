@@ -50,7 +50,7 @@ class DriverChangeController extends Controller {
            {
             return redirect()->back()->with('error_message','Inspection should be done first .',);
            }
-           $today = \Carbon\Carbon::today();
+           $today = \Carbon\Carbon::now();
            $ethiopianDate = $this->dailyKmCalculation->ConvertToEthiopianDate($today);       
             DriverDriverChangeModel::create( [
             'vehicle_id' => $request->vehicle_id,

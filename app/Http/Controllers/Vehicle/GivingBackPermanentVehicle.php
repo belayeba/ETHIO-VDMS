@@ -62,7 +62,7 @@ public function ReturntVehiclePerm(Request $request)
               }
             try
                 {
-                    $today = \Carbon\Carbon::today();
+                    $today = \Carbon\Carbon::now();
                      $ethiopianDate = $this->dailyKmCalculation->ConvertToEthiopianDate($today); 
                     // Create the user
                     GivingBackVehiclePermanently::create([

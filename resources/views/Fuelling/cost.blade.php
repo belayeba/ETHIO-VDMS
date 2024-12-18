@@ -125,15 +125,16 @@
                                             <button type="button" class="btn btn-info rounded-pill" data-bs-toggle="modal" title="View Quota" data-bs-target="#viewQuotaModal{{ $fuelCost->fuel_cost_id }}">
                                                 <i class="ri-eye-line"></i>
                                             </button>
+                                            <button type="button" class="btn btn-secondary rounded-pill" data-bs-toggle="modal" title="View Quota" data-bs-target="#updateQuotaModal{{ $fuelCost->fuel_cost_id }}">
+                                                <i class="ri-edit-line"></i>
+                                            </button>
 
-                                            <button type="button" class="btn btn-secondary rounded-pill" title="Edit Fuel Quota"
+                                            {{-- <button type="button" class="btn btn-secondary rounded-pill" title="Edit Fuel Quota"
                                             data-bs-toggle="modal" 
-                                            data-bs-target="#quota_modal_{{$loop->index}}"
-                                            data-new-quota ="{{ $fuelCost->new_cost }}"
-                                            data-changed-by ="{{ $fuelCost->changer->first_name }}"
-                                            data-changed-date  ="{{ $fuelCost->created_at->format('Y-m-d') }}">
+                                            data-bs-target="updateQuotaModal"
+                                       >
                                             <i class="ri-edit-line"></i> 
-                                        </button>
+                                        </button> --}}
                                         
                                         {{-- <button type="submit" class="btn btn-danger rounded-pill" title="Delete Quota"
                                             onclick="return confirm(&quot;Click OK to delete Fuel Quota.&quot;)">
@@ -142,7 +143,7 @@
                                       </form>
                                 </tr>
                             </tbody>
-                            <div class="modal fade" id="viewQuotaModal{{ $fuelCost->fuel_quata_id  }}" tabindex="-1" aria-labelledby="viewQuotaModalLabel{{ $fuelCost->fuel_quata_id  }}" aria-hidden="true">
+                            <div class="modal fade" id="viewQuotaModal{{ $fuelCost->fuel_cost_id }}" tabindex="-1" aria-labelledby="viewQuotaModal{{ $fuelCost->fuel_cost_id }}" aria-hidden="true">
                                 <div class="modal-dialog">
                                     <div class="modal-content">
                                         <div class="modal-header">
@@ -160,7 +161,46 @@
                                             </div>
                                             <div class="mb-3">
                                                 <label class="form-label">Changed By:</label>
-                                                <p>{{ $fuelCost->changed_by }}</p>
+                                                <p>{{ $fuelCost->changer->first_name . ' ' .$fuelCost->changer->last_name }}</p>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label class="form-label">Changed Date:</label>
+                                                <p>{{ $fuelCost->created_at->format('Y-m-d')  }}</p>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="modal fade" id="updateQuotaModal{{ $fuelCost->fuel_cost_id }}" tabindex="-1" aria-labelledby="updateQuotaModal{{ $fuelCost->fuel_cost_id }}" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="viewQuotaModalLabel{{ $fuelCost->fuel_quata_id  }}">Fuel Cost Detail</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="position-relative mb-3">
+                                                <div class="mb-6 position-relative" >
+                                                    <label class="form-label">Cost of One Litre</label>
+                                                    <input type="number" name="Fuel_cost" class="form-control" value="{{ $fuelCost->new_cost }}">
+                                                </div>
+                                            </div>
+                                            <div class="col-mb-3 form-group {{ $errors->has('vehicle') ? 'has-error' : '' }}">
+                                                <label for="vehicle" class=" control-label">Fuel Type</label>
+                                                    
+                                                <select class="form-control select" id="vehicleCategory" name="fuel_type" value="{{ $fuelCost->fuel_type }}" data-fouc required>
+                                                    <option value=""> {{ $fuelCost->fuel_type }}</option>
+                                                    <option value="Benzene">Benzene</option>
+                                                    <option value="Diesel">Diesel</option>
+                                                </select>
+                                            </div></br>
+                                            <div class="mb-3">
+                                                <label class="form-label">Changed By:</label>
+                                                <p>{{ $fuelCost->changer->first_name . ' ' .$fuelCost->changer->last_name }}</p>
                                             </div>
                                             <div class="mb-3">
                                                 <label class="form-label">Changed Date:</label>

@@ -91,6 +91,7 @@
                                                         </tr>
                                                     </thead>
                                                     <tbody>
+                                                    @if(!is_null($clusters))
                                                         @foreach ($clusters as $item)
                                                         <tr>
                                                         <!-- Table rows will be populated here -->
@@ -139,7 +140,10 @@
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                         <!-- Accept Alert Modal -->
+                                                        
+                                                    </tbody>
+                                                </table>
+                                                <!-- Accept Alert Modal -->
                                                 <div id="warning_alert" class="modal fade" id="confirmationModal" tabindex="-1" role="dialog"
                                                 aria-labelledby="confirmationModalLabel"aria-hidden="true">
                                                 <div class="modal-dialog modal-sm">
@@ -198,8 +202,8 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
-
+                    </div>                                                   
+                    @endif
                    <style>
                     @media only screen and (max-width: 768px) {
                         .col-md-4 {

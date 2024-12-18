@@ -23,7 +23,6 @@
                     <div class="card">
                         <div class="card-body">
                             <div class="table-responsive" id="table1">
-                                <h4 class="header-title mb-4">NEW Transport Director REQUEST</h4>
                                 <table class="Transportdirector_datatable table table-centered mb-0 table-nowrap"
                                     id="inline-editable">
                                     <thead>

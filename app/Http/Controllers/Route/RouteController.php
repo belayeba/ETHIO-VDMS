@@ -11,6 +11,7 @@ use App\Models\Vehicle\VehiclesModel as Vehicle;
 use App\Models\Vehicle\VehiclesModel;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Controllers\Vehicle\Daily_KM_Calculation;
+use App\Models\RouteManagement\RouteChange;
 use Exception;
 
 class RouteController extends Controller {
@@ -56,7 +57,7 @@ class RouteController extends Controller {
             return redirect()->back()->with('error_message','All field is required.',);
         }
         try {
-        $today = \Carbon\Carbon::today();
+        $today = \Carbon\Carbon::now();
         $ethiopianDate = $this->dailyKmCalculation->ConvertToEthiopianDate($today); 
         Route::create( [
             'route_name' => $request->route_name,
@@ -84,26 +85,29 @@ class RouteController extends Controller {
         }
         return redirect()->back()->with('success_message','Users assigned successfully.',);
     }
-
-        public function updateRouteAssignment( Request $request, $route_id ) {
+    public function updateRoute( Request $request, $route_id ) 
+        {
+            $validator = Validator::make( $request->all(), [
+                'driver_phone' => [ 'required', 'regex:/^(?:\+251|0)[1-9]\d{8}$/' ],
+                'vehicle_id' => 'required|uuid|exists:vehicles,vehicle_id',
+            ] );
+            if ( $validator->fails() ) {
+                return redirect()->back()->with('error_message','All field is required.',);
+            }
             $route = Route::findOrFail( $route_id );
-
+            RouteChange::create( [
+                'route_change_id' => $route_id,
+                'older_vehicle_id' => $route->vehicle_id,
+                'older_driver_phone' => $route->driver_phone,
+                'registered_by' => auth()->user()->id,
+            ] );
         // Update driver
         if ( $request->has( 'driver_phone' ) ) {
+            $route->vehilce_id = $request->vehicle_id;
             $route->driver_phone = $request->driver_phone;
-            $route->save();
+            $route->update();
         }
-        // Reassign new users
-        if ( $request->user_ids ) {
-            foreach ( $request->user_ids as $user_id ) {
-                RouteUser::create( [
-                    'employee_id' => $user_id,
-                    'route_id' => $route_id,
-                    'registered_by' => auth()->user()->id,
-                ] );
-            }
-        }
-        return redirect()->back()->with('success_message','Route Assignment successfull.',);
+        return redirect()->back()->with('success_message','Route  successfully Updated.',);
     }
 
         public function removeRoute( $route_id ) {

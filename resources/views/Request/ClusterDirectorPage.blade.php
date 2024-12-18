@@ -23,9 +23,7 @@
                         <div class="col-12">
                             <div class="card">
                                 <div class="card-body">
-                                    <div class="table-responsive"  id="table1">
-                                        <h4 class="header-title mb-4">NEW Cluster Director REQUEST</h4>
-                                       
+                                    <div class="table-responsive"  id="table1">                                       
                                         <table class="table cluster_director_datatable table-striped dt-responsive nowrap w-100">
                                             <thead>
                                                 <tr>

@@ -28,10 +28,9 @@
                                     
 
             <div class="col-lg-12 mb-3">
-                <form action="{{ route('dailyreport.filterReport') }}" method="GET">
-
-
-                <div class="row">
+                <form action="{{ route('attendancereport.filter') }}" method="Post">
+                    @csrf
+                 <div class="row">
                     <div class="col-12">
                         <div class="card">
                             <div class="card-header">
@@ -39,12 +38,14 @@
                                     <form action="{{ route('dailyreport.filterReport') }}" method="GET">
                                     <!-- Plate Number Filter -->
                                     <div class="col-lg-4">
-                                        <label for="selectPlateNumber" class="form-label">Plate Number</label>
-                                        <select id="selectPlateNumber" name="plate_number" class="form-select">
-                                            <option value="">Select Plate Number</option>
-                                            @foreach($vehicles as $vehicle)
-                                                <option value="{{ $vehicle->plate_number }}">{{ $vehicle->plate_number }}</option>
-                                            @endforeach
+                                        <label for="selectPlateNumber" class="form-label">Vehicle Type</label>
+                                        <select id="selectPlateNumber" name="vehicle_type" class="form-select">
+                                            <option value="">Select Type</option>
+                                            <option value="1">45/60 vehicle</option>
+                                            <option value="2">Minibus vehicle</option>
+                                            <option value="3">Temporary Service Vehicle</option>
+                                            <option value="4">Permanent Service Vehicle</option>
+                                           
                                         </select>
                                     </div>
                                 
@@ -88,18 +89,16 @@
                                 <table id="basic-datatable" class="table table-striped dt-responsive nowrap w-100">
                                     <thead>
                                         <tr>
-                                            <th>Date</th>
                                             <th>Plate Number</th>
-                                            <th>Morning KM</th>
-                                            <th>Afternoon KM</th>
-                                            <th>Night KM Difference </th>
-                                            <th>Day KM Difference </th>
+                                            <th>Route</th>
+                                            <th>Total Days</th>
+                                            <th>Type</th>
                                         </tr>
                                     </thead>
 
 
                                     <tbody>
-                                        @foreach($dailkms as $km)
+                                        {{-- @foreach($dailkms as $km)
                                             <tr>
                                                 <td>{{ $km->date }}</td>
                                                 <td>{{ $km->plate_number  }}</td>
@@ -109,7 +108,7 @@
                                                 <td>{{ $km->daily_km  }}</td>
 
                                             </tr>
-                                        @endforeach
+                                        @endforeach --}}
                                     </tbody>
                                 </table>
 
