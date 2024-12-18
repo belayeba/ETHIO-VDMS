@@ -147,10 +147,9 @@ class Daily_KM_Calculation extends Controller
                 'plate_number' => $vehicle->plate_number ?? 'N/A',
                 'vin' => $vehicle->vin,
                 'driver' => is_null($vehicle->driver) ? 'N/A' : $vehicle->driver->users->username ?? 'N/A',
-                'model' => $vehicle->model,
-                'year' => $vehicle->year,
                 'vehicle_type' => $vehicle->vehicle_type,
                 'vehicle_category' => $vehicle->vehicle_category,
+                'rental_type' => $vehicle->rental_type,
                 'requested_by' => is_null($vehicle->requestedBy) ? 'N/A' : $vehicle->requestedBy->username,
                 'fuel_amount' => $vehicle->fuel_amount,
                 'mileage' => $vehicle->mileage,
@@ -473,6 +472,7 @@ class Daily_KM_Calculation extends Controller
             'name' => 'nullable|string',
             'vehicle_type' => 'nullable|string',
             'vehicle_category' => 'nullable|string',
+            'rental_type' => 'nullable|string',
             'status' => 'nullable|string',
             'start_date' => 'nullable|date',
             'end_date' => 'nullable|date',
@@ -488,6 +488,7 @@ class Daily_KM_Calculation extends Controller
                 'driver_name' => $request->input('driver_name'),
                 'vehicle_type' => $request->input('vehicle_type'),
                 'vehicle_category' => $request->input('vehicle_category'),
+                'rental_type' => $request->input('rental_type'),
                 'status' => $request->input('status'),
                 'date_range' => $request->input('date_range'),
             ]);
@@ -497,6 +498,7 @@ class Daily_KM_Calculation extends Controller
         $plateNumber = session('plate_number');
         $driverName = session('driver_name');
         $vehicleType = session('vehicle_type');
+        $rentalType = session('rental_type');
         $vehicleCategory = session('vehicle_category');
         $status = session('status');
         $dateRange = session('date_range');
@@ -510,16 +512,13 @@ class Daily_KM_Calculation extends Controller
                 $q->where('plate_number', 'LIKE', "%{$plateNumber}%");
             });
 
-        } elseif (count($dates) == 2) {
-            $startDate = $dates[0];
-            $endDate = $dates[1];
-            $query->whereBetween('registration_date', [$startDate, $endDate]);
         }
-
         elseif ($vehicleType) {
             $query->where('vehicle_type', 'LIKE', "%{$vehicleType}%");
         } elseif ($vehicleCategory) {
             $query->where('vehicle_category', 'LIKE', "%{$vehicleCategory}%");
+        } elseif ($rentalType) {
+            $query->where('rental_type', 'LIKE', "%{$rentalType}%");
         } elseif ($status) {
             $status = $status == "Active" ? 1 : 0;
             $query->where('status', 'LIKE', "%{$status}%");
@@ -537,10 +536,9 @@ class Daily_KM_Calculation extends Controller
                 'plate_number' => $vehicle->plate_number ?? 'N/A',
                 'vin' => $vehicle->vin,
                 'driver' => is_null($vehicle->driver) ? 'N/A' : $vehicle->driver->users->username ?? 'N/A',
-                'model' => $vehicle->model,
-                'year' => $vehicle->year,
                 'vehicle_type' => $vehicle->vehicle_type,
                 'vehicle_category' => $vehicle->vehicle_category,
+                'rental_type' => $vehicle->rental_type,
                 'requested_by' => is_null($vehicle->requestedBy) ? 'N/A' : $vehicle->requestedBy->username,
                 'fuel_amount' => $vehicle->fuel_amount,
                 'mileage' => $vehicle->mileage,

@@ -123,6 +123,16 @@
                                                                 @endforeach
                                                             </select>
                                                         </div>
+                                                        <div class="col-lg-4">
+                                                            <label for="selectRentalType" class="form-label">Rental Type</label>
+                                                            <select id="selectRentalType" name="RentalType" class="form-select">
+                                                                <option value="">RentalType</option>
+                                                                @foreach ($vehicles as $vehicle)
+                                                                    <option value="{{ $vehicle->rental_type }}">
+                                                                        {{ $vehicle->rental_type }}</option>
+                                                                @endforeach
+                                                            </select>
+                                                        </div>
 
                                                         <div class="col-lg-4 mt-3">
                                                             <button type="submit" class="btn btn-info">Filter <i
@@ -163,12 +173,11 @@
                                         <thead>
                                             <tr>
                                                 <th>Plate Number</th>
-                                                <th>Vin</th>
+                                                <th>Chassis</th>
                                                 <th>Driver</th>
-                                                <th>Model</th>
-                                                <th>Year</th>
                                                 <th>Owner</th>
-                                                <th>Services</th>
+                                                <th>Services Type</th>
+                                                <th>Rental Type</th>
                                                 <th>Requested By</th>
                                                 <th>Fuel Amount</th>
                                                 <th>Mileage</th>
@@ -184,11 +193,10 @@
                                                     <td>{{ $km->plate_number }}</td>
                                                     <td>{{ $km->vin }}</td>
                                                     <td>{{ $km->driver }}</td>
-                                                    <td>{{ $km->model }}</td>
-                                                    <td>{{ $km->year }}</td>
                                                     <td>{{ $km->vehicle_type }}</td>
                                                     <td>{{ $km->vehicle_category }}</td>
                                                     <td>{{ $km->requested_by }}</td>
+                                                    <td>{{ $km->rental_type }}</td>
                                                     <td>{{ $km->fuel_amount }}</td>
                                                     <td>{{ $km->mileage }}</td>
                                                     <td>{{ $km->last_service }}</td>
