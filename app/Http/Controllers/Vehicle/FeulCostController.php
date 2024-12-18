@@ -48,7 +48,7 @@ class FeulCostController extends Controller
                     );
             }
             $logged_user = Auth::id();
-            $today = \Carbon\Carbon::today();
+            $today = \Carbon\Carbon::now();
             $ethiopianDate = $this->dailyKmCalculation->ConvertToEthiopianDate($today); 
             FeulCosts::create([
                 'new_cost' => $request->Fuel_cost,        

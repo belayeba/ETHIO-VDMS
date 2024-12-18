@@ -50,7 +50,7 @@ class ClusterController extends Controller {
         {
             $user = Auth::id();
             // Get the authenticated user's ID
-            $today = \Carbon\Carbon::today();
+            $today = \Carbon\Carbon::now();
             $ethiopianDate = $this->dailyKmCalculation->ConvertToEthiopianDate($today); 
             $request->merge(['created_by' => $user,'created_at' => $ethiopianDate]); 
             

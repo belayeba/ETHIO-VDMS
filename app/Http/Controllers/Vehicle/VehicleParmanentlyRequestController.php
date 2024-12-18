@@ -127,7 +127,7 @@ class VehicleParmanentlyRequestController extends Controller
             $id = Auth::id();
             try 
             {
-                $today = \Carbon\Carbon::today();
+                $today = \Carbon\Carbon::now();
                 $ethiopianDate = $this->dailyKmCalculation->ConvertToEthiopianDate($today); 
                 $postion_letter = $request->file( "position_letter" );
                 $driving_license = $request->file( "Driving_license" );
@@ -462,7 +462,7 @@ class VehicleParmanentlyRequestController extends Controller
             if(!$check_driver)
                 {
                     DB::beginTransaction(); // Begin a transaction
-                    $today = \Carbon\Carbon::today();
+                    $today = \Carbon\Carbon::now();
                     $ethiopianDate = $this->dailyKmCalculation->ConvertToEthiopianDate($today);
                     DriversModel::create( [
                         'user_id' => $Vehicle_Request->requested_by,
@@ -475,7 +475,8 @@ class VehicleParmanentlyRequestController extends Controller
                     ] );
                 }
             // dd($Vehicle_Request);
-            $today = Carbon::today()->toDateString();
+            $today = Carbon::now()->toDateString();
+            $ethiopianDate = $this->dailyKmCalculation->ConvertToEthiopianDate($today);
             $Vehicle_Request->given_by = $user_id;
             $Vehicle_Request->vehicle_id = $vehicle_id;
             $Vehicle_Request->inspection_id = $latest_inspection->inspection_id;
