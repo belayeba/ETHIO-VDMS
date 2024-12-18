@@ -92,7 +92,7 @@ class VehicleRegistrationController extends Controller {
             $fileinsurance = time() . '_' . $file->getClientOriginalName();
             $file->move( $storagePath, $fileinsurance );
         }
-        $today = \Carbon\Carbon::today();
+        $today = \Carbon\Carbon::now();
         $ethiopianDate = $this->dailyKmCalculation->ConvertToEthiopianDate($today); 
         VehiclesModel::create( [
             'vin'=>$request->vin,
@@ -219,7 +219,7 @@ class VehicleRegistrationController extends Controller {
                 }
             }
         // Update the vehicle with the new data
-        $today = \Carbon\Carbon::today();
+        $today = \Carbon\Carbon::now();
         $ethiopianDate = $this->dailyKmCalculation->ConvertToEthiopianDate($today); 
         VehiclesModel::find( $id )->update( [
             'vin'=>$request->vin,

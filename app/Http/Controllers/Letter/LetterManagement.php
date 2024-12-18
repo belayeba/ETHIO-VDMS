@@ -101,7 +101,7 @@ class LetterManagement extends Controller
             $the_letter = time() . '_' . $file->getClientOriginalName();
             $file->move( $storagePath, $the_letter );
         }
-        $today = Carbon::today();
+        $today = Carbon::now();
         $ethio_date = $this->ConvertToEthiopianDate($today);
         $letter = LetterModel::create([
             'letter_file' => $the_letter,

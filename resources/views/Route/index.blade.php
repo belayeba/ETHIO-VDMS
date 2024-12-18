@@ -186,7 +186,7 @@
                                                                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                                     </div>
                                                                     <div class="modal-body">
-                                                                        <form id="editRouteForm" method="POST">
+                                                                        <form action="{{ route('route.store') }}" id="editRouteForm" method="POST">
                                                                             @csrf
                                                                             @method('PUT') <!-- Assuming you're using RESTful update -->
                                                                             <input type="hidden" name="route_id" id="edit_route_id">
@@ -273,8 +273,7 @@
             document.getElementById('edit_route_name').value = routeName;
             document.getElementById('edit_vehicle_id').value = vehicleId;
             document.getElementById('edit_driver_phone').value = driverPhone;
-
-            document.getElementById('editRouteForm').action = `/routes/${routeId}`;
+            document.getElementById('editRouteForm').action = `/routes/update/${routeId}`;
         });
     });
 });

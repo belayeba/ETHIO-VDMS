@@ -24,9 +24,9 @@ class Daily_KM_Calculation extends Controller
     {
         public function displayPage()
             {
-                $today = Carbon::now();
+                $today = Carbon::today();
                 $ethio_date = $this->ConvertToEthiopianDate($today);
-                $vehicle = VehiclesModel::get();
+                $vehicle = VehiclesModel::whereNot('rental_type','position')->whereNot('rental_type','morning_afternoon_minibus')->whereNot('rental_type','40/60')->whereNot('status',false)->get();
                 $TodaysDate = DailyKMCalculationModel::where('created_at',$ethio_date)->latest()->get();
                 return view('Vehicle.DailKmForm',compact('vehicle','TodaysDate'));
             }

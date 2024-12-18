@@ -51,7 +51,7 @@ class DriverRegistrationController extends Controller {
             }
             $license = time() . '_' . $file->getClientOriginalName();
             $file->move( $storagePath, $license );
-            $today = \Carbon\Carbon::today();
+            $today = \Carbon\Carbon::now();
            $ethiopianDate = $this->dailyKmCalculation->ConvertToEthiopianDate($today); 
             DriversModel::create( [
                 'user_id' => $request->input( 'user_id' ),

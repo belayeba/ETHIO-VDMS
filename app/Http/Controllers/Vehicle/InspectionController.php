@@ -76,7 +76,7 @@ class InspectionController extends Controller
             try
                 {
                     DB::transaction(function () use ($inspectionId, $vehicleId, $inspectedBy, $inspectionDate, $parts, $damagedParts, $damageDescriptions,$fileinspection) {
-                        $today = \Carbon\Carbon::today();
+                        $today = \Carbon\Carbon::now();
                         $ethiopianDate = $this->dailyKmCalculation->ConvertToEthiopianDate($today); 
                         foreach ($parts as $partId => $partName) {
                             InspectionModel::create([

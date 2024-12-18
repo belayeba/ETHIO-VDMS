@@ -345,7 +345,7 @@ Route::group(['middleware' => ['auth']], function()
                 Route::get('/user',[RouteController::class, 'displayRoute'])->name('route.show');
                 Route::post('/store',[RouteController::class, 'registerRoute'])->name('route.store');
                 Route::post('/employee/store',[RouteController::class, 'assignUsersToRoute'])->name('employeeService.store');
-                Route::put('/update/{request_id}', [RouteController::class, 'update'])->name('route.update');
+                Route::put('/update/{request_id}', [RouteController::class, 'updateRoute'])->name('route.update');
                 Route::delete('/delete/{request_id}', [RouteController::class, 'removeRoute'])->name('route.destroy');
                 Route::delete('/user/delete/{request_id}', [RouteController::class, 'removeUserFromRoute'])->name('routeUser.destroy');
                 });

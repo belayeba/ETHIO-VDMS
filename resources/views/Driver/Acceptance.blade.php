@@ -122,7 +122,7 @@
                                                         <td>{{$request->vehicle->plate_number}}</td>
                                                         <td>{{$request->newDriver->user->first_name}}</td>
                                                         <td>{{ $request->oldDriver && $request->user ? $request->user->first_name : "No older" }}</td>
-                                                        <td> @if($request->driver_accepted === 0 && $request->driver_reject_reason === null)
+                                                        <td> @if($request->driver_accepted === 1 && $request->driver_reject_reason === null)
                                                                 <p class="btn btn-primary ">ACCEPTED</p>
                                                              @elseif($request->driver_accepted !== 0 && $request->driver_reject_reason !== null)
                                                                 <p class="btn btn-danger">REJECTED
@@ -162,7 +162,7 @@
             </div> <!-- end modal content-->
         </div> <!-- end modal dialog-->
 
-        <script>
+<script>
 
             document.getElementById('showInspectionModal').addEventListener('click', function() {
           var inspection = this.getAttribute('data-value');                                
