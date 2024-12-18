@@ -170,15 +170,112 @@ class AttendanceController extends Controller
                     return redirect()->back()->with('error_message', 'Something went wrong!');
                 }
 
-            
-                $id = $request->input('request_id'); 
-                $attendance = AttendanceModel::find($id);
-                
-                if (!$attendance) {
-                    return redirect()->back()->with('error_message', 'Attendance not found!');
-                }
+       
+        $id = $request->input('request_id'); 
+        $attendance = AttendanceModel::find($id);
         
-                $attendance->delete();
-                return redirect()->back()->with('success_message', 'Attendance deleted successfully!');
-            }
+        if (!$attendance) {
+            return redirect()->back()->with('error_message', 'Attendance not found!');
+        }
+  
+        $attendance->delete();
+        return redirect()->back()->with('success_message', 'Attendance deleted successfully!');
     }
+    
+    public function ReportPage()
+    {
+        
+        return view('vehicle.attendanceReport');
+
+    }
+
+    public function filterReport(Request $request)
+    {
+        dd($request);
+        // Validate input filters
+        $validator = Validator::make($request->all(), [
+            'plate_number' => 'nullable|string',
+            'name' => 'nullable|string',
+            'department' => 'nullable|string',
+            'start_date' => 'nullable|date',
+            'end_date' => 'nullable|date|after_or_equal:start_date',
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->back()->with('error_message',
+                         $validator->errors(),
+                    );
+        }
+// dd('hello');
+        if ($request->has('export')) {
+            session([
+                'plate_number' => $request->input('plate_number'),
+                'name' => $request->input('name'),
+                'start_date' => $request->input('start_date'),
+                'end_date' => $request->input('end_date'),
+            ]);
+        }
+        // Get filter parameters
+        $plateNumber = $request->input('plate_number');
+        $name = $request->input('name');
+        $department = $request->input('department');
+        $cluster = $request->input('cluster');
+
+        $startDate = $request->input('start_date');
+        $endDate = $request->input('end_date');
+
+        $filter = $request->input('filter');
+
+       
+        // Query the daily KM data with filters
+        $query = DailyKMCalculationModel::with('vehicle', 'driver');
+        if ($plateNumber) {
+            $query->whereHas('vehicle', function ($q) use ($plateNumber) {
+                $q->where('plate_number', 'LIKE', "%{$plateNumber}%");
+            });
+
+        }
+
+        if ($startDate && $endDate) {
+            $query->whereBetween('created_at', [$startDate, $endDate]);
+        }
+        
+
+        
+
+        $dailkms = $query->oldest()->get();
+
+        $dailkms = $dailkms->map(function ($km) {
+            return (object) [
+                'date' => $km->created_at->format('Y-m-d'),
+                'plate_number' => $km->vehicle->plate_number ?? 'N?A',
+                'morning_km' => $km->morning_km ?? 'N/A',
+                'afternoon_km' => $km->afternoon_km,
+                'daily_km' => $km->afternoon_km - $km->morning_km,
+                'night_km' => $km->night_km,
+            ];
+        });
+
+        if ($dailkms->isEmpty()) {
+            $dailkms = $query;
+        }
+
+        $vehicles = VehiclesModel::select('vehicle_id', 'plate_number')->get();
+        $drivers = DriversModel::with('user')->get();
+        $departments = DepartmentsModel::select('department_id', 'name')->get();
+        $clusters = ClustersModel::select('cluster_id', 'name')->get();
+        // return response()->json([
+        //     // 'vehicles' => $vehicles,
+        //     // 'drivers' => $drivers,
+        //     // 'departments' => $departments,
+        //     'dailkms' => $dailkms
+        //  ]);
+
+        if ($request->input('export') == 1) {
+            return Excel::download(new FilteredReportExport($dailkms), 'filtered_report.xlsx');
+        }
+
+        return view('Vehicle.dailyReport', compact('vehicles', 'drivers', 'departments', 'dailkms'));
+    }
+
+}

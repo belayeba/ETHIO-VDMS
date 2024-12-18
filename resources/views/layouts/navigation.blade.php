@@ -274,6 +274,11 @@
                                             <a href="{{ route('attendance.index') }}">Vehicle Attendance</a>
                                         </li>
                                     @endcan()
+                                    @can('Vehicle Registration')
+                                        <li>
+                                            <a href="{{ route('Replacement.index') }}">Vehicle Replacement</a>
+                                        </li>
+                                    @endcan()
                                     @can('Vehicle Part Registration')
                                         <li>
                                             <a href="{{ route('vehicle_parts.index') }}">Vehicle Parts</a>
@@ -354,6 +359,11 @@
                                     @can('Daily KM Report')
                                         <li>
                                             <a href="{{ route('dailyreport.index') }}">Daily KM</a>
+                                        </li>
+                                    @endcan()
+                                    @can('Daily KM Report')
+                                        <li>
+                                            <a href="{{ route('attendancereport.index') }}">Attendance Report</a>
                                         </li>
                                     @endcan()
                                     @can('Permananet Vehicle Request')
