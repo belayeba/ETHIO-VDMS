@@ -184,98 +184,89 @@ class AttendanceController extends Controller
     
     public function ReportPage()
     {
+        $vehicles = VehiclesModel::select('vehicle_id', 'plate_number','rental_type')->whereNotNull('rental_type')->get();
+        $routes = Route::select('vehicle_id', 'route_name')->get();
         
-        return view('vehicle.attendanceReport');
+        return view('vehicle.attendanceReport',compact('vehicles','routes'));
 
     }
 
     public function filterReport(Request $request)
     {
-        dd($request);
+        
         // Validate input filters
         $validator = Validator::make($request->all(), [
-            'plate_number' => 'nullable|string',
-            'name' => 'nullable|string',
-            'department' => 'nullable|string',
+            'vehicle_type' => 'nullable|string',
             'start_date' => 'nullable|date',
-            'end_date' => 'nullable|date|after_or_equal:start_date',
+            'end_date' => 'nullable|date|after_or_equal:start_date'
         ]);
 
         if ($validator->fails()) {
             return redirect()->back()->with('error_message',
-                         $validator->errors(),
-                    );
+                    $validator->errors(),
+            );
         }
 // dd('hello');
         if ($request->has('export')) {
             session([
-                'plate_number' => $request->input('plate_number'),
-                'name' => $request->input('name'),
+                'vehicle_type' => $request->input('plate_vehicle_typenumber'),
                 'start_date' => $request->input('start_date'),
                 'end_date' => $request->input('end_date'),
             ]);
         }
-        // Get filter parameters
-        $plateNumber = $request->input('plate_number');
-        $name = $request->input('name');
-        $department = $request->input('department');
-        $cluster = $request->input('cluster');
 
+        // Get filter parameters
+        $vehicle_type = $request->input('vehicle_type');
         $startDate = $request->input('start_date');
         $endDate = $request->input('end_date');
 
-        $filter = $request->input('filter');
-
        
         // Query the daily KM data with filters
-        $query = DailyKMCalculationModel::with('vehicle', 'driver');
-        if ($plateNumber) {
-            $query->whereHas('vehicle', function ($q) use ($plateNumber) {
-                $q->where('plate_number', 'LIKE', "%{$plateNumber}%");
+        $query = AttendanceModel::with('vehicle', 'route');
+        if ($vehicle_type == "40/60") {
+            $query->whereHas('vehicle', function ($q) use ($vehicle_type) {
+                
+                $q->where('rental_type', 'LIKE', "%{$vehicle_type}%");
+
             });
 
         }
-
+        
+        // dd($request);
         if ($startDate && $endDate) {
             $query->whereBetween('created_at', [$startDate, $endDate]);
         }
         
 
         
+        
+        $vehicles = $query->oldest()->get();
 
-        $dailkms = $query->oldest()->get();
-
-        $dailkms = $dailkms->map(function ($km) {
+        $vehicles = $vehicles->map(function ($q) use ($request) {
+            $startDate = \Carbon\Carbon::parse($request->input('start_date'))->startOfDay();
+            $endDate = \Carbon\Carbon::parse($request->input('end_date'))->startOfDay();
+          
             return (object) [
-                'date' => $km->created_at->format('Y-m-d'),
-                'plate_number' => $km->vehicle->plate_number ?? 'N?A',
-                'morning_km' => $km->morning_km ?? 'N/A',
-                'afternoon_km' => $km->afternoon_km,
-                'daily_km' => $km->afternoon_km - $km->morning_km,
-                'night_km' => $km->night_km,
+                'date' => $q->created_at->format('Y-m-d'),
+                'plate_number' => $q->vehicle->plate_number ?? 'N?A',
+                'rental_type' => $q->vehicle->rental_type,
+                'vehicle_id' => $q->vehicle->vehicle_id,
+                'interval' => $request->input('start_date') . $request->input('end_date') ?? 'N/A',
+                'total' => $endDate->diffInDays($startDate),
             ];
         });
 
-        if ($dailkms->isEmpty()) {
-            $dailkms = $query;
+        if ($vehicles->isEmpty()) {
+            $vehicles = $query;
         }
 
-        $vehicles = VehiclesModel::select('vehicle_id', 'plate_number')->get();
-        $drivers = DriversModel::with('user')->get();
-        $departments = DepartmentsModel::select('department_id', 'name')->get();
-        $clusters = ClustersModel::select('cluster_id', 'name')->get();
-        // return response()->json([
-        //     // 'vehicles' => $vehicles,
-        //     // 'drivers' => $drivers,
-        //     // 'departments' => $departments,
-        //     'dailkms' => $dailkms
-        //  ]);
+        $routes = Route::select('vehicle_id', 'route_name')->get();
 
         if ($request->input('export') == 1) {
-            return Excel::download(new FilteredReportExport($dailkms), 'filtered_report.xlsx');
+            return Excel::download(new FilteredReportExport($vehicles), 'filtered_report.xlsx');
         }
 
-        return view('Vehicle.dailyReport', compact('vehicles', 'drivers', 'departments', 'dailkms'));
+        return view('vehicle.attendanceReport', compact( 'vehicles','routes'));
     }
 
 }
