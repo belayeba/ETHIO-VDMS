@@ -10,6 +10,7 @@ use App\Models\User;
 use App\Models\Organization\DepartmentsModel; 
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 use Illuminate\Support\Str;
 use Hash;
 
@@ -126,6 +127,7 @@ class usercontroller extends Controller
             $data['email'] = $request->input('email');
             $data['department_id'] = $request->input('department');
             $data['phone_number'] = $request->input('phone');
+            $data['created_By'] = $currentUser;
             $user = User::create($data);
             $user->assignRole($request->input('roles'));
 
@@ -150,27 +152,25 @@ class usercontroller extends Controller
     {
         
         $users = user::findOrFail($id);
-        // dd($users);
         $roles = Role::pluck('name','name')->all();
         $department= DepartmentsModel::get();
-        // $Requested = VehicleTemporaryRequestModel::with('peoples', 'materials')
-        //                 ->findOrFail($id);
-        // dd($users);
         return view("users.edit",compact('users','roles','department'));
+
     }
 
     public function storeupdates(Request $request)
     {
         $validator = Validator::make($request->all(), [
+            'id' => 'required|uuid|exists:users,id',
             'first_name' => 'required|string|max:50',
             'middle_name' => 'required|string|max:50',
             'last_name' => 'required|string|max:50',
-            'username' => 'required|string|unique:users,username',
+            'username' => ['required','string',Rule::unique('users', 'username')->ignore($request->id),],
             'roles' => 'required|string',
             'department' => 'required|string|max:255',
-            'email' => 'required|string|max:100|unique:users,email',
-            'password' => 'required|string|min:8',
-            'confirm' => 'required|string|min:8|same:password',
+            'email' => ['required','string','max:100',Rule::unique('users', 'email')->ignore($request->id),],
+            'password' => 'nullable|string|min:8',
+            'confirm' => 'nullable|string|min:8|same:password',
             'phone' => 'required|string',    
         ]);
         // If validation fails, return an error response
@@ -180,21 +180,39 @@ class usercontroller extends Controller
                 $errorString = collect($errorMessages)->implode(' ');
                 return back()->with('error_message', $errorString);
             }
+
+            // dd($request);
+
         try{
             $currentUser = auth()->user();
             $data = $request->all();
         
-            $data['password'] = Hash::make($data['password']);
-            $data['username']=$request->input('username') ?? null;
-            $data['first_name'] = $request->input('first_name');
-            $data['last_name'] = $request->input('last_name');
-            $data['email'] = $request->input('email');
-            $data['department_id'] = $request->input('department');
-            $data['phone_number'] = $request->input('phone');
-            $user = User::create($data);
-            $user->assignRole($request->input('roles'));
+           // Retain the current password if none is provided
+            if (!empty($request->input('password'))) {
+                $data['password'] = Hash::make($request->input('password'));
+            }
 
-            // dd('success');
+            // Fetch the user to update
+            $user = User::findOrFail($request->id);
+
+            // Update the user's information
+            $user->update([
+                'first_name' => $data['first_name'],
+                'middle_name' => $data['middle_name'],
+                'last_name' => $data['last_name'],
+                'username' => $data['username'],
+                'email' => $data['email'],
+                'department_id' => $data['department'],
+                'phone_number' => $data['phone'],
+                'password' => $data['password'] ?? $user->password, // Keep existing password if none is provided
+                'updated_by' => $currentUser->id,
+            ]);
+
+            // Sync roles
+            if ($request->has('roles')) {
+                $user->syncRoles($request->input('roles'));
+            }
+            return redirect()->route('user_list')->with('success_message', 'User is updated successfully');
 
         }
         catch (Exception $exception) {

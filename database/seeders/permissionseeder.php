@@ -18,13 +18,13 @@ class permissionseeder extends Seeder {
     public function run(): void {
 
         // Remove relationships before truncating
-        DB::table( 'model_has_roles' )->truncate();
-        DB::table( 'role_has_permissions' )->truncate();
+        // DB::table( 'model_has_roles' )->truncate();
+        // DB::table( 'role_has_permissions' )->truncate();
 
         // Truncate tables with foreign key constraints
-        Role::query()->delete();
-        Permission::query()->delete();
-        PermissionGroup::query()->delete();
+        // Role::query()->delete();
+        // Permission::query()->delete();
+        // PermissionGroup::query()->delete();
 
         $adminRole = Role::create( [ 'name' => 'Admin' ] );
         $editorRole = Role::create( [ 'name' => 'Editor' ] );
@@ -122,16 +122,17 @@ class permissionseeder extends Seeder {
                 ]
             ],
         ];
-        foreach ( $permission_data as $group ) {
-            $permissions = $group[ 'permissions' ];
-            $groupId = PermissionGroup::create( [ 'name' => $group[ 'permission_group' ] ] )->id;
-
-            foreach ( $permissions as $permission ) {
-                Permission::create( [ 'name' => $permission, 'group_id' => $groupId ] );
-
-                // Assign all permissions to the Admin role
-                $permissionId = Permission::where( 'name', $permission )->first()->id;
-                $adminRole->permissions()->attach( $permissionId );
+        foreach ($permission_data as $group) {
+            $groupId = PermissionGroup::create(['name' => $group['permission_group']])->id;
+    
+            foreach ($group['permissions'] as $permission) {
+                $createdPermission = Permission::create([
+                    'name' => $permission,
+                    'group_id' => $groupId,
+                ]);
+    
+               
+                $adminRole->givePermissionTo($createdPermission);
             }
         }
     }
