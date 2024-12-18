@@ -98,7 +98,7 @@ class Daily_KM_Calculation extends Controller
         // dd($drivers->driver_id);
         // Fetch the daily KM data
         $dailkms = VehicleTemporaryRequestModel::with('vehicle', 'driver', 'requestedBy')
-            ->where('status', 'Approved')    
+            ->where('status', 'Approved')
             ->latest()
             ->take(50)
             ->get();
@@ -123,12 +123,46 @@ class Daily_KM_Calculation extends Controller
                     'end_locations' => $km->end_locations,
                     'department_name' => $km->requestedBy->department->name ?? 'N/A',
                     'cluster_name' => $km->department->cluster->name ?? 'N/A',
-    
+
                 ];
             });
 
 
         return view('Vehicle.temporaryReport', compact('vehicles', 'drivers', 'departments', 'clusters', 'dailkms'));
+    }
+
+    public function vehicleReport()
+    {
+        $drivers = User::all();
+        $departments = DepartmentsModel::select('department_id', 'name')->get();
+        $clusters = ClustersModel::select('cluster_id', 'name')->get();
+
+        $vehicles = VehiclesModel::with('maintenances', 'requestedBy','fuelings','driver','inspection')
+            ->latest()
+            ->take(50)
+            ->get();
+        
+        $vehicles = $vehicles->map(function ($vehicle) {
+            return (object) [
+                'plate_number' => $vehicle->plate_number ?? 'N/A',
+                'vin' => $vehicle->vin,
+                'driver' => is_null($vehicle->driver) ? 'N/A' : $vehicle->driver->users->username ?? 'N/A',
+                'model' => $vehicle->model,
+                'year' => $vehicle->year,
+                'vehicle_type' => $vehicle->vehicle_type,
+                'vehicle_category' => $vehicle->vehicle_category,
+                'requested_by' => is_null($vehicle->requestedBy) ? 'N/A' : $vehicle->requestedBy->username,
+                'fuel_amount' => $vehicle->fuel_amount,
+                'mileage' => $vehicle->mileage,
+                'last_service' => $vehicle->last_service,
+                'next_service' => $vehicle->next_service,
+                'status' => $vehicle->status == 1 ? 'Active' : 'Inactive',
+            ];
+        });
+
+        //dd($vehicles);
+
+        return view('Vehicle.vehicleReport', compact('vehicles', 'drivers', 'departments', 'clusters', 'vehicles'));
     }
 
     public function filterReport(Request $request)
@@ -356,7 +390,7 @@ class Daily_KM_Calculation extends Controller
                 $query->whereHas('vehicle', function ($q) use ($plateNumber) {
                     $q->where('plate_number', 'LIKE', "%{$plateNumber}%");
                 });
-    
+
             }elseif ($driverName) {
                 $query->whereHas('requestedBy', function ($q) use ($driverName) {
                     $q->where('username', 'LIKE', "%{$driverName}%");
@@ -367,20 +401,20 @@ class Daily_KM_Calculation extends Controller
                 $endDate = $dates[1];
                 $query->whereBetween('start_date', [$startDate, $endDate]);
             }
-    
+
             // return response()->json([
             //     // 'vehicles' => $vehicles,
             //     // 'drivers' => $drivers,
             //     // 'departments' => $departments,
             //     'dailkms' => $dailkms
             //  ]);
-    
+
             elseif ($department) {
                 $query->whereHas('department', function ($q) use ($department) {
                     $q->where('department_id', 'LIKE', "%{$department}%");
                 });
             } elseif ($cluster) {
-    
+
                 $query->whereHas('department.department.cluster', function ($q) use ($cluster) {
                     $q->where('cluster_id', 'LIKE', "%{$cluster}%");
                 });
@@ -389,9 +423,9 @@ class Daily_KM_Calculation extends Controller
                     $q->where('username', 'LIKE', "%{$driverName}%");
                 });
             }
-    
+
             $dailkms = $query->get();
-    
+
             $dailkms = $dailkms->map(function ($km) {
                 return (object) [
                     'requested_by' => $km->requestedBy->username,
@@ -411,24 +445,122 @@ class Daily_KM_Calculation extends Controller
                     'end_locations' => $km->end_locations,
                     'department_name' => $km->requestedBy->department->name ?? 'N/A',
                     'cluster_name' => $km->department->cluster->name ?? 'N/A',
-    
+
                 ];
             });
-    
+
             if ($dailkms->isEmpty()) {
                 $dailkms = $query;
             }
-    
+
             if ($request->input('export') == 1) {
                 return Excel::download(new FilteredReportExport($dailkms), 'filtered_report.xlsx');
             }
-    
+
             $vehicles = VehiclesModel::select('vehicle_id', 'plate_number')->get();
             $drivers = User::all();
             $departments = DepartmentsModel::select('department_id', 'name')->get();
             $clusters = ClustersModel::select('cluster_id', 'name')->get();
 
         return view('Vehicle.temporaryReport', compact('vehicles', 'drivers', 'departments', 'clusters', 'dailkms'));
+
+    }
+
+    public function filterVehicleReport(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'plate_number' => 'nullable|string',
+            'name' => 'nullable|string',
+            'vehicle_type' => 'nullable|string',
+            'vehicle_category' => 'nullable|string',
+            'status' => 'nullable|string',
+            'start_date' => 'nullable|date',
+            'end_date' => 'nullable|date',
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
+        // Get filter parameters
+        if ($request->has('export')) {
+            session([
+                'plate_number' => $request->input('plate_number'),
+                'driver_name' => $request->input('driver_name'),
+                'vehicle_type' => $request->input('vehicle_type'),
+                'vehicle_category' => $request->input('vehicle_category'),
+                'status' => $request->input('status'),
+                'date_range' => $request->input('date_range'),
+            ]);
+        }
+
+        // Retrieve filters from session
+        $plateNumber = session('plate_number');
+        $driverName = session('driver_name');
+        $vehicleType = session('vehicle_type');
+        $vehicleCategory = session('vehicle_category');
+        $status = session('status');
+        $dateRange = session('date_range');
+
+        $dates = explode(' - ', $dateRange);
+        // Query the daily KM data with filters
+        $query = VehiclesModel::with('maintenances', 'requestedBy','fuelings','driver','inspection');
+
+        if ($plateNumber) {
+            $query->whereHas('vehicle', function ($q) use ($plateNumber) {
+                $q->where('plate_number', 'LIKE', "%{$plateNumber}%");
+            });
+
+        } elseif (count($dates) == 2) {
+            $startDate = $dates[0];
+            $endDate = $dates[1];
+            $query->whereBetween('registration_date', [$startDate, $endDate]);
+        }
+
+        elseif ($vehicleType) {
+            $query->where('vehicle_type', 'LIKE', "%{$vehicleType}%");
+        } elseif ($vehicleCategory) {
+            $query->where('vehicle_category', 'LIKE', "%{$vehicleCategory}%");
+        } elseif ($status) {
+            $status = $status == "Active" ? 1 : 0;
+            $query->where('status', 'LIKE', "%{$status}%");
+        }
+        elseif ($driverName) {
+            $query->where('username', 'LIKE', "%{$driverName}%");
+        }
+
+        $vehicles = $query->get();
+
+        //dd($vehicle);
+
+        $vehicles = $vehicles->map(function ($vehicle) {
+            return (object) [
+                'plate_number' => $vehicle->plate_number ?? 'N/A',
+                'vin' => $vehicle->vin,
+                'driver' => is_null($vehicle->driver) ? 'N/A' : $vehicle->driver->users->username ?? 'N/A',
+                'model' => $vehicle->model,
+                'year' => $vehicle->year,
+                'vehicle_type' => $vehicle->vehicle_type,
+                'vehicle_category' => $vehicle->vehicle_category,
+                'requested_by' => is_null($vehicle->requestedBy) ? 'N/A' : $vehicle->requestedBy->username,
+                'fuel_amount' => $vehicle->fuel_amount,
+                'mileage' => $vehicle->mileage,
+                'last_service' => $vehicle->last_service,
+                'next_service' => $vehicle->next_service,
+                'status' => $vehicle->status == 1 ? 'Active' : 'Inactive',
+            ];
+        });
+
+        if ($vehicles->isEmpty()) {
+            $vehicles = $query;
+        }
+
+        if ($request->input('export') == 1) {
+            return Excel::download(new FilteredReportExport($vehicles), 'filtered_report.xlsx');
+        }
+
+        $drivers = User::all();
+        
+        return view('Vehicle.vehicleReport', compact('vehicles', 'drivers'));
 
     }
 

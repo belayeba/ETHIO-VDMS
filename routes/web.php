@@ -366,10 +366,12 @@ Route::group([
 Route::get('/vehicle/report/daily', [Daily_KM_Calculation::class, 'ReportPage'])->name('dailyreport.ReportPage');
 Route::get('/vehicle/report/permanent', [Daily_KM_Calculation::class, 'permanentReport'])->name('dailyreport.permanentReport');
 Route::get('/vehicle/report/temporary', [Daily_KM_Calculation::class, 'temporaryReport'])->name('dailyreport.temporaryReport');
+Route::get('/vehicle/report/', [Daily_KM_Calculation::class, 'vehicleReport'])->name('dailyreport.vehicleReport');
 
 Route::get('/vehicle/report/filter', [Daily_KM_Calculation::class, 'filterReport'])->name('dailyreport.filterReport');
 Route::get('/vehicle/report/permanent/filter', [Daily_KM_Calculation::class, 'filterPermanentReport'])->name('dailyreport.filterPermanentReport');
 Route::get('/vehicle/report/temporary/filter', [Daily_KM_Calculation::class, 'filterTemporaryReport'])->name('dailyreport.filterTemporaryReport');
+Route::get('/vehicle/report/filter', [Daily_KM_Calculation::class, 'filterVehicleReport'])->name('dailyreport.filterVehicleReport');
 
 // Tinsae
 // });
