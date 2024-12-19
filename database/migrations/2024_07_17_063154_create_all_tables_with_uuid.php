@@ -222,9 +222,12 @@ class CreateAllTablesWithUuid extends Migration
         });
         Schema::create('giving_back_vehicles_parmanently', function (Blueprint $table) {
             $table->uuid('giving_back_vehicle_id')->primary();
+            $table->uuid('vehicle_id');
+            $table->foreign('vehicle_id')->references('vehicle_id')->on('vehicles')->onDelete('restrict');
             $table->uuid('requested_by');
             $table->foreign('requested_by')->references('id')->on('users')->onDelete('restrict');
             $table->string('purpose');
+            $table->string('return_type');
             $table->uuid('approved_by')->nullable();
             $table->foreign('approved_by')->references('id')->on('users')->onDelete('restrict');
             $table->string('reject_reason_vec_director')->nullable();
@@ -448,6 +451,7 @@ class CreateAllTablesWithUuid extends Migration
             $table->boolean('in_out_town');
             $table->integer('how_many_days');
             $table->integer('start_km')->nullable();
+            $table->integer('allowed_km')->nullable();
             $table->integer('end_km')->nullable();
             $table->string('status', 255)->default('Pending');
             $table->boolean('with_driver')->default(1);

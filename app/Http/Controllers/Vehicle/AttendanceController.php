@@ -118,7 +118,6 @@ class AttendanceController extends Controller
                     'created_at' => $ethio_date,
                     'notes' => $request->notes,
                 ]);
-
                 return redirect()->back()->with('success_message', 'Attendance Saved');
             }
         public function show($id)

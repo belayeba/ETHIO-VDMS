@@ -9,9 +9,21 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
+use Andegna\DateTime;
+use Carbon\Carbon;
 
 class ReplacementController extends Controller
 {
+    public function ConvertToEthiopianDate($today)
+    {
+        $ethiopianDate = new DateTime($today);
+
+        // Format the Ethiopian date
+        $formattedDate = $ethiopianDate->format('Y-m-d');
+
+        // Display the Ethiopian date
+        return $formattedDate;
+    }
     public function index()
     {
         $vehicles = VehiclesModel::get();
@@ -29,17 +41,18 @@ class ReplacementController extends Controller
         if ($validator->fails()) {
             return response()->json(['errors' => $validator->errors()], 422);
         }
+        $old_vehicle = VehiclePermanentlyRequestModel::findOrFail($request->input('permanent_id'));
+        $old_vehicle_id = $old_vehicle->vehicle_id;
+        $old_vehicle->vehicle_id = $request->input('new_vehicle_id');
+        $old_vehicle->save();
         $id = Auth::id();
-        $check_other_replacement = ReplacementModel::select('status')->where('permanent_id',$request->permanent_id)->where('status',true)->first();
-        if($check_other_replacement)
-            {
-                $check_other_replacement->status = false;
-                $check_other_replacement->update();
-            }
-        $replacement = ReplacementModel::create([
-            'new_vehicle_id' => $request->new_vehicle_id,
+        $today = Carbon::now();
+        $ethio_date = $this->ConvertToEthiopianDate($today);
+        ReplacementModel::create([
+            'old_vehicle_id' => $old_vehicle_id,
             'permanent_id' => $request->permanent_id,
             'register_by' =>  $id,
+            'created_at' => $ethio_date
         ]);
 
         return redirect()->back()->with('success_message', "Successfully Replaced!",);
@@ -57,7 +70,6 @@ class ReplacementController extends Controller
                     $counter++;
                     return $counter;
                 })
-
                 ->addColumn('oldCar', function ($row) {
                     return $row->permanentRequest->vehicle->plate_number;
                 })

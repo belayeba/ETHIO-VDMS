@@ -61,7 +61,15 @@
                                                                 placeholder="Enter purpose of Request">
                                                         </div>
                                                     </div>
-
+                                                    <div class="position-relative mb-3">
+                                                        <label class="form-label">Request Type</label>
+                                                        <select class="form-select" name="return_type"
+                                                            aria-label="Floating label select example">
+                                                            <option selected>select type</option>
+                                                            <option value="ForGood">For Good</option>
+                                                            <option value="Replacement">Replacement</option>
+                                                        </select>
+                                                    </div>
                                                     <div class="position-relative mb-3">
                                                         <label class="form-label">Select Vehicle</label>
                                                         <select class="form-select" name="request_id"

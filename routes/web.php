@@ -31,7 +31,7 @@ use App\Http\Controllers\Vehicle\AttendanceController;
 use App\Http\Controllers\Vehicle\ReplacementController;
 use App\Http\Controllers\Letter\LetterController;
 use App\Http\Controllers\Letter\LetterManagement;
-
+use Illuminate\Foundation\Http\Middleware\ValidateCsrfToken;
 
 Route::get('/', function () 
 {
@@ -51,7 +51,12 @@ Route::get('/datetest', function()
 
 // Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
+Route::controller(usercontroller::class)->withoutMiddleware([ValidateCsrfToken::class])->group(function()
+{
+    Route::post('/key_clocklogin', 'login');
 
+
+});
     Auth::routes();
 
 Route::group(['middleware' => ['auth']], function()
@@ -119,7 +124,7 @@ Route::group(['middleware' => ['auth']], function()
                         Route::get('/get_my_request', 'my_request')->name('my_request');
                         Route::post('/reject_request/{id}', 'finance_reject')->name('finance_reject');
                 });
-            Route::controller(usercontroller::class)->group(function()
+                Route::controller(usercontroller::class)->group(function()
                 {
                     Route::post('/search-users', 'searchUsers')->name('search.users');
                     Route::get('/users', 'list')->name('user_list');

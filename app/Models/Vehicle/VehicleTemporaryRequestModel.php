@@ -32,6 +32,7 @@ class VehicleTemporaryRequestModel extends Model
         'end_time',
         'in_out_town',
         'start_km',
+        'allowed_km',
         'end_km',
         'status',
         'how_many_days',

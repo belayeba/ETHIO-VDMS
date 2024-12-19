@@ -209,6 +209,13 @@
                                                                 name="end_location" placeholder="Enter arrival location">
                                                         </div>
                                                     </div>
+                                                    <div class="position-relative mb-3">
+                                                        <div class="mb-6 position-relative" id="datepicker1">
+                                                            <label class="form-label">Allowed Km after Destination</label>
+                                                            <input type="number" class="form-control"
+                                                                name="allowed_km" placeholder="Enter Allowed KM after destination">
+                                                        </div>
+                                                    </div>
                                                 </div> <!-- end card-body-->
                                                 <ul class="pager wizard mb-0 list-inline mt-1">
                                                     <li class="previous list-inline-item">

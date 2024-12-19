@@ -40,7 +40,7 @@ class ReplacementModel extends Model
      * @var array
      */
     protected $fillable = [
-        'new_vehicle_id',
+        'old_vehicle_id',
         'permanent_id',
         'register_by',
         'status',

@@ -12,10 +12,43 @@ use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use Hash;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Redirect;
 
 class usercontroller extends Controller
 {
+    public function login(Request $request)
+    {
+        $response = Http::asForm()->post(config("services.keycloak.base_url").'realms/'.config("services.keycloak.realms").'/protocol/openid-connect/token/introspect', [
+            'token' => $request->token,
+            'client_id' => config("services.keycloak.client_id"),
+            'client_secret' => config("services.keycloak.client_secret")
+        ]);
 
+
+
+        if($response->successful() && $response["active"])
+        {
+            $thisUser= User::where("email",$response["email"])->first();
+
+            if($thisUser)
+            {
+
+                Auth::login($thisUser);
+
+                return Redirect::to('/home');
+
+            }
+
+            return Redirect::to(config("services.keycloak.portal_url").'homepage')->with("error","You can not access this service!!");
+
+
+        }
+        else 
+        {
+            return Redirect::to(config("services.keycloak.portal_url").'homepage')->with("error","Failed to authenticate!!");
+        }
+    }
     public function list()
     {
         $users=User::get();
