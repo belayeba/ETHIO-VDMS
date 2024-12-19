@@ -20,22 +20,6 @@
                 <strong> Success- </strong> {!! session('success_message') !!} 
             </div>
             @endif
-
-        @if(Session::has('error_message'))
-        <div class="alert alert-danger alert-dismissible text-bg-danger border-0 fade show col-lg-8" 
-            role="alert">
-            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="Close"></button>
-            <strong>Error - </strong> {!! session('error_message') !!}
-        </div>
-        @endif
-        
-        @if(Session::has('success_message'))
-        <div class="alert alert-primary alert-dismissible text-bg-primary border-0 fade show col-lg-4"
-            role="alert">
-            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="Close"></button>
-            <strong>Success </strong>
-        </div>
-        @endif
         <!-- Start Content-->
         <div class="container-fluid">
 
@@ -43,6 +27,7 @@
                             <div class="card">
                                 <div class="card-header">
                                     <h4 class="header-title">User Create</h4>
+                                    <h4 class="header-title"><a href="{{route('user_list')}}"><i class="ri-arrow-left-line"></i></a></h4>
                                 </div>
                                 <div class="card-body">
                                     <form method="POST" class="needs-validation" action="{{ route('user.update.store') }}" novalidate>
@@ -161,18 +146,20 @@
                                                 <div class="position-relative mb-3">
                                                     <label class="form-label" for="validationTooltip03">Password</label>
                                                     <input type="text" class="form-control" id="validationTooltip03"
-                                                        placeholder="password" name="password" required>
+                                                        placeholder="password" name="password">
                                                     <div class="invalid-tooltip">
                                                         Please provide a valid Password.
                                                     </div>
                                                 </div>
                                             </div>
 
+                                            <input type="hidden"  name="id" value="{{$users->id}}">
+
                                             <div class="col-lg-6">
                                                 <div class="position-relative mb-3">
                                                     <label class="form-label" for="validationTooltip03">Confirm Password</label>
                                                     <input type="text" class="form-control" id="validationTooltip03"
-                                                        placeholder="confirm password" name="confirm" required>
+                                                        placeholder="confirm password" name="confirm">
                                                     <div class="invalid-tooltip">
                                                         Please provide a confirmed password.
                                                     </div>

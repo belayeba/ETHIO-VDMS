@@ -371,20 +371,7 @@ class CreateAllTablesWithUuid extends Migration
         //     $table->softDeletes();
         // });
         // Trips Table
-        // Route
-        Schema::create('routechanges', function (Blueprint $table) 
-            {
-                $table->uuid('route_change_id')->primary();
-                $table->uuid('route_id');
-                $table->foreign('route_id')->references('route_id')->on('routes')->onDelete('restrict');
-                $table->uuid('older_vehicle_id');
-                $table->foreign('older_vehicle_id')->references('vehicle_id')->on('vehicles')->onDelete('restrict');
-                $table->integer('older_driver_phone');
-                $table->uuid('registered_by');
-                $table->foreign('registered_by')->references('id')->on('users')->onDelete('restrict');
-                $table->timestamps();
-                $table->softDeletes();
-            });
+       
         // Route
         Schema::create('routes', function (Blueprint $table) 
             {
@@ -398,6 +385,22 @@ class CreateAllTablesWithUuid extends Migration
                 $table->timestamps();
                 $table->softDeletes();
             });
+
+             // Route
+        Schema::create('routechanges', function (Blueprint $table) 
+            {
+                $table->uuid('route_change_id')->primary();
+                $table->uuid('route_id');
+                $table->foreign('route_id')->references('route_id')->on('routes')->onDelete('restrict');
+                $table->uuid('older_vehicle_id');
+                $table->foreign('older_vehicle_id')->references('vehicle_id')->on('vehicles')->onDelete('restrict');
+                $table->integer('older_driver_phone');
+                $table->uuid('registered_by');
+                $table->foreign('registered_by')->references('id')->on('users')->onDelete('restrict');
+                $table->timestamps();
+                $table->softDeletes();
+            });
+
         Schema::create('attendances', function (Blueprint $table) {
             $table->uuid('attendance_id');
             $table->uuid('vehicle_id');

@@ -387,7 +387,7 @@ Route::group(['middleware' => ['auth']], function()
                     Route::post('/attendance/update/{id}', 'update')->name('attendance.update');
                     Route::delete('/attendance/delete', 'destroy')->name('attendance.destroy');
                     Route::get('/attendance/report','ReportPage')->name('attendancereport.index');
-                    Route::post('/attendance/report/filter','filterReport')->name('attendancereport.filter');
+                    Route::get('/attendance/report/filter','filterReport')->name('attendancereport.filter');
                 });
 
                 // letter 
@@ -414,6 +414,7 @@ Route::group(['middleware' => ['auth']], function()
                     Route::get('/Replacement', 'index')->name('Replacement.index');
                     Route::get('/Replacement/fetch', 'FetchReplacement')->name('Replacement.fetch');
                     Route::post('/Replacement/store', 'store')->name('Replacement.store');
+                    Route::post('/Replacement/update/{id}', 'update')->name('Replacement.update');
                     Route::delete('/Replacement/delete/{id}', 'destroy')->name('Replacement.delete');
                    
                 });

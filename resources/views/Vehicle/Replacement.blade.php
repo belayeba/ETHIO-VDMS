@@ -152,39 +152,27 @@
                                             <div class="modal-body">
                                                 <form  method="post" id="update-form" enctype="multipart/form-data">
                                                     @csrf
-                                                        <div class="row">
-                                                            <div class="position-relative mb-3">
-                                                                <label class="form-label">Attendance</label>
-                                                                <div class="row">
-                                                                    <div class="col-3">
-                                                                        <div class="form-check">
-                                                                            <input type="hidden" name="morning" value="0">
-                                                                            <input type="checkbox" class="form-check-input ok-checkbox" name="morning" id="morning" value="1" data-row="">
-                                                                            <label class="form-check-label" for="yes_">Morning</label>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="col-3">
-                                                                        <div class="form-check">
-                                                                            <input type="hidden" name="afternoon" value="0">
-        
-                                                                            <input type="checkbox" class="form-check-input damaged-checkbox" name="afternoon" id="afternoon" value="1" data-row="">
-                                                                            
-                                                                            <label class="form-check-label" for="no_">Night</label>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>  
-
-                                                            <input type="hidden" name="notes" id="request_update_id">
-
-                                                            <div class="position-relative mb-3">
-                                                                <div class="mb-6 position-relative" >
-                                                                    <label class="form-label">Remark</label>
-                                                                    <input type="text" name="notes" class="form-control" id="notes" placeholder="Enter Remark if any">
-                                                                </div>
-                                                            </div>
-        
+                                                    <div class="row">
+                                                        <div class="position-relative mb-3">
+                                                            <label class="form-label" for="validationTooltip02">Select old vehicle</label>
+                                                            <select class="form-control"  name="permanent_id">
+                                                                <option value=""  id="oldSelect"></option>
+                                                                @foreach ($permanent as $perm)
+                                                                <option value="{{$perm->vehicle_request_permanent_id}}">{{$perm->vehicle->plate_number}}</option>
+                                                            @endforeach 
+                                                            </select>
                                                         </div>
+                                                        
+                                                        <div class="position-relative mb-3">
+                                                            <label class="form-label" for="validationTooltip02">Select Replacemen</label>
+                                                            <select class="form-control"  name="new_vehicle_id">
+                                                                <option value="" id="newSelect"></option>
+                                                                @foreach ($vehicles as $vec)
+                                                                    <option value="{{$vec->vehicle_id}}">{{$vec->plate_number}}</option>
+                                                                @endforeach 
+                                                            </select>
+                                                        </div>
+                                                    </div>
                                                     </div>                                                        
                                             <div class="modal-footer">
                                                 <button type="button" class="btn btn-light"
@@ -247,19 +235,20 @@
 
         $(document).ready(function() {
             var AcceptedId;
+            var newCar;
+            var oldCar;
 
             $(document).on('click', '.update-btn', function() {
                 AcceptedId = $(this).data('id');
-                morning = $(this).data('morning');
-                night = $(this).data('afternoon');
-                notes = $(this).data('notes');
+                newCar = $(this).data('new');
+                oldCar = $(this).data('old');
+                console.log(newCar, oldCar, AcceptedId)
 
-                $('#update-form').attr('action', '{{ route('attendance.update', ['id' => ':id']) }}'.replace(':id', AcceptedId));
+                $('#update-form').attr('action', '{{ route('Replacement.update', ['id' => ':id']) }}'.replace(':id', AcceptedId));
 
                 $('#request_update_id').val(AcceptedId);
-                $('#morning').prop('checked', morning == 1);
-                $('#afternoon').prop('checked', night == 1);
-                $('#notes').val(notes);
+                $('#newSelect').text(newCar);
+                $('#oldSelect').text(oldCar);
                 $('#update-modal').modal('show');
             });
         });
