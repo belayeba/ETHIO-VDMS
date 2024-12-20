@@ -404,6 +404,7 @@
                             </div>
                         </li>
                     @endcan()
+                    @can('Letter')
                     <li class="side-nav-item">
                         <a data-bs-toggle="collapse" href="#letterManagement" aria-expanded="false"
                             aria-controls="letterManagement" class="side-nav-link">
@@ -437,6 +438,7 @@
                             </ul>
                         </div>
                     </li>
+                    @endcan()
             </div>
         </div>
         </br></br>
