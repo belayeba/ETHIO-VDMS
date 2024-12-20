@@ -62,7 +62,7 @@
                                                         </div>
                                                     </div>
                                                     <div class="position-relative mb-3">
-                                                        <label class="form-label">Request Type</label>
+                                                        <label class="form-label">Return Type</label>
                                                         <select class="form-select" name="return_type"
                                                             aria-label="Floating label select example">
                                                             <option selected>select type</option>

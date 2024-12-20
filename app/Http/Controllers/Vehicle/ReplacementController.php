@@ -10,6 +10,7 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Andegna\DateTime;
+use App\Models\Vehicle\InspectionModel;
 use Carbon\Carbon;
 
 class ReplacementController extends Controller
@@ -42,8 +43,30 @@ class ReplacementController extends Controller
             return response()->json(['errors' => $validator->errors()], 422);
         }
         $old_vehicle = VehiclePermanentlyRequestModel::findOrFail($request->input('permanent_id'));
+        if($old_vehicle->status)
+           {
+              return redirect()->back()->with('error_message', "Your Vehicle should be returned first!",);
+           }
+        $the_vehicle = VehiclesModel::findOrFail($request->input('new_vehicle_id'));
+           if(!$the_vehicle->status)
+               {
+                   return redirect()->back()->with('error_message',
+                                   'Vehicle Not active.',
+                                   );
+               }
+        $latest_inspection = InspectionModel::where('vehicle_id', $request->input('new_vehicle_id'))->latest()->first();
+        if (!$latest_inspection) {
+            return redirect()->back()->with('error_message',
+            'Fill inspection first',
+            );
+        }
         $old_vehicle_id = $old_vehicle->vehicle_id;
         $old_vehicle->vehicle_id = $request->input('new_vehicle_id');
+        $old_vehicle->inspection_id = $latest_inspection->inspection_id;
+        $old_vehicle->fuel_quata =  $the_vehicle->fuel_amount;
+        $old_vehicle->accepted_by_requestor = null;
+        $old_vehicle->status = true;
+        $old_vehicle->mileage =  $the_vehicle->mileage;
         $old_vehicle->save();
         $id = Auth::id();
         $today = Carbon::now();
@@ -54,58 +77,57 @@ class ReplacementController extends Controller
             'register_by' =>  $id,
             'created_at' => $ethio_date
         ]);
-
         return redirect()->back()->with('success_message', "Successfully Replaced!",);
     }
 
     public function FetchReplacement()
-    {
-        $data = ReplacementModel::with(['newVehicle', 'permanentRequest', 'registeredBy'])->get();
-                
-                return datatables()->of($data)
-                ->addIndexColumn()
+        {
+            $data = ReplacementModel::with(['newVehicle', 'permanentRequest', 'registeredBy'])->get();
+                    
+                    return datatables()->of($data)
+                    ->addIndexColumn()
 
-                ->addColumn('counter', function($row) use ($data){
-                    static $counter = 0;
-                    $counter++;
-                    return $counter;
-                })
-                ->addColumn('oldCar', function ($row) {
-                    return $row->permanentRequest->vehicle->plate_number;
-                })
+                    ->addColumn('counter', function($row) use ($data){
+                        static $counter = 0;
+                        $counter++;
+                        return $counter;
+                    })
+                    ->addColumn('oldCar', function ($row) {
+                        return $row->permanentRequest->vehicle->plate_number;
+                    })
 
-                ->addColumn('newCar', function ($row) {
-                    return $row->newVehicle->plate_number;
-                })
+                    ->addColumn('newCar', function ($row) {
+                        return $row->newVehicle->plate_number;
+                    })
 
-                ->addColumn('registerBy', function ($row) {
-                    return $row->registeredBy->first_name .' '.$row->registeredBy->last_name ;
-                })
+                    ->addColumn('registerBy', function ($row) {
+                        return $row->registeredBy->first_name .' '.$row->registeredBy->last_name ;
+                    })
 
-                ->addColumn('date', function ($row) {
-                    return $row->created_at->format('d/m/Y');
-                })
+                    ->addColumn('date', function ($row) {
+                        return $row->created_at->format('d/m/Y');
+                    })
 
-                ->addColumn('actions', function ($row) {
-                    $actions = '';                    
+                    ->addColumn('actions', function ($row) {
+                        $actions = '';                    
 
-                    if ($row->reviewed_by == null) {
-                        $actions .= '<button class="btn btn-secondary rounded-pill update-btn" 
-                        data-id="' . $row->replacement_id. '" 
-                        data-new="' . $row->newVehicle->plate_number. '" 
-                        data-old="' . $row->permanentRequest->vehicle->plate_number. '" 
-                        title="edit"><i class="ri-edit-line"></i></button>';
-                        $actions .= '<button class="btn btn-danger rounded-pill reject-btn"  
-                        data-id="' . $row->replacement_id. '" 
-                        title="delete"><i class=" ri-close-circle-fill"></i></button>';
-                    }
+                        if ($row->reviewed_by == null) {
+                            $actions .= '<button class="btn btn-secondary rounded-pill update-btn" 
+                            data-id="' . $row->replacement_id. '" 
+                            data-new="' . $row->newVehicle->plate_number. '" 
+                            data-old="' . $row->permanentRequest->vehicle->plate_number. '" 
+                            title="edit"><i class="ri-edit-line"></i></button>';
+                            $actions .= '<button class="btn btn-danger rounded-pill reject-btn"  
+                            data-id="' . $row->replacement_id. '" 
+                            title="delete"><i class=" ri-close-circle-fill"></i></button>';
+                        }
 
-                    return $actions;
-                })
+                        return $actions;
+                    })
 
-                ->rawColumns(['counter','oldCar','newCar','registerBy','date','actions'])
-                ->toJson();
-    }
+                    ->rawColumns(['counter','oldCar','newCar','registerBy','date','actions'])
+                    ->toJson();
+        }
     
     public function show($id)
     {

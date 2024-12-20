@@ -124,7 +124,7 @@ Route::group(['middleware' => ['auth']], function()
                         Route::get('/get_my_request', 'my_request')->name('my_request');
                         Route::post('/reject_request/{id}', 'finance_reject')->name('finance_reject');
                 });
-                Route::controller(usercontroller::class)->group(function()
+            Route::controller(usercontroller::class)->group(function()
                 {
                     Route::post('/search-users', 'searchUsers')->name('search.users');
                     Route::get('/users', 'list')->name('user_list');
@@ -164,7 +164,6 @@ Route::group(['middleware' => ['auth']], function()
                     Route::post('/perm_simirit_reject_request', 'DispatcherRejectRequest')->name('perm_vec_simirit_reject');
                     Route::get('/user_accept_assigned_vehicle/{id}', 'accept_assigned_vehicle')->name('accept_assigned_vehicle');
                     Route::post('/user_decline_assigned_vehicle', 'reject_assigned_vehicle')->name('reject_assigned_vehicle');
-
                 });
             Route::controller(GivingBackPermanentVehicle::class)->group(function () 
                 {
@@ -376,9 +375,7 @@ Route::group(['middleware' => ['auth']], function()
                     Route::get('/get_new_message_count', 'get_new_message_count');
                     Route::post('/change_status', 'redirect_to_inteded');
                 });
-
-                // Vehicle attendance controller
-
+              // Vehicle attendance controller
             Route::controller(AttendanceController::class)->group(function () 
                 {
                     Route::get('/attendance', 'index')->name('attendance.index');

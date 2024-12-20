@@ -210,13 +210,13 @@ class CreateAllTablesWithUuid extends Migration
         });
         Schema::create('replacements', function (Blueprint $table) {
             $table->uuid('replacement_id');
-            $table->uuid('new_vehicle_id');
-            $table->foreign('new_vehicle_id')->references('vehicle_id')->on('vehicles')->onDelete('restrict');
+            $table->uuid('old_vehicle_id');
+            $table->foreign('old_vehicle_id')->references('vehicle_id')->on('vehicles')->onDelete('restrict');
             $table->uuid('permanent_id');
             $table->foreign('permanent_id')->references('vehicle_request_permanent_id')->on('vehicle_requests_parmanently')->onDelete('restrict');
             $table->uuid('register_by');
             $table->foreign('register_by')->references('id')->on('users')->onDelete('restrict');
-            $table->boolean('status')->default(1);
+            $table->boolean('status')->default(true);
             $table->timestamps();
             $table->softDeletes();
         });
