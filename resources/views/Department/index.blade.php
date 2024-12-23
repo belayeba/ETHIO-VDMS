@@ -164,12 +164,7 @@
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    
-                                                    @endforeach
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                        <!-- Accept Alert Modal -->
+                                                     <!-- Accept Alert Modal -->
                                         <div id="warning_alert" class="modal fade" id="confirmationModal" tabindex="-1" role="dialog"
                                         aria-labelledby="confirmationModalLabel"aria-hidden="true">
                                         <div class="modal-dialog modal-sm">
@@ -198,6 +193,10 @@
                                             </div><!-- /.modal-content -->
                                         </div><!-- /.modal-dialog -->
                                     </div><!-- /.modal -->
+                                                    @endforeach
+                                                </tbody>
+                                            </table>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
