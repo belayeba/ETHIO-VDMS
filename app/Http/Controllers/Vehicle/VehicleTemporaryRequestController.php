@@ -117,7 +117,7 @@ class VehicleTemporaryRequestController extends Controller
                     'return_time' => 'required|date_format:H:i',
                     'start_location' => 'required|string|max:255',
                     'end_location' => 'required|string|max:255',
-                    'allowed_km' => 'required|number',
+                    'allowed_km' => 'required|numeric',
                     'itemNames.*' => 'nullable|string|max:255',
                     'people_id' => 'nullable|array',
                     'people_id.*' => 'exists:users,id',

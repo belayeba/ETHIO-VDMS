@@ -18,59 +18,60 @@
                 <strong> Success- </strong> {!! session('success_message') !!} 
             </div>
         @endif
+        <div class="preloader" dir="ltr">
+                <div class='body'>
+                    <span>
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </span>
+                    <div class='base'>
+                        <span></span>
+                        <div class='face'></div>
+                    </div>
+                </div>
+                <div class='longfazers'>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+            <input type="hidden" name="table_name" id="table_name" value="">
+            <input type="hidden" name="csrf_token" class="csrf_token" value="{{ csrf_token() }}">
             <div class="main-wrapper" style="min-height: 600px">
-               
-                <div id="main-content">
+                <!-- Page Content  -->
+                <div id="main-content" class="">
                     <section class="sms-breadcrumb mb-10 white-box">
                         <div class="container-fluid p-0">
+                          
                         </div>
                     </section>
 
                     <section class="admin-visitor-area up_st_admin_visitor">
                         <div class="container-fluid p-0">
                             <div class="row justify-content-center">
-
+                                <!-- Add New Cluster Form -->
                                 <div class="col-md-4">
                                     <div class="card">
                                         <div class="card-header">
-                                            <h4 class="header-title mb-0">Route Assignment</h4>
+                                            <h4 class="header-title mb-0">Do you want to change Location?</h4>
                                         </div>
                                         <div class="card-body">
-                                            <form method="POST" action="{{ route('employeeService.store') }}" accept-charset="UTF-8" name="route_assigning_form" id="route_assigning_form" enctype="multipart/form-data">
+                                            <form method="POST" action="{{ route('location_change_request') }}" accept-charset="UTF-8" name="cluster-form" id="cluster-form" enctype="multipart/form-data">
                                                 @csrf
-                                                <div class="row mb-3">
-                                                    <label class="col-md-3 col-form-label" for="route">Route</label>
-                                                    <div class="col-md-9">
-                                                        <select id="route_id" name="route_id" class="form-select" required>
-                                                            <option value="">Select Route</option>
-                                                            @foreach($routes as $route)
-                                                                <option value="{{ $route->route_id }}">{{ $route->route_name }}</option>
-                                                            @endforeach
-                                                        </select>
-                                                    </div>
+                                                <div class="mb-3">
+                                                    <label for="nameInput" class="form-label">Location Name <strong class="text-danger">*</strong></label>
+                                                    <input type="text" class="form-control" id="nameInput" name="location_name" placeholder="Your Location">
                                                 </div>
-
-                                                <div id="TogglePackage">
-                                                    <div class="row">
-                                                        <p class="mb-1 fw-bold text-muted">Select People</p>
-                                                        <select id="multiSelect" name="people_id[]" class="select2 form-control select2-multiple" data-toggle="select2" multiple="multiple" data-placeholder="Select People ..." style="height: 200px;">
-                                                            <optgroup label="Users/Employees">
-                                                                @foreach ($users as $user)
-                                                                    <option value="{{ $user->id }}">{{ $user->first_name }} {{ $user->last_name }}</option>
-                                                                @endforeach
-                                                            </optgroup>
-                                                        </select>
-                                                    </div>
-                                                </div>
-
-                                                <div class="d-flex justify-content-center mt-3">
+                                                <div class="d-flex justify-content-center">
                                                     <button type="submit" class="btn btn-primary">Save</button>
                                                 </div>
                                             </form>
                                         </div>
                                     </div>
                                 </div>
-
+                                
                                 <div class="col-md-8">
                                     <div class="card">
                                         <div class="card-header">
@@ -83,8 +84,10 @@
                                                         <tr>
                                                             <th>#</th>
                                                             <th>Route</th>
+                                                            <th>Driver Name</th>
+                                                            <th>Driver Phone</th>
                                                             <th>Vehicle</th>
-                                                            <th>Action</th>
+                                                            <th>Service Users</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
@@ -92,10 +95,12 @@
                                                         <tr>
                                                             <td>{{ $loop->iteration }}</td>
                                                             <td>{{ $data->first()->route->route_name }}</td>
-                                                            <td>{{ $data->first()->route->vehicle->plate_number }}</td>
+                                                            <td>{{ $data->first()->route->driver_name }}</td>
+                                                            <td>{{ $data->first()->route->route_name }}</td>
+                                                            <td>{{ $data->first()->route->driver_phone}}</td>
                                                             <td>
                                                                 <button type="button" class="btn btn-info rounded-pill" 
-                                                                    data-bs-toggle="modal" data-bs-target="#viewEmployeeModal-{{ $loop->index }}" 
+                                                                    data-bs-toggle="modal" data-bs-target="#viewEmployeeModal-1" 
                                                                     data-id="{{ $data->first()->id }}" 
                                                                     data-name="{{ $data->first()->user->username }}" 
                                                                     data-department="{{ $data->first()->user->department->name ?? 'N/A' }}">
@@ -103,7 +108,6 @@
                                                                 </button>
                                                             </td>
                                                         </tr>
-                                                        @endforeach
                                                     </tbody>
                                                 </table>
                                             </div>
@@ -112,8 +116,7 @@
                                 </div>
                                 
                                 <!-- Modals -->
-                                @foreach ($routeUser as $route_id => $data)
-                                <div class="modal fade" id="viewEmployeeModal-{{ $loop->index }}" tabindex="-1" role="dialog" aria-labelledby="viewEmployeeModalLabel" aria-hidden="true">
+                                <div class="modal fade" id="viewEmployeeModal-1" tabindex="-1" role="dialog" aria-labelledby="viewEmployeeModalLabel" aria-hidden="true">
                                     <div class="modal-dialog modal-lg">
                                         <div class="modal-content">
                                             <div class="modal-header">
@@ -126,26 +129,17 @@
                                                         <tr>
                                                             <th>#</th>
                                                             <th>Employee</th>
-                                                            <th>Department</th>
-                                                            <th>Action</th> 
+                                                            <th>Location</th>
+                                                            <th>Phone</th> 
                                                         </tr>
                                                     </thead>
                                                     <tbody>
                                                         @foreach ($data as $dat)
                                                         <tr>
                                                             <td>{{ $loop->iteration }}</td> <!-- Loop iteration for numbering -->
-                                                            <td>{{ optional($dat->user)->username ?? 'N/A' }}</td> <!-- Ensure user exists -->
+                                                            <td>{{ $dat->employee_start_location}}</td> <!-- Ensure user exists -->
                                                             <td>{{ optional($dat->user->department)->name ?? 'N/A' }}</td> <!-- Ensure department exists -->
-                                                            <td>
-                                                                <!-- Remove button/icon -->
-                                                                <form action="{{ route('routeUser.destroy', $dat->employee_id) }}" method="POST" onsubmit="return confirm('Are you sure you want to remove this employee?');">
-                                                                    @csrf
-                                                                    @method('DELETE')
-                                                                    <button type="submit" class="btn btn-danger btn-sm">
-                                                                        <i class="ri-delete-bin-line"></i>
-                                                                    </button>
-                                                                </form>
-                                                            </td>
+                                                            <td>{{ optional($dat->user->department)->name ?? 'N/A' }}</td>
                                                         </tr>
                                                         @endforeach
                                                     </tbody>
@@ -155,11 +149,66 @@
                                     </div>
                                 </div>
                                 @endforeach
+                            </div>
+                        </div>
+                    </section>
+                    
+                    <!-- Confirmation Modal -->
+                    <div class="modal fade" id="confirm-delete" tabindex="-1" role="dialog" aria-labelledby="confirmDeleteLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="confirmDeleteLabel">Delete Confirmation</h5>
+                                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <p class="text-center">Are you sure to delete ?</p>
+                                    <div class="d-flex justify-content-between">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                        <a id="delete_link" class="btn btn-danger">Delete</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>                                                   
+                   <style>
+                    @media only screen and (max-width: 768px) {
+                        .col-md-4 {
+                            width: 100%;
+                        }
+                        .col-md-8 {
+                            width: 100%;
+                        }
+
+                        .card {
+                            margin-bottom: 20px;
+                        }
+
+                        .table-responsive {
+                            overflow-x: auto;
+                        }
+
+                        .modal-dialog {
+                            max-width: 90%;
+                        }
+                    }
+
+                    @media only screen and (max-width: 480px) {
+                        .card {
+                            padding: 10px;
+                        }
+
+                        .modal-dialog {
+                            max-width: 100%;
+                        }
+                    }
+                   </style>
                 </div>
             </div>
         </div>
     </div>
-
     <script>
     document.addEventListener("DOMContentLoaded", function () {
     // View Route Modal
