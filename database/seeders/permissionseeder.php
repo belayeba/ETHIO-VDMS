@@ -107,8 +107,20 @@ class permissionseeder extends Seeder {
                 'permission_group' => 'Route Management',
                 'permissions' => [
                     'Route Registration',
-                    'Assign Employee to ROute',
+                    'Assign Employee to Route',
                     'Change Route For Employee',
+                    'Employee Change Route'
+                ]
+            ],
+            [
+                'permission_group' => 'Letter Management',
+                'permissions' => [
+                    'Letter Related',
+                    'Attach Letter',
+                    'Letter Review',
+                    'Letter Approve',
+                    'Purchase Letter',
+                    'Finance Letter'
                 ]
             ],
             [

@@ -140,10 +140,7 @@
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                        
-                                                    </tbody>
-                                                </table>
-                                                <!-- Accept Alert Modal -->
+                                                        <!-- Accept Alert Modal -->
                                                 <div id="warning_alert" class="modal fade" id="confirmationModal" tabindex="-1" role="dialog"
                                                 aria-labelledby="confirmationModalLabel"aria-hidden="true">
                                                 <div class="modal-dialog modal-sm">

@@ -380,6 +380,7 @@ class CreateAllTablesWithUuid extends Migration
                 $table->uuid('vehicle_id');
                 $table->foreign('vehicle_id')->references('vehicle_id')->on('vehicles')->onDelete('restrict');
                 $table->integer('driver_phone');
+                $table->string('driver_name');
                 $table->uuid('registered_by');
                 $table->foreign('registered_by')->references('id')->on('users')->onDelete('restrict');
                 $table->timestamps();
@@ -400,7 +401,20 @@ class CreateAllTablesWithUuid extends Migration
                 $table->timestamps();
                 $table->softDeletes();
             });
-
+       // Route
+       Schema::create('employeChangesLocation', function (Blueprint $table) 
+            {
+                $table->uuid('employee_change_id')->primary();
+                $table->uuid('route_id')->default();
+                $table->foreign('route_id')->references('route_id')->on('routes')->onDelete('restrict');
+                $table->uuid('changed_by')->nullable();
+                $table->foreign('changed_by')->references('id')->on('users')->onDelete('restrict');
+                $table->string('location_name');
+                $table->uuid('registered_by');
+                $table->foreign('registered_by')->references('id')->on('users')->onDelete('restrict');
+                $table->timestamps();
+                $table->softDeletes();
+            });
         Schema::create('attendances', function (Blueprint $table) {
             $table->uuid('attendance_id');
             $table->uuid('vehicle_id');
@@ -417,9 +431,10 @@ class CreateAllTablesWithUuid extends Migration
         });
         Schema::create('route_user', function (Blueprint $table) {
             $table->uuid('route_user_id')->primary();
+            $table->string('employee_start_location')->default("Unkown");
             $table->uuid('employee_id');
             $table->foreign('employee_id')->references('id')->on('users')->onDelete('restrict');
-            $table->uuid('route_id');
+            $table->uuid('route_id')->nullable();
             $table->foreign('route_id')->references('route_id')->on('routes')->onDelete('restrict');
             $table->uuid('registered_by');
             $table->foreign('registered_by')->references('id')->on('users')->onDelete('restrict');

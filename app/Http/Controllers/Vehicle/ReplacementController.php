@@ -55,7 +55,8 @@ class ReplacementController extends Controller
                                    );
                }
         $latest_inspection = InspectionModel::where('vehicle_id', $request->input('new_vehicle_id'))->latest()->first();
-        if (!$latest_inspection) {
+        if (!$latest_inspection) 
+        {
             return redirect()->back()->with('error_message',
             'Fill inspection first',
             );

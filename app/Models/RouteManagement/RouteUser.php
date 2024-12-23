@@ -19,6 +19,7 @@ class RouteUser extends Model
 
     protected $fillable = [
         'employee_id',
+        'employee_start_location',
         'route_id',
         'registered_by',
     ];

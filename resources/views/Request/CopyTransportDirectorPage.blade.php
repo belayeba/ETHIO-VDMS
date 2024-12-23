@@ -23,7 +23,6 @@
                     <div class="card">
                         <div class="card-body">
                             <div class="table-responsive" id="table1">
-                                <h4 class="header-title mb-4">NEW Transport Director REQUEST</h4>
                                 <div class="toggle-tables">
                                     <button type="button" class="btn btn-secondary rounded-pill" autofocus
                                         onclick="toggleDiv('table1')">PENDING REQUEST</button>

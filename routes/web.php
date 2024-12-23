@@ -31,6 +31,7 @@ use App\Http\Controllers\Vehicle\AttendanceController;
 use App\Http\Controllers\Vehicle\ReplacementController;
 use App\Http\Controllers\Letter\LetterController;
 use App\Http\Controllers\Letter\LetterManagement;
+use App\Http\Controllers\Route\EmployeeChangeLocationController;
 use Illuminate\Foundation\Http\Middleware\ValidateCsrfToken;
 
 Route::get('/', function () 
@@ -344,28 +345,30 @@ Route::group(['middleware' => ['auth']], function()
         });
                 Route::group([
                     'prefix'=>'Route',
-                ], function (){
-                Route::get('/',[RouteController::class, 'displayAllRoutes'])->name('route.index');
-                Route::get('/user',[RouteController::class, 'displayRoute'])->name('route.show');
-                Route::post('/store',[RouteController::class, 'registerRoute'])->name('route.store');
-                Route::post('/employee/store',[RouteController::class, 'assignUsersToRoute'])->name('employeeService.store');
-                Route::put('/update/{request_id}', [RouteController::class, 'updateRoute'])->name('route.update');
-                Route::delete('/delete/{request_id}', [RouteController::class, 'removeRoute'])->name('route.destroy');
-                Route::delete('/user/delete/{request_id}', [RouteController::class, 'removeUserFromRoute'])->name('routeUser.destroy');
+                ], function ()
+                {
+                    Route::get('/',[RouteController::class, 'displayAllRoutes'])->name('route.index');
+                    Route::get('/self_route',[RouteController::class, 'own_route'])->name('route.self_route_self');
+                    Route::get('/user',[RouteController::class, 'displayRoute'])->name('route.show');
+                    Route::post('/store',[RouteController::class, 'registerRoute'])->name('route.store');
+                    Route::post('/employee/store',[RouteController::class, 'assignUsersToRoute'])->name('employeeService.store');
+                    Route::put('/update/{request_id}', [RouteController::class, 'updateRoute'])->name('route.update');
+                    Route::delete('/delete/{request_id}', [RouteController::class, 'removeRoute'])->name('route.destroy');
+                    Route::delete('/user/delete/{request_id}', [RouteController::class, 'removeUserFromRoute'])->name('routeUser.destroy');
                 });
                 // Define routes for InspectionController
             Route::controller(InspectionController::class)->group(function ()
-                 {
-                    Route::post('/inspection/store', 'storeInspection')->name('inspection.store'); // Create a new inspection
-                    Route::post('/inspection/show', 'showInspection')->name('inspection.show.specific'); // Show a specific inspection
-                    // Route::get('/inspect_vehicle/{id}', 'showInspectionbyVehicle')->name('inspection.ByVehicle'); 
-                    Route::get('/inspection', 'showInspectionbyVehicle')->name('inspection.ByVehicle'); // Show a specific inspection
-                    Route::get('/inspections', 'listInspections')->name('inspection.list'); // List all inspections
-                    Route::get('/inspections/page', 'InspectionPage')->name('inspection.page'); // inspection page
-                    // Route::get('/inspect_vehicle/{id}', 'showInspectionbyVehicle');//->name('inspection.ByVehicle'); // inspection page
-                    Route::put('/inspection/{inspectionId}/{partName}', 'updateInspection')->name('inspection.update'); // Update a specific inspection
-                    Route::delete('/inspection/{inspectionId}', 'deleteInspection')->name('inspection.delete'); // Delete a specific inspection
-                 });
+                {
+                Route::post('/inspection/store', 'storeInspection')->name('inspection.store'); // Create a new inspection
+                Route::post('/inspection/show', 'showInspection')->name('inspection.show.specific'); // Show a specific inspection
+                // Route::get('/inspect_vehicle/{id}', 'showInspectionbyVehicle')->name('inspection.ByVehicle'); 
+                Route::get('/inspection', 'showInspectionbyVehicle')->name('inspection.ByVehicle'); // Show a specific inspection
+                Route::get('/inspections', 'listInspections')->name('inspection.list'); // List all inspections
+                Route::get('/inspections/page', 'InspectionPage')->name('inspection.page'); // inspection page
+                // Route::get('/inspect_vehicle/{id}', 'showInspectionbyVehicle');//->name('inspection.ByVehicle'); // inspection page
+                Route::put('/inspection/{inspectionId}/{partName}', 'updateInspection')->name('inspection.update'); // Update a specific inspection
+                Route::delete('/inspection/{inspectionId}', 'deleteInspection')->name('inspection.delete'); // Delete a specific inspection
+                });
             Route::controller(NotificationController::class)->group(function () 
                 {
                     Route::post('/delete_notification', 'delete_notification')->name('delete_all_notification');
@@ -374,6 +377,11 @@ Route::group(['middleware' => ['auth']], function()
                     Route::get('/clear_all_notifications', 'clear_all_notifications');
                     Route::get('/get_new_message_count', 'get_new_message_count');
                     Route::post('/change_status', 'redirect_to_inteded');
+                });
+            Route::controller(EmployeeChangeLocationController::class)->group(function () 
+                {
+                    Route::get('/approve_page', 'simiritPage')->name('change.location_change_approve');
+                    Route::post('/change_location', 'store')->name('location_change_request');
                 });
               // Vehicle attendance controller
             Route::controller(AttendanceController::class)->group(function () 
@@ -403,10 +411,9 @@ Route::group(['middleware' => ['auth']], function()
                     Route::post('/letter/accept/{id}', 'accept')->name('letter.accept');
                     Route::delete('/letter/delete', 'destroy')->name('attendance.destroy');
                 });
-
                 // Replacement
 
-                Route::controller(ReplacementController::class)->group(function () 
+            Route::controller(ReplacementController::class)->group(function () 
                 {
                     Route::get('/Replacement', 'index')->name('Replacement.index');
                     Route::get('/Replacement/fetch', 'FetchReplacement')->name('Replacement.fetch');
@@ -415,8 +422,6 @@ Route::group(['middleware' => ['auth']], function()
                     Route::delete('/Replacement/delete/{id}', 'destroy')->name('Replacement.delete');
                    
                 });
-
-
                  // SAMIR
             // Route::group([
             //         'prefix'=>'vehicle',

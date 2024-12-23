@@ -20,6 +20,7 @@ class Route extends Model
     protected $fillable = [
         'route_name',
         'driver_phone',
+        'driver_name',
         'vehicle_id',
         'registered_by',
     ];
