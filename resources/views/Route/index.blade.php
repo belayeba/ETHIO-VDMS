@@ -83,11 +83,16 @@
                                                 </div>
                                                 <div class="position-relative mb-3">
                                                     <div class="mb-6 position-relative">
+                                                        <label class="form-label">Driver Name</label>
+                                                        <input type="text" name="driver_name" id="driver_name" class="form-control" placeholder="Enter Driver Phone Number" required>
+                                                    </div>
+                                                </div>
+                                                <div class="position-relative mb-3">
+                                                    <div class="mb-6 position-relative">
                                                         <label class="form-label">Driver Phone Number</label>
                                                         <input type="text" name="driver_phone" id="driver_phone" class="form-control" placeholder="Enter Driver Phone Number" required>
                                                     </div>
                                                 </div>
-                                                
                                                 <div class="d-flex justify-content-center">
                                                     <button type="submit" class="btn btn-primary">Save</button>
                                                 </div>

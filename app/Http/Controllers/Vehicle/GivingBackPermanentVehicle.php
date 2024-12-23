@@ -39,8 +39,8 @@ public function ReturntVehiclePerm(Request $request)
                    // Validate the request
             $validator = Validator::make($request->all(), [
                 'purpose' => 'required|string|max:1000',
+                'return_type' => 'required|String|In:Replacement,ForGood',
                 'request_id' => 'required|exists:vehicle_requests_parmanently,vehicle_request_permanent_id'
-                
             ]);            
                   // If validation fails, return an error response
             if ($validator->fails()) 
@@ -49,7 +49,6 @@ public function ReturntVehiclePerm(Request $request)
                     'All field is required',
                     );
                 }
-                // dd($request);
             $logged_user = Auth::id();
             $request_id= $request->input('request_id');
             $get_permanent_request = VehiclePermanentlyRequestModel::find($request_id);
@@ -69,6 +68,7 @@ public function ReturntVehiclePerm(Request $request)
                         'vehicle_id'=>$get_permanent_request->vehicle_id,
                         'purpose' =>$request->purpose,
                         'requested_by' => $logged_user,
+                        'return_type' => $request->return_type,
                         'permanent_request' =>$get_permanent_request->vehicle_request_permanent_id,
                         'created_at' => $ethiopianDate
                     ]);
@@ -81,7 +81,7 @@ public function ReturntVehiclePerm(Request $request)
                 {
                     // Handle the case when the vehicle request is not found
                     return redirect()->back()->with('error_message',
-                    'Sorry, Something Went Wrong.',
+                    'Sorry, Something Went Wrong.'.$e,
                     );
                 }
     }

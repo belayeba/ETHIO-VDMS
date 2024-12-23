@@ -38,7 +38,6 @@
                         </div> --}}
                     </div>
                 </section>
-
                 <section class="admin-visitor-area up_st_admin_visitor">
                     <div class="container-fluid p-0">
                         <div class="row justify-content-center">

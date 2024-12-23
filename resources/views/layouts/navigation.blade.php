@@ -390,12 +390,22 @@
                             </a>
                             <div class="collapse" id="routeManagement">
                                 <ul class="side-nav-second-level">
+                                    @can('Employee Change Route')
+                                       <li>
+                                            <a href="{{ route('route.self_route_self') }}">My Route</a>
+                                        </li>
+                                        @endcan()
+                                    @can('Change Route For Employee')
+                                        <li>
+                                            <a href="{{ route('change.location_change_approve') }}">Approve Location Change</a>
+                                        </li>
+                                        @endcan()
                                     @can('Route Registration')
                                         <li>
                                             <a href="{{ route('route.index') }}">Registration</a>
                                         </li>
                                     @endcan()
-                                    @can('Assign Employee to ROute')
+                                    @can('Assign Employee to Route')
                                         <li>
                                             <a href="{{ route('route.show') }}">Employee Service</a>
                                         </li>
@@ -404,6 +414,7 @@
                             </div>
                         </li>
                     @endcan()
+                    @can('Letter Related')
                     <li class="side-nav-item">
                         <a data-bs-toggle="collapse" href="#letterManagement" aria-expanded="false"
                             aria-controls="letterManagement" class="side-nav-link">
@@ -413,27 +424,31 @@
                         </a>
                         <div class="collapse" id="letterManagement">
                             <ul class="side-nav-second-level">
-                                
+                                @can('Attach Letter')
                                     <li>
                                         <a href="{{ route('letter.index') }}">Letter Request</a>
                                     </li>
-                              
+                                @endcan()
+                                @can('Letter Review')
                                     <li>
                                         <a href="{{ route('letter.review.page') }}">Letter Review</a>
                                     </li>
-
+                                @endcan()
+                                @can('Letter Approve')
                                     <li>
                                         <a href="{{ route('letter.approve.page') }}">Letter Approve</a>
                                     </li>
-
+                                @endcan()
+                                @can('Purchase Letter')
                                     <li>
                                         <a href="{{ route('purchase.accept.page') }}">Purchase Accept</a>
                                     </li>
-
+                                @endcan()
+                                @can('Finance Letter')
                                     <li>
                                         <a href="{{ route('finance.accept.page') }}">Finanace Accept</a>
                                     </li>
-                             
+                                @endcan()
                             </ul>
                         </div>
                     </li>

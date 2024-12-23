@@ -28,24 +28,23 @@
                                     
 
             <div class="col-lg-12 mb-3">
-                <form action="{{ route('attendancereport.filter') }}" method="Post">
-                    @csrf
+                <form action="{{ route('attendancereport.filter') }}" method="Get">
+                 
                  <div class="row">
                     <div class="col-12">
                         <div class="card">
                             <div class="card-header">
                                 <div class="row">
-                                    <form action="{{ route('dailyreport.filterReport') }}" method="GET">
+                                    {{-- <form action="{{ route('dailyreport.filterReport') }}" method="GET"> --}}
                                     <!-- Plate Number Filter -->
                                     <div class="col-lg-4">
                                         <label for="selectPlateNumber" class="form-label">Vehicle Type</label>
                                         <select id="selectPlateNumber" name="vehicle_type" class="form-select">
                                             <option value="">Select Type</option>
-                                            <option value="1">45/60 vehicle</option>
-                                            <option value="2">Minibus vehicle</option>
-                                            <option value="3">Temporary Service Vehicle</option>
-                                            <option value="4">Permanent Service Vehicle</option>
-                                           
+                                            <option value="40/60">45/60 vehicle</option>
+                                            <option value="whole_day">Whole day Minibus</option>
+                                            <option value="position">Position Vehicle</option>
+                                            <option value="morning_afternoon_minibus">Morning Afternoon Minibus</option>
                                         </select>
                                     </div>
                                 
@@ -89,26 +88,32 @@
                                 <table id="basic-datatable" class="table table-striped dt-responsive nowrap w-100">
                                     <thead>
                                         <tr>
+                                            <th>#</th>
                                             <th>Plate Number</th>
+                                            <th>Type</th>
+                                            <th>Date From - To</th>
                                             <th>Route</th>
                                             <th>Total Days</th>
-                                            <th>Type</th>
                                         </tr>
                                     </thead>
 
 
                                     <tbody>
-                                        {{-- @foreach($dailkms as $km)
+                                        @foreach($vehicles as $vehicle)
                                             <tr>
-                                                <td>{{ $km->date }}</td>
-                                                <td>{{ $km->plate_number  }}</td>
-                                                <td>{{ $km->morning_km }}</td>
-                                                <td>{{ $km->afternoon_km }}</td>
-                                                <td>{{ $km->night_km  }}</td>
-                                                <td>{{ $km->daily_km  }}</td>
-
+                                                <td>{{ $loop->iteration }}</td>
+                                                <td>{{ $vehicle->plate_number  }}</td>
+                                                <td>{{ $vehicle->rental_type  }}</td>
+                                                <td>{{$vehicle->interval ?? 'N/A'}}</td>
+                                                <td>
+                                                    @php
+                                                        $route = $routes->where('vehicle_id', $vehicle->vehicle_id)->first();
+                                                        echo $route ? $route->route_name : 'N/A';
+                                                    @endphp
+                                                </td>
+                                                <td>{{$vehicle->total ?? 'N/A' }}</td>
                                             </tr>
-                                        @endforeach --}}
+                                        @endforeach
                                     </tbody>
                                 </table>
 

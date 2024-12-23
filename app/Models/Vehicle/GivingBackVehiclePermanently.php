@@ -22,6 +22,7 @@ class GivingBackVehiclePermanently extends Model {
     protected $fillable = [
         'vehicle_id',
         'purpose',
+        'return_type',
         'approved_by',
         'reject_reason_vec_director',
         'requested_by',
@@ -50,7 +51,7 @@ class GivingBackVehiclePermanently extends Model {
     }
 
     public function vehicle(): BelongsTo {
-        return $this->belongsTo( VehicleVehiclesModel::class, 'vehicle_id' );
+        return $this->belongsTo( VehicleVehiclesModel::class, 'vehicle_id','vehicle_id' );
     }
 
     public function permanentRequest(): BelongsTo {
