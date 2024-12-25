@@ -31,8 +31,8 @@
                                                     ALL
                                                 </button>
                                                 <div class="dropdown-menu dropdown-menu-animated">
-                                                    <a class="dropdown-item" onclick="updateState(2, 'PENDING')">For Good</a>
-                                                    <a class="dropdown-item" onclick="updateState(3, 'ASSIGNED')">REPLACEMENT</a>
+                                                    <a class="dropdown-item" onclick="updateState(2, 'For Good')">For Good</a>
+                                                    <a class="dropdown-item" onclick="updateState(3, 'Replacement')">REPLACEMENT</a>
                                                 </div>
                                             </div>
                                             <!-- Add more buttons for additional tables if needed -->
