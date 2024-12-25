@@ -452,6 +452,7 @@
                             </ul>
                         </div>
                     </li>
+                    @endcan()
             </div>
         </div>
         </br></br>

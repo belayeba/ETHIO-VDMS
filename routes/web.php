@@ -173,6 +173,7 @@ Route::group(['middleware' => ['auth']], function()
                     Route::put('/update-return-request', 'update_return_request')->name('update_return_request');
                     Route::delete('/delete-request', 'deleteRequest')->name('delete_request');
                     Route::get('/director-approval-page', 'VehicleDirector_page')->name('director_approval_page');
+                    Route::get('/director-fetch-return', 'FetchReturnDirector')->name('FetchReturnDirector');
                     Route::post('/director-approve-request', 'VehicleDirectorApproveRequest')->name('director_approve_givingback_request');
                     Route::post('/director-reject-request', 'Vec_DirectorRejectRequest')->name('director_reject_requesting');
                     Route::get('/vehicle-director-page', 'Dispatcher_page')->name('vehicle_director_page');

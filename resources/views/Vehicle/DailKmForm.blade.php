@@ -274,88 +274,92 @@
 
 
         <script>
-                var displayDifferenceModal = document.getElementById('DisplayDifference');
-                    displayDifferenceModal.addEventListener('show.bs.modal', function (event) {
-                    var button = event.relatedTarget;
-                    var morningDifference = button.getAttribute('data-morning_difference');
-                    var dayDifference = button.getAttribute('data-day_difference');
+        document.addEventListener('DOMContentLoaded', function () {
+    const selectTime = document.getElementById('time');
+    const morning = document.getElementById('morning');
+    const evening = document.getElementById('evening');
+    const vehicleIdHidden = document.getElementById('vehicle_id_hidden');
+    const vehicleIdHiddenAfternoon = document.getElementById('vehicle_id_hidden_afternoon');
 
-                    // Update the modal's input fields
-                    document.getElementById('morningDifferenceInput').value = morningDifference;
-                    document.getElementById('dayDifferenceInput').value = dayDifference;
-                });
-            document.addEventListener('DOMContentLoaded', function() {
-                const selectTime = document.getElementById('time');
-                const morning = document.getElementById('morning');
-                const evening = document.getElementById('evening');
-                const morningInput = document.querySelector('input[name="morning_km"]');
-                const eveningInput = document.querySelector('input[name="evening_km"]');
+    // Helper function to toggle visibility and disable inputs
+    function toggleVisibility(sectionToShow, sectionToHide) {
+        sectionToShow.style.display = 'block';
+        sectionToHide.style.display = 'none';
 
-                selectTime.addEventListener('change', function() {
-                    if (selectTime.value === 'morning') {
-                        morning.style.display = 'block';
-                        evening.style.display = 'none';
-                    } else if (selectTime.value === 'evening') {
-                        morning.style.display = 'none';
-                        evening.style.display = 'block';
-                    } else {
-                        morningInput.style.display = 'none';
-                        eveningInput.style.display = 'none';
-                    }
-                });
-            });
+        Array.from(sectionToShow.querySelectorAll('input, select')).forEach(input => input.disabled = false);
+        Array.from(sectionToHide.querySelectorAll('input, select')).forEach(input => input.disabled = true);
+    }
 
-            document.getElementById('department_id').addEventListener('change', function() {
-                let selectedId = this.value; // Retrieve the selected ID
-                const morningInput = document.querySelector('input[name="morning_km"]');
-                const eveningInput = document.querySelector('input[name="evening_km"]');
+    // Handle time selection
+    selectTime.addEventListener('change', function () {
+        if (selectTime.value === 'morning') {
+            toggleVisibility(morning, evening);
+        } else if (selectTime.value === 'evening') {
+            toggleVisibility(evening, morning);
+        }
+    });
 
-                document.getElementById('vehicle_id_hidden').value = selectedId;
-                document.getElementById('vehicle_id_hidden_afternoon').value = selectedId;
-                // Craft and send the Ajax request
-                $.ajax({
-                    url: '{{ route("daily_km.page.check") }}',
-                    method: 'GET',
-                    data: {
-                        id: selectedId
-                    },
-                    success: function(response) {
-                        // Process the retrieved data from the backend
-                        console.log(response);
-                        if (response.success && response.message.includes('Morning km is filled')) {
-                            document.querySelector('select[name="Time"] option[value="morning"]').hidden =
-                                true;
+    // Handle department change
+    const departmentSelect = document.getElementById('department_id');
+    if (departmentSelect) {
+        departmentSelect.addEventListener('change', function () {
+            const selectedId = this.value;
+
+            vehicleIdHidden.value = selectedId;
+            vehicleIdHiddenAfternoon.value = selectedId;
+
+            // AJAX request
+            $.ajax({
+                url: @json(route('daily_km.page.check')),
+                method: 'GET',
+                data: { id: selectedId },
+                headers: {
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                },
+                success: function (response) {
+                    console.log(response);
+
+                    if (response.success) {
+                        if (response.message?.includes('Morning km is filled')) {
+                            document.querySelector('select[name="Time"] option[value="morning"]').hidden = true;
                             morning.style.display = 'none';
+                        } else {
+                            document.querySelector('select[name="Time"] option[value="morning"]').hidden = false;
                         }
 
-                        if (response.success && response.message.includes('Afternoon km is filled')) {
-                            document.querySelector('select[name="Time"] option[value="evening"]').hidden =
-                                true;
+                        if (response.message?.includes('Afternoon km is filled')) {
+                            document.querySelector('select[name="Time"] option[value="evening"]').hidden = true;
                             evening.style.display = 'none';
+                        } else {
+                            document.querySelector('select[name="Time"] option[value="evening"]').hidden = false;
                         }
-                        if (!response.message.includes('Morning km is filled') && !response.message
-                            .includes('Afternoon km is filled')) {
-                            document.querySelector('select[name="Time"] option[value="morning"]').hidden =
-                                false;
-                            document.querySelector('select[name="Time"] option[value="evening"]').hidden =
-                                false;
-                        }
-                    },
-                    error: function(err) {
-                        console.error('An error occurred:', err);
                     }
-                });
+                },
+                error: function (err) {
+                    console.error('An error occurred:', err);
+                }
             });
+        });
+    }
+
+    // Modal handling
+    const displayDifferenceModal = document.getElementById('displayDifferenceModal');
+    if (displayDifferenceModal) {
+        displayDifferenceModal.addEventListener('show.bs.modal', function (event) {
+            const button = event.relatedTarget;
+            if (!button) return;
+
+            const morningDifference = button.getAttribute('data-morning_difference') || '';
+            const dayDifference = button.getAttribute('data-day_difference') || '';
+
+            document.getElementById('morningDifferenceInput').value = morningDifference;
+            document.getElementById('dayDifferenceInput').value = dayDifference;
+        });
+    }
+});
+
         </script>
-        <!-- Dropzone File Upload js -->
-        <script src="{{ asset('assets/vendor/dropzone/min/dropzone.min.js') }}"></script>
-
-       
-
-        <script src="{{ asset('assets/js/pages/fileupload.init.js') }}"></script>
-     
-    <script src="{{ asset('assets/js/app.min.js') }}"></script>
-    @endsection
-    
-    <script src="{{ asset('assets/js/vendor.min.js') }}"></script>
-    
+        
+       <script src="{{ asset('assets/js/app.min.js') }}"></script>
+       @endsection
+       <script src="{{ asset('assets/js/vendor.min.js') }}"></script>

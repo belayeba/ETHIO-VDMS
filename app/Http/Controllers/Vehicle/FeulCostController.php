@@ -14,12 +14,16 @@ use App\Models\Vehicle\FeulCosts;
 
 class FeulCostController extends Controller
 {
-    protected $dailyKmCalculation;
+    public function ConvertToEthiopianDate($today)
+    {
+        $ethiopianDate = new DateTime($today);
 
-    public function __construct(Daily_KM_Calculation $dailyKmCalculation)
-        {
-            $this->dailyKmCalculation = $dailyKmCalculation;
-        }
+        // Format the Ethiopian date
+        $formattedDate = $ethiopianDate->format('Y-m-d H:i:s');        
+        // Display the Ethiopian date
+        return $formattedDate;
+    }
+
     // List all fuel quotas
     public function index()
         {
@@ -49,7 +53,7 @@ class FeulCostController extends Controller
             }
             $logged_user = Auth::id();
             $today = \Carbon\Carbon::now();
-            $ethiopianDate = $this->dailyKmCalculation->ConvertToEthiopianDate($today); 
+            $ethiopianDate = $this->ConvertToEthiopianDate($today); 
             FeulCosts::create([
                 'new_cost' => $request->Fuel_cost,        
                 'changed_by' => $logged_user,  

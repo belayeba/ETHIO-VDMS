@@ -15,12 +15,16 @@ use App\Http\Controllers\Vehicle\Daily_KM_Calculation;
 
 class InspectionController extends Controller
 {
-    protected $dailyKmCalculation;
+    public function ConvertToEthiopianDate($today)
+    {
+        $ethiopianDate = new DateTime($today);
 
-    public function __construct(Daily_KM_Calculation $dailyKmCalculation)
-        {
-            $this->dailyKmCalculation = $dailyKmCalculation;
-        }
+        // Format the Ethiopian date
+        $formattedDate = $ethiopianDate->format('Y-m-d H:i:s');        
+        // Display the Ethiopian date
+        return $formattedDate;
+    }
+
     public function InspectionPage()
         {
             $vehicle = VehiclesModel::all();
@@ -77,7 +81,7 @@ class InspectionController extends Controller
                 {
                     DB::transaction(function () use ($inspectionId, $vehicleId, $inspectedBy, $inspectionDate, $parts, $damagedParts, $damageDescriptions,$fileinspection) {
                         $today = \Carbon\Carbon::now();
-                        $ethiopianDate = $this->dailyKmCalculation->ConvertToEthiopianDate($today); 
+                        $ethiopianDate = $this->ConvertToEthiopianDate($today); 
                         foreach ($parts as $partId => $partName) {
                             InspectionModel::create([
                                 'inspection_id' => $inspectionId,
