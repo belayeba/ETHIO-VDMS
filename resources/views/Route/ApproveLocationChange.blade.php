@@ -52,27 +52,27 @@
                                                         </td>
                                                     </tr>
                                                 </tbody>
-                                                <form id="approvalForm-{{ $loop->index }}" method="POST" action="{{ route('vehicle_director_approve_request') }}" style="display: none;">
+                                                <form id="approvalForm-{{ $loop->index }}" method="POST" action="{{ route('approve_employee_location') }}" style="display: none;">
                                                     @csrf
-                                                    <input type="hidden" name="request_id" value="{{ $request->giving_back_vehicle_id }}">
+                                                    <input type="hidden" name="request_id" value="{{ $request->employee_change_id }}">
                                                 </form>
                                                 
                                                 <!-- this is for the Reject  modal -->
                                                 <div class="modal fade" id="staticaccept-{{ $loop->index }}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                                                     <div class="modal-dialog modal-lg modal-dialog-scrollable">
                                                         <div class="modal-content">
-                                                            <form method="POST" action="{{route('perm_vec_simirit_approve')}}">
+                                                            <form method="POST" action="{{route('approve_employee_location')}}">
                                                                 @csrf   
                                                                 <div class="modal-header">
                                                                         <div class="col-lg-6">
                                                                             <h5 class="mb-0">Select Vehicle</h5>
-                                                                                <select name="vehicle_id" class="form-select" id="vehicleselection"  required>
+                                                                                <select name="new_route" class="form-select" id="vehicleselection"  required>
                                                                                     <option value="" selected>Select</option>
-                                                                                    @foreach ($Vehicle as $item)
-                                                                                        <option value="{{$item->vehicle_id}}">{{$item->plate_number}}</option>
+                                                                                    @foreach ($Route as $item)
+                                                                                        <option value="{{$item->route_id}}">{{$item->route_name}}</option>
                                                                                     @endforeach
                                                                                 </select>
-                                                                            <input type="hidden" name="request_id" value="{{$request->vehicle_request_permanent_id}}">
+                                                                            <input type="hidden" name="request_id" value="{{$request->employee_change_id}}">
                                                                         </div>                                                               
                                                                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                                 </div> <!-- end modal header -->
@@ -81,7 +81,6 @@
                                                                     </div>
                                                                 </div>
                                                                 <div class="modal-footer">
-                                                                    <button type="button" class="btn btn-secondary"  id="assignBtn">Get Inspection</button>
                                                                     <button type="submit" class="btn btn-primary">Assign</button>
                                                                 </div> <!-- end modal footer -->
                                                             </form>                                                                    
@@ -105,6 +104,7 @@
                                                     <th>#</th>
                                                     <th>Requested By</th>
                                                     <th>Location</th>
+                                                    <th>Changed_by</th>
                                                     <th>Requested At</th>
                                                 </tr>
                                             </thead>
@@ -114,6 +114,7 @@
                                                         <td>{{$loop->iteration}}</td>
                                                         <td>{{$request->registeredBy->first_name}}</td>
                                                         <td>{{$request->location_name}}</td>
+                                                        <td>{{$request->changedBy->first_name}}</td>
                                                         <td>{{$request->created_at}}</td>
                                                     </tr>
                                                 </tbody>

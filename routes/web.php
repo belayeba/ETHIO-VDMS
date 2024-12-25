@@ -334,14 +334,15 @@ Route::group(['middleware' => ['auth']], function()
         });
         Route::group([
             'prefix'=>'driver_change',
-        ], function (){
-        Route::get('/',[DriverChangeController::class, 'driver_change_page'])->name('driver.switch');
-        Route::get('/request',[DriverChangeController::class, 'driver_get_request'])->name('driverchange.request');
-        Route::get('/my_request',[DriverChangeController::class, 'driver_get_request'])->name('driver.requestPage');
-        Route::post('/store',[DriverChangeController::class, 'store'])->name('driver_change.store');
-        Route::post('/accept',[DriverChangeController::class, 'driver_accept'])->name('driver_change.accept');
-        Route::put('/update/{request_id}', [DriverChangeController::class, 'update'])->name('driverchange.update');
-        Route::delete('/delete/{request_id}', [DriverChangeController::class, 'destroy'])->name('driverchange.destroy');
+        ], function ()
+        {
+            Route::get('/',[DriverChangeController::class, 'driver_change_page'])->name('driver.switch');
+            Route::get('/request',[DriverChangeController::class, 'driver_get_request'])->name('driverchange.request');
+            Route::get('/my_request',[DriverChangeController::class, 'driver_get_request'])->name('driver.requestPage');
+            Route::post('/store',[DriverChangeController::class, 'store'])->name('driver_change.store');
+            Route::post('/accept',[DriverChangeController::class, 'driver_accept'])->name('driver_change.accept');
+            Route::put('/update/{request_id}', [DriverChangeController::class, 'update'])->name('driverchange.update');
+            Route::delete('/delete/{request_id}', [DriverChangeController::class, 'destroy'])->name('driverchange.destroy');
         });
                 Route::group([
                     'prefix'=>'Route',
@@ -382,6 +383,7 @@ Route::group(['middleware' => ['auth']], function()
                 {
                     Route::get('/approve_page', 'simiritPage')->name('change.location_change_approve');
                     Route::post('/change_location', 'store')->name('location_change_request');
+                    Route::post('/approve_change_location', 'approve_change')->name('approve_employee_location');
                 });
               // Vehicle attendance controller
             Route::controller(AttendanceController::class)->group(function () 
@@ -394,7 +396,6 @@ Route::group(['middleware' => ['auth']], function()
                     Route::get('/attendance/report','ReportPage')->name('attendancereport.index');
                     Route::get('/attendance/report/filter','filterReport')->name('attendancereport.filter');
                 });
-
                 // letter 
             Route::controller(LetterManagement::class)->group(function () 
                 {
@@ -462,7 +463,8 @@ Route::group(['middleware' => ['auth']], function()
     });
     Route::group([
         'prefix'=>'department',
-    ], function (){
+    ], function ()
+    {
         Route::get('/',[DepartmentController::class,'index'])->name('department.index');
         // Route::get('/create',[DepartmentController::class,'create'])->name('department.create');
         Route::post('/store',[DepartmentController::class,'store'])->name('department.store');

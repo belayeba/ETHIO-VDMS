@@ -50,4 +50,8 @@ class EmployeeChangeLocation extends Model
             {
                 return $this->belongsTo(User::class, 'registered_by', 'id');
             }
+        public function changedBy()
+            {
+                return $this->belongsTo(User::class, 'changed_by', 'id');
+            }
     }

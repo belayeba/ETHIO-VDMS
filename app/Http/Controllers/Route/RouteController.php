@@ -17,7 +17,7 @@ use Illuminate\Support\Facades\Auth;
 
 class RouteController extends Controller 
 {
-    //
+        //
     protected $dailyKmCalculation;
 
     public function __construct(Daily_KM_Calculation $dailyKmCalculation)
@@ -34,22 +34,20 @@ class RouteController extends Controller
         {
             $id = Auth::id();
             $get_route_user =  RouteUser::where('employee_id',$id)->first();
+            $route = [];
+            $routeUser = [];
+            $users = [];
+            $routes = Route::get();
             if($get_route_user)
-              {
-                 $route_id =  $get_route_user->route_id;
-                 $route = Route::findOrFail($route_id)->first();
-                 $assignedUserIds = RouteUser::where('route_id',$route_id)->pluck('employee_id'); // Get all user IDs already in RouteUser
-                 $users = User::whereIn('id', $assignedUserIds)->get(); // Exclude these users
-                 $routeUser = RouteUser::where('route_id',$route_id)->get();
-                 $routeUser = $routeUser->groupBy( 'route_id' );
-
-            // $routes = Route::get();
-            // $assignedUserIds = RouteUser::pluck('employee_id'); // Get all user IDs already in RouteUser
-            // $users = User::whereNotIn('id', $assignedUserIds)->get(); // Exclude these users
-            // $routeUser = RouteUser::all();
-            // $routeUser = $routeUser->groupBy( 'route_id' );
-                 return view( 'Route.employeechange', compact( 'route', 'users', 'routeUser' ));
-               }
+                {
+                    $route_id =  $get_route_user->route_id;
+                    $route = Route::findOrFail($route_id)->first();
+                    $assignedUserIds = RouteUser::where('route_id',$route_id)->pluck('employee_id'); // Get all user IDs already in RouteUser
+                    $users = User::whereIn('id', $assignedUserIds)->get(); // Exclude these users
+                    $routeUser = RouteUser::where('route_id',$route_id)->get();
+                    $routeUser = $routeUser->groupBy( 'route_id' );
+                }
+               return view( 'Route.employeechange', compact( 'route','routes', 'users', 'routeUser' ));
         }
     public function displayRoute() 
         {
@@ -136,7 +134,6 @@ class RouteController extends Controller
             }
             return redirect()->back()->with('success_message','Route  successfully Updated.',);
         }
-
     public function removeRoute( $route_id ) 
         {
                 // Find the route by ID or fail if it doesn't exist

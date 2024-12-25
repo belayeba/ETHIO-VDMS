@@ -405,7 +405,7 @@ class CreateAllTablesWithUuid extends Migration
        Schema::create('employeChangesLocation', function (Blueprint $table) 
             {
                 $table->uuid('employee_change_id')->primary();
-                $table->uuid('route_id')->default();
+                $table->uuid('route_id')->nullable();
                 $table->foreign('route_id')->references('route_id')->on('routes')->onDelete('restrict');
                 $table->uuid('changed_by')->nullable();
                 $table->foreign('changed_by')->references('id')->on('users')->onDelete('restrict');
