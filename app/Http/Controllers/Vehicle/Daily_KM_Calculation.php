@@ -22,6 +22,14 @@ use Andegna\DateTime;
 
 class Daily_KM_Calculation extends Controller
     {
+        public function ConvertToEthiopianDate($today)
+            {
+                $ethiopianDate = new DateTime($today);
+                // Format the Ethiopian date
+                $formattedDate = $ethiopianDate->format('Y-m-d H:i:s');
+                // Display the Ethiopian date
+                return $formattedDate;
+            }
         public function displayPage()
             {
                 $today = Carbon::today();
@@ -29,15 +37,6 @@ class Daily_KM_Calculation extends Controller
                 $vehicle = VehiclesModel::whereNot('rental_type','position')->whereNot('rental_type','morning_afternoon_minibus')->whereNot('rental_type','40/60')->whereNot('status',false)->get();
                 $TodaysDate = DailyKMCalculationModel::where('created_at',$ethio_date)->latest()->get();
                 return view('Vehicle.DailKmForm',compact('vehicle','TodaysDate'));
-            }
-        public function ConvertToEthiopianDate($today)
-            {
-                $ethiopianDate = new DateTime($today);
-        
-                // Format the Ethiopian date
-                $formattedDate = $ethiopianDate->format('Y-m-d');        
-                // Display the Ethiopian date
-                return $formattedDate;
             }
            
             public function ReportPage()

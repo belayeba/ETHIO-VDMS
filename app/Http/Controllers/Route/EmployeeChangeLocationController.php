@@ -4,8 +4,10 @@ namespace App\Http\Controllers\Route;
 
 use App\Http\Controllers\Controller;
 use App\Models\RouteManagement\EmployeeChangeLocation;
+use App\Models\RouteManagement\Route;
 use App\Models\RouteManagement\RouteUser;
 use App\Models\Vehicle\VehiclePart;
+use App\Models\Vehicle\VehiclesModel;
 use Carbon\Carbon;
 use DateTime;
 use Illuminate\Http\Request;
@@ -27,8 +29,9 @@ class EmployeeChangeLocationController extends Controller
     public function simiritPage()
         {
             $Requests = EmployeeChangeLocation::get();
-            $Vehicle = VehiclePart::get();
-            return view('Route.ApproveLocationChange', compact('Requests','Vehicle'));
+             // $Vehicles = VehiclesModel::get();
+            $Route = Route::get();
+            return view('Route.ApproveLocationChange', compact('Requests','Route'));
         }
     public function store(Request $request)
         {
@@ -120,16 +123,16 @@ class EmployeeChangeLocationController extends Controller
 
             return redirect()->back()->with('success_message', "Successfully Updated!",);
         }
-    public function approve_change(Request $request, $id)
+    public function approve_change(Request $request)
         {
-            $change_request = EmployeeChangeLocation::findOrFail($id);
+            $change_request = EmployeeChangeLocation::findOrFail($request->input('request_id'));
 
             if (!$change_request) 
                 {
                     return response()->json(['message' => 'Request not found'], 404);
                 }
             $validator = Validator::make($request->all(), [
-                'new_route' => 'nullable|exists:route_user,route_user_id',
+                'new_route' => 'required|exists:routes,route_id',
             ]);
 
             if ($validator->fails()) 
@@ -147,7 +150,6 @@ class EmployeeChangeLocationController extends Controller
                         'route_id' => $request->new_route,
                         'registered_by' => auth()->user()->id,
                     ] );
-                    return redirect()->back()->with('success_message','Successfully Changed',);
                 } 
             else 
                 {
@@ -157,8 +159,10 @@ class EmployeeChangeLocationController extends Controller
                         'route_id' => $request->new_route,
                         'registered_by' => auth()->user()->id,
                     ] );
-                    return redirect()->back()->with('success_message','Successfully Changed',);
                 }
+                $change_request->changed_by = auth()->user()->id;
+                $change_request->save();
+                return redirect()->back()->with('success_message','Successfully Changed',);
 
         }
 

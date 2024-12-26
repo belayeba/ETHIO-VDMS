@@ -84,15 +84,19 @@
                                                             <th>#</th>
                                                             <th>Route</th>
                                                             <th>Vehicle</th>
+                                                            <th>Driver Name</th>
+                                                            <th>Driver Phone</th>
                                                             <th>Action</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
-                                                        @foreach ($routeUser as $route_id => $data)
+                                                    @foreach ($routeUser as $route_id => $data)
                                                         <tr>
                                                             <td>{{ $loop->iteration }}</td>
                                                             <td>{{ $data->first()->route->route_name }}</td>
                                                             <td>{{ $data->first()->route->vehicle->plate_number }}</td>
+                                                            <td>{{ $data->first()->route->driver_name }}</td>
+                                                            <td>{{ $data->first()->route->driver_phone }}</td>
                                                             <td>
                                                                 <button type="button" class="btn btn-info rounded-pill" 
                                                                     data-bs-toggle="modal" data-bs-target="#viewEmployeeModal-{{ $loop->index }}" 
@@ -103,7 +107,7 @@
                                                                 </button>
                                                             </td>
                                                         </tr>
-                                                        @endforeach
+                                                    @endforeach
                                                     </tbody>
                                                 </table>
                                             </div>
@@ -125,8 +129,9 @@
                                                     <thead>
                                                         <tr>
                                                             <th>#</th>
-                                                            <th>Employee</th>
-                                                            <th>Department</th>
+                                                            <th>Employee Name</th>
+                                                            <th>Location</th>
+                                                            <th>Employee Phone</th>
                                                             <th>Action</th> 
                                                         </tr>
                                                     </thead>
@@ -134,8 +139,9 @@
                                                         @foreach ($data as $dat)
                                                         <tr>
                                                             <td>{{ $loop->iteration }}</td> <!-- Loop iteration for numbering -->
-                                                            <td>{{ optional($dat->user)->username ?? 'N/A' }}</td> <!-- Ensure user exists -->
-                                                            <td>{{ optional($dat->user->department)->name ?? 'N/A' }}</td> <!-- Ensure department exists -->
+                                                            <td>{{ optional($dat->user)->first_name ?? 'N/A' }}</td> <!-- Ensure user exists -->
+                                                            <td>{{ $dat->employee_start_location ?? 'N/A' }}</td> <!-- Ensure department exists -->
+                                                            <td>{{ $dat->user->phone ?? 'N/A' }}</td> <!-- Ensure department exists -->
                                                             <td>
                                                                 <!-- Remove button/icon -->
                                                                 <form action="{{ route('routeUser.destroy', $dat->employee_id) }}" method="POST" onsubmit="return confirm('Are you sure you want to remove this employee?');">

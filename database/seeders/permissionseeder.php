@@ -78,6 +78,7 @@ class permissionseeder extends Seeder {
                     'Vehicle Part Registration',
                     'Vehicle Inspection',
                     'Daily KM Registration',
+                    'Approve Replacement'
                 ]
             ],
             [
@@ -110,6 +111,13 @@ class permissionseeder extends Seeder {
                     'Assign Employee to Route',
                     'Change Route For Employee',
                     'Employee Change Route'
+                ]
+            ],
+            [
+                'permission_group' => 'Attendance',
+                'permissions' => [
+                    'Fill Attendance',
+                    'View Attendance Report',
                 ]
             ],
             [
