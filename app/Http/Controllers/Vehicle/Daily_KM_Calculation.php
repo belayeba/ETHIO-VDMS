@@ -26,7 +26,7 @@ class Daily_KM_Calculation extends Controller
             {
                 $ethiopianDate = new DateTime($today);
                 // Format the Ethiopian date
-                $formattedDate = $ethiopianDate->format('Y-m-d H:i:s');
+                $formattedDate = $ethiopianDate->format('Y-m-d');
                 // Display the Ethiopian date
                 return $formattedDate;
             }
