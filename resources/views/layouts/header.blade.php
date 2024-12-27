@@ -102,7 +102,7 @@
                   <a class="nav-link dropdown-toggle arrow-none nav-user" data-bs-toggle="dropdown" href="#"
                       role="button" aria-haspopup="false" aria-expanded="false">
                       <span class="account-user-avatar">
-                          <img src="{{ asset('assets/images/users/avatar-1.jpg') }}" alt="user-image" width="32"
+                          <img src="{{ asset('assets/images/users/no-avatar.png') }}" alt="user-image" width="32"
                               class="rounded-circle">
                       </span>
                       <span class="d-lg-block d-none">

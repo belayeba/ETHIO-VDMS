@@ -27,6 +27,55 @@
             <!-- Start Content-->
             <div class="container-fluid">
                 <div class="row">
+                  <div class="row">
+                    <div class="col-xxl-3 col-sm-6">
+                        <div class="card widget-flat text-bg-secondary">
+                            <div class="card-body">
+                                <div class="float-end">
+                                    <i class="ri-questionnaire-fill widget-icon"></i>
+                                </div>
+                                <h6 class="text-uppercase mt-0" title="Temporary Requests">Total Temporary</br> Request</h6>
+                                <h2 class="my-2">{{$tempReq}}</h2>
+                            </div>
+                        </div>
+                    </div> <!-- end col-->
+
+                    <div class="col-xxl-3 col-sm-6">
+                        <div class="card widget-flat text-bg-primary">
+                            <div class="card-body">
+                                <div class="float-end">
+                                    <i class=" ri-p2p-fill widget-icon"></i>
+                                </div>
+                                <h6 class="text-uppercase mt-0" title="Permanent Request">Total Permanent</br> Request</h6>
+                                <h2 class="my-2">{{$permReq}}</h2>
+                            </div>
+                        </div>
+                    </div> <!-- end col-->
+
+                    <div class="col-xxl-3 col-sm-6">
+                        <div class="card widget-flat text-bg-secondary">
+                            <div class="card-body">
+                                <div class="float-end">
+                                    <i class=" ri-taxi-fill widget-icon"></i>
+                                </div>
+                                <h6 class="text-uppercase mt-0" title="Vehicles">Total </br>Vehicle</h6>
+                                <h2 class="my-2">{{$vehicles}}</h2>
+                            </div>
+                        </div>
+                    </div> <!-- end col-->
+
+                    <div class="col-xxl-3 col-sm-6">
+                        <div class="card widget-flat text-bg-primary">
+                            <div class="card-body">
+                                <div class="float-end">
+                                    <i class=" ri-user-fill widget-icon"></i>
+                                </div>
+                                <h6 class="text-uppercase mt-0" title="Customers">Total </br>Users</h6>
+                                <h2 class="my-2">{{$users}}</h2>
+                               </div>
+                        </div>
+                    </div> <!-- end col-->
+                </div>
 
                     <div class="col-sm-12">
                         <div class="card card-body" >
@@ -35,7 +84,7 @@
 
                             <!-- Map container inside the card body -->
                             {{-- <div id="map1" class="map1-container" style="height: 100vh;"></div> --}}
-                            <div id="map" class="container" style="height: 75vh;"></div>
+                            <div id="map" class="container" style="height: 70vh;"></div>
                         </div> <!-- end card-->
                     </div> <!-- end col-->
 

@@ -127,7 +127,7 @@ Route::group(['middleware' => ['auth']], function()
                 });
             Route::controller(usercontroller::class)->group(function()
                 {
-                    Route::post('/search-users', 'searchUsers')->name('search.users');
+                    Route::get('/search-users', 'searchUsers')->name('search.users');
                     Route::get('/users', 'list')->name('user_list');
                     Route::get('/users/list', 'list_show')->name('users.list.show');
                     Route::get('/users/create','create')->name('user_create');
@@ -450,7 +450,8 @@ Route::group(['middleware' => ['auth']], function()
                      Route::delete('/vehicle-parts-delete/{id}', 'destroy')->name('vehicle_parts.destroy'); // Delete a vehicle part
                 });
                  
-            Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');           
+            Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home'); 
+            Route::get('/home/info', [App\Http\Controllers\HomeController::class, 'info'])->name('home.info');                     
 
     Route::group([
         'prefix'=>'cluster',

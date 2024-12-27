@@ -127,13 +127,13 @@
                                                 <div class="col">
                                                     <p class="text-muted mt-3">Current Week</p>
                                                     <h3 class=" mb-0">
-                                                        <span>$506.54</span>
+                                                        <span>$50.54</span>
                                                     </h3>
                                                 </div>
                                                 <div class="col">
                                                     <p class="text-muted mt-3">Previous Week</p>
                                                     <h3 class=" mb-0">
-                                                        <span>$305.25 </span>
+                                                        <span>$30.25 </span>
                                                     </h3>
                                                 </div>
                                                 <div class="col">
