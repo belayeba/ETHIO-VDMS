@@ -102,11 +102,12 @@
                                                         @foreach ($chunkedPermissions as $chunk)
                                                             <div class="row">
                                                                 @foreach ($chunk as $groupedPermission)
-                                                                    <div class="col-md-3">
-                                                                        <div class="card">
+                                                                    <div class="col-md-4">
+                                                                        <div class="card"
+                                                                            style="box-shadow: 0px 10px 10px 8px rgba(0, 0, 0, 0.1);">
                                                                             <div class="card-header ">
-                                                                                <strong>{{ $groupedPermission->first()->PermissionGroup->name }}
-                                                                                </strong>
+                                                                                <h4>{{ $groupedPermission->first()->PermissionGroup->name }}
+                                                                                </h4>
                                                                             </div>
                                                                             <div class="card-body">
                                                                                 @foreach ($groupedPermission as $value)

@@ -5,6 +5,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Vehicle\ReplacementModel;
 use App\Models\Vehicle\VehiclesModel;
 use App\Models\Vehicle\VehiclePermanentlyRequestModel;
+use App\Models\Vehicle\GivingBackVehiclePermanently;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
@@ -35,6 +36,7 @@ class ReplacementController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
+            'giving_back_id' => 'required|exists:giving_back_vehicles_parmanently,giving_back_vehicle_id',
             'new_vehicle_id' => 'required|exists:vehicles,vehicle_id',
             'permanent_id' => 'required|exists:vehicle_requests_parmanently,vehicle_request_permanent_id',
         ]);
@@ -42,6 +44,10 @@ class ReplacementController extends Controller
         if ($validator->fails()) {
             return response()->json(['errors' => $validator->errors()], 422);
         }
+        
+
+        $Vehicle_Request = GivingBackVehiclePermanently::findOrFail($request->input('giving_back_id'));
+       
         $old_vehicle = VehiclePermanentlyRequestModel::findOrFail($request->input('permanent_id'));
         if($old_vehicle->status)
            {
@@ -61,6 +67,8 @@ class ReplacementController extends Controller
             'Fill inspection first',
             );
         }
+       
+        $Vehicle_Request->status = true;
         $old_vehicle_id = $old_vehicle->vehicle_id;
         $old_vehicle->vehicle_id = $request->input('new_vehicle_id');
         $old_vehicle->inspection_id = $latest_inspection->inspection_id;
@@ -69,6 +77,7 @@ class ReplacementController extends Controller
         $old_vehicle->status = true;
         $old_vehicle->mileage =  $the_vehicle->mileage;
         $old_vehicle->save();
+        $Vehicle_Request->save();
         $id = Auth::id();
         $today = Carbon::now();
         $ethio_date = $this->ConvertToEthiopianDate($today);
@@ -143,7 +152,7 @@ class ReplacementController extends Controller
 
 
     public function update(Request $request, $id)
-        {dd($request);
+        {
             $replacement = ReplacementModel::findOrFail($id);
 
             if (!$replacement) {

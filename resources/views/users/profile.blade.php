@@ -21,7 +21,7 @@
                         <div class="profile-user-box">
                             <div class="row">
                                 <div class="col-sm-6">
-                                    <div class="profile-user-img"><img src="assets/images/users/avatar-1.jpg" alt=""
+                                    <div class="profile-user-img"><img src="assets/images/users/no-avatar.png" alt=""
                                             class="avatar-lg rounded-circle"></div>
                                     <div class="">
                                         <h4 class="mt-4 fs-17 ellipsis">{{ $users->first_name }}</h4>

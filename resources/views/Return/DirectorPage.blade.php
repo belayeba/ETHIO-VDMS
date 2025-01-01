@@ -25,116 +25,37 @@
                                 <div class="card-body">
                                     <div class="table-responsive"  id="table1">
                                         <div class="toggle-tables">
-                                            <button type="button" class="btn btn-secondary rounded-pill" autofocus  onclick="toggleDiv('table1')">PENDING REQUEST</button>
-                                            <button type="button" class="btn btn-outline-secondary rounded-pill"  onclick="toggleDiv('table2')">ARCHIVED REQUEST</button>
+                                            
+                                            <div class="dropdown btn-group">
+                                                <button class="btn btn-light dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id="dropdownButton">
+                                                    ALL
+                                                </button>
+                                                <div class="dropdown-menu dropdown-menu-animated">
+                                                    <a class="dropdown-item" onclick="updateState(2, 'For Good')">For Good</a>
+                                                    <a class="dropdown-item" onclick="updateState(3, 'Replacement')">REPLACEMENT</a>
+                                                </div>
+                                            </div>
                                             <!-- Add more buttons for additional tables if needed -->
                                         </div></br>
-                                        <table class="table table-centered mb-0 table-nowrap" id="inline-editable">
+                                        <table class="table table-centered mb-0 table-nowrap director_datatable " id="inline-editable">
                                             <thead>
                                                 <tr>
                                                     <th>#</th>
                                                     <th>Requested By</th>
                                                     <th>Vehicle</th>
-                                                    <th>Reason</th>
+                                                    <th>Return</th>
                                                     <th>Requested At</th>
+                                                    <th>Status</th>
                                                     <th>Inspection</th>
                                                     <th>Action</th>
                                                 </tr>
                                             </thead>
-                                            @foreach($vehicle_requests->where('received_by', '==', null) as $request)
-                                                <tbody>
-                                                    <tr>
-                                                        <td>{{$loop->iteration}}</td>
-                                                        <td>{{$request->requestedBy->first_name}}</td>
-                                                        <td>{{$request->permanentRequest->vehicle->plate_number}}</td>
-                                                        <td>{{$request->purpose}}</td>
-                                                        <td>{{$request->created_at->format('Y-m-j')}}</td>
-                                                        <td><button type="button" class="btn btn-info rounded-pill" title="Inspect" id="showInspectionModal" data-value="{{$request->permanentRequest->inspection_id}}">Show</button></td>
-                                                        <td>@if($request->received_by === Null && $request->reject_reason_dispatcher === Null)
-                                                            <button id="acceptButton" type="button" class="btn btn-primary rounded-pill" title="Accept" onclick="confirmFormSubmission('approvalForm-{{ $loop->index }}')"><i class="ri-checkbox-circle-line"></i></button>
-                                                            <button type="button" class="btn btn-danger rounded-pill" data-bs-toggle="modal" data-bs-target="#staticBackdrop-{{ $loop->index }}" title="Reject"><i class=" ri-close-circle-fill"></i></button>
-                                                            @endif
-                                                        </td>
-                                                    </tr>
-                                                </tbody>
-                                                <form id="approvalForm-{{ $loop->index }}" method="POST" action="{{ route('vehicle_director_approve_request') }}" style="display: none;">
-                                                    @csrf
-                                                    <input type="hidden" name="request_id" value="{{ $request->giving_back_vehicle_id }}">
-                                                </form>
-                                                
-                                                <!-- this is for the Reject  modal -->
-                                                <div class="modal fade" id="staticBackdrop-{{ $loop->index }}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                                                    <div class="modal-dialog">
-                                                        <div class="modal-content">
-                                                            <div class="modal-header">
-                                                                <h5 class="modal-title" id="staticBackdropLabel">Reject reason</h5>
-                                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                            </div> <!-- end modal header -->
-                                                            <form method="POST" action="{{route('vehicle_director_reject_request')}}">
-                                                                @csrf
-                                                                <div class="modal-body">
-                                                                    <div class="col-lg-6">
-                                                                        <h5 class="mb-3"></h5>
-                                                                        <div class="form-floating">
-                                                                        <input type="hidden" name="request_id" value="{{$request->giving_back_vehicle_id}}">
-                                                                        <textarea class="form-control" name="reason" style="height: 60px;" required></textarea>
-                                                                        <label for="floatingTextarea">Reason</label>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="modal-footer">
-                                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                                                    <button type="submit" class="btn btn-danger">Reject</button>
-                                                                </div> <!-- end modal footer -->
-                                                            </form>                                                                    
-                                                        </div> <!-- end modal content-->
-                                                    </div> <!-- end modal dialog-->
-                                                </div>
-                                                <!-- end assign modal -->
-                                            @endforeach
+                                            <tbody>
+
+                                            </tbody>
                                         </table>
                                     </div>
                                     <!-- end .table-responsive-->
-                                    <div class="table-responsive"  id="table2" style="display:none">
-                                        <div class="toggle-tables">
-                                            <button type="button" class="btn btn-outline-secondary rounded-pill"  onclick="toggleDiv('table1')">PENDING REQUEST</button>
-                                            <button type="button" class="btn btn-secondary rounded-pill"  onclick="toggleDiv('table2')">ARCHIVED REQUEST</button>
-                                            <!-- Add more buttons for additional tables if needed -->
-                                        </div></br>
-                                        <table class="table table-centered mb-0 table-nowrap" id="inline-editable">
-                                            <thead>
-                                                <tr>
-                                                    <th>#</th>
-                                                    <th>Requested By</th>
-                                                    <th>Vehicle</th>
-                                                    <th>Reason</th>
-                                                    <th>Requested At</th>
-                                                    <th>Status</th>
-                                                    <th>Inspection</th>
-                                                </tr>
-                                            </thead>
-                                            @foreach($vehicle_requests->where('received_by', '!==', null) as $request)
-                                                <tbody>
-                                                    <tr>
-                                                        <td>{{$loop->iteration}}</td>
-                                                        <td>{{$request->requestedBy->first_name}}</td>
-                                                        <td>{{$request->permanentRequest->vehicle->plate_number}}</td>
-                                                        <td>{{$request->purpose}}</td>
-                                                        <td>{{$request->created_at}}</td>
-                                                        <td> @if($request->approved_by !== null && $request->reject_reason_director === null)
-                                                                <p class="btn btn-primary ">RETURNED</p>
-                                                             @elseif($request->approved_by !== null && $request->reject_reason_director !== null)
-                                                                <p class="btn btn-danger">REJECTED
-                                                            @endif
-                                                        </td> 
-                                                        <td>
-                                                          <button type="button" class="btn btn-info rounded-pill" title="Inspect" id="showInspectionModal" data-value="{{$request->permanentRequest->inspection_id}}">Show</button>
-                                                        </td> 
-                                                    </tr>
-                                                </tbody>
-                                            @endforeach
-                                        </table>
-                                    </div> 
                                 </div>
                                 <!-- end card-body -->
                             </div>
@@ -145,28 +66,235 @@
                     <!-- end row -->
                 </div> <!-- container -->
             </div> <!-- content --> 
+            <!-- show all the information about the request modal -->
+            <div id="standard-modal" class="modal fade" tabindex="-1" role="dialog"
+            aria-labelledby="standard-modalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Request Details</h4>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <dl class="row mb-0">
+                            <dt class="col-sm-5">Request reason</dt>
+                            <dd class="col-sm-7" id="show_Reason"></dd>
+                        </dl>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-light"
+                            data-bs-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- end show modal -->
+
+         <!-- show all the information about the request modal -->
+        <div id="replace-modal" class="modal fade" tabindex="-1" role="dialog"
+            aria-labelledby="standard-modalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Replace Vehicle</h4>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
+                    </div>
+                    <form id="replaceForm" action="{{ route('Replacement.store') }}" method="post" enctype="multipart/form-data">
+                        @csrf
+                    <div class="modal-body">
+                        <div class="tab-pane" id="account-2">
+                            <div class="row">
+                                <div class="position-relative mb-3">
+                                    <label class="form-label" for="validationTooltip02">Old vehicle</label>
+                                    <span  class="form-control" id="vehicle_id" ></span>
+                                    <input type="hidden" class="form-control" id="permanent_id" name="permanent_id"></input>
+                                    <input type="hidden" class="form-control" id="giving_back_id" name="giving_back_id"></input>
+                                </div>
+                                
+                                <div class="position-relative mb-3">
+                                    <label class="form-label" for="validationTooltip02">Select New Vehicle</label>
+                                    <select class="form-control" id="routeSelect" name="new_vehicle_id" required>
+                                        <option value="">Select Replacement</option>
+                                        @foreach ($vehicles as $vec)
+                                            <option value="{{$vec->vehicle_id}}">{{$vec->plate_number}}</option>
+                                        @endforeach 
+                                    </select>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-info">Submit</button>
+
+                        <button type="button" class="btn btn-light"
+                            data-bs-dismiss="modal">Close</button>
+                    </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!-- end show modal -->
+
+         <!-- Accept Alert Modal -->
+         <div class="modal fade" id="confirmationModal" tabindex="-1" role="dialog"
+                aria-labelledby="confirmationModalLabel"aria-hidden="true">
+                <div class="modal-dialog modal-sm">
+                    <div class="modal-content">
+                        <form method="POST" action="{{ route('vehicle_director_approve_request') }}">
+                            @csrf
+                            <input type="hidden" name="request_id" id="request_accept_id">
+                            <div class="modal-body p-4">
+                                <div class="text-center">
+                                    <i class="ri-alert-line h1 text-warning"></i>
+                                    <h4 class="mt-2">Warning</h4>
+                                    <h5 class="mt-3">
+                                        Are you sure you want to accept this request?</br> This action
+                                        cannot be
+                                        undone.
+                                    </h5>
+                                    <button type="button" class="btn btn-secondary"
+                                        data-bs-dismiss="modal">Cancel</button>
+                                    <button type="submit" class="btn btn-primary"
+                                        id="confirmDelete">Yes,
+                                        Accept</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div><!-- /.modal-content -->
+                </div><!-- /.modal-dialog -->
+            </div><!-- /.modal -->
+
+            <!-- this is for the assign  modal -->
+            <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static"
+            data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel"
+            aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="staticBackdropLabel">Reject reason
+                        </h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
+                    </div> <!-- end modal header -->
+                    <form method="POST" action="{{ route('vehicle_director_reject_request') }}">
+                        @csrf
+                        <div class="modal-body">
+                            <div class="col-lg-6">
+                                <h5 class="mb-3"></h5>
+                                <div class="form-floating">
+                                    <input type="hidden" name="request_id"
+                                        id="Reject_request_id">
+                                    <textarea class="form-control" name="reason" style="height: 60px;" required></textarea>
+                                    <label for="floatingTextarea">Reason</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary"
+                                data-bs-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-danger">Reject</button>
+                        </div> <!-- end modal footer -->
+                    </form>
+                </div> <!-- end modal content-->
+            </div> <!-- end modal dialog-->
+        </div>
+        <!-- end assign modal -->
+
+
          <!-- this is for the assign  modal -->
-                           <div class="modal fade" id="showInspection" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                              <div class="modal-dialog modal-lg modal-dialog-scrollable">
-                                <div class="modal-content">
-                                     
-                                        <div class="modal-header">
-                                                                                                            
-                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                        </div> <!-- end modal header -->
-                                        <div class="modal-body">
-                                            <div class="row mt-3" id="inspectionCardsContainer" class="table table-striped"> 
-                                            </div>
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="submit" class="btn btn-secondary"  data-bs-dismiss="modal" aria-label="Close">close</button>
-                                        </div> <!-- end modal footer -->
-                                    </div>                                                              
-                                </div> <!-- end modal content-->
-                            </div> <!-- end modal dialog-->
-                <script>
-              document.getElementById('showInspectionModal').addEventListener('click', function() {
-            var inspection = this.getAttribute('data-value');                                
+            <div class="modal fade" id="showInspection" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg modal-dialog-scrollable">
+                <div class="modal-content">
+                        
+                        <div class="modal-header">
+                                                                                            
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div> <!-- end modal header -->
+                        <div class="modal-body">
+                            <div class="row mt-3" id="inspectionCardsContainer" class="table table-striped"> 
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-secondary"  data-bs-dismiss="modal" aria-label="Close">close</button>
+                        </div> <!-- end modal footer -->
+                    </div>                                                              
+                </div> <!-- end modal content-->
+            </div> <!-- end modal dialog-->
+                
+        <script>
+
+       
+</script>
+<script src="{{ asset('assets/vendor/datatables.net/js/jquery.dataTables.min.js') }}"></script>
+
+<script>
+    let customDataValue = 0;
+
+
+    function updateState(value, buttonText) {
+        document.getElementById('dropdownButton').innerText = buttonText;
+        customDataValue = value; 
+        table.ajax.reload();
+    }
+
+
+var table = $('.director_datatable').DataTable({
+    processing: true,
+    pageLength: 5,
+    serverSide: true,
+    ajax: {
+            url: "{{ route('FetchReturnDirector') }}",
+            data: function (d) {
+                d.customDataValue = customDataValue;
+            }
+        }, 
+    
+    columns: [{
+            data: 'counter',
+            name: 'counter'
+        },
+        {
+            data: 'requested_by',
+            name: 'requested_by'
+        },
+        {
+            data: 'vehicle',
+            name: 'vehicle'
+        },
+        {
+            data: 'reason',
+            name: 'reason'
+        },
+        {
+            data: 'date',
+            name: 'date'
+        },
+        {
+            data: 'status',
+            name: 'status'
+        },
+        {
+            data: 'inspect',
+            name: 'inspect'
+        },
+        
+        {
+            data: 'actions',
+            name: 'actions',
+            orderable: false,
+            searchable: false
+        },
+    ]
+});
+
+    $(document).ready(function() {
+        $(document).on('click', '.inspect-btn', function() {    
+            var inspection = $(this).data('id');
+            console.log(inspection);
+            // var inspection = this.getAttribute('data-value');                                
             // Perform an Ajax request to fetch data based on the selected car ID
             $.ajax({
                 url: "{{ route('inspection.show.specific') }}",
@@ -281,24 +409,61 @@
                 }
             });
         });
+    });
 
-        function confirmFormSubmission(formId) {
-                if (confirm("Are you sure you want to accept this request?")) {
-                    var form = document.getElementById(formId);
-                    form.submit();
-                }
-            }
-        
-            function toggleDiv(targetId) {
-                const allDivs = document.querySelectorAll('.table-responsive');
-                allDivs.forEach(div => {
-                    if (div.id === targetId) {
-                        div.style.display = 'block';// Show the target div
-                    } else {
-                        div.style.display = 'none';// Hide other divs
-                    }
-                });
-            }
+    $(document).ready(function() {
+        var ShowReason;
+
+        $(document).on('click', '.show-btn', function() {
+            ShowReason = $(this).data('id');
+
+            console.log(ShowReason);
+
+            
+            $('#show_Reason').text(ShowReason);
+            $('#standard-modal').modal('toggle');
+        });
+    });
+
+    $(document).ready(function() {
+            var AcceptedId;
+
+            $(document).on('click', '.accept-btn', function() {
+                AcceptedId = $(this).data('id');
+console.log(AcceptedId);
+                $('#request_accept_id').val(AcceptedId);
+                $('#confirmationModal').modal('show');
+            });
+        });
+
+        $(document).ready(function() {
+            var AcceptedId;
+
+            $(document).on('click', '.replace-btn', function() {
+                Vehicle = $(this).data('vehicle');
+                Permanent = $(this).data('id');
+                AcceptedId = $(this).data('request');
+                Giving = $(this).data('request');
+            console.log(Giving);
+                $('#vehicle_id').text(Vehicle);
+                $('#giving_back_id').val(Giving);
+                $('#permanent_id').val(Permanent);
+                $('#request_id').val(AcceptedId);
+                $('#replace-modal').modal('show');
+            });
+        });
+
+    $(document).ready(function() {
+        var RejectedId;
+
+        $(document).on('click', '.reject-btn', function() {
+            RejectedId = $(this).data('id');
+
+            $('#Reject_request_id').val(RejectedId);
+            $('#staticBackdrop').modal('toggle');
+        });
+    });
+
 </script>
 
 <script src="{{ asset('assets/js/vendor.min.js') }}"></script>

@@ -59,11 +59,11 @@ class usercontroller extends Controller
     public function searchUsers(Request $request)
     {
         $request->validate([
-            'query' => 'required|string|max:255',
+            'q' => 'nullable|string|max:255',
         ]);
     
-        $query = $request->input('query');
-    
+        $query = $request->input('q');
+    if ($query !== null){
         // Perform the search
         $users = User::where('username', 'like', "%$query%")
             ->orWhere('first_name', 'like', "%$query%")
@@ -74,6 +74,11 @@ class usercontroller extends Controller
             ->get();
     
         return response()->json($users);
+    }
+    else{
+        $users = User::get();
+        return response()->json($users); 
+    }
     }
     
     public function list_show(Request $request)

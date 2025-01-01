@@ -189,7 +189,141 @@ public function deleteRequest(Request $request)
 public function VehicleDirector_page() 
     {   
             $vehicle_requests = GivingBackVehiclePermanently::latest()->get();
+           
             return view("Return.vehicle_requests", compact('vehicle_requests'));     
+    }
+
+    //this is to fetch for Director
+public function FetchReturnDirector( Request $request )
+    {
+        // dd($request->input('customDataValue'));
+        $id = Auth::id();
+
+        $data_drawer_value = $request->input('customDataValue');
+
+        if($data_drawer_value == 1){
+
+            $data = GivingBackVehiclePermanently::latest()->get();
+        
+            }
+        
+        elseif($data_drawer_value == 2){
+            $data = GivingBackVehiclePermanently::whereNotNull('approved_by')
+            ->whereNull('reject_reason_vec_director')
+            ->where('return_type', "ForGood")
+            ->get();
+        }
+
+        elseif($data_drawer_value == 3){
+            $data = GivingBackVehiclePermanently::whereNotNull('approved_by')
+            ->whereNull('reject_reason_vec_director')
+            ->where('return_type', "Replacement")
+            ->get();
+        }
+
+        else{
+            $data = GivingBackVehiclePermanently::whereNotNull('approved_by')
+                        ->whereNull('reject_reason_vec_director')
+                        ->get();
+        }
+       
+        return datatables()->of($data)
+        ->addIndexColumn()
+        ->addColumn('counter', function($row) use ($data){
+            static $counter = 0;
+            $counter++;
+            return $counter;
+        })
+
+        ->addColumn('requested_by', function ($row) {
+            return $row->requestedBy->first_name. ' ' .$row->requestedBy->last_name;
+        })
+
+        ->addColumn('vehicle', function ($row) {
+            return $row->permanentRequest->vehicle->plate_number;
+        })
+
+        ->addColumn('reason', function ($row) {
+            return $row->return_type;
+        })
+
+        ->addColumn('date', function ($row) {
+            return $row->created_at->format('d/m/Y');
+        })
+
+        ->addColumn('inspect', function ($row) {
+            $button = '<button type="button" class="btn btn-info rounded-pill inspect-btn" 
+               data-id="' . $row->permanentRequest->inspection_id . '" title="Show Details">
+               Inspect</button>'; 
+            return $button;
+        })
+        
+
+        ->addColumn('status', function ($row) use ($data_drawer_value) {
+            if($data_drawer_value == 1){
+                if ($row->approved_by !== null && $row->reject_reason_vec_director === null) {
+                    return 'ACCEPTED';
+                } elseif ($row->approved_by !== null && $row->reject_reason_vec_director !== null) {
+                    return 'REJECTED';
+                }
+                return 'PENDING';
+            }
+            
+            else{
+                if ($row->received_by!== null && $row->reject_reason_dispatcher === null && $row->return_type === "ForGood") {
+                    return 'ACCEPTED';
+                }
+                elseif ($row->received_by!== null && $row->reject_reason_dispatcher === null && $row->return_type === "Replacement" && $row->status === 0) { 
+                    return 'REPLACEMENT PENDING';
+                }
+                elseif ($row->received_by!== null && $row->reject_reason_dispatcher === null && $row->return_type === "Replacement" && $row->status === 1) { 
+                    return 'REPLACED';
+                }
+                elseif ($row->received_by !== null && $row->reject_reason_dispatcher !== null) {
+                    return 'REJECTED';
+                }
+                return 'PENDING';
+            }
+        })
+        
+
+        ->addColumn('actions', function ($row) use ($data_drawer_value) {
+            $actions='';
+
+            if($data_drawer_value == 1){
+                $actions = '<button type="button" class="btn btn-info rounded-pill show-btn" 
+                data-id="' . $row->purpose. '" title="Show Details">
+                <i class="ri-eye-line"></i></button>'; 
+            
+                if ($row->approved_by === null) {
+                $actions .= '<button  type="button" class="btn btn-primary rounded-pill accept-btn"  data-id="' . $row->giving_back_vehicle_id. '" title="Accept"><i class="ri-checkbox-circle-line"></i></button>';
+                $actions .= '<button type="button" class="btn btn-danger rounded-pill reject-btn" data-id="' . $row->giving_back_vehicle_id . '" data-bs-toggle="modal" data-bs-target="#staticBackdrop" title="Reject"><i class=" ri-close-circle-fill"></i></button>';
+                }
+            }
+            else{
+                $actions = '<button type="button" class="btn btn-info rounded-pill show-btn" 
+                data-id="' . $row->purpose. '" title="Show Details">
+                <i class="ri-eye-line"></i></button>'; 
+            
+                if ($row->received_by === null)
+                 {
+
+                    $actions .= '<button  type="button" class="btn btn-primary rounded-pill accept-btn"  data-id="' . $row->giving_back_vehicle_id. '" title="Accept"><i class="ri-checkbox-circle-line"></i></button>';
+                    $actions .= '<button type="button" class="btn btn-danger rounded-pill reject-btn" data-id="' . $row->giving_back_vehicle_id . '" data-bs-toggle="modal" data-bs-target="#staticBackdrop" title="Reject"><i class=" ri-close-circle-fill"></i></button>';
+                
+                 }
+
+                 if ($row->received_by !== null && $row->reject_reason_dispatcher === null && $row->return_type === "Replacement" && $row->status === 0)
+                 {
+                    $actions .= '<button  type="button" class="btn btn-success rounded-pill replace-btn" data-id="' . $row->permanent_request . '" data-givingid="' . $row->giving_back_vehicle_id. '" data-request="' . $row->giving_back_vehicle_id . '" data-vehicle="' . $row->vehicle->plate_number. '" title="Replace"><i class="ri-loop-left-line"></i></button>';                
+                 }
+            }
+
+            return $actions;
+        })
+
+        ->rawColumns(['actions','vehicle','requested_by','counter','Reason','status','date','inspect'])
+        ->toJson();
     }
 // DIRECTOR APPROVE THE REQUESTS
 public function VehicleDirectorApproveRequest(Request $request)
@@ -244,6 +378,7 @@ public function Vec_DirectorRejectRequest(Request $request)
                 return redirect()->back()->with('error_message',
                 'Sorry, Something Went Wrong.',
                 );
+            }
             // }dd($request);
           // Check if it is not approved before
         $id = $request->input('request_id');
@@ -258,6 +393,7 @@ public function Vec_DirectorRejectRequest(Request $request)
                                  "Warning, You are denied the service",
                             );
                     }
+                    
                 $Vehicle_Request->approved_by = $user_id;
                 $Vehicle_Request->reject_reason_vec_director = $reason;
                 $user = User::find($Vehicle_Request->requested_by);
@@ -278,14 +414,11 @@ public function Vec_DirectorRejectRequest(Request $request)
                 );
             }
     }
-}
 // Dispatcher Page
 public function Dispatcher_page() 
     {    
-    $vehicle_requests = GivingBackVehiclePermanently::whereNotNull('approved_by')
-                        ->whereNull('reject_reason_vec_director')
-                        ->get();
-    return view("Return.DirectorPage", compact('vehicle_requests'));     
+    $vehicles = VehiclesModel::get();
+    return view("Return.DirectorPage", compact('vehicles'));     
     }
     // VEHICLE DIRECTOR APPROVE THE REQUESTS
 public function DispatcherApproveRequest(Request $request)
@@ -316,6 +449,7 @@ public function DispatcherApproveRequest(Request $request)
             $get_permanent_request->status = false;
             $Vehicle_Request->received_by = $user_id;
             $Vehicle_Request->returned_date = $todayDateTime;
+            $Vehicle_Request->status = false;
             
             $the_vehicle->status = true;
             $the_vehicle->save();

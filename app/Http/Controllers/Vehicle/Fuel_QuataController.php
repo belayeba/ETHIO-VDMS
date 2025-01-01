@@ -13,11 +13,15 @@ use App\Http\Controllers\Vehicle\Daily_KM_Calculation;
 
 class Fuel_QuataController extends Controller
 {
-    protected $dailyKmCalculation;
 
-    public function __construct(Daily_KM_Calculation $dailyKmCalculation)
+    public function ConvertToEthiopianDate($today)
     {
-        $this->dailyKmCalculation = $dailyKmCalculation;
+        $ethiopianDate = new DateTime($today);
+
+        // Format the Ethiopian date
+        $formattedDate = $ethiopianDate->format('Y-m-d H:i:s');        
+        // Display the Ethiopian date
+        return $formattedDate;
     }
     // List all fuel quotas
     public function index()
@@ -47,7 +51,7 @@ class Fuel_QuataController extends Controller
 
             $logged_user = Auth::id();
             $today = \Carbon\Carbon::now();
-            $ethiopianDate = $this->dailyKmCalculation->ConvertToEthiopianDate($today);
+            $ethiopianDate = $this->ConvertToEthiopianDate($today);
 
             DB::beginTransaction(); // Begin a transaction
             try {
