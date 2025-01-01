@@ -376,6 +376,11 @@
                                             <a href="{{ route('dailyreport.temporaryReport') }}">Temporary</a>
                                         </li>
                                     @endcan()
+                                    {{-- @can('Temporary Vehicle Request') --}}
+                                    <li>
+                                        <a href="{{ route('dailyreport.vehicleReport') }}">Vehicle</a>
+                                    </li>
+                                    {{-- @endcan() --}}
                                 </ul>
                             </div>
                         </li>

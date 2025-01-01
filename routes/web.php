@@ -291,7 +291,6 @@ Route::group(['middleware' => ['auth']], function()
                     Route::get('/vehicle/report/filter',  'filterReport')->name('dailyreport.filterReport');
                     Route::get('/vehicle/report/permanent/filter',  'filterPermanentReport')->name('dailyreport.filterPermanentReport');
                     Route::get('/vehicle/report/temporary/filter', 'filterTemporaryReport')->name('dailyreport.filterTemporaryReport');
-
                     Route::get('/daily_km/check', 'CheckVehicle')->name('daily_km.page.check');
                     Route::post('/daily_km/store', 'displayForm')->name('daily_km.page.store'); // Create a new inspection
                     Route::post('/daily_km/morning', 'morning_km')->name('daily_km.page.morning'); // Show a specific inspection
@@ -299,6 +298,10 @@ Route::group(['middleware' => ['auth']], function()
                     Route::get('/daily_km/page', 'displayPage')->name('daily_km.page'); // inspection page
                     Route::delete('/daily_km/delete', 'delete_morningkm')->name('daily_km.page.delete'); // Delete a specific inspection
                 });
+
+                Route::get('/vehicle/report/data', [Daily_KM_Calculation::class, 'vehicleReport'])->name('dailyreport.vehicleReport');
+                Route::get('/vehicle/report/filter', [Daily_KM_Calculation::class, 'filterVehicleReport'])->name('dailyreport.filterVehicleReport');
+
             Route::controller(Fuel_QuataController::class)->group(function ()
                 {
                     Route::get('/get_all','index')->name('all_fuel_quota');
@@ -471,7 +474,6 @@ Route::group(['middleware' => ['auth']], function()
         Route::post('/{department}/update', [DepartmentController::class,'update'])->name('department.update');
         Route::delete('/delete/{department}',[DepartmentController::class,'destroy'])->name('department.destroy');
     });
-
 
     //filters
         

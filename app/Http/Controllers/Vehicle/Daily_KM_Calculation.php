@@ -69,6 +69,137 @@ class Daily_KM_Calculation extends Controller
         
                 return view('Vehicle.dailyReport', compact('vehicles', 'drivers', 'departments', 'dailkms'));
             }
+
+            public function vehicleReport()
+        {
+        $drivers = User::all();
+        $departments = DepartmentsModel::select('department_id', 'name')->get();
+        $clusters = ClustersModel::select('cluster_id', 'name')->get();
+
+        $vehicles = VehiclesModel::with('maintenances', 'requestedBy','fuelings','driver','inspection')
+            ->latest()
+            ->take(50)
+            ->get();
+        
+        $vehicles = $vehicles->map(function ($vehicle) {
+            return (object) [
+                'plate_number' => $vehicle->plate_number ?? 'N/A',
+                'vin' => $vehicle->vin,
+                'driver' => is_null($vehicle->driver) ? 'N/A' : $vehicle->driver->users->username ?? 'N/A',
+                'vehicle_type' => $vehicle->vehicle_type,
+                'vehicle_category' => $vehicle->vehicle_category,
+                'rental_type' => $vehicle->rental_type,
+                'requested_by' => is_null($vehicle->requestedBy) ? 'N/A' : $vehicle->requestedBy->username,
+                'fuel_amount' => $vehicle->fuel_amount,
+                'mileage' => $vehicle->mileage,
+                'last_service' => $vehicle->last_service,
+                'next_service' => $vehicle->next_service,
+                'status' => $vehicle->status == 1 ? 'Active' : 'Inactive',
+            ];
+        });
+
+        //dd($vehicles);
+
+        return view('Vehicle.vehicleReport', compact('vehicles', 'drivers', 'departments', 'clusters', 'vehicles'));
+        }
+
+        public function filterVehicleReport(Request $request)
+        {
+            // dd($request);
+            $validator = Validator::make($request->all(), [
+                'plate_number' => 'nullable|string',
+                'name' => 'nullable|string',
+                'vehicle_type' => 'nullable|string',
+                'vehicle_category' => 'nullable|string',
+                'rental_type' => 'nullable|string',
+                'status' => 'nullable|string',
+                'start_date' => 'nullable|date',
+                'end_date' => 'nullable|date',
+            ]);
+    
+            if ($validator->fails()) {
+                return redirect()->back()->withErrors($validator)->withInput();
+            }
+            // Get filter parameters
+            if ($request->has('export')) {
+                session([
+                    'plate_number' => $request->input('plate_number'),
+                    'driver_name' => $request->input('driver_name'),
+                    'vehicle_type' => $request->input('vehicle_type'),
+                    'vehicle_category' => $request->input('vehicle_category'),
+                    'rental_type' => $request->input('rental_type'),
+                    'status' => $request->input('status'),
+                    'date_range' => $request->input('date_range'),
+                ]);
+            }
+    
+            // Retrieve filters from session
+            $plateNumber = session('plate_number');
+            $driverName = session('driver_name');
+            $vehicleType = session('vehicle_type');
+            $rentalType = session('rental_type');
+            $vehicleCategory = session('vehicle_category');
+            $status = session('status');
+            $dateRange = session('date_range');
+    
+            $dates = explode(' - ', $dateRange);
+            // Query the daily KM data with filters
+            $query = VehiclesModel::with('maintenances', 'requestedBy','fuelings','driver','inspection');
+    
+            if ($plateNumber) {
+                $query->whereHas('vehicle', function ($q) use ($plateNumber) {
+                    $q->where('plate_number', 'LIKE', "%{$plateNumber}%");
+                });
+    
+            }
+            elseif ($vehicleType) {
+                $query->where('vehicle_type', 'LIKE', "%{$vehicleType}%");
+            } elseif ($vehicleCategory) {
+                $query->where('vehicle_category', 'LIKE', "%{$vehicleCategory}%");
+            } elseif ($rentalType) {
+                $query->where('rental_type', 'LIKE', "%{$rentalType}%");
+            } elseif ($status) {
+                $status = $status == "Active" ? 1 : 0;
+                $query->where('status', 'LIKE', "%{$status}%");
+            }
+            elseif ($driverName) {
+                $query->where('username', 'LIKE', "%{$driverName}%");
+            }
+    
+            $vehicles = $query->get();
+    
+            //dd($vehicle);
+    
+            $vehicles = $vehicles->map(function ($vehicle) {
+                return (object) [
+                    'plate_number' => $vehicle->plate_number ?? 'N/A',
+                    'vin' => $vehicle->vin,
+                    'driver' => is_null($vehicle->driver) ? 'N/A' : $vehicle->driver->users->username ?? 'N/A',
+                    'vehicle_type' => $vehicle->vehicle_type,
+                    'vehicle_category' => $vehicle->vehicle_category,
+                    'rental_type' => $vehicle->rental_type,
+                    'requested_by' => is_null($vehicle->requestedBy) ? 'N/A' : $vehicle->requestedBy->username,
+                    'fuel_amount' => $vehicle->fuel_amount,
+                    'mileage' => $vehicle->mileage,
+                    'last_service' => $vehicle->last_service,
+                    'next_service' => $vehicle->next_service,
+                    'status' => $vehicle->status == 1 ? 'Active' : 'Inactive',
+                ];
+            });
+    
+            if ($vehicles->isEmpty()) {
+                $vehicles = $query;
+            }
+    
+            if ($request->input('export') == 1) {
+                return Excel::download(new FilteredReportExport($vehicles), 'filtered_report.xlsx');
+            }
+    
+            $drivers = User::all();
+            
+            return view('Vehicle.vehicleReport', compact('vehicles', 'drivers'));
+    
+        }
         
             public function permanentReport()
             {
