@@ -29,12 +29,14 @@ use App\Http\Controllers\Vehicle\VehicleRegistrationController;
 use App\Http\Controllers\Vehicle\PermanentFuelController;
 use App\Http\Controllers\Vehicle\AttendanceController;
 use App\Http\Controllers\Letter\LetterController;
+use App\Http\Controllers\Auth\AuthenticatedSessionController;
 
 Route::get('/', function () 
 {
     return view('auth.login');
 });
 
+Route::post('login', [AuthenticatedSessionController::class, 'store']);
 
 Route::get('/tabletest', function()
 {
@@ -89,8 +91,16 @@ Route::group(['middleware' => ['auth']], function()
             Route::controller(MentenanceController::class)->group(function()
                 {
                         Route::get('/mentaincance_request_page', 'displayMaintenanceRequestPage');
+                        Route::post('/driver_post_request', 'RequestMaintenance')->name('driver_request_post');
+                        Route::get('/show_approver_request', 'displayRequestForApprover');
+                        Route::post('/approver_approve_request', 'approver_approval')->name('approver_approve_request');
+                        Route::post('/approver_rejection', 'approver_rejection')->name('approver_rejection');
+                        
+                        Route::get('/show_simirit_request', 'displayRequestForSimirit');
+                        Route::post('/simirit_approve_request', 'approver_approval')->name('simirit_approve_request');
+                         Route::post('/user_delete_request', 'deleteRequest')->name('temp_delete_request');
+
                         //Route::post('/user_post_request', 'RequestVehicleTemp')->name('temp_request_post');
-                        // Route::post('/user_delete_request', 'deleteRequest')->name('temp_delete_request');
                         // Route::post('/user_update_info', 'update_temp_request')->name('temp_update_request');
                         // Route::get('/director_approve_page', 'DirectorApprovalPage')->name('director_approve_page');
                         // Route::post('/director_approve_request', 'DirectorApproveRequest')->name('director_approve_request');

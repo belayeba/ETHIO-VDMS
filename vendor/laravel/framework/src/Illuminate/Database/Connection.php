@@ -25,192 +25,193 @@ use PDO;
 use PDOStatement;
 use RuntimeException;
 
-class Connection implements ConnectionInterface {
+class Connection implements ConnectionInterface
+{
     use DetectsConcurrencyErrors,
-    DetectsLostConnections,
-    Concerns\ManagesTransactions,
-    InteractsWithTime,
-    Macroable;
+        DetectsLostConnections,
+        Concerns\ManagesTransactions,
+        InteractsWithTime,
+        Macroable;
 
     /**
-    * The active PDO connection.
-    *
-    * @var \PDO|\Closure
-    */
+     * The active PDO connection.
+     *
+     * @var \PDO|\Closure
+     */
     protected $pdo;
 
     /**
-    * The active PDO connection used for reads.
-    *
-    * @var \PDO|\Closure
-    */
+     * The active PDO connection used for reads.
+     *
+     * @var \PDO|\Closure
+     */
     protected $readPdo;
 
     /**
-    * The name of the connected database.
-    *
-    * @var string
-    */
+     * The name of the connected database.
+     *
+     * @var string
+     */
     protected $database;
 
     /**
-    * The type of the connection.
-    *
-    * @var string|null
-    */
+     * The type of the connection.
+     *
+     * @var string|null
+     */
     protected $readWriteType;
 
     /**
-    * The table prefix for the connection.
-    *
-    * @var string
-    */
+     * The table prefix for the connection.
+     *
+     * @var string
+     */
     protected $tablePrefix = '';
 
     /**
-    * The database connection configuration options.
-    *
-    * @var array
-    */
+     * The database connection configuration options.
+     *
+     * @var array
+     */
     protected $config = [];
 
     /**
-    * The reconnector instance for the connection.
-    *
-    * @var callable
-    */
+     * The reconnector instance for the connection.
+     *
+     * @var callable
+     */
     protected $reconnector;
 
     /**
-    * The query grammar implementation.
-    *
-    * @var \Illuminate\Database\Query\Grammars\Grammar
-    */
+     * The query grammar implementation.
+     *
+     * @var \Illuminate\Database\Query\Grammars\Grammar
+     */
     protected $queryGrammar;
 
     /**
-    * The schema grammar implementation.
-    *
-    * @var \Illuminate\Database\Schema\Grammars\Grammar
-    */
+     * The schema grammar implementation.
+     *
+     * @var \Illuminate\Database\Schema\Grammars\Grammar
+     */
     protected $schemaGrammar;
 
     /**
-    * The query post processor implementation.
-    *
-    * @var \Illuminate\Database\Query\Processors\Processor
-    */
+     * The query post processor implementation.
+     *
+     * @var \Illuminate\Database\Query\Processors\Processor
+     */
     protected $postProcessor;
 
     /**
-    * The event dispatcher instance.
-    *
-    * @var \Illuminate\Contracts\Events\Dispatcher
-    */
+     * The event dispatcher instance.
+     *
+     * @var \Illuminate\Contracts\Events\Dispatcher|null
+     */
     protected $events;
 
     /**
-    * The default fetch mode of the connection.
-    *
-    * @var int
-    */
+     * The default fetch mode of the connection.
+     *
+     * @var int
+     */
     protected $fetchMode = PDO::FETCH_OBJ;
 
     /**
-    * The number of active transactions.
-    *
-    * @var int
-    */
+     * The number of active transactions.
+     *
+     * @var int
+     */
     protected $transactions = 0;
 
     /**
-    * The transaction manager instance.
-    *
-    * @var \Illuminate\Database\DatabaseTransactionsManager
-    */
+     * The transaction manager instance.
+     *
+     * @var \Illuminate\Database\DatabaseTransactionsManager|null
+     */
     protected $transactionsManager;
 
     /**
-    * Indicates if changes have been made to the database.
-    *
-    * @var bool
-    */
+     * Indicates if changes have been made to the database.
+     *
+     * @var bool
+     */
     protected $recordsModified = false;
 
     /**
-    * Indicates if the connection should use the 'write' PDO connection.
-    *
-    * @var bool
-    */
+     * Indicates if the connection should use the "write" PDO connection.
+     *
+     * @var bool
+     */
     protected $readOnWriteConnection = false;
 
     /**
-    * All of the queries run against the connection.
-    *
-    * @var array
-    */
+     * All of the queries run against the connection.
+     *
+     * @var array
+     */
     protected $queryLog = [];
 
     /**
-    * Indicates whether queries are being logged.
-    *
-    * @var bool
-    */
+     * Indicates whether queries are being logged.
+     *
+     * @var bool
+     */
     protected $loggingQueries = false;
 
     /**
-    * The duration of all executed queries in milliseconds.
-    *
-    * @var float
-    */
+     * The duration of all executed queries in milliseconds.
+     *
+     * @var float
+     */
     protected $totalQueryDuration = 0.0;
 
     /**
-    * All of the registered query duration handlers.
-    *
-    * @var array
-    */
+     * All of the registered query duration handlers.
+     *
+     * @var array
+     */
     protected $queryDurationHandlers = [];
 
     /**
-    * Indicates if the connection is in a 'dry run'.
-    *
-    * @var bool
-    */
+     * Indicates if the connection is in a "dry run".
+     *
+     * @var bool
+     */
     protected $pretending = false;
 
     /**
-    * All of the callbacks that should be invoked before a transaction is started.
-    *
-    * @var \Closure[]
-    */
+     * All of the callbacks that should be invoked before a transaction is started.
+     *
+     * @var \Closure[]
+     */
     protected $beforeStartingTransaction = [];
 
     /**
-    * All of the callbacks that should be invoked before a query is executed.
-    *
-    * @var \Closure[]
-    */
+     * All of the callbacks that should be invoked before a query is executed.
+     *
+     * @var \Closure[]
+     */
     protected $beforeExecutingCallbacks = [];
 
     /**
-    * The connection resolvers.
-    *
-    * @var \Closure[]
-    */
+     * The connection resolvers.
+     *
+     * @var \Closure[]
+     */
     protected static $resolvers = [];
 
     /**
-    * Create a new database connection instance.
-    *
-    * @param  \PDO|\Closure  $pdo
-    * @param  string  $database
-    * @param  string  $tablePrefix
-    * @param  array  $config
-    * @return void
-    */
-
-    public function __construct( $pdo, $database = '', $tablePrefix = '', array $config = [] ) {
+     * Create a new database connection instance.
+     *
+     * @param  \PDO|\Closure  $pdo
+     * @param  string  $database
+     * @param  string  $tablePrefix
+     * @param  array  $config
+     * @return void
+     */
+    public function __construct($pdo, $database = '', $tablePrefix = '', array $config = [])
+    {
         $this->pdo = $pdo;
 
         // First we will setup the default properties. We keep track of the DB
@@ -231,168 +232,171 @@ class Connection implements ConnectionInterface {
     }
 
     /**
-    * Set the query grammar to the default implementation.
-    *
-    * @return void
-    */
-
-    public function useDefaultQueryGrammar() {
+     * Set the query grammar to the default implementation.
+     *
+     * @return void
+     */
+    public function useDefaultQueryGrammar()
+    {
         $this->queryGrammar = $this->getDefaultQueryGrammar();
     }
 
     /**
-    * Get the default query grammar instance.
-    *
-    * @return \Illuminate\Database\Query\Grammars\Grammar
-    */
-    protected function getDefaultQueryGrammar() {
-        ( $grammar = new QueryGrammar )->setConnection( $this );
+     * Get the default query grammar instance.
+     *
+     * @return \Illuminate\Database\Query\Grammars\Grammar
+     */
+    protected function getDefaultQueryGrammar()
+    {
+        ($grammar = new QueryGrammar)->setConnection($this);
 
         return $grammar;
     }
 
     /**
-    * Set the schema grammar to the default implementation.
-    *
-    * @return void
-    */
-
-    public function useDefaultSchemaGrammar() {
+     * Set the schema grammar to the default implementation.
+     *
+     * @return void
+     */
+    public function useDefaultSchemaGrammar()
+    {
         $this->schemaGrammar = $this->getDefaultSchemaGrammar();
     }
 
     /**
-    * Get the default schema grammar instance.
-    *
-    * @return \Illuminate\Database\Schema\Grammars\Grammar|null
-    */
-    protected function getDefaultSchemaGrammar() {
+     * Get the default schema grammar instance.
+     *
+     * @return \Illuminate\Database\Schema\Grammars\Grammar|null
+     */
+    protected function getDefaultSchemaGrammar()
+    {
         //
     }
 
     /**
-    * Set the query post processor to the default implementation.
-    *
-    * @return void
-    */
-
-    public function useDefaultPostProcessor() {
+     * Set the query post processor to the default implementation.
+     *
+     * @return void
+     */
+    public function useDefaultPostProcessor()
+    {
         $this->postProcessor = $this->getDefaultPostProcessor();
     }
 
     /**
-    * Get the default post processor instance.
-    *
-    * @return \Illuminate\Database\Query\Processors\Processor
-    */
-    protected function getDefaultPostProcessor() {
+     * Get the default post processor instance.
+     *
+     * @return \Illuminate\Database\Query\Processors\Processor
+     */
+    protected function getDefaultPostProcessor()
+    {
         return new Processor;
     }
 
     /**
-    * Get a schema builder instance for the connection.
-    *
-    * @return \Illuminate\Database\Schema\Builder
-    */
-
-    public function getSchemaBuilder() {
-        if ( is_null( $this->schemaGrammar ) ) {
+     * Get a schema builder instance for the connection.
+     *
+     * @return \Illuminate\Database\Schema\Builder
+     */
+    public function getSchemaBuilder()
+    {
+        if (is_null($this->schemaGrammar)) {
             $this->useDefaultSchemaGrammar();
         }
 
-        return new SchemaBuilder( $this );
+        return new SchemaBuilder($this);
     }
 
     /**
-    * Begin a fluent query against a database table.
-    *
-    * @param  \Closure|\Illuminate\Database\Query\Builder|\Illuminate\Contracts\Database\Query\Expression|string  $table
-    * @param  string|null  $as
-    * @return \Illuminate\Database\Query\Builder
-    */
-
-    public function table( $table, $as = null ) {
-        return $this->query()->from( $table, $as );
+     * Begin a fluent query against a database table.
+     *
+     * @param  \Closure|\Illuminate\Database\Query\Builder|\Illuminate\Contracts\Database\Query\Expression|string  $table
+     * @param  string|null  $as
+     * @return \Illuminate\Database\Query\Builder
+     */
+    public function table($table, $as = null)
+    {
+        return $this->query()->from($table, $as);
     }
 
     /**
-    * Get a new query builder instance.
-    *
-    * @return \Illuminate\Database\Query\Builder
-    */
-
-    public function query() {
+     * Get a new query builder instance.
+     *
+     * @return \Illuminate\Database\Query\Builder
+     */
+    public function query()
+    {
         return new QueryBuilder(
             $this, $this->getQueryGrammar(), $this->getPostProcessor()
         );
     }
 
     /**
-    * Run a select statement and return a single result.
-    *
-    * @param  string  $query
-    * @param  array  $bindings
-    * @param  bool  $useReadPdo
-    * @return mixed
-    */
+     * Run a select statement and return a single result.
+     *
+     * @param  string  $query
+     * @param  array  $bindings
+     * @param  bool  $useReadPdo
+     * @return mixed
+     */
+    public function selectOne($query, $bindings = [], $useReadPdo = true)
+    {
+        $records = $this->select($query, $bindings, $useReadPdo);
 
-    public function selectOne( $query, $bindings = [], $useReadPdo = true ) {
-        $records = $this->select( $query, $bindings, $useReadPdo );
-
-        return array_shift( $records );
+        return array_shift($records);
     }
 
     /**
-    * Run a select statement and return the first column of the first row.
-    *
-    * @param  string  $query
-    * @param  array  $bindings
-    * @param  bool  $useReadPdo
-    * @return mixed
-    *
-    * @throws \Illuminate\Database\MultipleColumnsSelectedException
-    */
+     * Run a select statement and return the first column of the first row.
+     *
+     * @param  string  $query
+     * @param  array  $bindings
+     * @param  bool  $useReadPdo
+     * @return mixed
+     *
+     * @throws \Illuminate\Database\MultipleColumnsSelectedException
+     */
+    public function scalar($query, $bindings = [], $useReadPdo = true)
+    {
+        $record = $this->selectOne($query, $bindings, $useReadPdo);
 
-    public function scalar( $query, $bindings = [], $useReadPdo = true ) {
-        $record = $this->selectOne( $query, $bindings, $useReadPdo );
-
-        if ( is_null( $record ) ) {
+        if (is_null($record)) {
             return null;
         }
 
-        $record = ( array ) $record;
+        $record = (array) $record;
 
-        if ( count( $record ) > 1 ) {
+        if (count($record) > 1) {
             throw new MultipleColumnsSelectedException;
         }
 
-        return reset( $record );
+        return reset($record);
     }
 
     /**
-    * Run a select statement against the database.
-    *
-    * @param  string  $query
-    * @param  array  $bindings
-    * @return array
-    */
-
-    public function selectFromWriteConnection( $query, $bindings = [] ) {
-        return $this->select( $query, $bindings, false );
+     * Run a select statement against the database.
+     *
+     * @param  string  $query
+     * @param  array  $bindings
+     * @return array
+     */
+    public function selectFromWriteConnection($query, $bindings = [])
+    {
+        return $this->select($query, $bindings, false);
     }
 
     /**
-    * Run a select statement against the database.
-    *
-    * @param  string  $query
-    * @param  array  $bindings
-    * @param  bool  $useReadPdo
-    * @return array
-    */
-
-    public function select( $query, $bindings = [], $useReadPdo = true ) {
-        return $this->run( $query, $bindings, function ( $query, $bindings ) use ( $useReadPdo ) {
-            if ( $this->pretending() ) {
+     * Run a select statement against the database.
+     *
+     * @param  string  $query
+     * @param  array  $bindings
+     * @param  bool  $useReadPdo
+     * @return array
+     */
+    public function select($query, $bindings = [], $useReadPdo = true)
+    {
+        return $this->run($query, $bindings, function ($query, $bindings) use ($useReadPdo) {
+            if ($this->pretending()) {
                 return [];
             }
 
@@ -450,7 +454,7 @@ class Connection implements ConnectionInterface {
      * @param  string  $query
      * @param  array  $bindings
      * @param  bool  $useReadPdo
-     * @return \Generator
+     * @return \Generator<int, \stdClass>
      */
     public function cursor($query, $bindings = [], $useReadPdo = true)
     {
@@ -462,11 +466,11 @@ class Connection implements ConnectionInterface {
             // First we will create a statement for the query. Then, we will set the fetch
             // mode and prepare the bindings for the query. Once that's done we will be
             // ready to execute the query against the database and return the cursor.
-            $statement = $this->prepared( $this->getPdoForSelect( $useReadPdo )
-            ->prepare( $query ) );
+            $statement = $this->prepared($this->getPdoForSelect($useReadPdo)
+                              ->prepare($query));
 
             $this->bindValues(
-                $statement, $this->prepareBindings( $bindings )
+                $statement, $this->prepareBindings($bindings)
             );
 
             // Next, we'll execute the query against the database and return the statement
@@ -581,6 +585,7 @@ class Connection implements ConnectionInterface {
             if ($this->pretending()) {
                 return 0;
             }
+
             // For update or delete statements, we want to get the number of rows affected
             // by the statement and return that back to the developer. We'll first need
             // to execute the statement and then we'll use PDO to fetch the affected.
@@ -620,6 +625,18 @@ class Connection implements ConnectionInterface {
     }
 
     /**
+     * Get the number of open connections for the database.
+     *
+     * @return int|null
+     */
+    public function threadCount()
+    {
+        $query = $this->getQueryGrammar()->compileThreadCount();
+
+        return $query ? $this->scalar($query) : null;
+    }
+
+    /**
      * Execute the given callback in "dry run" mode.
      *
      * @param  \Closure  $callback
@@ -655,11 +672,11 @@ class Connection implements ConnectionInterface {
 
         $this->pretending = false;
 
-        $result = $callback();
-
-        $this->pretending = true;
-
-        return $result;
+        try {
+            return $callback();
+        } finally {
+            $this->pretending = true;
+        }
     }
 
     /**
@@ -674,12 +691,12 @@ class Connection implements ConnectionInterface {
 
         // First we will back up the value of the logging queries property and then
         // we'll be ready to run callbacks. This query log will also get cleared
-            // so we will have a new log of all the queries that are executed now.
-            $this->enableQueryLog();
+        // so we will have a new log of all the queries that are executed now.
+        $this->enableQueryLog();
 
-            $this->queryLog = [];
+        $this->queryLog = [];
 
-            // Now we'll execute this callback and capture the result. Once it has been
+        // Now we'll execute this callback and capture the result. Once it has been
         // executed we will restore the value of query logging and give back the
         // value of the callback so the original callers can have the results.
         $result = $callback();
@@ -725,10 +742,10 @@ class Connection implements ConnectionInterface {
             // We need to transform all instances of DateTimeInterface into the actual
             // date string. Each query grammar maintains its own date string format
             // so we'll just ask the grammar for the format to get from the date.
-            if ( $value instanceof DateTimeInterface ) {
-                $bindings[ $key ] = $value->format( $grammar->getDateFormat() );
-            } elseif ( is_bool( $value ) ) {
-                $bindings[ $key ] = ( int ) $value;
+            if ($value instanceof DateTimeInterface) {
+                $bindings[$key] = $value->format($grammar->getDateFormat());
+            } elseif (is_bool($value)) {
+                $bindings[$key] = (int) $value;
             }
         }
 
@@ -736,30 +753,31 @@ class Connection implements ConnectionInterface {
     }
 
     /**
-    * Run a SQL statement and log its execution context.
-    *
-    * @param  string  $query
-    * @param  array  $bindings
-    * @param  \Closure  $callback
-    * @return mixed
-    *
-    * @throws \Illuminate\Database\QueryException
-    */
-    protected function run( $query, $bindings, Closure $callback ) {
-        foreach ( $this->beforeExecutingCallbacks as $beforeExecutingCallback ) {
-            $beforeExecutingCallback( $query, $bindings, $this );
+     * Run a SQL statement and log its execution context.
+     *
+     * @param  string  $query
+     * @param  array  $bindings
+     * @param  \Closure  $callback
+     * @return mixed
+     *
+     * @throws \Illuminate\Database\QueryException
+     */
+    protected function run($query, $bindings, Closure $callback)
+    {
+        foreach ($this->beforeExecutingCallbacks as $beforeExecutingCallback) {
+            $beforeExecutingCallback($query, $bindings, $this);
         }
 
         $this->reconnectIfMissingConnection();
 
-        $start = microtime( true );
+        $start = microtime(true);
 
         // Here we will run this query. If an exception occurs we'll determine if it was
         // caused by a connection that has been lost. If that is the cause, we'll try
         // to re-establish connection and re-run the query with a fresh connection.
         try {
-            $result = $this->runQueryCallback( $query, $bindings, $callback );
-        } catch ( QueryException $e ) {
+            $result = $this->runQueryCallback($query, $bindings, $callback);
+        } catch (QueryException $e) {
             $result = $this->handleQueryException(
                 $e, $query, $bindings, $callback
             );
@@ -791,37 +809,38 @@ class Connection implements ConnectionInterface {
         // run the SQL against the PDO connection. Then we can calculate the time it
         // took to execute and log the query SQL, bindings and time in our memory.
         try {
-            return $callback( $query, $bindings );
+            return $callback($query, $bindings);
         }
 
         // If an exception occurs when attempting to run a query, we'll format the error
         // message to include the bindings with SQL, which will make this exception a
         // lot more helpful to the developer instead of just the database's errors.
-        catch ( Exception $e ) {
-            if ( $this->isUniqueConstraintError( $e ) ) {
+        catch (Exception $e) {
+            if ($this->isUniqueConstraintError($e)) {
                 throw new UniqueConstraintViolationException(
-                    $this->getName(), $query, $this->prepareBindings( $bindings ), $e
+                    $this->getName(), $query, $this->prepareBindings($bindings), $e
                 );
             }
 
             throw new QueryException(
-                $this->getName(), $query, $this->prepareBindings( $bindings ), $e
+                $this->getName(), $query, $this->prepareBindings($bindings), $e
             );
         }
     }
 
     /**
-    * Determine if the given database exception was caused by a unique constraint violation.
-    *
-    * @param  \Exception  $exception
-    * @return bool
-    */
-    protected function isUniqueConstraintError( Exception $exception ) {
+     * Determine if the given database exception was caused by a unique constraint violation.
+     *
+     * @param  \Exception  $exception
+     * @return bool
+     */
+    protected function isUniqueConstraintError(Exception $exception)
+    {
         return false;
     }
 
     /**
-    * Log a query in the connection's query log.
+     * Log a query in the connection's query log.
      *
      * @param  string  $query
      * @param  array  $bindings
@@ -846,7 +865,7 @@ class Connection implements ConnectionInterface {
     /**
      * Get the elapsed time since a given starting point.
      *
-     * @param  int  $start
+     * @param  float  $start
      * @return float
      */
     protected function getElapsedTime($start)
@@ -1341,6 +1360,16 @@ class Connection implements ConnectionInterface {
     }
 
     /**
+     * Get a human-readable name for the given connection driver.
+     *
+     * @return string
+     */
+    public function getDriverTitle()
+    {
+        return $this->getDriverName();
+    }
+
+    /**
      * Get the query grammar used by the connection.
      *
      * @return \Illuminate\Database\Query\Grammars\Grammar
@@ -1533,116 +1562,120 @@ class Connection implements ConnectionInterface {
 
     /**
      * Determine whether we're logging queries.
-    *
-    * @return bool
-    */
-
-    public function logging() {
+     *
+     * @return bool
+     */
+    public function logging()
+    {
         return $this->loggingQueries;
     }
 
     /**
-    * Get the name of the connected database.
-    *
-    * @return string
-    */
-
-    public function getDatabaseName() {
+     * Get the name of the connected database.
+     *
+     * @return string
+     */
+    public function getDatabaseName()
+    {
         return $this->database;
     }
 
     /**
-    * Set the name of the connected database.
-    *
-    * @param  string  $database
-    * @return $this
-    */
-
-    public function setDatabaseName( $database ) {
+     * Set the name of the connected database.
+     *
+     * @param  string  $database
+     * @return $this
+     */
+    public function setDatabaseName($database)
+    {
         $this->database = $database;
 
         return $this;
     }
 
     /**
-    * Set the read / write type of the connection.
-    *
-    * @param  string|null  $readWriteType
-    * @return $this
-    */
-
-    public function setReadWriteType( $readWriteType ) {
+     * Set the read / write type of the connection.
+     *
+     * @param  string|null  $readWriteType
+     * @return $this
+     */
+    public function setReadWriteType($readWriteType)
+    {
         $this->readWriteType = $readWriteType;
 
         return $this;
     }
 
     /**
-    * Get the table prefix for the connection.
-    *
-    * @return string
-    */
-
-    public function getTablePrefix() {
+     * Get the table prefix for the connection.
+     *
+     * @return string
+     */
+    public function getTablePrefix()
+    {
         return $this->tablePrefix;
     }
 
     /**
-    * Set the table prefix in use by the connection.
-    *
-    * @param  string  $prefix
-    * @return $this
-    */
-
-    public function setTablePrefix( $prefix ) {
+     * Set the table prefix in use by the connection.
+     *
+     * @param  string  $prefix
+     * @return $this
+     */
+    public function setTablePrefix($prefix)
+    {
         $this->tablePrefix = $prefix;
 
-        $this->getQueryGrammar()->setTablePrefix( $prefix );
+        $this->getQueryGrammar()->setTablePrefix($prefix);
 
         return $this;
     }
 
     /**
-    * Set the table prefix and return the grammar.
-    *
-    * @param  \Illuminate\Database\Grammar  $grammar
-    * @return \Illuminate\Database\Grammar
-    */
-
-    public function withTablePrefix( Grammar $grammar ) {
-        $grammar->setTablePrefix( $this->tablePrefix );
+     * Set the table prefix and return the grammar.
+     *
+     * @template TGrammar of \Illuminate\Database\Grammar
+     *
+     * @param  TGrammar  $grammar
+     * @return TGrammar
+     */
+    public function withTablePrefix(Grammar $grammar)
+    {
+        $grammar->setTablePrefix($this->tablePrefix);
 
         return $grammar;
     }
 
     /**
-    * Get the server version for the connection.
-    *
-    * @return string
-    */
-
-    public function getServerVersion(): string {
-        return $this->getPdo()->getAttribute( PDO::ATTR_SERVER_VERSION );
+     * Get the server version for the connection.
+     *
+     * @return string
+     */
+    public function getServerVersion(): string
+    {
+        return $this->getPdo()->getAttribute(PDO::ATTR_SERVER_VERSION);
     }
 
     /**
-    * Register a connection resolver.
-    *
-    * @param  string  $driver
-    * @param  \Closure  $callback
-    * @return void
-    */
-    public static function resolverFor( $driver, Closure $callback ) {
-        static::$resolvers[ $driver ] = $callback;
+     * Register a connection resolver.
+     *
+     * @param  string  $driver
+     * @param  \Closure  $callback
+     * @return void
+     */
+    public static function resolverFor($driver, Closure $callback)
+    {
+        static::$resolvers[$driver] = $callback;
     }
 
     /**
-    * Get the connection resolver for the given driver.
-    *
-    * @param  string  $driver
-    * @return mixed
-    */
-    public static function getResolver( $driver ) {
-        return static::$resolvers[ $driver ] ?? null;
+     * Get the connection resolver for the given driver.
+     *
+     * @param  string  $driver
+     * @return \Closure|null
+     */
+    public static function getResolver($driver)
+    {
+        return static::$resolvers[$driver] ?? null;
     }
 }

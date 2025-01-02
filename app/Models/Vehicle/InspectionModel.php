@@ -5,6 +5,7 @@ namespace App\Models\Vehicle;
 use App\Models\User;
 use App\Models\Vehicle\VehiclesModel as VehicleVehiclesModel;
 use App\Models\VehiclesModel;
+use App\Models\Vehicle\MaintenancesModel;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Str;
@@ -54,11 +55,16 @@ class InspectionModel extends Model
     // Relationship with the User (Inspector) model
     public function inspector()
         {
-            return $this->belongsTo(User::class, 'inspected_by', 'id');
+            return $this->belongsTo(User::class, 'id', 'inspected_by');
         }
     // Relationship with the VehiclePart model
     public function part()
         {
-            return $this->belongsTo(VehiclePart::class, 'part_name', 'vehicle_parts_id');
+            return $this->belongsTo(VehiclePart::class, 'vehicle_parts_id','part_name');
         }
+        public function taking_inspection()
+        {
+            return $this->hasMany(MaintenancesModel::class,'taking_inspection','inspection_id');
+        } 
+   
 }
