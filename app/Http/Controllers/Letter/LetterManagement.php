@@ -60,11 +60,11 @@ class LetterManagement extends Controller
                         data-department="' . ($row->department ? $row->department : null) . '"
                         data-acceptedBy="' . ($row->acceptedBy ? $row->acceptedBy->first_name .' '. $row->acceptedBy->last_name : null) . '"
                         data-image="' . $row->letter_file . '"
-                        title="edit"><i class="ri-eye-line"></i></button>';
+                        title="View"><i class="ri-eye-line"></i></button>';
 
                     if ($row->reviewed_by == null) {
-                        $actions .= '<button class="btn btn-secondary rounded-pill update-btn" title="edit"><i class="ri-edit-line"></i></button>';
-                        $actions .= '<button class="btn btn-danger rounded-pill reject-btn" title="edit"><i class=" ri-close-circle-fill"></i></button>';
+                       
+                        $actions .= '<button class="btn btn-danger rounded-pill reject-btn" title="Delete"><i class=" ri-close-circle-fill"></i></button>';
                     }
 
                     return $actions;

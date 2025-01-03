@@ -186,8 +186,18 @@
                                 @endcan()
                                 @can('Request Mentenance')
                                     <li>
-                                        <a href="/mentaincance_request_page">Maintenance </a>
+                                        <a href="{{route('maintenance_request')}}">Maintenance </a>
                                     </li>
+                                @endcan()
+                                @can('Request Mentenance')
+                                <li>
+                                    <a href="{{route('maintenance_approver')}}">Maintenance Approver</a>
+                                </li>
+                                 @endcan()
+                                @can('Request Mentenance')
+                                <li>
+                                    <a href="{{route('maintenance_inspection')}}">Maintenance Inspection</a>
+                                </li>
                                 @endcan()
                             </ul>
                         </div>
