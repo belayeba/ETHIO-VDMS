@@ -127,7 +127,7 @@
                                                 <button type="button" class="btn-close" data-bs-dismiss="modal"
                                                     aria-label="Close"></button>
                                             </div> <!-- end modal header -->
-                                            <form method="POST" action="{{ route('approver_rejection') }}">
+                                            <form method="Get" action="">
                                                 @csrf
                                                 <div class="modal-body">
                                                     <div class="col-lg-8">

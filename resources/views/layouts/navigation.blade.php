@@ -184,21 +184,7 @@
                                         <a href="{{ route('vehicle_director_page') }}">Return Permanent</a>
                                     </li>
                                 @endcan()
-                                @can('Request Mentenance')
-                                    <li>
-                                        <a href="{{route('maintenance_request')}}">Maintenance </a>
-                                    </li>
-                                @endcan()
-                                @can('Request Mentenance')
-                                <li>
-                                    <a href="{{route('maintenance_approver')}}">Maintenance Approver</a>
-                                </li>
-                                 @endcan()
-                                @can('Request Mentenance')
-                                <li>
-                                    <a href="{{route('maintenance_inspection')}}">Maintenance Inspection</a>
-                                </li>
-                                @endcan()
+                                
                             </ul>
                         </div>
                     </li>
@@ -230,6 +216,36 @@
                             </ul>
                         </div>
                     </li>
+
+                    <li class="side-nav-item">
+                        <a data-bs-toggle="collapse" href="#sidebarMaintenance" aria-expanded="false"
+                            aria-controls="sidebarMaintenance" class="side-nav-link">
+                            <i class="ri-settings-5-fill "></i>
+                            <span>Maintenance</span>
+                            <span class="menu-arrow"></span>
+                        </a>
+                        <div class="collapse" id="sidebarMaintenance">
+                            <ul class="side-nav-second-level">
+                                @can('Request Mentenance')
+                                    <li>
+                                        <a href="{{route('maintenance_request')}}">Maintenance </a>
+                                    </li>
+                                @endcan()
+                                @can('Request Mentenance')
+                                <li>
+                                    <a href="{{route('maintenance_approver')}}">Maintenance Approver</a>
+                                </li>
+                                 @endcan()
+                                @can('Request Mentenance')
+                                <li>
+                                    <a href="{{route('maintenance_inspection')}}">Maintenance Inspection</a>
+                                </li>
+                                @endcan()
+                            </ul>
+                        </div>
+                    </li>
+
+
                     @can('Create User')
                         <li class="side-nav-item">
                             <a data-bs-toggle="collapse" href="#sidebarUser" aria-expanded="false"
