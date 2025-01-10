@@ -1,189 +1,295 @@
 @extends('layouts.navigation')
-
 @section('content')
+    <style>
+        .badge {
+            font-size: 0.9em;
+            padding: 0.3em 0.5em;
+            margin-right: 0.2em;
+        }
 
-    <div class="wrapper">
-        <div class="content-page">
-            <div class="preloader" dir="ltr">
-                <div class='body'>
-                    <span>
-                        <span></span>
-                        <span></span>
-                        <span></span>
-                    </span>
-                    <div class='base'>
-                        <span></span>
-                        <div class='face'></div>
-                    </div>
+        .remove-tag {
+            cursor: pointer;
+            margin-left: 0.3em;
+        }
+    </style>
+
+    <div class="content-page">
+        <div class="content">
+
+            @if (Session::has('error_message'))
+                <div class="alert alert-danger alert-dismissible text-bg-danger border-0 fade show col-lg-5" role="alert">
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert"
+                        aria-label="Close"></button>
+                    <strong>Error - </strong> {!! session('error_message') !!}
                 </div>
-                <div class='longfazers'>
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                    <span></span>
+            @endif
+
+            @if (Session::has('success_message'))
+                <div class="alert alert-primary alert-dismissible text-bg-primary border-0 fade show col-lg-5" role="alert">
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert"
+                        aria-label="Close"></button>
+                    <strong> Success- </strong> {!! session('success_message') !!}
                 </div>
-            </div>
-            <input type="hidden" name="table_name" id="table_name" value="">
-            <input type="hidden" name="csrf_token" class="csrf_token" value="{{ csrf_token() }}">
+            @endif
+            <!-- Start Content-->
+            <div class="container-fluid">
+                <div class="row g-3">
+                    <!-- Form Section -->
+                    <div class="col-12 col-lg-5">
+                        <div class="card">
+                           
+                            <div class="card-body">
+                                <!-- Form content -->
 
-            <div class="main-wrapper" style="min-height: 600px">
-                <!-- Page Content  -->
-                <div id="main-content" class="">
-                    <section class="sms-breadcrumb mb-10 white-box">
-                        <div class="container-fluid p-0">
-                            <div class="d-flex flex-wrap justify-content-between">
-                               
-                            </div>
-                        </div>
-                    </section>
+                                <form method="POST" action="{{ route('driver_request_post') }}" enctype="multipart/form-data">
+                                    @csrf
+                                    <ul class="nav nav-pills nav-justified form-wizard-header mb-3">
+                                        <li class="nav-item">
+                                            <a class="nav-link rounded-0 py-2" id="displayprogresive">
+                                                <i class="ri-settings-5-fill fw-normal fs-20 align-middle me-1"></i>
+                                                <span class="d-none d-sm-inline">Request Maintenance</span>
+                                            </a>
+                                        </li>
+                                    </ul>
 
-                    <section class="admin-visitor-area up_st_admin_visitor">
-                        <div class="container-fluid p-0">
-                            <div class="row justify-content-center">
-                                <!-- Add New Ebook Form -->
-                                <div class="col-md-4">
-                                    <div class="card">
-                                        <div class="card-header">
-                                            <h4 class="header-title mb-0">New Maintenance</h4>
-                                        </div>
-                                        <div class="card-body">
-                                            <form method="POST" action="" accept-charset="UTF-8" name="ebook-form" id="ebook-form" enctype="multipart/form-data">
-                                                @csrf
-                                                {{-- <div class="card-body"> --}}
-                                                    {{-- <div class="row"> --}}
-                                                        <div class="col-auto">
-                                                            <div class="position-relative mb-3">
-                                                                <div class="position-relative mb-3">
-                                                                    <label class="form-label" for="validationTooltip02">Select Vehicle</label>
-                                                                    <select class="form-control" id="department_id" name="vehicle_id">
-                                                                            <option value=""   disabled selected>Select</option>
-                                                                            @foreach ($vehicle as $vec )
-                                                                            <option value="{{$vec->vehicle_id}}">
-                                                                                {{$vec->plate_number}}
-                                                                            </option>
-                                                                            @endforeach
-                                                                    </select>
-                                                                </div> 
+                                    <div id="progressbarwizard" style="display: none">
+                                        <ul class="nav nav-pills nav-justified form-wizard-header mb-3">
+                                            <li class="nav-item">
+                                                <a href="#account-2" data-bs-toggle="tab" data-toggle="tab"
+                                                    class="nav-link rounded-0 py-2">
+                                                    <i class="ri-car-fill fw-normal fs-20 align-middle me-1"></i>
+                                                    <span class="d-none d-sm-inline">Reason</span>
+                                                </a>
+                                            </li>
+                                           
+                                         
+                                            <li class="nav-item">
+                                                <a href="#finish-3" data-bs-toggle="tab" data-toggle="tab"
+                                                    class="nav-link rounded-0 py-2">
+                                                    <i class=" ri-information-fill fw-normal fs-20 align-middle me-1"></i>
+                                                    <span class="d-none d-sm-inline">Info</span>
+                                                </a>
+                                            </li>
+
+                                        </ul>
+
+                                        <div class="tab-content b-0 mb-0">
+
+                                            <div id="bar" class="progress mb-3" style="height: 7px;">
+                                                <div
+                                                    class="bar progress-bar progress-bar-striped progress-bar-animated bg-success">
+                                                </div>
+                                            </div>
+                                                <div class="tab-pane" id="account-2">
+                                                    <div class="row">
+
+                                                        <div class="position-relative mb-3">
+                                                            <div class="mb-6 position-relative" id="datepicker1">
+                                                                <label class="form-label">Vehicle</label>
+                                                                <select id="vehicl" name="vehicle" class="form-select" required>
+                                                                    <option value="">Select</option>
+                                                                    @foreach($vehicle as $vehicle)
+                                                                        <option value="{{ $vehicle->vehicle_id }}">{{ $vehicle->plate_number }}</option>
+                                                                    @endforeach
+                                                                </select>
                                                             </div>
                                                         </div>
-                                                <div class="mb-3">
-                                                    <label for="nameInput" class="form-label">Name <strong class="text-danger">*</strong></label>
-                                                    <input type="text" class="form-control" id="nameInput" name="name" placeholder="Name">
+
+                                                        <div class="position-relative mb-3">
+                                                            <div class="mb-6 position-relative">
+                                                                <label class="form-label">Maintenance Type</label>
+                                                                <select id="maintenance" name="maintenance_type" class="form-select" required>
+                                                                    <option value="">Select</option>
+                                                                    <option value="service">Service</option>
+                                                                    <option value="accident">Accident</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+
+                                                    </div>
+                                                    <ul class="list-inline wizard mb-0">
+                                                        <li class="next list-inline-item float-end">
+                                                            <a href="javascript:void(0);" class="btn btn-info">Next <i
+                                                                    class="ri-arrow-right-line ms-1"></i></a>
+                                                        </li>
+                                                    </ul>
                                                 </div>
-                                                <div class="mb-3">
-                                                    <label for="nameInput" class="form-label">Description <strong class="text-danger">*</strong></label>
-                                                    <input type="text" class="form-control" id="nameInput" name="description" placeholder="Write your description here">
+
+                                            
+                                                
+                                                <div class="tab-pane" id="finish-3">
+                                                    <div class="row">
+                                                        <div class="position-relative mb-3">
+                                                            <div class="mb-6 position-relative">
+                                                                <label class="form-label">Current Mileage</label>
+                                                                <input type="number" name="milage" class="form-control"
+                                                                    placeholder="Enter current vehicle mileage" required>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="position-relative mb-3">
+                                                            <div class="mb-6 position-relative">
+                                                                <label class="form-label">Problem</label>
+                                                                <textarea type="text" name="driver_inspection" class="form-control"
+                                                                    rows="4"  style="resize: none;" required> </textarea>
+                                                            </div>
+                                                        </div>
+
+
+                                                    </div>
+                                                    <ul class="pager wizard mb-0 list-inline mt-1">
+                                                        <li class="previous list-inline-item">
+                                                            <button type="button" class="btn btn-light"><i
+                                                                    class="ri-arrow-left-line me-1"></i> Back</button>
+                                                        </li>
+                                                        <li class="next list-inline-item float-end">
+                                                            <button type="submit" class="btn btn-info">Submit</button>
+                                                        </li>
+                                                    </ul>
                                                 </div>
-                                                <div class="d-flex justify-content-center">
-                                                    <button type="submit" class="btn btn-primary">Request</button>
-                                                </div>
-                                            </form>
-                                        </div>
+                                            
+                                        </div></br> <!-- end card-body-->
+                                    </form>
                                     </div>
-                                </div>
-                                
-                                <!-- Ebook List -->
-                                <div class="col-md-8">
-                                    <div class="card">
-                                        <div class="card-header">
-                                            <h4 class="header-title mb-0">Maintenance List</h4>
-                                        </div>
-                                        <div class="card-body">
-                                            <div class="table-responsive">
-                                                <table id="lms_table" class="table">
-                                                    <thead>
-                                                        <tr>
-                                                            <th scope="col">#</th>
-                                                            <th scope="col">Maintenance Type</th>
-                                                            <th scope="col">Description</th>
-                                                            <th scope="col">Status</th>
-                                                            {{-- <th scope="col">Action</th> --}}
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        <!-- Table rows will be populated here -->
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </section>
-                    
-                    <!-- Confirmation Modal -->
-                    <div class="modal fade" id="confirm-delete" tabindex="-1" role="dialog" aria-labelledby="confirmDeleteLabel" aria-hidden="true">
-                        <div class="modal-dialog modal-dialog-centered" role="document">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="confirmDeleteLabel">Delete Confirmation</h5>
-                                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                    </button>
-                                </div>
-                                <div class="modal-body">
-                                    <p class="text-center">Are you sure to delete ?</p>
-                                    <div class="d-flex justify-content-between">
-                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                                        <a id="delete_link" class="btn btn-danger">Delete</a>
-                                    </div>
-                                </div>
                             </div>
                         </div>
                     </div>
+            
+                    <!-- Table Section -->
+                    <div class="col-12 col-lg-7">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table id="basic-datatable" class="Temporary_datatable table table-centered mb-0 table-nowrap">
+                                        <thead>
+                                            <tr>
+                                                <th>Roll.no</th>
+                                                <th>Vehicle</th>
+                                                <th>Type</th>
+                                                <th>Status</th>
+                                                <th>Actions</th>
+                                            </tr>
+                                        </thead>
 
-                    <footer class="footer-area">
-                        <div class="container">
-                            <div class="row">
-                                <div class="col-lg-12 text-center mt-5">
-                                    <p class="p-3 mb-0">Copyright © 2024. All rights reserved | Made By Ai</p>
+                                        <tbody>
+                                            
+                                        </tbody>
+                                    </table>
+
                                 </div>
-                            </div>
-                        </div>
-                    </footer>
+                                
+                                <!-- Accept Alert Modal -->
+                                <div class="modal fade" id="confirmationModal" tabindex="-1" role="dialog"
+                                aria-labelledby="confirmationModalLabel"aria-hidden="true">
+                                <div class="modal-dialog modal-sm">
+                                    <div class="modal-content">
+                                        <form method="POST" action="{{route('temp_delete_request')}}">
+                                            @csrf
+                                            <input type="hidden" name="request_id" id="deleted_id">
+                                            <div class="modal-body p-4">
+                                                <div class="text-center">
+                                                    <i class="ri-alert-line h1 text-danger"></i>
+                                                    <h4 class="mt-2">Warning</h4>
+                                                    <h5 class="mt-3">
+                                                        Are you sure you want to DELETE this request?</br> This action
+                                                        cannot be
+                                                        undone.
+                                                    </h5>
+                                                    <button type="button" class="btn btn-secondary"
+                                                        data-bs-dismiss="modal">Cancel</button>
+                                                    <button type="submit" class="btn btn-danger"
+                                                        id="confirmDelete">Yes,
+                                                        Delete</button>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div><!-- /.modal-content -->
+                                </div><!-- /.modal-dialog -->
+                            </div><!-- /.modal -->
+
+                              
+                            </div> <!-- end card body-->
+                        </div> <!-- end card -->
+                    </div><!-- end col-->
                 </div>
-            </div>
-        </div>
-    </div>
 
-    <script src="backend/js/datatable_extra.js"></script>
-    <script src="backend/js/plugin.js"></script>
-    <script src="chat/js/custom7b4a.js?v=7.1.0"></script>
-    <script src="whatsapp-support/scripts7b4a.js?v=7.1.0"></script>
-    <script src="vendor/uppy/uppy.min.js"></script>
-    <script src="vendor/uppy/uppy.legacy.min.js"></script>
-    <script src="vendor/uppy/ru_RU.min.js"></script>
-    <script src="../Modules/AIContent/Resources/assets/js/ai_content.js"></script>
-    <script>
-        $(document).on('click', '#show_ai_text_generator', function () {
-            var selected_template = $(this).data('selected_template');
-            var ai_template = $('#ai_template');
-            if (selected_template) {
-                ai_template.val(selected_template);
-                $('#ai_template').niceSelect('update');
-            }
-            $("#ai_text_generation_modal").modal('show');
-        });
 
-        $(document).on('change', '#ai_template', function (e) {
-            let templateId = $(this).val();
-            if (templateId == 1 || templateId == 11) {
-                $('#titleDiv').addClass('d-none');
-            } else {
-                $('#titleDiv').removeClass('d-none');
-            }
-        });
 
-        $('.dataTables_length label select').niceSelect();
-        $('.dataTables_length label .nice-select').addClass('dataTable_select');
-        $(document).on('click', '.dataTables_length label .nice-select', function () {
-            $(this).toggleClass('open_selectlist');
-        });
+                <script src="{{ asset('assets/vendor/datatables.net/js/jquery.dataTables.min.js') }}"></script>
+
+        <script>
+            var table = $('.Temporary_datatable').DataTable({
+                processing: true,
+                pageLength: 5,
+                serverSide: true,
+                ajax: {
+                    url: "{{ route('FetchMaintenanceRequest') }}",
+                    data: function (d) {
+                        d.customDataValue = 1;
+                    }
+                },    
+                columns: [{
+                        data: 'counter',
+                        name: 'counter'
+                    },
+                    {
+                        data: 'vehicle',
+                        name: 'vehicle'
+                    },
+                    {
+                        data: 'type',
+                        name: 'type'
+                    },
+                    {
+                        data: 'status',
+                        name: 'status'
+                    },
+                    {
+                        data: 'actions',
+                        name: 'actions',
+                        orderable: false,
+                        searchable: false
+                    },
+                ]
+            });
+                    
+            $(document).ready(function() {
+                    var RejectedId;
+        
+                    $(document).on('click', '.reject-btn', function() {
+                        RejectedId = $(this).data('id');
+        
+                        $('#deleted_id').val(RejectedId);
+                        $('#confirmationModal').modal('toggle');
+                    });
+                });
+         
+
+            document.getElementById('displayprogresive').addEventListener('click', function() {
+                // Retrieve the div element to be toggled
+                var targetDiv = document.getElementById('progressbarwizard');
+                
+                // Toggle the visibility of the div
+                if (targetDiv.style.display === 'none') {
+                    targetDiv.style.display = 'block';
+                } else {
+                    targetDiv.style.display = 'none';
+                }
+            });
     </script>
 
-    <!-- Vendor js -->
-    <script src="assets/js/vendor.min.js"></script>
+
+    <script src="assets/vendor/twitter-bootstrap-wizard/jquery.bootstrap.wizard.min.js"></script>
+
+
+    <script src="assets/js/pages/form-wizard.init.js"></script>
+    <script>
+        src = "{{ asset('assets/vendor/datatables.net-bs5/js/dataTables.bootstrap5.min.js') }}" 
+    </script>
+
+
+
     <!-- App js -->
-    <script src="assets/js/app.min.js"></script>
+    <script src="{{ asset('assets/js/app.min.js') }}"></script>
 @endsection
+    <script src="{{ asset('assets/js/vendor.min.js') }}"></script>

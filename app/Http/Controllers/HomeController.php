@@ -30,7 +30,7 @@ class HomeController extends Controller
         {
             $tempReq = VehicleTemporaryRequestModel::count();
             $permReq = VehiclePermanentlyRequestModel ::count();
-            $vehicles = VehiclePermanentlyRequestModel:: count();
+            $vehicles = VehiclesModel:: count();
             $users = user::count();
             $user= Auth::id();
             return view('home',compact('tempReq','permReq','vehicles','users','user'));
