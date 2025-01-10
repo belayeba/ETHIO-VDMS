@@ -28,8 +28,8 @@
                                         <tr>
                                             <th>#</th>
                                             <th>Requested By</th>
-                                            <th>Vehicle</th>
-                                            <th>Maintenance Type</th>
+                                            <th>Vehicle Type</th>
+                                            <th>Requested At</th>
                                             <th>Status</th>
                                             <th>Action</th>
                                         </tr>
@@ -62,7 +62,10 @@
                                                     <dt class="col-sm-5">Current Inspection</dt>
                                                     <dd class="col-sm-7"> <button  type="button" class="btn btn-primary "  id="assignBtn"  title="Inspect">Check</button></dd>
 
+                                                    <dt class="col-sm-5">Current Inspection</dt>
+                                                    <dd class="col-sm-7"> <iframe id="image1" class="img-fluid" style="width: 100%; height: 100%;"></iframe></dd>
                                                 </dl>
+
                                                 <div class="table-responsive">
                                                     <div class="row mt-3" id="inspectionCardsContainer" class="table table-striped"> 
                                                     </div>
@@ -82,7 +85,7 @@
                                     aria-labelledby="confirmationModalLabel"aria-hidden="true">
                                     <div class="modal-dialog modal-sm">
                                         <div class="modal-content">
-                                            <form method="POST" action="{{ route('approver_approve_request') }}">
+                                            <form method="POST" action="{{ route('simirit_approve_request') }}">
                                                 @csrf
                                                 <input type="hidden" name="maintenance_id" id="request_id">
                                                 <input type="hidden" name="maintenance_status" value="approved">
@@ -119,7 +122,7 @@
                                                 <button type="button" class="btn-close" data-bs-dismiss="modal"
                                                     aria-label="Close"></button>
                                             </div> <!-- end modal header -->
-                                            <form method="POST" action="{{ route('approver_rejection') }}">
+                                            <form method="POST" action="{{ route('simirit_rejection') }}">
                                                 @csrf
                                                 <div class="modal-body">
                                                     <div class="col-lg-6">
@@ -128,7 +131,7 @@
                                                             <input type="hidden" name="maintenance_id" id="Reject_request_id">
                                                             <input type="hidden" name="maintenance_status" value="rejected">
 
-                                                            <textarea class="form-control" name="approver_rejection_reason" style="height: 60px;" required></textarea>
+                                                            <textarea class="form-control" name="simirit_rejection_reason" style="height: 60px;" required></textarea>
                                                             <label for="floatingTextarea">Reason</label>
                                                         </div>
                                                     </div>
@@ -168,7 +171,7 @@
             ajax: {
                     url: "{{ route('FetchMaintenanceRequest') }}",
                     data: function (d) {
-                        d.customDataValue = 2;
+                        d.customDataValue = 4;
                     }
                 },    
                 columns: [{
@@ -201,7 +204,8 @@
         });
 
 
-            $(document).ready(function() {
+    
+        $(document).ready(function() {
                 var AcceptedId;
 
                 $(document).on('click', '.show-btn', function() {
@@ -210,9 +214,13 @@
                     millage = $(this).data('millage');
                     reason = $(this).data('reason');
                     inspection = $(this).data('inspection');
-                // console.log(car);
+                    inspection_image = $(this).data('image');
+                    
+                    const inspection_image_Path = '/storage/Maintenance/inspections/' + inspection_image;
+                // console.log(inspection_image);
 
                     $('#request_id').val(AcceptedId);
+                    $('#image1').attr('src', inspection_image_Path);
                     $('#vehicleselection').val(car);
                     $('#millage').text(millage);
                     $('#purpose').text(reason);

@@ -105,21 +105,15 @@ Route::group(['middleware' => ['auth']], function()
                         Route::post('/approver_approve_request', 'approver_approval')->name('approver_approve_request');
                         Route::get('/show_maintenance_inspector', 'displayRequestForInspection')->name('maintenance_inspection');
                         Route::post('/approver_rejection', 'approver_rejection')->name('approver_rejection');
-                        
-                        Route::get('/show_simirit_request', 'displayRequestForSimirit');
-                        Route::post('/simirit_approve_request', 'approver_approval')->name('simirit_approve_request');
+                        Route::post('/inspector_approve', 'inspector_approve')->name('inspector_inspection');
+                        Route::get('/show_simirit_request', 'displayRequestForSimirit')->name('simirit_display');
+                        Route::get('/show_Maintenance_final', 'displayMaintenanceFinal')->name('Final_display');
+                        Route::post('/simirit_approve_request', 'simirit_approval')->name('simirit_approve_request');
+                        Route::post('/simirit_reject', 'simirit_rejection')->name('simirit_rejection');
+                        Route::post('/end_maintenance', 'end_maintenance')->name('end_maintenance');
                         Route::post('/user_delete_request', 'deleteRequest')->name('temp_delete_request');
 
-                        //Route::post('/user_post_request', 'RequestVehicleTemp')->name('temp_request_post');
-                        // Route::post('/user_update_info', 'update_temp_request')->name('temp_update_request');
-                        // Route::get('/director_approve_page', 'DirectorApprovalPage')->name('director_approve_page');
-                        // Route::post('/director_approve_request', 'DirectorApproveRequest')->name('director_approve_request');
-                        // Route::post('/director_reject_request', 'DirectorApproveRequest')->name('director_reject_request');
-                        // Route::get('/simirit_approve_page', 'VehicleDirector')->name('simirit_page');
-                        // Route::post('/simirit_approve_request', 'VehicleDirectorApproveRequest')->name('simirit_approve');
-                        // Route::post('/simirit_fill_start_km', ' VehicleDirectorFillstartKm')->name('simirit_fill_start_km');
-                        // Route::post('/simirit_reject_request', 'VehicleDirectorRejectRequest')->name('simirit_reject');
-                        // Route::post('/simirit_returns_vehicle', 'Returning_temporary_vehicle')->name('simirit_return_vehicle');
+
                 });
 
             Route::controller(PermanentFuelController::class)->group(function()
