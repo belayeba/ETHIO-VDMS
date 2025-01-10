@@ -274,11 +274,6 @@
                                             <a href="{{ route('attendance.index') }}">Vehicle Attendance</a>
                                         </li>
                                     @endcan()
-                                    @can('Approve Replacement')
-                                        <li>
-                                            <a href="{{ route('Replacement.index') }}">Vehicle Replacement</a>
-                                        </li>
-                                    @endcan()
                                     @can('Vehicle Part Registration')
                                         <li>
                                             <a href="{{ route('vehicle_parts.index') }}">Vehicle Parts</a>
