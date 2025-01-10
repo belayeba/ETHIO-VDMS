@@ -24,7 +24,7 @@ return new class extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('phone_number', 255)->nullable();
             $table->uuid('department_id')->nullable();
-            // $table->foreign('department_id')->references('department_id')->on('departments');
+             $table->foreign('department_id')->references('department_id')->on('departments');
             $table->rememberToken();
             $table->timestamps();
             $table->softDeletes();

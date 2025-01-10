@@ -229,7 +229,7 @@
                                             </div>
                                             <div class="tab-pane" id="finish-3">
                                                 <div class="row">
-                                                    <h6 class="fs-15 mt-3">Do you need driver</h6>
+                                                    <h6 class="fs-15 mt-3">Do you have Driver?</h6>
                                                     <div class="mt-2">
                                                         <div class="form-check form-check-inline">
                                                             <input type="checkbox" class="form-check-input"

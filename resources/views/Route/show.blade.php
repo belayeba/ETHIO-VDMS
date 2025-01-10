@@ -95,7 +95,7 @@
                                                             <td>{{ $loop->iteration }}</td>
                                                             <td>{{ $data->first()->route->route_name }}</td>
                                                             <td>{{ $data->first()->route->vehicle->plate_number }}</td>
-                                                            <td>{{ $data->first()->route->driver_name }}</td>
+                                                            <td>{{ $data->first()->route->vehicle->driver->user->username }}</td>
                                                             <td>{{ $data->first()->route->driver_phone }}</td>
                                                             <td>
                                                                 <button type="button" class="btn btn-info rounded-pill" 
@@ -141,16 +141,12 @@
                                                             <td>{{ $loop->iteration }}</td> <!-- Loop iteration for numbering -->
                                                             <td>{{ optional($dat->user)->first_name ?? 'N/A' }}</td> <!-- Ensure user exists -->
                                                             <td>{{ $dat->employee_start_location ?? 'N/A' }}</td> <!-- Ensure department exists -->
-                                                            <td>{{ $dat->user->phone ?? 'N/A' }}</td> <!-- Ensure department exists -->
+                                                            <td>{{ $dat->user->phone_number ?? 'N/A' }}</td> <!-- Ensure department exists -->
                                                             <td>
                                                                 <!-- Remove button/icon -->
-                                                                <form action="{{ route('routeUser.destroy', $dat->employee_id) }}" method="POST" onsubmit="return confirm('Are you sure you want to remove this employee?');">
-                                                                    @csrf
-                                                                    @method('DELETE')
-                                                                    <button type="submit" class="btn btn-danger btn-sm">
-                                                                        <i class="ri-delete-bin-line"></i>
-                                                                    </button>
-                                                                </form>
+                                                                <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#warning_alert">
+                                                                    <i class="ri-delete-bin-line"></i>
+                                                                </button>
                                                             </td>
                                                         </tr>
                                                         @endforeach
@@ -160,6 +156,35 @@
                                         </div>
                                     </div>
                                 </div>
+                                <!-- Accept Alert Modal -->
+                                <div id="warning_alert" class="modal fade" id="confirmationModal" tabindex="-1" role="dialog"
+                                aria-labelledby="confirmationModalLabel"aria-hidden="true">
+                                <div class="modal-dialog modal-sm">
+                                    <div class="modal-content">
+                                        <form method="POST" action="{{ route('routeUser.destroy', $dat->employee_id) }}">
+                                            @csrf
+                                            @method('DELETE')
+                                            <input type="hidden" name="request_id" id="request_id">
+                                            <div class="modal-body p-4">
+                                                <div class="text-center">
+                                                    <i class="ri-alert-line h1 text-warning"></i>
+                                                    <h4 class="mt-2">Warning</h4>
+                                                    <h5 class="mt-3">
+                                                        Are you sure you want to remove this employee?</br> This action
+                                                        cannot be
+                                                        undone.
+                                                    </h5>
+                                                    <button type="button" class="btn btn-secondary"
+                                                        data-bs-dismiss="modal">Cancel</button>
+                                                    <button type="submit" class="btn btn-primary"
+                                                        id="confirmDelete">Yes,
+                                                        Accept</button>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div><!-- /.modal-content -->
+                                </div><!-- /.modal-dialog -->
+                            </div><!-- /.modal -->
                                 @endforeach
                 </div>
             </div>

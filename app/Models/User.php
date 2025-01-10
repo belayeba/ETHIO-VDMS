@@ -71,10 +71,10 @@ class User extends Authenticatable {
         return $this->hasMany( NotificationModel::class, 'user_id' );
     }
 
-    public function department(): BelongsTo {
-        return $this->belongsTo( DepartmentsModel::class, 'department_id' );
+    public function department(): BelongsTo
+    {
+        return $this->belongsTo(DepartmentsModel::class, 'department_id');
     }
-
     public function driverCommunications(): HasMany {
         return $this->hasMany( DriverCommunicationModel::class, 'user_id' );
     }

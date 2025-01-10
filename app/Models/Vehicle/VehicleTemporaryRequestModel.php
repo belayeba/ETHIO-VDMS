@@ -123,13 +123,20 @@ class VehicleTemporaryRequestModel extends Model
     }
 
     public function scopeByCluster($query)
-        {
-            $userId = Auth::id();
-            $user = User::with('department')->find($userId);
-            $clusterId = $user->department->cluster_id;
-
-            return $query->whereHas('requestedBy', function ($q) use ($clusterId) {
-                $q->where('cluster_id', $clusterId);
-            });
+    {
+        $userId = Auth::id();
+        $user = User::with('department')->find($userId);
+    
+        if (!$user || !$user->department) {
+            throw new \Exception('User or department not found for the logged-in user.');
         }
+    
+        $clusterId = $user->department->cluster_id;
+        // Use the 'requestedBy' relationship instead of 'user'
+        return $query->whereHas('requestedBy.department', function ($q) use ($clusterId) {
+            $q->where('cluster_id', $clusterId);
+        });
+    }
+    
+    
 }
