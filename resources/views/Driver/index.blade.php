@@ -173,11 +173,13 @@
                                                                             <div class="mb-3">
                                                                                 <label for="name" class="form-label">Driver</label>
                                                                                 <select id="name" name="name" class="form-select" required>
-                                                                                  @foreach($data as $item)
-                                                                                    <option value="{{ $item->user_id }}" {{ $item->user_id == $item->user_id ? 'selected' : '' }}>{{  $item->user->username }}</option>
+                                                                                  @foreach($data as $driver)
+                                                                                    <option value="{{ $driver->user_id }}" {{ $driver->user_id == $item->user_id ? 'selected' : '' }}>
+                                                                                        {{ $driver->user->username }}
+                                                                                    </option>
                                                                                   @endforeach
                                                                                 </select>
-                                                                              </div>
+                                                                            </div>
                                                         
                                                                             <div class="mb-3">
                                                                                 <label for="phone{{ $loop->index }}" class="form-label">Phone Number</label>
@@ -207,7 +209,7 @@
                                                                     </div>
                                                                 </div>
                                                             </div>
-                                                        </div>
+                                                        </div>                                                        
                                                         <div class="modal fade" id="viewDriverModal{{ $item->driver_id }}" tabindex="-1" aria-labelledby="viewDriverModalLabel{{ $item->driver_id }}" aria-hidden="true">
                                                             <div class="modal-dialog">
                                                                 <div class="modal-content">
