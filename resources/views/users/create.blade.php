@@ -133,7 +133,7 @@
                                         <div class="position-relative mb-3">
                                             <label class="form-label" for="validationTooltip04">Phone</label>
                                             <input type="mob" class="form-control" name="phone"
-                                                id="validationTooltip04" placeholder=" +251" value="+251" required>
+                                                id="validationTooltip04" pattern="^\+251\d{9}$" placeholder="Start with +251" required>
                                             <div class="invalid-tooltip">
                                                 Please provide a valid phone.no.
                                             </div>

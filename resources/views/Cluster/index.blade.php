@@ -64,7 +64,7 @@
                                                 @csrf
                                                 <div class="mb-3">
                                                     <label for="nameInput" class="form-label">Name <strong class="text-danger">*</strong></label>
-                                                    <input type="text" class="form-control" id="nameInput" name="name" placeholder="Name">
+                                                    <input type="text" class="form-control" id="nameInput"  maxlength="100" name="name" placeholder="Name">
                                                 </div>
                                                 <div class="d-flex justify-content-center">
                                                     <button type="submit" class="btn btn-primary">Save</button>

@@ -90,7 +90,7 @@ Route::group(['middleware' => ['auth']], function()
                         Route::post('/TransportDirector_reject_request', 'TransportDirectorRejectRequest')->name('TransportDirector_reject_request');
                         Route::get('/simirit_approve_page', 'SimiritPage')->name('simirit_page');
                         Route::get('/FetchForDispatchery/temp', 'FetchForDispatcher')->name('FetchForDispatcher');
-                        Route::post('/simirit_approve_request', 'simiritApproveRequest')->name('simirit_approve');
+                        Route::post('/temp_simirit_approve_request', 'simiritApproveRequest')->name('simirit_approve_temporary');
                         Route::post('/simirit_fill_start_km/store', 'simiritFillstartKm')->name('simirit_fill_start_km');
                         Route::post('/simirit_reject_request', 'simiritRejectRequest')->name('simirit_reject');
                         Route::post('/simirit_returns_vehicle', 'Returning_temporary_vehicle')->name('simirit_return_vehicle');
@@ -108,7 +108,7 @@ Route::group(['middleware' => ['auth']], function()
                         Route::post('/inspector_approve', 'inspector_approve')->name('inspector_inspection');
                         Route::get('/show_simirit_request', 'displayRequestForSimirit')->name('simirit_display');
                         Route::get('/show_Maintenance_final', 'displayMaintenanceFinal')->name('Final_display');
-                        Route::post('/simirit_approve_request', 'simirit_approval')->name('simirit_approve_request');
+                        Route::post('/maintenance_simirit_approve_request', 'simirit_approval')->name('simirit_approve_request');
                         Route::post('/simirit_reject', 'simirit_rejection')->name('simirit_rejection');
                         Route::post('/end_maintenance', 'end_maintenance')->name('end_maintenance');
                         Route::post('/user_delete_request', 'deleteRequest')->name('temp_delete_request');
@@ -140,6 +140,7 @@ Route::group(['middleware' => ['auth']], function()
                     Route::post('/users/store', 'store')->name('users.store');
                     Route::get('/update/{id}', 'update')->name('user.update');
                     Route::post('/updates/store','storeupdates')->name('user.update.store');
+                    Route::post('/user/delete', 'destroy')->name('users.delete');
                     Route::get('/profile','profile')->name('user_profile');
                     Route::post('/profile/store','profile_save')->name('user.profile.store');
 
@@ -295,7 +296,7 @@ Route::group(['middleware' => ['auth']], function()
                     Route::get('/vehicle/report/permanent', 'permanentReport')->name('dailyreport.permanentReport');
                     Route::get('/vehicle/report/temporary', 'temporaryReport')->name('dailyreport.temporaryReport');
 
-                    Route::get('/vehicle/report/filter',  'filterReport')->name('dailyreport.filterReport');
+                    Route::get('/vehicle/dailyreport/filter',  'filterReport')->name('dailyreport.filterReport');
                     Route::get('/vehicle/report/permanent/filter',  'filterPermanentReport')->name('dailyreport.filterPermanentReport');
                     Route::get('/vehicle/report/temporary/filter', 'filterTemporaryReport')->name('dailyreport.filterTemporaryReport');
                     Route::get('/daily_km/check', 'CheckVehicle')->name('daily_km.page.check');

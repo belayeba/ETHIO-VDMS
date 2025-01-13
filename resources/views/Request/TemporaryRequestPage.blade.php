@@ -118,7 +118,6 @@
                                                                     <option value="Human">Human</option>
                                                                     <option value="Load">Load</option>
                                                                     <option value="Load">Both</option>
-                                                                    <option value="Load">Neither</option>
                                                                 </select>
                                                         </div>
                                                     </div>
@@ -229,7 +228,7 @@
                                             </div>
                                             <div class="tab-pane" id="finish-3">
                                                 <div class="row">
-                                                    <h6 class="fs-15 mt-3">Do you have Driver?</h6>
+                                                    <h6 class="fs-15 mt-3">Do you need Driver?</h6>
                                                     <div class="mt-2">
                                                         <div class="form-check form-check-inline">
                                                             <input type="checkbox" class="form-check-input"
@@ -251,9 +250,9 @@
                                                                 data-toggle="select2" multiple="multiple"
                                                                 data-placeholder="Select People ...">
                                                                 <optgroup label="Users/Employees">
-                                                                    @foreach ($users as $user)
-                                                                        <option value="{{ $user->id }}">
-                                                                            <p style="color:black">{{ $user->first_name }}
+                                                                    @foreach ($driver as $driver)
+                                                                        <option value="{{ $driver->driver_id }}">
+                                                                            <p style="color:black">{{ $driver->user->first_name }}
                                                                         </option>
                                                                     @endforeach
                                                                 </optgroup>
@@ -362,7 +361,7 @@
 
                                                 packageCheckbox.addEventListener('change', function() {
                                                     if (divToToggle) {
-                                                        if (packageCheckbox.value === '1') {
+                                                        if (packageCheckbox.value == '1') {
                                                             divToToggle.style.display = 'block'; // Display the div if the checkbox value is 1
                                                         } else {
                                                             divToToggle.style.display = 'none';
@@ -664,57 +663,71 @@
                 function buildProgressMessage(button) {
                     let progressMessages = [];
 
-                    const messages = [{
-                            condition: button.data('dir_approved_by'),
-                            message: 'Approved by Director'
+                     // Director decision
+                    // if (button.data('director_reject_reason') && button.data('dir_approved_by')) {
+                    //     progressMessages.push('Rejected by Director');
+                    // } else if (button.data('dir_approved_by')) {
+                    //     progressMessages.push('Approved by Director');
+                    // }
+
+                    // // Div decision
+                    // if (button.data('cluster_director_reject_reason') && button.data('div_approved_by')) {
+                    //     progressMessages.push('Rejected by Division-Director');
+                    // } else if (button.data('ddiv_approved_by')) {
+                    //     progressMessages.push('Approved by Division-Director');
+                    // }
+                    const messages = [
+                        {
+                            condition: button.data('dir_approved_by') && !button.data('director_reject_reason'),
+                            message: '<span style="color: green;">Approved by Director</span>'
                         },
                         {
-                            condition: button.data('director_reject_reason'),
-                            message: 'Rejected by Director'
+                            condition: button.data('director_reject_reason') && button.data('dir_approved_by'),
+                            message: '<span style="color: red;">Rejected by Director</span>'
                         },
                         {
-                            condition: button.data('div_approved_by'),
-                            message: 'Approved by Division-Director'
+                            condition: button.data('div_approved_by') && !button.data('cluster_director_reject_reason'),
+                            message: '<span style="color: green;">Approved by Division-Director</span>'
                         },
                         {
-                            condition: button.data('cluster_director_reject_reason'),
-                            message: 'Rejected by Division-Director'
+                            condition: button.data('cluster_director_reject_reason') && button.data('div_approved_by'),
+                            message: '<span style="color: red;">Rejected by Division-Director</span>'
                         },
                         {
-                            condition: button.data('hr_div_approved_by'),
-                            message: 'Approved by HR-Director'
+                            condition: button.data('hr_div_approved_by') && !button.data('hr_director_reject_reason'),
+                            message: '<span style="color: green;">Approved by HR-Director</span>'
                         },
                         {
-                            condition: button.data('hr_director_reject_reason'),
-                            message: 'Rejected by HR-Director'
+                            condition: button.data('hr_director_reject_reason') && button.data('hr_div_approved_by'),
+                            message: '<span style="color: red;">Rejected by HR-Director</span>'
                         },
                         {
-                            condition: button.data('transport_director_id'),
-                            message: 'Approved by Dispatcher-Director'
+                            condition: button.data('transport_director_id') && !button.data('vec_director_reject_reason'),
+                            message: '<span style="color: green;">Approved by Dispatcher-Director</span>',
                         },
                         {
-                            condition: button.data('vec_director_reject_reason'),
-                            message: 'Rejected by Dispatcher-Director'
+                            condition: button.data('vec_director_reject_reason') && button.data('transport_director_id'),
+                            message: '<span style="color: red;">Rejected by Dispatcher-Director</span>',
                         },
                         {
-                            condition: button.data('assigned_by'),
-                            message: 'Approved by Dispatcher'
+                            condition: button.data('assigned_by') && !button.data('assigned_by_reject_reason'),
+                            message: '<span style="color: green;">Approved by Dispatcher</span>'
                         },
                         {
-                            condition: button.data('assigned_by_reject_reason'),
-                            message: 'Rejected by Dispatcher'
+                            condition: button.data('assigned_by_reject_reason') && button.data('assigned_by'),
+                            message: '<span style="color: red;">Rejected by Dispatcher</span>'
                         },
                         {
                             condition: button.data('vehicle_id'),
-                            message: 'Assigned Vehicle <u>' + button.data('vehicle_plate') + '</u>'
+                            message: '<span style="color: green;">Assigned Vehicle <u>' + button.data('vehicle_plate') + '</u></span>'
                         },
                         {
                             condition: button.data('start_km'),
-                            message: 'Vehicle Request <u>' + button.data('vehicle_plate') + '</u> Dispatched'
+                            message: '<span style="color: green;">Vehicle Request <u>' + button.data('vehicle_plate') + '</u> Dispatched</span>'
                         },
                         {
                             condition: button.data('end_km'),
-                            message: 'Request completed'
+                            message: '<span style="color: green;">Request completed</span>'
                         },
                     ];
                     messages.forEach(item => {

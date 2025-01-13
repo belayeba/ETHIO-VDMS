@@ -58,7 +58,7 @@
                                                         <option value="">Select Driver</option>
                                                         @foreach ($drivers as $driver)
                                                             <option value="{{ $driver->username }}">
-                                                                {{ $driver->username }}</option>
+                                                                {{ $driver->first_name .' '.$driver->last_name }}</option>
                                                         @endforeach
                                                     </select>
                                                 </div>
@@ -134,36 +134,37 @@
                                 </div>
 
                                 <div class="card-body">
-                                    <table id="datatable-buttons" class="table table-striped dt-responsive nowrap w-100">
-                                        <thead>
-                                            <tr>
-                                                <th>Given Date</th>
-                                                <th>Requested By</th>
-                                                <th>Plate Number</th>
-                                                <th>Reason</th>
-                                                <th>Mileage</th>
-                                                <th>Department</th>
-                                                <th>Cluster</th>
-
-                                            </tr>
-                                        </thead>
-
-                                        <tbody>
-                                            @foreach ($dailkms as $km)
+                                    <div class="table-responsive">
+                                        <table id="datatable-buttons" class="table table-striped dt-responsive nowrap w-100">
+                                            <thead>
                                                 <tr>
-                                                    <td>{{ $km->given_date }}</td>
-                                                    <td>{{ $km->requested_by }}</td>
-                                                    <td>{{ $km->plate_number }}</td>
-                                                    <td>{{ $km->purpose }}</td>
-                                                    <td>{{ $km->mileage }}</td>
-                                                    <td>{{ $km->department_name }}</td>
-                                                    <td>{{ $km->cluster_name }}</td>
+                                                    <th>Given Date</th>
+                                                    <th>Requested By</th>
+                                                    <th>Plate Number</th>
+                                                    <th>Reason</th>
+                                                    <th>Mileage</th>
+                                                    <th>Department</th>
+                                                    <th>Cluster</th>
 
                                                 </tr>
-                                            @endforeach
-                                        </tbody>
-                                    </table>
+                                            </thead>
 
+                                            <tbody>
+                                                @foreach ($dailkms as $km)
+                                                    <tr>
+                                                        <td>{{ $km->given_date }}</td>
+                                                        <td>{{ $km->requested_by }}</td>
+                                                        <td>{{ $km->plate_number }}</td>
+                                                        <td>{{ $km->purpose }}</td>
+                                                        <td>{{ $km->mileage }}</td>
+                                                        <td>{{ $km->department_name }}</td>
+                                                        <td>{{ $km->cluster_name }}</td>
+
+                                                    </tr>
+                                                @endforeach
+                                            </tbody>
+                                        </table>
+                                    </div>
                                 </div> <!-- end card body-->
                             </div> <!-- end card -->
                         </div><!-- end col-->

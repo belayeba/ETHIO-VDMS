@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Models\Vehicle\InspectionModel;
 use App\Models\Vehicle\VehiclesModel;
+use App\Models\Driver\DriversModel;
 use App\Models\Vehicle\VehicleTemporaryRequestModel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -29,9 +30,10 @@ class VehicleTemporaryRequestController extends Controller
         public function displayRequestPage()
             {
                 $id = Auth::id();
-                $users = user::all();
+                $users = User::get();
+                $driver = DriversModel::get();
                 $Requested = VehicleTemporaryRequestModel::with('peoples', 'materials')->where('requested_by_id', $id)->get();
-                return view("Request.TemporaryRequestPage",compact('Requested','users'));
+                return view("Request.TemporaryRequestPage",compact('Requested','users','driver'));
             }
             
         public function FetchTemporaryRequest()
@@ -87,7 +89,13 @@ class VehicleTemporaryRequestController extends Controller
                     if ($row->dir_approved_by == null && $row->director_reject_reason == null) {
                         $actions .= '<a href="'.route('editRequestPage', ['id' => $row->request_id]).'" class="btn btn-secondary rounded-pill" title="edit"><i class="ri-edit-line"></i></a>';
                     }
-        
+                    $actions .= '<button class="btn btn-danger rounded-pill reject-reason" title="Reject-Reason"
+                    data-reason1="' . $row->director_reject_reason . '"
+                    data-reason2="' . $row->cluster_director_reject_reason . '"
+                    data-reason3="' . $row->hr_director_reject_reason . '"
+                    data-reason4="' . $row->vec_director_reject_reason . '"
+                    data-reason5="' . $row->assigned_by_reject_reason . '"
+                    >reason</button>';
                     return $actions;
                 })
 
@@ -1200,7 +1208,7 @@ class VehicleTemporaryRequestController extends Controller
                         $Vehicle_Request->taking_inspection = $inspection_id;
                         $Vehicle_Request->save();
                         $user = User::find($Vehicle_Request->requested_by_id);
-                        $message = "Vehicle is assigned for your Vehicle Temporary Request, click here to see its detail";
+                        $message = "The Vehcicle is temporarily assigned to you, click here to see its detail";
                         $subject = "Vehicle Temporary";
                         $url = "/temp_request_page";
                         $user->NotifyUser($message,$subject,$url);

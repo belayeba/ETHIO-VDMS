@@ -156,7 +156,7 @@
                                 @endcan()
                                 @can('Dispatcher Page')
                                     <li>
-                                        <a href="{{ route('simirit_page') }}">Temporarly Assign</a>
+                                        <a href="{{ route('simirit_page') }}">Temporary Assign</a>
                                     </li>
                                 @endcan()
                                 @can('Vehicle Director Page')

@@ -94,14 +94,14 @@ class permissionseeder extends Seeder {
                 'permissions' => [
                     'Request Fuel',
                     'Finance Accept',
-                    'Set Feul Cost',
+                    'Set Fuel Cost',
                 ]
             ],
             [
-                'permission_group' => 'Mentenance Management',
+                'permission_group' => 'Maintenance Management',
                 'permissions' => [
-                    'Request Mentenance',
-                    'Approve Mentenance',
+                    'Request Maintenance',
+                    'Approve Maintenance',
                 ]
             ],
             [
