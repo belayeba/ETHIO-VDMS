@@ -104,12 +104,12 @@ class usercontroller extends Controller
                 }
             })
             ->addColumn('created_at', function($row){
-                return $row->created_at;
+                return $row->created_at->format('d/m/Y');
             })
             ->addColumn('action', function($row){
                 return '
-                         <a href="' . route('user.update', ['id' => $row->id]) . '" class="btn btn-secondary rounded-pill" title="Edit"><i class="ri-edit-box-line"></i></a>
-                        <button type="button" class="btn btn-danger rounded-pill" title="Delete"><i class="ri-close-circle-line"></i></button>';
+                        <a href="' . route('user.update', ['id' => $row->id]) . '" class="btn btn-secondary rounded-pill" title="Edit"><i class="ri-edit-box-line"></i></a>
+                        <button type="button" class="btn btn-danger rounded-pill reject-btn"  data-id="' . $row->id . '" title="Delete"><i class="ri-close-circle-line"></i></button>';
             })
             ->rawColumns(['first_name','email','phone_number','department_id','created_at','action'])
             ->make(true);
@@ -258,6 +258,29 @@ class usercontroller extends Controller
                 ->withErrors(['unexpected_error' => 'Unexpected error occurred while trying to process your request.']);
         }   
     
+    }
+
+    public function destroy(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'user_id' => 'required|uuid|exists:users,id',   
+        ]);
+   
+        if ($validator->fails()) 
+            {
+                return back()->with('error_message', 'Something went Wrong!');
+            }
+
+        try {
+            //code...
+            $id=$request->input('user_id');
+            $user = User::findOrFail($id);
+            $user->delete();
+            return back()->with('success_message', 'User Removed!');
+        } catch (\Throwable $th) {
+            
+            return back()->with('error_message', 'Unable to Process!');
+        }
     }
 
 

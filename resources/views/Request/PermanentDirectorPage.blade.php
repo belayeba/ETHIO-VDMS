@@ -108,54 +108,54 @@
                                         <!-- end assign modal -->
 
 
-                                                                                <!-- show all the information about the request modal -->
+                                        <!-- show all the information about the request modal -->
                                         <div id="standard-modal" class="modal fade" tabindex="-1" role="dialog"
-                                        aria-labelledby="standard-modalLabel" aria-hidden="true">
-                                        <div class="modal-dialog modal-lg">
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <h4 class="modal-title">Request Details</h4>
-                                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                        aria-label="Close"></button>
-                                                </div>
-                                                <div class="modal-body">
-                                                    <div class="col-md-6">
-                                                        <dl class="row mb-1">
-                                                            <dt class="col-sm-5">Request reason:</dt>
-                                                            <dd class="col-sm-7" id="reason"></dd>
-                                                        </dl>
-                                                    </div></br></br>
-                                                    <div class="row">
-                                                        <!-- Left Card -->
+                                            aria-labelledby="standard-modalLabel" aria-hidden="true">
+                                            <div class="modal-dialog modal-lg">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h4 class="modal-title">Request Details</h4>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                            aria-label="Close"></button>
+                                                    </div>
+                                                    <div class="modal-body">
                                                         <div class="col-md-6">
-                                                            <div class="card">
-                                                                <div class="card-header">
-                                                                    <h5 class="card-title">Position Letter</h5>
-                                                                </div>
-                                                                <div class="card-body">
-                                                                <iframe id="image1" class="img-fluid" style="width: 100%; height: 100%;"></iframe>
+                                                            <dl class="row mb-1">
+                                                                <dt class="col-sm-5">Request reason:</dt>
+                                                                <dd class="col-sm-7" id="reason"></dd>
+                                                            </dl>
+                                                        </div></br></br>
+                                                        <div class="row">
+                                                            <!-- Left Card -->
+                                                            <div class="col-md-6">
+                                                                <div class="card">
+                                                                    <div class="card-header">
+                                                                        <h5 class="card-title">Position Letter</h5>
+                                                                    </div>
+                                                                    <div class="card-body">
+                                                                    <iframe id="image1" class="img-fluid" style="width: 100%; height: 100%;"></iframe>
+                                                                    </div>
                                                                 </div>
                                                             </div>
-                                                        </div>
-                                                
-                                                        <!-- Right Card -->
-                                                        <div class="col-md-6">
-                                                            <div class="card">
-                                                                <div class="card-header">
-                                                                    <h5 class="card-title">Driving License</h5>
-                                                                </div>
-                                                                <div class="card-body">
-                                                                    <iframe id="image2" src="" alt="Driving License" class="img-fluid"></iframe>
+                                                    
+                                                            <!-- Right Card -->
+                                                            <div class="col-md-6">
+                                                                <div class="card">
+                                                                    <div class="card-header">
+                                                                        <h5 class="card-title">Driving License</h5>
+                                                                    </div>
+                                                                    <div class="card-body">
+                                                                        <iframe id="image2" src="" alt="Driving License" class="img-fluid"></iframe>
+                                                                    </div>
                                                                 </div>
                                                             </div>
                                                         </div>
                                                     </div>
-                                                </div>
-                                                <div class="modal-footer">
-                                                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
                                         </div>
                                         <!-- end show modal -->
 

@@ -85,38 +85,39 @@
 
                             
                             <div class="card-body">
-                                <table id="basic-datatable" class="table table-striped dt-responsive nowrap w-100">
-                                    <thead>
-                                        <tr>
-                                            <th>#</th>
-                                            <th>Plate Number</th>
-                                            <th>Type</th>
-                                            <th>Date From - To</th>
-                                            <th>Route</th>
-                                            <th>Total Days</th>
-                                        </tr>
-                                    </thead>
-
-
-                                    <tbody>
-                                        @foreach($vehicles as $vehicle)
+                                <div class="table-responsive">
+                                    <table id="basic-datatable" class="table table-striped dt-responsive nowrap w-100">
+                                        <thead>
                                             <tr>
-                                                <td>{{ $loop->iteration }}</td>
-                                                <td>{{ $vehicle->plate_number  }}</td>
-                                                <td>{{ $vehicle->rental_type  }}</td>
-                                                <td>{{$vehicle->interval ?? 'N/A'}}</td>
-                                                <td>
-                                                    @php
-                                                        $route = $routes->where('vehicle_id', $vehicle->vehicle_id)->first();
-                                                        echo $route ? $route->route_name : 'N/A';
-                                                    @endphp
-                                                </td>
-                                                <td>{{$vehicle->total ?? 'N/A' }}</td>
+                                                <th>#</th>
+                                                <th>Plate Number</th>
+                                                <th>Type</th>
+                                                <th>Date From - To</th>
+                                                <th>Route</th>
+                                                <th>Total Days</th>
                                             </tr>
-                                        @endforeach
-                                    </tbody>
-                                </table>
+                                        </thead>
 
+
+                                        <tbody>
+                                            @foreach($vehicles as $vehicle)
+                                                <tr>
+                                                    <td>{{ $loop->iteration }}</td>
+                                                    <td>{{ $vehicle->plate_number  }}</td>
+                                                    <td>{{ $vehicle->rental_type  }}</td>
+                                                    <td>{{$vehicle->interval ?? 'N/A'}}</td>
+                                                    <td>
+                                                        @php
+                                                            $route = $routes->where('vehicle_id', $vehicle->vehicle_id)->first();
+                                                            echo $route ? $route->route_name : 'N/A';
+                                                        @endphp
+                                                    </td>
+                                                    <td>{{$vehicle->total ?? 'N/A' }}</td>
+                                                </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div> <!-- end card body-->
                         </div> <!-- end card -->
                     </div><!-- end col-->

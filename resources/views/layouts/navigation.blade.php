@@ -156,7 +156,7 @@
                                 @endcan()
                                 @can('Dispatcher Page')
                                     <li>
-                                        <a href="{{ route('simirit_page') }}">Temporarly Assign</a>
+                                        <a href="{{ route('simirit_page') }}">Temporary Assign</a>
                                     </li>
                                 @endcan()
                                 @can('Vehicle Director Page')
@@ -239,6 +239,16 @@
                                 @can('Request Mentenance')
                                 <li>
                                     <a href="{{route('maintenance_inspection')}}">Maintenance Inspection</a>
+                                </li>
+                                @endcan()
+                                @can('Request Mentenance')
+                                <li>
+                                    <a href="{{route('simirit_display')}}">Simirit Approve</a>
+                                </li>
+                                @endcan()
+                                @can('Request Mentenance')
+                                <li>
+                                    <a href="{{route('Final_display')}}">Finalize Maintenance</a>
                                 </li>
                                 @endcan()
                             </ul>

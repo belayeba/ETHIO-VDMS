@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Models\Vehicle\MaintenancesModel;
 use App\Models\Vehicle\VehiclesModel;
+use App\Models\Maintenance\Maintained_vehicle;
+use App\Models\Maintenance\Maintenance_record;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -79,7 +81,21 @@ class MentenanceController extends Controller
         }
 
         if($data_drawer_value == 3){
-            $data = MaintenancesModel::whereNotNull('approved_by')->where('maintenance_status', 'in_progress')
+            $data = MaintenancesModel::whereNotNull('approved_by')
+            ->with('vehicle')
+            ->get();
+        }
+
+        if($data_drawer_value == 4){
+            $data =MaintenancesModel::
+            whereNotNull('inspected_by')
+            ->with('vehicle')
+            ->get();
+        }
+        if($data_drawer_value == 5){
+            $data =MaintenancesModel::
+            whereNotNull('sim_approved_by')
+            ->whereNull('simirit_reject_reason')
             ->with('vehicle')
             ->get();
         }
@@ -116,18 +132,54 @@ class MentenanceController extends Controller
             }
 
             if($data_drawer_value == 2){
-                $actions = '<button type="button" class="btn btn-info rounded-pill"> <i class="ri-eye-line"></i> </button>';
+                // $actions = '<button  type="button" class="btn btn-secondary rounded-pill accept-btn" data-id="' . $row->maintenance_id. '"  title="Inspect">Inspection</button>';
+                $actions = '<button type="button" class="btn btn-info rounded-pill show-btn" 
+                data-id="' . $row->maintenance_id. '" 
+                
+                data-millage="' . $row->milage. '" 
+                data-reason="' . $row->drivers_inspection. '" 
+                data-inspection="' . $row->taking_inspection. '"
+                data-vehicleid="' . $row->vehicle_id. '" > 
+                <i class="ri-eye-line"></i> </button>';
+
                 if($row->approved_by == null){
                 $actions .= '<button  type="button" class="btn btn-primary rounded-pill accept-btn" data-id="' . $row->maintenance_id. '"  title="Accept"><i class="ri-checkbox-circle-line"></i></button>';
                 $actions .= '<button type="button" class="btn btn-danger rounded-pill reject-btn" data-id="' . $row->maintenance_id. '" data-bs-toggle="modal" data-bs-target="#staticBackdrop" title="Reject"><i class=" ri-close-circle-fill"></i></button>';
                 }
             }
             if($data_drawer_value == 3){
-                $actions = '<button type="button" class="btn btn-info rounded-pill"> <i class="ri-eye-line"></i> </button>';
+                $actions = '<button type="button" class="btn btn-info rounded-pill show-btn" 
+                data-id="' . $row->maintenance_id. '" 
                 
+                data-millage="' . $row->milage. '" 
+                data-reason="' . $row->drivers_inspection. '" 
+                data-inspection="' . $row->taking_inspection. '"
+                data-vehicleid="' . $row->vehicle_id. '" > 
+                <i class="ri-eye-line"></i> </button>';
+                if($row->inspected_by == null){
                 $actions .= '<button  type="button" class="btn btn-primary rounded-pill reject-btn" data-id="' . $row->maintenance_id. '"  title="Accept"><i class="ri-checkbox-circle-line"></i></button>';
-                // $actions .= '<button type="button" class="btn btn-danger rounded-pill " data-id="' . $row->maintenance_id. '" data-bs-toggle="modal" data-bs-target="#staticBackdrop" title="Reject"><i class=" ri-close-circle-fill"></i></button>';
-                
+                }
+            }
+            if($data_drawer_value == 4){
+                $actions = '<button type="button" class="btn btn-info rounded-pill show-btn" 
+                data-id="' . $row->maintenance_id. '" 
+                data-image="' . $row->car_inspector_inspection. '"
+                data-millage="' . $row->milage. '" 
+                data-reason="' . $row->drivers_inspection. '" 
+                data-inspection="' . $row->taking_inspection. '"
+                data-vehicleid="' . $row->vehicle_id. '" > 
+                <i class="ri-eye-line"></i> </button>';
+                if($row->sim_approved_by == null){
+                $actions .= '<button  type="button" class="btn btn-primary rounded-pill accept-btn" data-id="' . $row->maintenance_id. '"  title="Accept"><i class="ri-checkbox-circle-line"></i></button>';
+                $actions .= '<button type="button" class="btn btn-danger rounded-pill reject-btn" data-id="' . $row->maintenance_id. '" data-bs-toggle="modal" data-bs-target="#staticBackdrop" title="Reject"><i class=" ri-close-circle-fill"></i></button>';
+                }
+            }
+
+            if($data_drawer_value ==5){
+                $actions = '<button type="button" class="btn btn-info rounded-pill"> <i class="ri-eye-line"></i> </button>';
+                // if($row->inspected_by == null){
+                $actions .= '<button  type="button" class="btn btn-primary rounded-pill reject-btn" data-id="' . $row->maintenance_id. '"  title="Accept"><i class="ri-checkbox-circle-line"></i></button>';
+                // }
             }
             return $actions;
         })
@@ -140,10 +192,8 @@ class MentenanceController extends Controller
     public function displayRequestForSimirit()
     {
         $id = Auth::id();
-        $requested = MaintenancesModel::whereNull('sim_approved_by')
-        ->where('maintenance_status', 'in_progress')->with('vehicle')
-        ->get();
-        return view("Maintenance.simirit_request",compact('requested','vehicle'));
+       
+        return view("Maintenance.simirit_approve");
     }
     public function displayRequestForApprover()
      {
@@ -249,12 +299,64 @@ class MentenanceController extends Controller
               }
       }
 
-    public function displayRequestForInspection(){
+    public function displayRequestForInspection() {
 
         $id = Auth::id();
 
         return view("Maintenance.Maintainer_inspection");
 
+    }
+
+    public function displayMaintenanceFinal() {
+
+        $id = Auth::id();
+
+        return view("Maintenance.Maintenance_final");
+
+    }
+
+    public function inspector_approve(Request $request)
+    {
+
+        $validator = validator::make($request->all(),[
+            'maintenance_id'=>'required|exists:maintenances,maintenance_id',
+            'inspection_file'  => 'required|file|mimes:pdf,jpeg,png,jpg',
+            'inspector_comment' => 'required|string',
+        ]);
+        if ($validator->fails()){
+            return redirect()->back()->with('error_message',
+            "Please fill, all fields",);
+        }
+        try {
+            
+            $current_inspection = $request->file( "inspection_file" );
+            $inspection_file = time() . '_' . $current_inspection->getClientOriginalName();
+
+            $inspection_file_storage = storage_path( 'app/public/Maintenance/inspections' );
+            if ( !file_exists( $inspection_file_storage ) ) {
+                mkdir( $inspection_file_storage, 0755, true );
+            }
+
+            $current_inspection->move( $inspection_file_storage, $inspection_file );
+            $inspector_id = Auth::id();
+
+            $update_maintenance = MaintenancesModel::where('maintenance_id',$request->maintenance_id) 
+
+            ->update ([
+                'maintenance_status'=>'in_progress',
+                'car_inspector_inspection' => $inspection_file,
+                'inspector_comment' => $request->inspector_comment,
+                'inspected_by' => $inspector_id
+            ]);
+
+            return redirect()->back()->with('success_message',
+            "Inspection Added Successfully",
+            );
+
+        } catch (exception $e) {
+            return redirect()->back()->with('error_message',
+            "Sorry, Something went wrong",);
+        }
     }
   
     public function simirit_approval(Request $request)
@@ -267,38 +369,36 @@ class MentenanceController extends Controller
               'maintenance_id.required' => 'Maintenance Request is required',
               'maintenance_id.exists' => 'Maintenance Request does not exist',
               'maintenance_status.required' => 'Request status is required.',
-             ]);
+             ]); 
              if ($validator->fails()) {
-                 return response()->json(['errors' => $validator->errors()], 422);
+                return redirect()->back()->with('error_message',
+                    $validator->errors(),
+                );
              }
-             try{         
-             $vehicle_id = MaintenancesModel::where('maintenance_id',$request->maintenance_id)->vehicle_id;
-             $taking_inspection = InspectionModel::where('vehicle_id',$vehicle_id)->latest()->inspection_id;
-             $simirit_id = Auth::id();
-         $update_maintenance = MaintenancesModel::where('maintenance_id',$request->maintenance_id)
-         ->update([
-                   'maintenance_status'=>'in_progress',
-                   'approver_rejection_reason' => $request->rejection_reason ?? null,
-                   'taking_inspection' => $taking_inspection,
-                   'sim_approved_by' => $simirit_id,
-            ]);
-          
-            return response()->json([
-             'success' => true,
-             'message' => 'Maintenance Request Approved Successfully.',
-         ]); 
+             try{      
+
+            $simirit_id = Auth::id();
+            $update_maintenance = MaintenancesModel::where('maintenance_id',$request->maintenance_id)
+            ->update([
+                    'maintenance_status'=>'simirit_approved',
+                    'approver_rejection_reason' => $request->rejection_reason ?? null,
+                    'sim_approved_by' => $simirit_id,
+                ]);
+            
+                return redirect()->back()->with('success_message',
+                "Maintenance Request Approved Successfully.", ); 
          }
             catch (Exception $e) 
             {
                 DB::rollBack();
-              return redirect()->back()->with('error_message',
-                         "Sorry, Something went wrong",
-                    );
-               }
+                return redirect()->back()->with('error_message',
+                            "Sorry, Something went wrong",
+                );
+            }
       } 
     public function simirit_rejection(Request $request)
       {
- 
+        
          $validator = Validator::make($request->all(), [
              'maintenance_id'=>'required|exists:maintenances,maintenance_id',
              'maintenance_status'=>'required|in:rejected',
@@ -312,25 +412,26 @@ class MentenanceController extends Controller
               
              ]);
              if ($validator->fails()) {
-                 return response()->json(['errors' => $validator->errors()], 422);
+                return redirect()->back()->with('error_message',
+                 $validator->errors(),
+                );
              }
+
              try{         
-             $vehicle_id = MaintenancesModel::where('maintenance_id',$request->maintenance_id)->vehicle_id;
-             $taking_inspection = InspectionModel::where('vehicle_id',$vehicle_id)->latest()->inspection_id;
-             $sim_approved_by = Auth::id();
-             
-         $update_maintenance = MaintenancesModel::where('maintenance_id',$request->maintenance_id)
-         ->update([
-                   'maintenance_status'=>'rejected',
-                   'approver_rejection_reason' => $request->rejection_reason,
-                   'taking_inspection' => $taking_inspection,
-                   'sim_approved_by' => $sim_approved_by,
-            ]);
-          
-            return response()->json([
-             'success' => true,
-             'message' => 'Maintenance Request Rejected',
-         ]); 
+                
+            $sim_approved_by = Auth::id();
+            
+            $update_maintenance = MaintenancesModel::where('maintenance_id',$request->maintenance_id)
+            ->update([
+                    'maintenance_status'=>'rejected',
+                    'simirit_reject_reason' => $request->simirit_rejection_reason,
+                    'sim_approved_by' => $sim_approved_by,
+                ]);
+            
+                return redirect()->back()->with('success_message',
+                    "Maintenance Request Rejected",
+                    );
+               
          }
             catch (Exception $e) 
             {
@@ -378,7 +479,7 @@ class MentenanceController extends Controller
              'total_maintenance_cost.*.sparepart_cost' => 'sometimes|integer|min:0',
              'total_maintenance_cost.*.machine_cost' => 'sometimes|integer|min:0',
              'total_maintenance_cost.*.labor_cost' => 'sometimes|integer|min:0',
-             'technician_description' => 'sometimes|string',
+             'technician_description' => 'required|string',
              'spareparts_used' => 'sometimes|array|min:1',
          ], [
              'maintenance_id.required' => 'Maintenance Request is required.',
@@ -394,19 +495,22 @@ class MentenanceController extends Controller
               if ($validator->fails()) {
             return response()->json(['errors' => $validator->errors()], 422);
                       }
-                       try{
+                    //    try{
                    DB::beginTransaction();
-  
-                   foreach ($request->maintenance_records as $request) {
-                    $maintained_vehicle = Maintained_vehicle::where('maintenance_id',$request->maintenance_id)->first();
-                    $timeElapsed = $this->getElapsedTime($request['maintenance_start_date'], $request['maintenance_end_date']);
+                   $id=$request->input('maintenance_id');
+                   $maintenance_id = MaintenancesModel::where('maintenance_id',$id)->first();
+                   $vehicle_id = $maintenance_id -> vehicle_id;
+//   dd($vehicle_id);
+                   foreach ($request->maintenance_records as $record) {
+                    $maintained_vehicle = Maintained_vehicle::where('maintenance_id',$id)->first();
+                    $timeElapsed = $this->getElapsedTime($record['maintenance_start_date'], $record['maintenance_end_date']);
                      $maintenance_record = new Maintenance_record;
-                     $maintenance_record->maintenance_start_date = $request->maintenance_record->maintenance_start_date;
-                     $maintenance_record->maintenance_end_date = $request->maintenance_record->maintenance_end_date;
-                     $maintenance_record->completed_task = $request->maintenance_record->completed_task;
-                     $maintenance_record->time_elapsed = $time_elapsed;
-                     $maintenance_record->maintained_by = $request->maintenance_record->maintained_by;
-                     $maintenance_record->maintained_vehicle_id = $maintained_vehicle->maintained_vehicle_id;
+                     $maintenance_record->maintenance_start_date =  $record['maintenance_start_date'];
+                     $maintenance_record->maintenance_end_date = $record['maintenance_end_date'];
+                     $maintenance_record->completed_task = $record['completed_task'];
+                     $maintenance_record->time_elapsed = $timeElapsed;
+                     $maintenance_record->maintained_by = $record['maintained_by'];
+                     $maintenance_record->maintained_vehicle_id = $vehicle_id;
                      $maintenance_record->save();
                 }
                 foreach ($request->items_for_next_maintenance as $request) {
@@ -448,14 +552,14 @@ class MentenanceController extends Controller
                     'maintenance_status'=>'completed',
                 ]);
                 DB::commit();
-        }
-        catch (Exception $e) 
-        {
-            DB::rollBack();
-          return redirect()->back()->with('error_message',
-                     "Sorry, Something went wrong",
-                );
-        }
+        // }
+        // catch (Exception $e) 
+        // {
+        //     DB::rollBack();
+        //   return redirect()->back()->with('error_message',
+        //              "Sorry, Something went wrong",
+        //         );
+        // }
     } 
     public function deleteRequest(Request $request)
     {

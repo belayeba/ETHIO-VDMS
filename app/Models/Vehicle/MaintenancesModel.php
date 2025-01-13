@@ -24,6 +24,9 @@ class MaintenancesModel extends Model {
         'requested_by',
         'approved_by',
         'director_reject_reason',
+        'inspected_by',
+        'car_inspector_inspection',
+        'inspector_comment',
         'sim_approved_by',
         'simirit_reject_reason',
         'maintained_by',
@@ -65,5 +68,9 @@ class MaintenancesModel extends Model {
 
     public function maintainedBy(): BelongsTo {
         return $this->belongsTo( User::class, 'maintained_by' );
+    }
+
+    public function inspectedBy(): BelongsTo {
+        return $this->belongsTo( User::class, 'inspected_by' );
     }
 }

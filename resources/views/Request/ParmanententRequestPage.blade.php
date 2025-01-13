@@ -122,6 +122,7 @@
 
                     <div class="col-12 col-lg-7">
                         <div class="card h-100">
+                            
                             <div class="card-body">
                                 <div class="table-responsive">
                                     <table class="table Permanent_datatable table-striped dt-responsive nowrap w-100">
@@ -140,6 +141,57 @@
                                     </table>
                                 </div>
 
+                                <!-- show all the information about the request modal -->
+                                <div id="standard-modal" class="modal fade" tabindex="-1" role="dialog"
+                                    aria-labelledby="standard-modalLabel" aria-hidden="true">
+                                    <div class="modal-dialog modal-lg">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h4 class="modal-title">Request Details</h4>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                    aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <div class="col-md-6">
+                                                    <dl class="row mb-1">
+                                                        <dt class="col-sm-5">Request reason:</dt>
+                                                        <dd class="col-sm-7" id="reason"></dd>
+                                                    </dl>
+                                                </div></br></br>
+                                                <div class="row">
+                                                    <!-- Left Card -->
+                                                    <div class="col-md-6">
+                                                        <div class="card">
+                                                            <div class="card-header">
+                                                                <h5 class="card-title">Position Letter</h5>
+                                                            </div>
+                                                            <div class="card-body">
+                                                            <iframe id="image1" class="img-fluid" style="width: 100%; height: 100%;"></iframe>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                            
+                                                    <!-- Right Card -->
+                                                    <div class="col-md-6">
+                                                        <div class="card">
+                                                            <div class="card-header">
+                                                                <h5 class="card-title">Driving License</h5>
+                                                            </div>
+                                                            <div class="card-body">
+                                                                <iframe id="image2" src="" alt="Driving License" class="img-fluid"></iframe>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- end show modal -->
+
                                 <!-- Warning Alert Modal -->
                                 <div class="modal fade" id="confirmationModal" tabindex="-1" role="dialog"
                                     aria-labelledby="confirmationModalLabel"aria-hidden="true">
@@ -150,10 +202,10 @@
                                                 <input type="hidden" name="request_id" id="request_id">
                                                 <div class="modal-body p-4">
                                                     <div class="text-center">
-                                                        <i class="ri-alert-line h1 text-warning"></i>
+                                                        <i class="ri-alert-line h1 text-danger"></i>
                                                         <h4 class="mt-2">Warning</h4>
                                                         <h5 class="mt-3">
-                                                            Are you sure you want to delete this item? This action cannot be
+                                                            Are you sure you want to delete this Request? This action cannot be
                                                             undone.
                                                         </h5>
                                                         <button type="button" class="btn btn-secondary"
@@ -186,7 +238,7 @@
                                                     <div class="col-lg-6">
                                                         <h5 class="mb-3"></h5>
                                                         <div class="form-floating">
-                                                            <input type="text" name="request_id" id="rejected_id">
+                                                            <input type="hidden" name="request_id" id="rejected_id">
                                                             <textarea class="form-control" name="reason" style="height: 60px;" required></textarea>
                                                             <label for="floatingTextarea">Reason</label>
                                                         </div>
@@ -204,12 +256,12 @@
                                 <!-- end assign modal -->
 
                                 <!-- show all the information about the request modal -->
-                                <div id="standard-modal" class="modal fade" tabindex="-1" role="dialog"
-                                    aria-labelledby="standard-modalLabel" aria-hidden="true">
+                                <div id="edit-modal" class="modal fade" tabindex="-1" role="dialog"
+                                    aria-labelledby="edit-modalLabel" aria-hidden="true">
                                     <div class="modal-dialog">
                                         <div class="modal-content">
                                             <div class="modal-header">
-                                                <h4 class="modal-title" id="standard-modalLabel">Request Update
+                                                <h4 class="modal-title" id="edit-modalLabel">Request Update
                                                 </h4>
                                                 <button type="button" class="btn-close" data-bs-dismiss="modal"
                                                     aria-label="Close"></button>
@@ -224,13 +276,13 @@
                                                         <div class="row">
                                                             <div class="mb-3">
                                                                 <label for="nameInput" class="form-label">Position <strong class="text-danger">*</strong></label>
-                                                                <input type="text" class="form-control" id="position" name="position" placeholder="Enter Your Position">
+                                                                <input type="text" class="form-control" id="editposition" name="position" placeholder="Enter Your Position">
                                                             </div>
                                                             <div class="position-relative mb-3">
                                                                 <div class="mb-6 position-relative" id="datepicker1">
                                                                     <label class="form-label">Reason</label>
                                                                     <input type="text" name="purpose"
-                                                                        id="request_reason" class="form-control" required>
+                                                                        id="editrequest_reason" class="form-control" required>
                                                                     <input type="hidden" name="request_id"
                                                                         id="request_id">
                                                                 </div>
@@ -244,13 +296,13 @@
                                                             </div>
                                                             <div class="mb-3">
                                                         <label for="nameInput" class="form-label">License Number <strong class="text-danger">*</strong></label>
-                                                        <input type="text" class="form-control" id="license_number" name="license_number" placeholder="Enter License Number">
+                                                        <input type="text" class="form-control" id="editlicense_number" name="license_number" placeholder="Enter License Number">
                                                     </div>
                                                     <div class="position-relative mb-3">
                                                         <div class="mb-6 position-relative" id="datepicker1">
                                                             <label class="form-label">License expiry date </label>
                                                             <input type="text" class="form-control" name="expiry_date"
-                                                                placeholder="Enter license expiry date" id="expirydate">
+                                                                placeholder="Enter license expiry date" id="editexpirydate">
                                                         </div>
                                                         <script>
                                                             $('#expirydate').calendarsPicker({
@@ -348,16 +400,20 @@
                 });
 
                 $(document).ready(function() {
-                    $('#standard-modal').on('show.bs.modal', function(event) {
-                        var button = $(event.relatedTarget);
-                        var modal = $(this);
-
-                        var requestReason = button.data('reason');
-                        var requestId = button.data('id');
+                    $(document).on('click', '.edit-btn', function() {
+                        var requestReason = $(this).data('reason');
+                        var requestId =$(this).data('id');
+                        var Position = $(this).data('position');
+                        var license = $(this).data('license');
+                        var expiry = $(this).data('expire')
 
                         // Populate modal fields
-                        modal.find('#request_reason').val(requestReason);
-                        modal.find('#request_id').val(requestId);
+                       $('#editrequest_reason').val(requestReason);
+                       $('#editposition').val(Position);
+                       $('#editlicense_number').val(license);
+                       $('#editexpirydate').val(expiry);
+                       $('#editrequest_id').val(requestId);
+                       $('#edit-modal').modal('show');
                     });
                 });
 
@@ -510,6 +566,30 @@
                             cardsContainer.innerHTML =
                                 '<p>No inspection data available at the moment. Please check the Plate number!</p>';
                         }
+                    });
+                });
+
+                $(document).ready(function() {
+                    var RejectedId;
+
+                    $(document).on('click', '.show-btn', function() {
+                        RejectedId = $(this).data('id');
+                        Reason = $(this).data('reason');
+                        PositionLetter = $(this).data('position_letter');
+                        DrivingLicense = $(this).data('driving_license');
+
+                        // console.log(PositionLetter, DrivingLicense)
+
+                        // Construct file paths for the iframes
+                        const positionLetterPath = '/storage/PermanentVehicle/PositionLetter/' + PositionLetter;
+                        const drivingLicensePath = '/storage/PermanentVehicle/Driving_license/' + DrivingLicense;
+
+                        // Populate the iframes with the file paths
+                        $('#reason').text(Reason);
+                        $('#image1').attr('src', positionLetterPath);
+                        $('#image2').attr('src', drivingLicensePath);
+                        $('#Reject_request_id').val(RejectedId);
+                        $('#standard-modal').modal('toggle');
                     });
                 });
             </script>

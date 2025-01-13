@@ -53,6 +53,36 @@
                                             <!-- Table content -->
                                         </tbody>
                                     </table>
+                                      <!-- Accept Alert Modal -->
+                                        <div class="modal fade" id="confirmationModal" tabindex="-1" role="dialog"
+                                            aria-labelledby="confirmationModalLabel"aria-hidden="true">
+                                            <div class="modal-dialog modal-sm">
+                                                <div class="modal-content">
+                                                    <form method="POST" action="{{ route('users.delete') }}">
+                                                        @csrf
+                                                        <input type="hidden" name="user_id" id="deleted_user_id">
+                                                        <div class="modal-body p-4">
+                                                            <div class="text-center">
+                                                                <i class="ri-alert-line h1 text-danger"></i>
+                                                                <h4 class="mt-2">Warning</h4>
+                                                                <h5 class="mt-3">
+                                                                    Are you sure you want to DELETE this user?</br> This action
+                                                                    cannot be
+                                                                    undone.
+                                                                </h5>
+                                                                <button type="button" class="btn btn-secondary"
+                                                                    data-bs-dismiss="modal">Cancel</button>
+                                                                <button type="submit" class="btn btn-danger"
+                                                                    id="confirmDelete">Yes,
+                                                                    DELETE</button>
+                                                            </div>
+                                                        </div>
+                                                    </form>
+                                                </div><!-- /.modal-content -->
+                                            </div><!-- /.modal-dialog -->
+                                        </div>
+                                    <!-- /.modal -->
+
                                 </div>
                             </div>
                         </div>
@@ -99,6 +129,18 @@
                 ]
             });
         });
+
+        $(document).ready(function() {
+            var RejectedId;
+
+            $(document).on('click', '.reject-btn', function() {
+                RejectedId = $(this).data('id');
+
+                $('#deleted_user_id').val(RejectedId);
+                $('#confirmationModal').modal('toggle');
+            });
+        });
+
     </script>
 
     <script>

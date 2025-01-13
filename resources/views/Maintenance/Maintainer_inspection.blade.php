@@ -39,10 +39,10 @@
                                     </tbody>
                                 </table>
 
-                                <!-- show all the information about the request modal -->
+                                 <!-- show all the information about the request modal -->
                                 <div id="standard-modal" class="modal fade" tabindex="-1" role="dialog"
-                                    aria-labelledby="standard-modalLabel" aria-hidden="true">
-                                    <div class="modal-dialog">
+                                    aria-labelledby="standard-modalLabel modal-scrollable" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-scrollable">
                                         <div class="modal-content">
                                             <div class="modal-header">
                                                 <h4 class="modal-title">Request Details</h4>
@@ -51,30 +51,22 @@
                                             </div>
                                             <div class="modal-body">
                                                 <dl class="row mb-0">
-                                                    <dt class="col-sm-5">Request reason</dt>
-                                                    <dd class="col-sm-7" data-field="purpose"></dd>
+                                                    <input type="hidden" id="vehicleselection" >
+                                                    <dt class="col-sm-5">Maintenance Purpose</dt>
+                                                    <dd class="col-sm-7"><span id="purpose"></span></dd>
 
-                                                    <dt class="col-sm-5">Requested vehicle</dt>
-                                                    <dd class="col-sm-7" data-field="vehicle_type"></dd>
+                                                    <dt class="col-sm-5">Vehicle's millage</dt>
+                                                    <dd class="col-sm-7"><span id="millage"></span></dd>
 
-                                                    <dt class="col-sm-5">Start date and Time</dt>
-                                                    <dd class="col-sm-7" data-field="start_date"></dd>
 
-                                                    <dt class="col-sm-5">Return date and Time</dt>
-                                                    <dd class="col-sm-7" data-field="end_date"></dd>
+                                                    <dt class="col-sm-5">Current Inspection</dt>
+                                                    <dd class="col-sm-7"> <button  type="button" class="btn btn-primary "  id="assignBtn"  title="Inspect">Check</button></dd>
 
-                                                    <dt class="col-sm-5">Location From and To</dt>
-                                                    <dd class="col-sm-7" data-field="start_location"></dd>
-
-                                                    <dt class="col-sm-5">Passengers</dt>
-                                                    <dd class="col-sm-7" data-field="passengers"></dd>
-
-                                                    <dt class="col-sm-5">Materials</dt>
-                                                    <dd class="col-sm-7" data-field="materials"></dd>
-
-                                                    <dt class="col-sm-5">Progress</dt>
-                                                    <dd class="col-sm-7" data-field="progress"></dd>
                                                 </dl>
+                                                <div class="table-responsive">
+                                                    <div class="row mt-3" id="inspectionCardsContainer" class="table table-striped"> 
+                                                    </div>
+                                                </div>
                                             </div>
                                             <div class="modal-footer">
                                                 <button type="button" class="btn btn-light"
@@ -122,29 +114,28 @@
                                     <div class="modal-dialog">
                                         <div class="modal-content">
                                             <div class="modal-header">
-                                                <h5 class="modal-title" id="staticBackdropLabel">Reject reason
+                                                <h5 class="modal-title" id="staticBackdropLabel">Inspection form
                                                 </h5>
                                                 <button type="button" class="btn-close" data-bs-dismiss="modal"
                                                     aria-label="Close"></button>
                                             </div> <!-- end modal header -->
-                                            <form method="Get" action="">
+                                            <form method="post" action="{{route('inspector_inspection')}}" enctype="multipart/form-data">
                                                 @csrf
                                                 <div class="modal-body">
                                                     <div class="col-lg-8">
                                                         {{-- <h5 class="mb-3"></h5> --}}
-                                                        <input type="hidden" name="maintenance_id" id="Reject_request_id">
-                                                        <input type="hidden" name="maintenance_status" value="rejected">
+                                                        <input type="hidden" name="maintenance_id" id="maintenance_id">
                                                         <div class="position-relative mb-3">
                                                             <div class="mb-6 position-relative">
                                                                 <label class="form-label">Inspection Doc</label>
-                                                                <input type="file" name="InspectDoc" class="form-control"
+                                                                <input type="file" name="inspection_file" class="form-control"
                                                                     required>
                                                             </div>
                                                         </div>
                                                         <label class="form-label">Other Inspection</label>
                                                         <div class="form-floating">
-                                                            <textarea class="form-control" name="maintainer_inspection" rows="6"  style="resize: none;"  required></textarea>
-                                                            <label for="floatingTextarea">Comment</label>
+                                                            <textarea class="form-control" name="inspector_comment" rows="6"  style="resize: none;" required></textarea>
+                                                            {{-- <label for="floatingTextarea">Comment</label> --}}
                                                         </div>
                                                     </div>
                                                 </div>
@@ -217,6 +208,149 @@
 
 
     
+        $(document).ready(function() {
+                var AcceptedId;
+
+                $(document).on('click', '.show-btn', function() {
+                    AcceptedId = $(this).data('id');
+                    car = $(this).data('vehicleid');
+                    millage = $(this).data('millage');
+                    reason = $(this).data('reason');
+                    inspection = $(this).data('inspection');
+                // console.log(car);
+
+                    $('#request_id').val(AcceptedId);
+                    $('#vehicleselection').val(car);
+                    $('#millage').text(millage);
+                    $('#purpose').text(reason);
+                    $('#inspection').text(inspection);
+                    $('#standard-modal').modal('show');
+                });
+            });
+
+        document.getElementById('assignBtn').addEventListener('click', function() {
+           
+           var selectedCarId = document.getElementById('vehicleselection').value;
+           console.log(selectedCarId);
+           // Perform an Ajax request to fetch data based on the selected car ID
+           $.ajax({
+               url: "{{ route('inspection.ByVehicle') }}",
+               type: 'GET',
+               data: { id: selectedCarId },
+               success: function(response) {
+                          // $('#showinspection-modal').modal('show');
+                           var cardsContainer = document.getElementById('inspectionCardsContainer');
+                           cardsContainer.innerHTML = ''; // Clear previous cards
+
+                           if (response.status === 'success' && Array.isArray(response.data) && response.data
+                               .length > 0) {
+                               // Create the table
+                               var Image = response.data[0].image_path;
+                               var imageUrl = Image ? "{{ asset('storage/vehicles/Inspections/') }}" + '/' + Image : null;
+                               var inspectedBy = response.data[0].inspected_by;
+                               var createdAt = new Date(response.data[0].created_at).toLocaleDateString(
+                                   'en-US', {
+                                       year: 'numeric',
+                                       month: '2-digit',
+                                       day: '2-digit'
+                                   });
+                               // Create a section to display "Inspected By" and "Created At" at the top right corner
+                               var infoSection = document.createElement('div');
+                               infoSection.className = 'd-flex justify-content-end mb-4'; // Flexbox to align right and add margin-bottom
+                               infoSection.innerHTML = `
+                                   <p><strong>Inspected By:</strong> ${inspectedBy} </br>
+                                   <strong>Created At:</strong> ${createdAt}</br>
+                                   <strong>Image:</strong> 
+                                   ${ imageUrl 
+                                       ? `<a href="${imageUrl}" target="_blank"> Click to View </a>` 
+                                       : 'No image'
+                                   }
+                               `;
+                               cardsContainer.appendChild(
+                                   infoSection); // Append the info section before the table
+                               var h1 = document.createElement('h4');
+                               h1.style.textAlign = 'center';
+                               h1.innerHTML = 'Vehilce parts';
+                               var h2 = document.createElement('h4');
+                               h2.style.textAlign = 'center';
+                               h2.innerHTML = 'Spare parts';
+                               var table = document.createElement('table');
+                               table.className = 'table table-striped'; // Add Bootstrap classes for styling
+                               table.innerHTML = `
+                               <thead>
+                                   <tr>
+                                       <th>Vehicle Part</th>
+                                       <th>Is Damaged</th>
+                                       <th>Damage Description</th>
+                                   </tr>
+                               </thead>
+                               <tbody>
+                               </tbody>
+                           `;
+
+                                   response.data.forEach(function(inspection) {
+                                       if(inspection.type == "normal_part")
+                                        {
+                                           var row = document.createElement('tr');
+                                           row.innerHTML = `
+                                           <td>${inspection.part_name}</td>
+                                           <td>${inspection.is_damaged ? 'No' : 'Yes'}</td>
+                                           <td>${inspection.damage_description ? inspection.damage_description : '-'}</td>
+                                           `;
+                                           table.querySelector('tbody').appendChild(
+                                               row); // Append row to the table body
+                                       }
+                               });
+                               cardsContainer.appendChild(h1);
+                               cardsContainer.appendChild(table);
+                               // Spare Part
+                               var table = document.createElement('table');
+                               table.className = 'table table-striped'; // Add Bootstrap classes for styling
+                               table.innerHTML = `
+                                       <thead>
+                                           <tr>
+                                               <th>Spare Part</th>
+                                               <th>Is Available</th>
+                                               <th>Quantity</th>
+                                           </tr>
+                                       </thead>
+                                       <tbody>
+                                       </tbody>
+                                   `;
+
+                               response.data.forEach(function(inspection) 
+                               {
+                                   if(inspection.type == "spare_part")
+                                       {
+                                           var row = document.createElement('tr');
+                                           row.innerHTML = `
+                                           <td>${inspection.part_name}</td>
+                                           <td>${inspection.is_damaged == "0"? 'No' : 'Yes'}</td>
+                                           <td>${inspection.damage_description ? inspection.damage_description : '-'}</td>
+                                           `;
+                                               table.querySelector('tbody').appendChild(
+                                                   row); // Append row to the table body
+                                       }
+                               });
+                               cardsContainer.appendChild(h2);
+                               cardsContainer.appendChild(table);
+
+                           } 
+                           else 
+                           {
+                               // Handle the case where no data is available
+                               cardsContainer.innerHTML = '<p>No inspection data available.</p>';
+                           }
+                       },
+                       error: function() {
+                           $('#showinspection-modal').modal('show');
+                           var cardsContainer = document.getElementById('inspectionCardsContainer');
+                           cardsContainer.innerHTML = ''; // Clear previous cards
+                           cardsContainer.innerHTML =
+                               '<p>No inspection data available at the moment. Please check the Plate number!</p>';
+                       }
+           });
+       });
 
         $(document).ready(function() {
             var AcceptedId;
@@ -235,7 +369,7 @@
             $(document).on('click', '.reject-btn', function() {
                 RejectedId = $(this).data('id');
 
-                $('#Reject_request_id').val(RejectedId);
+                $('#maintenance_id').val(RejectedId);
                 $('#staticBackdrop').modal('toggle');
             });
         });
