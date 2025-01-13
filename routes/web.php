@@ -90,7 +90,7 @@ Route::group(['middleware' => ['auth']], function()
                         Route::post('/TransportDirector_reject_request', 'TransportDirectorRejectRequest')->name('TransportDirector_reject_request');
                         Route::get('/simirit_approve_page', 'SimiritPage')->name('simirit_page');
                         Route::get('/FetchForDispatchery/temp', 'FetchForDispatcher')->name('FetchForDispatcher');
-                        Route::post('/simirit_approve_request', 'simiritApproveRequest')->name('simirit_approve');
+                        Route::post('/simirit_approve_temp_request', 'simiritApproveRequest')->name('simirit_approve_temp_request');
                         Route::post('/simirit_fill_start_km/store', 'simiritFillstartKm')->name('simirit_fill_start_km');
                         Route::post('/simirit_reject_request', 'simiritRejectRequest')->name('simirit_reject');
                         Route::post('/simirit_returns_vehicle', 'Returning_temporary_vehicle')->name('simirit_return_vehicle');
@@ -116,7 +116,7 @@ Route::group(['middleware' => ['auth']], function()
                         // Route::post('/director_approve_request', 'DirectorApproveRequest')->name('director_approve_request');
                         // Route::post('/director_reject_request', 'DirectorApproveRequest')->name('director_reject_request');
                         // Route::get('/simirit_approve_page', 'VehicleDirector')->name('simirit_page');
-                        // Route::post('/simirit_approve_request', 'VehicleDirectorApproveRequest')->name('simirit_approve');
+                         Route::post('/simirit_approve_mente_request', 'VehicleDirectorApproveRequest')->name('simirit_approve');
                         // Route::post('/simirit_fill_start_km', ' VehicleDirectorFillstartKm')->name('simirit_fill_start_km');
                         // Route::post('/simirit_reject_request', 'VehicleDirectorRejectRequest')->name('simirit_reject');
                         // Route::post('/simirit_returns_vehicle', 'Returning_temporary_vehicle')->name('simirit_return_vehicle');
@@ -313,7 +313,7 @@ Route::group(['middleware' => ['auth']], function()
                 });
 
                 Route::get('/vehicle/report/data', [Daily_KM_Calculation::class, 'vehicleReport'])->name('dailyreport.vehicleReport');
-                Route::get('/vehicle/report/filter', [Daily_KM_Calculation::class, 'filterVehicleReport'])->name('dailyreport.filterVehicleReport');
+                Route::get('/vehicle/report/filterr', [Daily_KM_Calculation::class, 'filterVehicleReport'])->name('dailyreport.filterVehicleReport');
 
             Route::controller(Fuel_QuataController::class)->group(function ()
                 {

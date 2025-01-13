@@ -110,7 +110,7 @@
                             <div class="modal fade" id="staticaccept" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                                 <div class="modal-dialog modal-lg modal-dialog-scrollable">
                                     <div class="modal-content">
-                                        <form method="POST" action="{{route('simirit_approve')}}">
+                                        <form method="POST" action="{{route('simirit_page')}}">
                                             @csrf   
                                             <div class="modal-header">
                                                     <div class="col-lg-6">
@@ -209,7 +209,7 @@
                                             <h3  class="text-info"><span id="Display_plate"></span></h3>
                                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                         </div> <!-- end modal header -->
-                                        <form method="POST" action="{{route('simirit_return_vehicle')}}">
+                                        <form method="POST" action="{{route('simirit_approve_temp_request')}}">
                                             @csrf
                                             <div class="modal-body">
                                                 <div class="mb-6 position-relative">

@@ -114,13 +114,75 @@ class PermanentFuelController extends Controller {
                 ], 200);
             }
         }
+    public function get_cost($vehicle_id,$month,$year)
+        {
+           
+            $logged_user = Auth::id();
+            $get_driver = DriversModel::where('user_id',$logged_user)->first();
+            $year = $request->input('year');
+            $month = $request->input('month');
+            $vehicle_id = $request->input('vehicle_id');
+            if ($month == 1) {
+                $year = $year - 1;
+                $month = 12;
+            } else {
+                $month = $month - 1;
+            }
+            // Fetch the current month's fuel record for the given driver
+            $fueling_of_one = PermanentFuelModel::where('driver_id', $get_driver->driver_id)
+                ->where('year', $year)
+                ->where('month', $month)
+                ->where('vehicle_id', $vehicle_id)
+                ->first();
+            
+            if (!$fueling_of_one) {
+                // Return an error response if no record is found
+                return response()->json([
+                    'status' => 'success',
+                    'message' => 'Previous cost calculated successfully.',
+                    'data' => [
+                        'expected_total' => null,
+                        'previous_fuel' => null
+                    ]
+                ], 200);
+            }    
+            // Fetch the previous month's fuel record
+            $get_previous_feul = PermanentFuelModel::where('year', $year)
+                ->where('month', $month)
+                ->where('vehicle_id', $fueling_of_one->vehicle_id)
+                ->latest()
+                ->first();
+                $expected_total = 0;
+            if ($get_previous_feul) {
+                // Calculate the expected total if the previous record exists
+                $expected_total = $get_previous_feul->one_litre_price * $get_previous_feul->quata;
         
+                return response()->json([
+                    'status' => 'success',
+                    'message' => 'Previous cost calculated successfully.',
+                    'data' => [
+                        'expected_total' => $expected_total,
+                        'previous_fuel' => $get_previous_feul
+                    ]
+                ], 200);
+            } else {
+                // Return a response indicating no previous cost is available
+                return response()->json([
+                    'status' => 'success',
+                    'message' => 'No previous cost available.',
+                    'data' => [
+                        'expected_total' => $expected_total,
+                        'previous_fuel' => $get_previous_feul
+                    ]
+                ], 200);
+            }
+        }   
     public function fuel_request_fetch() 
         {
             $logged_user = Auth::id();
             $get_driver = DriversModel::where('user_id',$logged_user)->first();
             $fueling = PermanentFuelModel::where('driver_id',$get_driver->driver_id)->get();
-            $data = PermanentFuelModel::select('fueling_id','vehicle_id','driver_id','month','year','finance_approved_by')
+            $data = PermanentFuelModel::select('fueling_id','vehicle_id','driver_id','month','year','finance_approved_by','final_approved_by')
                                             ->where('driver_id', $get_driver->driver_id)
                                             ->distinct()
                                             ->latest()
@@ -146,6 +208,9 @@ class PermanentFuelController extends Controller {
 
                     ->addColumn('month', function ($row) {
                         return $row->month . '/' . $row->year;
+                    })
+                    ->addColumn('approved_cost', function ($row)  {
+                        return $row->final_approved_by != null ? $this->get_approved_fuel_cost($row->fueling_id): "Pending";
                     })
                     ->addColumn('action', function ($row) {
                         $actions = '<button type="button" class="btn btn-info rounded-pill view-btn" data-id="' . $row->fueling_id . '"><i class="ri-eye-line"></i></button>
@@ -323,6 +388,16 @@ class PermanentFuelController extends Controller {
                 ];
             });
             return response()->json(['status' => 'success', 'data' => $fueling_data,'total_fuel'=>$total_feul,'expected_fuel' =>$expected_total]);
+    
+        }
+    public function get_approved_fuel_cost( $id ) 
+        {
+            
+            // dd($id);
+            $fueling = PermanentFuelModel::select('one_litre_price','quata')->where('fueling_id',$id )->first();
+            $total_feul =  $fueling->one_litre_price * $fueling->quata;
+           
+            return $total_feul;
     
         }
     public function update(Request $request)
@@ -530,7 +605,9 @@ class PermanentFuelController extends Controller {
                     ->addColumn('approver', function ($row)  {
                         return $row->final_approved_by != null ? $row->finalApprover->first_name : "Not Approved Yet";
                     })
-
+                    ->addColumn('approved_cost', function ($row)  {
+                        return $row->final_approved_by != null ? $this->get_approved_fuel_cost($row->fueling_id): "Pending";
+                    })
                     ->addColumn('status', function ($row)  {
                         return $row->status_check($row->fueling_id) ;
                     })

@@ -75,7 +75,7 @@
                                     <div class="col-md-8">
                                         <div class="card">
                                             <div class="card-header">
-                                                <h4 class="header-title mb-0">Route List</h4>
+                                                <h4 class="header-title mb-0">My Route</h4>
                                             </div>
                                             <div class="card-body">
                                                 <div class="table-responsive">

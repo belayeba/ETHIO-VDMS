@@ -587,7 +587,7 @@
                         <dl class="row mb-0">
                             <dt class="col-sm-4">Insurance:</dt>
                             <dd class="col-sm-8">
-                                <p><a href="{{ Storage::url($item->insurance) }}" target="_blank">View File</a></p>
+                                <p><a href="{{ Storage::url('vehicles/' . $item->insurance) }}" target="_blank">View File</a></p>
                             </dd>
                         </dl>
                         @endif

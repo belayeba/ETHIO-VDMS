@@ -185,6 +185,7 @@
                                                 <th scope="col">#</th>
                                                 <th scope="col">Vehicle Plate</th>
                                                 <th scope="col">Month</th>
+                                                <th scope="col">Approved Cost</th>
                                                 <th scope="col">Status</th>
                                                 <th scope="col">Action</th>
                                             </tr>
@@ -326,6 +327,10 @@
                     {
                         data: 'month',
                         name: 'month'
+                    },
+                    {
+                        data: 'approved_cost',
+                        name: 'approved_cost'
                     },
                     {
                         data: 'status',
