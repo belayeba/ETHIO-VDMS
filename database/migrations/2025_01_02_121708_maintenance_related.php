@@ -25,11 +25,16 @@ return new class extends Migration
 
             $table->string('milage');
             $table->enum('maintenance_type', ['service','accident']);
-            $table->enum('maintenance_status', ['in_progress','completed','pending','rejected'])->default('pending');
+            $table->enum('maintenance_status', ['in_progress','completed','simirit_approved','pending','rejected'])->default('pending');
 
             $table->uuid('approved_by')->nullable();
             $table->foreign('approved_by')->references('id')->on('users')->onDelete('restrict');
             $table->string('approver_rejection_reason', 1000)->nullable();
+
+            $table->uuid('inspected_by')->nullable();
+            $table->foreign('inspected_by')->references('id')->on('users')->onDelete('restrict');
+            $table->string('inspector_comment', 1000)->nullable();
+            $table->string('car_inspector_inspection')->nullable();
 
             $table->uuid('sim_approved_by')->nullable();
             $table->foreign('sim_approved_by')->references('id')->on('users')->onDelete('restrict');

@@ -20,15 +20,7 @@ class Maintained_vehicle extends Model
     public $incrementing = false;
     protected $keyType = 'uuid';
   
-    protected static function boot()
-           {
-    parent::boot();
-    static::creating(function ($model) {
-        if (empty($model->{$model->getKeyName()})) {
-            $model->{$model->getKeyName()} = (string) Str::uuid();
-        }
-    });
-}
+   
 protected $fillable = [
     'maintained_vehicle_id',
     'maintenance_id',
@@ -40,6 +32,15 @@ protected $fillable = [
     'spareparts_used',
     'created_at'
 ];
+protected static function boot()
+{
+parent::boot();
+static::creating(function ($model) {
+if (empty($model->{$model->getKeyName()})) {
+ $model->{$model->getKeyName()} = (string) Str::uuid();
+}
+});
+}
 public function maintained_vehicle(): HasMany {
     return $this->hasMany(Maintained_vehicle::class,'maintained_vehicle_id', 'maintained_vehicle_id');
 }
