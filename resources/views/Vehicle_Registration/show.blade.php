@@ -576,18 +576,20 @@
                         <dl class="row mb-0">
                             <dt class="col-sm-4">Libre:</dt>
                             <dd class="col-sm-8">
-                                <p><a href="{{ Storage::url($item->libre) }}" target="_blank">View File</a></p>
+                                <p>
+                                    <a href="{{ Storage::url('vehicles/' . $item->libre) }}" target="_blank">View File</a>
+                                </p>
                             </dd>
                         </dl>
                         @endif
-                    </div>
+                    </div>                    
             
                     <div class="col-md-6">
                         @if($item->insurance)
                         <dl class="row mb-0">
                             <dt class="col-sm-4">Insurance:</dt>
                             <dd class="col-sm-8">
-                                <p><a href="{{ Storage::url($item->insurance) }}" target="_blank">View File</a></p>
+                                <p><a href="{{ Storage::url('vehicles/' . $item->insurance) }}" target="_blank">View File</a></p>
                             </dd>
                         </dl>
                         @endif

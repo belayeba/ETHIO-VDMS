@@ -237,7 +237,7 @@
                                                                         <div class="mb-3">
                                                                             <label class="form-label">License File:</label>
                                                                             @if($item->license_file)
-                                                                                <p><a href="{{ Storage::disk('public')->url($item->license_file) }}" target="_blank">View File</a></p>
+                                                                                <p><a href="{{ Storage::url('Drivers/' . $item->license_file) }}" target="_blank">View File</a></p>
                                                                             @else
                                                                                 <p>No file uploaded</p>
                                                                             @endif
