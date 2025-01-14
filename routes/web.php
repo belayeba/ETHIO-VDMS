@@ -308,7 +308,7 @@ Route::group(['middleware' => ['auth']], function()
                 });
 
                 Route::get('/vehicle/report/data', [Daily_KM_Calculation::class, 'vehicleReport'])->name('dailyreport.vehicleReport');
-                Route::get('/vehicle/report/filter', [Daily_KM_Calculation::class, 'filterVehicleReport'])->name('dailyreport.filterVehicleReport');
+                Route::get('/vehicle/report/filterr', [Daily_KM_Calculation::class, 'filterVehicleReport'])->name('dailyreport.filterVehicleReport');
 
             Route::controller(Fuel_QuataController::class)->group(function ()
                 {
