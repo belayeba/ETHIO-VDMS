@@ -459,6 +459,36 @@
                     </div><!-- end col-->
                 </div>
 
+                <!-- this is for the Reject  modal -->
+                <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static"
+                    data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel"
+                    aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="staticBackdropLabel">Reject reason
+                                </h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                            </div> <!-- end modal header -->
+                                <div class="modal-body">
+                                    <div class="col-lg-6">
+                                        <h5 class="mb-3"></h5>
+                                        <div class="form-floating">
+                                            <input type="hidden" name="request_id" id="rejected_id">
+                                            <textarea class="form-control" name="reason" id="reason" style="height: 60px;" disabled></textarea>
+                                            <label for="floatingTextarea">Reason</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary"
+                                        data-bs-dismiss="modal">Close</button>
+                                </div> <!-- end modal footer -->
+                            </div> <!-- end modal content-->
+                        </div> <!-- end modal dialog-->
+                    </div>
+                    <!-- end assign modal -->
 
 
                 <script src="{{ asset('assets/vendor/datatables.net/js/jquery.dataTables.min.js') }}"></script>
@@ -663,20 +693,7 @@
                 function buildProgressMessage(button) {
                     let progressMessages = [];
 
-                     // Director decision
-                    // if (button.data('director_reject_reason') && button.data('dir_approved_by')) {
-                    //     progressMessages.push('Rejected by Director');
-                    // } else if (button.data('dir_approved_by')) {
-                    //     progressMessages.push('Approved by Director');
-                    // }
-
-                    // // Div decision
-                    // if (button.data('cluster_director_reject_reason') && button.data('div_approved_by')) {
-                    //     progressMessages.push('Rejected by Division-Director');
-                    // } else if (button.data('ddiv_approved_by')) {
-                    //     progressMessages.push('Approved by Division-Director');
-                    // }
-                    const messages = [
+                     const messages = [
                         {
                             condition: button.data('dir_approved_by') && !button.data('director_reject_reason'),
                             message: '<span style="color: green;">Approved by Director</span>'
@@ -760,6 +777,23 @@
                     targetDiv.style.display = 'none';
                 }
             });
+
+            $(document).ready(function() {
+                   
+                    $(document).on('click', '.reject-reason', function() {
+                        const reasons = [
+                            $(this).data('reason1'),
+                            $(this).data('reason2'),
+                            $(this).data('reason3'),
+                            $(this).data('reason4'),
+                            $(this).data('reason5'),
+                        ];
+                        const selectedReason = reasons.find(reason => reason && reason.trim() !== '') || 'No reason provided';
+
+                        $('#reason').val(selectedReason);
+                        $('#staticBackdrop').modal('show');
+                    });
+                });
     </script>
 
 

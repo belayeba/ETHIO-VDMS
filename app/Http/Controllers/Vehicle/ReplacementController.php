@@ -122,14 +122,14 @@ class ReplacementController extends Controller
                         $actions = '';                    
 
                         if ($row->reviewed_by == null) {
-                            $actions .= '<button class="btn btn-secondary rounded-pill update-btn" 
-                            data-id="' . $row->replacement_id. '" 
-                            data-new="' . $row->newVehicle->plate_number. '" 
-                            data-old="' . $row->permanentRequest->vehicle->plate_number. '" 
-                            title="edit"><i class="ri-edit-line"></i></button>';
-                            $actions .= '<button class="btn btn-danger rounded-pill reject-btn"  
-                            data-id="' . $row->replacement_id. '" 
-                            title="delete"><i class=" ri-close-circle-fill"></i></button>';
+                            // $actions .= '<button class="btn btn-secondary rounded-pill update-btn" 
+                            // data-id="' . $row->replacement_id. '" 
+                            // data-new="' . $row->newVehicle->plate_number. '" 
+                            // data-old="' . $row->permanentRequest->vehicle->plate_number. '" 
+                            // title="edit"><i class="ri-edit-line"></i></button>';
+                            // $actions .= '<button class="btn btn-danger rounded-pill reject-btn"  
+                            // data-id="' . $row->replacement_id. '" 
+                            // title="delete"><i class=" ri-close-circle-fill"></i></button>';
                         }
 
                         return $actions;
