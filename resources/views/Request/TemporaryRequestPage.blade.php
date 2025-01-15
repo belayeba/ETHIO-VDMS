@@ -210,7 +210,7 @@
                                                     </div>
                                                     <div class="position-relative mb-3">
                                                         <div class="mb-6 position-relative" id="datepicker1">
-                                                            <label class="form-label">Allowed Km after Destination</label>
+                                                            <label class="form-label">Total KM</label>
                                                             <input type="number" class="form-control"
                                                                 name="allowed_km" placeholder="Enter Allowed KM after destination">
                                                         </div>
@@ -228,7 +228,7 @@
                                             </div>
                                             <div class="tab-pane" id="finish-3">
                                                 <div class="row">
-                                                    <h6 class="fs-15 mt-3">Do you need Driver?</h6>
+                                                    <h6 class="fs-15 mt-3">Do you have Driver?</h6>
                                                     <div class="mt-2">
                                                         <div class="form-check form-check-inline">
                                                             <input type="checkbox" class="form-check-input"

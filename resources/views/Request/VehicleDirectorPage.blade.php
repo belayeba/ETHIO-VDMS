@@ -209,7 +209,7 @@
                                             <h3  class="text-info"><span id="Display_plate"></span></h3>
                                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                         </div> <!-- end modal header -->
-                                        <form method="POST" action="{{route('simirit_approve_temp_request')}}">
+                                        <form method="POST" action="{{route('simirit_return_vehicle')}}">
                                             @csrf
                                             <div class="modal-body">
                                                 <div class="mb-6 position-relative">
