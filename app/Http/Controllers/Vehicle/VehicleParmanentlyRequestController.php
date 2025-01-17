@@ -105,10 +105,11 @@ class VehicleParmanentlyRequestController extends Controller
             
                 }
 
-                if (!is_null($row->vehicle_id) && is_null($row->accepted_by_requestor)) {
-                    $action .= '<a href="' . route('accept_assigned_vehicle', ['id' => $row->vehicle_request_permanent_id]) . '" class="btn btn-primary rounded-pill" title="Accept">Accept</a>
-                            <button type="button" class="btn btn-danger rounded-pill reject-btn" data-bs-toggle="modal" data-bs-target="#staticBackdrop" data-id="' . $row->vehicle_request_permanent_id . '" title="Reject">Reject</button>';
-                }
+                if (!is_null($row->vehicle_id) && is_null($row->accepted_by_requestor)) 
+                    {
+                        $action .= '<a href="' . route('accept_assigned_vehicle', ['id' => $row->vehicle_request_permanent_id]) . '" class="btn btn-primary rounded-pill" title="Accept">Accept</a>
+                                <button type="button" class="btn btn-danger rounded-pill reject-btn" data-bs-toggle="modal" data-bs-target="#staticBackdrop" data-id="' . $row->vehicle_request_permanent_id . '" title="Reject">Reject</button>';
+                    }
 
                 return $action;
             })

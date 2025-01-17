@@ -257,11 +257,13 @@
             processing: true,
             pageLength: 5,
             serverSide: true,
-            ajax: {
+            ajax: 
+                {
                     url: "{{ route('FetchForDispatcher') }}",
-                    data: function (d) {
-                        d.customDataValue = customDataValue;
-                    }
+                    data: function (d) 
+                        {
+                            d.customDataValue = customDataValue;
+                        }
                 },         
             columns: [{
                     data: 'counter',
