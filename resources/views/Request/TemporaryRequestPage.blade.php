@@ -249,7 +249,7 @@
                                                                 class="select2 form-control select2-multiple"
                                                                 data-toggle="select2" multiple="multiple"
                                                                 data-placeholder="Select People ...">
-                                                                <optgroup label="Users/Employees">
+                                                                <optgroup label="Drivers">
                                                                     @foreach ($driver as $driver)
                                                                         <option value="{{ $driver->driver_id }}">
                                                                             <p style="color:black">{{ $driver->user->first_name }}
@@ -289,7 +289,7 @@
                                                     <div id="TogglePackage" style="display:none"></br>
                                                         <div class="row"></br>
                                                             <p class="mb-1 fw-bold text-muted">Search Passenger</p>
-                                                            <input type="text" id="searchBox" class="form-control mb-2" placeholder="Search for people..." />
+                                                            <input type="text" id="searchBox"  class="form-control mb-2" placeholder="Search for people..." />
                                                             <ul id="userSuggestions" class="list-group" style="max-height: 100px; overflow-y: auto;"></ul> <!-- Suggestions -->
                                                             <div id="selectedValues" class="mt-2"></div> <!-- Display selected users -->
                                                         </div>
@@ -587,6 +587,7 @@
                         tag.innerHTML = `
                             ${user.first_name}
                             <span class="remove-tag" data-id="${user.id}" style="cursor: pointer;">&times;</span>
+                            <input type="hidden" name="people_id[]" value="${user.id}" />
                         `;
                         selectedValuesDiv.appendChild(tag);
                     });
@@ -608,51 +609,75 @@
 
 
 
-            document.addEventListener('DOMContentLoaded', function() {
+           document.addEventListener('DOMContentLoaded', function() {
+            const select = document.getElementById('multiSelect');
+            const selectedValuesDiv = document.getElementById('selectedValues');
 
-                const itemName = document.getElementById('itemName');
-                const itemWeight = document.getElementById('itemWeight');
-                const addButton = document.getElementById('addItem');
-                const itemList = document.getElementById('itemList');
-
-                const itemNames = [];
-                const itemWeights = [];
-
-                addButton.addEventListener('click', function() {
-                    if (itemName.value && itemWeight.value) {
-                        const itemDiv = document.createElement('div');
-                        itemDiv.innerHTML = `
-                <span>${itemName.value} - ${itemWeight.value} kg</span>
-                <button class="removeItem">X</button>
-            `;
-                        const nameInput = document.createElement('input');
-                        nameInput.type = 'hidden';
-                        nameInput.name = 'material_name[]';
-                        nameInput.value = itemName.value;
-
-                        const weightInput = document.createElement('input');
-                        weightInput.type = 'hidden';
-                        weightInput.name = 'weight[]';
-                        weightInput.value = itemWeight.value;
-
-                        itemDiv.appendChild(nameInput);
-                        itemDiv.appendChild(weightInput);
-                        itemList.appendChild(itemDiv);
-
-                        itemName.value = '';
-                        itemWeight.value = '';
-                    }
+            select.addEventListener('change', function() {
+                selectedValuesDiv.innerHTML = '';
+                Array.from(select.selectedOptions).forEach(option => {
+                    const tag = document.createElement('span');
+                    tag.classList.add('badge', 'bg-primary', 'me-1', 'mb-1');
+                    tag.innerHTML = `${option.text} <span class="remove-tag" data-value="${option.value}">&times;</span>`;
+                    selectedValuesDiv.appendChild(tag);
                 });
+            });
 
-                itemList.addEventListener('click', function(e) {
-                    if (e.target.classList.contains('removeItem')) {
+            selectedValuesDiv.addEventListener('click', function(e) {
+                if (e.target.classList.contains('remove-tag')) {
+                    const value = e.target.getAttribute('data-value');
+                    const option = select.querySelector(`option[value="${value}"]`);
+                    option.selected = false;
+                    e.target.parentElement.remove();
+                }
+            });
+        });
+        
+        document.addEventListener('DOMContentLoaded', function() {
+        
+            const itemName = document.getElementById('itemName');
+            const itemWeight = document.getElementById('itemWeight');
+            const addButton = document.getElementById('addItem');
+            const itemList = document.getElementById('itemList');
+
+            const itemNames = [];
+            const itemWeights = [];
+
+            addButton.addEventListener('click', function() {
+                if (itemName.value && itemWeight.value) {
+                    const itemDiv = document.createElement('div');
+                    itemDiv.innerHTML = `
+                        <span>${itemName.value} - ${itemWeight.value} kg</span>
+                        <button class="removeItem">X</button>
+                    `;
+                    const nameInput = document.createElement('input');
+                    nameInput.type = 'hidden';
+                    nameInput.name = 'material_name[]';
+                    nameInput.value = itemName.value;
+
+                    const weightInput = document.createElement('input');
+                    weightInput.type = 'hidden';
+                    weightInput.name = 'weight[]';
+                    weightInput.value = itemWeight.value;
+
+                    itemDiv.appendChild(nameInput);
+                    itemDiv.appendChild(weightInput);
+                    itemList.appendChild(itemDiv);
+
+                    itemName.value = '';
+                    itemWeight.value = '';
+                }
+            });
+
+            itemList.addEventListener('click', function(e) {
+                if (e.target.classList.contains('removeItem')) {
                         const itemDiv = e.target.parentElement;
 
                         // Remove item from DOM
                         itemDiv.remove();
                     }
                 });
-            });
+        });
 
             $('#standard-modal').on('show.bs.modal', function(event) {
                 var button = $(event.relatedTarget); // Button that triggered the modal
@@ -670,10 +695,11 @@
 
                 // Populate passengers
                 var passengers = button.data('passengers');
+                console.log(passengers);
                 var passengerList = '';
                 if (passengers) {
                     passengers.forEach(function(person) {
-                        passengerList += person.user.first_name + '<br>';
+                        passengerList += person.user.first_name + ' ' + person.user.middle_name  + '<br>';
                     });
                 }
                 modal.find('[data-field="passengers"]').html(passengerList);
@@ -683,8 +709,7 @@
                 var materialList = '';
                 if (materials) {
                     materials.forEach(function(material) {
-                        materialList += 'Material name: ' + material.material_name + ',<br>' +
-                            'Material Weight: ' + material.weight + '.<br>';
+                        materialList +=  material.material_name + ' ' + material.weight + '.<br>';
                     });
                 }
                 modal.find('[data-field="materials"]').html(materialList);
@@ -736,6 +761,7 @@
                         },
                         {
                             condition: button.data('vehicle_id'),
+                            
                             message: '<span style="color: green;">Assigned Vehicle <u>' + button.data('vehicle_plate') + '</u></span>'
                         },
                         {
@@ -747,6 +773,7 @@
                             message: '<span style="color: green;">Request completed</span>'
                         },
                     ];
+                    console.log(button.data('vehicle_Driver') )
                     messages.forEach(item => {
                         if (item.condition) {
                             progressMessages.push(item.message);

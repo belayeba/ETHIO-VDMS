@@ -188,7 +188,10 @@
                             </ul>
                         </div>
                     </li>
-
+                
+                 
+                    @if(auth()->user()->can('Set Feul Cost') || auth()->user()->can('Request Fuel') || 
+                    auth()->user()->can('Finance Accept'))
                     <li class="side-nav-item">
                         <a data-bs-toggle="collapse" href="#sidebarFuel" aria-expanded="false"
                             aria-controls="sidebarFuel" class="side-nav-link">
@@ -216,6 +219,7 @@
                             </ul>
                         </div>
                     </li>
+                    @endif
 
                     <li class="side-nav-item">
                         <a data-bs-toggle="collapse" href="#sidebarMaintenance" aria-expanded="false"
@@ -256,7 +260,8 @@
                     </li>
 
 
-                    @can('Create User')
+                    @if(auth()->user()->can('Create User') || auth()->user()->can('Create Driver') || 
+                        auth()->user()->can('Change Driver') || auth()->user()->can('Accept Driver Change'))
                         <li class="side-nav-item">
                             <a data-bs-toggle="collapse" href="#sidebarUser" aria-expanded="false"
                                 aria-controls="sidebarUser" class="side-nav-link">
@@ -281,16 +286,18 @@
                                             <a href="{{ route('driver.switch') }}">Driver Change</a>
                                         </li>
                                     @endcan()
-                                    {{-- @can('Accept Driver Change') --}}
+                                    @can('Accept Driver Change')
                                         <li>
                                             <a href="{{ route('driverchange.request') }}">Driver Accept</a>
                                         </li>
-                                    {{-- @endcan() --}}
+                                    @endcan()
                                 </ul>
                             </div>
                         </li>
-                    @endcan()
-                    @can('Vehicle Registration')
+                    @endif()
+
+                    @if(auth()->user()->can('Vehicle Registration') || auth()->user()->can('Fill Attendance') || 
+                    auth()->user()->can('Vehicle Part Registration') || auth()->user()->can('Vehicle Inspection') || auth()->user()->can('Daily KM Registration'))
                         <li class="side-nav-item">
                             <a data-bs-toggle="collapse" href="#sidebarVehicle" aria-expanded="false"
                                 aria-controls="sidebarVehicle" class="side-nav-link">
@@ -333,8 +340,9 @@
                                 </ul>
                             </div>
                         </li>
-                    @endcan()
-                    @can('Create Cluster')
+                    @endif()
+
+                    @if(auth()->user()->can('Create Cluster') || auth()->user()->can('Create Department'))
                         <li class="side-nav-item">
                             <a data-bs-toggle="collapse" href="#sidebarOrganization" aria-expanded="false"
                                 aria-controls="sidebarOrganization" class="side-nav-link">
@@ -357,7 +365,8 @@
                                 </ul>
                             </div>
                         </li>
-                    @endcan()
+                    @endif()
+
                     @can('Create Role')
                         <li class="side-nav-item">
                             <a data-bs-toggle="collapse" href="#sidebarRole" aria-expanded="false"
@@ -377,7 +386,9 @@
                             </div>
                         </li>
                     @endcan()
-                    @can('Daily KM Report')
+                   
+                    @if(auth()->user()->can('Daily KM Report') || auth()->user()->can('View Attendance Report')
+                    || auth()->user()->can('Permananet Vehicle Request') || auth()->user()->can('Temporary Vehicle Request'))
                         <li class="side-nav-item">
                             <a data-bs-toggle="collapse" href="#sidebarReport" aria-expanded="false"
                                 aria-controls="sidebarReport" class="side-nav-link">
@@ -407,16 +418,18 @@
                                             <a href="{{ route('dailyreport.temporaryReport') }}">Temporary</a>
                                         </li>
                                     @endcan()
-                                    {{-- @can('Temporary Vehicle Request') --}}
+                                    @can('Maintance Request')
                                     <li>
                                         <a href="{{ route('dailyreport.vehicleReport') }}">Vehicle</a>
                                     </li>
-                                    {{-- @endcan() --}}
+                                    @endcan()
                                 </ul>
                             </div>
                         </li>
-                    @endcan()
-                    @can('Route Registration')
+                    @endif()
+
+                    @if(auth()->user()->can('Employee Change Route') || auth()->user()->can('Change Route For Employee')
+                    || auth()->user()->can('Route Registration') || auth()->user()->can('Assign Employee to Route'))
                         <li class="side-nav-item">
                             <a data-bs-toggle="collapse" href="#routeManagement" aria-expanded="false"
                                 aria-controls="routeManagement" class="side-nav-link">
@@ -449,8 +462,11 @@
                                 </ul>
                             </div>
                         </li>
-                    @endcan()
-                    @can('Letter Related')
+                    @endif()
+
+                    @if(auth()->user()->can('Attach Letter') || auth()->user()->can('Letter Review')
+                    || auth()->user()->can('Letter Approve') || auth()->user()->can('Purchase Letter') 
+                    || auth()->user()->can('Finance Letter'))
                     <li class="side-nav-item">
                         <a data-bs-toggle="collapse" href="#letterManagement" aria-expanded="false"
                             aria-controls="letterManagement" class="side-nav-link">
@@ -488,7 +504,7 @@
                             </ul>
                         </div>
                     </li>
-                    @endcan()
+                    @endif()
             </div>
         </div>
         </br></br>

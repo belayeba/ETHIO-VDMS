@@ -73,6 +73,17 @@
 
                                             <div class="col-lg-6">
                                                 <div class="position-relative mb-3">
+                                                    <label class="form-label" for="validationTooltip04">Phone</label>
+                                                    <input type="mob" class="form-control" name="phone" id="validationTooltip04"
+                                                    pattern="^\+251\d{9}$" placeholder="Start with +251" value="{{$users->phone_number}}" required>
+                                                    <div class="invalid-tooltip">
+                                                        Please provide a valid phone.no.
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            {{-- <div class="col-lg-6">
+                                                <div class="position-relative mb-3">
                                                     <label class="form-label" for="validationTooltip04">Username</label>
                                                     <input type="text" class="form-control" name="username" value="{{$users->username}}" id="validationTooltip04"
                                                         placeholder="username" required>
@@ -80,7 +91,7 @@
                                                         Please provide a valid Username.
                                                     </div>
                                                 </div>
-                                            </div>
+                                            </div> --}}
                                         </div>
 
                                         <div class="row">
@@ -129,19 +140,6 @@
                                                     </div>
                                                 </div>
                                             </div>
-
-                                            <div class="col-lg-6">
-                                                <div class="position-relative mb-3">
-                                                    <label class="form-label" for="validationTooltip04">Phone</label>
-                                                    <input type="mob" class="form-control" name="phone" id="validationTooltip04"
-                                                    pattern="^\+251\d{9}$" placeholder="Start with +251" value="{{$users->phone_number}}" required>
-                                                    <div class="invalid-tooltip">
-                                                        Please provide a valid phone.no.
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="row"> 
                                             <div class="col-lg-6">
                                                 <div class="position-relative mb-3">
                                                     <label class="form-label" for="validationTooltip03">Password</label>
@@ -152,6 +150,10 @@
                                                     </div>
                                                 </div>
                                             </div>
+                                            
+                                        </div>
+                                        <div class="row"> 
+                                            
 
                                             <input type="hidden"  name="id" value="{{$users->id}}">
 

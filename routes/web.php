@@ -142,6 +142,7 @@ Route::group(['middleware' => ['auth']], function()
                     Route::post('/updates/store','storeupdates')->name('user.update.store');
                     Route::post('/user/delete', 'destroy')->name('users.delete');
                     Route::get('/profile','profile')->name('user_profile');
+                    Route::get('/user/export','exportToPdf')->name('user_export');
                     Route::post('/profile/store','profile_save')->name('user.profile.store');
 
                 });
@@ -308,7 +309,7 @@ Route::group(['middleware' => ['auth']], function()
                 });
 
                 Route::get('/vehicle/report/data', [Daily_KM_Calculation::class, 'vehicleReport'])->name('dailyreport.vehicleReport');
-                Route::get('/vehicle/report/filterr', [Daily_KM_Calculation::class, 'filterVehicleReport'])->name('dailyreport.filterVehicleReport');
+                Route::get('/vehicle/report/filter', [Daily_KM_Calculation::class, 'filterVehicleReport'])->name('dailyreport.filterVehicleReport');
 
             Route::controller(Fuel_QuataController::class)->group(function ()
                 {

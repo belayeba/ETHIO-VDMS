@@ -34,7 +34,10 @@
                         <div class="card">
                             <div class="card-header d-flex justify-content-between align-items-center flex-wrap gap-2">
                                 <h4 class="header-title mb-0">User Lists</h4>
-                                <a href="{{ route('user_create') }}" class="btn btn-primary rounded-pill">Create</a>
+                                <div>
+                                    <a href="{{ route('user_create') }}" class="btn btn-primary rounded-pill">Create</a>
+                                    <a href="{{ route('user_export') }}" class="btn btn-info rounded-pill">Export</a>
+                                </div>
                             </div>
                             <div class="card-body">
                                 <div class="table-responsive">

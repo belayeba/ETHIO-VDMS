@@ -27,7 +27,7 @@ class permissionseeder extends Seeder {
         // PermissionGroup::query()->delete();
 
         $adminRole = Role::create( [ 'name' => 'Admin' ] );
-        $editorRole = Role::create( [ 'name' => 'Editor' ] );
+        
 
         $permission_data = [
             [
