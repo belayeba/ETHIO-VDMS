@@ -406,8 +406,8 @@
                         var Position = $(this).data('position');
                         var license = $(this).data('license');
                         var expiry = $(this).data('expire')
-
                         // Populate modal fields
+                        
                        $('#editrequest_reason').val(requestReason);
                        $('#editposition').val(Position);
                        $('#editlicense_number').val(license);

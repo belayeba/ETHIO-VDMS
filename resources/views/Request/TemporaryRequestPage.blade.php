@@ -105,8 +105,8 @@
                                                     <div class="position-relative mb-3">
                                                         <div class="mb-6 position-relative" id="datepicker1">
                                                             <label class="form-label">Reason</label>
-                                                            <input type="text" name="purpose" class="form-control"
-                                                                placeholder="Enter purpose of Request">
+                                                             <textarea  type="text" name="purpose" class="form-control"
+                                                                placeholder="Enter purpose of Request"></textarea>
                                                         </div>
                                                     </div>
 
@@ -194,7 +194,7 @@
                                                 <div class="row">
                                                     <div class="position-relative mb-3">
                                                         <div class="mb-6 position-relative" id="datepicker1">
-                                                            <label class="form-label">Location From</label>
+                                                            <label class="form-label">Location Start From</label>
                                                             <input type="text" class="form-control"
                                                                 name="start_location"
                                                                 placeholder="Enter starting location">
@@ -203,7 +203,7 @@
 
                                                     <div class="position-relative mb-3">
                                                         <div class="mb-6 position-relative" id="datepicker1">
-                                                            <label class="form-label">Location to</label>
+                                                            <label class="form-label">Location Destination</label>
                                                             <input type="text" class="form-control"
                                                                 name="end_location" placeholder="Enter arrival location">
                                                         </div>
@@ -212,7 +212,7 @@
                                                         <div class="mb-6 position-relative" id="datepicker1">
                                                             <label class="form-label">Total KM</label>
                                                             <input type="number" class="form-control"
-                                                                name="allowed_km" placeholder="Enter Allowed KM after destination">
+                                                                name="allowed_km" placeholder="Enter Total KM ">
                                                         </div>
                                                     </div>
                                                 </div> <!-- end card-body-->
@@ -396,6 +396,7 @@
                                             <tr>
                                                 <th>Roll.no</th>
                                                 <th>Requested Date</th>
+                                                <th>Status</th>
                                                 <th>location</th>
                                                 <th>Actions</th>
                                             </tr>
@@ -506,6 +507,10 @@
                     {
                         data: 'start_date',
                         name: 'start_date'
+                    },
+                    {
+                        data: 'status',
+                        name: 'status'
                     },
                     {
                         data: 'location',
