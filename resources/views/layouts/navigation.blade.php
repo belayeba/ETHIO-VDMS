@@ -359,7 +359,7 @@
                                     @endcan()
                                     @can('Create Department')
                                         <li>
-                                            <a href="/department">Department</a>
+                                            <a href="/department">Division</a>
                                         </li>
                                     @endcan()
                                 </ul>
