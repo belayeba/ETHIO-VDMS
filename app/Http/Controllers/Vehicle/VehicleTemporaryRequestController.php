@@ -17,7 +17,6 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use App\Notifications\TaskCompleted;
 use App\Http\Controllers\Vehicle\Daily_KM_Calculation;
-use App\Models\Trip\TripPersonsModel;
 use Carbon\Carbon;
 
 class VehicleTemporaryRequestController extends Controller
