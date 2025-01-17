@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use App\Notifications\TaskCompleted;
 use App\Http\Controllers\Vehicle\Daily_KM_Calculation;
+use App\Models\Trip\TripPersonsModel;
 use Carbon\Carbon;
 
 class VehicleTemporaryRequestController extends Controller
@@ -53,7 +54,19 @@ class VehicleTemporaryRequestController extends Controller
                 ->addColumn('start_date', function ($row) {
                     return $row->created_at->format('d/m/y');
                 })
-
+                ->addColumn('status', function ($row) {
+                    if ($row->vehicle_id !== null && $row->start_km == null) {
+                        return 'ASSIGNED';
+                    } elseif ($row->end_km == null && $row->start_km !== null) {
+                        return 'DISPATCHED';
+                    } elseif ($row->end_km !== null) {
+                        return 'RETURNED';
+                    } elseif ($row->assigned_by == null) {
+                        return 'PENDING';
+                    }elseif ($row->assigned_by_reject_reason != null){
+                        return 'REJECTED';
+                    }
+                })
                 ->addColumn('location', function ($row) {
                     return  '</br> From:'.$row->start_location . ',</br> To: ' . $row->end_locations;
                 })
@@ -109,6 +122,14 @@ class VehicleTemporaryRequestController extends Controller
                 ->toJson();
         
             }
+        public function return_people($id)
+           {
+              $people = TripPersonsModel::where('request_id',$id)->get();
+               if(!$people)
+                 {
+                    return [];
+                 }
+           }
         // Send Vehicle Request Temporary
         public function RequestVehicleTemp(Request $request) 
             {
@@ -1152,12 +1173,13 @@ class VehicleTemporaryRequestController extends Controller
                         ->whereNull('vec_director_reject_reason');
                     })
                     // Fallback to dir_approved_by if the first condition isn't true
-                    ->orWhere(function ($query) {
-                        $query->where('how_many_days', '<=', 2)
-                            ->where('in_out_town', true)
-                            ->whereNull('director_reject_reason')
-                            ->whereNotNull('dir_approved_by');
-                    })
+                    ->orWhere(function ($query) 
+                        {
+                            $query->where('how_many_days', '<=', 2)
+                                ->where('in_out_town', true)
+                                ->whereNull('director_reject_reason')
+                                ->whereNotNull('dir_approved_by');
+                        })
                     ->latest()
                     ->get();
                 }
@@ -1297,13 +1319,12 @@ class VehicleTemporaryRequestController extends Controller
                                 );
                             }
                         $inspection = InspectionModel::select('inspection_id')->where('vehicle_id',$assigned_vehicle)->latest()->first();
+                        $inspection_id = null;
                         if(!$inspection)
                             {
-                                return redirect()->back()->with('error_message',
-                                'This car has no inspection',
-                                );
+                                $inspection_id = $inspection->inspection_id;
                             }
-                        $inspection_id = $inspection->inspection_id;
+                        $inspection_id = $inspection_id;
                         $Vehicle_Request->assigned_by = $user_id;
                         $Vehicle_Request->vehicle_id = $assigned_vehicle;
                         $Vehicle_Request->taking_inspection = $inspection_id;
