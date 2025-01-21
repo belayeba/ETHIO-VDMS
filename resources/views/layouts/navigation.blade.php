@@ -112,26 +112,26 @@
                         <li class="side-nav-item">
                             <a href="{{ route('home') }}" class="side-nav-link">
                                 <i class="ri-dashboard-3-line"></i>
-                                <span> Map </span>
+                                <span>@lang('messages.Map')</span>
                             </a>
                         </li>
                     <li class="side-nav-item">  
                         <a data-bs-toggle="collapse" href="#sidebarRequest" aria-expanded="false"
                             aria-controls="sidebarRequest" class="side-nav-link">
                             <i class=" ri-questionnaire-line"></i>
-                            <span>Request Management</span>
+                            <span>@lang('messages.Request Management')</span>
                             <span class="menu-arrow"></span>
                         </a>
                         <div class="collapse" id="sidebarRequest">
                             <ul class="side-nav-second-level">
                                 @can('Temporary Request Page')
                                     <li>
-                                        <a href="{{ route('displayRequestPage') }}">Temporary Request</a>
+                                        <a href="{{ route('displayRequestPage') }}">@lang('messages.Temporary Request')</a>
                                     </li>
                                 @endcan()
                                 @can('Permanent Request Page')
                                     <li>
-                                        <a href="{{ route('vec_perm_request') }}">Permanent Request</a>
+                                        <a href="{{ route('vec_perm_request') }}">@lang('messages.Request Permanent Vehicle')</a>
                                     </li>
                                 @endcan()
                                 @can('Director Approval Page')
@@ -193,7 +193,7 @@
                         <a data-bs-toggle="collapse" href="#sidebarFuel" aria-expanded="false"
                             aria-controls="sidebarFuel" class="side-nav-link">
                             <i class="  ri-gas-station-fill"></i>
-                            <span>Fuel Management</span>
+                            <span>@lang('messages.Fuel Management')</span>
                             <span class="menu-arrow"></span>
                         </a>
                         <div class="collapse" id="sidebarFuel">
@@ -205,7 +205,7 @@
                                 @endcan()
                                 @can('Request Fuel')
                                     <li>
-                                        <a href="{{ route('permanenet_fuel_request') }}">Request</a>
+                                        <a href="{{ route('permanenet_fuel_request') }}">@lang('messages.Fuel Request')</a>
                                     </li>
                                 @endcan()
                                 @can('Finance Accept')
@@ -221,14 +221,14 @@
                         <a data-bs-toggle="collapse" href="#sidebarMaintenance" aria-expanded="false"
                             aria-controls="sidebarMaintenance" class="side-nav-link">
                             <i class="ri-settings-5-fill "></i>
-                            <span>Maintenance</span>
+                            <span>@lang('messages.Maintenance')</span>
                             <span class="menu-arrow"></span>
                         </a>
                         <div class="collapse" id="sidebarMaintenance">
                             <ul class="side-nav-second-level">
                                 @can('Request Mentenance')
                                     <li>
-                                        <a href="{{route('maintenance_request')}}">Maintenance </a>
+                                        <a href="{{route('maintenance_request')}}">@lang('messages.Request Maintenance') </a>
                                     </li>
                                 @endcan()
                                 @can('Request Mentenance')
@@ -261,29 +261,29 @@
                             <a data-bs-toggle="collapse" href="#sidebarUser" aria-expanded="false"
                                 aria-controls="sidebarUser" class="side-nav-link">
                                 <i class="  ri-user-fill"></i>
-                                <span>User Management</span>
+                                <span>@lang('messages.User Management')</span>
                                 <span class="menu-arrow"></span>
                             </a>
                             <div class="collapse" id="sidebarUser">
                                 <ul class="side-nav-second-level">
                                     @can('Create User')
                                         <li>
-                                            <a href="{{ route('user_list') }}">Create users</a>
+                                            <a href="{{ route('user_list') }}">@lang('messages.Create Users')</a>
                                         </li>
                                     @endcan()
                                     @can('Create Driver')
                                         <li>
-                                            <a href="{{ route('driver.index') }}">Driver Registration</a>
+                                            <a href="{{ route('driver.index') }}">@lang('messages.Driver Registration')</a>
                                         </li>
                                     @endcan()
                                     @can('Change Driver')
                                         <li>
-                                            <a href="{{ route('driver.switch') }}">Driver Change</a>
+                                            <a href="{{ route('driver.switch') }}">@lang('messages.Driver Change')</a>
                                         </li>
                                     @endcan()
                                     {{-- @can('Accept Driver Change') --}}
                                         <li>
-                                            <a href="{{ route('driverchange.request') }}">Driver Accept</a>
+                                            <a href="{{ route('driverchange.request') }}">@lang('messages.Driver Accept')</a>
                                         </li>
                                     {{-- @endcan() --}}
                                 </ul>
@@ -295,14 +295,14 @@
                             <a data-bs-toggle="collapse" href="#sidebarVehicle" aria-expanded="false"
                                 aria-controls="sidebarVehicle" class="side-nav-link">
                                 <i class=" ri-taxi-fill"></i>
-                                <span>Vehicle Management</span>
+                                <span>@lang('messages.Vehicle Management')</span>
                                 <span class="menu-arrow"></span>
                             </a>
                             <div class="collapse" id="sidebarVehicle">
                                 <ul class="side-nav-second-level">
                                     @can('Vehicle Registration')
                                         <li>
-                                            <a href="{{ route('vehicleRegistration.index') }}">Registration </a>
+                                            <a href="{{ route('vehicleRegistration.index') }}">@lang('messages.Vehicle Registration') </a>
                                         </li>
                                     @endcan()
                                     @can('Fill Attendance')
@@ -322,12 +322,12 @@
                                     @endcan()
                                     @can('Vehicle Inspection')
                                         <li>
-                                            <a href="{{ route('inspection.page') }}">Inspection</a>
+                                            <a href="{{ route('inspection.page') }}">@lang('messages.Vehicle Inspection')</a>
                                         </li>
                                     @endcan()
                                     @can('Daily KM Registration')
                                         <li>
-                                            <a href="{{ route('daily_km.page') }}">Daily KM</a>
+                                            <a href="{{ route('daily_km.page') }}">@lang('messages.Daily KM')</a>
                                         </li>
                                     @endcan()
                                 </ul>
@@ -339,19 +339,19 @@
                             <a data-bs-toggle="collapse" href="#sidebarOrganization" aria-expanded="false"
                                 aria-controls="sidebarOrganization" class="side-nav-link">
                                 <i class="ri-share-line"></i>
-                                <span> Organization </span>
+                                <span> @lang('messages.Organization') </span>
                                 <span class="menu-arrow"></span>
                             </a>
                             <div class="collapse" id="sidebarOrganization">
                                 <ul class="side-nav-second-level">
                                     @can('Create Cluster')
                                         <li>
-                                            <a href="{{ route('cluster.index') }}">Cluster</a>
+                                            <a href="{{ route('cluster.index') }}">@lang('messages.Cluster')</a>
                                         </li>
                                     @endcan()
                                     @can('Create Department')
                                         <li>
-                                            <a href="/department">Department</a>
+                                            <a href="/department">@lang('messages.Department')</a>
                                         </li>
                                     @endcan()
                                 </ul>
@@ -363,14 +363,14 @@
                             <a data-bs-toggle="collapse" href="#sidebarRole" aria-expanded="false"
                                 aria-controls="sidebarRole" class="side-nav-link">
                                 <i class="ri-shield-cross-fill"></i>
-                                <span>Role Management</span>
+                                <span>@lang('messages.Role Management')</span>
                                 <span class="menu-arrow"></span>
                             </a>
                             <div class="collapse" id="sidebarRole">
                                 <ul class="side-nav-second-level">
                                     @can('Create Role')
                                         <li>
-                                            <a href="{{ route('roles.index') }}">Roles</a>
+                                            <a href="{{ route('roles.index') }}">@lang('messages.Role')</a>
                                         </li>
                                     @endcan()
                                 </ul>
@@ -382,7 +382,7 @@
                             <a data-bs-toggle="collapse" href="#sidebarReport" aria-expanded="false"
                                 aria-controls="sidebarReport" class="side-nav-link">
                                 <i class=" ri-file-fill"></i>
-                                <span>Report</span>
+                                <span>@lang('messages.Report')</span>
                                 <span class="menu-arrow"></span>
                             </a>
                             <div class="collapse" id="sidebarReport">
@@ -418,17 +418,17 @@
                     @endcan()
                     @can('Route Registration')
                         <li class="side-nav-item">
-                            <a data-bs-toggle="collapse" href="#routeManagement" aria-expanded="false"
+                            <a data-bs-toggle="collapse" href="@lang('messages.Route Management')" aria-expanded="false"
                                 aria-controls="routeManagement" class="side-nav-link">
                                 <i class=" ri-route-fill"></i>
-                                <span>Route Management</span>
+                                <span>@lang('messages.Route Management')</span>
                                 <span class="menu-arrow"></span>
                             </a>
                             <div class="collapse" id="routeManagement">
                                 <ul class="side-nav-second-level">
                                     @can('Employee Change Route')
                                        <li>
-                                            <a href="{{ route('route.self_route_self') }}">My Route</a>
+                                            <a href="{{ route('route.self_route_self') }}">@lang('messages.My Route')</a>
                                         </li>
                                         @endcan()
                                     @can('Change Route For Employee')
@@ -438,12 +438,12 @@
                                         @endcan()
                                     @can('Route Registration')
                                         <li>
-                                            <a href="{{ route('route.index') }}">Registration</a>
+                                            <a href="{{ route('route.index') }}">@lang('messages.Route Registration')</a>
                                         </li>
                                     @endcan()
                                     @can('Assign Employee to Route')
                                         <li>
-                                            <a href="{{ route('route.show') }}">Employee Service</a>
+                                            <a href="{{ route('route.show') }}">@lang('messages.Employee Service')</a>
                                         </li>
                                     @endcan()
                                 </ul>
@@ -462,7 +462,7 @@
                             <ul class="side-nav-second-level">
                                 @can('Attach Letter')
                                     <li>
-                                        <a href="{{ route('letter.index') }}">Letter Request</a>
+                                        <a href="{{ route('letter.index') }}">@lang('messages.Letter Request')</a>
                                     </li>
                                 @endcan()
                                 @can('Letter Review')

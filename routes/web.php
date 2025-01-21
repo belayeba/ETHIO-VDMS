@@ -31,6 +31,7 @@ use App\Http\Controllers\Vehicle\AttendanceController;
 use App\Http\Controllers\Vehicle\ReplacementController;
 use App\Http\Controllers\Letter\LetterController;
 use App\Http\Controllers\Letter\LetterManagement;
+use App\Http\Controllers\localeController;
 use App\Http\Controllers\Route\EmployeeChangeLocationController;
 use Illuminate\Foundation\Http\Middleware\ValidateCsrfToken;
 
@@ -460,6 +461,8 @@ Route::group(['middleware' => ['auth']], function()
                 });
                  
             Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home'); 
+            
+            Route::get('locale/{lang}', [LocaleController::class, 'setlocale'])->name('locale.switch');
 
     Route::group([
         'prefix'=>'cluster',
