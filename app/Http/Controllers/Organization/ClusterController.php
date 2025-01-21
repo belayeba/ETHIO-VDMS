@@ -37,13 +37,13 @@ class ClusterController extends Controller {
 
     public function store( Request $request ) {
         $validation = Validator::make($request->all(),[
-            'name' => 'required|string|max:255',
+            'name' => 'required|string|regex:/^[a-zA-Z]+$/|max:100',
            // 'created_by' => 'required',
         ] );
         if ($validation->fails()) 
         {
            return redirect()->back()->with('error_message',
-               $validation->errors(),
+               'Something went Wrong, Please use Text formats only.',
             );
         }
         try
@@ -84,10 +84,17 @@ class ClusterController extends Controller {
 
     public function update( Request $request, ClustersModel $cluster ) {
         // dd( $request );
-        $request->validate( [
-            'name' => 'required|string|max:255',
+        $validation = Validator::make($request->all(),[
+            'name' => 'required|string|regex:/^[a-zA-Z]+$/|max:100',
+           // 'created_by' => 'required',
         ] );
-
+        if ($validation->fails()) 
+        {
+           return redirect()->back()->with('error_message',
+               'Something went Wrong, Please use Text formats only.',
+            );
+        }
+        
         $user = Auth::id();
         // Get the authenticated user's ID
         $request->merge(['created_by' => $user]); 

@@ -34,6 +34,7 @@
                                                     <th>Requested Month</th>
                                                     <th>Vehicle</th>
                                                     <th>Approved By</th>
+                                                    <th>Approved Cost</th>
                                                     <th>Status</th>
                                                     <th>Action</th>
                                                 </tr>
@@ -312,6 +313,10 @@
                 {
                     data: 'approver',
                     name: 'approver'
+                },
+                {
+                    data: 'approved_cost',
+                    name: 'approved_cost'
                 },
                 {
                     data: 'status',

@@ -35,6 +35,7 @@
                                             <a class="dropdown-item" onclick="updateState(1, 'PENDING')">PENDING</a>
                                             <a class="dropdown-item" onclick="updateState(2, 'ASSIGNED')">ASSIGNED</a>
                                             <a class="dropdown-item" onclick="updateState(3, 'DISPATCHED')">DISPATCHED</a>
+                                            <a class="dropdown-item" onclick="updateState(4, 'DISPATCHED')">RETURNED</a>
                                         </div>
                                     </div>
                                     {{-- <button type="button" class="btn btn-secondary rounded-pill" autofocus onclick="updateState(1)">PENDING REQUEST</button>
@@ -108,9 +109,9 @@
 
                             <!-- this is for the assign  modal -->
                             <div class="modal fade" id="staticaccept" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                                <div class="modal-dialog modal-lg modal-dialog-scrollable">
-                                    <div class="modal-content">
-                                        <form method="POST" action="{{route('simirit_approve')}}">
+                                <div class="modal-dialog modal-lg">                                   
+                                     <div class="modal-content">
+                                        <form method="POST" action="{{route('simirit_approve_temporary')}}">
                                             @csrf   
                                             <div class="modal-header">
                                                     <div class="col-lg-6">
@@ -125,7 +126,7 @@
                                                     </div>                                                               
                                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                             </div> <!-- end modal header -->
-                                            <div class="modal-body">
+                                            <div class="modal-body">Select a Vehicle and check Inspection, Before assigning.
                                                 <div class="table-responsive">
                                                     <div class="row mt-3" id="inspectionCardsContainer" class="table table-striped"> 
                                                     </div>
@@ -257,11 +258,13 @@
             processing: true,
             pageLength: 5,
             serverSide: true,
-            ajax: {
+            ajax: 
+                {
                     url: "{{ route('FetchForDispatcher') }}",
-                    data: function (d) {
-                        d.customDataValue = customDataValue;
-                    }
+                    data: function (d) 
+                        {
+                            d.customDataValue = customDataValue;
+                        }
                 },         
             columns: [{
                     data: 'counter',
@@ -457,57 +460,58 @@
             function buildProgressMessage(button) {
                 let progressMessages = [];
 
-                const messages = [{
-                        condition: button.data('dir_approved_by'),
-                        message: 'Approved by Director'
+                const messages = [
+                    {
+                        condition: button.data('dir_approved_by') && !button.data('director_reject_reason'),
+                        message: '<span style="color: green;">Approved by Director</span>'
                     },
                     {
-                        condition: button.data('director_reject_reason'),
-                        message: 'Rejected by Director'
+                        condition: button.data('director_reject_reason') && button.data('dir_approved_by'),
+                        message: '<span style="color: red;">Rejected by Director</span>'
                     },
                     {
-                        condition: button.data('div_approved_by'),
-                        message: 'Approved by Division-Director'
+                        condition: button.data('div_approved_by') && !button.data('cluster_director_reject_reason'),
+                        message: '<span style="color: green;">Approved by Division-Director</span>'
                     },
                     {
-                        condition: button.data('cluster_director_reject_reason'),
-                        message: 'Rejected by Division-Director'
+                        condition: button.data('cluster_director_reject_reason') && button.data('div_approved_by'),
+                        message: '<span style="color: red;">Rejected by Division-Director</span>'
                     },
                     {
-                        condition: button.data('hr_div_approved_by'),
-                        message: 'Approved by HR-Director'
+                        condition: button.data('hr_div_approved_by') && !button.data('hr_director_reject_reason'),
+                        message: '<span style="color: green;">Approved by HR-Director</span>'
                     },
                     {
-                        condition: button.data('hr_director_reject_reason'),
-                        message: 'Rejected by HR-Director'
+                        condition: button.data('hr_director_reject_reason') && button.data('hr_div_approved_by'),
+                        message: '<span style="color: red;">Rejected by HR-Director</span>'
                     },
                     {
-                        condition: button.data('transport_director_id'),
-                        message: 'Approved by Dispatcher-Director'
+                        condition: button.data('transport_director_id') && !button.data('vec_director_reject_reason'),
+                        message: '<span style="color: green;">Approved by Dispatcher-Director</span>',
                     },
                     {
-                        condition: button.data('vec_director_reject_reason'),
-                        message: 'Rejected by Dispatcher-Director'
+                        condition: button.data('vec_director_reject_reason') && button.data('transport_director_id'),
+                        message: '<span style="color: red;">Rejected by Dispatcher-Director</span>',
                     },
                     {
-                        condition: button.data('assigned_by'),
-                        message: 'Approved by Dispatcher'
+                        condition: button.data('assigned_by') && !button.data('assigned_by_reject_reason'),
+                        message: '<span style="color: green;">Approved by Dispatcher</span>'
                     },
                     {
-                        condition: button.data('assigned_by_reject_reason'),
-                        message: 'Rejected by Dispatcher'
+                        condition: button.data('assigned_by_reject_reason') && button.data('assigned_by'),
+                        message: '<span style="color: red;">Rejected by Dispatcher</span>'
                     },
                     {
                         condition: button.data('vehicle_id'),
-                        message: 'Assigned Vehicle <u>' + button.data('vehicle_plate') + '</u>'
+                        message: '<span style="color: green;">Assigned Vehicle <u>' + button.data('vehicle_plate') + '</u></span>'
                     },
                     {
                         condition: button.data('start_km'),
-                        message: 'Vehicle Request <u>' + button.data('vehicle_plate') + '</u> Dispatched'
+                        message: '<span style="color: green;">Vehicle Request <u>' + button.data('vehicle_plate') + '</u> Dispatched</span>'
                     },
                     {
                         condition: button.data('end_km'),
-                        message: 'Request completed'
+                        message: '<span style="color: green;">Request completed</span>'
                     },
                 ];
                 messages.forEach(item => {

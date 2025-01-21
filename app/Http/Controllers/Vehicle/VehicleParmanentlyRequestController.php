@@ -54,14 +54,14 @@ class VehicleParmanentlyRequestController extends Controller
                 if (is_null($row->approved_by)) {
                     return 'Pending';
                 } elseif (!is_null($row->director_reject_reason)) {
-                    return 'Rejected by Dir';
-                } elseif (!is_null($row->approved_by)){
-                    return 'Approved by Dir';
+                    return 'Director Reject';
+                } elseif (!is_null($row->approved_by) && is_null($row->director_reject_reason)){
+                    return 'Director Approve';
                 }
                 elseif (is_null($row->vec_director_reject_reason )) {
-                    return 'Rejected by simirit';
+                    return 'Dispatcher Reject';
                 } elseif (!is_null($row->vehicle_id)){
-                    return 'Approved by simirit';
+                    return 'Dispatcher Approve';
                 }
                 else {
                     return 'Approved';
@@ -75,13 +75,26 @@ class VehicleParmanentlyRequestController extends Controller
             ->addColumn('actions', function ($row){
                 $action = '';
 
+                $action .= '<button type="button" class="btn btn-info rounded-pill show-btn" data-bs-toggle="modal" 
+                data-reason="' . $row->purpose . '" 
+                data-position_letter="' . $row->position_letter . '" 
+                data-driving_license="' . $row->driving_license . '" 
+                data-bs-target="#standard-modal-{{ $loop->index }}" title="Show"><i class=" ri-eye-line"></i></button>';
+                
                 if (is_null($row->approved_by) && is_null($row->director_reject_reason)) {
-                    $action .= '<button type="button" class="btn btn-secondary rounded-pill" data-bs-toggle="modal" data-bs-target="#standard-modal" data-id="' . $row->vehicle_request_permanent_id . '" data-reason="' . $row->purpose. '"  title="edit">
+                    $action .= '<button type="button" class="btn btn-secondary rounded-pill edit-btn"
+                     data-id="' . $row->vehicle_request_permanent_id . '" 
+                     data-reason="' . $row->purpose. '" 
+                     data-position="' . $row->position. '"
+                     data-license="' . $row->license_number. '"
+                     data-expire="' . $row->expiry_date. '"
+                     title="edit">
                                 <i class="ri-edit-line"></i>
                             </button>
-                            <button type="button" class="btn btn-danger rounded-pill delete-btn" 
-                            data-id="' . $row->vehicle_request_permanent_id . '" title="Delete">
-                            <i class="ri-close-circle-line"></i></button>';
+
+                    <button type="button" class="btn btn-danger rounded-pill delete-btn" 
+                        data-id="' . $row->vehicle_request_permanent_id . '" title="Delete">
+                    <i class="ri-close-circle-line"></i></button>';
                 }
 
                 $action .= '</form>';
@@ -92,10 +105,11 @@ class VehicleParmanentlyRequestController extends Controller
             
                 }
 
-                if (!is_null($row->vehicle_id) && is_null($row->accepted_by_requestor)) {
-                    $action .= '<a href="' . route('accept_assigned_vehicle', ['id' => $row->vehicle_request_permanent_id]) . '" class="btn btn-primary rounded-pill" title="Accept">Accept</a>
-                            <button type="button" class="btn btn-danger rounded-pill reject-btn" data-bs-toggle="modal" data-bs-target="#staticBackdrop" data-id="' . $row->vehicle_request_permanent_id . '" title="Reject">Reject</button>';
-                }
+                if (!is_null($row->vehicle_id) && is_null($row->accepted_by_requestor)) 
+                    {
+                        $action .= '<a href="' . route('accept_assigned_vehicle', ['id' => $row->vehicle_request_permanent_id]) . '" class="btn btn-primary rounded-pill" title="Accept">Accept</a>
+                                <button type="button" class="btn btn-danger rounded-pill reject-btn" data-bs-toggle="modal" data-bs-target="#staticBackdrop" data-id="' . $row->vehicle_request_permanent_id . '" title="Reject">Reject</button>';
+                    }
 
                 return $action;
             })

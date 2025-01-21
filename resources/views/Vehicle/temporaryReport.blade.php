@@ -130,48 +130,49 @@
                                 </div>
 
                                 <div class="card-body">
-                                    <table id="datatable-buttons" class="table table-striped dt-responsive nowrap w-100">
-                                        <thead>
-                                            <tr>
-                                                <th>Requested By</th>
-                                                <th>Plate Number</th>
-                                                <th>Start Date</th>
-                                                <th>Start Time</th>
-                                                <th>End Date</th>
-                                                <th>End Time</th>
-                                                <th>Start KM</th>
-                                                <th>End KM</th>
-                                                <th>With/Without Driver</th>
-                                                <th>Start Location</th>
-                                                <th>End Location</th>
-                                                <th>Departmen</th>
-                                                <th>Cluster</th>
-
-                                            </tr>
-                                        </thead>
-
-                                        <tbody>
-                                            @foreach ($dailkms as $km)
+                                    <div class="table-responsive">
+                                        <table id="datatable-buttons" class="table table-striped dt-responsive nowrap w-100">
+                                            <thead>
                                                 <tr>
-                                                    <td>{{ $km->requested_by }}</td>
-                                                    <td>{{ $km->plate_number }}</td>
-                                                    <td>{{ $km->start_date }}</td>
-                                                    <td>{{ $km->start_time }}</td>
-                                                    <td>{{ $km->end_date }}</td>
-                                                    <td>{{ $km->end_time }}</td>
-                                                    <td>{{ $km->start_km }}</td>
-                                                    <td>{{ $km->end_km }}</td>
-                                                    <td>{{ $km->with_driver }}</td>
-                                                    <td>{{ $km->start_location }}</td>
-                                                    <td>{{ $km->end_locations }}</td>
-                                                    <td>{{ $km->department_name }}</td>
-                                                    <td>{{ $km->cluster_name }}</td>
+                                                    <th>Requestor</th>
+                                                    <th>Plate_Num</th>
+                                                    <th>Start Date</th>
+                                                    <th>Start Time</th>
+                                                    <th>End Date</th>
+                                                    <th>End Time</th>
+                                                    <th>Start KM</th>
+                                                    <th>End KM</th>
+                                                    <th>Driver</th>
+                                                    <th>Start Location</th>
+                                                    <th>End Location</th>
+                                                    <th>Department</th>
+                                                    <th>Cluster</th>
 
                                                 </tr>
-                                            @endforeach
-                                        </tbody>
-                                    </table>
+                                            </thead>
 
+                                            <tbody>
+                                                @foreach ($dailkms as $km)
+                                                    <tr>
+                                                        <td>{{ $km->requested_by }}</td>
+                                                        <td>{{ $km->plate_number }}</td>
+                                                        <td>{{ $km->start_date }}</td>
+                                                        <td>{{ $km->start_time }}</td>
+                                                        <td>{{ $km->end_date }}</td>
+                                                        <td>{{ $km->end_time }}</td>
+                                                        <td>{{ $km->start_km }}</td>
+                                                        <td>{{ $km->end_km }}</td>
+                                                        <td>{{ $km->with_driver }}</td>
+                                                        <td>{{ $km->start_location }}</td>
+                                                        <td>{{ $km->end_locations }}</td>
+                                                        <td>{{ $km->department_name }}</td>
+                                                        <td>{{ $km->cluster_name }}</td>
+
+                                                    </tr>
+                                                @endforeach
+                                            </tbody>
+                                        </table>
+                                    </div>
                                 </div> <!-- end card body-->
                             </div> <!-- end card -->
                         </div><!-- end col-->

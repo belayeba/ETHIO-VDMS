@@ -44,13 +44,13 @@ class DepartmentController extends Controller
     {
         // dd($request);
         $validator = Validator::make($request->all(), [
-            'name' => 'required|string|max:255',
+            'name' => 'required|string|regex:/^[a-zA-Z]+$/|max:255',
             'cluster_id' => 'required|uuid|exists:clusters,cluster_id',
         ]);
         // If validation fails, return an error response
         if ($validator->fails()) 
             {
-                return redirect()->back()->with('error_message','All fields are required',);
+                return redirect()->back()->with('error_message','All fields are required, And use Text only.',);
             }
 
         $user = auth()->user()->id; // Get the authenticated user's ID
@@ -88,10 +88,15 @@ class DepartmentController extends Controller
     public function update(Request $request, DepartmentsModel $department)
     {
         // Validate the request data
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'description' => 'nullable|string',
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|string|regex:/^[a-zA-Z]+$/|max:255',
+            'cluster_id' => 'required|uuid|exists:clusters,cluster_id',
         ]);
+        // If validation fails, return an error response
+        if ($validator->fails()) 
+            {
+                return redirect()->back()->with('error_message','All fields are required, And use Text only.',);
+            }
         $user = auth()->user()->id; // Get the authenticated user's ID
         $request->merge(['created_by' => $user]); // Add the user's ID to the request data
         // Update the department

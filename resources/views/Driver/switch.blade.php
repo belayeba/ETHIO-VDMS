@@ -58,7 +58,7 @@
                                 <div class="col-md-4">
                                     <div class="card">
                                         <div class="card-header">
-                                            <h4 class="header-title mb-0">Driver Change</h4>
+                                            <h4 class="header-title mb-0">Add Driver</h4>
                                         </div>
                                         <div class="card-body">
                                             <form method="POST" action="{{ route('driver_change.store') }}" accept-charset="UTF-8" name="driver_change-form" id="driver_change-form" enctype="multipart/form-data">
@@ -97,7 +97,7 @@
                                 <div class="col-md-8">
                                     <div class="card">
                                         <div class="card-header">
-                                            <h4 class="header-title mb-0">Driver Change List</h4>
+                                            <h4 class="header-title mb-0">Driver List</h4>
                                         </div>
                                         <div class="card-body">
                                             <div class="table-responsive">

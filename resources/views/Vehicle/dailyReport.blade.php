@@ -85,34 +85,35 @@
 
                             
                             <div class="card-body">
-                                <table id="basic-datatable" class="table table-striped dt-responsive nowrap w-100">
-                                    <thead>
-                                        <tr>
-                                            <th>Date</th>
-                                            <th>Plate Number</th>
-                                            <th>Morning KM</th>
-                                            <th>Afternoon KM</th>
-                                            <th>Night KM Difference </th>
-                                            <th>Day KM Difference </th>
-                                        </tr>
-                                    </thead>
-
-
-                                    <tbody>
-                                        @foreach($dailkms as $km)
+                                <div class="table-responsive">
+                                    <table id="basic-datatable" class="table table-striped dt-responsive nowrap w-100">
+                                        <thead>
                                             <tr>
-                                                <td>{{ $km->date }}</td>
-                                                <td>{{ $km->plate_number  }}</td>
-                                                <td>{{ $km->morning_km }}</td>
-                                                <td>{{ $km->afternoon_km }}</td>
-                                                <td>{{ $km->night_km  }}</td>
-                                                <td>{{ $km->daily_km  }}</td>
-
+                                                <th>Date</th>
+                                                <th>Plate Number</th>
+                                                <th>Morning KM</th>
+                                                <th>Night KM Difference </th>
+                                                <th>Afternoon KM</th>
+                                                <th>Day KM Difference </th>
                                             </tr>
-                                        @endforeach
-                                    </tbody>
-                                </table>
+                                        </thead>
 
+
+                                        <tbody>
+                                            @foreach($dailkms as $km)
+                                                <tr>
+                                                    <td>{{ $km->date }}</td>
+                                                    <td>{{ $km->plate_number  }}</td>
+                                                    <td>{{ $km->morning_km }}</td>
+                                                    <td>{{ $km->night_km  }}</td>
+                                                    <td>{{ $km->afternoon_km }}</td>
+                                                    <td>{{ $km->daily_km  }}</td>
+
+                                                </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div> <!-- end card body-->
                         </div> <!-- end card -->
                     </div><!-- end col-->

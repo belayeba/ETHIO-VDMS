@@ -75,7 +75,7 @@
                                     <div class="col-md-8">
                                         <div class="card">
                                             <div class="card-header">
-                                                <h4 class="header-title mb-0">Route List</h4>
+                                                <h4 class="header-title mb-0">My Route</h4>
                                             </div>
                                             <div class="card-body">
                                                 <div class="table-responsive">
@@ -177,39 +177,7 @@
                         </div>  
                     </div>  
                 </div> 
-                <div class="modal fade" id="staticaccept" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                    <div class="modal-dialog modal-lg modal-dialog-scrollable">
-                        <div class="modal-content">
-                            <form method="POST" action="{{route('simirit_approve')}}">
-                                @csrf   
-                                <div class="modal-header">
-                                        <div class="col-lg-6">
-                                            <h5 class="mb-0">Select Vehicle</h5>
-                                                <select name="assigned_vehicle_id" class="form-select" id="vehicleselection"  required>
-                                                    <option value="" selected>Select</option>
-                                                    @foreach ($routes as $item)
-                                                        <option value="{{$item->vehicle_id}}">{{$item->plate_number}}</option>
-                                                    @endforeach
-                                                </select>
-                                            <input type="hidden" name="request_id" id="request_id">
-                                        </div>                                                               
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                </div> <!-- end modal header -->
-                                <div class="modal-body">
-                                    <div class="table-responsive">
-                                        <div class="row mt-3" id="inspectionCardsContainer" class="table table-striped"> 
-                                        </div>
-                                    </div>
-                                    
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary"  id="assignBtn">Get Inspection</button>
-                                    <button type="submit" class="btn btn-primary">Assign</button>
-                                </div> <!-- end modal footer -->
-                            </form>                                                                    
-                        </div> <!-- end modal content-->
-                    </div> <!-- end modal dialog-->
-                </div>
+               
         </div>  
     </div>                                            
                    <style>

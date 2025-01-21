@@ -105,8 +105,8 @@
                                                     <div class="position-relative mb-3">
                                                         <div class="mb-6 position-relative" id="datepicker1">
                                                             <label class="form-label">Reason</label>
-                                                            <input type="text" name="purpose" class="form-control"
-                                                                placeholder="Enter purpose of Request">
+                                                             <textarea  type="text" name="purpose" class="form-control"
+                                                                placeholder="Enter purpose of Request"></textarea>
                                                         </div>
                                                     </div>
 
@@ -118,7 +118,6 @@
                                                                     <option value="Human">Human</option>
                                                                     <option value="Load">Load</option>
                                                                     <option value="Load">Both</option>
-                                                                    <option value="Load">Neither</option>
                                                                 </select>
                                                         </div>
                                                     </div>
@@ -195,7 +194,7 @@
                                                 <div class="row">
                                                     <div class="position-relative mb-3">
                                                         <div class="mb-6 position-relative" id="datepicker1">
-                                                            <label class="form-label">Location From</label>
+                                                            <label class="form-label">Location Start From</label>
                                                             <input type="text" class="form-control"
                                                                 name="start_location"
                                                                 placeholder="Enter starting location">
@@ -204,16 +203,16 @@
 
                                                     <div class="position-relative mb-3">
                                                         <div class="mb-6 position-relative" id="datepicker1">
-                                                            <label class="form-label">Location to</label>
+                                                            <label class="form-label">Location Destination</label>
                                                             <input type="text" class="form-control"
                                                                 name="end_location" placeholder="Enter arrival location">
                                                         </div>
                                                     </div>
                                                     <div class="position-relative mb-3">
                                                         <div class="mb-6 position-relative" id="datepicker1">
-                                                            <label class="form-label">Allowed Km after Destination</label>
+                                                            <label class="form-label">Total KM</label>
                                                             <input type="number" class="form-control"
-                                                                name="allowed_km" placeholder="Enter Allowed KM after destination">
+                                                                name="allowed_km" placeholder="Enter Total KM ">
                                                         </div>
                                                     </div>
                                                 </div> <!-- end card-body-->
@@ -250,10 +249,10 @@
                                                                 class="select2 form-control select2-multiple"
                                                                 data-toggle="select2" multiple="multiple"
                                                                 data-placeholder="Select People ...">
-                                                                <optgroup label="Users/Employees">
-                                                                    @foreach ($users as $user)
-                                                                        <option value="{{ $user->id }}">
-                                                                            <p style="color:black">{{ $user->first_name }}
+                                                                <optgroup label="Drivers">
+                                                                    @foreach ($driver as $driver)
+                                                                        <option value="{{ $driver->driver_id }}">
+                                                                            <p style="color:black">{{ $driver->user->first_name }}
                                                                         </option>
                                                                     @endforeach
                                                                 </optgroup>
@@ -290,7 +289,7 @@
                                                     <div id="TogglePackage" style="display:none"></br>
                                                         <div class="row"></br>
                                                             <p class="mb-1 fw-bold text-muted">Search Passenger</p>
-                                                            <input type="text" id="searchBox" class="form-control mb-2" placeholder="Search for people..." />
+                                                            <input type="text" id="searchBox"  class="form-control mb-2" placeholder="Search for people..." />
                                                             <ul id="userSuggestions" class="list-group" style="max-height: 100px; overflow-y: auto;"></ul> <!-- Suggestions -->
                                                             <div id="selectedValues" class="mt-2"></div> <!-- Display selected users -->
                                                         </div>
@@ -362,7 +361,7 @@
 
                                                 packageCheckbox.addEventListener('change', function() {
                                                     if (divToToggle) {
-                                                        if (packageCheckbox.value === '1') {
+                                                        if (packageCheckbox.value == '1') {
                                                             divToToggle.style.display = 'block'; // Display the div if the checkbox value is 1
                                                         } else {
                                                             divToToggle.style.display = 'none';
@@ -397,6 +396,7 @@
                                             <tr>
                                                 <th>Roll.no</th>
                                                 <th>Requested Date</th>
+                                                <th>Status</th>
                                                 <th>location</th>
                                                 <th>Actions</th>
                                             </tr>
@@ -460,6 +460,36 @@
                     </div><!-- end col-->
                 </div>
 
+                <!-- this is for the Reject  modal -->
+                <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static"
+                    data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel"
+                    aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="staticBackdropLabel">Reject reason
+                                </h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                            </div> <!-- end modal header -->
+                                <div class="modal-body">
+                                    <div class="col-lg-6">
+                                        <h5 class="mb-3"></h5>
+                                        <div class="form-floating">
+                                            <input type="hidden" name="request_id" id="rejected_id">
+                                            <textarea class="form-control" name="reason" id="reason" style="height: 60px;" disabled></textarea>
+                                            <label for="floatingTextarea">Reason</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary"
+                                        data-bs-dismiss="modal">Close</button>
+                                </div> <!-- end modal footer -->
+                            </div> <!-- end modal content-->
+                        </div> <!-- end modal dialog-->
+                    </div>
+                    <!-- end assign modal -->
 
 
                 <script src="{{ asset('assets/vendor/datatables.net/js/jquery.dataTables.min.js') }}"></script>
@@ -477,6 +507,10 @@
                     {
                         data: 'start_date',
                         name: 'start_date'
+                    },
+                    {
+                        data: 'status',
+                        name: 'status'
                     },
                     {
                         data: 'location',
@@ -558,6 +592,7 @@
                         tag.innerHTML = `
                             ${user.first_name}
                             <span class="remove-tag" data-id="${user.id}" style="cursor: pointer;">&times;</span>
+                            <input type="hidden" name="people_id[]" value="${user.id}" />
                         `;
                         selectedValuesDiv.appendChild(tag);
                     });
@@ -579,51 +614,75 @@
 
 
 
-            document.addEventListener('DOMContentLoaded', function() {
+           document.addEventListener('DOMContentLoaded', function() {
+            const select = document.getElementById('multiSelect');
+            const selectedValuesDiv = document.getElementById('selectedValues');
 
-                const itemName = document.getElementById('itemName');
-                const itemWeight = document.getElementById('itemWeight');
-                const addButton = document.getElementById('addItem');
-                const itemList = document.getElementById('itemList');
-
-                const itemNames = [];
-                const itemWeights = [];
-
-                addButton.addEventListener('click', function() {
-                    if (itemName.value && itemWeight.value) {
-                        const itemDiv = document.createElement('div');
-                        itemDiv.innerHTML = `
-                <span>${itemName.value} - ${itemWeight.value} kg</span>
-                <button class="removeItem">X</button>
-            `;
-                        const nameInput = document.createElement('input');
-                        nameInput.type = 'hidden';
-                        nameInput.name = 'material_name[]';
-                        nameInput.value = itemName.value;
-
-                        const weightInput = document.createElement('input');
-                        weightInput.type = 'hidden';
-                        weightInput.name = 'weight[]';
-                        weightInput.value = itemWeight.value;
-
-                        itemDiv.appendChild(nameInput);
-                        itemDiv.appendChild(weightInput);
-                        itemList.appendChild(itemDiv);
-
-                        itemName.value = '';
-                        itemWeight.value = '';
-                    }
+            select.addEventListener('change', function() {
+                selectedValuesDiv.innerHTML = '';
+                Array.from(select.selectedOptions).forEach(option => {
+                    const tag = document.createElement('span');
+                    tag.classList.add('badge', 'bg-primary', 'me-1', 'mb-1');
+                    tag.innerHTML = `${option.text} <span class="remove-tag" data-value="${option.value}">&times;</span>`;
+                    selectedValuesDiv.appendChild(tag);
                 });
+            });
 
-                itemList.addEventListener('click', function(e) {
-                    if (e.target.classList.contains('removeItem')) {
+            selectedValuesDiv.addEventListener('click', function(e) {
+                if (e.target.classList.contains('remove-tag')) {
+                    const value = e.target.getAttribute('data-value');
+                    const option = select.querySelector(`option[value="${value}"]`);
+                    option.selected = false;
+                    e.target.parentElement.remove();
+                }
+            });
+        });
+        
+        document.addEventListener('DOMContentLoaded', function() {
+        
+            const itemName = document.getElementById('itemName');
+            const itemWeight = document.getElementById('itemWeight');
+            const addButton = document.getElementById('addItem');
+            const itemList = document.getElementById('itemList');
+
+            const itemNames = [];
+            const itemWeights = [];
+
+            addButton.addEventListener('click', function() {
+                if (itemName.value && itemWeight.value) {
+                    const itemDiv = document.createElement('div');
+                    itemDiv.innerHTML = `
+                        <span>${itemName.value} - ${itemWeight.value} kg</span>
+                        <button class="removeItem">X</button>
+                    `;
+                    const nameInput = document.createElement('input');
+                    nameInput.type = 'hidden';
+                    nameInput.name = 'material_name[]';
+                    nameInput.value = itemName.value;
+
+                    const weightInput = document.createElement('input');
+                    weightInput.type = 'hidden';
+                    weightInput.name = 'weight[]';
+                    weightInput.value = itemWeight.value;
+
+                    itemDiv.appendChild(nameInput);
+                    itemDiv.appendChild(weightInput);
+                    itemList.appendChild(itemDiv);
+
+                    itemName.value = '';
+                    itemWeight.value = '';
+                }
+            });
+
+            itemList.addEventListener('click', function(e) {
+                if (e.target.classList.contains('removeItem')) {
                         const itemDiv = e.target.parentElement;
 
                         // Remove item from DOM
                         itemDiv.remove();
                     }
                 });
-            });
+        });
 
             $('#standard-modal').on('show.bs.modal', function(event) {
                 var button = $(event.relatedTarget); // Button that triggered the modal
@@ -641,10 +700,11 @@
 
                 // Populate passengers
                 var passengers = button.data('passengers');
+                console.log(passengers);
                 var passengerList = '';
                 if (passengers) {
                     passengers.forEach(function(person) {
-                        passengerList += person.user.first_name + '<br>';
+                        passengerList += person.user.first_name + ' ' + person.user.middle_name  + '<br>';
                     });
                 }
                 modal.find('[data-field="passengers"]').html(passengerList);
@@ -654,8 +714,7 @@
                 var materialList = '';
                 if (materials) {
                     materials.forEach(function(material) {
-                        materialList += 'Material name: ' + material.material_name + ',<br>' +
-                            'Material Weight: ' + material.weight + '.<br>';
+                        materialList +=  material.material_name + ' ' + material.weight + '.<br>';
                     });
                 }
                 modal.find('[data-field="materials"]').html(materialList);
@@ -664,59 +723,62 @@
                 function buildProgressMessage(button) {
                     let progressMessages = [];
 
-                    const messages = [{
-                            condition: button.data('dir_approved_by'),
-                            message: 'Approved by Director'
+                     const messages = [
+                        {
+                            condition: button.data('dir_approved_by') && !button.data('director_reject_reason'),
+                            message: '<span style="color: green;">Approved by Director</span>'
                         },
                         {
-                            condition: button.data('director_reject_reason'),
-                            message: 'Rejected by Director'
+                            condition: button.data('director_reject_reason') && button.data('dir_approved_by'),
+                            message: '<span style="color: red;">Rejected by Director</span>'
                         },
                         {
-                            condition: button.data('div_approved_by'),
-                            message: 'Approved by Division-Director'
+                            condition: button.data('div_approved_by') && !button.data('cluster_director_reject_reason'),
+                            message: '<span style="color: green;">Approved by Division-Director</span>'
                         },
                         {
-                            condition: button.data('cluster_director_reject_reason'),
-                            message: 'Rejected by Division-Director'
+                            condition: button.data('cluster_director_reject_reason') && button.data('div_approved_by'),
+                            message: '<span style="color: red;">Rejected by Division-Director</span>'
                         },
                         {
-                            condition: button.data('hr_div_approved_by'),
-                            message: 'Approved by HR-Director'
+                            condition: button.data('hr_div_approved_by') && !button.data('hr_director_reject_reason'),
+                            message: '<span style="color: green;">Approved by HR-Director</span>'
                         },
                         {
-                            condition: button.data('hr_director_reject_reason'),
-                            message: 'Rejected by HR-Director'
+                            condition: button.data('hr_director_reject_reason') && button.data('hr_div_approved_by'),
+                            message: '<span style="color: red;">Rejected by HR-Director</span>'
                         },
                         {
-                            condition: button.data('transport_director_id'),
-                            message: 'Approved by Dispatcher-Director'
+                            condition: button.data('transport_director_id') && !button.data('vec_director_reject_reason'),
+                            message: '<span style="color: green;">Approved by Dispatcher-Director</span>',
                         },
                         {
-                            condition: button.data('vec_director_reject_reason'),
-                            message: 'Rejected by Dispatcher-Director'
+                            condition: button.data('vec_director_reject_reason') && button.data('transport_director_id'),
+                            message: '<span style="color: red;">Rejected by Dispatcher-Director</span>',
                         },
                         {
-                            condition: button.data('assigned_by'),
-                            message: 'Approved by Dispatcher'
+                            condition: button.data('assigned_by') && !button.data('assigned_by_reject_reason'),
+                            message: '<span style="color: green;">Approved by Dispatcher</span>'
                         },
                         {
-                            condition: button.data('assigned_by_reject_reason'),
-                            message: 'Rejected by Dispatcher'
+                            condition: button.data('assigned_by_reject_reason') && button.data('assigned_by'),
+                            message: '<span style="color: red;">Rejected by Dispatcher</span>'
                         },
                         {
                             condition: button.data('vehicle_id'),
-                            message: 'Assigned Vehicle <u>' + button.data('vehicle_plate') + '</u>'
+                            
+                            message: '<span style="color: green;">Assigned Vehicle <u>' + button.data('vehicle_plate') + '</u></span>'
                         },
                         {
                             condition: button.data('start_km'),
-                            message: 'Vehicle Request <u>' + button.data('vehicle_plate') + '</u> Dispatched'
+                            message: '<span style="color: green;">Vehicle Request <u>' + button.data('vehicle_plate') + '</u> Dispatched</span>'
                         },
                         {
                             condition: button.data('end_km'),
-                            message: 'Request completed'
+                            message: '<span style="color: green;">Request completed</span>'
                         },
                     ];
+                    console.log(button.data('vehicle_Driver') )
                     messages.forEach(item => {
                         if (item.condition) {
                             progressMessages.push(item.message);
@@ -747,6 +809,23 @@
                     targetDiv.style.display = 'none';
                 }
             });
+
+            $(document).ready(function() {
+                   
+                    $(document).on('click', '.reject-reason', function() {
+                        const reasons = [
+                            $(this).data('reason1'),
+                            $(this).data('reason2'),
+                            $(this).data('reason3'),
+                            $(this).data('reason4'),
+                            $(this).data('reason5'),
+                        ];
+                        const selectedReason = reasons.find(reason => reason && reason.trim() !== '') || 'No reason provided';
+
+                        $('#reason').val(selectedReason);
+                        $('#staticBackdrop').modal('show');
+                    });
+                });
     </script>
 
 

@@ -218,7 +218,7 @@ class Daily_KM_Calculation extends Controller
                 $dailkms = $dailkms->map(function ($km) {
                     return (object) [
                         'given_date' => $km->given_date,
-                        'requested_by' => $km->requestedBy->username,
+                        'requested_by' => $km->requestedBy->first_name .' '.$km->requestedBy->last_name,
                         'plate_number' => $km->vehicle->plate_number ?? 'N/A',
                         'purpose' => $km->purpose,
                         'mileage' => $km->mileage,
@@ -335,8 +335,8 @@ class Daily_KM_Calculation extends Controller
                         'plate_number' => $km->vehicle->plate_number ?? 'N?A',
                         'morning_km' => $km->morning_km ?? 'N/A',
                         'afternoon_km' => $km->afternoon_km,
-                        'daily_km' => $km->afternoon_km - $km->morning_km,
-                        'night_km' => $km->night_km,
+                        'daily_km' => $km->getDailyKmAttribute($km->vehicle->vehicle_id),
+                        'night_km' => $km->getNightKmAttribute($km->vehicle->vehicle_id),
                     ];
                 });
         
@@ -436,7 +436,7 @@ class Daily_KM_Calculation extends Controller
                 $dailkms = $dailkms->map(function ($km) {
                     return (object) [
                         'given_date' => $km->given_date,
-                        'requested_by' => $km->requestedBy->username,
+                        'requested_by' => $km->requestedBy->first_name .' '.$km->requestedBy->last_name,
                         'plate_number' => $km->vehicle->plate_number ?? 'N/A',
                         'purpose' => $km->purpose,
                         'mileage' => $km->mileage,
