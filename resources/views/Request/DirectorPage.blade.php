@@ -221,7 +221,7 @@
             var passengerList = '';
             if (passengers) {
                 passengers.forEach(function(person) {
-                    passengerList += person.user.first_name + '<br>';
+                    passengerList += person.user.first_name + ' ' + person.user.middle_name  + '<br>';
                 });
             }
             modal.find('[data-field="passengers"]').html(passengerList);
@@ -231,10 +231,10 @@
             var materialList = '';
             if (materials) {
                 materials.forEach(function(material) {
-                    materialList += 'Material name: ' + material.material_name + ',<br>' +
-                        'Material Weight: ' + material.weight + '.<br>';
+                    materialList +=  material.material_name + ' ' + material.weight + '.<br>';
                 });
             }
+            modal.find('[data-field="materials"]').html(materialList);
             modal.find('[data-field="materials"]').html(materialList);
 
             // Function to build progress messages
