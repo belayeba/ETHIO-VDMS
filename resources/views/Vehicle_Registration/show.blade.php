@@ -203,6 +203,17 @@
                                                 </select>
                                             </div>
                                         </div>
+
+                                        <div class="row mb-3">
+                                            <label class="col-md-3 col-form-label" for="position">Position</label>
+                                            <div class="col-md-9">
+                                                <select id="position" name="position" class="form-select" required>
+                                                    <option value="">Select Position</option>
+                                                    <option value="Other">Other</option>
+                                                    <option value="Position">Position</option>
+                                                </select>
+                                            </div>
+                                        </div>
                                        
                                         <div class="row mb-3">
                                             <label class="col-md-3 col-form-label" for="vehicle_category">Service</label>
@@ -325,6 +336,7 @@
                                                                     driver: '{{ $item->driver_id }}',
                                                                     vehicle_category: '{{ $item->vehicle_category }}',
                                                                     vehicle_type: '{{ $item->vehicle_type }}',
+                                                                    position:'{{ $item->position }}'
                                                                     libre: '{{ $item->libre }}',
                                                                     insurance: '{{ $item->insurance }}'
                                                             })">
@@ -454,6 +466,14 @@
                                     <option value="Neither" {{ $item->vehicle_category == 'Neither' ? 'selected' : '' }}>Neither</option>
                                 </select>
                             </div>
+
+                            <div class="mb-3">
+                                <label for="editPosition" class="form-label">Position</label>
+                                <select id="editPosition" name="position" class="form-select" required>
+                                    <option value="Position" {{ $item->position == 'Position' ? 'selected' : '' }}>Position</option>
+                                    <option value="Other" {{ $item->position == 'Other' ? 'selected' : '' }}>Other</option>
+                                </select>
+                            </div>
                 
                             <div class="mb-3">
                                 <label for="editVehicleType" class="form-label">Vehicle Type</label>
@@ -556,11 +576,17 @@
                             <dd class="col-sm-8">
                                 <p>{{ $item->vehicle_category }}</p>
                             </dd>
+
+                            <dt class="col-sm-4">Position:</dt>
+                            <dd class="col-sm-8">
+                                <p>{{ $item->position }}</p>
+                            </dd>
             
                             <dt class="col-sm-4">Vehicle Type:</dt>
                             <dd class="col-sm-8">
                                 <p>{{ $item->vehicle_type }}</p>
                             </dd>
+                            
                             <dt class="col-sm-4">Rental Type:</dt>
                             <dd class="col-sm-8">
                                 <p>{{ $item->rental_type }}</p>
