@@ -434,7 +434,7 @@
                     @if(auth()->user()->can('Employee Change Route') || auth()->user()->can('Change Route For Employee')
                     || auth()->user()->can('Route Registration') || auth()->user()->can('Assign Employee to Route'))
                         <li class="side-nav-item">
-                            <a data-bs-toggle="collapse" href="@lang('messages.Route Management')" aria-expanded="false"
+                            <a data-bs-toggle="collapse" href="#routeManagement" aria-expanded="false"
                                 aria-controls="routeManagement" class="side-nav-link">
                                 <i class=" ri-route-fill"></i>
                                 <span>@lang('messages.Route Management')</span>
