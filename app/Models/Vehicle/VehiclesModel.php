@@ -58,7 +58,7 @@ class VehiclesModel extends Model {
     }
 
     public function inspection():BelongsTo {
-        return $this->belongsTo( InspectionModel::class, 'inspection_id', 'inspection_id' );
+        return $this->belongsTo( InspectionModel::class, 'vehicle_id', 'vehicle_id' );
     }
     // Other relations
 }

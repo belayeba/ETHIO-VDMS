@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Controllers\Vehicle\Daily_KM_Calculation;
+use Yajra\DataTables\Facades\DataTables;
 
 class VehicleRegistrationController extends Controller {
     // public function index()
@@ -33,6 +34,72 @@ class VehicleRegistrationController extends Controller {
         $drivers = DriversModel::all();
         $vehicle = VehiclesModel::paginate( 6 ); 
         return view( 'Vehicle_Registration.show', compact( 'vehicle', 'drivers' ) );
+    }
+    public function list(Request $request)
+    {
+        $vehicle = VehiclesModel::get();
+    
+        return DataTables::of($vehicle)
+            ->addIndexColumn()
+            ->addColumn('plate_number', function($row){
+                return $row->plate_number;
+            })
+            ->addColumn('vehicle_type', function($row){
+                return $row->vehicle_type;
+            })
+            ->addColumn('vehicle_category', function($row){
+                return $row->vehicle_category;
+            })
+            ->addColumn('action', function($row) {
+                $actions = '<button type="button" class="btn btn-info rounded-pill view-btn" 
+                                data-chancy_number="' . $row->vin . '"
+                                data-make="' . $row->make . '"
+                                data-model="' . $row->model . '"
+                                data-year="' . $row->year . '"
+                                data-plate_number="' . $row->plate_number . '"
+                                data-mileage="' . $row->mileage . '"
+                                data-capacity="' . $row->capacity . '"
+                                data-fuel_amount="' . $row->fuel_amount . '"
+                                data-fuel_type="' . $row->fuel_type . '"
+                                data-last_service="' . $row->last_service . '"
+                                data-next_service="' . $row->next_service . '"
+                                data-driver="' . $row->driver->user->first_name . '"
+                                data-vehicle_category="' . $row->vehicle_category . '"
+                                data-position="' . $row->position . '"
+                                data-vehicle_type="' . $row->vehicle_type . '"
+                                data-rental_type="' . $row->rental_type . '"
+                                data-libre="' . $row->libre . '"
+                                data-insurance="' . $row->insurance . '"
+                                title="View">
+                                <i class="ri-eye-line"></i>
+                            </button>
+                            <button type="button" class="btn btn-secondary rounded-pill edit-btn" 
+                                data-chancy_number="' . $row->vin . '"
+                                data-make="' . $row->make . '"
+                                data-model="' . $row->model . '"
+                                data-year="' . $row->year . '"
+                                data-plate_number="' . $row->plate_number . '"
+                                data-mileage="' . $row->mileage . '"
+                                data-capacity="' . $row->capacity . '"
+                                data-fuel_amount="' . $row->fuel_amount . '"
+                                data-fuel_type="' . $row->fuel_type . '"
+                                data-last_service="' . $row->last_service . '"
+                                data-next_service="' . $row->next_service . '"
+                                data-driver="' . $row->driver->user->first_name . '"
+                                data-vehicle_category="' . $row->vehicle_category . '"
+                                data-position="' . $row->position . '"
+                                data-vehicle_type="' . $row->vehicle_type . '"
+                                data-rental_type="' . $row->rental_type . '"
+                                data-libre="' . $row->libre . '"
+                                data-insurance="' . $row->insurance . '"
+                                title="Edit">
+                                <i class="ri-pencil-line"></i>
+                            </button>';
+            
+                return $actions;
+            })            
+            ->rawColumns(['plate_number','vehicle_type','vehicle_category','action'])
+            ->make(true);
     }
 
     public function create() {
@@ -132,10 +199,11 @@ class VehicleRegistrationController extends Controller {
     }
 
     public function update( Request $request, $id ) {
+        // dd($request);
         $user = Auth::id();
         // dd( $request->fuel_amount );
         $vehicle = VehiclesModel::findOrFail( $id );
-        // dd( $vehicle );
+        
         // Validate the request
         $validator = Validator::make( $request->all(), [
             'vin' => 'required|string|max:255',
@@ -176,7 +244,7 @@ class VehicleRegistrationController extends Controller {
         $filelibre = '';
         $fileinsurance = '';
         $status = true;
-
+        
         if ( $request->hasFile( 'libre' ) ) {
             $file = $request->file( 'libre' );
             $storagePath = storage_path( 'app/public/vehicles' );
@@ -213,13 +281,13 @@ class VehicleRegistrationController extends Controller {
             ];
         
             // Check each table for references
-            foreach ($references as $reference) {
-                if (DB::table($reference['table'])->where($reference['column'], $id)->exists()) {
-                    return redirect()->back()->with('error_message',
-                    "Record is referenced in another table and cannot be updated",
-                            );
-                }
-            }
+            // foreach ($references as $reference) {
+            //     if (DB::table($reference['table'])->where($reference['column'], $id)->exists()) {
+            //         return redirect()->back()->with('error_message',
+            //         "Record is referenced in another table and cannot be updated",
+            //                 );
+            //     }
+            // }
         // Update the vehicle with the new data
         $today = \Carbon\Carbon::now();
         $ethiopianDate = $this->dailyKmCalculation->ConvertToEthiopianDate($today); 
@@ -237,7 +305,7 @@ class VehicleRegistrationController extends Controller {
             'next_service' => $request->Next_Service,
             'registered_by' => $user,
             'fuel_type' => $request->fuel_type,
-            'inspection_id' => $request->inspection_id,
+            // 'inspection_id' => $vehicle->inspection->inspection_id,
             'status' => $status,
             'notes' => $request->Notes,
             'vehicle_type' => $request->vehicle_type,
