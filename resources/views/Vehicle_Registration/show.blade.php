@@ -569,7 +569,7 @@
             
                             <dt class="col-sm-4">Driver:</dt>
                             <dd class="col-sm-8">
-                                <p>{{ $item->driver_id ? $item->driver->user->first_name : "No driver" }}  {{ $item->driver_id ? $driver->user->middle_name : "" }}</p>
+                                <p></p>
                             </dd>
             
                             <dt class="col-sm-4">Vehicle Category:</dt>

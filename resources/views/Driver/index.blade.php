@@ -131,7 +131,7 @@
                                                         <tr>
                                                         <!-- Table rows will be populated here -->
                                                         <td>{{$loop->iteration}}</td>
-                                                        <td>{{ $item->user->username }}</td>
+                                                        <td>{{ $item->user->first_name }} {{ $item->user->middle_name }}</td>
                                                         <td>{{ $item->user->phone_number }}</td>
                                                         <td>{{ $item->status }}</td>
                                                         <td>

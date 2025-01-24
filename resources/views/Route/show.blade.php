@@ -95,7 +95,7 @@
                                                             <td>{{ $loop->iteration }}</td>
                                                             <td>{{ $data->first()->route->route_name }}</td>
                                                             <td>{{ $data->first()->route->vehicle->plate_number }}</td>
-                                                            <td>{{ $data->first()->route->vehicle->driver->user->username }}</td>
+                                                            <td>{{ $data->first()->route->vehicle->driver->user->first_name ?? null }}</td>
                                                             <td>{{ $data->first()->route->driver_phone }}</td>
                                                             <td>
                                                                 <button type="button" class="btn btn-info rounded-pill" 

@@ -94,7 +94,12 @@ class VehicleTemporaryRequestController extends Controller
                     data-assigned_by="' . $row->assigned_by . '"
                     data-assigned_by_reject_reason="' . $row->assigned_by_reject_reason . '"
                     data-vehicle_id="' . $row->vehicle_id . '"
-                    data-vehicle_plate="' . ($row->vehicle ? $row->vehicle->plate_number .'</br>Driver: '.$row->vehicle->driver->user->first_name. '</br>Phone: '.$row->vehicle->driver->user->phone_number  : '') . '"
+                    data-vehicle_plate="' . ($row->vehicle 
+                    ? $row->vehicle->plate_number . '</br>Driver: ' 
+                        . ($row->vehicle->driver ? ($row->vehicle->driver->user->first_name ?? 'none') . ' ' . ($row->vehicle->driver->user->last_name ?? 'none') : 'none') 
+                        . '</br>Phone: ' 
+                        . ($row->vehicle->driver ? ($row->vehicle->driver->user->phone_number ?? 'none') : 'none') 
+                    : '') . '"
                     data-start_km="' . $row->start_km . '"
                     data-end_km="' . $row->end_km . '"
                     title="Show Details">
@@ -1246,7 +1251,12 @@ class VehicleTemporaryRequestController extends Controller
                     data-assigned_by="' . $row->assigned_by . '"
                     data-assigned_by_reject_reason="' . $row->assigned_by_reject_reason . '"
                     data-vehicle_id="' . $row->vehicle_id . '"
-                    data-vehicle_plate="' . ($row->vehicle ? $row->vehicle->plate_number .'</br>Driver: '.$row->vehicle->driver->user->first_name. '</br>Phone: '.$row->vehicle->driver->user->phone_number  : '') . '"
+                    data-vehicle_plate="' . ($row->vehicle 
+                    ? $row->vehicle->plate_number . '</br>Driver: ' 
+                        . ($row->vehicle->driver ? ($row->vehicle->driver->user->first_name ?? 'none') . ' ' . ($row->vehicle->driver->user->last_name ?? 'none') : 'none') 
+                        . '</br>Phone: ' 
+                        . ($row->vehicle->driver ? ($row->vehicle->driver->user->phone_number ?? 'none') : 'none') 
+                    : '') . '"
                     data-start_km="' . $row->start_km . '"
                     data-end_km="' . $row->end_km . '"
                     title="Show Details">
