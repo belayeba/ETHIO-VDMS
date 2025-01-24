@@ -102,6 +102,9 @@ class permissionseeder extends Seeder {
                 'permissions' => [
                     'Request Maintenance',
                     'Approve Maintenance',
+                    'Inspect Maintenance',
+                    'Maintenance for Dispatcher',
+                    'Final Maintenance',
                 ]
             ],
             [

@@ -68,7 +68,7 @@
                                                         <select id="user_id" name="user_id" class="form-select" required>
                                                             <option value="">@lang('messages.Select Driver')</option>
                                                             @foreach($drivers as $driver)
-                                                                <option value="{{ $driver->id }}">{{ $driver->username }}</option>
+                                                                <option value="{{ $driver->id }}">{{ $driver->first_name }} {{ $driver->last_name }}</option>
                                                             @endforeach
                                                         </select>
                                                         

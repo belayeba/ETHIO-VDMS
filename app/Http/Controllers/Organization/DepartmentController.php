@@ -44,7 +44,7 @@ class DepartmentController extends Controller
     {
         // dd($request);
         $validator = Validator::make($request->all(), [
-            'name' => 'required|string|regex:/^[a-zA-Z]+$/|max:255',
+            'name' => 'required|string|regex:/^[a-zA-Z\s]+$/|max:100',
             'cluster_id' => 'required|uuid|exists:clusters,cluster_id',
         ]);
         // If validation fails, return an error response
@@ -89,7 +89,7 @@ class DepartmentController extends Controller
     {
         // Validate the request data
         $validator = Validator::make($request->all(), [
-            'name' => 'required|string|regex:/^[a-zA-Z]+$/|max:255',
+            'name' => 'required|string|regex:/^[a-zA-Z\s]+$/|max:100',
             'cluster_id' => 'required|uuid|exists:clusters,cluster_id',
         ]);
         // If validation fails, return an error response

@@ -470,7 +470,7 @@ class VehicleTemporaryRequestController extends Controller
                     data-end_date="' . $row->end_date . '"
                     data-end_time="' . $row->end_time . '"
                     data-start_location="' . $row->start_location . '&nbsp;&nbsp;&nbsp;' . $row->end_locations . '"
-                    data-passengers=\'' . json_encode($row->peoples) . '\'
+                    data-passengers=\'' . json_encode($row->peoples()->with('user')->get()) . '\'
                     data-materials=\'' . json_encode($row->materials) . '\'
                     data-dir_approved_by="' . $row->dir_approved_by . '"
                     data-director_reject_reason="' . $row->director_reject_reason . '"
@@ -928,9 +928,7 @@ class VehicleTemporaryRequestController extends Controller
                 ->latest()
                 ->get();
 
-            
-
-                   // dd($vehicleRequests);
+                // dd($vehicleRequests);
                 // Return the results, for example, passing them to a view
                 return view('Request.TransportDirectorPage', compact('vehicleRequests'));
             }
@@ -1235,7 +1233,7 @@ class VehicleTemporaryRequestController extends Controller
                     data-end_date="' . $row->end_date . '"
                     data-end_time="' . $row->end_time . '"
                     data-start_location="' . $row->start_location . '&nbsp;&nbsp;&nbsp;' . $row->end_locations . '"
-                    data-passengers=\'' . json_encode($row->peoples) . '\'
+                    data-passengers=\'' . json_encode($row->peoples()->with('user')->get()) . '\'
                     data-materials=\'' . json_encode($row->materials) . '\'
                     data-dir_approved_by="' . $row->dir_approved_by . '"
                     data-director_reject_reason="' . $row->director_reject_reason . '"

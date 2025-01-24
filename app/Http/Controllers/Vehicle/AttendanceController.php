@@ -9,6 +9,9 @@ use App\Models\Vehicle\AttendanceModel;
 use Illuminate\Support\Facades\Auth;
 use App\Models\RouteManagement\Route;
 use App\Models\Vehicle\VehiclesModel;
+use App\Models\Vehicle\VehiclePermanentlyRequestModel;
+use App\Models\Vehicle\DailyKMCalculationModel;
+use App\Models\Vehicle\ReplacementModel;
 use Andegna\DateTime;
 use Carbon\Carbon;
 
@@ -205,7 +208,7 @@ class AttendanceController extends Controller
                     $validator->errors(),
             );
         }
-// dd('hello');
+
         if ($request->has('export')) {
             session([
                 'vehicle_type' => $request->input('plate_vehicle_typenumber'),
@@ -221,37 +224,130 @@ class AttendanceController extends Controller
 
        
         // Query the daily KM data with filters
-        $query = AttendanceModel::with('vehicle', 'route');
-        if ($vehicle_type == "40/60") {
+        
+        if ($vehicle_type == "40/60" || $vehicle_type == "morning_afternoon_minibus" ) {
+            $query = AttendanceModel::with('vehicle', 'route');
             $query->whereHas('vehicle', function ($q) use ($vehicle_type) {
                 
                 $q->where('rental_type', 'LIKE', "%{$vehicle_type}%");
 
             });
 
+            if ($startDate && $endDate) {
+                $query->whereBetween('created_at', [$startDate, $endDate]);
+            }
+
+            $vehicles = $query->select('vehicle_id')->with('vehicle')
+            ->with('vehicle') 
+            ->groupBy('vehicle_id')
+            ->selectRaw("
+                    vehicle_id,
+                    SUM(
+                        CASE 
+                            WHEN morning = 1 AND afternoon = 1 THEN 1
+                            WHEN morning = 1 OR afternoon = 1 THEN 0.5
+                            ELSE 0
+                        END
+                    ) as registration_count
+                ")
+            ->get();
+
+        }
+
+        elseif ($vehicle_type == "whole_day") {
+            $query = DailyKMCalculationModel::with('vehicle');
+            $query->whereHas('vehicle', function ($q) use ($vehicle_type) {
+                
+                $q->where('rental_type', 'LIKE', "%{$vehicle_type}%");
+
+            });
+
+            if ($startDate && $endDate) {
+                $query->whereBetween('created_at', [$startDate, $endDate]);
+            }
+
+            $vehicles = $query->select('vehicle_id')->with('vehicle')
+            ->with('vehicle') 
+            ->groupBy('vehicle_id')
+            ->selectRaw("
+                    vehicle_id,
+                    SUM(
+                        CASE 
+                        WHEN morning_km IS NOT NULL AND afternoon_km IS NOT NULL THEN 1
+                        WHEN (morning_km IS NOT NULL OR afternoon_km IS NOT NULL) THEN 0.5
+                        ELSE 0
+                    END
+                    ) as registration_count
+                ")
+            ->get();
+           
+        }
+
+        if ($vehicle_type == "position") {
+          
+            // $query = VehiclePermanentlyRequestModel::with('vehicle');
+            // $query->whereHas('vehicle', function ($q) use ($vehicle_type) {
+                
+            //     $q->where('rental_type', 'LIKE', "%{$vehicle_type}%");
+
+            // });
+
+            $query = VehiclePermanentlyRequestModel::with('vehicle');
+            $query->whereHas('vehicle', function ($q) {
+                $q->whereNotNull('vehicle_id'); 
+            });
+
+            if ($startDate && $endDate) {
+                $query->whereBetween('created_at', [$startDate, $endDate]);
+            }
+ 
+            $vehicles = $query->get()->map(function ($request) use ($startDate, $endDate) 
+            {
+                $replacement = ReplacementModel::where('permanent_id', $request->vehicle_request_permanent_id)->first();
+
+                // Parse dates
+                $startDateObj = \Carbon\Carbon::parse($startDate);
+                $endDateObj = $endDate ? \Carbon\Carbon::parse($endDate) : \Carbon\Carbon::now();
+                // dd( $endDateObj);
+
+                if ($replacement) {
+                    // Calculate service durations
+                    $oldVehicleServiceDays = $replacement->created_at
+                        ? \Carbon\Carbon::parse($replacement->created_at)->diffInDays($startDateObj)
+                        : null;
+
+                    $newVehicleServiceDays = $endDateObj->diffInDays(\Carbon\Carbon::parse($replacement->created_at));
+
+                    return (object)[
+                        'date' => $request->created_at->format('Y-m-d'),
+                        'old_vehicle' => $request->vehicle->plate_number ?? 'N/A',
+                        'old_vehicle_service_days' => $oldVehicleServiceDays,
+                        'new_vehicle' => $replacement->newVehicle->plate_number ?? 'N/A',
+                        'new_vehicle_service_days' => $newVehicleServiceDays,
+                    ];
+                }
+
+                // If no replacement, return the original vehicle data
+                return (object)[
+                    'date' => $request->created_at->format('Y-m-d'),
+                    'plate_number' => $request->vehicle->plate_number ?? 'N/A',
+                    'service_days' => $startDateObj->diffInDays($endDateObj),
+                ];
+            });
+         dd($vehicles);
         }
         
-        // dd($request);
-        if ($startDate && $endDate) {
-            $query->whereBetween('created_at', [$startDate, $endDate]);
-        }
-        
-
-        
-        
-        $vehicles = $query->oldest()->get();
-
-        $vehicles = $vehicles->map(function ($q) use ($request) {
+            $vehicles = $vehicles->map(function ($q) use ($request) {
             $startDate = \Carbon\Carbon::parse($request->input('start_date'))->startOfDay();
             $endDate = \Carbon\Carbon::parse($request->input('end_date'))->startOfDay();
-          
+                                    
             return (object) [
-                'date' => $q->created_at->format('Y-m-d'),
+                // 'date' => $q->created_at->format('Y-m-d'),
                 'plate_number' => $q->vehicle->plate_number ?? 'N?A',
                 'rental_type' => $q->vehicle->rental_type,
                 'vehicle_id' => $q->vehicle->vehicle_id,
-                'interval' => $request->input('start_date') . $request->input('end_date') ?? 'N/A',
-                'total' => $endDate->diffInDays($startDate),
+                'interval' => $request->input('start_date') .' / '. $request->input('end_date') ?? 'N/A',
+                'total' => $q->registration_count, 
             ];
         });
 

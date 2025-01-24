@@ -700,7 +700,6 @@
 
                 // Populate passengers
                 var passengers = button.data('passengers');
-                console.log(passengers);
                 var passengerList = '';
                 if (passengers) {
                     passengers.forEach(function(person) {
