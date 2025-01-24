@@ -391,13 +391,16 @@
                 
                             <div class="mb-3">
                                 <label for="editDriver" class="form-label">@lang('messages.Driver')</label>
-                                <select id="editDriver" name="driver_id" class="form-select" id="Previousdriver">
+                                <select id="editDriver" name="driver_id" class="form-select">
                                     <option value="">@lang('messages.Select Driver')</option>
                                     @foreach($drivers as $driver)
-                                        <option value="{{ $driver->driver_id }}">{{$driver->user->first_name}} {{ $driver->user->middle_name}}</option>
+                                        <option value="{{ $driver->driver_id }}" 
+                                            {{ $driver->driver_id == $driver->driver_id ? 'selected' : '' }}>
+                                            {{ $driver->user->first_name }} {{ $driver->user->middle_name }}
+                                        </option>
                                     @endforeach
                                 </select>
-                            </div>
+                            </div>                            
 
                             <div class="mb-3">
                                 <div class="mb-6">
