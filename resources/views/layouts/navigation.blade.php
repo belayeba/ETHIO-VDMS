@@ -201,7 +201,7 @@
                         </a>
                         <div class="collapse" id="sidebarFuel">
                             <ul class="side-nav-second-level">
-                                @can('Set Feul Cost')
+                                @can('Set Fuel Cost')
                                     <li>
                                         <a href="{{ route('all_fuel_cost') }}">Set Feul Cost</a>
                                     </li>

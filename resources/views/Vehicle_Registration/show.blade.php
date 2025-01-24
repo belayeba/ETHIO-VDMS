@@ -391,10 +391,10 @@
                 
                             <div class="mb-3">
                                 <label for="editDriver" class="form-label">@lang('messages.Driver')</label>
-                                <select id="editDriver" name="driver_id" class="form-select" data-field="driver">
+                                <select id="editDriver" name="driver_id" class="form-select" id="Previousdriver">
                                     <option value="">@lang('messages.Select Driver')</option>
                                     @foreach($drivers as $driver)
-                                        <option data-field="driver"></option>
+                                        <option value="{{ $driver->driver_id }}">{{$driver->user->first_name}} {{ $driver->user->middle_name}}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -662,7 +662,7 @@
 <script>
     $(document).on('click', '.edit-btn', function() {
         var modal = $('#editVehicleModal');
-
+console.log($(this).data('driver'));
         modal.find('.modal-title').text('Edit Vehicle');
         modal.find('[data-field="chancy_number"]').val($(this).data('chancy_number'));
         modal.find('[data-field="make"]').val($(this).data('make'));
@@ -675,7 +675,7 @@
         modal.find('[data-field="fuel_type"]').val($(this).data('fuel_type'));
         modal.find('[data-field="last_service"]').val($(this).data('last_service'));
         modal.find('[data-field="next_service"]').val($(this).data('next_service'));
-        modal.find('[data-field="driver"]').val($(this).data('driver'));
+        modal.find('#Previousdriver').val($(this).data('driver'));
         modal.find('[data-field="libre"]').text($(this).data('libre'));
         modal.find('[data-field="insurance"]').text($(this).data('insurance'));
 
