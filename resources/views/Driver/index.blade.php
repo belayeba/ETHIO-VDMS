@@ -57,16 +57,16 @@
                                 <div class="col-md-4">
                                     <div class="card">
                                         <div class="card-header">
-                                            <h4 class="header-title mb-0">Driver Registration</h4>
+                                            <h4 class="header-title mb-0">@lang('messages.Driver Registration')</h4>
                                         </div>
                                         <div class="card-body">
                                             <form method="POST" action="{{ route('driver.store') }}" accept-charset="UTF-8" name="driver_registration-form" id="driver_registration-form" enctype="multipart/form-data">
                                                 @csrf
                                                 <div class="row mb-3">
-                                                    <label class="col-md-3 col-form-label" for="user_id">Driver</label>
+                                                    <label class="col-md-3 col-form-label" for="user_id">@lang('messages.Driver')</label>
                                                     <div class="col-md-9">
                                                         <select id="user_id" name="user_id" class="form-select" required>
-                                                            <option value="">Select Driver</option>
+                                                            <option value="">@lang('messages.Select Driver')</option>
                                                             @foreach($drivers as $driver)
                                                                 <option value="{{ $driver->id }}">{{ $driver->username }}</option>
                                                             @endforeach
@@ -75,16 +75,16 @@
                                                     </div>
                                                 </div>
                                                 <div class="mb-3">
-                                                    <label for="nameInput" class="form-label">License<strong class="text-danger">*</strong></label>
+                                                    <label for="nameInput" class="form-label">@lang('messages.License')<strong class="text-danger">*</strong></label>
                                                     <input type="file" class="form-control" id="license_file" name="license_file" placeholder="">
                                                 </div>
                                                 <div class="mb-3">
-                                                    <label for="nameInput" class="form-label">License Number <strong class="text-danger">*</strong></label>
-                                                    <input type="text" class="form-control" id="license_number" name="license_number" placeholder="Enter License Number">
+                                                    <label for="nameInput" class="form-label">@lang('messages.License Number')<strong class="text-danger">*</strong></label>
+                                                    <input type="text" class="form-control" id="license_number" name="license_number" placeholder=@lang('messages.Enter driving  License Number')>
                                                 </div>
                                                 <div class="position-relative mb-3">
                                                     <div class="mb-6 position-relative" id="datepicker1">
-                                                        <label class="form-label">License expiry date </label>
+                                                        <label class="form-label">@lang('messages.License expiry date') </label>
                                                         <input type="text" class="form-control" name="expiry_date"
                                                             placeholder="Enter license expiry date" id="expirydate">
                                                     </div>
@@ -97,11 +97,11 @@
                                                     </script>
                                                 </div>
                                                 <div class="mb-3">
-                                                    <label for="nameInput" class="form-label"> Notes<strong class="text-danger">*</strong></label>
+                                                    <label for="nameInput" class="form-label"> @lang('messages.Notes')<strong class="text-danger">*</strong></label>
                                                     <input type="text" class="form-control" id="notes" name="notes" placeholder="Notes">
                                                 </div>
                                                 <div class="d-flex justify-content-center">
-                                                    <button type="submit" class="btn btn-primary">Save</button>
+                                                    <button type="submit" class="btn btn-primary">@lang('messages.save')</button>
                                                 </div>
                                             </form>
                                         </div>
@@ -111,7 +111,7 @@
                                 <div class="col-md-8">
                                     <div class="card">
                                         <div class="card-header">
-                                            <h4 class="header-title mb-0">Driver List</h4>
+                                            <h4 class="header-title mb-0">@lang('messages.Driver List')</h4>
                                         </div>
                                         <div class="card-body">
                                             <div class="table-responsive">
@@ -119,10 +119,10 @@
                                                     <thead>
                                                         <tr>
                                                             <th> {{' # '}} </th>
-                                                            <th>{{ 'Driver' }}</th>
-                                                            <th>{{ 'Phone Number' }}</th>
-                                                            <th>{{ 'Status' }}</th>
-                                                            <th>{{ 'Action' }}</th>
+                                                            <th>{{ __('messages.Driver') }}</th>
+                                                            <th>{{ __('messages.Phone Number') }}</th>
+                                                            <th>{{ __('messages.Status') }}</th>
+                                                            <th>{{ __('messages.Action') }}</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
@@ -143,7 +143,7 @@
                                                                     <i class="ri-eye-line"></i>
                                                                 </button>
 
-                                                                <button type="button" class="btn btn-info rounded-pill" title="Edit Driver"
+                                                                <button type="button" class="btn btn-secondary rounded-pill" title="Edit Driver"
                                                                 data-bs-toggle="modal" 
                                                                 data-bs-target="#driver_modal_{{$loop->index}}"
                                                                 data-driver-name="{{ $item->user->username }}"
@@ -165,43 +165,54 @@
                                                             <div class="modal-dialog">
                                                                 <div class="modal-content">
                                                                     <div class="modal-body">
-                                                                        <form method="POST" action="{{ route('driver.update', $item) }}" class="ps-3 pe-3">
+                                                                        <form method="POST" action="{{ route('driver.update', $item) }}" class="ps-3 pe-3" enctype="multipart/form-data">
                                                                             @csrf
                                                                             @method('PUT')
                                                                             <input type="hidden" name="driver_id" value="{{ $item->driver_id }}">
                                                         
-                                                                            <div class="mb-3">
-                                                                                <label for="name" class="form-label">Driver</label>
-                                                                                <select id="name" name="name" class="form-select" required>
+                                                                            {{-- <div class="mb-3">
+                                                                                <label for="name" class="form-label">@lang('messages.Driver')</label>
+                                                                                <select id="name" name="user_id" class="form-select" required>
                                                                                   @foreach($data as $driver)
                                                                                     <option value="{{ $driver->user_id }}" {{ $driver->user_id == $item->user_id ? 'selected' : '' }}>
                                                                                         {{ $driver->user->username }}
                                                                                     </option>
                                                                                   @endforeach
                                                                                 </select>
+                                                                            </div> --}}
+                                                        
+                                                                            <div class="mb-3">
+                                                                                <label for="license{{ $loop->index }}" class="form-label">@lang('messages.License')</label>
+                                                                                <input class="form-control" type="file" name="license_file" id="license{{ $loop->index }}" value="{{ $item->license_file }}">
                                                                             </div>
                                                         
                                                                             <div class="mb-3">
-                                                                                <label for="phone{{ $loop->index }}" class="form-label">Phone Number</label>
-                                                                                <input class="form-control" type="text" name="phone" id="phone{{ $loop->index }}" value="{{ $item->user->phone_number }}">
+                                                                                <label for="licenseNumber{{ $loop->index }}" class="form-label">@lang('messages.License Number')</label>
+                                                                                <input class="form-control" type="text" name="license_number" id="licenseNumber{{ $loop->index }}" value="{{ $item->license_number }}">
                                                                             </div>
                                                         
-                                                                            <div class="mb-3">
-                                                                                <label for="license{{ $loop->index }}" class="form-label">License</label>
-                                                                                <input class="form-control" type="file" name="license" id="license{{ $loop->index }}" value="{{ $item->license_file }}">
+                                                                        
+                                                                            <div class="position-relative mb-3">
+                                                                                <div class="mb-6 position-relative" id="datepicker1">
+                                                                                    <label for="licenseExpiry{{ $loop->index }}" class="form-label">@lang('messages.License expiry date')</label>
+                                                                                    <input class="form-control" type="text" name="license_expiry_date" id="licenseExpirydate{{ $loop->index }}" value="{{ $item->license_expiry_date }}">
+                                                                                </div>
+                                                                               
                                                                             </div>
-                                                        
+
                                                                             <div class="mb-3">
-                                                                                <label for="licenseNumber{{ $loop->index }}" class="form-label">License Number</label>
-                                                                                <input class="form-control" type="text" name="licenseNumber" id="licenseNumber{{ $loop->index }}" value="{{ $item->license_number }}">
-                                                                            </div>
-                                                        
-                                                                            <div class="mb-3">
-                                                                                <label for="licenseExpiry{{ $loop->index }}" class="form-label">License Expiry Date</label>
-                                                                                <input class="form-control" type="date" name="licenseExpiry" id="licenseExpiry{{ $loop->index }}" value="{{ $item->license_expiry_date }}">
+                                                                                <label for="notes{{ $loop->index }}" class="form-label">@lang('messages.Notes')</label>
+                                                                                <input class="form-control" type="text" name="notes" id="notes{{ $loop->index }}" value="{{ $item->notes }}">
                                                                             </div>
                                                         
                                                                             <div class="mb-3 text-center">
+                                                                                 <script>
+                                                                                    $('#licenseExpirydate{{ $loop->index }}').calendarsPicker({
+                                                                                        calendar: $.calendars.instance('ethiopian', 'am'),
+                                                                                        pickerClass: 'myPicker',
+                                                                                        dateFormat: 'yyyy-mm-dd'
+                                                                                    });
+                                                                                </script>
                                                                                 <button class="btn btn-primary" type="submit">Update</button>
                                                                                 <a type="button" href="{{ route('driver.index') }}" class="btn btn-warning">Cancel</a>
                                                                             </div>
@@ -214,24 +225,24 @@
                                                             <div class="modal-dialog">
                                                                 <div class="modal-content">
                                                                     <div class="modal-header">
-                                                                        <h5 class="modal-title" id="viewDriverModalLabel{{ $item->driver_id }}">Driver Details</h5>
+                                                                        <h5 class="modal-title" id="viewDriverModalLabel{{ $item->driver_id }}">@lang('messages.Driver Details')</h5>
                                                                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                                     </div>
                                                                     <div class="modal-body">
                                                                         <div class="mb-3">
-                                                                            <label class="form-label">Name:</label>
+                                                                            <label class="form-label">@lang('messages.Name'):</label>
                                                                             <p>{{ $item->user->username }}</p>
                                                                         </div>
                                                                         <div class="mb-3">
-                                                                            <label class="form-label">Phone Number:</label>
+                                                                            <label class="form-label">@lang('messages.Phone Number'):</label>
                                                                             <p>{{ $item->user->phone_number }}</p>
                                                                         </div>
                                                                         <div class="mb-3">
-                                                                            <label class="form-label">License Number:</label>
+                                                                            <label class="form-label">@lang('messages.License Number'):</label>
                                                                             <p>{{ $item->license_number }}</p>
                                                                         </div>
                                                                         <div class="mb-3">
-                                                                            <label class="form-label">License Expiry Date:</label>
+                                                                            <label class="form-label">@lang('messages.License expiry date')</label>
                                                                             <p>{{ $item->license_expiry_date }}</p>
                                                                         </div>
                                                                         <div class="mb-3">
@@ -243,7 +254,7 @@
                                                                             @endif
                                                                         </div>
                                                                         <div class="mb-3">
-                                                                            <label class="form-label">Notes:</label>
+                                                                            <label class="form-label">@lang('messages.Notes'):</label>
                                                                             <p>{{ $item->notes }}</p>
                                                                         </div>
                                                                         <div class="modal-footer">

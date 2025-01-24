@@ -134,6 +134,7 @@
                                                                     data-bs-toggle="modal" data-bs-target="#viewRouteModal" 
                                                                     data-id="{{ $data->id }}" 
                                                                     data-route-name="{{ $data->route_name }}" 
+                                                                    data-driver="{{ $data->driver_name }}"
                                                                     data-vehicle-plate="{{ $data->vehicle->plate_number }}"
                                                                     data-driver-phone="{{ $data->driver_phone }}">
                                                                     <i class="ri-eye-line"></i>
@@ -177,6 +178,10 @@
                                                                         <div class="col-md-6">
                                                                             <label for="view_driver_phone" class="form-label"><strong>Driver Phone</strong></label>
                                                                             <p id="view_driver_phone"></p>
+                                                                        </div>
+                                                                        <div class="col-md-6">
+                                                                            <label for="view_driver_name" class="form-label"><strong>Driver Name</strong></label>
+                                                                            <p id="view_driver_name"></p>
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -259,10 +264,12 @@
             let routeName = this.getAttribute('data-route-name');
             let vehiclePlate = this.getAttribute('data-vehicle-plate');
             let driverPhone = this.getAttribute('data-driver-phone');
+            let driverName = this.getAttribute('data-driver');
             
             document.getElementById('view_route_name').textContent = routeName;
             document.getElementById('view_vehicle_plate').textContent = vehiclePlate;
             document.getElementById('view_driver_phone').textContent = driverPhone;
+            document.getElementById('view_driver_name').textContent =driverName;
         });
     });
 

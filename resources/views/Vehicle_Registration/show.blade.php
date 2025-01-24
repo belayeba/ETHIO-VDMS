@@ -30,10 +30,10 @@
             <section class="admin-visitor-area up_st_admin_visitor">
             <div class="container-fluid">
         <div class="row">
-<div class="col-5">
+<div class="col-md-5">
     <div class="card">
         <div class="card-header">
-            <h4 class="header-title mb-0">Vehicle Registration</h4>
+            <h4 class="header-title mb-0">@lang('messages.Vehicle Registration')</h4>
         </div>
        
         <div class="card-body">
@@ -46,19 +46,19 @@
                             <a href="#first" data-bs-toggle="tab" data-toggle="tab"
                                 class="nav-link rounded-0 py-2">
                                 <i class="ri-car-fill fw-normal fs-20 align-middle me-1"></i>
-                                <span class="d-none d-sm-inline">Basic</span>
+                                <span class="d-none d-sm-inline">@lang('messages.Basic')</span>
                             </a>
                         </li>
                         <li class="nav-item" data-target-form="#profileForm">
                             <a href="#second" data-bs-toggle="tab" data-toggle="tab"  class="nav-link rounded-0 py-2">
                                 <i class="ri-profile-line fw-normal fs-20 align-middle me-1"></i>
-                                <span class="d-none d-sm-inline">Profile</span>
+                                <span class="d-none d-sm-inline">@lang('messages.Profile')</span>
                             </a>
                         </li>
                         <li class="nav-item" data-target-form="#otherForm">
                             <a href="#third" data-bs-toggle="tab" data-toggle="tab" class="nav-link rounded-0 py-2">
                                 <i class="ri-check-double-line fw-normal fs-20 align-middle me-1"></i>
-                                <span class="d-none d-sm-inline">Type</span>
+                                <span class="d-none d-sm-inline">@lang('messages.Type')</span>
                             </a>
                         </li>
                     </ul>
@@ -76,7 +76,7 @@
                                 <div class="row">
                                     <div class="col-12">
                                         <div class="row mb-3">
-                                            <label class="col-md-3 col-form-label" for="Chancy Number">Chancy Number</label>
+                                            <label class="col-md-3 col-form-label" for="Chancy Number">@lang('messages.Chancy Number')</label>
                                             <div class="col-md-9">
                                                 <input type="number" class="form-control" id="Chancy Number" placeholder="Enter the Chancy number" name="vin" required>
                                             </div>
@@ -89,21 +89,21 @@
                                         </div>
                                         
                                         <div class="row mb-3">
-                                            <label class="col-md-3 col-form-label" for="model">Model</label>
+                                            <label class="col-md-3 col-form-label" for="model">@lang('messages.Model')</label>
                                             <div class="col-md-9">
                                                 <input type="text" id="Model" name="model" placeholder="Enter the model" class="form-control" required>
                                             </div>
                                         </div>
 
                                         <div class="row mb-3">
-                                            <label class="col-md-3 col-form-label" for="year">Year</label>
+                                            <label class="col-md-3 col-form-label" for="year">@lang('messages.Year')</label>
                                             <div class="col-md-9">
                                                 <input type="number" id="Year" name="year" placeholder="Enter the year" class="form-control" required>
                                             </div>
                                         </div>
 
                                         <div class="row mb-3">
-                                            <label class="col-md-3 col-form-label" for="plate_number">Plate Number</label>
+                                            <label class="col-md-3 col-form-label" for="plate_number">@lang('messages.Plate Number')</label>
                                             <div class="col-md-9">
                                                 <input type="text" id="Plate Number" name="plate_number"  pattern="^[A-Z]{2}-\d{1}-\d{5}$" placeholder="AA-1-12345" class="form-control" required>
                                             </div>
@@ -113,7 +113,7 @@
                                 </div> <!-- end row -->
                             <ul class="list-inline wizard mb-0">
                                 <li class="next list-inline-item float-end">
-                                    <a href="#" class="btn btn-info" id="nextBtn">Next <i class="ri-arrow-right-line ms-1"></i></a>
+                                    <a href="#" class="btn btn-info" id="nextBtn">@lang('messages.Next') <i class="ri-arrow-right-line ms-1"></i></a>
                                 </li>
                             </ul>
                         </div>
@@ -123,21 +123,21 @@
                                 <div class="row">
                                     <div class="col-12">
                                         <div class="row mb-3">
-                                            <label class="col-md-3 col-form-label" for="mileage">Mileage</label>
+                                            <label class="col-md-3 col-form-label" for="mileage">@lang('messages.Mileage')</label>
                                             <div class="col-md-9">
                                                 <input type="number" id="Mileage" name="mileage" placeholder="Enter the mileage" class="form-control" required>
                                             </div>
                                         </div>
 
                                         <div class="row mb-3">
-                                            <label class="col-md-3 col-form-label" for="fuel amount">Fuel Amount</label>
+                                            <label class="col-md-3 col-form-label" for="fuel amount">@lang('messages.Fuel Amount')</label>
                                             <div class="col-md-9">
                                                 <input type="number" id="fuel amount" name="fuel_amount" placeholder="Enter the fuel amount" class="form-control" required>
                                             </div>
                                         </div>
 
                                         <div class="row mb-3">
-                                            <label class="col-md-3 col-form-label" for="fuel_type">Fuel Type</label>
+                                            <label class="col-md-3 col-form-label" for="fuel_type">@lang('messages.Fuel Type')</label>
                                             <div class="col-md-9">
                                                 <select id="fuel_type" name="fuel_type" class="form-select" required>
                                                     <option value="">Select Fuel Type</option>
@@ -148,28 +148,28 @@
                                             </div>
                                         </div>
                                         <div class="row mb-3">
-                                            <label class="col-md-3 col-form-label" for="capacity">Capacity</label>
+                                            <label class="col-md-3 col-form-label" for="capacity">@lang('messages.Capacity')</label>
                                             <div class="col-md-9">
                                                 <input type="number" id="capacity" name="capacity" placeholder="Enter the max Capacity" class="form-control" required>
                                             </div>
                                         </div>
 
                                         <div class="row mb-3">
-                                            <label class="col-md-3 col-form-label" for="Last Service">Last Service</label>
+                                            <label class="col-md-3 col-form-label" for="Last Service">@lang('messages.Last Service')</label>
                                             <div class="col-md-9">
                                                 <input type="number" id="Last Service" name="Last_Service" placeholder="Enter the last service KM" class="form-control" required>
                                             </div>
                                         </div>
 
                                         <div class="row mb-3">
-                                            <label class="col-md-3 col-form-label" for="Next Service">Next Service</label>
+                                            <label class="col-md-3 col-form-label" for="Next Service">@lang('messages.Next Service')</label>
                                             <div class="col-md-9">
                                                 <input type="number" id="Next Service" name="Next_Service" placeholder="Enter the next service KM" class="form-control" required>
                                             </div>
                                         </div>
 
                                         <div class="row mb-3">
-                                            <label class="col-md-3 col-form-label" for="Notes">Notes</label>
+                                            <label class="col-md-3 col-form-label" for="Notes">@lang('messages.Notes')</label>
                                             <div class="col-md-9">
                                                 <input type="text" id="Notes" name="Notes" placeholder="Enter your notes here" class="form-control">
                                             </div>
@@ -181,10 +181,10 @@
                                 <!-- end row -->
                             <ul class="pager wizard mb-0 list-inline">
                                 <li class="previous list-inline-item">
-                                    <button type="button" class="btn btn-light"><i class="ri-arrow-left-line me-1"></i> Back </button>
+                                    <button type="button" class="btn btn-light"><i class="ri-arrow-left-line me-1"></i> @lang('messages.Back') </button>
                                 </li>
                                 <li class="next list-inline-item float-end">
-                                    <button type="button" class="btn btn-info">Next <i class="ri-arrow-right-line ms-1"></i></button>
+                                    <button type="button" class="btn btn-info">@lang('messages.Next') <i class="ri-arrow-right-line ms-1"></i></button>
                                 </li>
                             </ul>
                         </div>
@@ -193,7 +193,7 @@
                                 <div class="row">
                                     <div class="col-12">
                                         <div class="row mb-3">
-                                            <label class="col-md-3 col-form-label" for="driver">Driver</label>
+                                            <label class="col-md-3 col-form-label" for="driver">@lang('messages.Driver')</label>
                                             <div class="col-md-9">
                                                 <select id="driver" name="driver" class="form-select">
                                                     <option value="">Select Driver</option>
@@ -228,21 +228,21 @@
                                             </div>
                                         </div>
                                         <div class="row mb-3">
-                                            <label class="col-md-3 col-form-label" for="Libre">Libre</label>
+                                            <label class="col-md-3 col-form-label" for="Libre">@lang('messages.Libre')</label>
                                             <div class="col-md-9">
                                                 <input type="file" id="Libre" name="libre" class="form-control" required>
                                             </div>
                                         </div>
                                     
                                         <div class="row mb-3">
-                                            <label class="col-md-3 col-form-label" for="Insurance">Insurance</label>
+                                            <label class="col-md-3 col-form-label" for="Insurance">@lang('messages.Insurance')</label>
                                             <div class="col-md-9">
                                                 <input type="file" id="Insurance" name="insurance" class="form-control" required>
                                             </div>
                                         </div>
                                         
                                         <div class="row mb-3">
-                                            <label class="col-md-3 col-form-label" for="vehicle_type">Owner</label>
+                                            <label class="col-md-3 col-form-label" for="vehicle_type">@lang('messages.Owner')</label>
                                             <div class="col-md-9">
                                                 <select id="vehicleType" name="vehicle_type" class="form-select" required onchange="toggleFields()">
                                                     <option value="">Select owner</option>
@@ -253,7 +253,7 @@
                                         </div>
                                         <div class="row mb-3" id="rentalDiv" style="display: none;">
                                             <div class="col-md-9">
-                                                <label class="col-md-3 col-form-label" for="rental_type">Rental Type</label>
+                                                <label class="col-md-3 col-form-label" for="rental_type">@lang('messages.Rental Type')</label>
                                                 <select id="rentalType" name="rental_type" class="form-select">
                                                     <option value="">Select Type</option>
                                                     <option value="whole_day">Whole Day</option>
@@ -269,12 +269,12 @@
                                 <!-- end row -->
                             <ul class="pager wizard mb-0 list-inline mt-1">
                                 <li class="previous list-inline-item">
-                                    <button type="button" class="btn btn-light"><i class="ri-arrow-left-line me-1"></i> Back </button>
+                                    <button type="button" class="btn btn-light"><i class="ri-arrow-left-line me-1"></i>@lang('messages.Back')</button>
                                 </li>
                                 <!-- Your form fields go here -->
                                     
                                     <li class="next list-inline-item float-end">
-                                        <button type="submit" class="btn btn-info">Submit</button>
+                                        <button type="submit" class="btn btn-info">@lang('messages.Submit')</button>
                                     </li>
                                 </form> 
                             </ul>
@@ -287,78 +287,34 @@
         <div class="col-md-7">
                             <div class="card">
                                 <div class="card-header">
-                                    <h4 class="header-title mb-0">Vehicle List</h4>
+                                    <h4 class="header-title mb-0">@lang('messages.Vehicle List')</h4>
                                 </div>
                                 <div class="card-body">
                                     <div class="table-responsive">
-                                        <table id="lms_table" class="table">
+                                        <table id="lms_table" class="table table-centered table-nowrap  vehicle_datatable">
                                             <thead>
                                                 <tr>
-                                                    <th>#</th>
-                                                    <th>Plate Number</th>
-                                                    <th>Vehicle Type</th>
-                                                    <th>Vehicle Category</th>
+                                                    <th>{{ __('messages.Plate Number') }}</th>
+                                                    <th>{{ __('messages.Vehicle Type') }}</th>
+                                                    <th>{{ __('messages.Vehicle Category') }}</th>
                                                     {{-- <th>status</th> --}}
-                                                    <th>Actions</th>
+                                                    <th>{{ __('messages.Action') }}</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                @foreach ($vehicle as $item)
-                                                
-                                                <tr>
-                                                <td>{{$loop->iteration}}</td>
-                                                <td>{{ $item->plate_number }}</td>
-                                                <td>{{ $item->vehicle_type }}</td>
-                                                <td>{{ $item->vehicle_category }}</td>
-                                                <td>
-                                                    <form method="POST" action="{{ route('vehicle.destroy',$item) }}"accept-charset="UTF-8">
-                                                        @method('DELETE')
-                                                        <input  name="request_id" value="{{ $item->vehicle_id }}" type="hidden">
-                                                        {{ csrf_field() }}
-                                                        <button type="button" class="btn btn-info rounded-pill" data-bs-toggle="modal" data-bs-target="#viewModal{{ $item->vehicle_id }}">
-                                                            <i class="ri-eye-line"></i>
-                                                        </button>
-                                                        <a type="button" class="btn btn-secondary rounded-pill" data-bs-toggle="modal" data-bs-target="#editVehicleModal" 
-                                                            onclick="populateModal({
-                                                                    id: '{{ $item->vehicle_id }}',
-                                                                    vin: '{{ $item->vin }}',
-                                                                    make: '{{ $item->make }}',
-                                                                    model: '{{ $item->model }}',
-                                                                    year: '{{ $item->year }}',
-                                                                    plate_number: '{{ $item->plate_number }}',
-                                                                    mileage: '{{ $item->mileage }}',
-                                                                    capacity: '{{ $item->capacity }}',
-                                                                    fuel_amount: '{{ $item->fuel_amount }}',
-                                                                    fuel_type: '{{ $item->fuel_type }}',
-                                                                    last_service: '{{ $item->last_service }}',
-                                                                    next_service: '{{ $item->next_service }}',
-                                                                    notes: '{{ $item->notes }}',
-                                                                    driver: '{{ $item->driver_id }}',
-                                                                    vehicle_category: '{{ $item->vehicle_category }}',
-                                                                    vehicle_type: '{{ $item->vehicle_type }}',
-                                                                    position:'{{ $item->position }}'
-                                                                    libre: '{{ $item->libre }}',
-                                                                    insurance: '{{ $item->insurance }}'
-                                                            })">
-                                                                <i class="ri-edit-line"></i>
-                                                            </a>
-
-                                                        <button type="button" class="btn btn-danger rounded-pill" title="Delete Vehicle"
-                                                        data-bs-toggle="modal" data-bs-target="#warning_alert">
-                                                        <i class="ri-close-circle-line"></i> </button>
-                                                  </form>
-                                                 </td> 
-                                                </tr>
+                      
+                                            </tbody>
+                                            @foreach ($vehicle as $item)
                                                 <!-- Edit Vehicle Modal -->
 <div class="modal fade" id="editVehicleModal" tabindex="-1" aria-labelledby="editVehicleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
-            <form id="editVehicleForm" method="POST" action="{{ route('vehicle.update', ':vehicle_id') }}" enctype="multipart/form-data">
+            <form id="editVehicleForm" method="POST" action="{{ route('vehicle.update', $item) }}" enctype="multipart/form-data">
                 @csrf
                 @method('PUT')
 
                 <div class="modal-header">
-                    <h5 class="modal-title" id="editVehicleModalLabel">Edit Vehicle Information</h5>
+                    <h5 class="modal-title" id="editVehicleModalLabel">Edit Vehicle</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
 
@@ -369,41 +325,41 @@
                         <!-- First Column -->
                         <div class="col-md-6">
                             <div class="mb-3">
-                                <label for="editVin" class="form-label">Chancy Number</label>
-                                <input type="text" class="form-control" id="editVin" name="vin" value="{{ $item->vin }}" required>
+                                <label for="editVin" class="form-label">@lang('messages.Chancy Number')</label>
+                                <input type="text" class="form-control" id="editVin" name="vin" data-field="chancy_number" required>
                             </div>
                 
                             <div class="mb-3">
                                 <label for="editMake" class="form-label">Make</label>
-                                <input type="text" class="form-control" id="editMake" name="make" value="{{ $item->make }}" required>
+                                <input type="text" class="form-control" id="editMake" name="make" data-field="make" required>
                             </div>
                 
                             <div class="mb-3">
-                                <label for="editModel" class="form-label">Model</label>
-                                <input type="text" class="form-control" id="editModel" name="model" value="{{ $item->model }}" required>
+                                <label for="editModel" class="form-label">@lang('messages.Model')</label>
+                                <input type="text" class="form-control" id="editModel" name="model" data-field="model" required>
                             </div>
                 
                             <div class="mb-3">
-                                <label for="editYear" class="form-label">Year</label>
-                                <input type="number" class="form-control" id="editYear" name="year" value="{{ $item->year }}" required>
+                                <label for="editYear" class="form-label">@lang('messages.Year')</label>
+                                <input type="number" class="form-control" id="editYear" name="year" data-field="year" required>
                             </div>
                 
                             <div class="mb-3">
-                                <label for="editPlateNumber" class="form-label">Plate Number</label>
-                                <input type="text" class="form-control" id="editPlateNumber" name="plate_number" value="{{ $item->plate_number }}" pattern="^[A-Z]{2}-\d{1}-\d{5}$" required>
+                                <label for="editPlateNumber" class="form-label">@lang('messages.Plate Number')</label>
+                                <input type="text" class="form-control" id="editPlateNumber" name="plate_number" data-field="plate_number" pattern="^[A-Z]{2}-\d{1}-\d{5}$" required>
                             </div>
                 
                             <div class="mb-3">
-                                <label for="editMileage" class="form-label">Mileage</label>
-                                <input type="number" class="form-control" id="editMileage" name="mileage" value="{{ $item->mileage }}" required>
+                                <label for="editMileage" class="form-label">@lang('messages.Mileage')</label>
+                                <input type="number" class="form-control" id="editMileage" name="mileage" data-field="mileage" required>
                             </div>
                             <div class="mb-3">
-                                <label for="editCapacity" class="form-label">Capacity</label>
-                                <input type="number" class="form-control" id="editCapacity" name="capacity" value="{{ $item->capacity }}" required>
+                                <label for="editCapacity" class="form-label">@lang('messages.Capacity')</label>
+                                <input type="number" class="form-control" id="editCapacity" name="capacity" data-field="capacity" required>
                             </div>
                             <div class="mb-3">
-                                <label for="editFuelAmount" class="form-label">Fuel Amount</label>
-                                <input type="number" class="form-control" id="editFuelAmount" name="fuel_amount" value="{{ $item->fuel_amount }}" required>
+                                <label for="editFuelAmount" class="form-label">@lang('messages.Fuel Amount')</label>
+                                <input type="number" class="form-control" id="editFuelAmount" name="fuel_amount" data-field="fuel_amount" required>
                             </div>
                             {{-- <div class="mb-3">
                                 <label for="editRentalType_{{ $item->vehicle_id }}" class="form-label">Rental Type</label>
@@ -419,46 +375,46 @@
                         <!-- Second Column -->
                         <div class="col-md-6">
                             <div class="mb-3">
-                                <label for="editFuelType" class="form-label">Fuel Type</label>
-                                <input type="text" class="form-control" id="editFuelType" name="fuel_type" value="{{ $item->fuel_type }}" required>
+                                <label for="editFuelType" class="form-label">@lang('messages.Fuel Type')</label>
+                                <input type="text" class="form-control" id="editFuelType" name="fuel_type" data-field="fuel_type" required>
                             </div>
                 
                             <div class="mb-3">
-                                <label for="editLastService" class="form-label">Last Service</label>
-                                <input type="number" class="form-control" id="editLastService" name="last_service" value="{{ $item->last_service }}" required>
+                                <label for="editLastService" class="form-label">@lang('messages.Last Service')</label>
+                                <input type="number" class="form-control" id="editLastService" name="last_service" data-field="last_service" required>
                             </div>
                 
                             <div class="mb-3">
-                                <label for="editNextService" class="form-label">Next Service</label>
-                                <input type="number" class="form-control" id="editNextService" name="next_service" value="{{ $item->next_service }}" required>
+                                <label for="editNextService" class="form-label">@lang('messages.Next Service')</label>
+                                <input type="number" class="form-control" id="editNextService" name="next_service" data-field="next_service" required>
                             </div>
                 
                             <div class="mb-3">
-                                <label for="editDriver" class="form-label">Driver</label>
-                                <select id="editDriver" name="driver_id" class="form-select">
-                                    <option value="">Select Driver</option>
+                                <label for="editDriver" class="form-label">@lang('messages.Driver')</label>
+                                <select id="editDriver" name="driver_id" class="form-select" data-field="driver">
+                                    <option value="">@lang('messages.Select Driver')</option>
                                     @foreach($drivers as $driver)
-                                        <option value="{{$driver->driver_id}}">{{$driver->user->first_name}} + {{$driver->user->second_name}}</option>
+                                        <option data-field="driver"></option>
                                     @endforeach
                                 </select>
                             </div>
 
                             <div class="mb-3">
                                 <div class="mb-6">
-                                    <label for="editLibre" class="form-label">Libre</label>
-                                    <input type="file" class="form-control" id="editLibre" name="libre">
+                                    <label for="editLibre" class="form-label">@lang('messages.Libre')</label>
+                                    <input type="file" class="form-control" id="editLibre" name="libre" data-file="libre">
                                 </div>
                             </div>
 
                             <div class="mb-3">
                                 <div class="mb-3">
-                                    <label for="editInsurance" class="form-label">Insurance</label>
-                                    <input type="file" class="form-control" id="editInsurance" name="insurance">
+                                    <label for="editInsurance" class="form-label">@lang('messages.Insurance')</label>
+                                    <input type="file" class="form-control" id="editInsurance" name="insurance" data-field="insurance">
                                 </div>
                             </div>
                 
                             <div class="mb-3">
-                                <label for="editVehicleCategory" class="form-label">Vehicle Category</label>
+                                <label for="editVehicleCategory" class="form-label">@lang('messages.Vehicle Category')</label>
                                 <select id="editVehicleCategory" name="vehicle_category" class="form-select" required>
                                     <option value="Service" {{ $item->vehicle_category == 'Service' ? 'selected' : '' }}>Service</option>
                                     <option value="Load" {{ $item->vehicle_category == 'Load' ? 'selected' : '' }}>Load</option>
@@ -476,7 +432,7 @@
                             </div>
                 
                             <div class="mb-3">
-                                <label for="editVehicleType" class="form-label">Vehicle Type</label>
+                                <label for="editVehicleType" class="form-label">@lang('messages.Vehicle Type')</label>
                                 <select id="editVehicleType" name="vehicle_type" class="form-select" required onchange="toggleEditFields()">
                                     <option value="Organizational" {{ $item->vehicle_type == 'Organizational' ? 'selected' : '' }}>Organizational</option>
                                     <option value="Other" {{ $item->vehicle_type == 'Other' ? 'selected' : '' }}>Other</option>
@@ -487,151 +443,113 @@
                 </div>
                 
 
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary">Update</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-
-<div class="modal fade" id="viewModal{{ $item->vehicle_id }}" tabindex="-1" aria-labelledby="viewModalLabel{{ $item->vehicle_id }}" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="viewModalLabel{{ $item->vehicle_id }}">Vehicle Details</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <div class="row">
-                    <!-- First Column -->
-                    <div class="col-md-6">
-                        <dl class="row mb-0">
-                            <dt class="col-sm-4">Chancy Number:</dt>
-                            <dd class="col-sm-8">{{ $item->vin }}.</dd>
-            
-                            <dt class="col-sm-4">Make:</dt>
-                            <dd class="col-sm-8">
-                                <p>{{ $item->make }}.</p>
-                            </dd>
-            
-                            <dt class="col-sm-4">Model:</dt>
-                            <dd class="col-sm-8">
-                                <p>{{ $item->model }}</p>
-                            </dd>
-            
-                            <dt class="col-sm-4">Year:</dt>
-                            <dd class="col-sm-8">
-                                <p>{{ $item->year }}</p>
-                            </dd>
-            
-                            <dt class="col-sm-4">Plate Number:</dt>
-                            <dd class="col-sm-8">
-                                <p>{{ $item->plate_number }}</p>
-                            </dd>
-            
-                            <dt class="col-sm-4">Mileage:</dt>
-                            <dd class="col-sm-8">
-                                <p>{{ $item->mileage }}</p>
-                            </dd>
-
-                            <dt class="col-sm-4">Capacity:</dt>
-                            <dd class="col-sm-8">
-                                <p>{{ $item->capacity }}</p>
-                            </dd>
-                            <dt class="col-sm-4">Fuel Amount:</dt>
-                            <dd class="col-sm-8">
-                                <p>{{ $item->fuel_amount }}</p>
-                            </dd>
-                        </dl>
-                    </div>
-            
-                    <!-- Second Column -->
-                    <div class="col-md-6">
-                        <dl class="row mb-0">
-            
-                            <dt class="col-sm-4">Fuel Type:</dt>
-                            <dd class="col-sm-8">
-                                <p>{{ $item->fuel_type }}</p>
-                            </dd>
-            
-                            <dt class="col-sm-4">Last Service:</dt>
-                            <dd class="col-sm-8">
-                                <p>{{ $item->last_service }}</p>
-                            </dd>
-            
-                            <dt class="col-sm-4">Next Service:</dt>
-                            <dd class="col-sm-8">
-                                <p>{{ $item->next_service }}</p>
-                            </dd>
-            
-                            <dt class="col-sm-4">Driver:</dt>
-                            <dd class="col-sm-8">
-                                <p>{{ $item->driver_id ? $item->driver->user->first_name : "No driver" }}  {{ $item->driver_id ? $driver->user->middle_name : "" }}</p>
-                            </dd>
-            
-                            <dt class="col-sm-4">Vehicle Category:</dt>
-                            <dd class="col-sm-8">
-                                <p>{{ $item->vehicle_category }}</p>
-                            </dd>
-
-                            <dt class="col-sm-4">Position:</dt>
-                            <dd class="col-sm-8">
-                                <p>{{ $item->position }}</p>
-                            </dd>
-            
-                            <dt class="col-sm-4">Vehicle Type:</dt>
-                            <dd class="col-sm-8">
-                                <p>{{ $item->vehicle_type }}</p>
-                            </dd>
-                            
-                            <dt class="col-sm-4">Rental Type:</dt>
-                            <dd class="col-sm-8">
-                                <p>{{ $item->rental_type }}</p>
-                            </dd>
-                        </dl>
-                    </div>
-                </div>
-            
-                <!-- Files section (still within the two-column structure) -->
-                <div class="row">
-                    <div class="col-md-6">
-                        @if($item->libre)
-                        <dl class="row mb-0">
-                            <dt class="col-sm-4">Libre:</dt>
-                            <dd class="col-sm-8">
-                                <p>
-                                    <a href="{{ Storage::url('vehicles/' . $item->libre) }}" target="_blank">View File</a>
-                                </p>
-                            </dd>
-                        </dl>
-                        @endif
-                    </div>                    
-            
-                    <div class="col-md-6">
-                        @if($item->insurance)
-                        <dl class="row mb-0">
-                            <dt class="col-sm-4">Insurance:</dt>
-                            <dd class="col-sm-8">
-                                <p><a href="{{ Storage::url('vehicles/' . $item->insurance) }}" target="_blank">View File</a></p>
-                            </dd>
-                        </dl>
-                        @endif
-                    </div>
-                </div>
-            
-                <!-- Modal Footer -->
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">Update</button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
-    </div>
-</div>
-                                            @endforeach
-                                            </tbody>
+
+        <div class="modal fade" id="viewModal" role="dialog" tabindex="-1" aria-labelledby="viewModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Vehicle Details</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <!-- First Column -->
+                            <div class="col-md-6">
+                                <dl class="row mb-0">
+                                    <dt class="col-sm-4">@lang('messages.Chancy Number'):</dt>
+                                    <dd class="col-sm-8" data-field="chancy_number"></dd>
+                    
+                                    <dt class="col-sm-4">Make:</dt>
+                                    <dd class="col-sm-8" data-field="make"></dd>
+                    
+                                    <dt class="col-sm-4">@lang('messages.Model'):</dt>
+                                    <dd class="col-sm-8" data-field="model"></dd>
+                    
+                                    <dt class="col-sm-4">@lang('messages.Year'):</dt>
+                                    <dd class="col-sm-8" data-field="year"></dd>
+                    
+                                    <dt class="col-sm-4">@lang('messages.Plate Number'):</dt>
+                                    <dd class="col-sm-8" data-field="plate_number"></dd>
+                    
+                                    <dt class="col-sm-4">@lang('messages.Mileage'):</dt>
+                                    <dd class="col-sm-8" data-field="mileage"></dd>
+
+                                    <dt class="col-sm-4">@lang('messages.Capacity'):</dt>
+                                    <dd class="col-sm-8" data-field="capacity"></dd>
+
+                                    <dt class="col-sm-4">@lang('messages.Fuel Amount')</dt>
+                                    <dd class="col-sm-8" data-field="fuel_amount"></dd>
+                                </dl>
+                            </div>
+                    
+                            <!-- Second Column -->
+                            <div class="col-md-6">
+                                <dl class="row mb-0">
+                    
+                                    <dt class="col-sm-4">@lang('messages.Fuel Type')</dt>
+                                    <dd class="col-sm-8" data-field="fuel_type"></dd>
+                    
+                                    <dt class="col-sm-4">@lang('messages.Last Service'):</dt>
+                                    <dd class="col-sm-8" data-field="last_service"></dd>
+                    
+                                    <dt class="col-sm-4">@lang('messages.Next Service'):</dt>
+                                    <dd class="col-sm-8" data-field="next_service"></dd>
+                    
+                                    <dt class="col-sm-4">@lang('messages.Driver'):</dt>
+                                    <dd class="col-sm-8" data-field="driver"></dd>
+                    
+                                    <dt class="col-sm-4">@lang('messages.Vehicle Category'):</dt>
+                                    <dd class="col-sm-8" data-field="vehicle_category"></dd>
+
+                                    <dt class="col-sm-4">Position:</dt>
+                                    <dd class="col-sm-8" data-field="position"></dd>
+                    
+                                    <dt class="col-sm-4">@lang('messages.Vehicle Type'):</dt>
+                                    <dd class="col-sm-8" data-field="vehicle_type"></dd>
+                                    
+                                    <dt class="col-sm-4">@lang('messages.Rental Type')</dt>
+                                    <dd class="col-sm-8" data-field="rental_type"></dd>
+                                </dl>
+                            </div>
+                        </div>
+                    
+                        <!-- Files section (still within the two-column structure) -->
+                        <div class="row">
+                            <div class="col-md-6">
+                                @if($item->libre)
+                                <dl class="row mb-0">
+                                    <dt class="col-sm-4">@lang('messages.Libre'):</dt>
+                                    <dd class="col-sm-8" data-field="libre"></dd>
+                                </dl>
+                                @endif
+                            </div>                    
+                    
+                            <div class="col-md-6">
+                                @if($item->insurance)
+                                <dl class="row mb-0">
+                                    <dt class="col-sm-4">@lang('messages.Insurance'):</dt>
+                                    <dd class="col-sm-8" data-field="insurance"></dd>
+                                </dl>
+                                @endif
+                            </div>
+                        </div>
+                    
+                        <!-- Modal Footer -->
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-light" data-bs-dismiss="modal">@lang('Close')</button>
+                        </div>
+                    </div>
+            </div>
+        </div>
+        @endforeach                        
                                         </table>
                                     </div>
                                     <!-- Accept Alert Modal -->
@@ -652,7 +570,7 @@
                                                             cannot be
                                                             undone.
                                                         </h5>
-                                                        <button type="button" class="btn btn-secondary"
+                                                      <button type="button" class="btn btn-secondary"
                                                             data-bs-dismiss="modal">Cancel</button>
                                                         <button type="submit" class="btn btn-primary"
                                                             id="confirmDelete">Yes,
@@ -660,32 +578,114 @@
                                                     </div>
                                                 </div>
                                             </form>
-                                        </div><!-- /.modal-content -->
-                                    </div><!-- /.modal-dialog -->
-                                </div><!-- /.modal -->
+                                        </div>
+                                    </div>
+                                </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </section>
-
-                    </div> <!-- tab-content -->
-                </div> <!-- end #rootwizard-->
-</div>
-        </div> <!-- end card-body -->
-    </div> <!-- end card-->
-</div> <!-- end col -->
-</div> 
-<
-
         </div>
     </div>
-</div>
 
-<div class="d-flex justify-content-center">
-    {{ $vehicle->links() }}
-</div>
+<script src="{{ asset('assets/vendor/datatables.net/js/jquery.dataTables.min.js') }}"></script>
+
+<script>
+    $(function() {
+        var table = $('.vehicle_datatable').DataTable({
+
+            pageLength: 5,
+            ajax: "{{ route('vehicle.list') }}",
+            columns: [{
+                data: 'plate_number',
+                name: 'plate_number'
+            },
+            {
+                data: 'vehicle_type',
+                name: 'vehicle_type'
+            },
+            {
+                data: 'vehicle_category',
+                name: 'vehicle_category'
+            },
+            {
+                data: 'action',
+                name: 'action'
+            },
+]
+        });
+    });
+
+    $(document).ready(function() {
+            var RejectedId;
+
+            $(document).on('click', '.reject-btn', function() {
+                RejectedId = $(this).data('id');
+
+                $('#deleted_vehicle_id').val(RejectedId);
+                $('#confirmationModal').modal('toggle');
+            });
+        });
+</script>
+
+<script>
+    $(document).ready(function () { })
+    $(document).on('click', '.view-btn', function() {
+     var modal = $('#viewModal');
+
+        modal.find('.modal-title').text('Vehicle Details');
+        modal.find('[data-field="chancy_number"]').text($(this).data('chancy_number'));
+        modal.find('[data-field="make"]').text($(this).data('make'));
+        modal.find('[data-field="model"]').text($(this).data('model'));
+        modal.find('[data-field="year"]').text($(this).data('year'));
+        modal.find('[data-field="plate_number"]').text($(this).data('plate_number'));
+        modal.find('[data-field="mileage"]').text($(this).data('mileage'));
+        modal.find('[data-field="capacity"]').text($(this).data('capacity'));
+        modal.find('[data-field="fuel_amount"]').text($(this).data('fuel_amount'));
+        modal.find('[data-field="fuel_type"]').text($(this).data('fuel_type'));
+        modal.find('[data-field="last_service"]').text($(this).data('last_service'));
+        modal.find('[data-field="next_service"]').text($(this).data('next_service'));
+        modal.find('[data-field="driver"]').text($(this).data('driver'));
+        modal.find('[data-field="vehicle_category"]').text($(this).data('vehicle_category'));
+        modal.find('[data-field="position"]').text($(this).data('position'));
+        modal.find('[data-field="vehicle_type"]').text($(this).data('vehicle_type'));
+        modal.find('[data-field="rental_type"]').text($(this).data('rental_type'));
+        modal.find('[data-field="libre"]').text($(this).data('libre'));
+        modal.find('[data-field="insurance"]').text($(this).data('insurance'));
+
+        modal.modal('show'); 
+});
+</script>
+
+<script>
+    $(document).on('click', '.edit-btn', function() {
+        var modal = $('#editVehicleModal');
+
+        modal.find('.modal-title').text('Edit Vehicle');
+        modal.find('[data-field="chancy_number"]').val($(this).data('chancy_number'));
+        modal.find('[data-field="make"]').val($(this).data('make'));
+        modal.find('[data-field="model"]').val($(this).data('model'));
+        modal.find('[data-field="year"]').val($(this).data('year'));
+        modal.find('[data-field="plate_number"]').val($(this).data('plate_number'));
+        modal.find('[data-field="mileage"]').val($(this).data('mileage'));
+        modal.find('[data-field="capacity"]').val($(this).data('capacity'));
+        modal.find('[data-field="fuel_amount"]').val($(this).data('fuel_amount'));
+        modal.find('[data-field="fuel_type"]').val($(this).data('fuel_type'));
+        modal.find('[data-field="last_service"]').val($(this).data('last_service'));
+        modal.find('[data-field="next_service"]').val($(this).data('next_service'));
+        modal.find('[data-field="driver"]').val($(this).data('driver'));
+        modal.find('[data-field="libre"]').text($(this).data('libre'));
+        modal.find('[data-field="insurance"]').text($(this).data('insurance'));
+
+        modal.modal('show'); 
+});
+</script>
+
+<script>
+    src = "{{ asset('assets/vendor/datatables.net-bs5/js/dataTables.bootstrap5.min.js') }}" >
+</script>
 
 <script>
     document.getElementById('nextBtn').addEventListener('click', function(event) {
@@ -735,7 +735,7 @@
 }
 </script>
 
-<script src="assets/js/vendor.min.js"></script>
+
         
 <!-- Bootstrap Wizard Form js -->
 <script src="assets/vendor/twitter-bootstrap-wizard/jquery.bootstrap.wizard.min.js"></script>
@@ -747,3 +747,5 @@
 <script src="assets/js/app.min.js"></script>
 
 @endsection
+
+<script src="assets/js/vendor.min.js"></script>

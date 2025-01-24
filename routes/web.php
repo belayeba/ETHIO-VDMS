@@ -155,7 +155,7 @@ Route::group(['middleware' => ['auth']], function()
                     Route::post('/store',[VehicleVehicleRegistrationController::class, 'store'])->name('vehicleRegistration.store');
                     Route::delete('/delete/{vehicle}',[VehicleVehicleRegistrationController::class,'destroy'])->name('vehicle.destroy');
                     Route::put('/update/{vehicle}', [VehicleVehicleRegistrationController::class, 'update'])->name('vehicle.update');
-                
+                    Route::get('/list',[VehicleVehicleRegistrationController::class, 'list'])->name('vehicle.list');
                 });
             // Vehicle Permanent Request
             Route::controller(VehicleParmanentlyRequestController::class)->group(function()
@@ -463,7 +463,7 @@ Route::group(['middleware' => ['auth']], function()
                 });
                  
             Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home'); 
-            
+
             Route::get('locale/{lang}', [LocaleController::class, 'setlocale'])->name('locale.switch');
 
     Route::group([

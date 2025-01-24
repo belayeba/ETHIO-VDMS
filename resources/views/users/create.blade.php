@@ -25,7 +25,7 @@
                 <div class="col-lg-8">
                     <div class="card">
                         <div class="card-header">
-                            <h4 class="header-title">User Create</h4>
+                            <h4 class="header-title">@lang('messages.Create Users')</h4>
                         </div>
                         <div class="card-body">
                             <form method="POST" class="needs-validation" action="{{ route('users.store') }}" novalidate>
@@ -71,7 +71,7 @@
 
                                     <div class="col-lg-6">
                                         <div class="position-relative mb-3">
-                                            <label class="form-label" for="validationTooltip04">Phone</label>
+                                            <label class="form-label" for="validationTooltip04">@lang('messages.Phone Number')</label>
                                             <input type="mob" class="form-control" name="phone"
                                                 id="validationTooltip04" pattern="^\+251\d{9}$" placeholder="Start with +251" required>
                                             <div class="invalid-tooltip">
@@ -166,7 +166,7 @@
                                     </div> 
                                 </div> --}}
 
-                                <button class="btn btn-primary" type="submit">Save</button>
+                                <button class="btn btn-primary" type="submit">@lang('messages.save')</button>
 
                             </form>
                         </div> <!-- end card-body-->
