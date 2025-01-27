@@ -166,7 +166,6 @@
                                                                         <option value="">Select Fuel Type</option>
                                                                         <option value="Benzene">Benzene</option>
                                                                         <option value="Diesel">Diesel</option>
-                                                                        <option value="Electric">Electric</option>
                                                                     </select>
                                                                 </div>
                                                             </div>
@@ -875,31 +874,6 @@
     <script>
         src = "{{ asset('assets/vendor/datatables.net-bs5/js/dataTables.bootstrap5.min.js') }}" >
     </script>
-
-        <script>
-            document.addEventListener('DOMContentLoaded', function () {
-                const fuelTypeSelect = document.getElementById('fuel_type');
-                const fuelAmountRow = document.getElementById('fuel_amount_row');
-                const fuelAmountInput = document.getElementById('fuel_amount');
-
-                function toggleFuelAmount() {
-                    const selectedFuelType = fuelTypeSelect.value;
-                    if (selectedFuelType === 'Electric') {
-                        fuelAmountRow.style.display = 'none';
-                        fuelAmountInput.removeAttribute('required'); // Remove required attribute for validation
-                    } else {
-                        fuelAmountRow.style.display = 'flex';
-                        fuelAmountInput.setAttribute('required', 'required'); // Add required attribute back
-                    }
-                }
-
-                // Initialize the behavior on page load
-                toggleFuelAmount();
-
-                // Attach change event to update the behavior dynamically
-                fuelTypeSelect.addEventListener('change', toggleFuelAmount);
-            });
-        </script>
 
     <script>
         document.getElementById('nextBtn').addEventListener('click', function(event) {
