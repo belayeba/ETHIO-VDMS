@@ -255,6 +255,7 @@
             'Date Range' => 'የቀን ብዛት',
             'From' => 'ከ',
             'To' => 'ለ',
+            'Route List' => 'የመንገድ ዝርዝር',
             'Filter' => 'አጣራ',
             'Export' => 'መረጃ መላክ',
             'Select Plate Number' => 'የሰሌዳ ቁጥር ይምረጡ',

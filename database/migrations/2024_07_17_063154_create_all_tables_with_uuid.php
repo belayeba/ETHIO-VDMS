@@ -66,7 +66,7 @@ class CreateAllTablesWithUuid extends Migration
             $table->string('vehicle_category', 255); // THE VEHICLE SERVICE
             $table->string('position', 255);
             $table->string('rental_type', 255)->nullable(); // (45/60)(Position)(wholeDay)(morning_afternoon_minibus)
-            $table->decimal('fuel_amount', 10, 2);
+            $table->integer('fuel_amount', 10, 2);
             $table->integer('last_service')->nullable();
             $table->integer('next_service')->nullable();
             $table->uuid('registered_by')->nullable();

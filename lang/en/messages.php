@@ -107,6 +107,7 @@ return [
     'Create' => 'Create',
     'Email' => 'Email',
     'Phone' => 'Phone',
+    'Route List' => 'Route List',
     'Department' => 'Department',
     'Driver Registration' => 'Driver Registration',
     'Driver' => 'Driver',

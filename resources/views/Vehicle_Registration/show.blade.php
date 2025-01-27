@@ -160,30 +160,24 @@
                                                             </div>
 
                                                             <div class="row mb-3">
-                                                                <label class="col-md-3 col-form-label"
-                                                                    for="fuel amount">@lang('messages.Fuel Amount')</label>
+                                                                <label class="col-md-3 col-form-label" for="fuel_type">@lang('messages.Fuel Type')</label>
                                                                 <div class="col-md-9">
-                                                                    <input type="number" id="fuel amount"
-                                                                        name="fuel_amount"
-                                                                        placeholder="Enter the fuel amount"
-                                                                        class="form-control" required>
-                                                                </div>
-                                                            </div>
-
-                                                            <div class="row mb-3">
-                                                                <label class="col-md-3 col-form-label"
-                                                                    for="fuel_type">@lang('messages.Fuel Type')</label>
-                                                                <div class="col-md-9">
-                                                                    <select id="fuel_type" name="fuel_type"
-                                                                        class="form-select" required>
-                                                                        <option value="">Select Fuel Type
-                                                                        </option>
+                                                                    <select id="fuel_type" name="fuel_type" class="form-select" required>
+                                                                        <option value="">Select Fuel Type</option>
                                                                         <option value="Benzene">Benzene</option>
                                                                         <option value="Diesel">Diesel</option>
                                                                         <option value="Electric">Electric</option>
                                                                     </select>
                                                                 </div>
                                                             </div>
+                                                            
+                                                            <div class="row mb-3" id="fuel_amount_row">
+                                                                <label class="col-md-3 col-form-label" for="fuel_amount">@lang('messages.Fuel Amount')</label>
+                                                                <div class="col-md-9">
+                                                                    <input type="number" id="fuel_amount" name="fuel_amount" placeholder="Enter the fuel amount" class="form-control" required>
+                                                                </div>
+                                                            </div>
+
                                                             <div class="row mb-3">
                                                                 <label class="col-md-3 col-form-label"
                                                                     for="capacity">@lang('messages.Capacity')</label>
@@ -710,11 +704,11 @@
                                                                     </dl>
                                                                 </div>
                                                             </div>
-
+                                                           
                                                             <!-- Files section (still within the two-column structure) -->
                                                             <div class="row">
                                                                 <div class="col-md-6">
-                                                                    @if ($item->libre)
+                                                                    @if ($item->libre) 
                                                                         <dl class="row mb-0">
                                                                             <dt class="col-sm-4">@lang('messages.Libre'):
                                                                             </dt>
@@ -735,7 +729,7 @@
                                                                     @endif
                                                                 </div>
                                                             </div>
-
+                                                            
                                                             <!-- Modal Footer -->
                                                             <div class="modal-footer">
                                                                 <button type="button" class="btn btn-light"
@@ -857,7 +851,7 @@
     <script>
         $(document).on('click', '.edit-btn', function() {
             var modal = $('#editVehicleModal');
-            console.log($(this).data('driver'));
+            console.log($(this).data('libre'));
             modal.find('.modal-title').text('Edit Vehicle');
             modal.find('[data-field="chancy_number"]').val($(this).data('chancy_number'));
             modal.find('[data-field="make"]').val($(this).data('make'));
@@ -881,6 +875,31 @@
     <script>
         src = "{{ asset('assets/vendor/datatables.net-bs5/js/dataTables.bootstrap5.min.js') }}" >
     </script>
+
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                const fuelTypeSelect = document.getElementById('fuel_type');
+                const fuelAmountRow = document.getElementById('fuel_amount_row');
+                const fuelAmountInput = document.getElementById('fuel_amount');
+
+                function toggleFuelAmount() {
+                    const selectedFuelType = fuelTypeSelect.value;
+                    if (selectedFuelType === 'Electric') {
+                        fuelAmountRow.style.display = 'none';
+                        fuelAmountInput.removeAttribute('required'); // Remove required attribute for validation
+                    } else {
+                        fuelAmountRow.style.display = 'flex';
+                        fuelAmountInput.setAttribute('required', 'required'); // Add required attribute back
+                    }
+                }
+
+                // Initialize the behavior on page load
+                toggleFuelAmount();
+
+                // Attach change event to update the behavior dynamically
+                fuelTypeSelect.addEventListener('change', toggleFuelAmount);
+            });
+        </script>
 
     <script>
         document.getElementById('nextBtn').addEventListener('click', function(event) {
