@@ -314,10 +314,11 @@
                                                                     <option value="">Select owner</option>
                                                                     <option value="Organizational">Organizational
                                                                     </option>
-                                                                    <option value="other">Rental</option>
+                                                                    <option value="Rental">Rental</option>
                                                                 </select>
                                                             </div>
                                                         </div>
+                                                        
                                                         <div class="row mb-3" id="rentalDiv" style="display: none;">
                                                             <div class="col-md-9">
                                                                 <label class="col-md-3 col-form-label"
@@ -600,9 +601,9 @@
                                                                                     <option value="Organizational"
                                                                                         {{ $item->vehicle_type == 'Organizational' ? 'selected' : '' }}>
                                                                                         Organizational</option>
-                                                                                    <option value="Other"
-                                                                                        {{ $item->vehicle_type == 'Other' ? 'selected' : '' }}>
-                                                                                        Other</option>
+                                                                                    <option value="Rental"
+                                                                                        {{ $item->vehicle_type == 'Rental' ? 'selected' : '' }}>
+                                                                                        Rental</option>
                                                                                 </select>
                                                                             </div>
                                                                         </div>
@@ -892,7 +893,7 @@
             const rentalDiv = document.getElementById('rentalDiv'); // Get the rental type div
 
             // Show or hide the rental type div based on the selected value
-            if (vehicleType === 'other') {
+            if (vehicleType === 'Rental') {
                 rentalDiv.style.display = 'block'; // Show when "Rental" is selected
             } else {
                 rentalDiv.style.display = 'none'; // Hide for other options
