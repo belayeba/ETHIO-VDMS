@@ -579,31 +579,20 @@
                                                                             <div class="mb-3">
                                                                                 <label for="editPosition"
                                                                                     class="form-label">Position</label>
-                                                                                <select id="editPosition"
-                                                                                    name="position"
-                                                                                    class="form-select" required>
-                                                                                    <option value="Position"
-                                                                                        {{ $item->position == 'Position' ? 'selected' : '' }}>
-                                                                                        Position</option>
-                                                                                    <option value="Other"
-                                                                                        {{ $item->position == 'Other' ? 'selected' : '' }}>
-                                                                                        Other</option>
+                                                                                <select id="editPosition" name="position" class="form-select" required>
+                                                                                    <option value="Position"{{ $item->position == 'Position' ? 'selected' : '' }}> Position</option>
+                                                                                    <option value="Other" {{ $item->position == 'Other' ? 'selected' : '' }}> Other</option>
                                                                                 </select>
                                                                             </div>
 
                                                                             <div class="mb-3">
                                                                                 <label for="editVehicleType"
                                                                                     class="form-label">@lang('messages.Vehicle Type')</label>
-                                                                                <select id="editVehicleType"
-                                                                                    name="vehicle_type"
-                                                                                    class="form-select" required
-                                                                                    onchange="toggleEditFields()">
+                                                                                <select id="editVehicleType" name="vehicle_type" class="form-select" required onchange="toggleEditFields()">
                                                                                     <option value="Organizational"
-                                                                                        {{ $item->vehicle_type == 'Organizational' ? 'selected' : '' }}>
-                                                                                        Organizational</option>
+                                                                                        {{ $item->vehicle_type == 'Organizational' ? 'selected' : '' }}> Organizational</option>
                                                                                     <option value="Rental"
-                                                                                        {{ $item->vehicle_type == 'Rental' ? 'selected' : '' }}>
-                                                                                        Rental</option>
+                                                                                        {{ $item->vehicle_type == 'Rental' ? 'selected' : '' }}>Rental</option>
                                                                                 </select>
                                                                             </div>
                                                                         </div>
@@ -629,7 +618,7 @@
                                                 <div class="modal-dialog modal-lg">
                                                     <div class="modal-content">
                                                         <div class="modal-header">
-                                                            <h5 class="modal-title">Vehicle Details</h5>
+                                                            <h5 class="modal-title">@lang('messages.Vehicle Details')</h5>
                                                             <button type="button" class="btn-close"
                                                                 data-bs-dismiss="modal" aria-label="Close"></button>
                                                         </div>

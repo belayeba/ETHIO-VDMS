@@ -110,7 +110,7 @@ class RouteController extends Controller
             }
             return redirect()->back()->with('success_message','Users assigned successfully.',);
         }
-    public function updateRoute( Request $request, $route_id ) 
+        public function updateRoute( Request $request, $route_id ) 
         {
             $validator = Validator::make( $request->all(), [
                 'driver_phone' => [ 'required', 'regex:/^(?:\+251|0)[1-9]\d{8}$/' ],
@@ -134,6 +134,33 @@ class RouteController extends Controller
             }
             return redirect()->back()->with('success_message','Route  successfully Updated.',);
         }
+    public function update(Request $request, $route_id)
+    {
+        $user = Auth::id();
+        $validator = Validator::make($request->all(), [
+            'driver_phone' => ['nullable', 'regex:/^(?:\+251|0)[1-9]\d{8}$/'], // Make driver_phone nullable to allow skipping
+            'vehicle_id' => 'nullable|uuid|exists:vehicles,vehicle_id', // Make vehicle_id nullable to allow skipping
+            'route_name' => 'nullable|string',
+        ]);
+    
+        if ($validator->fails()) {
+            return redirect()->back()->with('error_message', 'All fields are required.');
+        }
+    
+        $route = Route::findOrFail($route_id);
+
+        $updateData = $request->only([
+            'driver_phone',
+            'route_name',
+            'vehicle_id'
+        ]);
+
+        // Remove null fields from the update array
+        $updateData = array_filter($updateData, fn($value) => !is_null($value));
+        $route->update($updateData);
+
+        return redirect()->back()->with('success_message', 'Successfully Updated.');
+    }
     public function removeRoute( $route_id ) 
         {
                 // Find the route by ID or fail if it doesn't exist

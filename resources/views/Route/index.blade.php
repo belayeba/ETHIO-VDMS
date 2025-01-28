@@ -142,14 +142,15 @@
                                                             
                                                                 <button type="button" class="btn btn-secondary rounded-pill" 
                                                                     data-bs-toggle="modal" data-bs-target="#editRouteModal" 
-                                                                    data-id="{{ $data->id }}" 
+                                                                    data-id="{{ $data->route_id }}" 
                                                                     data-route-name="{{ $data->route_name }}" 
                                                                     data-vehicle-id="{{ $data->vehicle_id }}" 
                                                                     data-driver-phone="{{ $data->driver_phone }}">
                                                                     <i class="ri-edit-line"></i> 
                                                                 </button>
-                                                                <button type="submit" class="btn btn-danger rounded-pill" title="Delete Route"
-                                                                onclick="return confirm(&quot;Click OK to delete Route.&quot;)">
+                                                                
+                                                                <button type="button" class="btn btn-danger rounded-pill" title="Delete Route"
+                                                                data-bs-toggle="modal" data-bs-target="#warning_alert">
                                                                 <i class="ri-close-circle-line"></i>
                                                             </button>
                                                                 </form>
@@ -196,9 +197,9 @@
                                                                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                                     </div>
                                                                     <div class="modal-body">
-                                                                        <form action="{{ route('route.store') }}" id="editRouteForm" method="POST">
+                                                                        <form action="{{ route('route.updates', $data->route_id) }}" id="editRouteForm" method="POST">
                                                                             @csrf
-                                                                            @method('PUT') <!-- Assuming you're using RESTful update -->
+                                                                            @method('PUT') 
                                                                             <input type="hidden" name="route_id" id="edit_route_id">
                                                         
                                                                             <div class="mb-3">
@@ -231,6 +232,37 @@
                                                         </div>
                                                         @endforeach
 
+                                                        <!-- Accept Alert Modal -->
+                                                        <div id="warning_alert" class="modal fade" id="confirmationModal"
+                                                        tabindex="-1" role="dialog"
+                                                        aria-labelledby="confirmationModalLabel"aria-hidden="true">
+                                                        <div class="modal-dialog modal-sm">
+                                                            <div class="modal-content">
+                                                                <form method="POST" action="{{ route('route.destroy',$data) }}">
+                                                                @csrf
+                                                                @method('DELETE')
+                                                                <input type="hidden" name="request_id" id="request_id">
+                                                                <div class="modal-body p-4">
+                                                                    <div class="text-center">
+                                                                        <i class="ri-alert-line h1 text-warning"></i>
+                                                                        <h4 class="mt-2">Warning</h4>
+                                                                        <h5 class="mt-3">
+                                                                            Are you sure you want to delete this Route?</br> This
+                                                                            action
+                                                                            cannot be
+                                                                            undone.
+                                                                        </h5>
+                                                                        <button type="button" class="btn btn-secondary"
+                                                                            data-bs-dismiss="modal">Cancel</button>
+                                                                        <button type="submit" class="btn btn-primary"
+                                                                            id="confirmDelete">Yes,
+                                                                            Accept</button>
+                                                                    </div>
+                                                                </div>
+                                                                </form>
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                     </tbody>
                                                 </table>
                                             </div>
@@ -285,7 +317,7 @@
             document.getElementById('edit_route_name').value = routeName;
             document.getElementById('edit_vehicle_id').value = vehicleId;
             document.getElementById('edit_driver_phone').value = driverPhone;
-            document.getElementById('editRouteForm').action = `/routes/update/${routeId}`;
+            document.getElementById('editRouteForm').action = `/Route/update/${routeId}`;
         });
     });
 });

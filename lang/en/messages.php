@@ -108,6 +108,7 @@ return [
     'Email' => 'Email',
     'Phone' => 'Phone',
     'Route List' => 'Route List',
+    'Vehicle Details' => 'Vehicle Details',
     'Department' => 'Department',
     'Driver Registration' => 'Driver Registration',
     'Driver' => 'Driver',

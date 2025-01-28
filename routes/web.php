@@ -157,6 +157,8 @@ Route::group(['middleware' => ['auth']], function()
                     Route::put('/update/{vehicle}', [VehicleVehicleRegistrationController::class, 'update'])->name('vehicle.update');
                     Route::get('/list',[VehicleVehicleRegistrationController::class, 'list'])->name('vehicle.list');
                 });
+                // Route::put('/vehicles/{id}/status', [VehicleVehicleRegistrationController::class, 'updateStatus']);
+
             // Vehicle Permanent Request
             Route::controller(VehicleParmanentlyRequestController::class)->group(function()
                 {
@@ -366,7 +368,8 @@ Route::group(['middleware' => ['auth']], function()
                     Route::get('/user',[RouteController::class, 'displayRoute'])->name('route.show');
                     Route::post('/store',[RouteController::class, 'registerRoute'])->name('route.store');
                     Route::post('/employee/store',[RouteController::class, 'assignUsersToRoute'])->name('employeeService.store');
-                    Route::put('/update/{request_id}', [RouteController::class, 'updateRoute'])->name('route.update');
+                    Route::put('/change/{request_id}', [RouteController::class, 'updateRoute'])->name('route.change');
+                    Route::put('/update/{route_id}', [RouteController::class, 'update'])->name('route.updates');
                     Route::delete('/delete/{request_id}', [RouteController::class, 'removeRoute'])->name('route.destroy');
                     Route::delete('/user/delete/{request_id}', [RouteController::class, 'removeUserFromRoute'])->name('routeUser.destroy');
                 });

@@ -33,6 +33,7 @@ class VehicleRegistrationController extends Controller {
     public function index() {
         $drivers = DriversModel::all();
         $vehicle = VehiclesModel::paginate( 6 ); 
+    
         return view( 'Vehicle_Registration.show', compact( 'vehicle', 'drivers' ) );
     }
     public function list(Request $request)
@@ -50,6 +51,17 @@ class VehicleRegistrationController extends Controller {
             ->addColumn('vehicle_category', function($row){
                 return $row->vehicle_category;
             })
+            ->addColumn('action', function ($vehicle) {
+                return '
+                    <label class="switch">
+                        <input type="checkbox" class="status-switch" data-id="' . $vehicle->id . '" ' . ($vehicle->status ? 'checked' : '') . '>
+                        <span class="slider">
+                            <svg class="slider-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                <circle cx="12" cy="12" r="10"></circle>
+                            </svg>
+                        </span>
+                    </label>';
+            })        
             ->addColumn('action', function($row) {
                 $actions = '<button type="button" class="btn btn-info rounded-pill view-btn" 
                                 data-chancy_number="' . $row->vin . '"
@@ -195,6 +207,18 @@ class VehicleRegistrationController extends Controller {
     public function edit( VehicleInfo $vehicle ) {
         return view( 'vehicles.edit', compact( 'vehicle' ) );
     }
+    // public function updateStatus(Request $request, $id)
+    // {
+    //     $validated = $request->validate([
+    //         'status' => 'required|in:0,1',
+    //     ]);
+
+    //     $vehicle = VehiclesModel::findOrFail($id);
+    //     $vehicle->status = $validated['status'];
+    //     $vehicle->save();
+
+    //     return response()->json(['success' => true]);
+    // }
 
     public function update(Request $request, $id)
     {
