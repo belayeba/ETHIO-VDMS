@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Models\Vehicle\InspectionModel;
 use App\Models\Vehicle\VehiclesModel;
 use App\Models\Driver\DriversModel;
+use App\Models\Trip\TripPersonsModel;
 use App\Models\Vehicle\VehicleTemporaryRequestModel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -16,7 +17,6 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use App\Notifications\TaskCompleted;
 use App\Http\Controllers\Vehicle\Daily_KM_Calculation;
-use App\Models\Trip\TripPersonsModel;
 use Carbon\Carbon;
 
 class VehicleTemporaryRequestController extends Controller
@@ -81,7 +81,7 @@ class VehicleTemporaryRequestController extends Controller
                     data-end_date="' . $row->end_date . '"
                     data-end_time="' . $row->end_time . '"
                     data-start_location="' . $row->start_location . '&nbsp;&nbsp;&nbsp;' . $row->end_locations . '"
-                    data-passengers=\'' . json_encode($this->return_people($row->request_id)) . '\'
+                    data-passengers=\'' . json_encode($row->peoples()->with('user')->get()) . '\'
                     data-materials=\'' . json_encode($row->materials) . '\'
                     data-dir_approved_by="' . ($row->dir_approved_by?  $row->approvedBy->first_name . ' ' . $row->approvedBy->middle_name:"Pending"). '"
                     data-director_reject_reason="' . $row->director_reject_reason . '"
@@ -94,7 +94,12 @@ class VehicleTemporaryRequestController extends Controller
                     data-assigned_by="' . $row->assigned_by . '"
                     data-assigned_by_reject_reason="' . $row->assigned_by_reject_reason . '"
                     data-vehicle_id="' . $row->vehicle_id . '"
-                    data-vehicle_plate="' . ($row->vehicle ? $row->vehicle->plate_number : '') . '"
+                    data-vehicle_plate="' . ($row->vehicle 
+                    ? $row->vehicle->plate_number . '</br>Driver: ' 
+                        . ($row->vehicle->driver ? ($row->vehicle->driver->user->first_name ?? 'none') . ' ' . ($row->vehicle->driver->user->last_name ?? 'none') : 'none') 
+                        . '</br>Phone: ' 
+                        . ($row->vehicle->driver ? ($row->vehicle->driver->user->phone_number ?? 'none') : 'none') 
+                    : '') . '"
                     data-start_km="' . $row->start_km . '"
                     data-end_km="' . $row->end_km . '"
                     title="Show Details">
@@ -147,17 +152,17 @@ class VehicleTemporaryRequestController extends Controller
                     'with_driver' => 'required|integer|in:1,0',
                     'start_date' => 'required|date',
                     'start_time' => 'required|date_format:H:i|after_or_equal:$today',
-                    'return_date' => 'required|date|after_or_equal:start_date', // Ensure return_date is after or equal to start_date
+                    'return_date' => 'required|date', // Ensure return_date is after or equal to start_date
                     'return_time' => 'required|date_format:H:i',
                     'start_location' => 'required|string|max:255',
                     'end_location' => 'required|string|max:255',
                     'allowed_km' => 'required|numeric',
-                    'itemNames.*' => 'nullable|string|max:255',
+                    'material_name.*' => 'nullable|string|max:255',
                     'people_id' => 'nullable|array',
                     'people_id.*' => 'exists:users,id',
-                    'itemWeights.*' => 'nullable|numeric|min:0',
-                    'itemNames' => 'nullable|equal_count',
-                    'itemWeights' => 'nullable|equal_count',
+                    'weight.*' => 'nullable|numeric|min:0',
+                    'material_name' => 'nullable|equal_count',
+                    'weight' => 'nullable|equal_count',
                 ]);
                 
                 // If validation fails, return an error response
@@ -189,7 +194,9 @@ class VehicleTemporaryRequestController extends Controller
                                         return redirect()->back()->with('error_message',
                                         'Return Date should be greater than Start Date',
                                     );
-                                }                     
+                                }       
+                                // $materialNames = $request->input('material_name', []);
+                                // dd($materialNames);              
                             $Vehicle_Request = VehicleTemporaryRequestModel::create([
                                 'purpose' => $request->purpose,
                                 'in_out_town' =>$request->in_out_town,
@@ -207,11 +214,12 @@ class VehicleTemporaryRequestController extends Controller
                                 'created_at' => $ethiopianDate
                             ]);
                             // Handle optional material_name and weight fields
-                            $materialNames = $request->input('itemWeights', []);
-                            //dd($materialNames);
-                            $weights = $request->input('itemWeights', []);
+                            $materialNames = $request->input('material_name', []);
+                        //    dd($materialNames);
+                            $weights = $request->input('weight', []);
                             foreach ($materialNames as $index => $materialName) 
                                 {
+                                
                                     $Vehicle_Request->materials()->create([
                                         'material_name' => $materialName,
                                         'weight' => $weights[$index],
@@ -219,7 +227,7 @@ class VehicleTemporaryRequestController extends Controller
                                 }   
                             // Handle optional people IDs
                             $peopleIds = $request->input('people_id', []);
-                        
+                     
                             foreach ($peopleIds as $personId) {
                                 $Vehicle_Request->peoples()->create([
                                     'employee_id' => $personId,
@@ -467,7 +475,7 @@ class VehicleTemporaryRequestController extends Controller
                     data-end_date="' . $row->end_date . '"
                     data-end_time="' . $row->end_time . '"
                     data-start_location="' . $row->start_location . '&nbsp;&nbsp;&nbsp;' . $row->end_locations . '"
-                    data-passengers=\'' . json_encode($row->peoples) . '\'
+                    data-passengers=\'' . json_encode($row->peoples()->with('user')->get()) . '\'
                     data-materials=\'' . json_encode($row->materials) . '\'
                     data-dir_approved_by="' . $row->dir_approved_by . '"
                     data-director_reject_reason="' . $row->director_reject_reason . '"
@@ -925,9 +933,7 @@ class VehicleTemporaryRequestController extends Controller
                 ->latest()
                 ->get();
 
-            
-
-                   // dd($vehicleRequests);
+                // dd($vehicleRequests);
                 // Return the results, for example, passing them to a view
                 return view('Request.TransportDirectorPage', compact('vehicleRequests'));
             }
@@ -1036,51 +1042,138 @@ class VehicleTemporaryRequestController extends Controller
 
                 if($data_drawer_value == 1)
                 {
-                    $data = VehicleTemporaryRequestModel::
-                                whereNotNull('transport_director_id')
-                                ->whereNull('vec_director_reject_reason')
-                                ->whereNull('start_km')
-                                ->whereNull('assigned_by')
-                                ->latest()
-                                ->get();
+                    $data = VehicleTemporaryRequestModel::with('approvedBy', 'requestedBy')
+                    ->where(function ($query) {
+                        // Check if how_many_days > 1 OR in_out_town is true
+                        $query->where(function ($q) {
+                            $q->where('how_many_days', '>', 2)
+                            ->OrWhere('in_out_town', false);
+                        })
+                        // Apply condition for hr_div_approved_by
+                        ->whereNotNull('transport_director_id')
+                        ->whereNull('assigned_by')
+                        ->whereNull('start_km')
+                        ->whereNull('assigned_by_reject_reason')
+                        ->whereNull('vec_director_reject_reason');
+                    })
+                    // Fallback to dir_approved_by if the first condition isn't true
+                    ->orWhere(function ($query) {
+                        $query->where('how_many_days', '<=', 2)
+                            ->where('in_out_town', true)
+                            ->whereNull('director_reject_reason')
+                            ->whereNull('assigned_by')
+                            ->whereNull('start_km')
+                            ->whereNull('assigned_by_reject_reason')
+                            ->whereNotNull('dir_approved_by');
+                    })
+                   
+                    
+                    ->latest()
+                    ->get();
                 }
                 elseif($data_drawer_value == 2)
                 {
-                    $data = VehicleTemporaryRequestModel::
-                                whereNotNull('transport_director_id')
-                                ->whereNull('vec_director_reject_reason')
-                                ->whereNull('start_km')
-                                ->whereNotNull('assigned_by')
-                                ->whereNotNull('vehicle_id')
-                                ->latest()
-                                ->get();
-                }
-                elseif($data_drawer_value == 3)
-                {
-                    $data = VehicleTemporaryRequestModel::
-                        whereNotNull('transport_director_id')
-                        ->whereNull('vec_director_reject_reason')
-                        ->whereNotNull('assigned_by')
-                        ->whereNotNull('start_km')
-                        ->whereNull('end_km')
-                        ->latest()
-                        ->get();
-                }
-                else
-                {
+                    
                     $data = VehicleTemporaryRequestModel::with('approvedBy', 'requestedBy')
-                    ->where(function ($query) 
-                        {
-                            // Check if how_many_days > 1 OR in_out_town is true
-                            $query->where(function ($q) 
-                                {
-                                    $q->where('how_many_days', '>', 2)
-                                    ->OrWhere('in_out_town', false);
-                                })
-                            // Apply condition for hr_div_approved_by
-                            ->whereNotNull('transport_director_id')
-                            ->whereNull('vec_director_reject_reason');
+                    ->where(function ($query) {
+                        // Check if how_many_days > 1 OR in_out_town is true
+                        $query->where(function ($q) {
+                            $q->where('how_many_days', '>', 2)
+                            ->OrWhere('in_out_town', false);
                         })
+                        // Apply condition for hr_div_approved_by
+                        ->whereNotNull('transport_director_id')
+                        ->whereNotNull('assigned_by')
+                        ->whereNull('start_km')
+                        ->whereNull('assigned_by_reject_reason')
+                        ->whereNull('vec_director_reject_reason');
+                    })
+                    // Fallback to dir_approved_by if the first condition isn't true
+                    ->orWhere(function ($query) {
+                        $query->where('how_many_days', '<=', 2)
+                            ->where('in_out_town', true)
+                            ->whereNull('director_reject_reason')
+                            ->whereNotNull('assigned_by')
+                            ->whereNull('start_km')
+                            ->whereNull('assigned_by_reject_reason')
+                            ->whereNotNull('dir_approved_by');
+                    })
+
+                    
+                    ->latest()
+                    ->get();
+                }
+                elseif($data_drawer_value == 3){
+                   
+                    $data = VehicleTemporaryRequestModel::with('approvedBy', 'requestedBy')
+                    ->where(function ($query) {
+                        // Check if how_many_days > 1 OR in_out_town is true
+                        $query->where(function ($q) {
+                            $q->where('how_many_days', '>', 2)
+                            ->OrWhere('in_out_town', false);
+                        })
+                        // Apply condition for hr_div_approved_by
+                        ->whereNotNull('transport_director_id')
+                        ->whereNotNull('assigned_by')
+                        ->whereNull('end_km')
+                        ->whereNull('assigned_by_reject_reason')
+                        ->whereNull('vec_director_reject_reason');
+                    })
+                    // Fallback to dir_approved_by if the first condition isn't true
+                    ->orWhere(function ($query) {
+                        $query->where('how_many_days', '<=', 2)
+                            ->where('in_out_town', true)
+                            ->whereNull('director_reject_reason')
+                            ->whereNotNull('assigned_by')
+                            ->whereNull('end_km')
+                            ->whereNull('assigned_by_reject_reason')
+                            ->whereNotNull('dir_approved_by');
+                    })
+                    
+                    ->latest()
+                    ->get();
+                }elseif($data_drawer_value == 4){
+                   
+                    $data = VehicleTemporaryRequestModel::with('approvedBy', 'requestedBy')
+                    ->where(function ($query) {
+                        // Check if how_many_days > 1 OR in_out_town is true
+                        $query->where(function ($q) {
+                            $q->where('how_many_days', '>', 2)
+                            ->OrWhere('in_out_town', false);
+                        })
+                        // Apply condition for hr_div_approved_by
+                        ->whereNotNull('transport_director_id')
+                        ->whereNotNull('assigned_by')
+                        ->whereNotNull('end_km')
+                        ->whereNull('assigned_by_reject_reason')
+                        ->whereNull('vec_director_reject_reason');
+                    })
+                    // Fallback to dir_approved_by if the first condition isn't true
+                    ->orWhere(function ($query) {
+                        $query->where('how_many_days', '<=', 2)
+                            ->where('in_out_town', true)
+                            ->whereNull('director_reject_reason')
+                            ->whereNotNull('assigned_by')
+                            ->whereNotNull('end_km')
+                            ->whereNull('assigned_by_reject_reason')
+                            ->whereNotNull('dir_approved_by');
+                    })
+                    
+                    ->latest()
+                    ->get();
+                }
+                else{
+                    $data = VehicleTemporaryRequestModel::with('approvedBy', 'requestedBy')
+                    ->where(function ($query) {
+                        // Check if how_many_days > 1 OR in_out_town is true
+                        $query->where(function ($q) {
+                            $q->where('how_many_days', '>', 2)
+                            ->OrWhere('in_out_town', false);
+                        })
+                        // Apply condition for hr_div_approved_by
+                        ->whereNotNull('transport_director_id')
+                        ->whereNull('vec_director_reject_reason');
+                    })
                     // Fallback to dir_approved_by if the first condition isn't true
                     ->orWhere(function ($query) 
                         {
@@ -1145,7 +1238,7 @@ class VehicleTemporaryRequestController extends Controller
                     data-end_date="' . $row->end_date . '"
                     data-end_time="' . $row->end_time . '"
                     data-start_location="' . $row->start_location . '&nbsp;&nbsp;&nbsp;' . $row->end_locations . '"
-                    data-passengers=\'' . json_encode($row->peoples) . '\'
+                    data-passengers=\'' . json_encode($row->peoples()->with('user')->get()) . '\'
                     data-materials=\'' . json_encode($row->materials) . '\'
                     data-dir_approved_by="' . $row->dir_approved_by . '"
                     data-director_reject_reason="' . $row->director_reject_reason . '"
@@ -1158,7 +1251,12 @@ class VehicleTemporaryRequestController extends Controller
                     data-assigned_by="' . $row->assigned_by . '"
                     data-assigned_by_reject_reason="' . $row->assigned_by_reject_reason . '"
                     data-vehicle_id="' . $row->vehicle_id . '"
-                    data-vehicle_plate="' . ($row->vehicle ? $row->vehicle->plate_number : '') . '"
+                    data-vehicle_plate="' . ($row->vehicle 
+                    ? $row->vehicle->plate_number . '</br>Driver: ' 
+                        . ($row->vehicle->driver ? ($row->vehicle->driver->user->first_name ?? 'none') . ' ' . ($row->vehicle->driver->user->last_name ?? 'none') : 'none') 
+                        . '</br>Phone: ' 
+                        . ($row->vehicle->driver ? ($row->vehicle->driver->user->phone_number ?? 'none') : 'none') 
+                    : '') . '"
                     data-start_km="' . $row->start_km . '"
                     data-end_km="' . $row->end_km . '"
                     title="Show Details">

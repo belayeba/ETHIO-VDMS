@@ -79,7 +79,7 @@
 
                     <div class="col-sm-12">
                         <div class="card card-body" >
-                            <h4 class="card-title">Map Display</h4>
+                            <h4 class="card-title"> @lang('messages.Map Display')</h4>
                             {{-- <p class="card-text">Map of Addis Ababa.</p> --}}
 
                             <!-- Map container inside the card body -->

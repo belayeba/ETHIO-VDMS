@@ -23,7 +23,7 @@ class VehiclesModel extends Model {
 
     protected $fillable = [
         'vin', 'make', 'model', 'year', 'plate_number', 'registered_by', 'mileage', 'vehicle_type',
-        'vehicle_category', 'fuel_amount', 'last_service', 'libre', 'insurance','rental_type',
+        'vehicle_category', 'fuel_amount', 'last_service', 'libre', 'insurance','rental_type','position',
         'next_service', 'driver_id', 'capacity','inspection_id', 'fuel_type', 'status', 'notes', 'created_at',
     ];
     protected static function boot() {
@@ -58,7 +58,7 @@ class VehiclesModel extends Model {
     }
 
     public function inspection():BelongsTo {
-        return $this->belongsTo( InspectionModel::class, 'inspection_id', 'inspection_id' );
+        return $this->belongsTo( InspectionModel::class, 'vehicle_id', 'vehicle_id' );
     }
     // Other relations
 }

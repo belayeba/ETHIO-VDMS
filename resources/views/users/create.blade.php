@@ -25,7 +25,7 @@
                 <div class="col-lg-8">
                     <div class="card">
                         <div class="card-header">
-                            <h4 class="header-title">User Create</h4>
+                            <h4 class="header-title">@lang('messages.Create Users')</h4>
                         </div>
                         <div class="card-body">
                             <form method="POST" class="needs-validation" action="{{ route('users.store') }}" novalidate>
@@ -71,6 +71,17 @@
 
                                     <div class="col-lg-6">
                                         <div class="position-relative mb-3">
+                                            <label class="form-label" for="validationTooltip04">@lang('messages.Phone Number')</label>
+                                            <input type="mob" class="form-control" name="phone"
+                                                id="validationTooltip04" pattern="^\+251\d{9}$" placeholder="Start with +251" required>
+                                            <div class="invalid-tooltip">
+                                                Please provide a valid phone.no.
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    {{-- <div class="col-lg-6">
+                                        <div class="position-relative mb-3">
                                             <label class="form-label" for="validationTooltip04">Username</label>
                                             <input type="text" class="form-control" name="username"
                                                 id="validationTooltip04" placeholder="username" required>
@@ -78,7 +89,7 @@
                                                 Please provide a valid Username.
                                             </div>
                                         </div>
-                                    </div>
+                                    </div> --}}
                                 </div>
 
                                 <div class="row">
@@ -113,7 +124,7 @@
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <div class="col-lg-6">
+                                    {{-- <div class="col-lg-6">
                                         <div class="position-relative mb-3">
                                             <label class="form-label" for="validationTooltipUsername">Email</label>
                                             <div class="input-group">
@@ -127,20 +138,11 @@
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
+                                    </div> --}}
 
-                                    <div class="col-lg-6">
-                                        <div class="position-relative mb-3">
-                                            <label class="form-label" for="validationTooltip04">Phone</label>
-                                            <input type="mob" class="form-control" name="phone"
-                                                id="validationTooltip04" pattern="^\+251\d{9}$" placeholder="Start with +251" required>
-                                            <div class="invalid-tooltip">
-                                                Please provide a valid phone.no.
-                                            </div>
-                                        </div>
-                                    </div>
+                                    
                                 </div>
-                                <div class="row">
+                                {{-- <div class="row">
                                     <div class="col-lg-6">
                                         <div class="position-relative mb-3">
                                             <label class="form-label" for="validationTooltip03">Password</label>
@@ -152,7 +154,7 @@
                                         </div>
                                     </div>
 
-                                    <div class="col-lg-6">
+                                    {{-- <div class="col-lg-6">
                                         <div class="position-relative mb-3">
                                             <label class="form-label" for="validationTooltip03">Confirm Password</label>
                                             <input type="text" class="form-control" id="validationTooltip03"
@@ -161,10 +163,10 @@
                                                 Please provide a confirmed password.
                                             </div>
                                         </div>
-                                    </div>
-                                </div>
+                                    </div> 
+                                </div> --}}
 
-                                <button class="btn btn-primary" type="submit">Save</button>
+                                <button class="btn btn-primary" type="submit">@lang('messages.save')</button>
 
                             </form>
                         </div> <!-- end card-body-->

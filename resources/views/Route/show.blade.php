@@ -95,7 +95,7 @@
                                                             <td>{{ $loop->iteration }}</td>
                                                             <td>{{ $data->first()->route->route_name }}</td>
                                                             <td>{{ $data->first()->route->vehicle->plate_number }}</td>
-                                                            <td>{{ $data->first()->route->vehicle->driver->user->username }}</td>
+                                                            <td>{{ $data->first()->route->vehicle->driver->user->first_name ?? null }}</td>
                                                             <td>{{ $data->first()->route->driver_phone }}</td>
                                                             <td>
                                                                 <button type="button" class="btn btn-info rounded-pill" 
@@ -140,8 +140,8 @@
                                                         <tr>
                                                             <td>{{ $loop->iteration }}</td> <!-- Loop iteration for numbering -->
                                                             <td>{{ optional($dat->user)->first_name ?? 'N/A' }}</td> <!-- Ensure user exists -->
-                                                            <td>{{ $dat->employee_start_location ?? 'N/A' }}</td> <!-- Ensure department exists -->
-                                                            <td>{{ $dat->user->phone_number ?? 'N/A' }}</td> <!-- Ensure department exists -->
+                                                            <td>{{ $data->first()->route->route_name  ?? 'N/A' }}</td> <!-- Ensure location exists -->
+                                                            <td>{{ $dat->user->phone_number ?? 'N/A' }}</td> <!-- Ensure phone exists -->
                                                             <td>
                                                                 <!-- Remove button/icon -->
                                                                 <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#warning_alert">

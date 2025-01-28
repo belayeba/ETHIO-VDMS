@@ -37,7 +37,7 @@ class ClusterController extends Controller {
 
     public function store( Request $request ) {
         $validation = Validator::make($request->all(),[
-            'name' => 'required|string|regex:/^[a-zA-Z]+$/|max:100',
+            'name' => 'required|string|regex:/^[a-zA-Z\s]+$/|max:100',
            // 'created_by' => 'required',
         ] );
         if ($validation->fails()) 
@@ -85,7 +85,7 @@ class ClusterController extends Controller {
     public function update( Request $request, ClustersModel $cluster ) {
         // dd( $request );
         $validation = Validator::make($request->all(),[
-            'name' => 'required|string|regex:/^[a-zA-Z]+$/|max:100',
+           'name' => 'required|string|regex:/^[a-zA-Z\s]+$/|max:100',
            // 'created_by' => 'required',
         ] );
         if ($validation->fails()) 

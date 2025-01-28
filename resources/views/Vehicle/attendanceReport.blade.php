@@ -39,7 +39,7 @@
                                     <!-- Plate Number Filter -->
                                     <div class="col-lg-4">
                                         <label for="selectPlateNumber" class="form-label">Vehicle Type</label>
-                                        <select id="selectPlateNumber" name="vehicle_type" class="form-select">
+                                        <select id="selectPlateNumber" name="vehicle_type" class="form-select" required>
                                             <option value="">Select Type</option>
                                             <option value="40/60">45/60 vehicle</option>
                                             <option value="whole_day">Whole day Minibus</option>

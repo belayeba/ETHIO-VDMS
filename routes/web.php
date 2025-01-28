@@ -31,6 +31,7 @@ use App\Http\Controllers\Vehicle\AttendanceController;
 use App\Http\Controllers\Vehicle\ReplacementController;
 use App\Http\Controllers\Letter\LetterController;
 use App\Http\Controllers\Letter\LetterManagement;
+use App\Http\Controllers\localeController;
 use App\Http\Controllers\Route\EmployeeChangeLocationController;
 use Illuminate\Foundation\Http\Middleware\ValidateCsrfToken;
 
@@ -142,6 +143,7 @@ Route::group(['middleware' => ['auth']], function()
                     Route::post('/updates/store','storeupdates')->name('user.update.store');
                     Route::post('/user/delete', 'destroy')->name('users.delete');
                     Route::get('/profile','profile')->name('user_profile');
+                    Route::get('/user/export','exportToPdf')->name('user_export');
                     Route::post('/profile/store','profile_save')->name('user.profile.store');
 
                 });
@@ -153,7 +155,7 @@ Route::group(['middleware' => ['auth']], function()
                     Route::post('/store',[VehicleVehicleRegistrationController::class, 'store'])->name('vehicleRegistration.store');
                     Route::delete('/delete/{vehicle}',[VehicleVehicleRegistrationController::class,'destroy'])->name('vehicle.destroy');
                     Route::put('/update/{vehicle}', [VehicleVehicleRegistrationController::class, 'update'])->name('vehicle.update');
-                
+                    Route::get('/list',[VehicleVehicleRegistrationController::class, 'list'])->name('vehicle.list');
                 });
             // Vehicle Permanent Request
             Route::controller(VehicleParmanentlyRequestController::class)->group(function()
@@ -308,7 +310,7 @@ Route::group(['middleware' => ['auth']], function()
                 });
 
                 Route::get('/vehicle/report/data', [Daily_KM_Calculation::class, 'vehicleReport'])->name('dailyreport.vehicleReport');
-                Route::get('/vehicle/report/filterr', [Daily_KM_Calculation::class, 'filterVehicleReport'])->name('dailyreport.filterVehicleReport');
+                Route::get('/vehicle/report/filter', [Daily_KM_Calculation::class, 'filterVehicleReport'])->name('dailyreport.filterVehicleReport');
 
             Route::controller(Fuel_QuataController::class)->group(function ()
                 {
@@ -461,6 +463,8 @@ Route::group(['middleware' => ['auth']], function()
                 });
                  
             Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home'); 
+
+            Route::get('locale/{lang}', [LocaleController::class, 'setlocale'])->name('locale.switch');
 
     Route::group([
         'prefix'=>'cluster',

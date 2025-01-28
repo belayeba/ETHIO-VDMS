@@ -58,7 +58,7 @@
                                 <div class="col-md-4">
                                     <div class="card">
                                         <div class="card-header">
-                                            <h4 class="header-title mb-0">Route Registration</h4>
+                                            <h4 class="header-title mb-0">@lang('messages.Route Registration')</h4>
                                         </div>
                                         <div class="card-body">
                                             <form method="POST" action="{{ route('route.store') }}" accept-charset="UTF-8" name="route_registration_form" id="route_registration_form" enctype="multipart/form-data">
@@ -71,10 +71,10 @@
                                                     </div>
                                                 </div>
                                                 <div class="row mb-3">
-                                                    <label class="form-label" for="vehicle">Vehicle</label>
+                                                    <label class="form-label" for="vehicle">@lang('messages.Vehicle')</label>
                                                     <div class="col-mb-6">
                                                         <select id="vehicleCategory" name="vehicle_id" class="form-select" required>
-                                                            <option value="">Select Vehicle</option>
+                                                            <option value="">@lang('messages.Select Vehicle')</option>
                                                             @foreach($vehicles as $vehicle)
                                                                 <option value="{{ $vehicle->vehicle_id }}">{{ $vehicle->plate_number }}</option>
                                                             @endforeach
@@ -83,18 +83,18 @@
                                                 </div>
                                                 <div class="position-relative mb-3">
                                                     <div class="mb-6 position-relative">
-                                                        <label class="form-label">Driver Name</label>
-                                                        <input type="text" name="driver_name" id="driver_name" class="form-control" placeholder="Enter Driver Phone Number" required>
+                                                        <label class="form-label">@lang('messages.Driver Name')</label>
+                                                        <input type="text" name="driver_name" id="driver_name" class="form-control" placeholder="Enter Driver Name" required>
                                                     </div>
                                                 </div>
                                                 <div class="position-relative mb-3">
                                                     <div class="mb-6 position-relative">
-                                                        <label class="form-label">Driver Phone Number</label>
+                                                        <label class="form-label">@lang('messages.Driver Phone number')</label>
                                                         <input type="text" name="driver_phone" id="driver_phone" class="form-control" placeholder="Enter Driver Phone Number" required>
                                                     </div>
                                                 </div>
                                                 <div class="d-flex justify-content-center">
-                                                    <button type="submit" class="btn btn-primary">Save</button>
+                                                    <button type="submit" class="btn btn-primary">@lang('messages.save')</button>
                                                 </div>
                                             </form>
                                         </div>
@@ -105,7 +105,7 @@
                                 <div class="col-md-8">
                                     <div class="card">
                                         <div class="card-header">
-                                            <h4 class="header-title mb-0">Route List</h4>
+                                            <h4 class="header-title mb-0">@lang('messages.Route List')</h4>
                                         </div>
                                         <div class="card-body">
                                             <div class="table-responsive">
@@ -113,10 +113,10 @@
                                                     <thead>
                                                         <tr>
                                                             <th>#</th>
-                                                            <th>Route</th>
-                                                            <th>Vehicle</th>
-                                                            <th>Driver Phone</th>
-                                                            <th>Action</th>
+                                                            <th>{{ __('messages.Route') }}</th>
+                                                            <th>{{ __('messages.Vehicle') }}</th>
+                                                            <th>{{ __('messages.Driver Phone number') }}</th>
+                                                            <th>{{ __('messages.Action') }}</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
@@ -134,6 +134,7 @@
                                                                     data-bs-toggle="modal" data-bs-target="#viewRouteModal" 
                                                                     data-id="{{ $data->id }}" 
                                                                     data-route-name="{{ $data->route_name }}" 
+                                                                    data-driver="{{ $data->driver_name }}"
                                                                     data-vehicle-plate="{{ $data->vehicle->plate_number }}"
                                                                     data-driver-phone="{{ $data->driver_phone }}">
                                                                     <i class="ri-eye-line"></i>
@@ -165,18 +166,22 @@
                                                                 <div class="modal-body">
                                                                     <div class="row mb-3">
                                                                         <div class="col-md-6">
-                                                                            <label for="view_route_name" class="form-label"><strong>Route Name</strong></label>
+                                                                            <label for="view_route_name" class="form-label"><strong>@lang('messages.Route')</strong></label>
                                                                             <p id="view_route_name"></p>
                                                                         </div>
                                                                         <div class="col-md-6">
-                                                                            <label for="view_vehicle_plate" class="form-label"><strong>Vehicle Plate</strong></label>
+                                                                            <label for="view_vehicle_plate" class="form-label"><strong>@lang('messages.Vehicle')</strong></label>
                                                                             <p id="view_vehicle_plate"></p>
                                                                         </div>
                                                                     </div>
                                                                     <div class="row mb-3">
                                                                         <div class="col-md-6">
-                                                                            <label for="view_driver_phone" class="form-label"><strong>Driver Phone</strong></label>
+                                                                            <label for="view_driver_phone" class="form-label"><strong>@lang('messages.Driver Phone number')</strong></label>
                                                                             <p id="view_driver_phone"></p>
+                                                                        </div>
+                                                                        <div class="col-md-6">
+                                                                            <label for="view_driver_name" class="form-label"><strong>@lang('messages.Driver Name')</strong></label>
+                                                                            <p id="view_driver_name"></p>
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -197,14 +202,14 @@
                                                                             <input type="hidden" name="route_id" id="edit_route_id">
                                                         
                                                                             <div class="mb-3">
-                                                                                <label for="edit_route_name" class="form-label">Route Name</label>
+                                                                                <label for="edit_route_name" class="form-label">@lang('messages.Route')</label>
                                                                                 <input type="text" class="form-control" name="route_name" id="edit_route_name" required>
                                                                             </div>
                                                         
                                                                             <div class="mb-3">
-                                                                                <label for="edit_vehicle_id" class="form-label">Vehicle</label>
+                                                                                <label for="edit_vehicle_id" class="form-label">@lang('messages.Vehicle')</label>
                                                                                 <select class="form-select" name="vehicle_id" id="edit_vehicle_id" required>
-                                                                                    <option value="">Select Vehicle</option>
+                                                                                    <option value="">@lang('messages.Select Vehicle')</option>
                                                                                     @foreach($vehicles as $vehicle)
                                                                                         <option value="{{ $vehicle->vehicle_id }}">{{ $vehicle->plate_number }}</option>
                                                                                     @endforeach
@@ -212,7 +217,7 @@
                                                                             </div>
                                                         
                                                                             <div class="mb-3">
-                                                                                <label for="edit_driver_phone" class="form-label">Driver Phone</label>
+                                                                                <label for="edit_driver_phone" class="form-label">@lang('messages.Driver Phone number')</label>
                                                                                 <input type="text" class="form-control" name="driver_phone" id="edit_driver_phone" required>
                                                                             </div>
                                                         
@@ -259,10 +264,12 @@
             let routeName = this.getAttribute('data-route-name');
             let vehiclePlate = this.getAttribute('data-vehicle-plate');
             let driverPhone = this.getAttribute('data-driver-phone');
+            let driverName = this.getAttribute('data-driver');
             
             document.getElementById('view_route_name').textContent = routeName;
             document.getElementById('view_vehicle_plate').textContent = vehiclePlate;
             document.getElementById('view_driver_phone').textContent = driverPhone;
+            document.getElementById('view_driver_name').textContent =driverName;
         });
     });
 

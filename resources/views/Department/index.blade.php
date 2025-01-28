@@ -45,17 +45,17 @@
                             <div class="col-md-4">
                                 <div class="card">
                                     <div class="card-header">
-                                        <h4 class="header-title mb-0">New Department</h4>
+                                        <h4 class="header-title mb-0">@lang('messages.New Department')</h4>
                                     </div>
                                     <div class="card-body">
                                         <form method="POST" action="{{ route('department.store') }}" accept-charset="UTF-8" name="department-form" id="department-form" enctype="multipart/form-data">
                                             @csrf
 
                                             <div class="col-mb-3 form-group {{ $errors->has('cluster') ? 'has-error' : '' }}">
-                                                <label for="cluster" class=" control-label">Cluster</label>
+                                                <label for="cluster" class=" control-label">@lang('messages.Cluster')</label>
                                                     
                                                 <select class="form-control select" id="cluster_id" name="cluster_id" data-fouc required>
-                                                    <option value="">Select Cluster</option>
+                                                    <option value="">@lang('messages.Select cluster')</option>
                                                     @foreach ($clusters as $item)
                                                     
                                                     <option value="{{ $item->cluster_id }}">
@@ -69,11 +69,11 @@
                                             </div>
                                             
                                             <div class="mb-3">
-                                                <label for="nameInput" class="form-label">Name <strong class="text-danger">*</strong></label>
-                                                <input type="text" class="form-control" id="nameInput" name="name" placeholder="Name">
+                                                <label for="nameInput" class="form-label">@lang('messages.Name') <strong class="text-danger">*</strong></label>
+                                                <input type="text" class="form-control" id="nameInput" name="name" placeholder=@lang('messages.Name') >
                                             </div>
                                             <div class="d-flex justify-content-center">
-                                                <button type="submit" class="btn btn-primary">Save</button>
+                                                <button type="submit" class="btn btn-primary">@lang('messages.save')</button>
                                             </div>
                                         </form>
                                     </div>
@@ -84,17 +84,17 @@
                             <div class="col-md-8">
                                 <div class="card">
                                     <div class="card-header">
-                                        <h4 class="header-title mb-0">Department List</h4>
+                                        <h4 class="header-title mb-0">@lang('messages.Department List')</h4>
                                     </div>
                                     <div class="card-body">
                                         <div class="table-responsive">
                                             <table id="lms_table" class="table">
                                                 <thead>
                                                     <tr>
-                                                        <th scope="col">#</th>
-                                                        <th scope="col">Name</th>
-                                                        <th scope="col">Cluster</th>
-                                                        <th scope="col">Action</th>
+                                                        <th scope="col">{{ '#' }}</th>
+                                                        <th scope="col">{{ __('messages.Name') }}</th>
+                                                        <th scope="col">{{ __('messages.Cluster') }}</th>
+                                                        <th scope="col">{{ __('messages.Action') }}</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>

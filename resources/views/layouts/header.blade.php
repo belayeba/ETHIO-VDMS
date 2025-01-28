@@ -23,29 +23,34 @@
           <ul class="topbar-menu d-flex align-items-center gap-3">
              
 
-              <li class="dropdown">
-                  <a class="nav-link dropdown-toggle arrow-none" data-bs-toggle="dropdown" href="#" role="button"
-                      aria-haspopup="false" aria-expanded="false">
-                      <img src="{{ asset('assets/images/flags/us.jpg') }}" alt="user-image" class="me-0 me-sm-1" height="12">
-                      <span class="align-middle d-none d-lg-inline-block">English</span> <i
-                          class="ri-arrow-down-s-line d-none d-sm-inline-block align-middle"></i>
-                  </a>
-                  <div class="dropdown-menu dropdown-menu-end dropdown-menu-animated">
-
-                      <!-- item-->
-                      <a href="javascript:void(0);" class="dropdown-item">
-                          <img src="{{ asset('assets/images/flags/Ethiopia.png') }}" alt="user-image" class="me-1" height="12">
-                          <span class="align-middle">Amharic</span>
-                      </a>
-
-                      <!-- item-->
-                      {{-- <a href="javascript:void(0);" class="dropdown-item">
-                          <img src="{{ asset('assets/images/flags/italy.jpg') }}" alt="user-image" class="me-1" height="12"> <span
-                              class="align-middle">Italian</span>
-                      </a> --}}
-
-                  </div>
-              </li>
+            <li class="dropdown">
+                <a class="nav-link dropdown-toggle arrow-none" data-bs-toggle="dropdown" role="button" aria-haspopup="false" aria-expanded="false">
+                    @php
+                        $currentLang = session('locale', 'en'); // Default to English
+                    @endphp
+                    <img src="{{ asset($currentLang === 'am' ? 'assets/images/flags/Ethiopia.png' : 'assets/images/flags/us.jpg') }}" 
+                         alt="user-image" class="me-0 me-sm-1" height="12">
+                    <span class="align-middle d-none d-lg-inline-block">
+                        {{ $currentLang === 'am' ? 'Amharic' : 'English' }}
+                    </span>
+                    <i class="ri-arrow-down-s-line d-none d-sm-inline-block align-middle"></i>
+                </a>
+                <div class="dropdown-menu dropdown-menu-end dropdown-menu-animated">
+                    <!-- Current language as the first item -->
+                    @if ($currentLang === 'am')
+                        <a href="{{ route('locale.switch', ['lang' => 'en']) }}" class="dropdown-item">
+                            <img src="{{ asset('assets/images/flags/us.jpg') }}" alt="English flag" class="me-1" height="12">
+                            <span class="align-middle">English</span>
+                        </a>
+                    @else
+                        <a href="{{ route('locale.switch', ['lang' => 'am']) }}" class="dropdown-item">
+                            <img src="{{ asset('assets/images/flags/Ethiopia.png') }}" alt="Amharic flag" class="me-1" height="12">
+                            <span class="align-middle">Amharic</span>
+                        </a>
+                    @endif
+                </div>
+            </li>
+            
 
 
               <li class="dropdown notification-list">

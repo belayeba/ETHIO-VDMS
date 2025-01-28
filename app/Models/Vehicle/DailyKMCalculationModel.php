@@ -64,11 +64,8 @@ class DailyKMCalculationModel extends Model {
             {
                 if(!$this->morning_km)
                     {
-                        if($lastRecorded->afternoon_km)
-                            {
-                            return $this->afternoon_km - $lastRecorded->afternoon_km;
-                            }
-                        return $this->afternoon_km - $lastRecorded->morning_km;
+                        
+                        return 0;
                     }
                 else if($lastRecorded->afternoon_km)
                     {
@@ -81,12 +78,15 @@ class DailyKMCalculationModel extends Model {
     
     public function getDailyKmAttribute()
     {
-        // Calculate the difference between afternoon_km and morning_km
-        if($this->afternoon_km)
-         {
-            return $this->afternoon_km - $this->morning_km;
-         }
-        return $this->morning_km;
+        if(!$this->afternoon_km)
+            { 
+            return 0;
+            }    
+        else
+            {           
+                return $this->afternoon_km - $this->morning_km;
+            }
+
     }
 
 }

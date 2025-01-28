@@ -27,7 +27,7 @@ class permissionseeder extends Seeder {
         // PermissionGroup::query()->delete();
 
         $adminRole = Role::create( [ 'name' => 'Admin' ] );
-        $editorRole = Role::create( [ 'name' => 'Editor' ] );
+        
 
         $permission_data = [
             [
@@ -102,6 +102,9 @@ class permissionseeder extends Seeder {
                 'permissions' => [
                     'Request Maintenance',
                     'Approve Maintenance',
+                    'Inspect Maintenance',
+                    'Maintenance for Dispatcher',
+                    'Final Maintenance',
                 ]
             ],
             [

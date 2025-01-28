@@ -33,20 +33,23 @@
                     <div class="col-12">
                         <div class="card">
                             <div class="card-header d-flex justify-content-between align-items-center flex-wrap gap-2">
-                                <h4 class="header-title mb-0">User Lists</h4>
-                                <a href="{{ route('user_create') }}" class="btn btn-primary rounded-pill">Create</a>
+                                <h4 class="header-title mb-0">@lang('messages.User Lists')</h4>
+                                <div>
+                                    <a href="{{ route('user_create') }}" class="btn btn-primary rounded-pill">@lang('messages.Create')</a>
+                                    <a href="{{ route('user_export') }}" class="btn btn-info rounded-pill">@lang('messages.Export')</a>
+                                </div>
                             </div>
                             <div class="card-body">
                                 <div class="table-responsive">
                                     <table class="table table-centered table-nowrap user_datatable">
                                         <thead>
                                             <tr>
-                                                <th scope="col">Name</th>
-                                                <th scope="col">Email</th>
-                                                <th scope="col">Phone</th>
-                                                <th scope="col">Department</th>
-                                                <th scope="col">Start date</th>
-                                                <th scope="col">Action</th>
+                                                <th scope="col">@lang('messages.Name')</th>
+                                                <th scope="col">@lang('messages.Email')</th>
+                                                <th scope="col">@lang('messages.Phone Number')</th>
+                                                <th scope="col">@lang('messages.Department')</th>
+                                                <th scope="col">@lang('messages.Start Date')</th>
+                                                <th scope="col">@lang('messages.Action')</th>
                                             </tr>
                                         </thead>
                                         <tbody>

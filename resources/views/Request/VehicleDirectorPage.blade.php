@@ -35,6 +35,7 @@
                                             <a class="dropdown-item" onclick="updateState(1, 'PENDING')">PENDING</a>
                                             <a class="dropdown-item" onclick="updateState(2, 'ASSIGNED')">ASSIGNED</a>
                                             <a class="dropdown-item" onclick="updateState(3, 'DISPATCHED')">DISPATCHED</a>
+                                            <a class="dropdown-item" onclick="updateState(4, 'DISPATCHED')">RETURNED</a>
                                         </div>
                                     </div>
                                     {{-- <button type="button" class="btn btn-secondary rounded-pill" autofocus onclick="updateState(1)">PENDING REQUEST</button>
@@ -108,8 +109,8 @@
 
                             <!-- this is for the assign  modal -->
                             <div class="modal fade" id="staticaccept" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                                <div class="modal-dialog modal-lg modal-dialog-scrollable">
-                                    <div class="modal-content">
+                                <div class="modal-dialog modal-lg">                                   
+                                     <div class="modal-content">
                                         <form method="POST" action="{{route('simirit_approve_temporary')}}">
                                             @csrf   
                                             <div class="modal-header">
@@ -439,7 +440,7 @@
             var passengerList = '';
             if (passengers) {
                 passengers.forEach(function(person) {
-                    passengerList += person.user.first_name + '<br>';
+                    passengerList += person.user.first_name + ' ' + person.user.middle_name  + '<br>';
                 });
             }
             modal.find('[data-field="passengers"]').html(passengerList);
@@ -449,8 +450,7 @@
             var materialList = '';
             if (materials) {
                 materials.forEach(function(material) {
-                    materialList += 'Material name: ' + material.material_name + ',<br>' +
-                        'Material Weight: ' + material.weight + '.<br>';
+                    materialList +=  material.material_name + ' ' + material.weight + '.<br>';
                 });
             }
             modal.find('[data-field="materials"]').html(materialList);

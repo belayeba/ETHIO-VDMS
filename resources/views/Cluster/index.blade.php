@@ -57,17 +57,17 @@
                                 <div class="col-md-4">
                                     <div class="card">
                                         <div class="card-header">
-                                            <h4 class="header-title mb-0">New Cluster</h4>
+                                            <h4 class="header-title mb-0">@lang('messages.New Cluster')</h4>
                                         </div>
                                         <div class="card-body">
                                             <form method="POST" action="{{ route('cluster.store') }}" accept-charset="UTF-8" name="cluster-form" id="cluster-form" enctype="multipart/form-data">
                                                 @csrf
                                                 <div class="mb-3">
-                                                    <label for="nameInput" class="form-label">Name <strong class="text-danger">*</strong></label>
-                                                    <input type="text" class="form-control" id="nameInput"  maxlength="100" name="name" placeholder="Name">
+                                                    <label for="nameInput" class="form-label">@lang('messages.Name') <strong class="text-danger">*</strong></label>
+                                                    <input type="text" class="form-control" id="nameInput" name="name" placeholder=@lang('messages.Name') >
                                                 </div>
                                                 <div class="d-flex justify-content-center">
-                                                    <button type="submit" class="btn btn-primary">Save</button>
+                                                    <button type="submit" class="btn btn-primary">@lang('messages.save')</button>
                                                 </div>
                                             </form>
                                         </div>
@@ -78,7 +78,7 @@
                                 <div class="col-md-8">
                                     <div class="card">
                                         <div class="card-header">
-                                            <h4 class="header-title mb-0">Cluster List</h4>
+                                            <h4 class="header-title mb-0">@lang('messages.Cluster list')</h4>
                                         </div>
                                         <div class="card-body">
                                             <div class="table-responsive">
@@ -86,8 +86,8 @@
                                                     <thead>
                                                         <tr>
                                                             <th> {{' # '}} </th>
-                                                            <th>{{ 'Name' }}</th>
-                                                            <th>{{ 'Action' }}</th>
+                                                            <th>{{ __('messages.Name') }}</th>
+                                                            <th>{{ __('messages.Action') }}</th>                                                            
                                                         </tr>
                                                     </thead>
                                                     <tbody>

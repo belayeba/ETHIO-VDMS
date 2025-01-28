@@ -100,37 +100,38 @@ class DriverRegistrationController extends Controller {
     // Update a driver
 
     public function update( Request $request, $id ) {
+        // dd($request);
         try {
             $driver = DriversModel::findOrFail( $id );
 
             $validator = Validator::make( $request->all(), [
-                'user_id' => 'required|uuid|exists:users,id',
-                'license_number' => 'required|string|max:255',
+                // 'driver_id' => 'required|uuid|exists:drivers,driver_id',
+                // 'license_number' => 'required|string|max:255',
                 'license_expiry_date' => 'required|date|after:today',
-                'license_file' => 'sometimes|required|file|mimes:pdf,jpg,jpeg',
-                'phone_number' => 'required|string|max:20',
-                'notes' => 'nullable|string',
+                // 'license_file' => 'sometimes|required|file|mimes:pdf,jpg,jpeg',
+                // 'notes' => 'nullable|string',
             ] );
-
+            dd($validator->fails());
+        
             if ( $validator->fails() ) {
                 return redirect()->back()->with('error_message','All fields are required',);
             }
 
             $file = $request->file( 'license_file' );
-
+            dd($file);
             $storagePath = storage_path( 'app/public/Drivers' );
             if ( !file_exists( $storagePath ) ) {
                 mkdir( $storagePath, 0755, true );
             }
             $license = time() . '_' . $file->getClientOriginalName();
+            dd($license);
             $file->move( $storagePath, $license );
             $driver->update( [
-                'user_id' => $request->input( 'user_id' ),
+                'driver_id' => $request->input( 'driver_id' ),
                 'license_number' => $request->input( 'license_number' ),
                 'license_expiry_date' => $request->input( 'license_expiry_date' ),
                 'status' => $request->input( 'status', 'active' ),
                 'license_file' => $license,
-                'phone_number' => $request->input( 'phone_number' ),
                 'notes' => $request->input( 'notes' ),
             ] );
             return redirect()->back()->with('success_message','Driver updated successfully.',);

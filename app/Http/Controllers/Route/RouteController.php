@@ -71,10 +71,10 @@ class RouteController extends Controller
         }
     public function registerRoute( Request $request ) 
         {
-            //dd( $request );
+            // dd( $request );
             $validator = Validator::make( $request->all(), [
                 'route_name' => 'required|string',
-                'driver_phone' => [ 'required', 'regex:/^(?:\+251|0)[1-9]\d{8}$/' ],
+               'driver_phone' => ['required', 'regex:/^(?:\+251|0)[1-9]\d{8}$/'],
                 'driver_name' =>'required|string|max:60',
                 'vehicle_id' => 'required|uuid|exists:vehicles,vehicle_id',
             ] );

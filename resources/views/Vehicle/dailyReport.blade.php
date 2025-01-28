@@ -92,8 +92,8 @@
                                                 <th>Date</th>
                                                 <th>Plate Number</th>
                                                 <th>Morning KM</th>
-                                                <th>Afternoon KM</th>
                                                 <th>Night KM Difference </th>
+                                                <th>Afternoon KM</th>
                                                 <th>Day KM Difference </th>
                                             </tr>
                                         </thead>
@@ -105,8 +105,8 @@
                                                     <td>{{ $km->date }}</td>
                                                     <td>{{ $km->plate_number  }}</td>
                                                     <td>{{ $km->morning_km }}</td>
-                                                    <td>{{ $km->afternoon_km }}</td>
                                                     <td>{{ $km->night_km  }}</td>
+                                                    <td>{{ $km->afternoon_km }}</td>
                                                     <td>{{ $km->daily_km  }}</td>
 
                                                 </tr>

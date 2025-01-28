@@ -7,6 +7,7 @@ use Spatie\Permission\Models\Role;
 use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
+use App\Models\userInfo;
 use App\Models\Organization\DepartmentsModel; 
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Facades\Validator;
@@ -15,6 +16,9 @@ use Illuminate\Support\Str;
 use Hash;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Redirect;
+use Dompdf\Dompdf;
+use Dompdf\Options;
+use Illuminate\Support\Facades\DB;
 
 class usercontroller extends Controller
 {
@@ -139,12 +143,8 @@ class usercontroller extends Controller
             'first_name' => 'required|string|max:50',
             'middle_name' => 'required|string|max:50',
             'last_name' => 'required|string|max:50',
-            'username' => 'required|string|unique:users,username',
             'roles' => 'required|string',
             'department' => 'required|string|max:255',
-            'email' => 'required|string|max:100|unique:users,email',
-            'password' => 'required|string|min:8',
-            'confirm' => 'required|string|min:8|same:password',
             'phone' => 'required|string',    
         ]);
         // If validation fails, return an error response
@@ -157,17 +157,26 @@ class usercontroller extends Controller
         try{
             $currentUser = auth()->user();
             $data = $request->all();
+            $plainPassword = $this->generateRandomPassword();
+            $password = Hash::make($plainPassword);
+            $email = $request->input('first_name').'.'.$request->input('middle_name').'@aii.et';
+            // dd($email);
         
-            $data['password'] = Hash::make($data['password']);
-            $data['username']=$request->input('username') ?? null;
+            $data['password'] = $password;
             $data['first_name'] = $request->input('first_name');
+            $data['middle_name'] = $request->input('middle_name');
             $data['last_name'] = $request->input('last_name');
-            $data['email'] = $request->input('email');
+            $data['email'] = $email;
             $data['department_id'] = $request->input('department');
             $data['phone_number'] = $request->input('phone');
             $data['created_By'] = $currentUser;
             $user = User::create($data);
             $user->assignRole($request->input('roles'));
+
+            $info['name'] = $request->input('first_name').' '.$request->input('middle_name');
+            $info['email'] = $email;
+            $info['password'] = $plainPassword;
+            $user_info = userInfo::create($info);
 
             return redirect()->route('user_list')->with('success_message', 'User is registered successfully');
 
@@ -177,6 +186,40 @@ class usercontroller extends Controller
                 ->withErrors(['unexpected_error' => 'Unexpected error occurred while trying to process your request.']);
         }   
     
+    }
+
+    private function generateRandomPassword($length = 8)
+    {
+        $characters = '###abcdefghijklmnopqrstuvwxyz$$$ABCDEFGHIJKLMNOPQRSTUVWXYZ!!&&__--1234567890@@@';
+        $password = '';
+        for ($i = 0; $i < $length; $i++) {
+            $password .= $characters[rand(0, strlen($characters) - 1)];
+        }
+        return $password;
+    }
+
+   
+    public function exportToPdf()
+    {
+        // Fetch data from a table
+        $data = userInfo::get();
+
+        $pdfContent =  view('users.export', compact('data'));
+
+        // Set up dompdf options
+        $options = new Options();
+        $options->set('isHtml5ParserEnabled', true);
+        $options->set('isPhpEnabled', true);
+        
+        $dompdf = new Dompdf($options);
+        $dompdf->loadHtml($pdfContent);
+        
+        
+        $dompdf->setPaper('A4', 'portrait');
+        
+        $dompdf->render();
+
+        return $dompdf->stream('users_data.pdf');
     }
 
     /**
@@ -203,7 +246,7 @@ class usercontroller extends Controller
             'first_name' => 'required|string|max:50',
             'middle_name' => 'required|string|max:50',
             'last_name' => 'required|string|max:50',
-            'username' => ['required','string',Rule::unique('users', 'username')->ignore($request->id),],
+            // 'username' => ['required','string',Rule::unique('users', 'username')->ignore($request->id),],
             'roles' => 'required|string',
             'department' => 'required|string|max:255',
             'email' => ['required','string','max:100',Rule::unique('users', 'email')->ignore($request->id),],
@@ -238,7 +281,7 @@ class usercontroller extends Controller
                 'first_name' => $data['first_name'],
                 'middle_name' => $data['middle_name'],
                 'last_name' => $data['last_name'],
-                'username' => $data['username'],
+                // 'username' => $data['username'],
                 'email' => $data['email'],
                 'department_id' => $data['department'],
                 'phone_number' => $data['phone'],

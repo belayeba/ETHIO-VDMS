@@ -335,8 +335,8 @@ class Daily_KM_Calculation extends Controller
                         'plate_number' => $km->vehicle->plate_number ?? 'N?A',
                         'morning_km' => $km->morning_km ?? 'N/A',
                         'afternoon_km' => $km->afternoon_km,
-                        'daily_km' => $km->afternoon_km - $km->morning_km,
-                        'night_km' => $km->night_km,
+                        'daily_km' => $km->getDailyKmAttribute($km->vehicle->vehicle_id),
+                        'night_km' => $km->getNightKmAttribute($km->vehicle->vehicle_id),
                     ];
                 });
         

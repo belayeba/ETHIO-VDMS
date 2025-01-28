@@ -80,7 +80,7 @@
                                                         <select id="driver" name="driver" class="form-select" required>
                                                             <option value="">Select Driver</option>
                                                             @foreach($drivers as $driver)
-                                                                <option value="{{ $driver->driver_id }}">{{ $driver->user->username }}</option>
+                                                                <option value="{{ $driver->driver_id }}">{{ $driver->user->first_name }} {{ $driver->user->middle_name }}</option>
                                                             @endforeach
                                                         </select>
                                                     </div>
