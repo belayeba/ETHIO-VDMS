@@ -83,9 +83,9 @@ class VehicleTemporaryRequestController extends Controller
                     data-start_location="' . $row->start_location . '&nbsp;&nbsp;&nbsp;' . $row->end_locations . '"
                     data-passengers=\'' . json_encode($row->peoples()->with('user')->get()) . '\'
                     data-materials=\'' . json_encode($row->materials) . '\'
-                    data-dir_approved_by="' . $row->dir_approved_by . '"
+                    data-dir_approved_by="' . ($row->dir_approved_by?  $row->approvedBy->first_name . ' ' . $row->approvedBy->middle_name:"Pending"). '"
                     data-director_reject_reason="' . $row->director_reject_reason . '"
-                    data-div_approved_by="' . $row->div_approved_by . '"
+                    data-div_approved_by="' . ($row->div_approved_by? $row->div_approvedBy->first_name . ' ' . $row->div_approvedBy->middle_name:"Pending")  . '"
                     data-cluster_director_reject_reason="' . $row->cluster_director_reject_reason . '"
                     data-hr_div_approved_by="' . $row->hr_div_approved_by . '"
                     data-hr_director_reject_reason="' . $row->hr_director_reject_reason . '"
@@ -127,13 +127,13 @@ class VehicleTemporaryRequestController extends Controller
         
             }
         public function return_people($id)
-           {
-              $people = TripPersonsModel::where('request_id',$id)->get();
-               if(!$people)
-                 {
-                    return [];
-                 }
-           }
+            {
+                $people = TripPersonsModel::where('request_id',$id)->get();
+                if(!$people)
+                    {
+                        return [];
+                    }
+            }
         // Send Vehicle Request Temporary
         public function RequestVehicleTemp(Request $request) 
             {
