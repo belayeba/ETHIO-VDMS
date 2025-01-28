@@ -398,7 +398,7 @@
                                                 <th>Requested Date</th>
                                                 <th>Status</th>
                                                 <th>location</th>
-                                                <th>Actions</th>
+                                                <th>Action</th>
                                             </tr>
                                         </thead>
 
@@ -701,15 +701,15 @@
                      const messages = [
                         {
                             condition: button.data('dir_approved_by') && !button.data('director_reject_reason'),
-                            message: '<span style="color: green;">Approved by Director</span>'
+                            message: '<span style="color: green;"> Approved By '+ button.data('dir_approved_by')+'(Division Director)</span>'
                         },
                         {
                             condition: button.data('director_reject_reason') && button.data('dir_approved_by'),
-                            message: '<span style="color: red;">Rejected by Director</span>'
+                            message: '<span style="color: red;">Rejected By '+ button.data('dir_approved_by')+'(Director)</span>'
                         },
                         {
                             condition: button.data('div_approved_by') && !button.data('cluster_director_reject_reason'),
-                            message: '<span style="color: green;">Approved by Division-Director</span>'
+                            message: '<span style="color: green;">Approved By ' + button.data('div_approved_by')+  '(Clustor Director)</span>'
                         },
                         {
                             condition: button.data('cluster_director_reject_reason') && button.data('div_approved_by'),
