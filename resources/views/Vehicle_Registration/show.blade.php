@@ -242,7 +242,7 @@
                                             <div class="tab-pane fade" id="third">
                                                 <div class="row">
                                                     <div class="col-12">
-                                                        <div class="row mb-3">
+                                                        {{-- <div class="row mb-3">
                                                             <label class="col-md-3 col-form-label"
                                                                 for="driver">@lang('messages.Driver')</label>
                                                             <div class="col-md-9">
@@ -256,7 +256,7 @@
                                                                     @endforeach
                                                                 </select>
                                                             </div>
-                                                        </div>
+                                                        </div> --}}
 
                                                         <div class="row mb-3">
                                                             <label class="col-md-3 col-form-label"
@@ -483,12 +483,14 @@
                                                                         <!-- Second Column -->
                                                                         <div class="col-md-6">
                                                                             <div class="mb-3">
-                                                                                <label for="editFuelType"
+                                                                                <label for="fuel_type"
                                                                                     class="form-label">@lang('messages.Fuel Type')</label>
-                                                                                <input type="text"
-                                                                                    class="form-control"
-                                                                                    id="editFuelType" name="fuel_type"
-                                                                                    data-field="fuel_type" required>
+                                                                                <select id="fuel_type"
+                                                                                    name="fuel_type"
+                                                                                    class="form-select" required>
+                                                                                    <option value="Benzene" {{ $item->fuel_type == 'Benzene' ? 'selected' : '' }}>Benzene</option>
+                                                                                    <option value="Diesel"{{ $item->fuel_type == 'Diesel' ? 'selected' : '' }}> Diesel</option>
+                                                                                </select>
                                                                             </div>
 
                                                                             <div class="mb-3">
@@ -511,7 +513,7 @@
                                                                                     data-field="next_service" required>
                                                                             </div>
 
-                                                                            <div class="mb-3">
+                                                                            {{-- <div class="mb-3">
                                                                                 <label for="editDriver"
                                                                                     class="form-label">@lang('messages.Driver')</label>
                                                                                 <select id="editDriver"
@@ -527,7 +529,7 @@
                                                                                     </option>
                                                                                     @endforeach
                                                                                 </select>
-                                                                            </div>
+                                                                            </div> --}}
 
                                                                             <div class="mb-3">
                                                                                 <div class="mb-6">
@@ -682,8 +684,8 @@
                                                                         <dd class="col-sm-8"
                                                                             data-field="next_service"></dd>
 
-                                                                        <dt class="col-sm-4">@lang('messages.Driver'):</dt>
-                                                                        <dd class="col-sm-8" data-field="driver"></dd>
+                                                                        {{-- <dt class="col-sm-4">@lang('messages.Driver'):</dt>
+                                                                        <dd class="col-sm-8" data-field="driver"></dd> --}}
 
                                                                         <dt class="col-sm-4">@lang('messages.Vehicle Category'):</dt>
                                                                         <dd class="col-sm-8"
@@ -835,7 +837,7 @@
             modal.find('[data-field="fuel_type"]').text($(this).data('fuel_type'));
             modal.find('[data-field="last_service"]').text($(this).data('last_service'));
             modal.find('[data-field="next_service"]').text($(this).data('next_service'));
-            modal.find('[data-field="driver"]').text($(this).data('driver'));
+            // modal.find('[data-field="driver"]').text($(this).data('driver'));
             modal.find('[data-field="vehicle_category"]').text($(this).data('vehicle_category'));
             modal.find('[data-field="position"]').text($(this).data('position'));
             modal.find('[data-field="vehicle_type"]').text($(this).data('vehicle_type'));
@@ -860,10 +862,10 @@
             modal.find('[data-field="mileage"]').val($(this).data('mileage'));
             modal.find('[data-field="capacity"]').val($(this).data('capacity'));
             modal.find('[data-field="fuel_amount"]').val($(this).data('fuel_amount'));
-            modal.find('[data-field="fuel_type"]').val($(this).data('fuel_type'));
+            // modal.find('[data-field="fuel_type"]').val($(this).data('fuel_type'));
             modal.find('[data-field="last_service"]').val($(this).data('last_service'));
             modal.find('[data-field="next_service"]').val($(this).data('next_service'));
-            modal.find('#Previousdriver').val($(this).data('driver'));
+            // modal.find('#Previousdriver').val($(this).data('driver'));
             modal.find('[data-field="libre"]').text($(this).data('libre'));
             modal.find('[data-field="insurance"]').text($(this).data('insurance'));
 
