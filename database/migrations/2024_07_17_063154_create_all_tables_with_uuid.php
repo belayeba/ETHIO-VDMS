@@ -380,7 +380,7 @@ class CreateAllTablesWithUuid extends Migration
                 $table->string('route_name');
                 $table->uuid('vehicle_id');
                 $table->foreign('vehicle_id')->references('vehicle_id')->on('vehicles')->onDelete('restrict');
-                $table->integer('driver_phone');
+                $table->string('driver_phone');
                 $table->string('driver_name');
                 $table->uuid('registered_by');
                 $table->foreign('registered_by')->references('id')->on('users')->onDelete('restrict');
@@ -396,7 +396,7 @@ class CreateAllTablesWithUuid extends Migration
                 $table->foreign('route_id')->references('route_id')->on('routes')->onDelete('restrict');
                 $table->uuid('older_vehicle_id');
                 $table->foreign('older_vehicle_id')->references('vehicle_id')->on('vehicles')->onDelete('restrict');
-                $table->integer('older_driver_phone');
+                $table->string('older_driver_phone');
                 $table->uuid('registered_by');
                 $table->foreign('registered_by')->references('id')->on('users')->onDelete('restrict');
                 $table->timestamps();
