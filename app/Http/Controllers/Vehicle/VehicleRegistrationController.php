@@ -76,7 +76,7 @@ class VehicleRegistrationController extends Controller {
                                 data-last_service="' . $row->last_service . '"
                                 data-next_service="' . $row->next_service . '"
                                 data-vehicle_category="' . $row->vehicle_category . '"
-                                data-position="' . $row->position . '"
+                                data-engine_number="' . $row->position . '"
                                 data-vehicle_type="' . $row->vehicle_type . '"
                                 data-rental_type="' . $row->rental_type . '"
                                 data-libre="' . $row->libre . '"
@@ -129,6 +129,7 @@ class VehicleRegistrationController extends Controller {
             'capacity' => 'required|integer',
             'mileage' => 'required|integer',
             'fuel_amount' => 'required|numeric',
+            'engine_number' => 'required|string',
             'Last_Service' => 'required|numeric||lt:Next_Service',
             'Next_Service' => 'required|numeric|gt:Last_Service',
             'fuel_type' => 'required|string|In:Electric,Diesel,Benzene',
@@ -175,6 +176,7 @@ class VehicleRegistrationController extends Controller {
             'make' => $request->make,
             'model' => $request->model,
             'year' => $request->year,
+            'position' => $request->engine_number,
             'plate_number' => $request->plate_number,
             'mileage' => $request->mileage,
             'fuel_amount' => $request->fuel_amount,
