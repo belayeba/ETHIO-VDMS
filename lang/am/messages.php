@@ -258,6 +258,7 @@
             'Route List' => 'የመንገድ ዝርዝር',
             'Filter' => 'አጣራ',
             'Vehicle Details' => 'የተሽከርካሪ ዝርዝሮች',
+            'Organizational Type' => 'Organizational Type',
             'Export' => 'መረጃ መላክ',
             'Select Plate Number' => 'የሰሌዳ ቁጥር ይምረጡ',
             'Plate Number' => 'የሰሌዳ ቁጥር',

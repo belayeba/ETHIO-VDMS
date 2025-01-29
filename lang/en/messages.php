@@ -109,6 +109,7 @@ return [
     'Phone' => 'Phone',
     'Route List' => 'Route List',
     'Vehicle Details' => 'Vehicle Details',
+    'Organizational Type' => 'Organizational Type',
     'Department' => 'Department',
     'Driver Registration' => 'Driver Registration',
     'Driver' => 'Driver',

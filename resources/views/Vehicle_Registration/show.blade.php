@@ -260,19 +260,6 @@
 
                                                         <div class="row mb-3">
                                                             <label class="col-md-3 col-form-label"
-                                                                for="position">Position</label>
-                                                            <div class="col-md-9">
-                                                                <select id="position" name="position"
-                                                                    class="form-select" required>
-                                                                    <option value="">Select Position</option>
-                                                                    <option value="Other">Other</option>
-                                                                    <option value="Position">Position</option>
-                                                                </select>
-                                                            </div>
-                                                        </div>
-
-                                                        <div class="row mb-3">
-                                                            <label class="col-md-3 col-form-label"
                                                                 for="vehicle_category">Service</label>
                                                             <div class="col-md-9">
                                                                 <select id="vehicleCategory" name="vehicle_category"
@@ -305,32 +292,39 @@
                                                         </div>
 
                                                         <div class="row mb-3">
-                                                            <label class="col-md-3 col-form-label"
-                                                                for="vehicle_type">@lang('messages.Owner')</label>
+                                                            <label class="col-md-3 col-form-label" for="vehicle_type">@lang('messages.Owner')</label>
                                                             <div class="col-md-9">
-                                                                <select id="vehicleType" name="vehicle_type"
-                                                                    class="form-select" required
-                                                                    onchange="toggleFields()">
+                                                                <select id="vehicleType" name="vehicle_type" class="form-select" required onchange="toggleFields()">
                                                                     <option value="">Select owner</option>
-                                                                    <option value="Organizational">Organizational
-                                                                    </option>
+                                                                    <option value="Organizational">Organizational</option>
                                                                     <option value="Rental">Rental</option>
                                                                 </select>
                                                             </div>
                                                         </div>
                                                         
+                                                        <!-- Rental Type Dropdown -->
                                                         <div class="row mb-3" id="rentalDiv" style="display: none;">
+                                                            <label class="col-md-3 col-form-label" for="rental_type">@lang('messages.Rental Type')</label>
                                                             <div class="col-md-9">
-                                                                <label class="col-md-3 col-form-label"
-                                                                    for="rental_type">@lang('messages.Rental Type')</label>
-                                                                <select id="rentalType" name="rental_type"
-                                                                    class="form-select">
+                                                                <select id="rentalType" name="rental_type" class="form-select">
                                                                     <option value="">Select Type</option>
                                                                     <option value="whole_day">Whole Day</option>
                                                                     <option value="position">Position</option>
                                                                     <option value="40/60">45/60</option>
-                                                                    <option value="morning_afternoon_minibus">Morning
-                                                                        Afternoon Minibus</option>
+                                                                    <option value="morning_afternoon_minibus">Morning Afternoon Minibus</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                        
+                                                        <!-- Organizational Type Dropdown -->
+                                                        <div class="row mb-3" id="organizationalDiv" style="display: none;">
+                                                            <label class="col-md-3 col-form-label" for="organizational_type">@lang('messages.Organizational Type')</label>
+                                                            <div class="col-md-9">
+                                                                <select id="organizationalType" name="rental_type" class="form-select">
+                                                                    <option value="">Select Type</option>
+                                                                    <option value="field">Field</option>
+                                                                    <option value="position">Position</option>
+                                                                    <option value="service">Service</option>
                                                                 </select>
                                                             </div>
                                                         </div>
@@ -577,15 +571,6 @@
                                                                             </div>
 
                                                                             <div class="mb-3">
-                                                                                <label for="editPosition"
-                                                                                    class="form-label">Position</label>
-                                                                                <select id="editPosition" name="position" class="form-select" required>
-                                                                                    <option value="Position"{{ $item->position == 'Position' ? 'selected' : '' }}> Position</option>
-                                                                                    <option value="Other" {{ $item->position == 'Other' ? 'selected' : '' }}> Other</option>
-                                                                                </select>
-                                                                            </div>
-
-                                                                            <div class="mb-3">
                                                                                 <label for="editVehicleType"
                                                                                     class="form-label">@lang('messages.Vehicle Type')</label>
                                                                                 <select id="editVehicleType" name="vehicle_type" class="form-select" required onchange="toggleEditFields()">
@@ -652,15 +637,17 @@
                                                                         <dd class="col-sm-8" data-field="capacity">
                                                                         </dd>
 
-                                                                        <dt class="col-sm-4">@lang('messages.Fuel Amount')</dt>
-                                                                        <dd class="col-sm-8" data-field="fuel_amount">
-                                                                        </dd>
+                                                                        
                                                                     </dl>
                                                                 </div>
 
                                                                 <!-- Second Column -->
                                                                 <div class="col-md-6">
                                                                     <dl class="row mb-0">
+
+                                                                        <dt class="col-sm-4">@lang('messages.Fuel Amount')</dt>
+                                                                        <dd class="col-sm-8" data-field="fuel_amount">
+                                                                        </dd>
 
                                                                         <dt class="col-sm-4">@lang('messages.Fuel Type')</dt>
                                                                         <dd class="col-sm-8" data-field="fuel_type">
@@ -674,16 +661,9 @@
                                                                         <dd class="col-sm-8"
                                                                             data-field="next_service"></dd>
 
-                                                                        {{-- <dt class="col-sm-4">@lang('messages.Driver'):</dt>
-                                                                        <dd class="col-sm-8" data-field="driver"></dd> --}}
-
                                                                         <dt class="col-sm-4">@lang('messages.Vehicle Category'):</dt>
                                                                         <dd class="col-sm-8"
                                                                             data-field="vehicle_category"></dd>
-
-                                                                        <dt class="col-sm-4">Position:</dt>
-                                                                        <dd class="col-sm-8" data-field="position">
-                                                                        </dd>
 
                                                                         <dt class="col-sm-4">@lang('messages.Vehicle Type'):</dt>
                                                                         <dd class="col-sm-8"
@@ -827,9 +807,7 @@
             modal.find('[data-field="fuel_type"]').text($(this).data('fuel_type'));
             modal.find('[data-field="last_service"]').text($(this).data('last_service'));
             modal.find('[data-field="next_service"]').text($(this).data('next_service'));
-            // modal.find('[data-field="driver"]').text($(this).data('driver'));
             modal.find('[data-field="vehicle_category"]').text($(this).data('vehicle_category'));
-            modal.find('[data-field="position"]').text($(this).data('position'));
             modal.find('[data-field="vehicle_type"]').text($(this).data('vehicle_type'));
             modal.find('[data-field="rental_type"]').text($(this).data('rental_type'));
             modal.find('[data-field="libre"]').text($(this).data('libre'));
@@ -855,7 +833,6 @@
             // modal.find('[data-field="fuel_type"]').val($(this).data('fuel_type'));
             modal.find('[data-field="last_service"]').val($(this).data('last_service'));
             modal.find('[data-field="next_service"]').val($(this).data('next_service'));
-            // modal.find('#Previousdriver').val($(this).data('driver'));
             modal.find('[data-field="libre"]').text($(this).data('libre'));
             modal.find('[data-field="insurance"]').text($(this).data('insurance'));
 
@@ -878,14 +855,25 @@
 
     <script>
         function toggleFields() {
-            const vehicleType = document.getElementById('vehicleType').value; // Get the selected value
-            const rentalDiv = document.getElementById('rentalDiv'); // Get the rental type div
+            const vehicleType = document.getElementById('vehicleType').value;
+            const rentalDiv = document.getElementById('rentalDiv');
+            const organizationalDiv = document.getElementById('organizationalDiv');
+            const rentalType = document.getElementById('rentalType');
+            const organizationalType = document.getElementById('organizationalType');
 
-            // Show or hide the rental type div based on the selected value
+            // Reset selection when switching between types
+            rentalType.value = "";
+            organizationalType.value = "";
+
             if (vehicleType === 'Rental') {
-                rentalDiv.style.display = 'block'; // Show when "Rental" is selected
+                rentalDiv.style.display = 'block';
+                organizationalDiv.style.display = 'none';
+            } else if (vehicleType === 'Organizational') {
+                organizationalDiv.style.display = 'block';
+                rentalDiv.style.display = 'none';
             } else {
-                rentalDiv.style.display = 'none'; // Hide for other options
+                rentalDiv.style.display = 'none';
+                organizationalDiv.style.display = 'none';
             }
         }
     </script>
