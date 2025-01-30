@@ -81,16 +81,7 @@
                                                     @csrf
                                                     <div class="row">
                                                         <div class="col-12">
-                                                            <div class="row mb-3">
-                                                                <label class="col-md-3 col-form-label"
-                                                                    for="Chancy Number">@lang('messages.Chassis Number')</label>
-                                                                <div class="col-md-9">
-                                                                    <input type="number" class="form-control"
-                                                                        id="Chancy Number"
-                                                                        placeholder="Enter the Chassis number"
-                                                                        name="vin" required>
-                                                                </div>
-                                                            </div>
+                                                            
                                                             <div class="row mb-3">
                                                                 <label class="col-md-3 col-form-label" for="make">
                                                                     Make</label>
@@ -107,16 +98,6 @@
                                                                 <div class="col-md-9">
                                                                     <input type="text" id="Model" name="model"
                                                                         placeholder="Enter the model"
-                                                                        class="form-control" required>
-                                                                </div>
-                                                            </div>
-
-                                                            <div class="row mb-3">
-                                                                <label class="col-md-3 col-form-label"
-                                                                    for="engine_number">Engine Number</label>
-                                                                <div class="col-md-9">
-                                                                    <input type="text" id="engine_number" name="engine_number"
-                                                                        placeholder="Enter the engine number"
                                                                         class="form-control" required>
                                                                 </div>
                                                             </div>
@@ -252,13 +233,13 @@
                                             <div class="tab-pane fade" id="third">
                                                 <div class="row">
                                                     <div class="col-12">
-                                                        {{-- <div class="row mb-3">
+                                                        <div class="row mb-3">
                                                             <label class="col-md-3 col-form-label"
-                                                                for="driver">@lang('messages.Driver')</label>
+                                                                for="driver">Assigned To</label>
                                                             <div class="col-md-9">
                                                                 <select id="driver" name="driver"
                                                                     class="form-select">
-                                                                    <option value="">Select Driver</option>
+                                                                    <option value="">Assigned To</option>
                                                                     @foreach ($drivers as $driver)
                                                                         <option value="{{ $driver->driver_id }}">
                                                                             {{ $driver->user->first_name . ' ' . $driver->user->middle_name }}
@@ -266,7 +247,7 @@
                                                                     @endforeach
                                                                 </select>
                                                             </div>
-                                                        </div> --}}
+                                                        </div>
 
                                                         <div class="row mb-3">
                                                             <label class="col-md-3 col-form-label"
@@ -313,7 +294,41 @@
                                                         </div>
                                                         
                                                         <!-- Rental Type Dropdown -->
-                                                        <div class="row mb-3" id="rentalDiv" style="display: none;">
+                                                <div id="rentalDiv" style="display: none;">
+                                                        <div class="row mb-3" >
+                                                            <div class="row mb-3">
+                                                                <label class="col-md-3 col-form-label"
+                                                                    for="rental_name">Rental</label>
+                                                                <div class="col-md-9">
+                                                                    <input type="text" id="rental_name"
+                                                                        name="rental_name"
+                                                                        placeholder="Enter the rental person name here"
+                                                                        class="form-control">
+                                                                </div>
+                                                            </div>
+    
+                                                            <div class="row mb-3">
+                                                                <label class="col-md-3 col-form-label"
+                                                                    for="rental_phone">Rental Phone</label>
+                                                                <div class="col-md-9">
+                                                                    <input type="text" id="rental_phone"
+                                                                        name="rental_phone"
+                                                                        placeholder="Enter the rental phone here"
+                                                                        class="form-control">
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="row mb-3">
+                                                                <label class="col-md-3 col-form-label"
+                                                                    for="cc">CC</label>
+                                                                <div class="col-md-9">
+                                                                    <input type="text" id="cc"
+                                                                        name="cc"
+                                                                        placeholder="Enter the cc here"
+                                                                        class="form-control">
+                                                                </div>
+                                                            </div>
+
                                                             <label class="col-md-3 col-form-label" for="rental_type">@lang('messages.Rental Type')</label>
                                                             <div class="col-md-9">
                                                                 <select id="rentalType" name="rental_type" class="form-select">
@@ -324,10 +339,34 @@
                                                                     <option value="morning_afternoon_minibus">Morning Afternoon Minibus</option>
                                                                 </select>
                                                             </div>
+
                                                         </div>
+                                                    </div>
                                                         
                                                         <!-- Organizational Type Dropdown -->
-                                                        <div class="row mb-3" id="organizationalDiv" style="display: none;">
+                                                    <div id="organizationalDiv" style="display: none;">
+                                                        <div class="row mb-3">
+                                                            <label class="col-md-3 col-form-label"
+                                                                for="Chancy Number">@lang('messages.Chassis Number')</label>
+                                                            <div class="col-md-9">
+                                                                <input type="number" class="form-control"
+                                                                    id="Chancy Number"
+                                                                    placeholder="Enter the Chassis number"
+                                                                    name="vin" required>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="row mb-3">
+                                                            <label class="col-md-3 col-form-label"
+                                                                for="engine_number">Engine Number</label>
+                                                            <div class="col-md-9">
+                                                                <input type="text" id="engine_number" name="engine_number"
+                                                                    placeholder="Enter the engine number"
+                                                                    class="form-control" required>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="row mb-3">
                                                             <label class="col-md-3 col-form-label" for="organizational_type">@lang('messages.Organizational Type')</label>
                                                             <div class="col-md-9">
                                                                 <select id="organizationalType" name="rental_type" class="form-select">
@@ -339,6 +378,7 @@
                                                             </div>
                                                         </div>
                                                     </div>
+                                                  </div>
                                                     <!-- end col -->
                                                 </div>
                                                 <!-- end row -->

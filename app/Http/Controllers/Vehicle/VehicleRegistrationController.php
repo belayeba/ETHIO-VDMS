@@ -64,7 +64,7 @@ class VehicleRegistrationController extends Controller {
             })        
             ->addColumn('action', function($row) {
                 $actions = '<button type="button" class="btn btn-info rounded-pill view-btn" 
-                                data-chancy_number="' . $row->vin . '"
+                                data-chancy_number="' . $row->chasis_number . '"
                                 data-make="' . $row->make . '"
                                 data-model="' . $row->model . '"
                                 data-year="' . $row->year . '"
@@ -85,7 +85,7 @@ class VehicleRegistrationController extends Controller {
                                 <i class="ri-eye-line"></i>
                             </button>
                             <button type="button" class="btn btn-secondary rounded-pill edit-btn" 
-                                data-chancy_number="' . $row->vin . '"
+                                data-chancy_number="' . $row->chasis_number . '"
                                 data-make="' . $row->make . '"
                                 data-model="' . $row->model . '"
                                 data-year="' . $row->year . '"
@@ -121,7 +121,7 @@ class VehicleRegistrationController extends Controller {
         $capacity = (int) $request->capacity;
 
         $validator = Validator::make( $request->all(), [
-            'vin' => 'required|string|max:255',
+            'chasis_number' => 'required|string|max:255',
             'make' => 'required|string|max:255',
             'model' => 'required|string|max:255',
             'year' => 'required|integer',
@@ -172,7 +172,7 @@ class VehicleRegistrationController extends Controller {
         $today = \Carbon\Carbon::now();
         $ethiopianDate = $this->dailyKmCalculation->ConvertToEthiopianDate($today); 
         VehiclesModel::create( [
-            'vin'=>$request->vin,
+            'chasis_number'=>$request->chasis_number,
             'make' => $request->make,
             'model' => $request->model,
             'year' => $request->year,
@@ -225,7 +225,7 @@ class VehicleRegistrationController extends Controller {
     
         // Define validation rules
         $rules = [
-            'vin' => 'nullable|string|max:255',
+            'chasis_number' => 'nullable|string|max:255',
             'make' => 'nullable|string|max:255',
             'model' => 'nullable|string|max:255',
             'year' => 'nullable|integer|min:1900|max:' . date('Y'),
@@ -274,7 +274,7 @@ class VehicleRegistrationController extends Controller {
     
         // Prepare update data dynamically
         $updateData = $request->only([
-            'vin',
+            'chasis_number',
             'make',
             'model',
             'year',

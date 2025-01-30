@@ -52,20 +52,22 @@ class CreateAllTablesWithUuid extends Migration
         Schema::create('vehicles', function (Blueprint $table) {
             $table->uuid('vehicle_id')->primary();
             //$table->uuid('inspection_id')->nullable();
-            $table->string('vin', 255);
+            $table->string('chasis_number', 255)->nullable();
             $table->string('make', 255);
             $table->string('model', 255);
             $table->integer('year');
             $table->integer('capacity');
             $table->string('plate_number', 255);
-            //$table->date('registration_date');
             $table->integer('mileage');
+            $table->string('cc', 255)->nullable();
             $table->string('vehicle_type', 255); // OWNER OF THE VEHICLE
             $table->string('libre', 255)->nullable();
             $table->string('insurance', 255)->nullable();
             $table->string('vehicle_category', 255); // THE VEHICLE SERVICE
-            $table->string('engine_number', 255);// Engine Number
+            $table->string('engine_number', 255)->nullable();// Engine Number
             $table->string('rental_type', 255)->nullable(); // (45/60)(Position)(wholeDay)(morning_afternoon_minibus)
+            $table->string('rental_person', 255)->nullable(); // person who rented the car
+            $table->string('rental_phone', 255)->nullable();  // phone number of the person
             $table->integer('fuel_amount', 10, 2);
             $table->integer('last_service')->nullable();
             $table->integer('next_service')->nullable();
