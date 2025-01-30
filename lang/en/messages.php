@@ -139,7 +139,7 @@ return [
     'Fuel Type' => 'Fuel Type',
     'Last Service' => 'Last Service',
     'Next Service' => 'Next Service',
-    'Chancy Number' => 'Chancy Number',
+    'Chassis Number' => 'Chassis Number',
     'Make' => 'Make',
     'Model' => 'Model',
     'Year' => 'Year',

@@ -129,7 +129,7 @@
             'Fuel Type'  => 'የነዳጅ አይነት',
             'Last Service'  => 'በመጨረሻ ሰርቪስ ቀን',
             'Next Service'   => 'በቀጣይ ሰርቪስ ቀን',
-            'Chancy Number' => 'የቻንሲ ቁጥር',
+            'Chassis Number' => 'የቻንሲ ቁጥር',
             'Vehicle List' => 'የተሽከርካሪ ዝርዝር',
             'Make'  => 'አድርግ',
             'Model' => 'ሞዴል',

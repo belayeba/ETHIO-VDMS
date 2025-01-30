@@ -18,78 +18,103 @@
                 <strong> Success- </strong> {!! session('success_message') !!} 
             </div>
         @endif
-            <div class="main-wrapper" style="min-height: 600px">
-               
-                <div id="main-content">
-                    <section class="sms-breadcrumb mb-10 white-box">
-                        <div class="container-fluid p-0">
-                        </div>
-                    </section>
-
-                    <section class="admin-visitor-area up_st_admin_visitor">
-                        <div class="container-fluid p-0">
-                            <div class="row justify-content-center">
-
-                                <div class="col-md-4">
-                                    <div class="card">
-                                        <div class="card-header">
-                                            <h4 class="header-title mb-0">Route Assignment</h4>
-                                        </div>
-                                        <div class="card-body">
-                                            <form method="POST" action="{{ route('employeeService.store') }}" accept-charset="UTF-8" name="route_assigning_form" id="route_assigning_form" enctype="multipart/form-data">
-                                                @csrf
-                                                <div class="row mb-3">
-                                                    <label class="col-md-3 col-form-label" for="route">Route</label>
-                                                    <div class="col-md-9">
-                                                        <select id="route_id" name="route_id" class="form-select" required>
-                                                            <option value="">Select Route</option>
-                                                            @foreach($routes as $route)
-                                                                <option value="{{ $route->route_id }}">{{ $route->route_name }}</option>
+        <div class="main-wrapper" style="min-height: 600px">
+            <div id="main-content">
+                <section class="sms-breadcrumb mb-10 white-box">
+                    <div class="container-fluid p-0"></div>
+                </section>
+        
+                <section class="admin-visitor-area up_st_admin_visitor">
+                    <div class="container-fluid p-0">
+                        <div class="row justify-content-center">
+                            <!-- Assignment Form -->
+                            <div class="col-md-4">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h4 class="header-title mb-0">Route Assignment</h4>
+                                    </div>
+                                    <div class="card-body">
+                                        <form method="POST" action="{{ route('employeeService.store') }}" id="route_assigning_form">
+                                            @csrf
+                                            <!-- Route Selection -->
+                                            <div class="row mb-3">
+                                                <label class="col-md-3 col-form-label" for="route">Route</label>
+                                                <div class="col-md-9">
+                                                    <select id="route_id" name="route_id" class="form-select" required>
+                                                        <option value="">Select Route</option>
+                                                        @foreach($routes as $route)
+                                                            <option value="{{ $route->route_id }}">{{ $route->route_name }}</option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                            </div>
+        
+                                            <!-- Employee Selection Table -->
+                                            <div class="row">
+                                                <p class="mb-1 fw-bold text-muted">Select People</p>
+                                                <div class="mb-3">
+                                                    <input
+                                                        type="text"
+                                                        id="employeeSearch"
+                                                        class="form-control"
+                                                        placeholder="Search by name"
+                                                    />
+                                                </div>
+                                                <div class="table-responsive">
+                                                    <table class="table" id="employee_table">
+                                                        <thead>
+                                                            <tr>
+                                                                <th><input type="checkbox" id="select_all"></th>
+                                                                <th>Name</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            @foreach($users as $user)
+                                                                <tr>
+                                                                    <td>
+                                                                        <input
+                                                                            type="checkbox"
+                                                                            name="people_id[]"
+                                                                            value="{{ $user->id }}"
+                                                                            class="select_employee"
+                                                                        />
+                                                                    </td>
+                                                                    <td>{{ $user->first_name }} {{ $user->last_name }}</td>
+                                                                </tr>
                                                             @endforeach
-                                                        </select>
-                                                    </div>
+                                                        </tbody>
+                                                    </table>
                                                 </div>
-
-                                                <div id="TogglePackage">
-                                                    <div class="row">
-                                                        <p class="mb-1 fw-bold text-muted">Select People</p>
-                                                        <select id="multiSelect" name="people_id[]" class="select2 form-control select2-multiple" data-toggle="select2" multiple="multiple" data-placeholder="Select People ..." style="height: 200px;">
-                                                            <optgroup label="Users/Employees">
-                                                                @foreach ($users as $user)
-                                                                    <option value="{{ $user->id }}">{{ $user->first_name }} {{ $user->last_name }}</option>
-                                                                @endforeach
-                                                            </optgroup>
-                                                        </select>
-                                                    </div>
-                                                </div>
-
-                                                <div class="d-flex justify-content-center mt-3">
-                                                    <button type="submit" class="btn btn-primary">Save</button>
-                                                </div>
-                                            </form>
-                                        </div>
+                                            </div>
+                                            
+                                            <div class="d-flex justify-content-center mt-3">
+                                                <button type="submit" class="btn btn-primary">Save</button>
+                                            </div>
+                                        </form>
                                     </div>
                                 </div>
-
-                                <div class="col-md-8">
-                                    <div class="card">
-                                        <div class="card-header">
-                                            <h4 class="header-title mb-0">Route List</h4>
-                                        </div>
-                                        <div class="card-body">
-                                            <div class="table-responsive">
-                                                <table id="lms_table" class="table">
-                                                    <thead>
-                                                        <tr>
-                                                            <th>#</th>
-                                                            <th>Route</th>
-                                                            <th>Vehicle</th>
-                                                            <th>Driver Name</th>
-                                                            <th>Driver Phone</th>
-                                                            <th>Action</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
+                            </div>
+        
+                            <!-- Route List -->
+                            <div class="col-md-8">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h4 class="header-title mb-0">Route List</h4>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="table-responsive">
+                                            <table id="route_list_table" class="table">
+                                                <thead>
+                                                    <tr>
+                                                        <th>#</th>
+                                                        <th>Route</th>
+                                                        <th>Vehicle</th>
+                                                        <th>Driver Name</th>
+                                                        <th>Driver Phone</th>
+                                                        <th>Action</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
                                                     @foreach ($routeUser as $route_id => $data)
                                                         <tr>
                                                             <td>{{ $loop->iteration }}</td>
@@ -108,12 +133,18 @@
                                                             </td>
                                                         </tr>
                                                     @endforeach
-                                                    </tbody>
-                                                </table>
-                                            </div>
+                                                </tbody>
+                                            </table>
                                         </div>
                                     </div>
                                 </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+        
                                 
                                 <!-- Modals -->
                                 @foreach ($routeUser as $route_id => $data)
@@ -207,33 +238,56 @@
     });
     </script>
 
-<script>
-    $(document).ready(function() {
-        $('#multiSelect').select2({
-            width: '100%',
-            dropdownAutoWidth: true,
-            placeholder: 'Select People ...',
-            allowClear: true,
-            closeOnSelect: false,
-            theme: 'bootstrap4',
-            templateResult: formatState,
-            escapeMarkup: function(m) { return m; }
-        });
-    });
+        <script>
+            $(document).ready(function() {
+                $('#multiSelect').select2({
+                    width: '100%',
+                    dropdownAutoWidth: true,
+                    placeholder: 'Select People ...',
+                    allowClear: true,
+                    closeOnSelect: false,
+                    theme: 'bootstrap4',
+                    templateResult: formatState,
+                    escapeMarkup: function(m) { return m; }
+                });
+            });
 
-    function formatState(state) {
-        if (!state.id) {
-            return state.text;
-        }
+            function formatState(state) {
+                if (!state.id) {
+                    return state.text;
+                }
 
-        var baseUrl = "/user/avatar/";
-        var $state = $(
-            '<span><img src="' + baseUrl + state.element.value + '" class="img-flag" /> ' + state.text + '</span>'
-        );
-        
-        return $state;
-    }
-</script>
+                var baseUrl = "/user/avatar/";
+                var $state = $(
+                    '<span><img src="' + baseUrl + state.element.value + '" class="img-flag" /> ' + state.text + '</span>'
+                );
+                
+                return $state;
+            }
+        </script>
+
+        <script>
+            document.getElementById('employeeSearch').addEventListener('keyup', function () {
+                const searchValue = this.value.toLowerCase();
+                const tableRows = document.querySelectorAll('#employee_table tbody tr');
+
+                tableRows.forEach((row) => {
+                    const name = row.cells[1].textContent.toLowerCase();
+
+                    if (name.includes(searchValue)) {
+                        row.style.display = '';
+                    } else {
+                        row.style.display = 'none';
+                    }
+                });
+            });
+
+            // Select All Functionality
+            document.getElementById('select_all').addEventListener('change', function () {
+                const checkboxes = document.querySelectorAll('.select_employee');
+                checkboxes.forEach((checkbox) => (checkbox.checked = this.checked));
+            });
+        </script>
 
     <!-- Vendor js -->
     <script src="{{ asset('assets/js/vendor.min.js') }}"></script>

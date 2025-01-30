@@ -83,11 +83,11 @@
                                                         <div class="col-12">
                                                             <div class="row mb-3">
                                                                 <label class="col-md-3 col-form-label"
-                                                                    for="Chancy Number">@lang('messages.Chancy Number')</label>
+                                                                    for="Chancy Number">@lang('messages.Chassis Number')</label>
                                                                 <div class="col-md-9">
                                                                     <input type="number" class="form-control"
                                                                         id="Chancy Number"
-                                                                        placeholder="Enter the Chancy number"
+                                                                        placeholder="Enter the Chassis number"
                                                                         name="vin" required>
                                                                 </div>
                                                             </div>
@@ -107,6 +107,16 @@
                                                                 <div class="col-md-9">
                                                                     <input type="text" id="Model" name="model"
                                                                         placeholder="Enter the model"
+                                                                        class="form-control" required>
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="row mb-3">
+                                                                <label class="col-md-3 col-form-label"
+                                                                    for="engine_number">Engine Number</label>
+                                                                <div class="col-md-9">
+                                                                    <input type="text" id="engine_number" name="engine_number"
+                                                                        placeholder="Enter the engine number"
                                                                         class="form-control" required>
                                                                 </div>
                                                             </div>
@@ -401,7 +411,7 @@
                                                                         <div class="col-md-6">
                                                                             <div class="mb-3">
                                                                                 <label for="editVin"
-                                                                                    class="form-label">@lang('messages.Chancy Number')</label>
+                                                                                    class="form-label">@lang('messages.Chassis Number')</label>
                                                                                 <input type="text"
                                                                                     class="form-control"
                                                                                     id="editVin" name="vin"
@@ -508,24 +518,6 @@
                                                                                     data-field="next_service" required>
                                                                             </div>
 
-                                                                            {{-- <div class="mb-3">
-                                                                                <label for="editDriver"
-                                                                                    class="form-label">@lang('messages.Driver')</label>
-                                                                                <select id="editDriver"
-                                                                                    name="driver_id"
-                                                                                    class="form-select"
-                                                                                    id="Previousdriver">
-                                                                                    <option value="">
-                                                                                        @lang('messages.Select Driver')</option>
-                                                                                    @foreach ($drivers as $driver)
-                                                                                    <option value="{{ $driver->driver_id }}" 
-                                                                                        {{ $driver->driver_id == $driver->driver_id ? 'selected' : '' }}>
-                                                                                        {{ $driver->user->first_name }} {{ $driver->user->middle_name }}
-                                                                                    </option>
-                                                                                    @endforeach
-                                                                                </select>
-                                                                            </div> --}}
-
                                                                             <div class="mb-3">
                                                                                 <div class="mb-6">
                                                                                     <label for="editLibre"
@@ -571,15 +563,19 @@
                                                                             </div>
 
                                                                             <div class="mb-3">
-                                                                                <label for="editVehicleType"
-                                                                                    class="form-label">@lang('messages.Vehicle Type')</label>
+                                                                                <label for="editVehicleType" class="form-label">@lang('messages.Vehicle Type')</label>
                                                                                 <select id="editVehicleType" name="vehicle_type" class="form-select" required onchange="toggleEditFields()">
-                                                                                    <option value="Organizational"
-                                                                                        {{ $item->vehicle_type == 'Organizational' ? 'selected' : '' }}> Organizational</option>
-                                                                                    <option value="Rental"
-                                                                                        {{ $item->vehicle_type == 'Rental' ? 'selected' : '' }}>Rental</option>
+                                                                                    <option value="Organizational" 
+                                                                                        @if(isset($item) && trim($item->vehicle_type) === 'Organizational') selected @endif>
+                                                                                        Organizational
+                                                                                    </option>
+                                                                                    <option value="Rental" 
+                                                                                        @if(isset($item) && trim($item->vehicle_type) === 'Rental') selected @endif>
+                                                                                        Rental
+                                                                                    </option>
                                                                                 </select>
                                                                             </div>
+                                                                            
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -612,7 +608,7 @@
                                                                 <!-- First Column -->
                                                                 <div class="col-md-6">
                                                                     <dl class="row mb-0">
-                                                                        <dt class="col-sm-4">@lang('messages.Chancy Number'):</dt>
+                                                                        <dt class="col-sm-4">@lang('messages.Chassis Number'):</dt>
                                                                         <dd class="col-sm-8"
                                                                             data-field="chancy_number"></dd>
 
@@ -621,6 +617,9 @@
 
                                                                         <dt class="col-sm-4">@lang('messages.Model'):</dt>
                                                                         <dd class="col-sm-8" data-field="model"></dd>
+
+                                                                        <dt class="col-sm-4">Engine Number:</dt>
+                                                                        <dd class="col-sm-8" data-field="engine_number"></dd>
 
                                                                         <dt class="col-sm-4">@lang('messages.Year'):</dt>
                                                                         <dd class="col-sm-8" data-field="year"></dd>
@@ -802,6 +801,7 @@
             modal.find('[data-field="year"]').text($(this).data('year'));
             modal.find('[data-field="plate_number"]').text($(this).data('plate_number'));
             modal.find('[data-field="mileage"]').text($(this).data('mileage'));
+            modal.find('[data-field="engine_number"]').text($(this).data('engine_number'));
             modal.find('[data-field="capacity"]').text($(this).data('capacity'));
             modal.find('[data-field="fuel_amount"]').text($(this).data('fuel_amount'));
             modal.find('[data-field="fuel_type"]').text($(this).data('fuel_type'));
@@ -810,8 +810,27 @@
             modal.find('[data-field="vehicle_category"]').text($(this).data('vehicle_category'));
             modal.find('[data-field="vehicle_type"]').text($(this).data('vehicle_type'));
             modal.find('[data-field="rental_type"]').text($(this).data('rental_type'));
-            modal.find('[data-field="libre"]').text($(this).data('libre'));
-            modal.find('[data-field="insurance"]').text($(this).data('insurance'));
+            
+            // Handling Libre and Insurance Files
+            var libreFile = $(this).data('libre');
+            var insuranceFile = $(this).data('insurance');
+
+            var libreField = modal.find('[data-field="libre"]');
+            var insuranceField = modal.find('[data-field="insurance"]');
+
+            if (libreFile) {
+                var libreLink = `<a href="/storage/vehicles/${libreFile}" target="_blank">View Libre</a>`;
+                libreField.html(libreLink);
+            } else {
+                libreField.text('No file available');
+            }
+
+            if (insuranceFile) {
+                var insuranceLink = `<a href="/storage/vehicles/${insuranceFile}" target="_blank">View Insurance</a>`;
+                insuranceField.html(insuranceLink);
+            } else {
+                insuranceField.text('No file available');
+            }
 
             modal.modal('show');
         });
