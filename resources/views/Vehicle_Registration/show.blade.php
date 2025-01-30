@@ -556,21 +556,21 @@
                                                                                     <option value="Both"
                                                                                         {{ $item->vehicle_category == 'Both' ? 'selected' : '' }}>
                                                                                         Both</option>
-                                                                                    <option value="Neither"
-                                                                                        {{ $item->vehicle_category == 'Neither' ? 'selected' : '' }}>
-                                                                                        Neither</option>
+                                                                                    <option value="human"
+                                                                                        {{ $item->vehicle_category == 'human' ? 'selected' : '' }}>
+                                                                                        Human</option>
                                                                                 </select>
                                                                             </div>
-
+                                                                           
                                                                             <div class="mb-3">
                                                                                 <label for="editVehicleType" class="form-label">@lang('messages.Vehicle Type')</label>
                                                                                 <select id="editVehicleType" name="vehicle_type" class="form-select" required onchange="toggleEditFields()">
-                                                                                    <option value="Organizational" 
-                                                                                        @if(isset($item) && trim($item->vehicle_type) === 'Organizational') selected @endif>
+                                                                                    <option value="Organizational"
+                                                                                    {{ $item->vehicle_type == 'Organizational' ? 'selected' : '' }}>
                                                                                         Organizational
                                                                                     </option>
-                                                                                    <option value="Rental" 
-                                                                                        @if(isset($item) && trim($item->vehicle_type) === 'Rental') selected @endif>
+                                                                                    <option value="Rental"
+                                                                                    {{ $item->vehicle_type == 'Rental' ? 'selected' : '' }}>
                                                                                         Rental
                                                                                     </option>
                                                                                 </select>
@@ -837,26 +837,36 @@
     </script>
 
     <script>
-        $(document).on('click', '.edit-btn', function() {
-            var modal = $('#editVehicleModal');
-            console.log($(this).data('libre'));
-            modal.find('.modal-title').text('Edit Vehicle');
-            modal.find('[data-field="chancy_number"]').val($(this).data('chancy_number'));
-            modal.find('[data-field="make"]').val($(this).data('make'));
-            modal.find('[data-field="model"]').val($(this).data('model'));
-            modal.find('[data-field="year"]').val($(this).data('year'));
-            modal.find('[data-field="plate_number"]').val($(this).data('plate_number'));
-            modal.find('[data-field="mileage"]').val($(this).data('mileage'));
-            modal.find('[data-field="capacity"]').val($(this).data('capacity'));
-            modal.find('[data-field="fuel_amount"]').val($(this).data('fuel_amount'));
-            // modal.find('[data-field="fuel_type"]').val($(this).data('fuel_type'));
-            modal.find('[data-field="last_service"]').val($(this).data('last_service'));
-            modal.find('[data-field="next_service"]').val($(this).data('next_service'));
-            modal.find('[data-field="libre"]').text($(this).data('libre'));
-            modal.find('[data-field="insurance"]').text($(this).data('insurance'));
+    $(document).on('click', '.edit-btn', function() {
+        var modal = $('#editVehicleModal');
 
-            modal.modal('show');
-        });
+        console.log($(this).data('libre'));
+
+        modal.find('.modal-title').text('Edit Vehicle');
+
+        // Populate input fields
+        modal.find('[data-field="chancy_number"]').val($(this).data('chancy_number'));
+        modal.find('[data-field="make"]').val($(this).data('make'));
+        modal.find('[data-field="model"]').val($(this).data('model'));
+        modal.find('[data-field="year"]').val($(this).data('year'));
+        modal.find('[data-field="plate_number"]').val($(this).data('plate_number'));
+        modal.find('[data-field="mileage"]').val($(this).data('mileage'));
+        modal.find('[data-field="capacity"]').val($(this).data('capacity'));
+        modal.find('[data-field="fuel_amount"]').val($(this).data('fuel_amount'));
+        modal.find('[data-field="last_service"]').val($(this).data('last_service'));
+        modal.find('[data-field="next_service"]').val($(this).data('next_service'));
+
+        // ✅ Populate dropdowns correctly
+        modal.find('#editVehicleCategory').val($(this).data('vehicle_category'));
+        modal.find('#editVehicleType').val($(this).data('vehicle_type'));
+        modal.find('#fuel_type').val($(this).data('fuel_type'));
+
+        // Populate text fields
+        modal.find('[data-field="libre"]').text($(this).data('libre'));
+        modal.find('[data-field="insurance"]').text($(this).data('insurance'));
+
+        modal.modal('show');
+    });
     </script>
 
     <script>
