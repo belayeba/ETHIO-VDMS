@@ -320,7 +320,7 @@
                                                                     <option value="">Select Type</option>
                                                                     <option value="whole_day">Whole Day</option>
                                                                     <option value="position">Position</option>
-                                                                    <option value="40/60">45/60</option>
+                                                                    <option value="40_60">45/60</option>
                                                                     <option value="morning_afternoon_minibus">Morning Afternoon Minibus</option>
                                                                 </select>
                                                             </div>

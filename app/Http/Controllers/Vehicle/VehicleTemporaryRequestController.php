@@ -1017,7 +1017,7 @@ class VehicleTemporaryRequestController extends Controller
                 catch (Exception $e) 
                     {
                         // Handle the case when the vehicle request is not found
-                      return redirect()->back()->with('error_message',
+                         return redirect()->back()->with('error_message',
                                  "Sorry, Something went wrong",
                             );
                     }
@@ -1025,8 +1025,10 @@ class VehicleTemporaryRequestController extends Controller
         // Vehicle Director Page
         public function SimiritPage() 
             {    
-                    $vehicles = VehiclesModel::where('status',1)->get();
-                    $vehicle_requests = VehicleTemporaryRequestModel::
+                $vehicles = VehiclesModel::whereIn('rental_type', ['field', 'service', 'whole_day'])
+                                                ->where('status', 1)
+                                                ->get();
+           $vehicle_requests = VehicleTemporaryRequestModel::
                                     whereNotNull('transport_director_id')
                                      ->whereNull('vec_director_reject_reason')
                                      //->whereNull('assigned_by')
