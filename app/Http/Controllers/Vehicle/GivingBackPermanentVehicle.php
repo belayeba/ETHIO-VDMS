@@ -417,8 +417,9 @@ public function Vec_DirectorRejectRequest(Request $request)
 // Dispatcher Page
 public function Dispatcher_page() 
     {    
-    $vehicles = VehiclesModel::get();
-    return view("Return.DirectorPage", compact('vehicles'));     
+        $vehicles = VehiclesModel::where('rental_type','position')->where('status', 1)->get();
+        // $vehicles = VehiclesModel::get();
+        return view("Return.DirectorPage", compact('vehicles'));     
     }
     // VEHICLE DIRECTOR APPROVE THE REQUESTS
 public function DispatcherApproveRequest(Request $request)

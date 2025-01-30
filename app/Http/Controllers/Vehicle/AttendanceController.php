@@ -23,13 +23,8 @@ class AttendanceController extends Controller
                 $today = Carbon::today();
                 $ethio_date = $this->ConvertToEthiopianDate($today);
                 $vehicles_in_attendance = AttendanceModel::select('vehicle_id')->where('created_at',$ethio_date)->get();
-                $vehicles = Route::select('vehicle_id')
-                                ->whereNotIn('vehicle_id', function ($query) use ($ethio_date) {
-                                    $query->select('vehicle_id')
-                                        ->from('attendances')
-                                        ->where('created_at', $ethio_date);
-                                })
-                                ->get();
+                $already_registered = Route::where('created_at', $ethio_date)->pluck('')->toArray();
+                $vehicles = VehiclesModel::select('vehicle_id')->whereNotIn('vehicle_id',$already_registered)->whereIn('rental_type',['morning_afternoon_minibus','40_60'])->get();
                 // $vehicles = Route::select('vehicle_id')->get();
                 return view('Vehicle.Attendance',compact('routes','vehicles'));
             }

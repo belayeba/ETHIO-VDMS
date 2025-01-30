@@ -34,7 +34,7 @@ class Daily_KM_Calculation extends Controller
             {
                 $today = Carbon::today();
                 $ethio_date = $this->ConvertToEthiopianDate($today);
-                $vehicle = VehiclesModel::whereNot('rental_type','position')->whereNot('rental_type','morning_afternoon_minibus')->whereNot('rental_type','40/60')->whereNot('status',false)->get();
+                $vehicle = VehiclesModel::whereIn('rental_type',['whole_day','field','service'])->whereNot('status',false)->get();
                 $TodaysDate = DailyKMCalculationModel::where('created_at',$ethio_date)->latest()->get();
                 return view('Vehicle.DailKmForm',compact('vehicle','TodaysDate'));
             }

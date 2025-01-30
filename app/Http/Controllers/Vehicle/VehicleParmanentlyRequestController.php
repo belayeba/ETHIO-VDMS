@@ -431,7 +431,7 @@ class VehicleParmanentlyRequestController extends Controller
     public function Dispatcher_page()
         {
             $Vehicle_Request = VehiclePermanentlyRequestModel::whereNotNull('approved_by')->whereNull('director_reject_reason')->get();
-            $Vehicle = VehiclesModel::where('status', 1)->get();
+            $Vehicle = VehiclesModel::where('rental_type','position')->where('status', 1)->get();
             return view("Request.PermanentVehicleDirector", compact('Vehicle_Request', 'Vehicle'));
         }
     // VEHICLE DIRECTOR APPROVE THE REQUESTS

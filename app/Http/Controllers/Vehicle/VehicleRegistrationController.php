@@ -133,9 +133,9 @@ class VehicleRegistrationController extends Controller {
             'Next_Service' => 'required|numeric|gt:Last_Service',
             'fuel_type' => 'required|string|In:Electric,Diesel,Benzene',
             'notes' => 'nullable|string',
-            'vehicle_type' => 'required|string|max:255',
+            'vehicle_type' => 'required|string|In:Organizational,Rental',
             'vehicle_category' => 'required|string|max:255',
-            'rental_type' => 'nullable|string|max:255',
+            'rental_type' => 'nullable|string|In:morning_afternoon_minibus,40_60,position,whole_day,service,field',
             'libre' => 'required|file|mimes:pdf,jpg,jpeg',
             'insurance' => 'required|file|mimes:pdf,jpg,jpeg',
         ] );

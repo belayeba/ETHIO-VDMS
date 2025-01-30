@@ -23,7 +23,10 @@ class DriverChangeController extends Controller {
         $this->dailyKmCalculation = $dailyKmCalculation;
     }
     public function driver_change_page() {
-        $vehicles = VehiclesModel::all();
+       // $vehicles = VehiclesModel::all();
+        $vehicles = VehiclesModel::whereIn('rental_type', ['field', 'service'])
+                                            ->where('status', 1)
+                                            ->get();
         $drivers = DriversModel::all();
         $driverChange = DriverDriverChangeModel::all();
         return view( 'Driver.switch', compact( 'vehicles', 'drivers', 'driverChange' ) );
