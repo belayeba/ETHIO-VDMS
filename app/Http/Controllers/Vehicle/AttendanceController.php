@@ -19,12 +19,14 @@ class AttendanceController extends Controller
     {
         public function index()
             {
+
                 $routes = Route::get();
                 $today = Carbon::today();
                 $ethio_date = $this->ConvertToEthiopianDate($today);
-                $vehicles_in_attendance = AttendanceModel::select('vehicle_id')->where('created_at',$ethio_date)->get();
-                $already_registered = Route::where('created_at', $ethio_date)->pluck('')->toArray();
-                $vehicles = VehiclesModel::select('vehicle_id')->whereNotIn('vehicle_id',$already_registered)->whereIn('rental_type',['morning_afternoon_minibus','40_60'])->get();
+                $vehicles_in_attendance = AttendanceModel::select('vehicle_id')->where('created_at',$ethio_date)->pluck('vehicle_id')->toArray();
+                // dd($ethio_date);
+                //$already_registered = Route::where('created_at', $ethio_date)->pluck('vehicle_id')->toArray();
+                $vehicles = VehiclesModel::select('vehicle_id','plate_number')->whereNotIn('vehicle_id',$vehicles_in_attendance)->whereIn('rental_type',['morning_afternoon_minibus','40_60'])->get();
                 // $vehicles = Route::select('vehicle_id')->get();
                 return view('Vehicle.Attendance',compact('routes','vehicles'));
             }
@@ -40,8 +42,14 @@ class AttendanceController extends Controller
             }
         public function FetchAttendance()
             {
-
-                $data = AttendanceModel::with(['vehicle', 'route', 'registeredBy'])->latest()->get();
+                $today = Carbon::today();
+                $ethio_date = $this->ConvertToEthiopianDate($today);
+                //$attend_vehicle = VehiclesModel::where('status',true)->whereIn('rental_type',['morning_afternoon_minibus','40_60'])->pluck('vehicle_id')->toArray();
+                $data = AttendanceModel::with(['vehicle', 'route', 'registeredBy'])->where('created_at',$ethio_date)->get();
+                //$data = AttendanceModel::whereIn('vehicle_id',$attend_vehicle)->whereNotIn('vehicle_id',$check_attendance)->get();
+                //$already_registered = Route::where('created_at', $ethio_date)->pluck('vehicle_id')->toArray();
+               // $data = VehiclesModel::select('vehicle_id','plate_number')->whereNotIn('vehicle_id',$vehicles_in_attendance)->whereIn('rental_type',['morning_afternoon_minibus','40_60'])->get();
+                //$data = AttendanceModel::with(['vehicle', 'route', 'registeredBy'])->latest()->get();
                         
                         return datatables()->of($data)
                         ->addIndexColumn()

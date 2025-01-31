@@ -56,22 +56,12 @@
                                                         <select class="form-control" id="vehicleSelect" name="vehicle_id">
                                                             <option value="">Select Vehicle</option>
                                                             @foreach ($vehicles as $vec)
-                                                                <option value="{{$vec->vehicle_id}}">{{$vec->vehicle->plate_number}}</option>
+                                                                <option value="{{$vec->vehicle_id}}">{{$vec->plate_number}}</option>
                                                             @endforeach
                                                         </select>
                                                     </div>
                                                     
-                                                    <div class="position-relative mb-3">
-                                                        <label class="form-label" for="validationTooltip02">Select Route</label>
-                                                        <select class="form-control" id="routeSelect" name="route_id">
-                                                            <option value="">Select Route</option>
-                                                            @foreach ($routes as $route)
-                                                                <option value="{{$route->route_id}}">{{$route->route_name}}</option>
-                                                            @endforeach
-                                                        </select>
-                                                    </div>
-                                                    
-                                                    <div class="position-relative mb-3">
+                                                        <div class="position-relative mb-3">
                                                         <label class="form-label">Attendance</label>
                                                         <div class="row">
                                                             <div class="col-3">
