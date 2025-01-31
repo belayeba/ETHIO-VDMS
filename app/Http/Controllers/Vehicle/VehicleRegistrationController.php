@@ -16,7 +16,8 @@ use Illuminate\Support\Facades\Validator;
 use App\Http\Controllers\Vehicle\Daily_KM_Calculation;
 use Yajra\DataTables\Facades\DataTables;
 
-class VehicleRegistrationController extends Controller {
+class VehicleRegistrationController extends Controller
+{
     // public function index()
     // {
     //     // dd( 'It is vehicle index baby ;)' );
@@ -30,25 +31,26 @@ class VehicleRegistrationController extends Controller {
     {
         $this->dailyKmCalculation = $dailyKmCalculation;
     }
-    public function index() {
+    public function index()
+    {
         $drivers = DriversModel::all();
-        $vehicle = VehiclesModel::paginate( 6 ); 
-    
-        return view( 'Vehicle_Registration.show', compact( 'vehicle', 'drivers' ) );
+        $vehicle = VehiclesModel::paginate(6);
+
+        return view('Vehicle_Registration.show', compact('vehicle', 'drivers'));
     }
     public function list(Request $request)
     {
         $vehicle = VehiclesModel::get();
-    
+
         return DataTables::of($vehicle)
             ->addIndexColumn()
-            ->addColumn('plate_number', function($row){
+            ->addColumn('plate_number', function ($row) {
                 return $row->plate_number;
             })
-            ->addColumn('vehicle_type', function($row){
+            ->addColumn('vehicle_type', function ($row) {
                 return $row->vehicle_type;
             })
-            ->addColumn('vehicle_category', function($row){
+            ->addColumn('vehicle_category', function ($row) {
                 return $row->vehicle_category;
             })
             ->addColumn('action', function ($vehicle) {
@@ -61,8 +63,8 @@ class VehicleRegistrationController extends Controller {
                             </svg>
                         </span>
                     </label>';
-            })        
-            ->addColumn('action', function($row) {
+            })
+            ->addColumn('action', function ($row) {
                 $actions = '<button type="button" class="btn btn-info rounded-pill view-btn" 
                                 data-chancy_number="' . $row->chasis_number . '"
                                 data-make="' . $row->make . '"
@@ -105,31 +107,36 @@ class VehicleRegistrationController extends Controller {
                                 title="Edit">
                                 <i class="ri-pencil-line"></i>
                             </button>';
-            
+
                 return $actions;
-            })            
-            ->rawColumns(['plate_number','vehicle_type','vehicle_category','action'])
+            })
+            ->rawColumns(['plate_number', 'vehicle_type', 'vehicle_category', 'action'])
             ->make(true);
     }
 
-    public function create() {
-        return view( 'vehicles.create' );
+    public function create()
+    {
+        return view('vehicles.create');
     }
-    public function store( Request $request ) {
+    public function store(Request $request)
+    {
         // dd($request);
         $user = Auth::id();
         $capacity = (int) $request->capacity;
 
-        $validator = Validator::make( $request->all(), [
-            'chasis_number' => 'required|string|max:255',
+        $validator = Validator::make($request->all(), [
+            'chasis_number' => 'nullable|string|max:255',
             'make' => 'required|string|max:255',
             'model' => 'required|string|max:255',
             'year' => 'required|integer',
-            'plate_number' => 'required|string|max:255|unique:vehicles,plate_number',  
+            'plate_number' => 'required|string|max:255|unique:vehicles,plate_number',
             'capacity' => 'required|integer',
             'mileage' => 'required|integer',
             'fuel_amount' => 'required|numeric',
-            'engine_number' => 'required|string',
+            'engine_number' => 'nullable|string',
+            'owner_phone' => 'nullable|string',
+            'owner_name' => 'nullable|string',
+            'cc' => 'nullable|string',
             'Last_Service' => 'required|numeric||lt:Next_Service',
             'Next_Service' => 'required|numeric|gt:Last_Service',
             'fuel_type' => 'required|string|In:Electric,Diesel,Benzene',
@@ -139,40 +146,41 @@ class VehicleRegistrationController extends Controller {
             'rental_type' => 'nullable|string|In:morning_afternoon_minibus,40_60,position,whole_day,service,field',
             'libre' => 'required|file|mimes:pdf,jpg,jpeg',
             'insurance' => 'required|file|mimes:pdf,jpg,jpeg',
-        ] );
+        ]);
         // dd($validator);
-        
-        if ( $validator->fails() ) {
-            return redirect()->back()->with('error_message',
-            $validator->errors(),
+
+        if ($validator->fails()) {
+            return redirect()->back()->with(
+                'error_message',
+                $validator->errors(),
             );
         }
         $filelibre = '';
         $fileinsurance = '';
-        if ( $request->hasFile( 'libre' ) ) {
-            $file = $request->file( 'libre' );
-            $storagePath = storage_path( 'app/public/vehicles' );
-            if ( !file_exists( $storagePath ) ) {
-                mkdir( $storagePath, 0755, true );
+        if ($request->hasFile('libre')) {
+            $file = $request->file('libre');
+            $storagePath = storage_path('app/public/vehicles');
+            if (!file_exists($storagePath)) {
+                mkdir($storagePath, 0755, true);
             }
 
             $filelibre = time() . '_' . $file->getClientOriginalName();
-            $file->move( $storagePath, $filelibre );
+            $file->move($storagePath, $filelibre);
         }
-        if ( $request->hasFile( 'insurance' ) ) {
-            $file = $request->file( 'insurance' );
+        if ($request->hasFile('insurance')) {
+            $file = $request->file('insurance');
 
-            $storagePath = storage_path( 'app/public/vehicles' );
-            if ( !file_exists( $storagePath ) ) {
-                mkdir( $storagePath, 0755, true );
+            $storagePath = storage_path('app/public/vehicles');
+            if (!file_exists($storagePath)) {
+                mkdir($storagePath, 0755, true);
             }
             $fileinsurance = time() . '_' . $file->getClientOriginalName();
-            $file->move( $storagePath, $fileinsurance );
+            $file->move($storagePath, $fileinsurance);
         }
         $today = \Carbon\Carbon::now();
-        $ethiopianDate = $this->dailyKmCalculation->ConvertToEthiopianDate($today); 
-        VehiclesModel::create( [
-            'chasis_number'=>$request->chasis_number,
+        $ethiopianDate = $this->dailyKmCalculation->ConvertToEthiopianDate($today);
+        VehiclesModel::create([
+            'chasis_number' => $request->chasis_number,
             'make' => $request->make,
             'model' => $request->model,
             'year' => $request->year,
@@ -180,6 +188,9 @@ class VehicleRegistrationController extends Controller {
             'plate_number' => $request->plate_number,
             'mileage' => $request->mileage,
             'fuel_amount' => $request->fuel_amount,
+            'owner_name' => $request->owner_name,
+            'owner_phone' => $request->owner_phone,
+            'cc' => $request->cc,
             'last_service' => $request->Last_Service,
             'next_service' => $request->Next_Service,
             'registered_by' => $user,
@@ -192,18 +203,19 @@ class VehicleRegistrationController extends Controller {
             'libre' => $filelibre,
             'insurance' => $fileinsurance,
             'created_at' => $ethiopianDate
-        ] );
+        ]);
 
-        return redirect()->back()->with( 'success_message', 'Vehicle created successfully.' );
-
+        return redirect()->back()->with('success_message', 'Vehicle created successfully.');
     }
 
-    public function show( VehicleInfo $vehicle ) {
-        return view( 'vehicles.show', compact( 'vehicle' ) );
+    public function show(VehicleInfo $vehicle)
+    {
+        return view('vehicles.show', compact('vehicle'));
     }
 
-    public function edit( VehicleInfo $vehicle ) {
-        return view( 'vehicles.edit', compact( 'vehicle' ) );
+    public function edit(VehicleInfo $vehicle)
+    {
+        return view('vehicles.edit', compact('vehicle'));
     }
     // public function updateStatus(Request $request, $id)
     // {
@@ -222,7 +234,7 @@ class VehicleRegistrationController extends Controller {
     {
         $user = Auth::id();
         $vehicle = VehiclesModel::findOrFail($id);
-    
+
         // Define validation rules
         $rules = [
             'chasis_number' => 'nullable|string|max:255',
@@ -236,6 +248,9 @@ class VehicleRegistrationController extends Controller {
             'fuel_type' => 'nullable|string|max:255',
             'last_service' => 'nullable|integer',
             'next_service' => 'nullable|integer',
+            'owner_phone' => 'nullable|string',
+            'owner_name' => 'nullable|string',
+            'cc' => 'nullable|string',
             'notes' => 'nullable|string|max:255',
             'vehicle_category' => 'nullable|string|max:255',
             'vehicle_type' => 'nullable|string|max:255',
@@ -244,18 +259,18 @@ class VehicleRegistrationController extends Controller {
             'libre' => 'nullable|file',
             'insurance' => 'nullable|file',
         ];
-    
+
         // Validate the request
         $validator = Validator::make($request->all(), $rules);
         if ($validator->fails()) {
             return redirect()->back()->with('error_message', $validator->errors());
         }
-    
+
         // Handle file uploads
         $filelibre = $vehicle->libre; // Default to existing file
         $fileinsurance = $vehicle->insurance; // Default to existing file
         $storagePath = storage_path('app/public/vehicles');
-    
+
         if ($request->hasFile('libre')) {
             if (!file_exists($storagePath)) {
                 mkdir($storagePath, 0755, true);
@@ -263,7 +278,7 @@ class VehicleRegistrationController extends Controller {
             $filelibre = time() . '_' . $request->file('libre')->getClientOriginalName();
             $request->file('libre')->move($storagePath, $filelibre);
         }
-    
+
         if ($request->hasFile('insurance')) {
             if (!file_exists($storagePath)) {
                 mkdir($storagePath, 0755, true);
@@ -271,7 +286,7 @@ class VehicleRegistrationController extends Controller {
             $fileinsurance = time() . '_' . $request->file('insurance')->getClientOriginalName();
             $request->file('insurance')->move($storagePath, $fileinsurance);
         }
-    
+
         // Prepare update data dynamically
         $updateData = $request->only([
             'chasis_number',
@@ -284,6 +299,9 @@ class VehicleRegistrationController extends Controller {
             'fuel_amount',
             'fuel_type',
             'last_service',
+            'owner_phone',
+            'cc',
+            'owner_phone',
             'next_service',
             'notes',
             'vehicle_category',
@@ -291,41 +309,44 @@ class VehicleRegistrationController extends Controller {
             'rental_type',
             'inspection_id',
         ]);
-    
+
         // Add dynamic values
         $updateData['libre'] = $filelibre;
         $updateData['insurance'] = $fileinsurance;
         $updateData['registered_by'] = $user;
         $updateData['registration_date'] = $this->dailyKmCalculation->ConvertToEthiopianDate(\Carbon\Carbon::now());
-    
+
         // Remove null fields from the update array
         $updateData = array_filter($updateData, fn($value) => !is_null($value));
-    
+
         // Update the vehicle
         $vehicle->update($updateData);
-    
+
         return redirect()->back()->with('success_message', 'Successfully Updated.');
     }
-    
 
-    public function destroy( Request $request ) {
-        $validation = Validator::make( $request->all(), [
-            'request_id'=>'required|exists:vehicles,vehicle_id',
-        ] );
+
+    public function destroy(Request $request)
+    {
+        $validation = Validator::make($request->all(), [
+            'request_id' => 'required|exists:vehicles,vehicle_id',
+        ]);
         // Check validation error
-        if ( $validation->fails() ) {
-            return redirect()->back()->with('error_message',
-                                'Warning! You are denied the service.',
-                                );
+        if ($validation->fails()) {
+            return redirect()->back()->with(
+                'error_message',
+                'Warning! You are denied the service.',
+            );
         }
         // Check if the request is that of this users
-        $id = $request->input( 'request_id' );
+        $id = $request->input('request_id');
         try {
-            $Vehicle = VehiclesModel::findOrFail( $id );
-            if ( $Vehicle->driver_id != null ) {
-                return redirect()->back()->with('error_message',
-                               "You cannot delete this vehilce",
-                            );
+            $Vehicle = VehiclesModel::findOrFail($id);
+            if ($Vehicle->driver_id != null) {
+                return redirect()->back()->with(
+                    'error_message',
+                    "You cannot delete this vehilce",
+                );
             }
             $references = [
                 ['table' => 'vehicle_inspections', 'column' => 'vehicle_id'],
@@ -343,120 +364,132 @@ class VehicleRegistrationController extends Controller {
             // Check each table for references
             foreach ($references as $reference) {
                 if (DB::table($reference['table'])->where($reference['column'], $id)->exists()) {
-                    return redirect()->back()->with('error_message',
-                    "Record is referenced in another table and cannot be deleted",
-                            );
+                    return redirect()->back()->with(
+                        'error_message',
+                        "Record is referenced in another table and cannot be deleted",
+                    );
                 }
             }
             $Vehicle->delete();
-            return redirect()->back()->with('success_message',
+            return redirect()->back()->with(
+                'success_message',
                 'Successfully Deleted.',
             );
-        } catch ( Exception $e ) {
+        } catch (Exception $e) {
             // Handle the case when the vehicle request is not found
-            return redirect()->back()->with('error_message',
-                               "Sorry, Something went wrong",
-                            );
+            return redirect()->back()->with(
+                'error_message',
+                "Sorry, Something went wrong",
+            );
         }
     }
     /**
-    * Display the details for a specific vehicle.
-    *
-    * @param  Vehicle  $vehicle
-    * @return \Illuminate\Http\Response
-    */
+     * Display the details for a specific vehicle.
+     *
+     * @param  Vehicle  $vehicle
+     * @return \Illuminate\Http\Response
+     */
 
-    public function showDetails( VehicleInfo $vehicle ) {
-        $details = $vehicle->details()->with( 'user', 'driver' )->get();
-        return view( 'vehicles.details.index', compact( 'vehicle', 'details' ) );
+    public function showDetails(VehicleInfo $vehicle)
+    {
+        $details = $vehicle->details()->with('user', 'driver')->get();
+        return view('vehicles.details.index', compact('vehicle', 'details'));
     }
 
     /**
-    * Show the form for creating a new vehicle detail.
-    *
-    * @param  Vehicle  $vehicle
-    * @return \Illuminate\Http\Response
-    */
+     * Show the form for creating a new vehicle detail.
+     *
+     * @param  Vehicle  $vehicle
+     * @return \Illuminate\Http\Response
+     */
 
-    public function createDetail( VehicleInfo $vehicle ) {
-        return view( 'vehicles.details.create', compact( 'vehicle' ) );
+    public function createDetail(VehicleInfo $vehicle)
+    {
+        return view('vehicles.details.create', compact('vehicle'));
     }
 
     /**
-    * Store a newly created vehicle detail in storage.
-    *
-    * @param  \Illuminate\Http\Request  $request
-    * @param  Vehicle  $vehicle
-    * @return \Illuminate\Http\Response
-    */
+     * Store a newly created vehicle detail in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  Vehicle  $vehicle
+     * @return \Illuminate\Http\Response
+     */
 
-    public function storeDetail( Request $request, VehicleInfo $vehicle ) {
-        $validated = $request->validate( [
+    public function storeDetail(Request $request, VehicleInfo $vehicle)
+    {
+        $validated = $request->validate([
             'detail' => 'required|string|max:2000',
             'register_by' => 'required|uuid|exists:users,id',
             'date' => 'required|date',
             'mileage' => 'required|integer',
             'driver_id' => 'required|uuid|exists:drivers,driver_id',
-        ] );
+        ]);
 
-        $validated[ 'vehicle_id' ] = $vehicle->vehicle_id;
+        $validated['vehicle_id'] = $vehicle->vehicle_id;
 
-        VehicleDetailModel::create( $validated );
-        return redirect()->back()->with('success_message',
-        "Vehicle detail created successfully.",
-     );
+        VehicleDetailModel::create($validated);
+        return redirect()->back()->with(
+            'success_message',
+            "Vehicle detail created successfully.",
+        );
     }
 
     /**
-    * Show the form for editing a specific vehicle detail.
-    *
-    * @param  Vehicle  $vehicle
-    * @param  VehicleDetail  $detail
-    * @return \Illuminate\Http\Response
-    */
+     * Show the form for editing a specific vehicle detail.
+     *
+     * @param  Vehicle  $vehicle
+     * @param  VehicleDetail  $detail
+     * @return \Illuminate\Http\Response
+     */
 
-    public function editDetail( VehicleInfo $vehicle, VehicleDetailModel $detail ) {
-        return view( 'vehicles.details.edit', compact( 'vehicle', 'detail' ) );
+    public function editDetail(VehicleInfo $vehicle, VehicleDetailModel $detail)
+    {
+        return view('vehicles.details.edit', compact('vehicle', 'detail'));
     }
 
     /**
-    * Update the specified vehicle detail in storage.
-    *
-    * @param  \Illuminate\Http\Request  $request
-    * @param  Vehicle  $vehicle
-    * @param  VehicleDetail  $detail
-    * @return \Illuminate\Http\Response
-    */
+     * Update the specified vehicle detail in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  Vehicle  $vehicle
+     * @param  VehicleDetail  $detail
+     * @return \Illuminate\Http\Response
+     */
 
-    public function updateDetail( Request $request, VehicleInfo $vehicle, VehicleDetailModel $detail ) {
-        $validated = $request->validate( [
+    public function updateDetail(Request $request, VehicleInfo $vehicle, VehicleDetailModel $detail)
+    {
+        $validated = $request->validate([
             'detail' => 'required|string|max:2000',
             'register_by' => 'required|uuid|exists:users,id',
             'date' => 'required|date',
             'mileage' => 'required|integer',
             'driver_id' => 'required|uuid|exists:drivers,driver_id',
-        ] );
+        ]);
 
-        $detail->update( $validated );
+        $detail->update($validated);
 
-        return redirect()->back()->with('success_message',
-        "Vehicle detail updated successfully.",
-     );    
+        return redirect()->back()->with(
+            'success_message',
+            "Vehicle detail updated successfully.",
+        );
     }
 
     /**
-    * Remove the specified vehicle detail from storage.
-    *
-    * @param  Vehicle  $vehicle
-    * @param  VehicleDetail  $detail
-    * @return \Illuminate\Http\Response
-    */
+     * Remove the specified vehicle detail from storage.
+     *
+     * @param  Vehicle  $vehicle
+     * @param  VehicleDetail  $detail
+     * @return \Illuminate\Http\Response
+     */
 
-    public function destroyDetail( VehicleInfo $vehicle, VehicleDetailModel $detail ) {
+    public function destroyDetail(VehicleInfo $vehicle, VehicleDetailModel $detail)
+    {
         $detail->delete();
-        return redirect()->back()->with('success_message',
-        "Vehicle detail deleted successfully.",
-     );
-       // return redirect()->route( 'vehicles.details.index', $vehicle )->with( 'success', 'Vehicle detail deleted successfully.' );
+        return redirect()->back()->with(
+            'success_message',
+            "Vehicle detail deleted successfully.",
+        );
+        // return redirect()->route( 'vehicles.details.index', $vehicle )->with( 'success', 'Vehicle detail deleted successfully.' );
     }
 }
