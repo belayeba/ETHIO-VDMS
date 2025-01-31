@@ -424,6 +424,7 @@
                                                 <dl class="row mb-0">
                                                     <dt class="col-sm-5">Request reason</dt>
                                                     <dd class="col-sm-7" data-field="purpose"></dd>
+                                                    
                                                     <dt class="col-sm-5">Requested vehicle</dt>
                                                     <dd class="col-sm-7" data-field="vehicle_type"></dd>
 
