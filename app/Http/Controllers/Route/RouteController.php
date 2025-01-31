@@ -27,7 +27,7 @@ class RouteController extends Controller
     public function displayAllRoutes() 
         {
             $routes = Route::get();
-            $vehicles = VehiclesModel::all();
+            $vehicles = VehiclesModel::whereIn('rental_type',['morning_afternoon_minibus','40_60'])->get();
             return view( 'Route.index', compact( 'routes', 'vehicles' ) );
         }
     public function own_route() 

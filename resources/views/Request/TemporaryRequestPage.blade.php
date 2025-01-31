@@ -424,26 +424,30 @@
                                                 <dl class="row mb-0">
                                                     <dt class="col-sm-5">Request reason</dt>
                                                     <dd class="col-sm-7" data-field="purpose"></dd>
-
                                                     <dt class="col-sm-5">Requested vehicle</dt>
                                                     <dd class="col-sm-7" data-field="vehicle_type"></dd>
 
                                                     <dt class="col-sm-5">Start date and Time</dt>
+
                                                     <dd class="col-sm-7" data-field="start_date"></dd>
 
                                                     <dt class="col-sm-5">Return date and Time</dt>
+
                                                     <dd class="col-sm-7" data-field="end_date"></dd>
 
                                                     <dt class="col-sm-5">Location From and To</dt>
+
                                                     <dd class="col-sm-7" data-field="start_location"></dd>
 
                                                     <dt class="col-sm-5">Passengers</dt>
+
                                                     <dd class="col-sm-7" data-field="passengers"></dd>
 
                                                     <dt class="col-sm-5">Materials</dt>
                                                     <dd class="col-sm-7" data-field="materials"></dd>
 
                                                     <dt class="col-sm-5">Progress</dt>
+                                                    
                                                     <dd class="col-sm-7" data-field="progress"></dd>
                                                 </dl>
                                             </div>
@@ -725,7 +729,7 @@
                      const messages = [
                         {
                             condition: button.data('dir_approved_by') && !button.data('director_reject_reason'),
-                            message: '<span style="color: green;"> Approved By '+ button.data('dir_approved_by')+'(Division Director)</span>'
+                            message: '<span style="color: green;">'+ button.data('dir_approved_by')+'</span>'
                         },
                         {
                             condition: button.data('director_reject_reason') && button.data('dir_approved_by'),
@@ -733,7 +737,7 @@
                         },
                         {
                             condition: button.data('div_approved_by') && !button.data('cluster_director_reject_reason'),
-                            message: '<span style="color: green;">Approved By ' + button.data('div_approved_by')+  '(Clustor Director)</span>'
+                            message: '<span style="color: green;">' + button.data('div_approved_by')+  '</span>'
                         },
                         {
                             condition: button.data('cluster_director_reject_reason') && button.data('div_approved_by'),
