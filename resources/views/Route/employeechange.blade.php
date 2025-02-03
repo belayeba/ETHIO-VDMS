@@ -47,6 +47,7 @@
                             
                             </div>
                         </section>
+                        <meta name="csrf-token" content="{{ csrf_token() }}">
 
                         <section class="admin-visitor-area up_st_admin_visitor">
                             <div class="container-fluid p-0">
@@ -132,7 +133,7 @@
                                                                 <th>#</th>
                                                                 <th>Employee</th>
                                                                 <th>Location</th>
-                                                                <!-- <th>Phone</th>  -->
+                                                                <th>Action</th>
                                                             </tr>
                                                         </thead>
                                                         <tbody>
@@ -141,7 +142,17 @@
                                                                 <td>{{ $loop->iteration }}</td> <!-- Loop iteration for numbering -->
                                                                 <td>{{ $dat->user->first_name. " ". $dat->user->middle_name}}</td> <!-- Ensure user exists -->
                                                                 <td>{{ $dat->employee_start_location  ?? 'N/A'}}</td> <!-- Ensure department exists -->
-                                                                <!-- <td>{{ $dat->user->phone ?? 'N/A' }}</td> -->
+                                                                <td>
+                                                                    @if (auth()->id() == $dat->user->id && $dat->employee_start_location == 'Unkown') 
+                                                                        <button class="btn btn-primary btn-sm editLocationBtn" 
+                                                                                data-id="{{ $dat->route_user_id }}" 
+                                                                                data-location="{{ $dat->employee_start_location ?? '' }}"
+                                                                                data-bs-toggle="modal" 
+                                                                                data-bs-target="#editLocationModal">
+                                                                            Edit
+                                                                        </button>
+                                                                    @endif
+                                                                </td>                                                                
                                                             </tr>
                                                             @endforeach
                                                         </tbody>
@@ -176,6 +187,31 @@
                                 </div>
                             </div>
                         </div>  
+                        <!-- Edit Location Modal -->
+                        <div class="modal fade" id="editLocationModal" tabindex="-1" aria-labelledby="editLocationModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title">Update Location</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <form method="POST" action="{{ route('employee.updateLocation') }}" id="editLocationForm">
+                                            @csrf
+                                            <input type="hidden" name="route_user_id" id="editEmployeeId">  <!-- Fix: Ensure this updates dynamically -->
+                                            
+                                            <div class="mb-3">
+                                                <label for="editLocation" class="form-label">New Location</label>
+                                                <input type="text" class="form-control" id="editLocation" name="location" required>
+                                            </div>
+                        
+                                            <button type="submit" class="btn btn-success">Update</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>                        
+                        
                     </div>  
                 </div> 
                
@@ -256,6 +292,18 @@
         return $state;
     }
 </script>
+
+    <script>
+        $(document).ready(function () {
+        $('.editLocationBtn').on('click', function () {
+            let employeeId = $(this).data('id'); // Get ID from button
+            let currentLocation = $(this).data('location'); // Get current location
+            
+            $('#editEmployeeId').val(employeeId); // Set ID in hidden input
+            $('#editLocation').val(currentLocation); // Set location in input
+        });
+    });
+    </script>
 
     <!-- Vendor js -->
     <script src="{{ asset('assets/js/vendor.min.js') }}"></script>

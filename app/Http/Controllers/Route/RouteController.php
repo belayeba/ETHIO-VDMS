@@ -21,41 +21,40 @@ class RouteController extends Controller
     protected $dailyKmCalculation;
 
     public function __construct(Daily_KM_Calculation $dailyKmCalculation)
-        {
-            $this->dailyKmCalculation = $dailyKmCalculation;
+    {
+        $this->dailyKmCalculation = $dailyKmCalculation;
+    }
+    public function displayAllRoutes()
+    {
+        $routes = Route::get();
+        $vehicles = VehiclesModel::whereIn('rental_type', ['morning_afternoon_minibus', '40_60'])->get();
+        return view('Route.index', compact('routes', 'vehicles'));
+    }
+    public function own_route()
+    {
+        $id = Auth::id();
+        $get_route_user =  RouteUser::where('employee_id', $id)->first();
+        $route = [];
+        $routeUser = [];
+        $users = [];
+        $routes = Route::get();
+        if ($get_route_user) {
+            $route_id =  $get_route_user->route_id;
+            $route = Route::findOrFail($route_id)->first();
+            $assignedUserIds = RouteUser::where('route_id', $route_id)->pluck('employee_id'); // Get all user IDs already in RouteUser
+            $users = User::whereIn('id', $assignedUserIds)->get(); // Exclude these users
+            $routeUser = RouteUser::where('route_id', $route_id)->get();
+            $routeUser = $routeUser->groupBy('route_id');
         }
-    public function displayAllRoutes() 
-        {
-            $routes = Route::get();
-            $vehicles = VehiclesModel::whereIn('rental_type',['morning_afternoon_minibus','40_60'])->get();
-            return view( 'Route.index', compact( 'routes', 'vehicles' ) );
-        }
-    public function own_route() 
-        {
-            $id = Auth::id();
-            $get_route_user =  RouteUser::where('employee_id',$id)->first();
-            $route = [];
-            $routeUser = [];
-            $users = [];
-            $routes = Route::get();
-            if($get_route_user)
-                {
-                    $route_id =  $get_route_user->route_id;
-                    $route = Route::findOrFail($route_id)->first();
-                    $assignedUserIds = RouteUser::where('route_id',$route_id)->pluck('employee_id'); // Get all user IDs already in RouteUser
-                    $users = User::whereIn('id', $assignedUserIds)->get(); // Exclude these users
-                    $routeUser = RouteUser::where('route_id',$route_id)->get();
-                    $routeUser = $routeUser->groupBy( 'route_id' );
-                }
-               return view( 'Route.employeechange', compact( 'route','routes', 'users', 'routeUser' ));
-        }
-    public function displayRoute() 
-        {
-            $routes = Route::get();
-            $assignedUserIds = RouteUser::pluck('employee_id'); // Get all user IDs already in RouteUser
-            $users = User::whereNotIn('id', $assignedUserIds)->get(); // Exclude these users
-            $routeUser = RouteUser::all();
-            $routeUser = $routeUser->groupBy( 'route_id' );
+        return view('Route.employeechange', compact('route', 'routes', 'users', 'routeUser'));
+    }
+    public function displayRoute()
+    {
+        $routes = Route::get();
+        $assignedUserIds = RouteUser::pluck('employee_id'); // Get all user IDs already in RouteUser
+        $users = User::whereNotIn('id', $assignedUserIds)->get(); // Exclude these users
+        $routeUser = RouteUser::all();
+        $routeUser = $routeUser->groupBy('route_id');
 
         return view('Route.show', compact('routes', 'users', 'routeUser'));
     }
@@ -167,7 +166,7 @@ class RouteController extends Controller
         $route = Route::findOrFail($route_id);
 
         // Delete the route
-       // $route->delete();
+        // $route->delete();
 
         // Return a success message 
         return redirect()->back()->with('error_message', 'You cannot Delete this route.',);
@@ -187,5 +186,30 @@ class RouteController extends Controller
     {
         RouteUser::where('route_id', $route_id)->delete();
         return redirect()->back()->with('success_message', 'All user removed successfullly.',);
+    }
+    public function updateLocation(Request $request)
+    {
+        // dd($request);
+        $request->validate([
+            'route_user_id' => 'required|exists:route_user,route_user_id',
+            'location' => 'required|string|max:255'
+        ]);
+        $user = Auth::user();
+        $employee = RouteUser::findOrFail($request->route_user_id);
+
+        // Ensure the logged-in user can only update their own location
+        if ($user->id !== $employee->employee_id) {
+            return redirect()->back()->with('error_message', 'Warning! You are denied the service',);
+        }
+        // Ensure the employee can only update their location if it is 'Unkown'
+        if ($employee->employee_start_location !== 'Unkown') {
+            return redirect()->back()->with('error_message', 'Warning! You are denied the service.');
+        }
+
+        // Update location
+        $employee->employee_start_location = $request->location;
+        $employee->update();
+
+        return redirect()->back()->with('success_message', 'Location updated Successfully',);
     }
 }
