@@ -76,9 +76,12 @@
                                     
                                     <div class="col-md-8">
                                         <div class="card">
-                                            <div class="card-header">
+                                            <div class="card-header d-flex justify-content-between align-items-center">
                                                 <h4 class="header-title mb-0">My Route</h4>
-                                            </div>
+                                                <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#progressModal">
+                                                    <i class="bi bi-bar-chart-line"></i> View Progress
+                                                </button>
+                                            </div>                                            
                                             <div class="card-body">
                                                 <div class="table-responsive">
                                                     <table id="lms_table" class="table">
@@ -123,7 +126,7 @@
                                         <div class="modal-dialog modal-lg">
                                             <div class="modal-content">
                                                 <div class="modal-header">
-                                                    <h5 class="modal-title" id="viewEmployeeModalLabel">View Employee Details for Route {{ $data->first()->route->route_name }}</h5>
+                                                    <h5 class="modal-title" id="viewEmployeeModalLabel">View Employee Details for Route : {{ $data->first()->route->route_name }}</h5>
                                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                 </div>
                                                 <div class="modal-body">
@@ -167,6 +170,46 @@
                             </div>
                         </section>
                         
+                        <!-- Progress Modal -->
+                        <div class="modal fade" id="progressModal" tabindex="-1" aria-labelledby="progressModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-lg">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="progressModalLabel">Request Progress</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <table class="table table-responsive">
+                                            <thead>
+                                                <tr>
+                                                    <th>#</th>
+                                                    <th>Requested At</th>
+                                                    <th>Location</th>
+                                                    <th>Comment</th>
+                                                    <th>Changed_by</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="progressTableBody">
+                                                @foreach ($Requests as $request)
+                                                    <td>{{ $loop->iteration }}</td>
+                                                    <td>{{ $request->created_at->format('d M Y') }}</td> 
+                                                    <td>{{ $request->location_name }}</td>
+                                                    <td>{{ $request->comment ??' N/A' }}</td>
+                                                    <td>
+                                                        @if ($request->changedBy)
+                                                            {{ $request->changedBy->first_name }} {{ $request->changedBy->last_name }}
+                                                        @else
+                                                            N/A
+                                                        @endif
+                                                    </td>
+                                                @endforeach
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                         <!-- Confirmation Modal -->
                         <div class="modal fade" id="confirm-delete" tabindex="-1" role="dialog" aria-labelledby="confirmDeleteLabel" aria-hidden="true">
                             <div class="modal-dialog modal-dialog-centered" role="document">

@@ -11,6 +11,7 @@ use App\Models\Vehicle\VehiclesModel as Vehicle;
 use App\Models\Vehicle\VehiclesModel;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Controllers\Vehicle\Daily_KM_Calculation;
+use App\Models\RouteManagement\EmployeeChangeLocation;
 use App\Models\RouteManagement\RouteChange;
 use Exception;
 use Illuminate\Support\Facades\Auth;
@@ -33,6 +34,7 @@ class RouteController extends Controller
     public function own_route()
     {
         $id = Auth::id();
+        $Requests = EmployeeChangeLocation::where('registered_by', auth()->id())->with('changedBy')->get();
         $get_route_user =  RouteUser::where('employee_id', $id)->first();
         $route = [];
         $routeUser = [];
@@ -46,7 +48,7 @@ class RouteController extends Controller
             $routeUser = RouteUser::where('route_id', $route_id)->get();
             $routeUser = $routeUser->groupBy('route_id');
         }
-        return view('Route.employeechange', compact('route', 'routes', 'users', 'routeUser'));
+        return view('Route.employeechange', compact('route', 'routes', 'users', 'routeUser', 'Requests'));
     }
     public function displayRoute()
     {
@@ -189,7 +191,6 @@ class RouteController extends Controller
     }
     public function updateLocation(Request $request)
     {
-        // dd($request);
         $request->validate([
             'route_user_id' => 'required|exists:route_user,route_user_id',
             'location' => 'required|string|max:255'
