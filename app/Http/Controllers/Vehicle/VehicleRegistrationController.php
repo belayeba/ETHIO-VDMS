@@ -143,7 +143,8 @@ class VehicleRegistrationController extends Controller
             'notes' => 'nullable|string',
             'vehicle_type' => 'required|string|In:Organizational,Rental',
             'vehicle_category' => 'required|string|max:255',
-            'rental_type' => 'nullable|string|In:morning_afternoon_minibus,40_60,position,whole_day,service,field',
+            'organization_type' => 'nullable|string|In:position,service,field',
+            'rental_type' => 'nullable|string|In:morning_afternoon_minibus,40_60,position,whole_day',
             'libre' => 'required|file|mimes:pdf,jpg,jpeg',
             'insurance' => 'required|file|mimes:pdf,jpg,jpeg',
         ]);
@@ -179,6 +180,18 @@ class VehicleRegistrationController extends Controller
         }
         $today = \Carbon\Carbon::now();
         $ethiopianDate = $this->dailyKmCalculation->ConvertToEthiopianDate($today);
+        if($request->rental_type)
+            {
+                $vec_type = $request->rental_type;
+            }
+        elseif($request->organization_type)
+            {
+                $vec_type = $request->organization_type;
+            }
+        else
+          {
+            return redirect()->back()->with('error_message',"Check Service of the vehicle");
+          }
         VehiclesModel::create([
             'chasis_number' => $request->chasis_number,
             'make' => $request->make,
@@ -199,7 +212,7 @@ class VehicleRegistrationController extends Controller
             'vehicle_type' => $request->vehicle_type,
             'capacity' => $capacity,
             'vehicle_category' => $request->vehicle_category,
-            'rental_type' => $request->rental_type,
+            'rental_type' => $vec_type,
             'libre' => $filelibre,
             'insurance' => $fileinsurance,
             'created_at' => $ethiopianDate

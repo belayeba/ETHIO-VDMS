@@ -288,7 +288,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::post('/daily_km/morning', 'morning_km')->name('daily_km.page.morning'); // Show a specific inspection
         Route::post('/daily_km/afternoon', 'aftern_km')->name('daily_km.page.evening'); // List all inspections
         Route::get('/daily_km/page', 'displayPage')->name('daily_km.page'); // inspection page
-        Route::delete('/daily_km/delete', 'delete_morningkm')->name('daily_km.page.delete'); // Delete a specific inspection
+        Route::post('d_k/update', 'updateKm')->name('daily_km.page.update'); // Delete a specific inspection
     });
 
     Route::get('/vehicle/report/data', [Daily_KM_Calculation::class, 'vehicleReport'])->name('dailyreport.vehicleReport');

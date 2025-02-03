@@ -28,7 +28,7 @@ class InspectionController extends Controller
 
     public function InspectionPage()
         {
-            $vehicle = VehiclesModel::select('vehicle_id')->whereNotIn('rental_type',['morning_afternoon_minibus','40_60','whole_day'])->where('status',true)->get();
+            $vehicle = VehiclesModel::select('vehicle_id','plate_number')->whereNotIn('rental_type',['morning_afternoon_minibus','40_60','whole_day'])->where('status',true)->get();
             $parts = VehiclePart::all();
             $inspections = InspectionModel::select('inspection_id','vehicle_id', 'inspected_by', 'inspection_date')
                 ->distinct()

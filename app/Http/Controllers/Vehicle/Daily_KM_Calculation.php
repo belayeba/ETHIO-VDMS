@@ -39,9 +39,9 @@ class Daily_KM_Calculation extends Controller
                 return view('Vehicle.DailKmForm',compact('vehicle','TodaysDate'));
             }
            
-            public function ReportPage()
+        public function ReportPage()
             {
-                $vehicles = VehiclesModel::select('vehicle_id', 'plate_number')->get();
+                $vehicles = VehiclesModel::select('vehicle_id', 'plate_number')->whereIn('rental_type',['field','service','whole_day'])->get();
                 $drivers = DriversModel::with('registeredBy', 'user')->get();
                 $departments = DepartmentsModel::select('department_id', 'name')->get();
         
@@ -70,7 +70,7 @@ class Daily_KM_Calculation extends Controller
                 return view('Vehicle.dailyReport', compact('vehicles', 'drivers', 'departments', 'dailkms'));
             }
 
-            public function vehicleReport()
+        public function vehicleReport()
         {
         $drivers = User::all();
         $departments = DepartmentsModel::select('department_id', 'name')->get();
@@ -612,6 +612,14 @@ class Daily_KM_Calculation extends Controller
                            $driver_id = $driver_from_vehicle->driver_id;
                             if($vehicle_daily)
                               {
+                                  if($vehicle_daily->afternoon_km)
+                                    {
+                                        if($vehicle_daily->afternoon_km < $request->morning_km)
+                                            {
+                                                return redirect()->back()->with('error_message',
+                                                "Morning KM should be less than Afternoon.");
+                                            }
+                                    }
                                    // update morning km
                                    $vehicle_daily->morning_km = $request->morning_km;
                                    $vehicle_daily->save();
@@ -670,6 +678,14 @@ class Daily_KM_Calculation extends Controller
                             $driver_id = $driver_from_vehicle->driver_id;
                             if($vehicle)
                               {
+                                        if($vehicle->morning_km)
+                                            {
+                                                if($vehicle->afternoon_km < $request->morning_km)
+                                                    {
+                                                        return redirect()->back()->with('error_message',
+                                                        "Morning KM should be less than Afternoon.");
+                                                    }
+                                            }
                                    // update morning km
                                    $vehicle->afternoon_km = $request->afternoon_km;
                                    $vehicle->save();
@@ -690,6 +706,67 @@ class Daily_KM_Calculation extends Controller
                             return redirect()->back()->with('success_message',
                             'Afternoon KM calcuation Registered Successfully.',
                        );
+                                
+                        }
+                    catch (Exception $e) 
+                        {
+                            // Handle the case when the vehicle request is not found
+                            return redirect()->back()->with('error_message',
+                            'Sorry, Something went wrong',
+                       );
+                        }
+            }
+        public function updateKm(Request $request)
+            {
+                    // Validate the request
+
+                    $validator = Validator::make($request->all(), [
+                        'afternoon_km' => 'required|integer',
+                        'morning_km' => 'required|integer',
+                        'calc_id'=>'required|uuid|exists:daily_km_calculations,calculation_id',
+                        // 'driver_id'=>'required|uuid|exists:drivers,driver_id'
+                    ]);            
+                    // If validation fails, return an error response
+                    if ($validator->fails()) 
+                        {
+                            return redirect()->back()->with('error_message',
+                                 $validator->errors(),
+                            );
+                        }
+
+                    $id = Auth::id();
+                    try
+                        {
+                            $vehicle = DailyKMCalculationModel::findOrFail($request->input('calc_id'));
+                            // $driver_from_vehicle = VehiclesModel::select('driver_id')->where('vehicle_id',$request->vehicle)->first();
+                            // /// $driver_id = $vehicle->driver_id;
+                            // if(!$driver_from_vehicle || !$driver_from_vehicle->driver_id)
+                            //   {
+                            //     return redirect()->back()->with('error_message',
+                            //     "No Driver.");
+                            //   }
+                            if($vehicle)
+                              {
+                                        // if($vehicle->morning_km)
+                                        //     {
+                                                if($request->afternoon_km < $request->morning_km)
+                                                    {
+                                                        return redirect()->back()->with('error_message',
+                                                        "Morning KM should be less than Afternoon.");
+                                                    }
+                                            // }
+                                   // update morning km
+                                   $vehicle->afternoon_km = $request->afternoon_km;
+                                   $vehicle->morning_km = $request->morning_km;
+                                   $vehicle->save();
+                                    // Success: Record was created
+                                    return redirect()->back()->with('success_message',
+                                            'Afternoon KM calcuation Registered Successfully.',
+                                    );
+                              }
+                              return redirect()->back()->with('error_message',
+                              'Warning! You are denied the service',
+                         );
                                 
                         }
                     catch (Exception $e) 

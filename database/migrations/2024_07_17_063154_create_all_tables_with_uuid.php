@@ -472,6 +472,7 @@ class CreateAllTablesWithUuid extends Migration
             $table->integer('allowed_km')->nullable();
             $table->integer('end_km')->nullable();
             $table->string('status', 255)->default('Pending');
+            $table->string('field_letter');
             $table->boolean('with_driver')->default(1);
             $table->uuid('vehicle_id')->nullable();
             $table->foreign('vehicle_id')->references('vehicle_id')->on('vehicles')->onDelete('restrict');

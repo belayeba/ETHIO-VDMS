@@ -144,8 +144,9 @@
                                         <tr>
                                             <th>Vehicle</th>
                                             <th>Morning Km</th>
+                                            <th>Night Difference</th>
                                             <th>Evening km</th>
-                                            <th>Difference</th>
+                                            <th>Day Difference</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>                                  
@@ -154,27 +155,15 @@
                                             <tr>
                                                 <td>{{ $data->vehicle->plate_number }}</td>
                                                 <td>{{ $data->morning_km }}</td>
+                                                <td>{{ $data->getNightKmAttribute($data->vehicle_id) }}</td>
                                                 <td>{{ $data->afternoon_km }}</td>
-                                                <td>
-                                                    <button type="button" class="btn btn-info rounded-pill"
-                                                            data-bs-toggle="modal"
-                                                            data-bs-target="#DisplayDifference"
-                                                            data-morning_difference="{{ $data->getNightKmAttribute($data->vehicle->plate_number) }}"
-                                                            data-day_difference="{{ $data->getDailyKmAttribute($data->vehicle->plate_number) }}"
-                                                            title="Show">
-                                                        <i class="ri-eye-line"></i>
-                                                    </button>
-                                                </td>
-
+                                                <td>{{ $data->getDailyKmAttribute() }}</td>
                                                 <td>
                                                     <button type="button" class="btn btn-info rounded-pill"
                                                         data-bs-toggle="modal"
                                                         data-bs-target="#standardmodal-{{ $loop->index }}"
-                                                        title="Show"><i class=" ri-eye-line"></i></button>
-                                                    <button type="button" class="btn btn-danger rounded-pill"
-                                                        data-bs-toggle="modal" data-bs-target="" title="Reject"><i
-                                                            class=" ri-close-circle-fill"></i></button>
-                                                </td>
+                                                        title="Show"><i class=" ri-edit-line"></i></button>
+                                                   </td>
                                             </tr>
                                         </tbody>
                                         <!-- edit the information of the request modal -->
@@ -189,32 +178,34 @@
                                                             aria-label="Close"></button>
                                                     </div>
                                                     <div class="modal-body">
-                                                        <form action="" method="post"
+                                                        <form action="{{ route('daily_km.page.update') }}" method="post"
                                                             enctype="multipart/form-data">
-
+                                                            @csrf
                                                             <div class="tab-pane" id="account2">
                                                                 <div class="row">
-                                                                    <div class="position-relative mb-3">
+                                                                <div class="position-relative mb-3">
                                                                         <div class="mb-6 position-relative"
                                                                             id="datepicker1">
-                                                                            <label class="form-label">Vehicle</label>
-                                                                            <input type="text" name="afternoon_km"
-                                                                                class="form-control"
-                                                                                value="{{ $data->afternoon_km }}"
-                                                                                readonly tabindex="-1"
-                                                                                style="user-select: none; pointer-events: none;">
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="position-relative mb-3">
-                                                                        <div class="mb-6 position-relative"
-                                                                            id="datepicker1">
-                                                                            <label class="form-label">Morning km</label>
-                                                                            <input type="text" name="afternoon_km"
+                                                                            <label class="form-label">Morning Km</label>
+                                                                            <input type="text" name="morning_km"
                                                                                 class="form-control"
                                                                                 value="{{ $data->morning_km }}">
                                                                         </div>
                                                                     </div>
+                                                                    <div class="position-relative mb-3">
+                                                                        <div class="mb-6 position-relative"
+                                                                            id="datepicker1">
+                                                                            <label class="form-label">Afternoon Km</label>
+                                                                            <input type="text" name="afternoon_km"
+                                                                                class="form-control"
+                                                                                value="{{ $data->afternoon_km }}">
 
+                                                                        </div>
+                                                                        <input type="text" name="calc_id"
+                                                                                class="form-control"
+                                                                                value="{{ $data->calculation_id }}" hidden>
+                                                                    </div>
+                                        
                                                                     <div class="position-relative mb-3">
                                                                         <label class="form-label">Note</label>
 
@@ -349,7 +340,7 @@
             const button = event.relatedTarget;
             if (!button) return;
 
-            const morningDifference = button.getAttribute('data-morning_difference') || '';
+            const morningDifference = button.getAttribute('morning_difference') || '';
             const dayDifference = button.getAttribute('data-day_difference') || '';
 
             document.getElementById('morningDifferenceInput').value = morningDifference;

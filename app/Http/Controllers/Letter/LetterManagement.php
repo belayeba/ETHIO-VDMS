@@ -48,17 +48,20 @@ class LetterManagement extends Controller
                 })
 
                 ->addColumn('date', function ($row) {
+                    
                     return $row->created_at->format('d/m/Y');
                 })
-
                 ->addColumn('actions', function ($row) {
-                    $actions = '';                    
+
+                    $actions = '';
                     
                         $actions .= '<button class="btn btn-info rounded-pill view-btn"
-                        data-reviewedBy="' . ($row->reviewedBy ? $row->reviewedBy->first_name .' '. $row->reviewedBy->last_name : null) . '"
-                        data-approvedBy="' . ($row->approvedBy ? $row->approvedBy->first_name .' '. $row->approvedBy->last_name : null) . '"
+                        data-reviewedBy="' . ($row->reviewedBy ? $row->reviewedBy->first_name .' '. $row->reviewedBy->middle_name : null) . '"
+                        data-approvedBy="' . ($row->approvedBy ? $row->approvedBy->first_name .' '. $row->approvedBy->middle_name : null) . '"
+
+                        data-letter_acceptor="' . ($row->acceptedBy ? $row->acceptedBy->first_name .' '. $row->acceptedBy->middle_name : null) . '"
+
                         data-department="' . ($row->department ? $row->department : null) . '"
-                        data-acceptedBy="' . ($row->acceptedBy ? $row->acceptedBy->first_name .' '. $row->acceptedBy->last_name : null) . '"
                         data-image="' . $row->letter_file . '"
                         title="View"><i class="ri-eye-line"></i></button>';
 
@@ -201,7 +204,7 @@ class LetterManagement extends Controller
         })
 
         ->addColumn('preparedBy', function ($row) {
-            return $row->preparedBy->first_name . ' ' . $row->preparedBy->last_name;
+            return $row->approvedBy->first_name . ' ' . $row->preparedBy->middle_name;
         })
 
         ->addColumn('date', function ($row) {
@@ -247,10 +250,10 @@ class LetterManagement extends Controller
             $actions = '';                    
             
                 $actions .= '<button class="btn btn-info rounded-pill view-btn"
-                data-reviewedBy="' . ($row->reviewedBy ? $row->reviewedBy->first_name . ' ' . $row->reviewedBy->last_name : null) . '"            
-                data-approvedBy="' . ($row->approvedBy ? $row->approvedBy->first_name . ' ' . $row->approvedBy->last_name : null) . '"
+                data-reviewedBy="' . ($row->reviewedBy ? $row->reviewedBy->first_name . ' ' . $row->reviewedBy->middle_name : null) . '"            
+                data-approvedBy="' . ($row->approvedBy ? $row->approvedBy->first_name . ' ' . $row->approvedBy->middle_name : null) . '"
                 data-department="' . ($row->department ? $row->department : null) . '"
-                data-acceptedBy="' . ($row->acceptedBy ? $row->acceptedBy->first_name . ' ' . $row->acceptedBy->last_name : null) . '"
+                data-letter_acceptor="' . ($row->acceptedBy ? $row->acceptedBy->first_name .' '. $row->acceptedBy->middle_name : null) . '"
                 data-image="' . $row->letter_file . '"
                 title="edit"><i class="ri-eye-line"></i></button>';
             if ($data_drawer_value == 1) {
@@ -390,7 +393,7 @@ class LetterManagement extends Controller
             'accepted_by' => Auth::id(),
             'accepted_by_reject_reason' => $request->accepted_by_reject_reason,
         ]);
-        return redirect()->back()->with('error_message',
+        return redirect()->back()->with('success_message',
         "The letter successfully Accepted",);
     }
 

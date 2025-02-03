@@ -126,7 +126,7 @@
                                                                 <button type="button" class="btn btn-info rounded-pill" 
                                                                     data-bs-toggle="modal" data-bs-target="#viewEmployeeModal-{{ $loop->index }}" 
                                                                     data-id="{{ $data->first()->id }}" 
-                                                                    data-name="{{ $data->first()->user->username }}" 
+                                                                    data-name="{{ $data->first()->user->first_name ?? 'N/A'}}" 
                                                                     data-department="{{ $data->first()->user->department->name ?? 'N/A' }}">
                                                                     <i class="ri-eye-line"></i>
                                                                 </button>

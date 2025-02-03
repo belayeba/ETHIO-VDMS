@@ -29,7 +29,7 @@
                                     <thead>
                                         <tr>
                                             <th>#</th>
-                                            <th>Prepared By</th>
+                                            <th>Sent By</th>
                                             <th>Date</th>
                                             <th>Status</th>
                                             <th>Action</th>
@@ -52,14 +52,14 @@
                                                 </div>
                                                 <div class="modal-body">
                                                     <dl class="row mb-0">
-                                                        <dt class="col-sm-5">Reviewed By</dt>
-                                                        <dd class="col-sm-7" id="review_view"></dd>
+                                                        <!-- <dt class="col-sm-5">Reviewed By</dt>
+                                                        <dd class="col-sm-7" id="review_view"></dd> -->
                                                     
-                                                        <dt class="col-sm-5">Approved By</dt>
+                                                        <dt class="col-sm-5">Sent By</dt>
                                                         <dd class="col-sm-7" id="approved_view"></dd>
                                                     
-                                                        <dt class="col-sm-5">Sent to Department</dt>
-                                                        <dd class="col-sm-7" id="department_view"></dd>
+                                                        <!-- <dt class="col-sm-5">Sent to Department</dt>
+                                                        <dd class="col-sm-7" id="department_view"></dd> -->
 
                                                         <dt class="col-sm-5">Accepted By</dt>
                                                         <dd class="col-sm-7" id="accepted_view"></dd>
@@ -201,9 +201,9 @@
            $(document).on('click', '.view-btn', function() {
         
                reviewedBy = $(this).data('reviewedby') || 'Pending';
-               approvedBy = $(this).data('approvedby') || 'Pending';
-               department = $(this).data('department') || 'Not Assigned';
-               acceptedBy = $(this).data('acceptedBy') || 'Pending';
+                approvedBy = $(this).data('approvedby') || 'Pending';
+                //    department = $(this).data('department') || 'Not Assigned';
+               acceptedBy = $(this).data('letter_acceptor') || 'Pending';
                pdfFile = $(this).data('image');
                storagePath = "{{ asset('storage/Letters') }}" +'/'+ pdfFile;
            
@@ -214,9 +214,9 @@
             
                
                
-               $('#review_view').text(reviewedBy);
+            //    $('#review_view').text(reviewedBy);
                $('#approved_view').text(approvedBy);
-               $('#department_view').text(department);
+            //    $('#department_view').text(department);
                $('#accepted_view').text(acceptedBy);
                $('#image').html('<a href="' + storagePath + '" target="_blank">Open PDF</a>');
 

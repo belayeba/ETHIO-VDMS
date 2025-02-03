@@ -67,6 +67,7 @@
                                                     <div class="d-flex justify-content-center">
                                                         <button type="submit" class="btn btn-primary">Save</button>
                                                     </div>
+                                                   
                                                 </form>
                                             </div>
                                         </div>
@@ -103,7 +104,7 @@
                                                                     <button type="button" class="btn btn-info rounded-pill" 
                                                                         data-bs-toggle="modal" data-bs-target="#viewEmployeeModal-1" 
                                                                         data-id="{{ $data->first()->id }}" 
-                                                                        data-name="{{ $data->first()->user->username }}" 
+                                                                        data-name="{{ $data->first()->user->first_name. ' '. $data->first()->user->middle_name}}" 
                                                                         data-department="{{ $data->first()->user->department->name ?? 'N/A' }}">
                                                                         <i class="ri-eye-line"></i>
                                                                     </button>
@@ -131,16 +132,16 @@
                                                                 <th>#</th>
                                                                 <th>Employee</th>
                                                                 <th>Location</th>
-                                                                <th>Phone</th> 
+                                                                <!-- <th>Phone</th>  -->
                                                             </tr>
                                                         </thead>
                                                         <tbody>
                                                             @foreach ($data as $dat)
                                                             <tr>
                                                                 <td>{{ $loop->iteration }}</td> <!-- Loop iteration for numbering -->
-                                                                <td>{{ $dat->user->first_name}}</td> <!-- Ensure user exists -->
+                                                                <td>{{ $dat->user->first_name. " ". $dat->user->middle_name}}</td> <!-- Ensure user exists -->
                                                                 <td>{{ $dat->employee_start_location  ?? 'N/A'}}</td> <!-- Ensure department exists -->
-                                                                <td>{{ $dat->user->phone ?? 'N/A' }}</td>
+                                                                <!-- <td>{{ $dat->user->phone ?? 'N/A' }}</td> -->
                                                             </tr>
                                                             @endforeach
                                                         </tbody>

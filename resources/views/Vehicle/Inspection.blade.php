@@ -291,7 +291,7 @@
                                     <button type="button" class="btn btn-info rounded-pill" title="Inspect" id="assignBtn-{{$loop->iteration}}">Show</button>
                                   
                                     <input type="hidden" name="id" id="IdSelection-{{$loop->iteration}}" value="{{$data->inspection_id}}" id="vehicleselection">
-                                    <button type="button" class="btn btn-danger rounded-pill reject-btn" data-bs-toggle="modal" data-bs-target="#confirmationModal-{{ $loop->index }}" title="Reject"><i class=" ri-close-circle-fill"></i></button>
+                                    <!-- <button type="button" class="btn btn-danger rounded-pill reject-btn" data-bs-toggle="modal" data-bs-target="#confirmationModal-{{ $loop->index }}" title="Reject"><i class=" ri-close-circle-fill"></i></button> -->
                                 </td>
                             </tr>
                         </tbody>

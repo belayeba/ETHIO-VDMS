@@ -354,7 +354,7 @@
                                                         <div class="row mb-3">
                                                             <label class="col-md-3 col-form-label" for="organizational_type">@lang('messages.Organizational Type')</label>
                                                             <div class="col-md-9">
-                                                                <select id="organizationalType" name="rental_type" class="form-select">
+                                                                <select id="organizationalType" name="organization_type" class="form-select">
                                                                     <option value="">Select Type</option>
                                                                     <option value="field">Field</option>
                                                                     <option value="position">Position</option>
@@ -500,13 +500,13 @@
                                                                                     data-field="capacity" required>
                                                                             </div>
                                                                             <div class="mb-3">
-                                                                                <label for="editFuelAmount"
-                                                                                    class="form-label">@lang('messages.Fuel Amount')</label>
+                                                                                <!-- <label for="editFuelAmount"
+                                                                                    class="form-label">@lang('messages.Fuel Amount')</label> -->
                                                                                 <input type="number"
                                                                                     class="form-control"
                                                                                     id="editFuelAmount"
                                                                                     name="fuel_amount"
-                                                                                    data-field="fuel_amount" required>
+                                                                                    data-field="fuel_amount" required hidden>
                                                                             </div>
                                                                         </div>
 

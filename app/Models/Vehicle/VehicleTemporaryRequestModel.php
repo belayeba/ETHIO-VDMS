@@ -40,6 +40,7 @@ class VehicleTemporaryRequestModel extends Model
         'vehicle_id',
         'driver_id',
         'dir_approved_by',
+        'field_letter',
         'director_reject_reason',
         'div_approved_by',
         'cluster_director_reject_reason',

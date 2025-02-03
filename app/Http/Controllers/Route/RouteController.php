@@ -110,6 +110,7 @@ class RouteController extends Controller
     }
     public function updateRoute(Request $request, $route_id)
     {
+        dd("coming");
         $validator = Validator::make($request->all(), [
             'driver_phone' => ['required', 'regex:/^(?:\+251|0)[1-9]\d{8}$/'],
             'vehicle_id' => 'required|uuid|exists:vehicles,vehicle_id',
@@ -139,18 +140,19 @@ class RouteController extends Controller
             'driver_phone' => ['nullable', 'regex:/^(?:\+251|0)[1-9]\d{8}$/'], // Make driver_phone nullable to allow skipping
             'vehicle_id' => 'nullable|uuid|exists:vehicles,vehicle_id', // Make vehicle_id nullable to allow skipping
             'route_name' => 'nullable|string',
+            'driver_name' => 'nullable|string',
         ]);
 
         if ($validator->fails()) {
             return redirect()->back()->with('error_message', 'All fields are required.');
         }
-
         $route = Route::findOrFail($route_id);
 
         $updateData = $request->only([
             'driver_phone',
             'route_name',
-            'vehicle_id'
+            'vehicle_id',
+            'driver_name'
         ]);
 
         // Remove null fields from the update array
@@ -165,10 +167,10 @@ class RouteController extends Controller
         $route = Route::findOrFail($route_id);
 
         // Delete the route
-        $route->delete();
+       // $route->delete();
 
         // Return a success message 
-        return redirect()->back()->with('success_message', 'Route deleted successfully.',);
+        return redirect()->back()->with('error_message', 'You cannot Delete this route.',);
     }
     public function removeUserFromRoute($id)
     {

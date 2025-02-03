@@ -203,7 +203,7 @@
                reviewedBy = $(this).data('reviewedby') || 'Pending';
                approvedBy = $(this).data('approvedby') || 'Pending';
                department = $(this).data('department') || 'Not Assigned';
-               acceptedBy = $(this).data('acceptedBy') || 'Pending';
+               acceptedBy = $(this).data('letter_acceptor') || 'Pending';
                pdfFile = $(this).data('image');
                storagePath = "{{ asset('storage/Letters') }}" +'/'+ pdfFile;
            
