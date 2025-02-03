@@ -47,6 +47,7 @@
                             
                             </div>
                         </section>
+                        <meta name="csrf-token" content="{{ csrf_token() }}">
 
                         <section class="admin-visitor-area up_st_admin_visitor">
                             <div class="container-fluid p-0">
@@ -75,9 +76,12 @@
                                     
                                     <div class="col-md-8">
                                         <div class="card">
-                                            <div class="card-header">
+                                            <div class="card-header d-flex justify-content-between align-items-center">
                                                 <h4 class="header-title mb-0">My Route</h4>
-                                            </div>
+                                                <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#progressModal">
+                                                    <i class="bi bi-bar-chart-line"></i> View Progress
+                                                </button>
+                                            </div>                                            
                                             <div class="card-body">
                                                 <div class="table-responsive">
                                                     <table id="lms_table" class="table">
@@ -122,7 +126,7 @@
                                         <div class="modal-dialog modal-lg">
                                             <div class="modal-content">
                                                 <div class="modal-header">
-                                                    <h5 class="modal-title" id="viewEmployeeModalLabel">View Employee Details for Route {{ $data->first()->route->route_name }}</h5>
+                                                    <h5 class="modal-title" id="viewEmployeeModalLabel">View Employee Details for Route : {{ $data->first()->route->route_name }}</h5>
                                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                 </div>
                                                 <div class="modal-body">
@@ -132,7 +136,7 @@
                                                                 <th>#</th>
                                                                 <th>Employee</th>
                                                                 <th>Location</th>
-                                                                <!-- <th>Phone</th>  -->
+                                                                <th>Action</th>
                                                             </tr>
                                                         </thead>
                                                         <tbody>
@@ -141,7 +145,17 @@
                                                                 <td>{{ $loop->iteration }}</td> <!-- Loop iteration for numbering -->
                                                                 <td>{{ $dat->user->first_name. " ". $dat->user->middle_name}}</td> <!-- Ensure user exists -->
                                                                 <td>{{ $dat->employee_start_location  ?? 'N/A'}}</td> <!-- Ensure department exists -->
-                                                                <!-- <td>{{ $dat->user->phone ?? 'N/A' }}</td> -->
+                                                                <td>
+                                                                    @if (auth()->id() == $dat->user->id && $dat->employee_start_location == 'Unkown') 
+                                                                        <button class="btn btn-primary btn-sm editLocationBtn" 
+                                                                                data-id="{{ $dat->route_user_id }}" 
+                                                                                data-location="{{ $dat->employee_start_location ?? '' }}"
+                                                                                data-bs-toggle="modal" 
+                                                                                data-bs-target="#editLocationModal">
+                                                                            Edit
+                                                                        </button>
+                                                                    @endif
+                                                                </td>                                                                
                                                             </tr>
                                                             @endforeach
                                                         </tbody>
@@ -156,6 +170,46 @@
                             </div>
                         </section>
                         
+                        <!-- Progress Modal -->
+                        <div class="modal fade" id="progressModal" tabindex="-1" aria-labelledby="progressModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-lg">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="progressModalLabel">Request Progress</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <table class="table table-responsive">
+                                            <thead>
+                                                <tr>
+                                                    <th>#</th>
+                                                    <th>Requested At</th>
+                                                    <th>Location</th>
+                                                    <th>Comment</th>
+                                                    <th>Changed_by</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="progressTableBody">
+                                                @foreach ($Requests as $request)
+                                                    <td>{{ $loop->iteration }}</td>
+                                                    <td>{{ $request->created_at->format('d M Y') }}</td> 
+                                                    <td>{{ $request->location_name }}</td>
+                                                    <td>{{ $request->comment ??' N/A' }}</td>
+                                                    <td>
+                                                        @if ($request->changedBy)
+                                                            {{ $request->changedBy->first_name }} {{ $request->changedBy->last_name }}
+                                                        @else
+                                                            N/A
+                                                        @endif
+                                                    </td>
+                                                @endforeach
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                         <!-- Confirmation Modal -->
                         <div class="modal fade" id="confirm-delete" tabindex="-1" role="dialog" aria-labelledby="confirmDeleteLabel" aria-hidden="true">
                             <div class="modal-dialog modal-dialog-centered" role="document">
@@ -176,6 +230,31 @@
                                 </div>
                             </div>
                         </div>  
+                        <!-- Edit Location Modal -->
+                        <div class="modal fade" id="editLocationModal" tabindex="-1" aria-labelledby="editLocationModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title">Update Location</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <form method="POST" action="{{ route('employee.updateLocation') }}" id="editLocationForm">
+                                            @csrf
+                                            <input type="hidden" name="route_user_id" id="editEmployeeId">  <!-- Fix: Ensure this updates dynamically -->
+                                            
+                                            <div class="mb-3">
+                                                <label for="editLocation" class="form-label">New Location</label>
+                                                <input type="text" class="form-control" id="editLocation" name="location" required>
+                                            </div>
+                        
+                                            <button type="submit" class="btn btn-success">Update</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>                        
+                        
                     </div>  
                 </div> 
                
@@ -256,6 +335,18 @@
         return $state;
     }
 </script>
+
+    <script>
+        $(document).ready(function () {
+        $('.editLocationBtn').on('click', function () {
+            let employeeId = $(this).data('id'); // Get ID from button
+            let currentLocation = $(this).data('location'); // Get current location
+            
+            $('#editEmployeeId').val(employeeId); // Set ID in hidden input
+            $('#editLocation').val(currentLocation); // Set location in input
+        });
+    });
+    </script>
 
     <!-- Vendor js -->
     <script src="{{ asset('assets/js/vendor.min.js') }}"></script>

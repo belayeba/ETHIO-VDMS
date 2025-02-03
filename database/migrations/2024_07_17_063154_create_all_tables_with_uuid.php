@@ -410,6 +410,7 @@ class CreateAllTablesWithUuid extends Migration
             $table->uuid('changed_by')->nullable();
             $table->foreign('changed_by')->references('id')->on('users')->onDelete('restrict');
             $table->string('location_name');
+            $table->string('comment')->nullable();
             $table->uuid('registered_by');
             $table->foreign('registered_by')->references('id')->on('users')->onDelete('restrict');
             $table->timestamps();

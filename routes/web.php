@@ -346,7 +346,9 @@ Route::group(['middleware' => ['auth']], function () {
         Route::put('/update/{route_id}', [RouteController::class, 'update'])->name('route.updates');
         Route::delete('/delete/{request_id}', [RouteController::class, 'removeRoute'])->name('route.destroy');
         Route::delete('/user/delete/{request_id}', [RouteController::class, 'removeUserFromRoute'])->name('routeUser.destroy');
+        Route::post('/update-location', [RouteController::class, 'updateLocation'])->name('employee.updateLocation');;
     });
+
     // Define routes for InspectionController
     Route::controller(InspectionController::class)->group(function () {
         Route::post('/inspection/store', 'storeInspection')->name('inspection.store'); // Create a new inspection
