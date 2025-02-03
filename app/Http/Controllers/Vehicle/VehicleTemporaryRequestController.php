@@ -744,7 +744,7 @@ class VehicleTemporaryRequestController extends Controller
                     $user_id = Auth::id();
                 try
                     {
-                        $field_letter = $request->file( "position_letter" );
+                        $field_letter = $request->file( "field_letter" );
                         $field_letterfileName = time() . '_' . $field_letter->getClientOriginalName(); // Generate unique filename
                         $field_letterstoragePath = storage_path( 'app/public/TemporaryVehicle/FieldLetters' ); // Define storage path
                         // Check if directory exists, if not create it

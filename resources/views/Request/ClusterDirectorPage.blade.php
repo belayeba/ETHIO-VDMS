@@ -50,14 +50,14 @@
                                                             aria-label="Close"></button>
                                                     </div>
                                                     <div class="modal-body">
-                                                        <div class="col-md-6" style="display: none;" id="letter_div">
+                                                        <!-- <div class="col-md-6" style="display: none;" id="letter_div"> -->
                                                                 <dl class="row mb-0">
                                                                     <dt class="col-sm-4">Field Letter:
                                                                     </dt>
                                                                     <dd class="col-sm-8" data-field="Fieldletter">
                                                                     </dd>
                                                                 </dl>
-                                                        </div>
+                                                        <!-- </div> -->
                                                         <dl class="row mb-0">
                                                                
                                                             <dt class="col-sm-5">Request reason</dt>
@@ -102,7 +102,7 @@
                                             aria-labelledby="confirmationModalLabel"aria-hidden="true">
                                             <div class="modal-dialog modal-sm">
                                                 <div class="modal-content">
-                                                    <form method="POST" action="{{ route('ClusterDirector_approve_request') }}">
+                                                    <form method="POST" enctype="multipart/form-data" action="{{ route('ClusterDirector_approve_request') }}">
                                                         @csrf
                                                         <input type="hidden" name="request_id" id="request_id">
                                                         <div class="modal-body p-4">
@@ -117,8 +117,8 @@
                                                                 <div class="position-relative mb-3">
                                                                     <label class="form-label">Attach Field
                                                                         Letter</label>
-                                                                    <input name="field_letter" class="form-control"
-                                                                        type="file" required>
+                                                                    <input  class="form-control"
+                                                                        type="file" name="field_letter" required>
                                                                 </div>
                                                                 <button type="button" class="btn btn-secondary"
                                                                     data-bs-dismiss="modal">Cancel</button>
@@ -227,14 +227,14 @@
                 $('#standard-modal').on('show.bs.modal', function(event) {
                     var button = $(event.relatedTarget); // Button that triggered the modal
                     var modal = $(this); // The modal
-                    var letterFile = $(this).data('field_letter');
-
+                    var letterFile = button.data('field_letter');//$(this).data('field_letter');
                     var letterField = modal.find('[data-field="Fieldletter"]');
                     if (letterFile) 
                             {
+                                
                                 var fieldLink = `<a href="app/public/TemporaryVehicle/FieldLetters/${letterFile}" target="_blank">View Letter</a>`;
                                 letterField.html(fieldLink);
-                                document.getElementById('letter_div').style.display = 'inline-block';
+                                //document.getElementById('letter_div').style.display = 'inline-block';
                             } 
                         else 
                             {

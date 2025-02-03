@@ -532,25 +532,25 @@ class CreateAllTablesWithUuid extends Migration
     }
 
     public function down()
-    {
-        Schema::dropIfExists('trip_person');
-        Schema::dropIfExists('trip_materials');
-        Schema::dropIfExists('vehicle_requests_temporary');
-        Schema::dropIfExists('daily_km_calculation');
-        Schema::dropIfExists('trips');
-        Schema::dropIfExists('gps_tracking');
-        Schema::dropIfExists('fuelings');
-        Schema::dropIfExists('maintenances');
-        Schema::dropIfExists('giving_back_vehicles_parmanently');
-        Schema::dropIfExists('vehicle_requests_parmanently');
-        Schema::dropIfExists('driver_changes');
-        Schema::dropIfExists('vehicle_inspections');
-        Schema::dropIfExists('vehicles_detail');
-        Schema::dropIfExists('vehicle_parts');
-        Schema::dropIfExists('locations');
-        Schema::dropIfExists('vehicles');
-        Schema::dropIfExists('drivers');
-        Schema::dropIfExists('departments');
-        Schema::dropIfExists('clusters');
-    }
+        {
+            Schema::dropIfExists('trip_person');
+            Schema::dropIfExists('trip_materials');
+            Schema::dropIfExists('vehicle_requests_temporary');
+            Schema::dropIfExists('daily_km_calculation');
+            Schema::dropIfExists('trips');
+            Schema::dropIfExists('gps_tracking');
+            Schema::dropIfExists('fuelings');
+            Schema::dropIfExists('maintenances');
+            Schema::dropIfExists('giving_back_vehicles_parmanently');
+            Schema::dropIfExists('vehicle_requests_parmanently');
+            Schema::dropIfExists('driver_changes');
+            Schema::dropIfExists('vehicle_inspections');
+            Schema::dropIfExists('vehicles_detail');
+            Schema::dropIfExists('vehicle_parts');
+            Schema::dropIfExists('locations');
+            Schema::dropIfExists('vehicles');
+            Schema::dropIfExists('drivers');
+            Schema::dropIfExists('departments');
+            Schema::dropIfExists('clusters');
+        }
 }
