@@ -71,7 +71,7 @@
                                                 <button type="button" class="btn-close" data-bs-dismiss="modal"
                                                     aria-label="Close"></button>
                                             </div>
-                                            <div class="modal-body">
+                                            <div class="modal-body" id="RequestContent">
                                                 <div class="col-md-6">
                                                         <dl class="row mb-0">
                                                             <dt class="col-sm-4">Field Letter:
@@ -107,6 +107,7 @@
                                                 </dl>
                                             </div>
                                             <div class="modal-footer">
+                                                <button type="button" class="btn btn-primary" onclick="printModal()">Print</button>
                                                 <button type="button" class="btn btn-light"
                                                     data-bs-dismiss="modal">Close</button>
                                             </div>
@@ -302,6 +303,20 @@
                 },
             ]
         });
+
+        function printModal() {
+                var Content = document.getElementById("RequestContent").innerHTML;
+
+                var printWindow = window.open("", "", "width=800,height=600");
+                printWindow.document.write('<html><head><title>Request Details</title>');
+                printWindow.document.write('<style>body { font-family: Arial, sans-serif; } dt { font-weight: bold; }</style>');
+                printWindow.document.write('</head><body>');
+                printWindow.document.write(Content);
+                printWindow.document.write('</body></html>');
+
+                printWindow.document.close();
+                printWindow.print();
+        }
 
 
         document.getElementById('assignBtn').addEventListener('click', function() {
