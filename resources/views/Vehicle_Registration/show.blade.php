@@ -616,7 +616,7 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                            @endforeach
+                                           
 
 
                                             <div class="modal fade" id="viewModal" role="dialog" tabindex="-1"
@@ -724,6 +724,7 @@
                                                                     @endif
                                                                 </div>
                                                             </div>
+                                                            @endforeach
                                                             
                                                             <!-- Modal Footer -->
                                                             <div class="modal-footer">
