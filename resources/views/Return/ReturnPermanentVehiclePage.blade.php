@@ -107,6 +107,7 @@
                                             <tr>
                                                 <th>Roll.no</th>
                                                 <th>Date Requested</th>
+                                                <th>Vehicle</th>
                                                 <th>Status</th>
                                                 <th>Action</th>
                                             </tr>
@@ -117,15 +118,17 @@
                                                 <tr>
                                                     <td>{{$loop->iteration}}</td>
                                                     <td>{{$request->created_at->format('Y-m-j')}}</td>
+                                                    <td>{{$request->vehicle->plate_number}}</td>
                                                     <td>{{$request->returned_date == null ? 'Pending' : 'Returned'}}</td>
                                                     <td>
                                                         <form method="POST" action="">
                                                             @csrf
                                                             <input type="hidden" name="request_id" value="{{ $request->vehicle_request_permanent_id }}">
-                                                            @if($request->reject_reason_vec_director !== null || $request->reject_reason_dispatcher !== null )
-                                                            <a href="{{route('perm_vec_update')}}" class="btn btn-primary rounded-pill"  data-bs-toggle="modal" data-bs-target="#standard-modal-{{ $loop->index }}" title="Return">return</a>
+                                                            @if($request->approved_by == null)
+                                                               <a href="{{route('perm_vec_update')}}" class="btn btn-primary rounded-pill"  data-bs-toggle="modal" data-bs-target="#standard-modal-{{ $loop->index }}" title="Return">edit</a>
                                                             @endif
-                                                            <button type="submit" class="btn btn-danger rounded-pill" title="Delete"><i class="ri-close-circle-line"></i></button>
+
+                                                            <!-- <button type="submit" class="btn btn-danger rounded-pill" title="Delete"><i class="ri-close-circle-line"></i></button> -->
                                                         </form>
                                                     </td>
                                                 </tr>

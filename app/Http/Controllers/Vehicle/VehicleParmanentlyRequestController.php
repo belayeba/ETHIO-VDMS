@@ -53,7 +53,13 @@ class VehicleParmanentlyRequestController extends Controller
             ->addColumn('status', function ($row) {
                 if (is_null($row->approved_by)) {
                     return 'Pending';
-                } elseif (!is_null($row->director_reject_reason)) {
+                } elseif ($row->given_by && is_null($row->vec_director_reject_reason)  && ($row->status == 1)) {
+                    return 'You are using';
+                }
+                elseif ($row->given_by && is_null($row->vec_director_reject_reason)  && ($row->status == 0)) {
+                    return 'Returned';
+                }
+                elseif (!is_null($row->director_reject_reason)) {
                     return 'Director Reject';
                 } elseif (!is_null($row->approved_by) && is_null($row->director_reject_reason)){
                     return 'Director Approve';

@@ -112,6 +112,13 @@ class DepartmentController extends Controller
     {
     try
     {
+        $dept_id = $department->department_id;
+        $check_dept = User::where("department_id",$dept_id)->first();
+        if($check_dept)
+          {
+              return redirect()->back()->with('error_message',
+              'Sorry, You cannot delete this department.',);
+          }
         // Delete the department
         $department->delete();
         // Redirect to the index page with a success message

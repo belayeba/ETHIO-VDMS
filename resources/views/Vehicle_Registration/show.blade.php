@@ -233,21 +233,6 @@
                                             <div class="tab-pane fade" id="third">
                                                 <div class="row">
                                                     <div class="col-12">
-                                                        <div class="row mb-3">
-                                                            <label class="col-md-3 col-form-label"
-                                                                for="driver">Assigned To</label>
-                                                            <div class="col-md-9">
-                                                                <select id="driver" name="driver"
-                                                                    class="form-select">
-                                                                    <option value="">Assigned To</option>
-                                                                    @foreach ($drivers as $driver)
-                                                                        <option value="{{ $driver->driver_id }}">
-                                                                            {{ $driver->user->first_name . ' ' . $driver->user->middle_name }}
-                                                                        </option>
-                                                                    @endforeach
-                                                                </select>
-                                                            </div>
-                                                        </div>
 
                                                         <div class="row mb-3">
                                                             <label class="col-md-3 col-form-label"
@@ -298,22 +283,22 @@
                                                         <div class="row mb-3" >
                                                             <div class="row mb-3">
                                                                 <label class="col-md-3 col-form-label"
-                                                                    for="rental_name">Rental</label>
+                                                                    for="owner_name">Owner Name</label>
                                                                 <div class="col-md-9">
-                                                                    <input type="text" id="rental_name"
-                                                                        name="rental_name"
-                                                                        placeholder="Enter the rental person name here"
+                                                                    <input type="text" id="owner_name"
+                                                                        name="owner_name"
+                                                                        placeholder="Enter the owner person name here"
                                                                         class="form-control">
                                                                 </div>
                                                             </div>
     
                                                             <div class="row mb-3">
                                                                 <label class="col-md-3 col-form-label"
-                                                                    for="rental_phone">Rental Phone</label>
+                                                                    for="owner_phone">Owner Phone</label>
                                                                 <div class="col-md-9">
-                                                                    <input type="text" id="rental_phone"
-                                                                        name="rental_phone"
-                                                                        placeholder="Enter the rental phone here"
+                                                                    <input type="text" id="owner_phone"
+                                                                        name="owner_phone"
+                                                                        placeholder="Enter the owner phone here"
                                                                         class="form-control">
                                                                 </div>
                                                             </div>
@@ -347,12 +332,12 @@
                                                     <div id="organizationalDiv" style="display: none;">
                                                         <div class="row mb-3">
                                                             <label class="col-md-3 col-form-label"
-                                                                for="Chancy Number">@lang('messages.Chassis Number')</label>
+                                                                for="chasis_number">@lang('messages.Chassis Number')</label>
                                                             <div class="col-md-9">
-                                                                <input type="number" class="form-control"
-                                                                    id="Chancy Number"
+                                                                <input type="text" class="form-control"
+                                                                    id="chasis_number"
                                                                     placeholder="Enter the Chassis number"
-                                                                    name="vin" required>
+                                                                    name="chasis_number" >
                                                             </div>
                                                         </div>
 
@@ -362,14 +347,14 @@
                                                             <div class="col-md-9">
                                                                 <input type="text" id="engine_number" name="engine_number"
                                                                     placeholder="Enter the engine number"
-                                                                    class="form-control" required>
+                                                                    class="form-control" >
                                                             </div>
                                                         </div>
 
                                                         <div class="row mb-3">
                                                             <label class="col-md-3 col-form-label" for="organizational_type">@lang('messages.Organizational Type')</label>
                                                             <div class="col-md-9">
-                                                                <select id="organizationalType" name="rental_type" class="form-select">
+                                                                <select id="organizationalType" name="organization_type" class="form-select">
                                                                     <option value="">Select Type</option>
                                                                     <option value="field">Field</option>
                                                                     <option value="position">Position</option>
@@ -515,13 +500,13 @@
                                                                                     data-field="capacity" required>
                                                                             </div>
                                                                             <div class="mb-3">
-                                                                                <label for="editFuelAmount"
-                                                                                    class="form-label">@lang('messages.Fuel Amount')</label>
+                                                                                <!-- <label for="editFuelAmount"
+                                                                                    class="form-label">@lang('messages.Fuel Amount')</label> -->
                                                                                 <input type="number"
                                                                                     class="form-control"
                                                                                     id="editFuelAmount"
                                                                                     name="fuel_amount"
-                                                                                    data-field="fuel_amount" required>
+                                                                                    data-field="fuel_amount" required hidden>
                                                                             </div>
                                                                         </div>
 

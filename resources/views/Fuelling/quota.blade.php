@@ -132,7 +132,7 @@
                                                 <i class="ri-eye-line"></i>
                                             </button>
 
-                                            <button type="button" class="btn btn-secondary rounded-pill" title="Edit Fuel Quota"
+                                            <!-- <button type="button" class="btn btn-secondary rounded-pill" title="Edit Fuel Quota"
                                             data-bs-toggle="modal" 
                                             data-bs-target="#quota_modal_{{$loop->index}}"
                                             data-vehicle="{{ $fuelQuata->vehicle->plate_number }}"
@@ -141,12 +141,12 @@
                                             data-changed-by ="{{ $fuelQuata->changer->first_name }}"
                                             data-changed-date  ="{{ $fuelQuata->created_at->format('Y-m-d') }}">
                                             <i class="ri-edit-line"></i> 
-                                        </button>
+                                        </button> -->
                                         
-                                        {{-- <button type="submit" class="btn btn-danger rounded-pill" title="Delete Quota"
+                                         <!-- <button type="submit" class="btn btn-danger rounded-pill" title="Delete Quota"
                                             onclick="return confirm(&quot;Click OK to delete Fuel Quota.&quot;)">
                                             <i class="ri-close-circle-line"></i>
-                                        </button> --}}
+                                        </button>  -->
                                       </form>
                                 </tr>
                             </tbody>

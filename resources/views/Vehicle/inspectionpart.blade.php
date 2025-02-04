@@ -125,7 +125,7 @@
                                     <td>{{$request->notes}}</td>
                                     <td>
                                             <a href="" class="btn btn-secondary rounded-pill" data-bs-toggle="modal" data-bs-target="#standard-modal-{{ $loop->index }}" title="edit"><i class=" ri-edit-line"></i></a>
-                                            <button type="button" class="btn btn-danger rounded-pill reject-btn" data-bs-toggle="modal" data-bs-target="#confirmationModal-{{ $loop->index }}" title="Reject"><i class=" ri-close-circle-fill"></i></button>
+                                            <!-- <button type="button" class="btn btn-danger rounded-pill reject-btn" data-bs-toggle="modal" data-bs-target="#confirmationModal-{{ $loop->index }}" title="Reject"><i class=" ri-close-circle-fill"></i></button> -->
                                     </td>
                                 </tr>
                             </tbody>

@@ -481,17 +481,17 @@
                             <ul class="side-nav-second-level">
                                 @can('Attach Letter')
                                     <li>
-                                        <a href="{{ route('letter.index') }}">@lang('messages.Letter Request')</a>
+                                        <a href="{{ route('letter.index') }}">Prepare Letter</a>
                                     </li>
                                 @endcan()
                                 @can('Letter Review')
                                     <li>
-                                        <a href="{{ route('letter.review.page') }}">Letter Review</a>
+                                        <a href="{{ route('letter.review.page') }}">Review Letter</a>
                                     </li>
                                 @endcan()
                                 @can('Letter Approve')
                                     <li>
-                                        <a href="{{ route('letter.approve.page') }}">Letter Approve</a>
+                                        <a href="{{ route('letter.approve.page') }}">Approve Letter</a>
                                     </li>
                                 @endcan()
                                 @can('Purchase Letter')

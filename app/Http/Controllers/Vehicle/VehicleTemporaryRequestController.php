@@ -149,14 +149,14 @@ class VehicleTemporaryRequestController extends Controller
                     'purpose' => 'required|string|max:255',
                     'vehicle_type' => 'required|string',
                     'in_out_town' => 'required|boolean',
-                    'with_driver' => 'required|integer|in:1,0',
+                    //'with_driver' => 'required|integer|in:1,0',
                     'start_date' => 'required|date',
                     'start_time' => 'required|date_format:H:i|after_or_equal:$today',
                     'return_date' => 'required|date', // Ensure return_date is after or equal to start_date
                     'return_time' => 'required|date_format:H:i',
                     'start_location' => 'required|string|max:255',
                     'end_location' => 'required|string|max:255',
-                    'allowed_km' => 'required|numeric',
+                    //'allowed_km' => 'required|numeric',
                     'material_name.*' => 'nullable|string|max:255',
                     'people_id' => 'nullable|array',
                     'people_id.*' => 'exists:users,id',
@@ -200,13 +200,13 @@ class VehicleTemporaryRequestController extends Controller
                             $Vehicle_Request = VehicleTemporaryRequestModel::create([
                                 'purpose' => $request->purpose,
                                 'in_out_town' =>$request->in_out_town,
-                                'with_driver' =>$request->with_driver,
+                               // 'with_driver' =>$request->with_driver,
                                 'how_many_days' =>$how_many_days,
                                 'vehicle_type' => $request->vehicle_type,
                                 'requested_by_id'=> $id,
                                 'start_location' => $request->start_location,
                                 'end_locations' => $request->end_location,
-                                'allowed_km' => $request->allowed_km,
+                               // 'allowed_km' => $request->allowed_km,
                                 'start_date' => $request->start_date,
                                 'start_time' => $request->start_time,
                                 'end_date' => $request->return_date,
@@ -472,7 +472,9 @@ class VehicleTemporaryRequestController extends Controller
                     data-vehicle_type="' . $row->vehicle_type . '"
                     data-start_date="' . $row->start_date . '"
                     data-start_time="' . $row->start_time . '"
+                    data-total_km="' . $row->allowed_km . '"
                     data-end_date="' . $row->end_date . '"
+                    data-field_letter="' . $row->field_letter . '"
                     data-end_time="' . $row->end_time . '"
                     data-start_location="' . $row->start_location . '&nbsp;&nbsp;&nbsp;' . $row->end_locations . '"
                     data-passengers=\'' . json_encode($row->peoples()->with('user')->get()) . '\'
@@ -726,7 +728,9 @@ class VehicleTemporaryRequestController extends Controller
         public function clusterDirectorApproveRequest(Request $request)
             {
                     $validation = Validator::make($request->all(),[
+                    'field_letter' => 'required|file|mimes:pdf,jpeg,png,jpg', // For PDF and common image types
                     'request_id' => 'required|uuid|exists:vehicle_requests_temporary,request_id',
+                    'total_km' => 'required|integer',
                     ]);
                     // Check validation error
                     if ($validation->fails()) 
@@ -740,6 +744,17 @@ class VehicleTemporaryRequestController extends Controller
                     $user_id = Auth::id();
                 try
                     {
+                        $field_letter = $request->file( "field_letter" );
+                        $field_letterfileName = time() . '_' . $field_letter->getClientOriginalName(); // Generate unique filename
+                        $field_letterstoragePath = storage_path( 'app/public/TemporaryVehicle/FieldLetters' ); // Define storage path
+                        // Check if directory exists, if not create it
+        
+                        if ( !file_exists( $field_letterstoragePath ) ) {
+                            mkdir( $field_letterstoragePath, 0755, true );
+                        }
+                        // Move file to the storage path
+                        $field_letter->move( $field_letterstoragePath, $field_letterfileName );
+
                         $Vehicle_Request = VehicleTemporaryRequestModel::findOrFail($id);
                         if($Vehicle_Request->div_approved_by)
                             {
@@ -748,6 +763,8 @@ class VehicleTemporaryRequestController extends Controller
                             );
                             }
                         $Vehicle_Request->div_approved_by = $user_id;
+                        $Vehicle_Request->field_letter = $field_letterfileName;
+                        $Vehicle_Request->allowed_km = $request->input('total_km');
                         $Vehicle_Request->save();
                        return redirect()->back()->with('success_message',
                                  "The request approved successfully",
@@ -1238,13 +1255,14 @@ class VehicleTemporaryRequestController extends Controller
                     data-start_date="' . $row->start_date . '"
                     data-start_time="' . $row->start_time . '"
                     data-end_date="' . $row->end_date . '"
+                    data-field_letter="' . $row->field_letter . '"
                     data-end_time="' . $row->end_time . '"
                     data-start_location="' . $row->start_location . '&nbsp;&nbsp;&nbsp;' . $row->end_locations . '"
                     data-passengers=\'' . json_encode($row->peoples()->with('user')->get()) . '\'
                     data-materials=\'' . json_encode($row->materials) . '\'
                     data-dir_approved_by="' . $row->dir_approved_by . '"
                     data-director_reject_reason="' . $row->director_reject_reason . '"
-                    data-div_approved_by="' . $row->div_approved_by . '"
+                    data-div_approved_by="' . $row->div_approved_by .'"
                     data-cluster_director_reject_reason="' . $row->cluster_director_reject_reason . '"
                     data-hr_div_approved_by="' . $row->hr_div_approved_by . '"
                     data-hr_director_reject_reason="' . $row->hr_director_reject_reason . '"
@@ -1493,8 +1511,7 @@ class VehicleTemporaryRequestController extends Controller
                         $Vehicle_Request->save();
                         $vehicle->save();
                         return redirect()->back()->with('success_message',
-                                 "Return Successfully Done!",
-                            );               
+                                 "Return Successfully Done!",);               
                     }
                 catch (Exception $e) 
                     {

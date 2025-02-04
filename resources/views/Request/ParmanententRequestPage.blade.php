@@ -77,7 +77,7 @@
                                                         <input type="text" class="form-control" id="position" name="position" placeholder="Enter Your Position">
                                                     </div>
                                                     <div class="position-relative mb-3">
-                                                        <label class="form-label">Upload Position Latter</label>
+                                                        <label class="form-label">Upload Position Letter</label>
                                                         <input name="position_letter" class="form-control" type="file">
                                                     </div>
                                                     <div class="mb-3">

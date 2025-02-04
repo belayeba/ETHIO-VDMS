@@ -208,13 +208,13 @@
                                                                 name="end_location" placeholder="Enter arrival location">
                                                         </div>
                                                     </div>
-                                                    <div class="position-relative mb-3">
-                                                        <div class="mb-6 position-relative" id="datepicker1">
+                                                    <!-- <div class="position-relative mb-3"> -->
+                                                        <!-- <div class="mb-6 position-relative" id="datepicker1">
                                                             <label class="form-label">Total KM</label>
                                                             <input type="number" class="form-control"
                                                                 name="allowed_km" placeholder="Enter Total KM ">
-                                                        </div>
-                                                    </div>
+                                                        </div> -->
+                                                    <!-- </div> -->
                                                 </div> <!-- end card-body-->
                                                 <ul class="pager wizard mb-0 list-inline mt-1">
                                                     <li class="previous list-inline-item">
@@ -228,7 +228,7 @@
                                             </div>
                                             <div class="tab-pane" id="finish-3">
                                                 <div class="row">
-                                                    <h6 class="fs-15 mt-3">Do you have Driver?</h6>
+                                                    <!-- <h6 class="fs-15 mt-3">Do you have Driver?</h6>
                                                     <div class="mt-2">
                                                         <div class="form-check form-check-inline">
                                                             <input type="checkbox" class="form-check-input"
@@ -259,7 +259,7 @@
                                                             </select>
                                                             {{-- <div id="selectedValues" class="mt-2"></div> --}}
                                                         </div>
-                                                    </div>
+                                                    </div> -->
                                                     <h6 class="fs-15 mt-3">In/Out Town</h6>
                                                     <div class="mt-2">
                                                         <div class="form-check form-check-inline">
@@ -424,6 +424,7 @@
                                                 <dl class="row mb-0">
                                                     <dt class="col-sm-5">Request reason</dt>
                                                     <dd class="col-sm-7" data-field="purpose"></dd>
+                                                    
                                                     <dt class="col-sm-5">Requested vehicle</dt>
                                                     <dd class="col-sm-7" data-field="vehicle_type"></dd>
 
@@ -481,8 +482,7 @@
                                         <h5 class="mb-3"></h5>
                                         <div class="form-floating">
                                             <input type="hidden" name="request_id" id="rejected_id">
-                                            <textarea class="form-control" name="reason" id="reason" style="height: 60px;" disabled></textarea>
-                                            <label for="floatingTextarea">Reason</label>
+                                            <textarea class="form-control" name="reason" id="reason" style="height: 100%;width: 100%;" disabled></textarea>
                                         </div>
                                     </div>
                                 </div>

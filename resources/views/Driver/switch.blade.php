@@ -58,10 +58,11 @@
                                 <div class="col-md-4">
                                     <div class="card">
                                         <div class="card-header">
-                                            <h4 class="header-title mb-0">Add Driver</h4>
+                                            <h4 class="header-title mb-0">Change Driver</h4>
                                         </div>
                                         <div class="card-body">
-                                            <form method="POST" action="{{ route('driver_change.store') }}" accept-charset="UTF-8" name="driver_change-form" id="driver_change-form" enctype="multipart/form-data">
+                                            <form method="POST" action="{{ route('driver_change.store') }}" accept-charset="UTF-8" 
+                                                name="driver_change-form" id="driver_change-form" enctype="multipart/form-data">
                                                 @csrf
                                                 <div class="row mb-3">
                                                     <label class="col-md-3 col-form-label" for="vehicle">Vehicle</label>
@@ -72,8 +73,10 @@
                                                                 <option value="{{ $vehicle->vehicle_id }}">{{ $vehicle->plate_number }}</option>
                                                             @endforeach
                                                         </select>
+                                                        <small id="vehicleError" class="text-danger d-none">Please select a vehicle.</small>
                                                     </div>
                                                 </div>
+                                                
                                                 <div class="row mb-3">
                                                     <label class="col-md-3 col-form-label" for="driver">New Driver</label>
                                                     <div class="col-md-9">
@@ -83,8 +86,10 @@
                                                                 <option value="{{ $driver->driver_id }}">{{ $driver->user->first_name }} {{ $driver->user->middle_name }}</option>
                                                             @endforeach
                                                         </select>
+                                                        <small id="driverError" class="text-danger d-none">Please select a driver.</small>
                                                     </div>
                                                 </div>
+
                                                 <div class="d-flex justify-content-center">
                                                     <button type="submit" class="btn btn-primary">Save</button>
                                                 </div>
@@ -124,7 +129,7 @@
                                                                         <i class="ri-eye-line"></i>
                                                                     </button>
                                                     
-                                                                    <button type="button" class="btn btn-info rounded-pill" title="Edit Driver Change"
+                                                                    <button type="button" class="btn btn-secondary rounded-pill" title="Edit Driver Change"
                                                                         data-bs-toggle="modal" 
                                                                         data-bs-target="#editDriverChangeModal_{{ $loop->index }}"
                                                                         data-vehicle="{{ $item->vehicle->model }}"
@@ -133,14 +138,12 @@
                                                                         <i class="ri-edit-line"></i> 
                                                                     </button>
                                                     
-                                                                    <form method="POST" action=" " style="display:inline-block;" accept-charset="UTF-8">
-                                                                        @method('DELETE')
-                                                                        {{ csrf_field() }}
-                                                                        <button type="button" class="btn btn-danger rounded-pill" title="Delete Driver Change"
-                                                                         data-bs-toggle="modal" data-bs-target="#warning_alert">
-                                                                        <i class="ri-close-circle-line"></i>
-                                                                        </button>
-                                                                    </form>
+                                                                    @if (($item->driver_accepted == false))
+                                                                    <button type="button" class="btn btn-danger rounded-pill" title="Delete Driver Change"
+                                                                        data-bs-toggle="modal" data-bs-target="#warning_alert">
+                                                                    <i class="ri-close-circle-line"></i>
+                                                                    </button>
+                                                                    @endif
                                                                 </td>
                                                             </tr>
 
@@ -293,6 +296,41 @@
 });
 
    </script>
+
+<script>
+    document.getElementById('driver_change-form').addEventListener('submit', function(event) {
+        let isValid = true;
+    
+        // Get input elements
+        let vehicle = document.getElementById('vehicleCategory');
+        let driver = document.getElementById('driver');
+        
+        // Get error messages
+        let vehicleError = document.getElementById('vehicleError');
+        let driverError = document.getElementById('driverError');
+    
+        // Validate vehicle selection
+        if (vehicle.value === "") {
+            vehicleError.classList.remove('d-none');
+            isValid = false;
+        } else {
+            vehicleError.classList.add('d-none');
+        }
+    
+        // Validate driver selection
+        if (driver.value === "") {
+            driverError.classList.remove('d-none');
+            isValid = false;
+        } else {
+            driverError.classList.add('d-none');
+        }
+    
+        // If validation fails, prevent form submission
+        if (!isValid) {
+            event.preventDefault();
+        }
+    });
+    </script>
     
 
     <!-- Vendor js -->

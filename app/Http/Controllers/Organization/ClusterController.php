@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use App\Http\Controllers\Vehicle\Daily_KM_Calculation;
+use App\Models\Organization\DepartmentsModel;
 use Exception;
 
 class ClusterController extends Controller {
@@ -109,6 +110,13 @@ class ClusterController extends Controller {
     public function destroy( ClustersModel $cluster ) {
     try
     {
+        $cluster_id = $cluster->cluster_id;
+        $check_dept = DepartmentsModel::where("cluster_id",$cluster_id)->first();
+        if($check_dept)
+          {
+              return redirect()->back()->with('error_message',
+              'Sorry, You cannot delete this cluster.',);
+          }
         $cluster->delete();
         return redirect()->back()->with( 'success', 'Cluster deleted successfully.' );
     }

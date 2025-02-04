@@ -55,38 +55,37 @@ class DailyKMCalculationModel extends Model {
         return $this->belongsTo( User::class, 'created_by', 'id' );
     }
     public function getNightKmAttribute($id)
-    {
-        $lastRecorded = self::where('vehicle_id', $id) 
-        ->where('created_at', '<', $this->created_at) 
-        ->first();
+        {
+            $lastRecorded = self::where('vehicle_id', $id) 
+            ->where('created_at', '<', $this->created_at) 
+            ->first();
 
-        if ($lastRecorded) 
-            {
-                if(!$this->morning_km)
-                    {
-                        
-                        return 0;
-                    }
-                else if($lastRecorded->afternoon_km)
-                    {
-                        return $this->morning_km - $lastRecorded->afternoon_km;
-                    }
-                return $this->morning_km - $lastRecorded->morning_km;
-            }
-        return $this->morning_km;
-    }
+            if ($lastRecorded) 
+                {
+                    if(!$this->morning_km)
+                        {
+                            
+                            return 0;
+                        }
+                    else if($lastRecorded->afternoon_km)
+                        {
+                            return $this->morning_km - $lastRecorded->afternoon_km;
+                        }
+                    return $this->morning_km - $lastRecorded->morning_km;
+                }
+            return $this->morning_km;
+        }
     
     public function getDailyKmAttribute()
-    {
-        if(!$this->afternoon_km)
-            { 
-            return 0;
-            }    
-        else
-            {           
-                return $this->afternoon_km - $this->morning_km;
-            }
-
-    }
+        {
+            if(!$this->afternoon_km)
+                { 
+                   return 0;
+                }    
+            else
+                {           
+                    return $this->afternoon_km - $this->morning_km;
+                }
+        }
 
 }

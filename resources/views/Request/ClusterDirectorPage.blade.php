@@ -39,7 +39,6 @@
 
                                             </tbody>
                                         </table>
-        
                                         <!-- show all the information about the request modal -->
                                         <div id="standard-modal" class="modal fade" tabindex="-1" role="dialog"
                                             aria-labelledby="standard-modalLabel" aria-hidden="true">
@@ -51,10 +50,22 @@
                                                             aria-label="Close"></button>
                                                     </div>
                                                     <div class="modal-body">
+                                                        <!-- <div class="col-md-6" style="display: none;" id="letter_div"> -->
+                                                                <dl class="row mb-0">
+                                                                    <dt class="col-sm-4">Field Letter:
+                                                                    </dt>
+                                                                    <dd class="col-sm-8" data-field="Fieldletter">
+                                                                    </dd>
+                                                                </dl>
+                                                        <!-- </div> -->
                                                         <dl class="row mb-0">
+                                                               
                                                             <dt class="col-sm-5">Request reason</dt>
                                                             <dd class="col-sm-7" data-field="purpose"></dd>
-        
+
+                                                            <!-- <dt class="col-sm-5">Total KM</dt>
+                                                            <dd class="col-sm-7" data-field="total_km"></dd> -->
+
                                                             <dt class="col-sm-5">Requested vehicle</dt>
                                                             <dd class="col-sm-7" data-field="vehicle_type"></dd>
         
@@ -72,7 +83,7 @@
         
                                                             <dt class="col-sm-5">Materials</dt>
                                                             <dd class="col-sm-7" data-field="materials"></dd>
-        
+
                                                             <dt class="col-sm-5">Progress</dt>
                                                             <dd class="col-sm-7" data-field="progress"></dd>
                                                         </dl>
@@ -91,23 +102,28 @@
                                             aria-labelledby="confirmationModalLabel"aria-hidden="true">
                                             <div class="modal-dialog modal-sm">
                                                 <div class="modal-content">
-                                                    <form method="POST" action="{{ route('ClusterDirector_approve_request') }}">
+                                                    <form method="POST" enctype="multipart/form-data" action="{{ route('ClusterDirector_approve_request') }}">
                                                         @csrf
                                                         <input type="hidden" name="request_id" id="request_id">
                                                         <div class="modal-body p-4">
                                                             <div class="text-center">
-                                                                <i class="ri-alert-line h1 text-warning"></i>
-                                                                <h4 class="mt-2">Warning</h4>
-                                                                <h5 class="mt-3">
-                                                                    Are you sure you want to accept this request?</br> This action
-                                                                    cannot be
-                                                                    undone.
-                                                                </h5>
+                                                                <div class="position-relative mb-3">
+                                                                    <div class="mb-6 position-relative" id="datepicker1">
+                                                                        <label class="form-label">Total KM</label>
+                                                                        <input type="number" class="form-control"
+                                                                            name="total_km" placeholder="Enter Total KM ">
+                                                                    </div>
+                                                                </div>
+                                                                <div class="position-relative mb-3">
+                                                                    <label class="form-label">Attach Field
+                                                                        Letter</label>
+                                                                    <input  class="form-control"
+                                                                        type="file" name="field_letter" required>
+                                                                </div>
                                                                 <button type="button" class="btn btn-secondary"
                                                                     data-bs-dismiss="modal">Cancel</button>
                                                                 <button type="submit" class="btn btn-primary"
-                                                                    id="confirmDelete">Yes,
-                                                                    Accept</button>
+                                                                    id="confirmDelete">Submit</button>
                                                             </div>
                                                         </div>
                                                     </form>
@@ -211,7 +227,20 @@
                 $('#standard-modal').on('show.bs.modal', function(event) {
                     var button = $(event.relatedTarget); // Button that triggered the modal
                     var modal = $(this); // The modal
-        
+                    var letterFile = button.data('field_letter');//$(this).data('field_letter');
+                    var letterField = modal.find('[data-field="Fieldletter"]');
+                    if (letterFile) 
+                            {
+                                
+                                var fieldLink = `<a href="app/public/TemporaryVehicle/FieldLetters/${letterFile}" target="_blank">View Letter</a>`;
+                                letterField.html(fieldLink);
+                                //document.getElementById('letter_div').style.display = 'inline-block';
+                            } 
+                        else 
+                            {
+                                letterField.text('No file available');
+                            }
+                 
                     // Populate basic request details
                     modal.find('.modal-title').text('Request Details');
                     modal.find('[data-field="purpose"]').text(button.data('purpose'));
@@ -221,7 +250,7 @@
                     modal.find('[data-field="end_date"]').text(button.data('end_date') + ', ' + button.data('end_time'));
                     modal.find('[data-field="start_location"]').text(button.data('start_location'));
                     modal.find('[data-field="end_locations"]').text(button.data('end_locations'));
-        
+                    // modal.find('[data-field="total_km"]').text(button.data('total_km'));
                     // Populate passengers
                     var passengers = button.data('passengers');
                     var passengerList = '';

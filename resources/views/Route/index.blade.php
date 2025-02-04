@@ -145,7 +145,8 @@
                                                                     data-id="{{ $data->route_id }}" 
                                                                     data-route-name="{{ $data->route_name }}" 
                                                                     data-vehicle-id="{{ $data->vehicle_id }}" 
-                                                                    data-driver-phone="{{ $data->driver_phone }}">
+                                                                    data-driver-phone="{{ $data->driver_phone }}"
+                                                                    data-driver-name="{{ $data->driver_name }}">
                                                                     <i class="ri-edit-line"></i> 
                                                                 </button>
                                                                 
@@ -216,7 +217,10 @@
                                                                                     @endforeach
                                                                                 </select>
                                                                             </div>
-                                                        
+                                                                            <div class="mb-3">
+                                                                                <label for="edit_driver_phone" class="form-label">Driver Name</label>
+                                                                                <input type="text" class="form-control" name="driver_name" id="edit_driver_name" required>
+                                                                            </div>
                                                                             <div class="mb-3">
                                                                                 <label for="edit_driver_phone" class="form-label">@lang('messages.Driver Phone number')</label>
                                                                                 <input type="text" class="form-control" name="driver_phone" id="edit_driver_phone" required>
@@ -312,11 +316,12 @@
             let routeName = this.getAttribute('data-route-name');
             let vehicleId = this.getAttribute('data-vehicle-id');
             let driverPhone = this.getAttribute('data-driver-phone');
-            
+            let driverName = this.getAttribute('data-driver-name');
             document.getElementById('edit_route_id').value = routeId;
             document.getElementById('edit_route_name').value = routeName;
             document.getElementById('edit_vehicle_id').value = vehicleId;
             document.getElementById('edit_driver_phone').value = driverPhone;
+            document.getElementById('edit_driver_name').value = driverName;
             document.getElementById('editRouteForm').action = `/Route/update/${routeId}`;
         });
     });
