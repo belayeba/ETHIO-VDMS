@@ -322,7 +322,9 @@ Route::group(['middleware' => ['auth']], function () {
         Route::post('/store', [DriverRegistrationController::class, 'store'])->name('driver.store');
         Route::delete('/delete/{driver}', [DriverRegistrationController::class, 'destroy'])->name('driver.destroy');
         Route::put('/update/{driver}', [DriverRegistrationController::class, 'update'])->name('driver.update');
+        Route::post('/update-status', [DriverRegistrationController::class, 'updateStatus'])->name('driver.status');
     });
+
     Route::group([
         'prefix' => 'driver_change',
     ], function () {
