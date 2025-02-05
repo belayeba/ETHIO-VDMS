@@ -275,6 +275,7 @@ class Daily_KM_Calculation extends Controller
     {
         $report = VehicleTemporaryRequestModel::get();
 
+
         return DataTables::of($report)
             ->addIndexColumn()
             ->addColumn('requested_by', function ($row) {
@@ -296,6 +297,7 @@ class Daily_KM_Calculation extends Controller
                 return $row->end_locations;
             })
             ->addColumn('action', function ($row) {
+                $inOutValue = ($row->in_out_of_addis_ababa == 1) ? 'In Town' : 'Out of Town';
                 $actions = '<button type="button" class="btn btn-info rounded-pill view-btn" 
                 data-requested_by="' . $row->requestedBy->first_name . '"
                 data-plate_number="' . $row->vehicle->plate_number . '"
@@ -304,11 +306,10 @@ class Daily_KM_Calculation extends Controller
                 data-start_time="' . $row->start_time . '"
                 data-end_date="' . $row->end_date . '"
                 data-end_time="' . $row->end_time . '"
-                data-in_out_of_addis_ababa="' . $row->in_out_of_addis_ababa . '"
+                data-in_out_of_addis_ababa="' . $inOutValue . '"
                 data-how_many_days="' . $row->how_many_days . '"
                 data-start_km="' . $row->start_km . '"
                 data-end_km="' . $row->end_km . '"
-                data-with_driver="' . $row->with_driver . '"
                 data-start_location="' . $row->start_location . '"
                 data-end_locations="' . $row->end_locations . '"
                 data-department_name="' . $row->requestedBy->department->name . '"

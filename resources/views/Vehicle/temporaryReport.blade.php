@@ -209,9 +209,6 @@
                                                             <dt class="col-sm-4">End KM:</dt>
                                                             <dd class="col-sm-8" data-field="end_km"></dd>
 
-                                                            <dt class="col-sm-4">With Driver:</dt>
-                                                            <dd class="col-sm-8" data-field="with_driver"></dd>
-
                                                             <dt class="col-sm-4">Start Location:</dt>
                                                             <dd class="col-sm-8" data-field="start_location"></dd>
 
@@ -309,7 +306,6 @@
             var howManyDays = $(this).data('how_many_days');
             var startKm = $(this).data('start_km');
             var endKm = $(this).data('end_km');
-            var withDriver = $(this).data('with_driver');
             var startLocation = $(this).data('start_location');
             var endLocations = $(this).data('end_locations');
             var departmentName = $(this).data('department_name');
@@ -327,7 +323,6 @@
             $('[data-field="how_many_days"]').text(howManyDays);
             $('[data-field="start_km"]').text(startKm);
             $('[data-field="end_km"]').text(endKm);
-            $('[data-field="with_driver"]').text(withDriver);
             $('[data-field="start_location"]').text(startLocation);
             $('[data-field="end_locations"]').text(endLocations);
             $('[data-field="department_name"]').text(departmentName);
