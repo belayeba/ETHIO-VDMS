@@ -291,6 +291,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('/daily_km/page', 'displayPage')->name('daily_km.page'); // inspection page
         Route::post('d_k/update', 'updateKm')->name('daily_km.page.update'); // Delete a specific inspection
     });
+    Route::get('/daily/list', [Daily_KM_Calculation::class, 'list'])->name('tempreport.list');
 
     Route::get('/vehicle/report/data', [Daily_KM_Calculation::class, 'vehicleReport'])->name('dailyreport.vehicleReport');
     Route::get('/vehicle/report/filter', [Daily_KM_Calculation::class, 'filterVehicleReport'])->name('dailyreport.filterVehicleReport');
@@ -323,7 +324,9 @@ Route::group(['middleware' => ['auth']], function () {
         Route::post('/store', [DriverRegistrationController::class, 'store'])->name('driver.store');
         Route::delete('/delete/{driver}', [DriverRegistrationController::class, 'destroy'])->name('driver.destroy');
         Route::put('/update/{driver}', [DriverRegistrationController::class, 'update'])->name('driver.update');
+        Route::post('/update-status', [DriverRegistrationController::class, 'updateStatus'])->name('driver.status');
     });
+
     Route::group([
         'prefix' => 'driver_change',
     ], function () {

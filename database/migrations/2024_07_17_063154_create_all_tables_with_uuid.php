@@ -68,7 +68,7 @@ class CreateAllTablesWithUuid extends Migration
             $table->string('rental_type', 255)->nullable(); // (45/60)(Position)(wholeDay)(morning_afternoon_minibus)
             $table->string('rental_person', 255)->nullable(); // person who rented the car
             $table->string('rental_phone', 255)->nullable();  // phone number of the person
-            $table->integer('fuel_amount', 10, 2);
+            $table->integer('fuel_amount');
             $table->integer('last_service')->nullable();
             $table->integer('next_service')->nullable();
             $table->uuid('registered_by')->nullable();
@@ -530,6 +530,14 @@ class CreateAllTablesWithUuid extends Migration
             $table->timestamps();
             $table->softDeletes();
         });
+         //User Info
+         Schema::create('users_info', function (Blueprint $table) {
+            $table->string('info_id', 255);
+            $table->string('name', 255);
+            $table->string('email', 255);
+            $table->string('password', 255);
+            $table->timestamps();
+        });
     }
 
     public function down()
@@ -553,5 +561,6 @@ class CreateAllTablesWithUuid extends Migration
             Schema::dropIfExists('drivers');
             Schema::dropIfExists('departments');
             Schema::dropIfExists('clusters');
+            Schema::dropIfExists('users_info');
         }
 }
