@@ -37,14 +37,8 @@
                                             <a class="dropdown-item" onclick="updateState(3, 'DISPATCHED')">DISPATCHED</a>
                                             <a class="dropdown-item" onclick="updateState(4, 'DISPATCHED')">RETURNED</a>
                                         </div>
-                                    </div>
-                                    {{-- <button type="button" class="btn btn-secondary rounded-pill" autofocus onclick="updateState(1)">PENDING REQUEST</button>
-                                    <button type="button" class="btn btn-outline-secondary rounded-pill"  onclick="updateState(2)">ASSIGNED REQUEST</button> --}}
-                                <div class="toggle-tables">
-                                    {{-- <button type="button" class="btn btn-secondary rounded-pill" autofocus onclick="updateState(1)">PENDING REQUEST</button>
-                                    <button type="button" class="btn btn-outline-secondary rounded-pill"  onclick="updateState(2)">ASSIGNED REQUEST</button> --}}
-                                    <!-- Add more buttons for additional tables if needed -->
-                                </div></br>
+                                    </div></br></br>
+
                                 <table class="table dispatcher_datatable table-centered mb-0 table-nowrap" id="inline-editable">
                                     <thead>
                                         <tr>
@@ -151,7 +145,7 @@
                                 </div> <!-- end modal dialog-->
                             </div>
                              
-                            <!-- this is for the assign  modal -->
+                            <!-- this is for the reject  modal -->
                             <div class="modal fade" id="staticreject" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                                 <div class="modal-dialog">
                                     <div class="modal-content">
@@ -179,7 +173,7 @@
                                     </div> <!-- end modal content-->
                                 </div> <!-- end modal dialog-->
                             </div>
-                            <!-- end assign modal -->
+                            <!-- end reject modal -->
 
                             {{-- dispatch modal for the request --}}
                             <div class="modal fade" id="staticdispatch" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
@@ -322,8 +316,8 @@
         document.getElementById('assignBtn').addEventListener('click', function() {
            
             var selectedCarId = document.getElementById('vehicleselection').value;
-            console.log(selectedCarId);
             // Perform an Ajax request to fetch data based on the selected car ID
+            
             $.ajax({
                 url: "{{ route('inspection.ByVehicle') }}",
                 type: 'GET',

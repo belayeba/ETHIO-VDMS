@@ -1055,7 +1055,6 @@ class VehicleTemporaryRequestController extends Controller
              // fetching director approval requests
         public function FetchForDispatcher(Request $request)
             {
-                // dd($request->input('customDataValue'));
             
                 $data_drawer_value = $request->input('customDataValue');
 
@@ -1290,6 +1289,7 @@ class VehicleTemporaryRequestController extends Controller
                     //  elseif ($data_drawer_value == 2 || $data_drawer_value == 0) {
                         elseif ($row->start_km == null && $row->assigned_by != null && $row->assigned_by_reject_reason  == null ) {
                             $actions .= '<button type="button" class="btn btn-warning rounded-pill dispatch-btn" data-id="' . $row->request_id . '" data-plate="' . $row->vehicle->plate_number . '" title="Dispatch"><i class="  ri-contract-right-fill"></i></button>';
+                            $actions .= '<button type="button" class="btn btn-primary rounded-pill accept-btn" data-id="' . $row->request_id . '" data-plate="' . $row->vehicle->plate_number . '" title="Reassign"><i class="ri-checkbox-circle-line"></i></button>';
                         }
                     // } 
                     // elseif ($data_drawer_value == 3 || $data_drawer_value == 0) {
@@ -1339,7 +1339,7 @@ class VehicleTemporaryRequestController extends Controller
                                     );
                                 }
                            
-                        if($Vehicle_Request->assigned_by)
+                        if($Vehicle_Request->start_km)
                             {
                                 return redirect()->back()->with('error_message',
                                 'Warning! You are denied the service.',
@@ -1347,7 +1347,7 @@ class VehicleTemporaryRequestController extends Controller
                             }
                         $inspection = InspectionModel::select('inspection_id')->where('vehicle_id',$assigned_vehicle)->latest()->first();
                         $inspection_id = null;
-                        if(!$inspection)
+                        if($inspection)
                             {
                                 $inspection_id = $inspection->inspection_id;
                             }

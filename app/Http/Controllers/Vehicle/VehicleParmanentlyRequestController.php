@@ -83,6 +83,7 @@ class VehicleParmanentlyRequestController extends Controller
 
                 $action .= '<button type="button" class="btn btn-info rounded-pill show-btn" data-bs-toggle="modal" 
                 data-reason="' . $row->purpose . '" 
+                data-position="' . $row->position . '" 
                 data-position_letter="' . $row->position_letter . '" 
                 data-driving_license="' . $row->driving_license . '" 
                 data-bs-target="#standard-modal-{{ $loop->index }}" title="Show"><i class=" ri-eye-line"></i></button>';
@@ -334,6 +335,7 @@ class VehicleParmanentlyRequestController extends Controller
 
                 $action .= '<button type="button" class="btn btn-info rounded-pill show-btn" data-bs-toggle="modal" 
                 data-reason="' . $row->purpose . '" 
+                data-position="' . $row->position . '" 
                 data-position_letter="' . $row->position_letter . '" 
                 data-driving_license="' . $row->driving_license . '" 
                 data-bs-target="#standard-modal-{{ $loop->index }}" title="Show"><i class=" ri-eye-line"></i></button>';
@@ -436,10 +438,98 @@ class VehicleParmanentlyRequestController extends Controller
     // Vehicle Director Page
     public function Dispatcher_page()
         {
-            $Vehicle_Request = VehiclePermanentlyRequestModel::whereNotNull('approved_by')->whereNull('director_reject_reason')->get();
             $Vehicle = VehiclesModel::where('rental_type','position')->where('status', 1)->get();
-            return view("Request.PermanentVehicleDirector", compact('Vehicle_Request', 'Vehicle'));
+            return view("Request.PermanentVehicleDirector", compact('Vehicle'));
         }
+
+     // datatable for the Vehicle director 
+     public function FetchPermanentForDispatcher(Request $request)
+     {
+
+        $data_drawer_value = $request->input('customDataValue');
+      
+
+        if($data_drawer_value == 1)
+        {
+         $data = VehiclePermanentlyRequestModel::whereNotNull('approved_by')->whereNull('director_reject_reason')->whereNull('given_by')->get();
+        }
+        elseif($data_drawer_value == 2)
+        {
+         $data = VehiclePermanentlyRequestModel::whereNotNull('approved_by')->whereNull('director_reject_reason')->whereNotNull('vehicle_id')->whereNull('accepted_by_requestor')->get();
+        }
+        elseif($data_drawer_value == 3)
+        {
+         $data = VehiclePermanentlyRequestModel::whereNotNull('approved_by')->whereNull('director_reject_reason')->whereNotNull('accepted_by_requestor')->get();
+        }
+        elseif($data_drawer_value == 4)
+        {
+         $data = VehiclePermanentlyRequestModel::whereNotNull('approved_by')->whereNull('director_reject_reason')->whereNotNull('vec_director_reject_reason')->get();
+        }else{
+         $data = VehiclePermanentlyRequestModel::whereNotNull('approved_by')->whereNull('director_reject_reason')->get();
+        }
+
+        // 
+
+         
+         return datatables()->of($data)
+         ->addIndexColumn()
+         ->addColumn('counter', function($row) use ($data){
+             static $counter = 0;
+             $counter++;
+             return $counter;
+         })
+
+         ->addColumn('requested_by', function ($row) {
+             return $row->requestedBy->first_name . ' ' .$row->requestedBy->middle_name ;
+         })
+
+
+         ->addColumn('start_date', function ($row) {
+             return $row->created_at->format('d/m/Y');
+         })
+
+         ->addColumn('status', function ($row) {
+             if (is_null($row->given_by)) {
+                 return 'PENDING';
+             } elseif (!is_null($row->vec_director_reject_reason)) {
+                 return 'REJECTED';
+             } elseif (!is_null($row->accepted_by_requestor)) {
+                return 'TAKEN';
+             }
+             else {
+                 return 'APPROVED';
+             }
+         })
+
+
+         ->addColumn('actions', function ($row){
+             $action = '';
+
+             $action .= '<button type="button" class="btn btn-info rounded-pill show-btn"
+             data-reason="' . $row->purpose . '" 
+             data-position="' . $row->position . '" 
+             data-position_letter="' . $row->position_letter . '" 
+             data-driving_license="' . $row->driving_license . '" 
+             title="Show"><i class=" ri-eye-line"></i></button>';
+
+             if (is_null($row->given_by)) {
+                 $action .= '
+                         <button id="acceptButton" type="button" class="btn btn-primary rounded-pill accept-btn" data-id="' . $row->vehicle_request_permanent_id . '" 
+                         title="Accept"><i class="ri-checkbox-circle-line"></i></button>
+
+                         <button type="button" class="btn btn-danger rounded-pill reject-btn" 
+                         data-id="' . $row->vehicle_request_permanent_id . '" title="Reject">
+                         <i class=" ri-close-circle-fill"></i></button>';
+             }
+
+             return $action;
+         })
+
+         ->rawColumns(['requested_by','reason','start_date','status','counter','actions'])
+         ->toJson();
+ 
+     }
+
     // VEHICLE DIRECTOR APPROVE THE REQUESTS
     public function DispatcherApproveRequest(Request $request)
         {
