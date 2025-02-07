@@ -75,55 +75,125 @@
                                </div>
                         </div>
                     </div> <!-- end col-->
+                </div>
 
-                    <div class="d-flex justify-content-center align-items-center">
-                      <div class="col-12 col-md-8 col-lg-8">
-                          <div class="card">
-                              <div class="card-header  ">
-                                  <h4 class="header-title d-flex justify-content-center"> Wellcome to fleet Management</h4>
-                                  <p class="text-muted mb-0 d-flex justify-content-center">Where You can request vehicle, fuel, maintenance, and much more.
-                                  </p>
-                              </div>
-                              <div class="card-body">
-                                  <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
-                                      <ol class="carousel-indicators">
-                                          <li data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active"></li>
-                                          <li data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1"></li>
-                                          <li data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2"></li>
-                                      </ol>
-                                      <div class="carousel-inner" role="listbox">
-                                          <div class="carousel-item active">
-                                              <img class="d-block img-fluid" src="assets/images/small/fleetMgt.png" alt="First slide">
-                                          </div>
-                                          <div class="carousel-item">
-                                              <img class="d-block img-fluid" src="assets/images/small/addisStreet.jpg" alt="Second slide">
-                                          </div>
-                                          <div class="carousel-item">
-                                              <img class="d-block img-fluid" src="assets/images/small/fleetDC.jpg" alt="Third slide">
-                                          </div>
-                                      </div>
-                                      <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button"
-                                          data-bs-slide="prev">
-                                          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                                          <span class="visually-hidden">Previous</span>
-                                      </a>
-                                      <a class="carousel-control-next" href="#carouselExampleIndicators" role="button"
-                                          data-bs-slide="next">
-                                          <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                                          <span class="visually-hidden">Next</span>
-                                      </a>
-                                  </div>
-                              </div>
-                          </div>
-                      </div>
-                  </div>
-                  
-                  </div>
+                    <div class="col-sm-12">
+                        <div class="card card-body" >
+                            <h4 class="card-title"> @lang('messages.Map Display')</h4>
+                            {{-- <p class="card-text">Map of Addis Ababa.</p> --}}
+
+                            <!-- Map container inside the card body -->
+                            {{-- <div id="map1" class="map1-container" style="height: 100vh;"></div> --}}
+                            <div id="map" class="container" style="height: 70vh;"></div>
+                        </div> <!-- end card-->
+                    </div> <!-- end col-->
+
                 </div>
             </div>
-          </div>
-      
             
+                   
+
+    <!-- Include Maptalks CSS and JS -->
+    <link rel="stylesheet" href="https://unpkg.com/maptalks/dist/maptalks.css">
+    <script type="text/javascript" src="https://unpkg.com/maptalks/dist/maptalks.min.js"></script>
+    {{-- <link rel="stylesheet" href="https://unpkg.com/maptalks/dist/maptalks.css">
+    <script type="text/javascript" src="https://unpkg.com/maptalks/dist/maptalks.min.js"></script>
+
+    <script type="text/javascript" src="https://unpkg.com/turf@3.0.14/turf.min.js"></script> --}}
+    <script>
+        // Initialize the map within the map container inside the card
+        var map = new maptalks.Map('map', {
+        center: [38.763611, 9.005401],
+        zoom: 7,
+        baseLayer: new maptalks.TileLayer('base', {
+          urlTemplate: 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png',
+          subdomains: ["a","b","c","d"],
+          attribution: '&copy; <a href="http://osm.org">OpenStreetMap</a> contributors, &copy; <a href="https://carto.com/">CARTO</a>'
+        })
+      });
+
+      var layer = new maptalks.VectorLayer('vector').addTo(map);
+
+      var marker = new maptalks.Marker(
+        [38.7667302, 8.988853],
+        {
+          'properties' : {
+            'name' : 'A-1-22112'
+          },
+          symbol : [
+            {
+              'markerFile'   : 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSq_f7BQdyTmLTF8rCF8Y4P4A2GprGVFjUZbA&s',
+              'markerWidth'  : 28,
+              'markerHeight' : 40,
+              'markerDx'     : 0,
+              'markerDy'     : 0,
+              'markerOpacity': 1
+            },
+            {
+              'textFaceName' : 'sans-serif',
+              'textName' : '{name}',
+              'textSize' : 14,
+              'textDy'   : 24
+            }
+          ]
+        }
+      ).addTo(layer);
+
+
+
+
+      var marker = new maptalks.Marker(
+        [38.7490906, 9.018345],
+        {
+          'properties' : {
+            'name' : 'A-2-27633'
+          },
+          symbol : [
+            {
+              'markerFile'   : 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSq_f7BQdyTmLTF8rCF8Y4P4A2GprGVFjUZbA&s',
+              'markerWidth'  : 28,
+              'markerHeight' : 40,
+              'markerDx'     : 0,
+              'markerDy'     : 0,
+              'markerOpacity': 1
+            },
+            {
+              'textFaceName' : 'sans-serif',
+              'textName' : '{name}',
+              'textSize' : 14,
+              'textDy'   : 24
+            }
+          ]
+        }
+      ).addTo(layer);
+
+      var marker = new maptalks.Marker(
+        [39.2232378, 8.5339425],
+        {
+          'properties' : {
+            'name' : 'B-3-23343'
+          },
+          symbol : [
+            {
+              'markerFile'   : 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTs9o-Le0yd9rLvrLp4S5A81R0CUWUJUvmx-Q&s',
+              'markerWidth'  : 28,
+              'markerHeight' : 40
+            },
+            {
+              'textFaceName' : 'sans-serif',
+              'textName' : '{name}',
+              'textSize' : 14,
+              'textDy'   : 24,
+              'markerDx'     : 0,
+              'markerDy'     : 0,
+              'markerOpacity': 1
+            }
+          ]
+        }
+      ).addTo(layer);
+      
+    </script>
+
     <!-- App js -->
     <script src="{{ asset('assets/js/app.min.js') }}"></script>
     @endsection
