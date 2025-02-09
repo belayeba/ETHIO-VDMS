@@ -142,6 +142,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::delete('/delete/{vehicle}', [VehicleVehicleRegistrationController::class, 'destroy'])->name('vehicle.destroy');
         Route::put('/update/{vehicle}', [VehicleVehicleRegistrationController::class, 'update'])->name('vehicle.update');
         Route::get('/list', [VehicleVehicleRegistrationController::class, 'list'])->name('vehicle.list');
+        Route::post('/update-status', [VehicleVehicleRegistrationController::class, 'updateStatus'])->name('vehicle.status');
     });
     // Route::put('/vehicles/{id}/status', [VehicleVehicleRegistrationController::class, 'updateStatus']);
 
