@@ -1009,11 +1009,19 @@ class VehicleTemporaryRequestController extends Controller
         $vehicles = VehiclesModel::whereIn('rental_type', ['field', 'service', 'whole_day'])
             ->where('status', 1)
             ->get();
+
+
+        $AssignedVehicles = VehiclesModel::whereIn(
+            'vehicle_id', 
+            VehicleTemporaryRequestModel::whereNotNull('start_km')->whereNull('end_km')->pluck('vehicle_id')->unique()
+        )->get();
+           
+
         $vehicle_requests = VehicleTemporaryRequestModel::whereNotNull('transport_director_id')
             ->whereNull('vec_director_reject_reason')
             //->whereNull('assigned_by')
             ->get();
-        return view("Request.VehicleDirectorPage", compact('vehicle_requests', 'vehicles'));
+        return view("Request.VehicleDirectorPage", compact('vehicle_requests', 'vehicles','AssignedVehicles'));
     }
     // fetching director approval requests
     public function FetchForDispatcher(Request $request)

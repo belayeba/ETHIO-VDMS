@@ -121,9 +121,17 @@
                                                         <h5 class="mb-0">Select Vehicle</h5>
                                                             <select name="assigned_vehicle_id" class="form-select" id="vehicleselection"  required>
                                                                 <option value="" selected>Select</option>
-                                                                @foreach ($vehicles as $item)
-                                                                    <option value="{{$item->vehicle_id}}">{{$item->plate_number}}</option>
-                                                                @endforeach
+                                                                    <optgroup label="None Occupied Vehicles">
+                                                                        @foreach ($vehicles as $item)
+                                                                            <option value="{{$item->vehicle_id}}">{{$item->plate_number}}</option>
+                                                                        @endforeach
+                                                                    </optgroup>
+                                                                    
+                                                                    <optgroup label="Occupied Vehicles">
+                                                                        @foreach ($AssignedVehicles as $item)
+                                                                            <option value="{{$item->vehicle_id}}">{{$item->plate_number}}</option>
+                                                                        @endforeach
+                                                                    </optgroup>
                                                             </select>
                                                         <input type="hidden" name="request_id" id="request_id">
                                                     </div>                                                               

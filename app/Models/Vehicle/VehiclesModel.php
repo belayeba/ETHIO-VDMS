@@ -46,6 +46,7 @@ class VehiclesModel extends Model
         'capacity',
         'inspection_id',
         'fuel_type',
+        'driver_id',
         'status',
         'notes',
         'created_at',
