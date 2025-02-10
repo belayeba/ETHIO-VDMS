@@ -400,7 +400,7 @@
                                                     <th>{{ __('messages.Plate Number') }}</th>
                                                     <th>{{ __('messages.Vehicle Type') }}</th>
                                                     <th>{{ __('messages.Vehicle Category') }}</th>
-                                                    {{-- <th>status</th> --}}
+                                                    <th>status</th>
                                                     <th>{{ __('messages.Action') }}</th>
                                                 </tr>
                                             </thead>
@@ -774,46 +774,102 @@
                     </div>
             </section>
 
+            <style>
+                .switch {
+  position: relative;
+  display: inline-block;
+  width: 34px;
+  height: 20px;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  transition: 0.4s;
+  border-radius: 20px;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 14px;
+  width: 14px;
+  left: 3px;
+  bottom: 3px;
+  background-color: white;
+  transition: 0.4s;
+  border-radius: 50%;
+}
+
+input:checked + .slider {
+  background-color: #4CAF50;
+}
+
+input:checked + .slider:before {
+  transform: translateX(14px);
+}
+
+            </style>
 
     <script src="{{ asset('assets/vendor/datatables.net/js/jquery.dataTables.min.js') }}"></script>
 
     <script>
         $(function() {
-            var table = $('.vehicle_datatable').DataTable({
+    var table = $('.vehicle_datatable').DataTable({
+        pageLength: 5,
+        ajax: "{{ route('vehicle.list') }}",
+        columns: [
+            { data: 'plate_number', 
+              name: 'plate_number' 
+            },
+            { data: 'vehicle_type', 
+              name: 'vehicle_type' 
+            },
+            { data: 'vehicle_category', 
+              name: 'vehicle_category' 
+            },
+            { data: 'status', name: 'status', orderable: false, searchable: false }, // ✅ Add orderable & searchable false
+            { data: 'action', name: 'action', orderable: false, searchable: false },
+        ],
+        drawCallback: function() {
+            // ✅ Re-bind event listener to dynamically loaded elements
+            $('.status-toggle').off('change').on('change', function() {
+                var status = $(this).prop('checked') ? '1' : '0';
+                var itemId = $(this).data('id');
 
-                pageLength: 5,
-                ajax: "{{ route('vehicle.list') }}",
-                columns: [{
-                        data: 'plate_number',
-                        name: 'plate_number'
+                $.ajax({
+                    url: "{{ route('vehicle.status') }}",
+                    type: 'POST',
+                    data: {
+                        id: itemId,
+                        status: status,
+                        _token: '{{ csrf_token() }}'
                     },
-                    {
-                        data: 'vehicle_type',
-                        name: 'vehicle_type'
+                    success: function(response) {
+                    // Trigger a page reload to show session messages
+                    window.location.reload();
                     },
-                    {
-                        data: 'vehicle_category',
-                        name: 'vehicle_category'
-                    },
-                    {
-                        data: 'action',
-                        name: 'action'
-                    },
-                ]
+                    error: function(xhr, status, error) {
+                        // Trigger a page reload to show error message
+                        window.location.reload();
+                    }
+                });
             });
-        });
-
-        $(document).ready(function() {
-            var RejectedId;
-
-            $(document).on('click', '.reject-btn', function() {
-                RejectedId = $(this).data('id');
-
-                $('#deleted_vehicle_id').val(RejectedId);
-                $('#confirmationModal').modal('toggle');
-            });
-        });
-    </script>
+        }
+    });
+});
+</script>
 
     <script>
         $(document).ready(function() {})
