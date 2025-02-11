@@ -137,6 +137,7 @@ class CreateAllTablesWithUuid extends Migration
             $table->timestamps();
             $table->softDeletes();
             $table->primary(['inspection_id', 'part_name', 'inspected_by']);  // Composite primary key to avoid duplication
+            $table->unique('inspection_id');
         });
         // driver change
         Schema::create('driver_changes', function (Blueprint $table) {
