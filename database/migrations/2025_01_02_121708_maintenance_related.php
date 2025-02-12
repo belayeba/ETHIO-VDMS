@@ -41,7 +41,16 @@ return new class extends Migration
             $table->string('simirit_reject_reason', 1000)->nullable();
 
             $table->uuid('taking_inspection')->nullable();
-            $table->foreign('taking_inspection')->references('inspection_id')->on('vehicle_inspections')->onDelete('restrict');
+            $table->uuid('part_name')->nullable();
+            $table->uuid('inspected_by')->nullable();
+            
+            $table->foreign(['inspection_id', 'part_name', 'inspected_by'], 'taking_inspection')
+            ->references(['inspection_id', 'part_name', 'inspected_by'])
+            ->on('vehicle_inspections')
+            ->onDelete('restrict');
+
+            // $table->uuid('taking_inspection')->nullable();
+            // $table->foreign('taking_inspection')->references('inspection_id')->on('vehicle_inspections')->onDelete('restrict');
 
             $table->text('notes')->nullable();
 
@@ -53,8 +62,18 @@ return new class extends Migration
             $table->uuid('maintained_vehicle_id')->primary();
             $table->uuid('maintenance_id');
             $table->foreign('maintenance_id')->references('maintenance_id')->on('maintenances')->onDelete('cascade');
+
             $table->uuid('giving_inspection')->nullable();
-            $table->foreign('giving_inspection')->references('inspection_id')->on('vehicle_inspections')->onDelete('restrict');
+            $table->uuid('part_name')->nullable();
+            $table->uuid('inspected_by')->nullable();
+            
+            $table->foreign(['inspection_id', 'part_name', 'inspected_by'], 'giving_inspection')
+            ->references(['inspection_id', 'part_name', 'inspected_by'])
+            ->on('vehicle_inspections')
+            ->onDelete('restrict');
+            
+            // $table->uuid('giving_inspection')->nullable();
+            // $table->foreign('giving_inspection')->references('inspection_id')->on('vehicle_inspections')->onDelete('restrict');
             $table->string('spareparts_used')->nullable();
             $table->uuid('accepted_by')->nullable();
             $table->foreign('accepted_by')->references('id')->on('users')->onDelete('restrict');
