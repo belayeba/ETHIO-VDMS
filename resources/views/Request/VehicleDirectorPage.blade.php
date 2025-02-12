@@ -137,9 +137,17 @@
                                                     </div>                                                               
                                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                             </div> <!-- end modal header -->
-                                            <div class="modal-body">Select a Vehicle and check Inspection, Before assigning.
-                                                <div class="table-responsive">
-                                                    <div class="row mt-3" id="inspectionCardsContainer" class="table table-striped"> 
+                                            <div class="modal-body">
+                                                {{-- <div class="form-check form-check-inline">
+                                                    <input type="checkbox" class="form-check-input"
+                                                        name="package" value="1">
+                                                    <label class="form-check-label" style="font-size: 16px">Assign A New Vehicle</label>
+                                                </div></br></br> --}}
+                                                <div>
+                                                    Select a Vehicle and check Inspection, Before assigning.
+                                                    <div class="table-responsive">
+                                                        <div class="row mt-3" id="inspectionCardsContainer" class="table table-striped"> 
+                                                        </div>
                                                     </div>
                                                 </div>
                                                 
