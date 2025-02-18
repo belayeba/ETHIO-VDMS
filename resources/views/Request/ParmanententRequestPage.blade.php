@@ -51,7 +51,7 @@
                                                 <a href="#account-2" data-bs-toggle="tab" data-toggle="tab"
                                                     class="nav-link rounded-0 py-2">
                                                     <i class="ri-car-fill fw-normal fs-20 align-middle me-1"></i>
-                                                    <span class="d-none d-sm-inline">Request</span>
+                                                    <span class="d-none d-sm-inline">@lang('messages.Request')</span>
                                                 </a>
                                             </li>
                                         </ul>
@@ -67,26 +67,26 @@
                                                 <div class="row">
                                                     <div class="position-relative mb-3">
                                                         <div class="mb-6 position-relative" id="datepicker1">
-                                                            <label class="form-label">Reason</label>
+                                                            <label class="form-label">@lang('messages.Reason')</label>
                                                             <input type="text" name="purpose" class="form-control"
                                                                 placeholder="Enter purpose of Request">
                                                         </div>
                                                     </div>
                                                     <div class="mb-3">
-                                                        <label for="nameInput" class="form-label">Position <strong class="text-danger">*</strong></label>
+                                                        <label for="nameInput" class="form-label">@lang('messages.position') <strong class="text-danger">*</strong></label>
                                                         <input type="text" class="form-control" id="position" name="position" placeholder="Enter Your Position">
                                                     </div>
                                                     <div class="position-relative mb-3">
-                                                        <label class="form-label">Upload Position Letter</label>
+                                                        <label class="form-label">@lang('messages.Upload Position Letter')</label>
                                                         <input name="position_letter" class="form-control" type="file">
                                                     </div>
                                                     <div class="mb-3">
-                                                        <label for="nameInput" class="form-label">License Number <strong class="text-danger">*</strong></label>
+                                                        <label for="nameInput" class="form-label">@lang('messages.License Number')<strong class="text-danger">*</strong></label>
                                                         <input type="text" class="form-control" id="license_number" name="license_number" placeholder="Enter License Number">
                                                     </div>
                                                     <div class="position-relative mb-3">
                                                         <div class="mb-6 position-relative" id="datepicker1">
-                                                            <label class="form-label">License expiry date </label>
+                                                            <label class="form-label">@lang('messages.License expiry date')</label>
                                                             <input type="text" class="form-control" name="expiry_date"
                                                                 placeholder="Enter license expiry date" id="expirydate">
                                                         </div>
@@ -99,14 +99,14 @@
                                                         </script>
                                                     </div>
                                                     <div class="position-relative mb-3">
-                                                        <label class="form-label">Upload Driving License</label>
+                                                        <label class="form-label">@lang('messages.Upload Driving License')</label>
                                                         <input name="Driving_license" class="form-control" type="file">
                                                     </div>
                                                 </div>
 
                                                 <ul class="list-inline wizard mb-0">
                                                     <li class="next list-inline-item float-end">
-                                                        <button type="submit" class="btn btn-info">Submit</button>
+                                                        <button type="submit" class="btn btn-info">@lang('messages.Submit')</button>
                                                     </li>
                                                 </ul>
 
@@ -128,11 +128,11 @@
                                     <table class="table Permanent_datatable table-striped dt-responsive nowrap w-100">
                                         <thead>
                                             <tr>
-                                                <th>Roll.no</th>
-                                                <th>Date Requested</th>
-                                                <th>status</th>
-                                                <th>Vehicle</th>
-                                                <th>Actions</th>
+                                                <th>{{ __('messages.Roll No.') }}</th>
+                                                <th>{{ __('messages.Requested Date') }}</th>
+                                                <th>{{ __('messages.Status') }}</th>
+                                                <th>{{ __('messages.Vehicle') }}</th>
+                                                <th>{{ __('messages.Action') }}</th>
                                             </tr>
                                         </thead>
                                         <tbody>

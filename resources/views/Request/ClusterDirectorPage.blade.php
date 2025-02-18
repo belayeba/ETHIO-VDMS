@@ -27,12 +27,12 @@
                                         <table class="table cluster_director_datatable table-striped dt-responsive nowrap w-100">
                                             <thead>
                                                 <tr>
-                                                    <th>#</th>
-                                                    <th>Requested By</th>
-                                                    <th>Vehicle Type</th>
-                                                    <th>Requested At</th>
-                                                    <th>Status</th>
-                                                    <th>Action</th>
+                                                    <th>{{ __('messages.Roll No.') }}</th>
+                                                    <th>{{ __('messages.Requested By') }}</th>
+                                                    <th>{{ __('messages.Vehicle Type') }}</th>
+                                                    <th>{{ __('messages.Requested At') }}</th>
+                                                    <th>{{ __('messages.Status') }}</th>
+                                                    <th>{{ __('messages.Action') }}</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -60,25 +60,25 @@
                                                         <!-- </div> -->
                                                         <dl class="row mb-0">
                                                                
-                                                            <dt class="col-sm-5">Request reason</dt>
+                                                            <dt class="col-sm-5">@lang('messages.Request reason')</dt>
                                                             <dd class="col-sm-7" data-field="purpose"></dd>
 
                                                             <!-- <dt class="col-sm-5">Total KM</dt>
                                                             <dd class="col-sm-7" data-field="total_km"></dd> -->
 
-                                                            <dt class="col-sm-5">Requested vehicle</dt>
+                                                            <dt class="col-sm-5">@lang('messages.Requested vehicle')</dt>
                                                             <dd class="col-sm-7" data-field="vehicle_type"></dd>
         
-                                                            <dt class="col-sm-5">Start date and Time</dt>
+                                                            <dt class="col-sm-5">@lang('messages.Start date and Time')</dt>
                                                             <dd class="col-sm-7" data-field="start_date"></dd>
         
-                                                            <dt class="col-sm-5">Return date and Time</dt>
+                                                            <dt class="col-sm-5">@lang('messages.Return date and Time')</dt>
                                                             <dd class="col-sm-7" data-field="end_date"></dd>
         
                                                             <dt class="col-sm-5">Location From and To</dt>
                                                             <dd class="col-sm-7" data-field="start_location"></dd>
         
-                                                            <dt class="col-sm-5">Passengers</dt>
+                                                            <dt class="col-sm-5">@lang('messages.Passengers')</dt>
                                                             <dd class="col-sm-7" data-field="passengers"></dd>
         
                                                             <dt class="col-sm-5">Materials</dt>
@@ -123,7 +123,7 @@
                                                                 <button type="button" class="btn btn-secondary"
                                                                     data-bs-dismiss="modal">Cancel</button>
                                                                 <button type="submit" class="btn btn-primary"
-                                                                    id="confirmDelete">Submit</button>
+                                                                    id="confirmDelete">@lang('messages.Submit')</button>
                                                             </div>
                                                         </div>
                                                     </form>
@@ -152,7 +152,7 @@
                                                                     <input type="hidden" name="request_id"
                                                                         id="Reject_request_id">
                                                                     <textarea class="form-control" name="reason" style="height: 60px;" required></textarea>
-                                                                    <label for="floatingTextarea">Reason</label>
+                                                                    <label for="floatingTextarea">@lang('messages.Reason')</label>
                                                                 </div>
                                                             </div>
                                                         </div>

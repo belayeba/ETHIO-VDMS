@@ -421,17 +421,17 @@
                                         </div>
                                         <div class="modal-body" id="RequestContent">
                                             <dl class="row mb-0">
-                                                <dt class="col-sm-5">Request reason</dt>
+                                                <dt class="col-sm-5">@lang('messages.Request reason')</dt>
                                                 <dd class="col-sm-7" data-field="purpose"></dd>
 
-                                                <dt class="col-sm-5">Requested vehicle</dt>
+                                                <dt class="col-sm-5">@lang('messages.Requested vehicle')</dt>
                                                 <dd class="col-sm-7" data-field="vehicle_type"></dd>
 
-                                                <dt class="col-sm-5">Start date and Time</dt>
+                                                <dt class="col-sm-5">@lang('messages.Start date and Time')</dt>
 
                                                 <dd class="col-sm-7" data-field="start_date"></dd>
 
-                                                <dt class="col-sm-5">Return date and Time</dt>
+                                                <dt class="col-sm-5">@lang('messages.Return date and Time')</dt>
 
                                                 <dd class="col-sm-7" data-field="end_date"></dd>
 
@@ -439,7 +439,7 @@
 
                                                 <dd class="col-sm-7" data-field="start_location"></dd>
 
-                                                <dt class="col-sm-5">Passengers</dt>
+                                                <dt class="col-sm-5">@lang('messages.Passengers')</dt>
 
                                                 <dd class="col-sm-7" data-field="passengers"></dd>
 
