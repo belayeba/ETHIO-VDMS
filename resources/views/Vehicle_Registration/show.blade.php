@@ -236,7 +236,7 @@
 
                                                         <div class="row mb-3">
                                                             <label class="col-md-3 col-form-label"
-                                                                for="vehicle_category">Service</label>
+                                                                for="vehicle_category">@lang('messages.Service')</label>
                                                             <div class="col-md-9">
                                                                 <select id="vehicleCategory" name="vehicle_category"
                                                                     class="form-select" required>
@@ -400,7 +400,7 @@
                                                     <th>{{ __('messages.Plate Number') }}</th>
                                                     <th>{{ __('messages.Vehicle Type') }}</th>
                                                     <th>{{ __('messages.Vehicle Category') }}</th>
-                                                    <th>status</th>
+                                                    <th>{{ __('messages.status') }}</th>
                                                     <th>{{ __('messages.Action') }}</th>
                                                 </tr>
                                             </thead>
@@ -608,9 +608,9 @@
 
                                                             <div class="modal-footer">
                                                                 <button type="button" class="btn btn-secondary"
-                                                                    data-bs-dismiss="modal">Close</button>
+                                                                    data-bs-dismiss="modal">@lang('messages.Close')</button>
                                                                 <button type="submit"
-                                                                    class="btn btn-primary">Update</button>
+                                                                    class="btn btn-primary">@lang('messages.Update')</button>
                                                             </div>
                                                         </form>
                                                     </div>

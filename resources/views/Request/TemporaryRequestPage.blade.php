@@ -454,7 +454,7 @@
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-primary" onclick="printModal()">Print</button>
                                             <button type="button" class="btn btn-light"
-                                                data-bs-dismiss="modal">Close</button>
+                                                data-bs-dismiss="modal">@lang('messages.Close')</button>
                                         </div>
                                     </div>
                                 </div>
