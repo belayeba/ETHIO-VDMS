@@ -1,5 +1,11 @@
 @extends('layouts.navigation')
 @section('content')
+<style>
+    .table-responsive {
+    max-height: 400px; /* Adjust height as needed */
+    overflow-y: auto;
+}
+</style>
 
     <div class="wrapper">
         <div class="content-page">
@@ -88,8 +94,16 @@
                                             </div>
                                             
                                             <div class="d-flex justify-content-center mt-3">
-                                                <button type="submit" class="btn btn-primary">Save</button>
+                                                <button type="submit" id="route_assigning_form_submit" class="btn btn-primary">Save</button>
                                             </div>
+                                            <script>
+                                                document.getElementById('route_assigning_form').addEventListener('submit', function() {
+                                                    let button = document.getElementById('route_assigning_form_submit');
+                                                    button.disabled = true;
+                                                    button.innerText = "Processing..."; // Optional: Change text to indicate processing
+                                                });
+
+                                            </script>
                                         </form>
                                     </div>
                                 </div>

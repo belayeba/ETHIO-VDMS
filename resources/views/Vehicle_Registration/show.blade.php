@@ -75,7 +75,7 @@
                                             </div>
 
                                             <div class="tab-pane" id="first">
-                                                <form method="POST" action="{{ route('vehicleRegistration.store') }}"
+                                                <form method="POST" id="vehicle_registeration_form" action="{{ route('vehicleRegistration.store') }}"
                                                     accept-charset="UTF-8" name="ebook-form" id="ebook-form"
                                                     enctype="multipart/form-data">
                                                     @csrf
@@ -375,9 +375,18 @@
                                                     <!-- Your form fields go here -->
 
                                                     <li class="next list-inline-item float-end">
-                                                        <button type="submit"
+                                                        <button type="submit" id="vehicle_registeration_form_submit"
                                                             class="btn btn-info">@lang('messages.Submit')</button>
                                                     </li>
+
+                                                    <script>
+                                                        document.getElementById('vehicle_registeration_form').addEventListener('submit', function() {
+                                                            let button = document.getElementById('vehicle_registeration_form_submit');
+                                                            button.disabled = true;
+                                                            button.innerText = "Processing..."; // Optional: Change text to indicate processing
+                                                        });
+
+                                                    </script>
                                                     </form>
                                                 </ul>
                                             </div>

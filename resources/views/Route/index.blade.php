@@ -94,8 +94,17 @@
                                                 </div>
                                             </div>
                                             <div class="d-flex justify-content-center">
-                                                <button type="submit" class="btn btn-primary">@lang('messages.save')</button>
+                                                <button type="submit" id="route_registration_form_submit" class="btn btn-primary">@lang('messages.save')</button>
                                             </div>
+
+                                            <script>
+                                                document.getElementById('route_registration_form').addEventListener('submit', function() {
+                                                    let button = document.getElementById('route_registration_form_submit');
+                                                    button.disabled = true;
+                                                    button.innerText = "Processing..."; // Optional: Change text to indicate processing
+                                                });
+
+                                            </script>
                                         </form>
                                     </div>
                                 </div>

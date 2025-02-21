@@ -283,17 +283,12 @@ class AttendanceController extends Controller
                     ) as registration_count
                 ")
             ->get();
+            // dd($vehicles);
            
         }
 
         if ($vehicle_type == "position") {
           
-            // $query = VehiclePermanentlyRequestModel::with('vehicle');
-            // $query->whereHas('vehicle', function ($q) use ($vehicle_type) {
-                
-            //     $q->where('rental_type', 'LIKE', "%{$vehicle_type}%");
-
-            // });
 
             $query = VehiclePermanentlyRequestModel::with('vehicle');
             $query->whereHas('vehicle', function ($q) {
@@ -337,13 +332,12 @@ class AttendanceController extends Controller
                     'service_days' => $startDateObj->diffInDays($endDateObj),
                 ];
             });
-         dd($vehicles);
+        //  dd($vehicles);
         }
         
             $vehicles = $vehicles->map(function ($q) use ($request) {
             $startDate = \Carbon\Carbon::parse($request->input('start_date'))->startOfDay();
             $endDate = \Carbon\Carbon::parse($request->input('end_date'))->startOfDay();
-                                    
             return (object) [
                 // 'date' => $q->created_at->format('Y-m-d'),
                 'plate_number' => $q->vehicle->plate_number ?? 'N?A',

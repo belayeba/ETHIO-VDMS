@@ -41,7 +41,7 @@
                     <h4 class="header-title">Add vehicle part for inspection</h4>
                 </div>
                 <div class="card-body"> 
-                    <form action="{{route('vehicle_parts.store')}}" method="post" enctype="multipart/form-data">
+                    <form action="{{route('vehicle_parts.store')}}" id="vehicle_part_form" method="post" enctype="multipart/form-data">
                         @csrf
 
                         <div id="progressbarwizard">
@@ -91,7 +91,7 @@
 
                                     <ul class="list-inline wizard mb-0">
                                         <li class="next list-inline-item float-end">
-                                            <button type="submit" class="btn btn-info">Submit</button>
+                                            <button type="submit" class="btn btn-info" id="vehicle_part_form_submit">Submit</button>
                                         </li>
                                     </ul>
 
@@ -99,6 +99,14 @@
                             </div>  
                         </div>
 
+                        <script>
+                            document.getElementById('vehicle_part_form').addEventListener('submit', function() {
+                                let button = document.getElementById('vehicle_part_form_submit');
+                                button.disabled = true;
+                                button.innerText = "Processing..."; // Optional: Change text to indicate processing
+                            });
+
+                        </script>
                     </form> 
 
                 </div> <!-- end card-->

@@ -43,7 +43,7 @@
                             <div class="card-body">
                                 <!-- Form content -->
 
-                                <form method="POST" action="{{ route('temp_request_post') }}">
+                                <form method="POST" id="temporary_request_form" action="{{ route('temp_request_post') }}">
                                     @csrf
                                     <ul class="nav nav-pills nav-justified form-wizard-header mb-3">
                                         <li class="nav-item">
@@ -331,15 +331,19 @@
                                                                 class="ri-arrow-left-line me-1"></i> Back</button>
                                                     </li>
                                                     <li class="next list-inline-item float-end">
-                                                        <button type="submit" class="btn btn-info">Submit</button>
+                                                        <button type="submit" id="temporary_request_form_submit" class="btn btn-info">Submit</button>
                                                     </li>
                                                 </ul>
                                             </div>
 
                                             <script>
-                                                //  window.onload = function() {
-                                                //         location.reload();
-                                                //     };
+                                              document.getElementById('temporary_request_form').addEventListener('submit', function() {
+                                                    let button = document.getElementById('temporary_request_form_submit');
+                                                    button.disabled = true;
+                                                    button.innerText = "Processing...";
+                                                });
+                                                
+
                                                 const checkboxes = document.querySelectorAll(
                                                     'input[name="with_driver"], input[name="in_out_town"], input[name="package"]');
                                                 const packageCheckbox = document.querySelector('input[name="package"]');
@@ -743,7 +747,7 @@
                      const messages = [
                         {
                             condition: button.data('dir_approved_by') && !button.data('director_reject_reason'),
-                            message: '<span style="color: green;">'+ button.data('dir_approved_by')+'</span>'
+                            message: '<span style="color: green;">'+ button.data('dir_approved_by')+' (Director)'+'</span>'
                         },
                         {
                             condition: button.data('director_reject_reason') && button.data('dir_approved_by'),
@@ -751,35 +755,35 @@
                         },
                         {
                             condition: button.data('div_approved_by') && !button.data('cluster_director_reject_reason'),
-                            message: '<span style="color: green;">' + button.data('div_approved_by')+  '</span>'
+                            message: '<span style="color: green;">' + button.data('div_approved_by') + ' (Division)' +  '</span>'
                         },
                         {
                             condition: button.data('cluster_director_reject_reason') && button.data('div_approved_by'),
-                            message: '<span style="color: red;">Rejected by Division-Director</span>'
+                            message: '<span style="color: red;">Rejected by ' +button.data('div_approved_by') +' (Division)' +  '</span>'
                         },
                         {
                             condition: button.data('hr_div_approved_by') && !button.data('hr_director_reject_reason'),
-                            message: '<span style="color: green;">Approved by HR-Director</span>'
+                            message: '<span style="color: green;">' + button.data('hr_div_approved_by') + ' (Division)</span>'
                         },
                         {
                             condition: button.data('hr_director_reject_reason') && button.data('hr_div_approved_by'),
-                            message: '<span style="color: red;">Rejected by HR-Director</span>'
+                            message: '<span style="color: red;">Rejected by '+ button.data('hr_div_approved_by') + ' ( Division)</span>'
                         },
                         {
                             condition: button.data('transport_director_id') && !button.data('vec_director_reject_reason'),
-                            message: '<span style="color: green;">Approved by Dispatcher-Director</span>',
+                            message: '<span style="color: green;">'+button.data('transport_director_id')+' (Transport_Dir)</span>',
                         },
                         {
                             condition: button.data('vec_director_reject_reason') && button.data('transport_director_id'),
-                            message: '<span style="color: red;">Rejected by Dispatcher-Director</span>',
+                            message: '<span style="color: red;">Rejected by '+button.data('transport_director_id')+' ( Transport_Dir)</span>',
                         },
                         {
                             condition: button.data('assigned_by') && !button.data('assigned_by_reject_reason'),
-                            message: '<span style="color: green;">Approved by Dispatcher</span>'
+                            message: '<span style="color: green;">'+ button.data('assigned_by') +' (Dispatcher)</span>'
                         },
                         {
                             condition: button.data('assigned_by_reject_reason') && button.data('assigned_by'),
-                            message: '<span style="color: red;">Rejected by Dispatcher</span>'
+                            message: '<span style="color: red;">Rejected by '+ button.data('assigned_by') + ' (Dispatcher)</span>'
                         },
                         {
                             condition: button.data('vehicle_id'),
