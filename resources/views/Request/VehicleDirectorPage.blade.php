@@ -103,7 +103,7 @@
                                             <div class="modal-footer">
                                                 <button type="button" class="btn btn-primary" onclick="printModal()">Print</button>
                                                 <button type="button" class="btn btn-light"
-                                                    data-bs-dismiss="modal">Close</button>
+                                                    data-bs-dismiss="modal">@lang('messages.Close')</button>
                                             </div>
                                         </div>
                                     </div>
@@ -182,7 +182,7 @@
                                                 </div>
                                             </div>
                                             <div class="modal-footer">
-                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">@lang('messages.Close')</button>
                                                 <button type="submit" class="btn btn-danger">Reject</button>
                                             </div> <!-- end modal footer -->
                                         </form>                                                                    
@@ -240,7 +240,7 @@
                                                 <input type="hidden" name="request_id" id="return_id">
                                             </div>
                                             <div class="modal-footer">
-                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">@lang('messages.Close')</button>
                                                 <button type="submit" class="btn btn-warning">Return</button>
                                             </div> <!-- end modal footer -->
                                         </form>                                                                    
