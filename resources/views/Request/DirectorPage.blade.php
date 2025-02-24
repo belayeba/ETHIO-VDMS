@@ -63,13 +63,13 @@
                                                     <dt class="col-sm-5">@lang('messages.Return date and Time')</dt>
                                                     <dd class="col-sm-7" data-field="end_date"></dd>
 
-                                                    <dt class="col-sm-5">Location From and To</dt>
+                                                    <dt class="col-sm-5">@lang('messages.Location From and To')</dt>
                                                     <dd class="col-sm-7" data-field="start_location"></dd>
 
                                                     <dt class="col-sm-5">@lang('messages.Passengers')</dt>
                                                     <dd class="col-sm-7" data-field="passengers"></dd>
 
-                                                    <dt class="col-sm-5">Materials</dt>
+                                                    <dt class="col-sm-5">@lang('messages.Materials')</dt>
                                                     <dd class="col-sm-7" data-field="materials"></dd>
 
                                                     <dt class="col-sm-5">Progress</dt>
@@ -78,7 +78,7 @@
                                             </div>
                                             <div class="modal-footer">
                                                 <button type="button" class="btn btn-light"
-                                                    data-bs-dismiss="modal">Close</button>
+                                                    data-bs-dismiss="modal">@lang('messages.Close')</button>
                                             </div>
                                         </div>
                                     </div>
@@ -96,17 +96,14 @@
                                                 <div class="modal-body p-4">
                                                     <div class="text-center">
                                                         <i class="ri-alert-line h1 text-warning"></i>
-                                                        <h4 class="mt-2">Warning</h4>
+                                                        <h4 class="mt-2">@lang('messages.Warning')</h4>
                                                         <h5 class="mt-3">
-                                                            Are you sure you want to accept this request?</br> This action
-                                                            cannot be
-                                                            undone.
+                                                            @lang('messages.Are you sure you want to accept this request?')</br> @lang('messages.This action cannot be undone.')
                                                         </h5>
                                                         <button type="button" class="btn btn-secondary"
-                                                            data-bs-dismiss="modal">Cancel</button>
+                                                            data-bs-dismiss="modal">@lang('messages.Cancel')</button>
                                                         <button type="submit" class="btn btn-primary"
-                                                            id="confirmDelete">Yes,
-                                                            Accept</button>
+                                                            id="confirmDelete">@lang('messages.Yes, Accept')</button>
                                                     </div>
                                                 </div>
                                             </form>
@@ -121,7 +118,7 @@
                                     <div class="modal-dialog">
                                         <div class="modal-content">
                                             <div class="modal-header">
-                                                <h5 class="modal-title" id="staticBackdropLabel">Reject reason
+                                                <h5 class="modal-title" id="staticBackdropLabel">@lang('messages.Reject reason')
                                                 </h5>
                                                 <button type="button" class="btn-close" data-bs-dismiss="modal"
                                                     aria-label="Close"></button>
@@ -135,14 +132,14 @@
                                                             <input type="hidden" name="request_id"
                                                                 id="Reject_request_id">
                                                             <textarea class="form-control" name="reason" style="height: 60px;" required></textarea>
-                                                            <label for="floatingTextarea">Reason</label>
+                                                            <label for="floatingTextarea">@lang('messages.Reason')</label>
                                                         </div>
                                                     </div>
                                                 </div>
                                                 <div class="modal-footer">
                                                     <button type="button" class="btn btn-secondary"
-                                                        data-bs-dismiss="modal">Close</button>
-                                                    <button type="submit" class="btn btn-danger">Reject</button>
+                                                        data-bs-dismiss="modal">@lang('messages.Close')</button>
+                                                    <button type="submit" class="btn btn-danger">@lang('messages.Reject')</button>
                                                 </div> <!-- end modal footer -->
                                             </form>
                                         </div> <!-- end modal content-->

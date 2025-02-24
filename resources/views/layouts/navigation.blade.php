@@ -136,52 +136,52 @@
                                 @endcan()
                                 @can('Director Approval Page')
                                 <li>
-                                    <a href="{{ route('director_temp') }}">Approve Temporary</a>
+                                    <a href="{{ route('director_temp') }}">@lang('messages.Approval Temporary')</a>
                                 </li>
                                 @endcan()
                                 @can('Clustor Director Apporal Page')
                                 <li>
-                                    <a href="{{ route('ClusterDirector_temp') }}">Approve Temporary</a>
+                                    <a href="{{ route('ClusterDirector_temp') }}">@lang('messages.Approval Temporary')</a>
                                 </li>
                                 @endcan()
                                 @can('HR Cluster Director Approval Page')
                                 <li>
-                                    <a href="{{ route('HRClusterDirector_temp') }}">Approve Temporary</a>
+                                    <a href="{{ route('HRClusterDirector_temp') }}">@lang('messages.Approval Temporary')</a>
                                 </li>
                                 @endcan()
                                 @can('Transport Director')
                                 <li>
-                                    <a href="{{ route('TransportDirector_temp') }}">Approve Temporary</a>
+                                    <a href="{{ route('TransportDirector_temp') }}">@lang('messages.Approval Temporary')</a>
                                 </li>
                                 @endcan()
                                 @can('Dispatcher Page')
                                 <li>
-                                    <a href="{{ route('simirit_page') }}">Temporary Assign</a>
+                                    <a href="{{ route('simirit_page') }}">@lang('messages.Temporary Assign')</a>
                                 </li>
                                 @endcan()
                                 @can('Vehicle Director Page')
                                 <li>
-                                    <a href="{{ route('perm_vec_director_page') }}">Approve Pemanent</a>
+                                    <a href="{{ route('perm_vec_director_page') }}">@lang('messages.Approve Permanent')</a>
                                 </li>
                                 @endcan()
                                 @can('Dispatcher')
                                 <li>
-                                    <a href="{{ route('perm_vec_simirit_page') }}">Assign Permanent</a>
+                                    <a href="{{ route('perm_vec_simirit_page') }}">@lang('messages.Assign Permanent')</a>
                                 </li>
                                 @endcan()
                                 @can('Request Return')
                                 <li>
-                                    <a href="{{ route('return_permanent_request_page') }}">Return Permanent</a>
+                                    <a href="{{ route('return_permanent_request_page') }}">@lang('messages.Return Permanent')</a>
                                 </li>
                                 @endcan()
                                 @can('Approve Return')
                                 <li>
-                                    <a href="{{ route('director_approval_page') }}">Approve Return</a>
+                                    <a href="{{ route('director_approval_page') }}">@lang('messages.Approve Return')</a>
                                 </li>
                                 @endcan()
                                 @can('Take Back to Transport')
                                 <li>
-                                    <a href="{{ route('vehicle_director_page') }}">Return Permanent</a>
+                                    <a href="{{ route('vehicle_director_page') }}">@lang('messages.Return Permanent')</a>
                                 </li>
                                 @endcan()
 
@@ -203,7 +203,7 @@
                             <ul class="side-nav-second-level">
                                 @can('Set Fuel Cost')
                                 <li>
-                                    <a href="{{ route('all_fuel_cost') }}">Set Feul Cost</a>
+                                    <a href="{{ route('all_fuel_cost') }}">@lang('messages.Set Feul Cost')</a>
                                 </li>
                                 @endcan()
                                 @can('Request Fuel')
@@ -213,7 +213,7 @@
                                 @endcan()
                                 @can('Finance Accept')
                                 <li>
-                                    <a href="{{ route('finance_approve_fuel_page') }}">Approve</a>
+                                    <a href="{{ route('finance_approve_fuel_page') }}">@lang('messages.Approve')</a>
                                 </li>
                                 @endcan()
                             </ul>
@@ -322,12 +322,12 @@
                                 @endcan()
                                 @can('Vehicle Part Registration')
                                 <li>
-                                    <a href="{{ route('vehicle_parts.index') }}">Vehicle Parts</a>
+                                    <a href="{{ route('vehicle_parts.index') }}">@lang('messages.Vehicle Parts')</a>
                                 </li>
                                 @endcan()
                                 @can('Vehicle Part Registration')
                                 <li>
-                                    <a href="{{ route('quota.index') }}">Change Fuel Quata</a>
+                                    <a href="{{ route('quota.index') }}">@lang('messages.Change Fuel Quota')</a>
                                 </li>
                                 @endcan()
                                 @can('Vehicle Inspection')
@@ -403,7 +403,7 @@
                             <ul class="side-nav-second-level">
                                 @can('Daily KM Report')
                                 <li>
-                                    <a href="{{ route('dailyreport.index') }}">Daily KM</a>
+                                    <a href="{{ route('dailyreport.index') }}">@lang('messages.Daily KM')</a>
                                 </li>
                                 @endcan()
                                 @can('View Attendance Report')
@@ -413,17 +413,17 @@
                                 @endcan()
                                 @can('Permananet Vehicle Request')
                                 <li>
-                                    <a href="{{ route('dailyreport.permanentReport') }}">Permanent</a>
+                                    <a href="{{ route('dailyreport.permanentReport') }}">@lang('messages.Permanent')</a>
                                 </li>
                                 @endcan()
                                 @can('Temporary Vehicle Request')
                                 <li>
-                                    <a href="{{ route('dailyreport.temporaryReport') }}">Temporary</a>
+                                    <a href="{{ route('dailyreport.temporaryReport') }}">@lang('messages.Temporary')</a>
                                 </li>
                                 @endcan()
                                 @can('Maintance Request')
                                 <li>
-                                    <a href="{{ route('dailyreport.vehicleReport') }}">Vehicle</a>
+                                    <a href="{{ route('dailyreport.vehicleReport') }}">@lang('messages.Vehicle')</a>
                                 </li>
                                 @endcan()
                             </ul>
@@ -449,7 +449,7 @@
                                 @endcan()
                                 @can('Change Route For Employee')
                                 <li>
-                                    <a href="{{ route('change.location_change_approve') }}">Approve Location Change</a>
+                                    <a href="{{ route('change.location_change_approve') }}">@lang('messages.Approve Location Change')</a>
                                 </li>
                                 @endcan()
                                 @can('Route Registration')

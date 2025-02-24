@@ -42,12 +42,12 @@
                                 <table class="table dispatcher_datatable table-centered mb-0 table-nowrap" id="inline-editable">
                                     <thead>
                                         <tr>
-                                            <th>#</th>
-                                            <th>Requested By</th>
-                                            <th>Vehicle Type</th>
-                                            <th>Requested At</th>
-                                            <th>Status</th>
-                                            <th>Action</th>
+                                            <th>{{ __('messages.Roll No.') }}</th>
+                                            <th>{{ __('messages.Requested By') }}</th>
+                                            <th>{{ __('messages.Vehicle Type')}}</th>
+                                            <th>{{ __('messages.Requested At') }}</th>
+                                            <th>{{ __('messages.Status') }}</th>
+                                            <th>{{ __('messages.Action') }}</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -74,25 +74,25 @@
                                                             </dd>
                                                         </dl>
                                                 <dl class="row mb-0">
-                                                    <dt class="col-sm-5">Request reason</dt>
+                                                    <dt class="col-sm-5">@lang('messages.Request reason')</dt>
                                                     <dd class="col-sm-7" data-field="purpose"></dd>
 
-                                                    <dt class="col-sm-5">Requested vehicle</dt>
+                                                    <dt class="col-sm-5">@lang('messages.Requested vehicle')</dt>
                                                     <dd class="col-sm-7" data-field="vehicle_type"></dd>
 
-                                                    <dt class="col-sm-5">Start date and Time</dt>
+                                                    <dt class="col-sm-5">@lang('messages.Start date and Time')</dt>
                                                     <dd class="col-sm-7" data-field="start_date"></dd>
 
-                                                    <dt class="col-sm-5">Return date and Time</dt>
+                                                    <dt class="col-sm-5">@lang('messages.Return date and Time')</dt>
                                                     <dd class="col-sm-7" data-field="end_date"></dd>
 
-                                                    <dt class="col-sm-5">Location From and To</dt>
+                                                    <dt class="col-sm-5">@lang('messages.Location From and To')</dt>
                                                     <dd class="col-sm-7" data-field="start_location"></dd>
 
                                                     <dt class="col-sm-5">Passengers</dt>
                                                     <dd class="col-sm-7" data-field="passengers"></dd>
 
-                                                    <dt class="col-sm-5">Materials</dt>
+                                                    <dt class="col-sm-5">@lang('messages.Materials')</dt>
                                                     <dd class="col-sm-7" data-field="materials"></dd>
 
                                                     <dt class="col-sm-5">Progress</dt>
@@ -100,7 +100,7 @@
                                                 </dl>
                                             </div>
                                             <div class="modal-footer">
-                                                <button type="button" class="btn btn-primary" onclick="printModal()">Print</button>
+                                                <button type="button" class="btn btn-primary" onclick="printModal()">@lang('messages.Print')</button>
                                                 <button type="button" class="btn btn-light"
                                                     data-bs-dismiss="modal">@lang('messages.Close')</button>
                                             </div>
@@ -117,7 +117,7 @@
                                             @csrf   
                                             <div class="modal-header">
                                                     <div class="col-lg-6">
-                                                        <h5 class="mb-0">Select Vehicle</h5>
+                                                        <h5 class="mb-0">@lang('messages.Select Vehicle')</h5>
                                                             <select name="assigned_vehicle_id" class="form-select" id="vehicleselection"  required>
                                                                 <option value="" selected>Select</option>
                                                                     <optgroup label="None Occupied Vehicles">
@@ -143,7 +143,7 @@
                                                     <label class="form-check-label" style="font-size: 16px">Assign A New Vehicle</label>
                                                 </div></br></br> --}}
                                                 <div>
-                                                    Select a Vehicle and check Inspection, Before assigning.
+                                                    @lang('messages.Select a Vehicle and check Inspection, Before assigning.')
                                                     <div class="table-responsive">
                                                         <div class="row mt-3" id="inspectionCardsContainer" class="table table-striped"> 
                                                         </div>
@@ -152,8 +152,8 @@
                                                 
                                             </div>
                                             <div class="modal-footer">
-                                                <button type="button" class="btn btn-secondary"  id="assignBtn">Get Inspection</button>
-                                                <button type="submit" class="btn btn-primary">Assign</button>
+                                                <button type="button" class="btn btn-secondary"  id="assignBtn">@lang('messages.Get Inspection')</button>
+                                                <button type="submit" class="btn btn-primary">@lang('messages.Assign')</button>
                                             </div> <!-- end modal footer -->
                                         </form>                                                                    
                                     </div> <!-- end modal content-->
@@ -176,13 +176,13 @@
                                                     <div class="form-floating">
                                                     <input type="hidden" name="request_id" id="reject_id" >
                                                     <textarea class="form-control" name="reason" style="height: 60px;" required></textarea>
-                                                    <label for="floatingTextarea">Reason</label>
+                                                    <label for="floatingTextarea">@lang('messages.Reason')</label>
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="modal-footer">
                                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">@lang('messages.Close')</button>
-                                                <button type="submit" class="btn btn-danger">Reject</button>
+                                                <button type="submit" class="btn btn-danger">@lang('messages.Reject')</button>
                                             </div> <!-- end modal footer -->
                                         </form>                                                                    
                                     </div> <!-- end modal content-->
@@ -195,7 +195,7 @@
                                 <div class="modal-dialog">
                                     <div class="modal-content">
                                         <div class="modal-header">
-                                            <h4 class="modal-title" id="staticBackdropLabel">Assigned Vehicle</h4>&nbsp;&nbsp;
+                                            <h4 class="modal-title" id="staticBackdropLabel">@lang('messages.Assigned Vehicle')</h4>&nbsp;&nbsp;
                                             <h3  class="text-info"><span id="Display_plate_accepted"></span></h3>
                                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                         </div> <!-- end modal header -->
@@ -203,15 +203,15 @@
                                             @csrf
                                             <div class="modal-body">
                                                 <div class="mb-6 position-relative">
-                                                    <label class="form-label">Start KM</label>
+                                                    <label class="form-label">@lang('messages.Start KM')</label>
                                                     <input type="number" class="form-control" name="start_km"
                                                         placeholder="Enter Initial KM">
                                                 </div>
                                                 <input type="hidden" name="request_id" id="dispatch_id">
                                             </div>
                                             <div class="modal-footer">
-                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                                <button type="submit" class="btn btn-primary">Dispatch</button>
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">@lang('messages.Close')</button>
+                                                <button type="submit" class="btn btn-primary">@lang('messages.Dispatch')</button>
                                             </div> <!-- end modal footer -->
                                         </form>                                                                    
                                     </div> <!-- end modal content-->
@@ -224,7 +224,7 @@
                                 <div class="modal-dialog">
                                     <div class="modal-content">
                                         <div class="modal-header">
-                                            <h4 class="modal-title" id="staticBackdropLabel">Assigned Vehicle</h4>&nbsp;&nbsp;
+                                            <h4 class="modal-title" id="staticBackdropLabel">@lang('messages.Assigned Vehicle')</h4>&nbsp;&nbsp;
                                             <h3  class="text-info"><span id="Display_plate"></span></h3>
                                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                         </div> <!-- end modal header -->
@@ -232,7 +232,7 @@
                                             @csrf
                                             <div class="modal-body">
                                                 <div class="mb-6 position-relative">
-                                                    <label class="form-label">End KM</label>
+                                                    <label class="form-label">@lang('messages.End KM')</label>
                                                     <input type="number" class="form-control" name="end_km"
                                                         placeholder="Enter Return KM">
                                                 </div>
@@ -240,7 +240,7 @@
                                             </div>
                                             <div class="modal-footer">
                                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">@lang('messages.Close')</button>
-                                                <button type="submit" class="btn btn-warning">Return</button>
+                                                <button type="submit" class="btn btn-warning">@lang('messages.Return')</button>
                                             </div> <!-- end modal footer -->
                                         </form>                                                                    
                                     </div> <!-- end modal content-->

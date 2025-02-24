@@ -27,12 +27,12 @@
                                         <table class="table HRdirector_datatable table-centered mb-0 table-nowrap" id="inline-editable">
                                             <thead>
                                                 <tr>
-                                                    <th>#</th>
-                                                    <th>Requested By</th>
-                                                    <th>Vehicle Type</th>
-                                                    <th>Requested At</th>
-                                                    <th>Status</th>
-                                                    <th>Action</th>
+                                                    <th>{{ __('messages.Roll No.') }}</th>
+                                                    <th>{{ __('messages.Requested By') }}</th>
+                                                    <th>{{ __('messages.Vehicle Type')}}</th>
+                                                    <th>{{ __('messages.Requested At') }}</th>
+                                                    <th>{{ __('messages.Status') }}</th>
+                                                    <th>{{ __('messages.Action ') }}</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -58,25 +58,25 @@
                                                                 <dd class="col-sm-8" data-field="Fieldletter">
                                                                 </dd>
                                                                 </dl>
-                                                            <dt class="col-sm-5">Request reason</dt>
+                                                            <dt class="col-sm-5">@lang('messages.Request reason')</dt>
                                                             <dd class="col-sm-7" data-field="purpose"></dd>
         
-                                                            <dt class="col-sm-5">Requested vehicle</dt>
+                                                            <dt class="col-sm-5">@lang('messages.Requested vehicle')</dt>
                                                             <dd class="col-sm-7" data-field="vehicle_type"></dd>
         
-                                                            <dt class="col-sm-5">Start date and Time</dt>
+                                                            <dt class="col-sm-5">@lang('messages.Start date and Time')</dt>
                                                             <dd class="col-sm-7" data-field="start_date"></dd>
         
-                                                            <dt class="col-sm-5">Return date and Time</dt>
+                                                            <dt class="col-sm-5">@lang('messages.Return date and Time')</dt>
                                                             <dd class="col-sm-7" data-field="end_date"></dd>
         
-                                                            <dt class="col-sm-5">Location From and To</dt>
+                                                            <dt class="col-sm-5">@lang('messages.Location From and To')</dt>
                                                             <dd class="col-sm-7" data-field="start_location"></dd>
         
-                                                            <dt class="col-sm-5">Passengers</dt>
+                                                            <dt class="col-sm-5">@lang('messages.Passengers')</dt>
                                                             <dd class="col-sm-7" data-field="passengers"></dd>
         
-                                                            <dt class="col-sm-5">Materials</dt>
+                                                            <dt class="col-sm-5">@lang('messages.Materials')</dt>
                                                             <dd class="col-sm-7" data-field="materials"></dd>
         
                                                             <dt class="col-sm-5">Progress</dt>
@@ -85,7 +85,7 @@
                                                     </div>
                                                     <div class="modal-footer">
                                                         <button type="button" class="btn btn-light"
-                                                            data-bs-dismiss="modal">Close</button>
+                                                            data-bs-dismiss="modal">@lang('messages.Close')</button>
                                                     </div>
                                                 </div>
                                             </div>
@@ -103,17 +103,16 @@
                                                         <div class="modal-body p-4">
                                                             <div class="text-center">
                                                                 <i class="ri-alert-line h1 text-warning"></i>
-                                                                <h4 class="mt-2">Warning</h4>
+                                                                <h4 class="mt-2">@lang('messages.Warning')</h4>
                                                                 <h5 class="mt-3">
                                                                     Are you sure you want to accept this request?</br> This action
                                                                     cannot be
                                                                     undone.
                                                                 </h5>
                                                                 <button type="button" class="btn btn-secondary"
-                                                                    data-bs-dismiss="modal">Cancel</button>
+                                                                    data-bs-dismiss="modal">@lang('messages.Cancel')</button>
                                                                 <button type="submit" class="btn btn-primary"
-                                                                    id="confirmDelete">Yes,
-                                                                    Accept</button>
+                                                                    id="confirmDelete">@lang('messages.Yes, Accept')</button>
                                                             </div>
                                                         </div>
                                                     </form>
@@ -142,14 +141,14 @@
                                                                     <input type="hidden" name="request_id"
                                                                         id="Reject_request_id">
                                                                     <textarea class="form-control" name="reason" style="height: 60px;" required></textarea>
-                                                                    <label for="floatingTextarea">Reason</label>
+                                                                    <label for="floatingTextarea">@lang('messages.Reason')</label>
                                                                 </div>
                                                             </div>
                                                         </div>
                                                         <div class="modal-footer">
                                                             <button type="button" class="btn btn-secondary"
-                                                                data-bs-dismiss="modal">Close</button>
-                                                            <button type="submit" class="btn btn-danger">Reject</button>
+                                                                data-bs-dismiss="modal">@lang('messages.Close')</button>
+                                                            <button type="submit" class="btn btn-danger">@lang('messages.Reject')</button>
                                                         </div> <!-- end modal footer -->
                                                     </form>
                                                 </div> <!-- end modal content-->
