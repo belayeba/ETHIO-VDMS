@@ -83,15 +83,15 @@ class VehicleTemporaryRequestController extends Controller
                     data-start_location="' . $row->start_location . '&nbsp;&nbsp;&nbsp;' . $row->end_locations . '"
                     data-passengers=\'' . json_encode($row->peoples()->with('user')->get()) . '\'
                     data-materials=\'' . json_encode($row->materials) . '\'
-                    data-dir_approved_by="' . ($row->dir_approved_by ?  $row->approvedBy->first_name . ' ' . $row->approvedBy->middle_name : "Pending") . '"
+                    data-dir_approved_by="' . ($row->dir_approved_by ?  $row->approvedBy->first_name . ' ' . $row->approvedBy->middle_name : null) . '"
                     data-director_reject_reason="' . $row->director_reject_reason . '"
-                    data-div_approved_by="' . ($row->div_approved_by ? $row->div_approvedBy->first_name . ' ' . $row->div_approvedBy->middle_name : "Pending")  . '"
+                    data-div_approved_by="' . ($row->div_approved_by ? $row->div_approvedBy->first_name . ' ' . $row->div_approvedBy->middle_name : null)  . '"
                     data-cluster_director_reject_reason="' . $row->cluster_director_reject_reason . '"
-                    data-hr_div_approved_by="' . $row->hr_div_approved_by . '"
+                    data-hr_div_approved_by="' . ($row->hr_div_approved_by ? $row->hr_div_approvedBy->first_name . ' ' . $row->hr_div_approvedBy->middle_name : null)  . '"
                     data-hr_director_reject_reason="' . $row->hr_director_reject_reason . '"
-                    data-transport_director_id="' . $row->transport_director_id . '"
+                    data-transport_director_id="' . ($row->transport_director_id ? $row->transport_director_approvedBy->first_name . ' ' . $row->transport_director_approvedBy->middle_name : null)  . '"
                     data-vec_director_reject_reason="' . $row->vec_director_reject_reason . '"
-                    data-assigned_by="' . $row->assigned_by . '"
+                    data-assigned_by="' . ($row->assigned_by ? $row->assignedBy->first_name . ' ' . $row->assignedBy->middle_name : null) . '"
                     data-assigned_by_reject_reason="' . $row->assigned_by_reject_reason . '"
                     data-vehicle_id="' . $row->vehicle_id . '"
                     data-vehicle_plate="' . ($row->vehicle
@@ -472,15 +472,15 @@ class VehicleTemporaryRequestController extends Controller
                     data-start_location="' . $row->start_location . '&nbsp;&nbsp;&nbsp;' . $row->end_locations . '"
                     data-passengers=\'' . json_encode($row->peoples()->with('user')->get()) . '\'
                     data-materials=\'' . json_encode($row->materials) . '\'
-                    data-dir_approved_by="' . $row->dir_approved_by . '"
+                    data-dir_approved_by="' . ($row->dir_approved_by ?  $row->approvedBy->first_name . ' ' . $row->approvedBy->middle_name : null) . '"
                     data-director_reject_reason="' . $row->director_reject_reason . '"
-                    data-div_approved_by="' . $row->div_approved_by . '"
+                    data-div_approved_by="' . ($row->div_approved_by ? $row->div_approvedBy->first_name . ' ' . $row->div_approvedBy->middle_name : null)  . '"
                     data-cluster_director_reject_reason="' . $row->cluster_director_reject_reason . '"
-                    data-hr_div_approved_by="' . $row->hr_div_approved_by . '"
+                    data-hr_div_approved_by="' . ($row->hr_div_approved_by ? $row->hr_div_approvedBy->first_name . ' ' . $row->hr_div_approvedBy->middle_name : null)  . '"
                     data-hr_director_reject_reason="' . $row->hr_director_reject_reason . '"
-                    data-transport_director_id="' . $row->transport_director_id . '"
+                    data-transport_director_id="' . ($row->transport_director_id ? $row->transport_director_approvedBy->first_name . ' ' . $row->transport_director_approvedBy->middle_name : null)  . '"
                     data-vec_director_reject_reason="' . $row->vec_director_reject_reason . '"
-                    data-assigned_by="' . $row->assigned_by . '"
+                    data-assigned_by="' . ($row->assigned_by ? $row->assignedBy->first_name . ' ' . $row->assignedBy->middle_name : null) . '"
                     data-assigned_by_reject_reason="' . $row->assigned_by_reject_reason . '"
                     data-vehicle_id="' . $row->vehicle_id . '"
                     data-vehicle_plate="' . ($row->vehicle ? $row->vehicle->plate_number : '') . '"
@@ -677,7 +677,7 @@ class VehicleTemporaryRequestController extends Controller
         $user = User::where('id', $userId)->first();
 
         // Get the cluster_id from the user's department
-        $clusterId = $user->department->cluster_id;
+        $clusterId = $user->department->cluster_id ?? null;
 
         $vehicleRequests = VehicleTemporaryRequestModel::with('approvedBy', 'requestedBy.department')->whereHas('requestedBy.department', function ($query) use ($clusterId) {
             $query->where('cluster_id', $clusterId);
@@ -1225,15 +1225,15 @@ class VehicleTemporaryRequestController extends Controller
                     data-start_location="' . $row->start_location . '&nbsp;&nbsp;&nbsp;' . $row->end_locations . '"
                     data-passengers=\'' . json_encode($row->peoples()->with('user')->get()) . '\'
                     data-materials=\'' . json_encode($row->materials) . '\'
-                    data-dir_approved_by="' . $row->dir_approved_by . '"
+                    data-dir_approved_by="' . ($row->dir_approved_by ?  $row->approvedBy->first_name . ' ' . $row->approvedBy->middle_name : null) . '"
                     data-director_reject_reason="' . $row->director_reject_reason . '"
-                    data-div_approved_by="' . $row->div_approved_by . '"
+                    data-div_approved_by="' . ($row->div_approved_by ? $row->div_approvedBy->first_name . ' ' . $row->div_approvedBy->middle_name : null)  . '"
                     data-cluster_director_reject_reason="' . $row->cluster_director_reject_reason . '"
-                    data-hr_div_approved_by="' . $row->hr_div_approved_by . '"
+                    data-hr_div_approved_by="' . ($row->hr_div_approved_by ? $row->hr_div_approvedBy->first_name . ' ' . $row->hr_div_approvedBy->middle_name : null)  . '"
                     data-hr_director_reject_reason="' . $row->hr_director_reject_reason . '"
-                    data-transport_director_id="' . $row->transport_director_id . '"
+                    data-transport_director_id="' . ($row->transport_director_id ? $row->transport_director_approvedBy->first_name . ' ' . $row->transport_director_approvedBy->middle_name : null)  . '"
                     data-vec_director_reject_reason="' . $row->vec_director_reject_reason . '"
-                    data-assigned_by="' . $row->assigned_by . '"
+                    data-assigned_by="' . ($row->assigned_by ? $row->assignedBy->first_name . ' ' . $row->assignedBy->middle_name : null) . '"
                     data-assigned_by_reject_reason="' . $row->assigned_by_reject_reason . '"
                     data-vehicle_id="' . $row->vehicle_id . '"
                     data-vehicle_plate="' . ($row->vehicle

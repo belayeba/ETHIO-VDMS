@@ -60,7 +60,7 @@
                                                                 Role Name</h4>
                                                         </strong>
                                                         <input class="form-control" name="name" type="text"
-                                                            id="name" value="" minlength="1" maxlength="255"
+                                                            id="name" value="" minlength="1" maxlength="255" required
                                                             placeholder="Enter Role Name...">
                                                     </div>
                                                 </div>
@@ -115,9 +115,17 @@
                                         <button type="button" class="btn btn-secondary"style=" border-radius:25px"
                                             id="selectAllBtn" onclick="toggleCheckboxes()">select
                                             all</button>
-                                        <button class="btn btn-primary" type="submit"
+                                        <button class="btn btn-primary" id="create_role_form_submit" type="submit"
                                             style="border-radius: 25px;">create</button>
                                     </div> <!-- end modal footer -->
+
+                                    <script>
+                                        document.getElementById('create_role_form').addEventListener('submit', function() {
+                                            let button = document.getElementById('create_role_form_submit');
+                                            button.disabled = true;
+                                            button.innerText = "Processing..."; // Optional: Change text to indicate processing
+                                        });
+                                    </script>
                                     </form>
                                 </div> <!-- end modal content-->
                             </div> <!-- end modal dialog-->

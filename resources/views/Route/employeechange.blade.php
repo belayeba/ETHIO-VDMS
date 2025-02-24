@@ -66,8 +66,17 @@
                                                 <input type="text" class="form-control" id="nameInput" name="location_name" placeholder="Your Location">
                                             </div>
                                             <div class="d-flex justify-content-center">
-                                                <button type="submit" class="btn btn-primary">Save</button>
+                                                <button type="submit" id="cluster-form-submit" class="btn btn-primary">Save</button>
                                             </div>
+
+                                            <script>
+                                                document.getElementById('cluster-form').addEventListener('submit', function() {
+                                                    let button = document.getElementById('cluster-form-submit');
+                                                    button.disabled = true;
+                                                    button.innerText = "Processing..."; // Optional: Change text to indicate processing
+                                                });
+
+                                            </script>
 
                                         </form>
                                     </div>

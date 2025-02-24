@@ -19,6 +19,7 @@ use Illuminate\Support\Facades\Redirect;
 use Dompdf\Dompdf;
 use Dompdf\Options;
 use Illuminate\Support\Facades\DB;
+use PhpOffice\PhpSpreadsheet\IOFactory;
 
 class usercontroller extends Controller
 {
@@ -198,9 +199,99 @@ class usercontroller extends Controller
         return $password;
     }
 
+    public function importUserExcel(Request $request)
+    {
+        ini_set('max_execution_time', 200);
+
+        $validator = Validator::make($request->all(),[
+            'file' => 'required|mimes:xlsx,xls,csv|max:2048',
+        ]);
+        if ($validator->fails()) 
+            {
+                $errorMessages = $validator->errors()->all();
+                $errorString = collect($errorMessages)->implode(' ');
+                return back()->with('error_message', $errorString);
+            }
+
+        $file = $request->file('file');
+        
+        $spreadsheet = IOFactory::load($file->getPathname());
+       
+        $sheet = $spreadsheet->getActiveSheet();
+       
+        $rows = $sheet->toArray();
+        
+        $users = [];
+
+        // Skip the header row
+        foreach (array_slice($rows, 1) as $row) {
+
+            $plainPassword = $this->generateRandomPassword();
+            $password = Hash::make($plainPassword);
+
+            $fullName = trim($row[0]);
+            $nameParts = explode(' ', $fullName);
+            
+        
+            $firstName = isset($nameParts[1]) ? $nameParts[0] . ' ' . $nameParts[1] : $nameParts[0];
+            $middleName = isset($nameParts[2]) ? $nameParts[2] : null;
+            $lastName = $nameParts[count($nameParts) - 1] ?? null;
+            $email = $nameParts[1].'.'.$nameParts[2].'@aii.et';
+
+            $phoneNumber = trim($row[2]);
+            if (strpos($phoneNumber, '0') === 0) {
+                $phoneNumber = '+251' . substr($phoneNumber, 1); // Remove leading '0' and add '+21'
+            }else{
+                $phoneNumber = '+251'.''.$phoneNumber;
+            }
+            
+            $departmentName = trim($row[3]);
+
+            $department = DepartmentsModel::where('name', $departmentName)->first();
+        
+            if (!$department) {
+                continue;
+            }
+            
+            $users[] = [
+                'id' => Str::uuid(),
+                'first_name' => $firstName,
+                'middle_name' => $middleName,
+                'last_name' => $lastName,
+                'username' => $row[1],
+                'email' => $email, 
+                'phone_number' => $phoneNumber, 
+                'password' => $password, 
+                'department_id' => $department->department_id,
+                'plain_password' => $plainPassword,
+                'created_at' => now(),
+                'updated_at' => now()
+            ];
+        }
+
+        User::insert(collect($users)
+            ->map(fn($u) => collect($u)->except('plain_password'))
+            ->toArray());
+
+        $insertedUsers = User::whereIn('email', array_column($users, 'email'))->get();
+
+        foreach ($insertedUsers as $index => $user) {
+            $user->assignRole('Employee');
+
+            userInfo::create([
+                'name' => $user->first_name . ' ' . $user->middle_name,
+                'email' => $user->email,
+                'password' => $users[$index]['plain_password'], // Correctly mapped
+            ]);
+        }
+         
+        return back()->with('success_message', 'Users imported successfully!');
+    }
+    
    
     public function exportToPdf()
     {
+        // userInfo::truncate();
         // Fetch data from a table
         $data = userInfo::get();
 

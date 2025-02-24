@@ -42,7 +42,7 @@
                                 <h4 class="header-title">Request Permanent Vehicle</h4>
                             </div>
                             <div class="card-body">
-                                <form action="{{ route('vec_perm_request_post') }}" method="post" enctype="multipart/form-data">
+                                <form action="{{ route('vec_perm_request_post') }}" id="permanent_request_form" method="post" enctype="multipart/form-data">
                                     @csrf
 
                                     <div id="progressbarwizard">
@@ -113,6 +113,13 @@
                                             </div>
                                         </div>
                                     </div>
+                                    <script>
+                                        document.getElementById('permanent_request_form').addEventListener('submit', function() {
+                                            let button = document.getElementById('permanent_request_form_submit');
+                                            button.disabled = true;
+                                            button.innerText = "Processing..."; 
+                                        });
+                                    </script>
 
                                 </form>
 

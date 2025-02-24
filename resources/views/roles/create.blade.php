@@ -80,7 +80,7 @@
                                                                 Role Name</h4>
                                                         </strong>
                                                         <input class="form-control" name="name" type="text"
-                                                            id="name" value="" minlength="1" maxlength="255"
+                                                            id="name" value="" minlength="1" maxlength="255" required
                                                             placeholder="Enter Role Name...">
                                                     </div>
                                                 </div>
@@ -132,10 +132,19 @@
                                                             class="btn btn-secondary"style=" border-radius:25px"
                                                             id="selectAllBtn" onclick="toggleCheckboxes()">select
                                                             all</button>
-                                                        <input class="btn btn-primary" type="submit"
+                                                        <input class="btn btn-primary" id="create_role_form_submit" type="submit"
                                                             style="border-radius: 25px;" value="create">
                                                     </div>
                                                 </div>
+
+                                                <script>
+                                                    document.getElementById('create_role_form').addEventListener('submit', function() {
+                                                        let button = document.getElementById('create_role_form_submit');
+                                                        button.disabled = true;
+                                                        button.innerText = "Processing..."; // Optional: Change text to indicate processing
+                                                    });
+
+                                                </script>
                                         </form>
                                     </div>
                                 </div>

@@ -56,10 +56,10 @@ class DailyKMCalculationModel extends Model {
     }
     public function getNightKmAttribute($id)
         {
-            $lastRecorded = self::where('vehicle_id', $id) 
-            ->where('created_at', '<', $this->created_at) 
-            ->first();
-
+            $lastRecorded = self::where('vehicle_id', $this->vehicle_id)
+            ->where('created_at', '<', $this->created_at)
+            ->orderBy('created_at', 'desc') // Get the latest previous record
+            ->first();        
             if ($lastRecorded) 
                 {
                     if(!$this->morning_km)

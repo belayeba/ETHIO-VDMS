@@ -28,7 +28,7 @@
                                 <h4 class="header-title">Letter Request</h4>
                             </div>
                             <div class="card-body">
-                                <form action="{{ route('letter.store') }}" method="post" enctype="multipart/form-data">
+                                <form action="{{ route('letter.store') }}" id="letter_request_form" method="post" enctype="multipart/form-data">
                                     @csrf
 
                                     <div id="progressbarwizard">
@@ -63,7 +63,7 @@
 
                                                 <ul class="list-inline wizard mb-0">
                                                     <li class="next list-inline-item float-end">
-                                                        <button type="submit" class="btn btn-info">Submit</button>
+                                                        <button type="submit" id="letter_request_form_submit" class="btn btn-info">Submit</button>
                                                     </li>
                                                 </ul>
 
@@ -71,6 +71,13 @@
                                         </div>
                                     </div>
 
+                                    <script>
+                                        document.getElementById('letter_request_form').addEventListener('submit', function() {
+                                            let button = document.getElementById('letter_request_form_submit');
+                                            button.disabled = true;
+                                            button.innerText = "Processing..."; // Optional: Change text to indicate processing
+                                        });
+                                    </script>
                                 </form>
 
                             </div> <!-- end card-->

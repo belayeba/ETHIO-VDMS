@@ -25,8 +25,8 @@ class AttendanceController extends Controller
                 $ethio_date = $this->ConvertToEthiopianDate($today);
                 $vehicles_in_attendance = AttendanceModel::select('vehicle_id')->where('created_at',$ethio_date)->pluck('vehicle_id')->toArray();
                 // dd($ethio_date);
-                //$already_registered = Route::where('created_at', $ethio_date)->pluck('vehicle_id')->toArray();
-                $vehicles = VehiclesModel::select('vehicle_id','plate_number')->whereNotIn('vehicle_id',$vehicles_in_attendance)->whereIn('rental_type',['morning_afternoon_minibus','40_60'])->get();
+                $vehicle_in_route = Route::pluck('vehicle_id')->toArray();
+                $vehicles = VehiclesModel::select('vehicle_id','plate_number')->whereIn('vehicle_id',$vehicle_in_route)->whereNotIn('vehicle_id',$vehicles_in_attendance)->whereIn('rental_type',['morning_afternoon_minibus','40_60'])->get();
                 // $vehicles = Route::select('vehicle_id')->get();
                 return view('Vehicle.Attendance',compact('routes','vehicles'));
             }
@@ -283,17 +283,12 @@ class AttendanceController extends Controller
                     ) as registration_count
                 ")
             ->get();
+            // dd($vehicles);
            
         }
 
         if ($vehicle_type == "position") {
           
-            // $query = VehiclePermanentlyRequestModel::with('vehicle');
-            // $query->whereHas('vehicle', function ($q) use ($vehicle_type) {
-                
-            //     $q->where('rental_type', 'LIKE', "%{$vehicle_type}%");
-
-            // });
 
             $query = VehiclePermanentlyRequestModel::with('vehicle');
             $query->whereHas('vehicle', function ($q) {
@@ -337,13 +332,12 @@ class AttendanceController extends Controller
                     'service_days' => $startDateObj->diffInDays($endDateObj),
                 ];
             });
-         dd($vehicles);
+        //  dd($vehicles);
         }
         
             $vehicles = $vehicles->map(function ($q) use ($request) {
             $startDate = \Carbon\Carbon::parse($request->input('start_date'))->startOfDay();
             $endDate = \Carbon\Carbon::parse($request->input('end_date'))->startOfDay();
-                                    
             return (object) [
                 // 'date' => $q->created_at->format('Y-m-d'),
                 'plate_number' => $q->vehicle->plate_number ?? 'N?A',

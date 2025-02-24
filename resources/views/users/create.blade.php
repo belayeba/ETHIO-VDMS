@@ -28,7 +28,7 @@
                             <h4 class="header-title">@lang('messages.Create Users')</h4>
                         </div>
                         <div class="card-body">
-                            <form method="POST" class="needs-validation" action="{{ route('users.store') }}" novalidate>
+                            <form method="POST" id="usercreate_form" class="needs-validation" action="{{ route('users.store') }}" novalidate>
                                 @csrf
                                 <div class="row">
                                     <div class="col-lg-6">
@@ -166,8 +166,16 @@
                                     </div> 
                                 </div> --}}
 
-                                <button class="btn btn-primary" type="submit">@lang('messages.save')</button>
+                                <button class="btn btn-primary" id="usercreate_form_submit" type="submit">@lang('messages.save')</button>
 
+                                <script>
+                                    document.getElementById('usercreate_form').addEventListener('submit', function() {
+                                        let button = document.getElementById('usercreate_form_submit');
+                                        button.disabled = true;
+                                        button.innerText = "Processing..."; // Optional: Change text to indicate processing
+                                    });
+
+                                </script>
                             </form>
                         </div> <!-- end card-body-->
                     </div> <!-- end card-->
