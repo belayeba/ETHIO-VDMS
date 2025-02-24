@@ -11,146 +11,172 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Controllers\Vehicle\Daily_KM_Calculation;
 
-class DriverRegistrationController extends Controller {
+class DriverRegistrationController extends Controller
+{
     //Page
     protected $dailyKmCalculation;
 
     public function __construct(Daily_KM_Calculation $dailyKmCalculation)
-        {
-            $this->dailyKmCalculation = $dailyKmCalculation;
-        }
-    public function RegistrationPage() {
+    {
+        $this->dailyKmCalculation = $dailyKmCalculation;
+    }
+    public function RegistrationPage()
+    {
         $drivers = User::get();
         $data = DriversModel::get();
-    
-        return view( 'Driver.index', compact( 'drivers', 'data' ) );
+
+        return view('Driver.index', compact('drivers', 'data'));
     }
     // Create a new driver
 
-    public function store( Request $request ) {
+    public function store(Request $request)
+    {
         try {
             // dd( $request->input( 'expiry_date' ));
-            $validator = Validator::make( $request->all(), [
+            $validator = Validator::make($request->all(), [
                 'user_id' => 'required|uuid|exists:users,id',
                 'license_number' => 'required|string|max:255',
                 'expiry_date' => 'required|date',
                 'license_file' => 'required|file|mimes:pdf,jpg,jpeg',
                 'notes' => 'nullable|string',
-            ] );
+            ]);
 
-            if ( $validator->fails() ) {
-                return redirect()->back()->with('error_message','Warning! You are denied the service',);
+            if ($validator->fails()) {
+                return redirect()->back()->with('error_message', 'Warning! You are denied the service',);
             }
             $loged_user = Auth::id();
 
-            $file = $request->file( 'license_file' );
+            $file = $request->file('license_file');
 
-            $storagePath = storage_path( 'app/public/Drivers' );
-            if ( !file_exists( $storagePath ) ) {
-                mkdir( $storagePath, 0755, true );
+            $storagePath = storage_path('app/public/Drivers');
+            if (!file_exists($storagePath)) {
+                mkdir($storagePath, 0755, true);
             }
             $license = time() . '_' . $file->getClientOriginalName();
-            $file->move( $storagePath, $license );
+            $file->move($storagePath, $license);
             $today = \Carbon\Carbon::now();
-           $ethiopianDate = $this->dailyKmCalculation->ConvertToEthiopianDate($today); 
-            DriversModel::create( [
-                'user_id' => $request->input( 'user_id' ),
-                'license_number' => $request->input( 'license_number' ),
-                'license_expiry_date' => $request->input( 'expiry_date' ),
+            $ethiopianDate = $this->dailyKmCalculation->ConvertToEthiopianDate($today);
+            DriversModel::create([
+                'user_id' => $request->input('user_id'),
+                'license_number' => $request->input('license_number'),
+                'license_expiry_date' => $request->input('expiry_date'),
                 'license_file' => $license,
                 'register_by' => $loged_user,
-                'notes' => $request->input( 'notes' ),
+                'notes' => $request->input('notes'),
                 'created_at' => $ethiopianDate
-            ] );
+            ]);
             $user = User::find($request->user_id);
             $message = "You are registered as driver ";
             $subject = "Driver Registration";
             $url = "#";
-            $user->NotifyUser($message,$subject,$url);
-            return redirect()->back()->with('success_message','Driver created successfully.',);
-        } catch ( Exception $e ) {
-            return redirect()->back()->with('error_message','Sorry, Something went wrong',);
-    
+            $user->NotifyUser($message, $subject, $url);
+            return redirect()->back()->with('success_message', 'Driver created successfully.',);
+        } catch (Exception $e) {
+            return redirect()->back()->with('error_message', 'Sorry, Something went wrong',);
         }
     }
 
     // Get all drivers
 
-    public function index() {
+    public function index()
+    {
         try {
             $drivers = DriversModel::all();
-            return response()->json( $drivers );
-        } catch ( \Exception $e ) {
-            return redirect()->back()->with('error_message','Fetching Drivers failed',);
+            return response()->json($drivers);
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error_message', 'Fetching Drivers failed',);
         }
     }
 
     // Get a specific driver by ID
 
-    public function show( $id ) {
+    public function show($id)
+    {
         try {
-            $driver = DriversModel::findOrFail( $id );
-            return response()->json( $driver );
-        } catch ( Exception $e ) {
-            return redirect()->back()->with('error_message','Driver not found',);
+            $driver = DriversModel::findOrFail($id);
+            return response()->json($driver);
+        } catch (Exception $e) {
+            return redirect()->back()->with('error_message', 'Driver not found',);
         }
-
     }
 
     // Update a driver
 
-    public function update( Request $request, $id ) {
+    public function update(Request $request, $id)
+    {
         // dd($request);
         try {
-            $driver = DriversModel::findOrFail( $id );
+            $driver = DriversModel::findOrFail($id);
 
-            $validator = Validator::make( $request->all(), [
+            $validator = Validator::make($request->all(), [
                 // 'driver_id' => 'required|uuid|exists:drivers,driver_id',
                 // 'license_number' => 'required|string|max:255',
                 'license_expiry_date' => 'required|date|after:today',
                 // 'license_file' => 'sometimes|required|file|mimes:pdf,jpg,jpeg',
                 // 'notes' => 'nullable|string',
-            ] );
+            ]);
             dd($validator->fails());
-        
-            if ( $validator->fails() ) {
-                return redirect()->back()->with('error_message','All fields are required',);
+
+            if ($validator->fails()) {
+                return redirect()->back()->with('error_message', 'All fields are required',);
             }
 
-            $file = $request->file( 'license_file' );
+            $file = $request->file('license_file');
             dd($file);
-            $storagePath = storage_path( 'app/public/Drivers' );
-            if ( !file_exists( $storagePath ) ) {
-                mkdir( $storagePath, 0755, true );
+            $storagePath = storage_path('app/public/Drivers');
+            if (!file_exists($storagePath)) {
+                mkdir($storagePath, 0755, true);
             }
             $license = time() . '_' . $file->getClientOriginalName();
             dd($license);
-            $file->move( $storagePath, $license );
-            $driver->update( [
-                'driver_id' => $request->input( 'driver_id' ),
-                'license_number' => $request->input( 'license_number' ),
-                'license_expiry_date' => $request->input( 'license_expiry_date' ),
-                'status' => $request->input( 'status', 'active' ),
+            $file->move($storagePath, $license);
+            $driver->update([
+                'driver_id' => $request->input('driver_id'),
+                'license_number' => $request->input('license_number'),
+                'license_expiry_date' => $request->input('license_expiry_date'),
+                'status' => $request->input('status', 'active'),
                 'license_file' => $license,
-                'notes' => $request->input( 'notes' ),
-            ] );
-            return redirect()->back()->with('success_message','Driver updated successfully.',);
-        } catch ( Exception $e ) {
-            return redirect()->back()->with('error_message','Driver not found',);
+                'notes' => $request->input('notes'),
+            ]);
+            return redirect()->back()->with('success_message', 'Driver updated successfully.',);
+        } catch (Exception $e) {
+            return redirect()->back()->with('error_message', 'Driver not found',);
         }
-
     }
 
-    // Delete a driver
+    public function updateStatus(Request $request)
+    {
+        $itemId = $request->input('id');
+        $status = $request->input('status');
 
-    public function destroy( $id ) {
-        try {
-            $driver = DriversModel::findOrFail( $id );
-            $driver->delete();
-            return redirect()->back()->with('success_message','Driver deleted successfully.',);
-        } catch ( Exception $e ) {
-            return redirect()->back()->with('error_message','Driver not found',);
+        // Find the item and update the status
+        $item = DriversModel::find($itemId);
+        if ($item) {
+            if ($status == 'active' || $status == 'inactive') {
+                $item->status = $status;
+                $item->save();
+
+                // Set success message in the session
+                session()->flash('success_message', 'Status updated successfully');
+                return response()->json(['message' => 'Status updated successfully']);
+            }
         }
 
+        // Set error message in the session if the item is not found
+        session()->flash('error_message', 'Item not found');
+        return response()->json(['message' => 'Item not found'], 404);
+    }
+
+
+    // Delete a driver
+    public function destroy($id)
+    {
+        try {
+            $driver = DriversModel::findOrFail($id);
+            $driver->delete();
+            return redirect()->back()->with('success_message', 'Driver deleted successfully.',);
+        } catch (Exception $e) {
+            return redirect()->back()->with('error_message', 'Driver not found',);
+        }
     }
 }

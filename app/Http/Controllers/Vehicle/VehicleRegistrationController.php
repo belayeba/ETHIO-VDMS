@@ -53,64 +53,58 @@ class VehicleRegistrationController extends Controller
             ->addColumn('vehicle_category', function ($row) {
                 return $row->vehicle_category;
             })
-            ->addColumn('action', function ($vehicle) {
+            ->addColumn('status', function ($vehicle) {
                 return '
-                    <label class="switch">
-                        <input type="checkbox" class="status-switch" data-id="' . $vehicle->id . '" ' . ($vehicle->status ? 'checked' : '') . '>
-                        <span class="slider">
-                            <svg class="slider-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                                <circle cx="12" cy="12" r="10"></circle>
-                            </svg>
-                        </span>
-                    </label>';
+                <label class="switch">
+                    <input type="checkbox" class="status-toggle" data-id="' . $vehicle->vehicle_id . '" ' . ($vehicle->status == '1' ? 'checked' : '') . '>
+                    <span class="slider round"></span>
+                </label>';
             })
             ->addColumn('action', function ($row) {
-                $actions = '<button type="button" class="btn btn-info rounded-pill view-btn" 
-                                data-chancy_number="' . $row->chasis_number . '"
-                                data-make="' . $row->make . '"
-                                data-model="' . $row->model . '"
-                                data-year="' . $row->year . '"
-                                data-plate_number="' . $row->plate_number . '"
-                                data-mileage="' . $row->mileage . '"
-                                data-capacity="' . $row->capacity . '"
-                                data-fuel_amount="' . $row->fuel_amount . '"
-                                data-fuel_type="' . $row->fuel_type . '"
-                                data-last_service="' . $row->last_service . '"
-                                data-next_service="' . $row->next_service . '"
-                                data-vehicle_category="' . $row->vehicle_category . '"
-                                data-engine_number="' . $row->position . '"
-                                data-vehicle_type="' . $row->vehicle_type . '"
-                                data-rental_type="' . $row->rental_type . '"
-                                data-libre="' . $row->libre . '"
-                                data-insurance="' . $row->insurance . '"
-                                title="View">
-                                <i class="ri-eye-line"></i>
-                            </button>
-                            <button type="button" class="btn btn-secondary rounded-pill edit-btn" 
-                                data-chancy_number="' . $row->chasis_number . '"
-                                data-make="' . $row->make . '"
-                                data-model="' . $row->model . '"
-                                data-year="' . $row->year . '"
-                                data-plate_number="' . $row->plate_number . '"
-                                data-mileage="' . $row->mileage . '"
-                                data-capacity="' . $row->capacity . '"
-                                data-fuel_amount="' . $row->fuel_amount . '"
-                                data-fuel_type="' . $row->fuel_type . '"
-                                data-last_service="' . $row->last_service . '"
-                                data-next_service="' . $row->next_service . '"
-                                data-vehicle_category="' . $row->vehicle_category . '"
-                                data-position="' . $row->position . '"
-                                data-vehicle_type="' . $row->vehicle_type . '"
-                                data-rental_type="' . $row->rental_type . '"
-                                data-libre="' . $row->libre . '"
-                                data-insurance="' . $row->insurance . '"
-                                title="Edit">
-                                <i class="ri-pencil-line"></i>
-                            </button>';
-
-                return $actions;
+                return '<button type="button" class="btn btn-info rounded-pill view-btn" 
+                        data-chancy_number="' . $row->chasis_number . '"
+                        data-make="' . $row->make . '"
+                        data-model="' . $row->model . '"
+                        data-year="' . $row->year . '"
+                        data-plate_number="' . $row->plate_number . '"
+                        data-mileage="' . $row->mileage . '"
+                        data-engine_number="' . $row->engine_number . '"
+                        data-capacity="' . $row->capacity . '"
+                        data-fuel_amount="' . $row->fuel_amount . '"
+                        data-fuel_type="' . $row->fuel_type . '"
+                        data-last_service="' . $row->last_service . '"
+                        data-next_service="' . $row->next_service . '"
+                        data-vehicle_category="' . $row->vehicle_category . '"
+                        data-vehicle_type="' . $row->vehicle_type . '"
+                        data-rental_type="' . $row->rental_type . '"
+                        data-libre="' . $row->libre . '"
+                        data-insurance="' . $row->insurance . '"
+                        title="View">
+                        <i class="ri-eye-line"></i>
+                    </button>
+                    <button type="button" class="btn btn-secondary rounded-pill edit-btn" 
+                       data-chancy_number="' . $row->chasis_number . '"
+                        data-make="' . $row->make . '"
+                        data-model="' . $row->model . '"
+                        data-year="' . $row->year . '"
+                        data-plate_number="' . $row->plate_number . '"
+                        data-mileage="' . $row->mileage . '"
+                        data-engine_number="' . $row->engine_number . '"
+                        data-capacity="' . $row->capacity . '"
+                        data-fuel_amount="' . $row->fuel_amount . '"
+                        data-fuel_type="' . $row->fuel_type . '"
+                        data-last_service="' . $row->last_service . '"
+                        data-next_service="' . $row->next_service . '"
+                        data-vehicle_category="' . $row->vehicle_category . '"
+                        data-vehicle_type="' . $row->vehicle_type . '"
+                        data-rental_type="' . $row->rental_type . '"
+                        data-libre="' . $row->libre . '"
+                        data-insurance="' . $row->insurance . '"
+                        title="Edit">
+                        <i class="ri-pencil-line"></i>
+                    </button>';
             })
-            ->rawColumns(['plate_number', 'vehicle_type', 'vehicle_category', 'action'])
+            ->rawColumns(['status', 'action']) // ✅ Add 'status' column here to prevent escaping
             ->make(true);
     }
 
@@ -180,18 +174,13 @@ class VehicleRegistrationController extends Controller
         }
         $today = \Carbon\Carbon::now();
         $ethiopianDate = $this->dailyKmCalculation->ConvertToEthiopianDate($today);
-        if($request->rental_type)
-            {
-                $vec_type = $request->rental_type;
-            }
-        elseif($request->organization_type)
-            {
-                $vec_type = $request->organization_type;
-            }
-        else
-          {
-            return redirect()->back()->with('error_message',"Check Service of the vehicle");
-          }
+        if ($request->rental_type) {
+            $vec_type = $request->rental_type;
+        } elseif ($request->organization_type) {
+            $vec_type = $request->organization_type;
+        } else {
+            return redirect()->back()->with('error_message', "Check Service of the vehicle");
+        }
         VehiclesModel::create([
             'chasis_number' => $request->chasis_number,
             'make' => $request->make,
@@ -336,6 +325,29 @@ class VehicleRegistrationController extends Controller
         $vehicle->update($updateData);
 
         return redirect()->back()->with('success_message', 'Successfully Updated.');
+    }
+
+    public function updateStatus(Request $request)
+    {
+        $itemId = $request->input('id');
+        $status = $request->input('status');
+
+        // Find the item and update the status
+        $item = VehiclesModel::find($itemId);
+        if ($item) {
+            if ($status == '1' || $status == '0') {
+                $item->status = $status;
+                $item->save();
+
+                // Set success message in the session
+                session()->flash('success_message', 'Status updated successfully');
+                return response()->json(['message' => 'Status updated successfully']);
+            }
+        }
+
+        // Set error message in the session if the item is not found
+        session()->flash('error_message', 'Item not found');
+        return response()->json(['message' => 'Item not found'], 404);
     }
 
 

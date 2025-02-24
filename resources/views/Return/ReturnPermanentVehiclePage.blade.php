@@ -31,7 +31,7 @@
                                 <h4 class="header-title">Return Permanent Vehicle</h4>
                             </div>
                             <div class="card-body">
-                                <form action="{{route('return_vehicle_permanent')}}" method="post" enctype="multipart/form-data">
+                                <form action="{{route('return_vehicle_permanent')}}" id="return_permanent_form" method="post" enctype="multipart/form-data">
                                     @csrf
 
                                     <div id="progressbarwizard">
@@ -84,13 +84,21 @@
 
                                                 <ul class="list-inline wizard mb-0">
                                                     <li class="next list-inline-item float-end">
-                                                        <button type="submit" class="btn btn-info">Submit</button>
+                                                        <button type="submit" id="return_permanent_form_submit" class="btn btn-info">Submit</button>
                                                     </li>
                                                 </ul>
 
                                             </div>
                                         </div>
                                     </div>
+
+                                    <script>
+                                        document.getElementById('return_permanent_form').addEventListener('submit', function() {
+                                                    let button = document.getElementById('return_permanent_form_submit');
+                                                    button.disabled = true;
+                                                    button.innerText = "Processing..."; // Optional: Change text to indicate processing
+                                                });
+                                    </script>
 
                                 </form>
 

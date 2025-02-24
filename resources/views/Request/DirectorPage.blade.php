@@ -26,12 +26,12 @@
                                 <table class="table director_datatable table-striped dt-responsive nowrap w-100">
                                     <thead>
                                         <tr>
-                                            <th>#</th>
-                                            <th>Requested By</th>
-                                            <th>Vehicle Type</th>
-                                            <th>Requested At</th>
-                                            <th>Status</th>
-                                            <th>Action</th>
+                                            <th>{{ __('messages.Roll No.') }}</th>
+                                            <th>{{ __('messages.Requested By') }}</th>
+                                            <th>{{ __('messages.Vehicle Type') }}</th>
+                                            <th>{{ __('messages.Requested At') }}</th>
+                                            <th>{{ __('messages.Status') }}</th>
+                                            <th>{{ __('messages.Action') }}</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -51,22 +51,22 @@
                                             </div>
                                             <div class="modal-body">
                                                 <dl class="row mb-0">
-                                                    <dt class="col-sm-5">Request reason</dt>
+                                                    <dt class="col-sm-5">@lang('messages.Request reason')</dt>
                                                     <dd class="col-sm-7" data-field="purpose"></dd>
 
-                                                    <dt class="col-sm-5">Requested vehicle</dt>
+                                                    <dt class="col-sm-5">@lang('messages.Requested vehicle')</dt>
                                                     <dd class="col-sm-7" data-field="vehicle_type"></dd>
 
-                                                    <dt class="col-sm-5">Start date and Time</dt>
+                                                    <dt class="col-sm-5">@lang('messages.Start date and Time')</dt>
                                                     <dd class="col-sm-7" data-field="start_date"></dd>
 
-                                                    <dt class="col-sm-5">Return date and Time</dt>
+                                                    <dt class="col-sm-5">@lang('messages.Return date and Time')</dt>
                                                     <dd class="col-sm-7" data-field="end_date"></dd>
 
                                                     <dt class="col-sm-5">Location From and To</dt>
                                                     <dd class="col-sm-7" data-field="start_location"></dd>
 
-                                                    <dt class="col-sm-5">Passengers</dt>
+                                                    <dt class="col-sm-5">@lang('messages.Passengers')</dt>
                                                     <dd class="col-sm-7" data-field="passengers"></dd>
 
                                                     <dt class="col-sm-5">Materials</dt>
@@ -244,43 +244,43 @@
                 const messages = [
                     {
                         condition: button.data('dir_approved_by') && !button.data('director_reject_reason'),
-                        message: '<span style="color: green;">Approved by Director</span>'
+                        message: '<span style="color: green;">'+ button.data('dir_approved_by')+' (Director)'+'</span>'
                     },
                     {
                         condition: button.data('director_reject_reason') && button.data('dir_approved_by'),
-                        message: '<span style="color: red;">Rejected by Director</span>'
+                        message: '<span style="color: red;">Rejected By '+ button.data('dir_approved_by')+'(Director)</span>'
                     },
                     {
                         condition: button.data('div_approved_by') && !button.data('cluster_director_reject_reason'),
-                        message: '<span style="color: green;">Approved by Division-Director</span>'
+                        message: '<span style="color: green;">' + button.data('div_approved_by') + ' (Division)' +  '</span>'
                     },
                     {
                         condition: button.data('cluster_director_reject_reason') && button.data('div_approved_by'),
-                        message: '<span style="color: red;">Rejected by Division-Director</span>'
+                        message: '<span style="color: red;">Rejected by ' +button.data('div_approved_by') +' (Division)' +  '</span>'
                     },
                     {
                         condition: button.data('hr_div_approved_by') && !button.data('hr_director_reject_reason'),
-                        message: '<span style="color: green;">Approved by HR-Director</span>'
+                        message: '<span style="color: green;">' + button.data('hr_div_approved_by') + ' (Division)</span>'
                     },
                     {
                         condition: button.data('hr_director_reject_reason') && button.data('hr_div_approved_by'),
-                        message: '<span style="color: red;">Rejected by HR-Director</span>'
+                        message: '<span style="color: red;">Rejected by '+ button.data('hr_div_approved_by') + ' ( Division)</span>'
                     },
                     {
                         condition: button.data('transport_director_id') && !button.data('vec_director_reject_reason'),
-                        message: '<span style="color: green;">Approved by Dispatcher-Director</span>',
+                        message: '<span style="color: green;">'+button.data('transport_director_id')+' (Transport_Dir)</span>',
                     },
                     {
                         condition: button.data('vec_director_reject_reason') && button.data('transport_director_id'),
-                        message: '<span style="color: red;">Rejected by Dispatcher-Director</span>',
+                        message: '<span style="color: red;">Rejected by '+button.data('transport_director_id')+' ( Transport_Dir)</span>',
                     },
                     {
                         condition: button.data('assigned_by') && !button.data('assigned_by_reject_reason'),
-                        message: '<span style="color: green;">Approved by Dispatcher</span>'
+                        message: '<span style="color: green;">'+ button.data('assigned_by') +' (Dispatcher)</span>'
                     },
                     {
                         condition: button.data('assigned_by_reject_reason') && button.data('assigned_by'),
-                        message: '<span style="color: red;">Rejected by Dispatcher</span>'
+                        message: '<span style="color: red;">Rejected by '+ button.data('assigned_by') + ' (Dispatcher)</span>'
                     },
                     {
                         condition: button.data('vehicle_id'),

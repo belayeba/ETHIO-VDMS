@@ -87,9 +87,17 @@ class VehicleTemporaryRequestModel extends Model
             return $this->belongsTo(User::class, 'dir_approved_by');
         }
     public function div_approvedBy(): BelongsTo
-        {
-            return $this->belongsTo(User::class, 'div_approved_by');
-        }
+    {
+        return $this->belongsTo(User::class, 'div_approved_by');
+    }
+    public function hr_div_approvedBy(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'hr_div_approved_by');
+    }
+    public function transport_director_approvedBy(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'transport_director_id');
+    }
     public function vehicle(): BelongsTo
         {
             return $this->belongsTo(VehiclesModel::class, 'vehicle_id');

@@ -68,7 +68,7 @@ class CreateAllTablesWithUuid extends Migration
             $table->string('rental_type', 255)->nullable(); // (45/60)(Position)(wholeDay)(morning_afternoon_minibus)
             $table->string('rental_person', 255)->nullable(); // person who rented the car
             $table->string('rental_phone', 255)->nullable();  // phone number of the person
-            $table->integer('fuel_amount', 10, 2);
+            $table->integer('fuel_amount');
             $table->integer('last_service')->nullable();
             $table->integer('next_service')->nullable();
             $table->uuid('registered_by')->nullable();
@@ -149,8 +149,18 @@ class CreateAllTablesWithUuid extends Migration
             $table->foreign('old_driver_id')->references('driver_id')->on('drivers')->onDelete('restrict');
             $table->uuid('changed_by');
             $table->foreign('changed_by')->references('id')->on('users')->onDelete('restrict');
-            $table->uuid('inspection_id');  // Link to the entire inspection session
-            $table->foreign('inspection_id')->references('inspection_id')->on('vehicle_inspections')->onDelete('restrict');
+
+            $table->uuid('inspection_id')->nullable();
+            $table->uuid('part_name')->nullable();
+            $table->uuid('inspected_by')->nullable();
+            
+            $table->foreign(['inspection_id', 'part_name', 'inspected_by'])
+                ->references(['inspection_id', 'part_name', 'inspected_by'])
+                ->on('vehicle_inspections')
+                ->onDelete('restrict');
+
+            // $table->uuid('inspection_id');  // Link to the entire inspection session
+            // $table->foreign('inspection_id')->references('inspection_id')->on('vehicle_inspections')->onDelete('restrict');
             $table->boolean('driver_accepted')->default(0);
             $table->string('driver_reject_reason', 1000)->nullable();
             $table->boolean('status')->default(0); // To know current driver of the vehilce and it should be active when driver accept it
@@ -205,8 +215,19 @@ class CreateAllTablesWithUuid extends Migration
             $table->uuid('vehicle_id')->nullable();
             $table->foreign('vehicle_id')->references('vehicle_id')->on('vehicles')->onDelete('restrict');
             $table->integer('mileage')->nullable();
-            $table->uuid('inspection_id')->nullable();  // Link to the entire inspection session
-            $table->foreign('inspection_id')->references('inspection_id')->on('vehicle_inspections')->onDelete('restrict');
+
+            $table->uuid('inspection_id')->nullable();
+            $table->uuid('part_name')->nullable();
+            $table->uuid('inspected_by')->nullable();
+            
+                // Shorter foreign key name to avoid MySQL length issue
+            $table->foreign(['inspection_id', 'part_name', 'inspected_by'], 'inspection_id')
+            ->references(['inspection_id', 'part_name', 'inspected_by'])
+            ->on('vehicle_inspections')
+            ->onDelete('restrict');
+
+            // $table->uuid('inspection_id')->nullable();  // Link to the entire inspection session
+            // $table->foreign('inspection_id')->references('inspection_id')->on('vehicle_inspections')->onDelete('restrict');
             $table->boolean('status')->default(true); // COLUMN THAT SHOWS VEHICLE RETURNED OR NOT
             $table->timestamps();
             $table->softDeletes();
@@ -247,35 +268,7 @@ class CreateAllTablesWithUuid extends Migration
             $table->softDeletes();
         });
         // Maintenance Table
-        Schema::create('maintenances', function (Blueprint $table) {
-            $table->uuid('maintenance_id')->primary();
-            $table->uuid('vehicle_id');
-            $table->foreign('vehicle_id')->references('vehicle_id')->on('vehicles')->onDelete('restrict');
-            $table->uuid('requested_by');
-            $table->foreign('requested_by')->references('id')->on('users')->onDelete('restrict');
-            $table->uuid('approved_by')->nullable();
-            $table->foreign('approved_by')->references('id')->on('users')->onDelete('restrict');
-            $table->string('director_reject_reason', 1000)->nullable();
-            $table->uuid('sim_approved_by')->nullable();
-            // $table->foreign('sim_approved_by')->references('id')->on('users')->onDelete('restrict');
-            // $table->string('simirit_reject_reason', 1000)->nullable();
-            $table->string('maintenance_type', 255);
-            $table->uuid('maintained_by')->nullable();
-            $table->foreign('maintained_by')->references('id')->on('users')->onDelete('restrict');
-            $table->text('description')->nullable();
-            $table->date('date')->nullable();
-            $table->uuid('vehicle_detail_id')->nullable();
-            $table->foreign('vehicle_detail_id')->references('detail_id')->on('vehicles_detail')->onDelete('restrict');
-            $table->uuid('taking_inspection')->nullable();  // Link to the entire inspection session
-            $table->foreign('taking_inspection')->references('inspection_id')->on('vehicle_inspections')->onDelete('restrict');
-            $table->uuid('giving_inspection')->nullable();  // Link to the entire inspection session
-            $table->foreign('giving_inspection')->references('inspection_id')->on('vehicle_inspections')->onDelete('restrict');
-            $table->decimal('cost', 10, 2)->nullable();
-            $table->text('parts_used')->nullable();
-            $table->text('notes')->nullable();
-            $table->timestamps();
-            $table->softDeletes();
-        });
+       
         Schema::create('letters', function (Blueprint $table) {
             $table->uuid('letter_id')->primary();
             $table->string('letter_file');
@@ -502,10 +495,23 @@ class CreateAllTablesWithUuid extends Migration
             $table->decimal('km_per_liter', 10, 2)->nullable();
             $table->uuid('driver_id')->nullable();
             $table->foreign('driver_id')->references('driver_id')->on('drivers')->onDelete('restrict');
-            $table->uuid('taking_inspection')->nullable();  // Link to the entire inspection session
-            $table->foreign('taking_inspection')->references('inspection_id')->on('vehicle_inspections')->onDelete('restrict');
-            $table->uuid('returning_inspection')->nullable();  // Link to the entire inspection session
-            $table->foreign('returning_inspection')->references('inspection_id')->on('vehicle_inspections')->onDelete('restrict');
+
+            $table->uuid('taking_inspection')->nullable();  // Link to the inspection session
+            $table->uuid('returning_inspection')->nullable();
+            $table->uuid('part_name')->nullable();
+            $table->uuid('inspected_by')->nullable();
+            
+            // Composite foreign key matching vehicle_inspections composite primary key
+            $table->foreign(['taking_inspection', 'part_name', 'inspected_by'], 'taking_inspection')
+            ->references(['inspection_id', 'part_name', 'inspected_by'])
+            ->on('vehicle_inspections')
+            ->onDelete('restrict');
+        
+            $table->foreign(['returning_inspection', 'part_name', 'inspected_by'], 'returning_inspection')
+                ->references(['inspection_id', 'part_name', 'inspected_by'])
+                ->on('vehicle_inspections')
+                ->onDelete('restrict');
+
             $table->timestamps();
             $table->softDeletes();
         });
@@ -530,6 +536,14 @@ class CreateAllTablesWithUuid extends Migration
             $table->timestamps();
             $table->softDeletes();
         });
+         //User Info
+         Schema::create('users_info', function (Blueprint $table) {
+            $table->string('info_id', 255);
+            $table->string('name', 255);
+            $table->string('email', 255);
+            $table->string('password', 255);
+            $table->timestamps();
+        });
     }
 
     public function down()
@@ -541,7 +555,6 @@ class CreateAllTablesWithUuid extends Migration
             Schema::dropIfExists('trips');
             Schema::dropIfExists('gps_tracking');
             Schema::dropIfExists('fuelings');
-            Schema::dropIfExists('maintenances');
             Schema::dropIfExists('giving_back_vehicles_parmanently');
             Schema::dropIfExists('vehicle_requests_parmanently');
             Schema::dropIfExists('driver_changes');
@@ -553,5 +566,6 @@ class CreateAllTablesWithUuid extends Migration
             Schema::dropIfExists('drivers');
             Schema::dropIfExists('departments');
             Schema::dropIfExists('clusters');
+            Schema::dropIfExists('users_info');
         }
 }

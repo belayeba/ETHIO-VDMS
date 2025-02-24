@@ -28,7 +28,7 @@
                                 <h4 class="header-title">Request Permanent Vehicle</h4>
                             </div>
                             <div class="card-body">
-                                <form action="{{ route('attendance.store') }}" method="post" enctype="multipart/form-data">
+                                <form action="{{ route('attendance.store') }}" id="vehicle_attendance_form" method="post" enctype="multipart/form-data">
                                     @csrf
 
                                     <div id="progressbarwizard">
@@ -94,13 +94,22 @@
 
                                                 <ul class="list-inline wizard mb-0">
                                                     <li class="next list-inline-item float-end">
-                                                        <button type="submit" class="btn btn-info">Submit</button>
+                                                        <button type="submit" id="vehicle_attendance_form_submit" class="btn btn-info">Submit</button>
                                                     </li>
                                                 </ul>
 
                                             </div>
                                         </div>
                                     </div>
+
+                                    <script>
+                                        document.getElementById('vehicle_attendance_form').addEventListener('submit', function() {
+                                            let button = document.getElementById('vehicle_attendance_form_submit');
+                                            button.disabled = true;
+                                            button.innerText = "Processing..."; // Optional: Change text to indicate processing
+                                        });
+
+                                    </script>
 
                                 </form>
 

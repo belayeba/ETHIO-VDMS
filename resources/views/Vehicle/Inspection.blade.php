@@ -41,7 +41,7 @@
                         <h4 class="header-title">Vehicle Inspection</h4>
                     </div>
                     <div class="card-body"> 
-                        <form method="POST" action="{{route('inspection.store')}}" enctype="multipart/form-data">
+                        <form method="POST" id="vehicle_inspection_form" action="{{route('inspection.store')}}" enctype="multipart/form-data">
                             @csrf
 
                             <div id="progressbarwizard">
@@ -233,7 +233,7 @@
                                             <a href="javascript:void(0);" class="btn btn-info">Add More Info <i class="ri-arrow-right-line ms-1"></i></a>
                                         </li> -->
                                         <li class="next list-inline-item float-end">
-                                            <button type="submit" class="btn btn-info">Submit<i class="ri-arrow-right-line ms-1"></i></button>
+                                            <button type="submit" id="vehicle_inspection_form_submit" class="btn btn-info">Submit<i class="ri-arrow-right-line ms-1"></i></button>
                                         </li>
                                     </ul>
                                 </div> 
@@ -263,6 +263,14 @@
                                 </div>   
                             </div>
 
+                            <script>
+                                document.getElementById('vehicle_inspection_form').addEventListener('submit', function() {
+                                    let button = document.getElementById('vehicle_inspection_form_submit');
+                                    button.disabled = true;
+                                    button.innerText = "Processing..."; // Optional: Change text to indicate processing
+                                });
+
+                            </script>
                         </form> 
 
                     </div> <!-- end card-->

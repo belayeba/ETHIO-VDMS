@@ -32,7 +32,12 @@ class HomeController extends Controller
             $permReq = VehiclePermanentlyRequestModel ::count();
             $vehicles = VehiclesModel:: count();
             $users = user::count();
-            $user= Auth::id();
+            $user = Auth::user();
+            
+            if ($user->can('Dispatcher Page')) {
+                return view('Dispatcher', compact('tempReq', 'permReq', 'vehicles', 'users', 'user'));
+            }
+           
             return view('home',compact('tempReq','permReq','vehicles','users','user'));
         }
 

@@ -73,8 +73,17 @@
                                                 <input type="text" class="form-control" id="nameInput" name="name" placeholder=@lang('messages.Name') >
                                             </div>
                                             <div class="d-flex justify-content-center">
-                                                <button type="submit" class="btn btn-primary">@lang('messages.save')</button>
+                                                <button type="submit" id="department-form-submit" class="btn btn-primary">@lang('messages.save')</button>
                                             </div>
+
+                                            <script>
+                                                document.getElementById('department-form').addEventListener('submit', function() {
+                                                    let button = document.getElementById('department-form-submit');
+                                                    button.disabled = true;
+                                                    button.innerText = "Processing..."; // Optional: Change text to indicate processing
+                                                });
+
+                                            </script>
                                         </form>
                                     </div>
                                 </div>

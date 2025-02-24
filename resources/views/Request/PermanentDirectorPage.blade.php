@@ -121,6 +121,11 @@
                                                     <div class="modal-body">
                                                         <div class="col-md-6">
                                                             <dl class="row mb-1">
+                                                                <dt class="col-sm-5">Position:</dt>
+                                                                <dd class="col-sm-7" id="position"></dd>
+                                                            </dl>
+
+                                                            <dl class="row mb-1">
                                                                 <dt class="col-sm-5">Request reason:</dt>
                                                                 <dd class="col-sm-7" id="reason"></dd>
                                                             </dl>
@@ -234,6 +239,7 @@
         $(document).on('click', '.show-btn', function() {
             RejectedId = $(this).data('id');
             Reason = $(this).data('reason');
+            Position = $(this).data('position');
             PositionLetter = $(this).data('position_letter');
             DrivingLicense = $(this).data('driving_license');
 
@@ -245,6 +251,7 @@
 
             // Populate the iframes with the file paths
             $('#reason').text(Reason);
+            $('#position').text(Position);
             $('#image1').attr('src', positionLetterPath);
             $('#image2').attr('src', drivingLicensePath);
             $('#Reject_request_id').val(RejectedId);

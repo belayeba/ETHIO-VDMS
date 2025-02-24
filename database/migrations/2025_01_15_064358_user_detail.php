@@ -11,14 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        //
-        Schema::create('users_info', function (Blueprint $table) {
-            $table->string('info_id', 255);
-            $table->string('name', 255);
-            $table->string('email', 255);
-            $table->string('password', 255);
-            $table->timestamps();
-        });
+       
     }
 
     /**
@@ -27,6 +20,6 @@ return new class extends Migration
     public function down(): void
     {
         //
-        Schema::dropIfExists('users_info');
+      
     }
 };

@@ -36,6 +36,7 @@
                                 <h4 class="header-title mb-0">@lang('messages.User Lists')</h4>
                                 <div>
                                     <a href="{{ route('user_create') }}" class="btn btn-primary rounded-pill">@lang('messages.Create')</a>
+                                    <button data-bs-toggle="modal" data-bs-target="#ImportModal" title="ImportUsers"  class="btn btn-warning rounded-pill">Import</button>
                                     <a href="{{ route('user_export') }}" class="btn btn-info rounded-pill">@lang('messages.Export')</a>
                                 </div>
                             </div>
@@ -85,6 +86,41 @@
                                             </div><!-- /.modal-dialog -->
                                         </div>
                                     <!-- /.modal -->
+
+                                    <!-- Import Modal -->
+                                    <div class="modal fade" id="ImportModal" tabindex="-1" role="dialog"
+                                        aria-labelledby="ImportModalLabel"aria-hidden="true">
+                                        <div class="modal-dialog modal-sm">
+                                            <div class="modal-content">
+                                                <form method="POST" id="importForm" action="{{ route('users.import') }}" enctype="multipart/form-data">
+                                                    @csrf
+                                                    <div class="modal-body p-4">
+                                                        <div class="text-center">
+                                                            <h4 class="mt-2 text-warning" >Attention</h4>
+                                                            <h5 class="mt-3">
+                                                                Select an Excel file to import Users.
+                                                            </h5>
+                                                            <input type="file" class="form-control" name="file" required>
+                                                        </div>
+                                                    </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-secondary"
+                                                                data-bs-dismiss="modal">Cancel</button>
+                                                            <button type="submit" id="importButton" class="btn btn-primary"
+                                                                    >Import</button>
+                                                        </div>
+                                                        <script>
+                                                            document.getElementById('importForm').addEventListener('submit', function() {
+                                                                let button = document.getElementById('importButton');
+                                                                button.disabled = true;
+                                                                button.innerText = "Processing..."; // Optional: Change text to indicate processing
+                                                            });
+                                                        </script>
+                                                </form>
+                                            </div><!-- /.modal-content -->
+                                        </div><!-- /.modal-dialog -->
+                                    </div>
+                                     <!-- /.modal -->
 
                                 </div>
                             </div>

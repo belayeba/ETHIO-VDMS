@@ -76,8 +76,16 @@
                                     <!-- Buttons: Add and Submit (aligned to the right) -->
                                     <div class="d-flex justify-content-end mt-3">
                                         <button type="button" id="addItem" class="btn btn-primary rounded-pill">Attach Reciet</button>
-                                        <button type="submit" class="btn btn-info ms-3">Submit</button>
+                                        <button type="submit" id="fuelForm_submit" class="btn btn-info ms-3">Submit</button>
                                     </div>
+
+                                    <script>
+                                        document.getElementById('fuelForm').addEventListener('submit', function() {
+                                                let button = document.getElementById('fuelForm_submit');
+                                                button.disabled = true;
+                                                button.innerText = "Processing..."; 
+                                            });
+                                    </script>
                                 </form>
                                 
                                 <script>

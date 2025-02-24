@@ -2,7 +2,6 @@
 
 namespace Spatie\Permission\Models;
 
-use App\Models\PermissionGroup;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Spatie\Permission\Contracts\Role as RoleContract;
@@ -118,7 +117,7 @@ class Role extends Model implements RoleContract
     {
         $guardName = $guardName ?? Guard::getDefaultName(static::class);
 
-        $role = static::findByParam([(new static())->getKeyName() => $id, 'guard_name' => $guardName]);
+        $role = static::findByParam([(new static)->getKeyName() => $id, 'guard_name' => $guardName]);
 
         if (! $role) {
             throw RoleDoesNotExist::withId($id, $guardName);
@@ -186,12 +185,9 @@ class Role extends Model implements RoleContract
         $permission = $this->filterPermission($permission, $guardName);
 
         if (! $this->getGuardNames()->contains($permission->guard_name)) {
-            throw GuardDoesNotMatch::create($permission->guard_name, $guardName ?? $this->getGuardNames());
+            throw GuardDoesNotMatch::create($permission->guard_name, $guardName ? collect([$guardName]) : $this->getGuardNames());
         }
 
         return $this->permissions->contains($permission->getKeyName(), $permission->getKey());
-    }
-    public function PermissionGroup() {
-        return $this->belongsTo( PermissionGroup::class, 'group_id', 'id' );
     }
 }

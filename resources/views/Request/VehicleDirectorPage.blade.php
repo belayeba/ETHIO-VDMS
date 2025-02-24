@@ -37,14 +37,8 @@
                                             <a class="dropdown-item" onclick="updateState(3, 'DISPATCHED')">DISPATCHED</a>
                                             <a class="dropdown-item" onclick="updateState(4, 'DISPATCHED')">RETURNED</a>
                                         </div>
-                                    </div>
-                                    {{-- <button type="button" class="btn btn-secondary rounded-pill" autofocus onclick="updateState(1)">PENDING REQUEST</button>
-                                    <button type="button" class="btn btn-outline-secondary rounded-pill"  onclick="updateState(2)">ASSIGNED REQUEST</button> --}}
-                                <div class="toggle-tables">
-                                    {{-- <button type="button" class="btn btn-secondary rounded-pill" autofocus onclick="updateState(1)">PENDING REQUEST</button>
-                                    <button type="button" class="btn btn-outline-secondary rounded-pill"  onclick="updateState(2)">ASSIGNED REQUEST</button> --}}
-                                    <!-- Add more buttons for additional tables if needed -->
-                                </div></br>
+                                    </div></br></br>
+
                                 <table class="table dispatcher_datatable table-centered mb-0 table-nowrap" id="inline-editable">
                                     <thead>
                                         <tr>
@@ -71,7 +65,8 @@
                                                 <button type="button" class="btn-close" data-bs-dismiss="modal"
                                                     aria-label="Close"></button>
                                             </div>
-                                            <div class="modal-body">
+                                            <div class="modal-body" id="RequestContent">
+                                                <div class="col-md-6">
                                                         <dl class="row mb-0">
                                                             <dt class="col-sm-4">Field Letter:
                                                             </dt>
@@ -105,8 +100,9 @@
                                                 </dl>
                                             </div>
                                             <div class="modal-footer">
+                                                <button type="button" class="btn btn-primary" onclick="printModal()">Print</button>
                                                 <button type="button" class="btn btn-light"
-                                                    data-bs-dismiss="modal">Close</button>
+                                                    data-bs-dismiss="modal">@lang('messages.Close')</button>
                                             </div>
                                         </div>
                                     </div>
@@ -124,17 +120,33 @@
                                                         <h5 class="mb-0">Select Vehicle</h5>
                                                             <select name="assigned_vehicle_id" class="form-select" id="vehicleselection"  required>
                                                                 <option value="" selected>Select</option>
-                                                                @foreach ($vehicles as $item)
-                                                                    <option value="{{$item->vehicle_id}}">{{$item->plate_number}}</option>
-                                                                @endforeach
+                                                                    <optgroup label="None Occupied Vehicles">
+                                                                        @foreach ($vehicles as $item)
+                                                                            <option value="{{$item->vehicle_id}}">{{$item->plate_number}}</option>
+                                                                        @endforeach
+                                                                    </optgroup>
+                                                                    
+                                                                    <optgroup label="Occupied Vehicles">
+                                                                        @foreach ($AssignedVehicles as $item)
+                                                                            <option value="{{$item->vehicle_id}}">{{$item->plate_number}}</option>
+                                                                        @endforeach
+                                                                    </optgroup>
                                                             </select>
                                                         <input type="hidden" name="request_id" id="request_id">
                                                     </div>                                                               
                                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                             </div> <!-- end modal header -->
-                                            <div class="modal-body">Select a Vehicle and check Inspection, Before assigning.
-                                                <div class="table-responsive">
-                                                    <div class="row mt-3" id="inspectionCardsContainer" class="table table-striped"> 
+                                            <div class="modal-body">
+                                                {{-- <div class="form-check form-check-inline">
+                                                    <input type="checkbox" class="form-check-input"
+                                                        name="package" value="1">
+                                                    <label class="form-check-label" style="font-size: 16px">Assign A New Vehicle</label>
+                                                </div></br></br> --}}
+                                                <div>
+                                                    Select a Vehicle and check Inspection, Before assigning.
+                                                    <div class="table-responsive">
+                                                        <div class="row mt-3" id="inspectionCardsContainer" class="table table-striped"> 
+                                                        </div>
                                                     </div>
                                                 </div>
                                                 
@@ -148,7 +160,7 @@
                                 </div> <!-- end modal dialog-->
                             </div>
                              
-                            <!-- this is for the assign  modal -->
+                            <!-- this is for the reject  modal -->
                             <div class="modal fade" id="staticreject" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                                 <div class="modal-dialog">
                                     <div class="modal-content">
@@ -169,14 +181,14 @@
                                                 </div>
                                             </div>
                                             <div class="modal-footer">
-                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">@lang('messages.Close')</button>
                                                 <button type="submit" class="btn btn-danger">Reject</button>
                                             </div> <!-- end modal footer -->
                                         </form>                                                                    
                                     </div> <!-- end modal content-->
                                 </div> <!-- end modal dialog-->
                             </div>
-                            <!-- end assign modal -->
+                            <!-- end reject modal -->
 
                             {{-- dispatch modal for the request --}}
                             <div class="modal fade" id="staticdispatch" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
@@ -227,7 +239,7 @@
                                                 <input type="hidden" name="request_id" id="return_id">
                                             </div>
                                             <div class="modal-footer">
-                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">@lang('messages.Close')</button>
                                                 <button type="submit" class="btn btn-warning">Return</button>
                                             </div> <!-- end modal footer -->
                                         </form>                                                                    
@@ -301,12 +313,26 @@
             ]
         });
 
+        function printModal() {
+                var Content = document.getElementById("RequestContent").innerHTML;
+
+                var printWindow = window.open("", "", "width=800,height=600");
+                printWindow.document.write('<html><head><title>Request Details</title>');
+                printWindow.document.write('<style>body { font-family: Arial, sans-serif; } dt { font-weight: bold; }</style>');
+                printWindow.document.write('</head><body>');
+                printWindow.document.write(Content);
+                printWindow.document.write('</body></html>');
+
+                printWindow.document.close();
+                printWindow.print();
+        }
+
 
         document.getElementById('assignBtn').addEventListener('click', function() {
            
             var selectedCarId = document.getElementById('vehicleselection').value;
-            console.log(selectedCarId);
             // Perform an Ajax request to fetch data based on the selected car ID
+            
             $.ajax({
                 url: "{{ route('inspection.ByVehicle') }}",
                 type: 'GET',
@@ -478,43 +504,43 @@
                 const messages = [
                     {
                         condition: button.data('dir_approved_by') && !button.data('director_reject_reason'),
-                        message: '<span style="color: green;">Approved by Director</span>'
+                        message: '<span style="color: green;">'+ button.data('dir_approved_by')+' (Director)'+'</span>'
                     },
                     {
                         condition: button.data('director_reject_reason') && button.data('dir_approved_by'),
-                        message: '<span style="color: red;">Rejected by Director</span>'
+                        message: '<span style="color: red;">Rejected By '+ button.data('dir_approved_by')+'(Director)</span>'
                     },
                     {
                         condition: button.data('div_approved_by') && !button.data('cluster_director_reject_reason'),
-                        message: '<span style="color: green;">Approved by Division-Director</span>'
+                        message: '<span style="color: green;">' + button.data('div_approved_by') + ' (Division)' +  '</span>'
                     },
                     {
                         condition: button.data('cluster_director_reject_reason') && button.data('div_approved_by'),
-                        message: '<span style="color: red;">Rejected by Division-Director</span>'
+                        message: '<span style="color: red;">Rejected by ' +button.data('div_approved_by') +' (Division)' +  '</span>'
                     },
                     {
                         condition: button.data('hr_div_approved_by') && !button.data('hr_director_reject_reason'),
-                        message: '<span style="color: green;">Approved by HR-Director</span>'
+                        message: '<span style="color: green;">' + button.data('hr_div_approved_by') + ' (Division)</span>'
                     },
                     {
                         condition: button.data('hr_director_reject_reason') && button.data('hr_div_approved_by'),
-                        message: '<span style="color: red;">Rejected by HR-Director</span>'
+                        message: '<span style="color: red;">Rejected by '+ button.data('hr_div_approved_by') + ' ( Division)</span>'
                     },
                     {
                         condition: button.data('transport_director_id') && !button.data('vec_director_reject_reason'),
-                        message: '<span style="color: green;">Approved by Dispatcher-Director</span>',
+                        message: '<span style="color: green;">'+button.data('transport_director_id')+' (Transport_Dir)</span>',
                     },
                     {
                         condition: button.data('vec_director_reject_reason') && button.data('transport_director_id'),
-                        message: '<span style="color: red;">Rejected by Dispatcher-Director</span>',
+                        message: '<span style="color: red;">Rejected by '+button.data('transport_director_id')+' ( Transport_Dir)</span>',
                     },
                     {
                         condition: button.data('assigned_by') && !button.data('assigned_by_reject_reason'),
-                        message: '<span style="color: green;">Approved by Dispatcher</span>'
+                        message: '<span style="color: green;">'+ button.data('assigned_by') +' (Dispatcher)</span>'
                     },
                     {
                         condition: button.data('assigned_by_reject_reason') && button.data('assigned_by'),
-                        message: '<span style="color: red;">Rejected by Dispatcher</span>'
+                        message: '<span style="color: red;">Rejected by '+ button.data('assigned_by') + ' (Dispatcher)</span>'
                     },
                     {
                         condition: button.data('vehicle_id'),

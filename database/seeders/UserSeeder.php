@@ -17,13 +17,12 @@ class UserSeeder extends Seeder
     public function run(): void
     {
         //
-        User::create([
+        $adminUser = User::create([
             'id' => Str::uuid(),
             'first_name' => 'Admin User',
             'email' => 'other@gmail.com',
-            'password' => Hash::make('12345678'),
-            'last_name' => 'testlast',
-            'username' => 'superUser'
+            'password' => Hash::make('Fleet@Aii#1234'),
+            'last_name' => 'testlast'
         ]);
 
         $adminRole = Role::where('name', 'Admin')->first(); 

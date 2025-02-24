@@ -42,7 +42,7 @@
                                 <h4 class="header-title">Request Permanent Vehicle</h4>
                             </div>
                             <div class="card-body">
-                                <form action="{{ route('vec_perm_request_post') }}" method="post" enctype="multipart/form-data">
+                                <form action="{{ route('vec_perm_request_post') }}" id="permanent_request_form" method="post" enctype="multipart/form-data">
                                     @csrf
 
                                     <div id="progressbarwizard">
@@ -51,7 +51,7 @@
                                                 <a href="#account-2" data-bs-toggle="tab" data-toggle="tab"
                                                     class="nav-link rounded-0 py-2">
                                                     <i class="ri-car-fill fw-normal fs-20 align-middle me-1"></i>
-                                                    <span class="d-none d-sm-inline">Request</span>
+                                                    <span class="d-none d-sm-inline">@lang('messages.Request')</span>
                                                 </a>
                                             </li>
                                         </ul>
@@ -67,26 +67,26 @@
                                                 <div class="row">
                                                     <div class="position-relative mb-3">
                                                         <div class="mb-6 position-relative" id="datepicker1">
-                                                            <label class="form-label">Reason</label>
+                                                            <label class="form-label">@lang('messages.Reason')</label>
                                                             <input type="text" name="purpose" class="form-control"
                                                                 placeholder="Enter purpose of Request">
                                                         </div>
                                                     </div>
                                                     <div class="mb-3">
-                                                        <label for="nameInput" class="form-label">Position <strong class="text-danger">*</strong></label>
+                                                        <label for="nameInput" class="form-label">@lang('messages.position') <strong class="text-danger">*</strong></label>
                                                         <input type="text" class="form-control" id="position" name="position" placeholder="Enter Your Position">
                                                     </div>
                                                     <div class="position-relative mb-3">
-                                                        <label class="form-label">Upload Position Letter</label>
+                                                        <label class="form-label">@lang('messages.Upload Position Letter')</label>
                                                         <input name="position_letter" class="form-control" type="file">
                                                     </div>
                                                     <div class="mb-3">
-                                                        <label for="nameInput" class="form-label">License Number <strong class="text-danger">*</strong></label>
+                                                        <label for="nameInput" class="form-label">@lang('messages.License Number')<strong class="text-danger">*</strong></label>
                                                         <input type="text" class="form-control" id="license_number" name="license_number" placeholder="Enter License Number">
                                                     </div>
                                                     <div class="position-relative mb-3">
                                                         <div class="mb-6 position-relative" id="datepicker1">
-                                                            <label class="form-label">License expiry date </label>
+                                                            <label class="form-label">@lang('messages.License expiry date')</label>
                                                             <input type="text" class="form-control" name="expiry_date"
                                                                 placeholder="Enter license expiry date" id="expirydate">
                                                         </div>
@@ -99,20 +99,27 @@
                                                         </script>
                                                     </div>
                                                     <div class="position-relative mb-3">
-                                                        <label class="form-label">Upload Driving License</label>
+                                                        <label class="form-label">@lang('messages.Upload Driving License')</label>
                                                         <input name="Driving_license" class="form-control" type="file">
                                                     </div>
                                                 </div>
 
                                                 <ul class="list-inline wizard mb-0">
                                                     <li class="next list-inline-item float-end">
-                                                        <button type="submit" class="btn btn-info">Submit</button>
+                                                        <button type="submit" class="btn btn-info">@lang('messages.Submit')</button>
                                                     </li>
                                                 </ul>
 
                                             </div>
                                         </div>
                                     </div>
+                                    <script>
+                                        document.getElementById('permanent_request_form').addEventListener('submit', function() {
+                                            let button = document.getElementById('permanent_request_form_submit');
+                                            button.disabled = true;
+                                            button.innerText = "Processing..."; 
+                                        });
+                                    </script>
 
                                 </form>
 
@@ -128,11 +135,11 @@
                                     <table class="table Permanent_datatable table-striped dt-responsive nowrap w-100">
                                         <thead>
                                             <tr>
-                                                <th>Roll.no</th>
-                                                <th>Date Requested</th>
-                                                <th>status</th>
-                                                <th>Vehicle</th>
-                                                <th>Actions</th>
+                                                <th>{{ __('messages.Roll No.') }}</th>
+                                                <th>{{ __('messages.Requested Date') }}</th>
+                                                <th>{{ __('messages.Status') }}</th>
+                                                <th>{{ __('messages.Vehicle') }}</th>
+                                                <th>{{ __('messages.Action') }}</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -153,6 +160,11 @@
                                             </div>
                                             <div class="modal-body">
                                                 <div class="col-md-6">
+                                                    <dl class="row mb-1">
+                                                        <dt class="col-sm-5">Position:</dt>
+                                                        <dd class="col-sm-7" id="ShowPosition"></dd>
+                                                    </dl>
+
                                                     <dl class="row mb-1">
                                                         <dt class="col-sm-5">Request reason:</dt>
                                                         <dd class="col-sm-7" id="reason"></dd>
@@ -575,10 +587,11 @@
                     $(document).on('click', '.show-btn', function() {
                         RejectedId = $(this).data('id');
                         Reason = $(this).data('reason');
+                        Position = $(this).data('position');
                         PositionLetter = $(this).data('position_letter');
                         DrivingLicense = $(this).data('driving_license');
 
-                        // console.log(PositionLetter, DrivingLicense)
+                        console.log(Position);
 
                         // Construct file paths for the iframes
                         const positionLetterPath = '/storage/PermanentVehicle/PositionLetter/' + PositionLetter;
@@ -586,6 +599,7 @@
 
                         // Populate the iframes with the file paths
                         $('#reason').text(Reason);
+                        $('#ShowPosition').text(Position);
                         $('#image1').attr('src', positionLetterPath);
                         $('#image2').attr('src', drivingLicensePath);
                         $('#Reject_request_id').val(RejectedId);
