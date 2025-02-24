@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'Map'=> 'Map',
+    'Map' => 'Map',
     'AII Role' => 'AII Role',
     'My Account' => 'My Account',
     'Logout' => 'Logout',
@@ -12,7 +12,7 @@ return [
     'Fuel' => 'Fuel',
     'Price' => 'Price',
     'Date' => 'Date',
-    'Map Display'=> 'Map Display',
+    'Map Display' => 'Map Display',
     'Total Vehicle' => 'Total Vehicle',
     'Temporary Request' => 'Temporary Request',
     'Attachment' => 'Attachment',
@@ -149,6 +149,9 @@ return [
     'Return date and Time' => 'Return date and Time',
     'Location From and To' => 'Location From and To',
     'Passengers' => 'Passengers',
+    'Request Vehicle Service' => 'Request Vehicle Service',
+    'Close' => 'Close',
+    'Print' => 'Print',
     'Plate Number' => 'Plate Number',
     'Next' => 'Next',
     'Vehicle Category' => 'Vehicle Category',
@@ -168,8 +171,8 @@ return [
     'Organization'  => 'Organization',
     'Cluster'   => 'Cluster',
     'Department' => 'Department',
-    'New Cluster'=> 'New Cluster',
-    'Cluster List'=> 'Cluster List',
+    'New Cluster' => 'New Cluster',
+    'Cluster List' => 'Cluster List',
     'Role Table'  => 'Role Table',
     'Role' => 'Role',
     'Permission'  => 'Permission',
@@ -307,5 +310,3 @@ return [
     'Select Driver' => 'Select Driver',
     'Rental Type' => 'Rental Type',
 ];
-
-?>

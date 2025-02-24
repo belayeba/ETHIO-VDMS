@@ -38,7 +38,7 @@
                 <div class="col-12 col-lg-5">
                     <div class="card">
                         <div class="card-header">
-                            <h4 class="header-title">Request Vehicle Service</h4>
+                            <h4 class="header-title">@lang('messages.Request Vehicle Service')</h4>
                         </div>
                         <div class="card-body">
                             <!-- Form content -->
@@ -452,9 +452,9 @@
                                             </dl>
                                         </div>
                                         <div class="modal-footer">
-                                            <button type="button" class="btn btn-primary" onclick="printModal()">Print</button>
+                                            <button type="button" class="btn btn-primary" onclick="printModal()">@lang('messages.Print')</button>
                                             <button type="button" class="btn btn-light"
-                                                data-bs-dismiss="modal">Close</button>
+                                                data-bs-dismiss="modal">@lang('messages.Close')</button>
                                         </div>
                                     </div>
                                 </div>
