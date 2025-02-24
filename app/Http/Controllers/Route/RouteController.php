@@ -34,7 +34,7 @@ class RouteController extends Controller
     public function own_route()
     {
         $id = Auth::id();
-        $Requests = EmployeeChangeLocation::where('registered_by', auth()->id())->with('changedBy')->get();
+        $Requests = EmployeeChangeLocation::where('registered_by',  $id)->with('changedBy')->get();
         $get_route_user =  RouteUser::where('employee_id', $id)->first();
         $route = [];
         $routeUser = [];

@@ -52,6 +52,12 @@
                                             </div>
                                             <div class="modal-body">
                                                 <dl class="row mb-0">
+                                                   <dl class="row mb-0">
+                                                        <dt class="col-sm-4">Field Letter:
+                                                        </dt>
+                                                        <dd class="col-sm-8" data-field="Fieldletter">
+                                                        </dd>
+                                                    </dl>
                                                     <dt class="col-sm-5">Request reason</dt>
                                                     <dd class="col-sm-7" data-field="purpose"></dd>
 
@@ -211,7 +217,18 @@
         $('#standard-modal').on('show.bs.modal', function(event) {
             var button = $(event.relatedTarget); // Button that triggered the modal
             var modal = $(this); // The modal
-
+            var letterFile = button.data('field_letter');//$(this).data('field_letter');
+            var letterField = modal.find('[data-field="Fieldletter"]');
+            if (letterFile) 
+                    {
+                        var fieldLink = `<a href="app/public/TemporaryVehicle/FieldLetters/${letterFile}" target="_blank">View Letter</a>`;
+                        letterField.html(fieldLink);
+                        //document.getElementById('letter_div').style.display = 'inline-block';
+                    } 
+                else 
+                    {
+                        letterField.text('No file available');
+                    }
             // Populate basic request details
             modal.find('.modal-title').text('Request Details');
             modal.find('[data-field="purpose"]').text(button.data('purpose'));

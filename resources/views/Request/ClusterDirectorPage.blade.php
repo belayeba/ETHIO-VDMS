@@ -231,7 +231,6 @@
                     var letterField = modal.find('[data-field="Fieldletter"]');
                     if (letterFile) 
                             {
-                                
                                 var fieldLink = `<a href="app/public/TemporaryVehicle/FieldLetters/${letterFile}" target="_blank">View Letter</a>`;
                                 letterField.html(fieldLink);
                                 //document.getElementById('letter_div').style.display = 'inline-block';

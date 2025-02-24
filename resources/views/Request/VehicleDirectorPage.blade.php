@@ -72,14 +72,12 @@
                                                     aria-label="Close"></button>
                                             </div>
                                             <div class="modal-body">
-                                                <div class="col-md-6">
                                                         <dl class="row mb-0">
                                                             <dt class="col-sm-4">Field Letter:
                                                             </dt>
                                                             <dd class="col-sm-8" data-field="Fieldletter">
                                                             </dd>
                                                         </dl>
-                                                </div>
                                                 <dl class="row mb-0">
                                                     <dt class="col-sm-5">Request reason</dt>
                                                     <dd class="col-sm-7" data-field="purpose"></dd>
@@ -443,7 +441,7 @@
                     {
                         letterField.text('No file available');
                     }
-            // Populate basic request details
+            //   Populate basic request details
             modal.find('.modal-title').text('Request Details');
             modal.find('[data-field="purpose"]').text(button.data('purpose'));
             modal.find('[data-field="vehicle_type"]').text(button.data('vehicle_type'));

@@ -1347,7 +1347,7 @@ class VehicleTemporaryRequestController extends Controller
                             }
                         $inspection = InspectionModel::select('inspection_id')->where('vehicle_id',$assigned_vehicle)->latest()->first();
                         $inspection_id = null;
-                        if(!$inspection)
+                        if($inspection)
                             {
                                 $inspection_id = $inspection->inspection_id;
                             }
@@ -1502,7 +1502,11 @@ class VehicleTemporaryRequestController extends Controller
                           }
                         $vehicle = VehiclesModel::findOrFail($Vehicle_Request->vehicle_id);
                         $inspection = InspectionModel::where('vehicle_id', $Vehicle_Request->vehicle_id)->latest()->first();
-                        $latest_inspection = $inspection->inspection_id;
+                        $latest_inspection = null;
+                        if($inspection)
+                          {
+                            $latest_inspection = $inspection->inspection_id;
+                          }
                         $Vehicle_Request->taken_by = $user_id;
                         $Vehicle_Request->end_km = $end_km;
                         $vehicle->status = true;
@@ -1579,5 +1583,9 @@ class VehicleTemporaryRequestController extends Controller
                                  "Sorry, Something went wrong",
                             );
                     }
+            }
+        public function Report()
+            {
+                $Reports = VehicleTemporaryRequestModel:: select('requested_by_id','start_km','end_km','end_locations','created_at')->whereNotNull('end_km')->get();
             }
     }
