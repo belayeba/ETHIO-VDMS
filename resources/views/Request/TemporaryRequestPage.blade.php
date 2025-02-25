@@ -38,7 +38,7 @@
                 <div class="col-12 col-lg-5">
                     <div class="card">
                         <div class="card-header">
-                            <h4 class="header-title">Request Vehicle Service</h4>
+                            <h4 class="header-title">@lang('messages.Request Vehicle Service')</h4>
                         </div>
                         <div class="card-body">
                             <!-- Form content -->
@@ -298,8 +298,7 @@
                                                     <div class="row">
                                                         <div class="col-lg-6">
                                                             <div class="mb-3 position-relative" id="datepicker1">
-                                                                <label for="itemName" class="form-label">Item
-                                                                    Name:</label>
+                                                                <label for="itemName" class="form-label">@lang('messages.Item Name')</label>
                                                                 <input type="text" class="form-control"
                                                                     placeholder="Add Item" id="itemName">
                                                             </div>
@@ -327,10 +326,10 @@
                                                 <ul class="pager wizard mb-0 list-inline mt-1">
                                                     <li class="previous list-inline-item">
                                                         <button type="button" class="btn btn-light"><i
-                                                                class="ri-arrow-left-line me-1"></i> Back</button>
+                                                                class="ri-arrow-left-line me-1"></i> @lang('messages.Back')</button>
                                                     </li>
                                                     <li class="next list-inline-item float-end">
-                                                        <button type="submit" id="temporary_request_form_submit" class="btn btn-info">Submit</button>
+                                                        <button type="submit" id="temporary_request_form_submit" class="btn btn-info">@lang('messages.Submit')</button>
                                                     </li>
                                                 </ul>
                                             </div>
@@ -447,7 +446,7 @@
 
                                                 <dd class="col-sm-7" data-field="passengers"></dd>
 
-                                                <dt class="col-sm-5">Materials</dt>
+                                                <dt class="col-sm-5">@lang('messages.Materials')</dt>
                                                 <dd class="col-sm-7" data-field="materials"></dd>
 
                                                 <dt class="col-sm-5">Progress</dt>
@@ -456,7 +455,7 @@
                                             </dl>
                                         </div>
                                         <div class="modal-footer">
-                                            <button type="button" class="btn btn-primary" onclick="printModal()">Print</button>
+                                            <button type="button" class="btn btn-primary" onclick="printModal()">@lang('messages.Print')</button>
                                             <button type="button" class="btn btn-light"
                                                 data-bs-dismiss="modal">@lang('messages.Close')</button>
                                         </div>
@@ -476,7 +475,7 @@
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="staticBackdropLabel">Reject reason
+                            <h5 class="modal-title" id="staticBackdropLabel">@lang('messages.Reject reason')
                             </h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal"
                                 aria-label="Close"></button>
@@ -492,7 +491,7 @@
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary"
-                                data-bs-dismiss="modal">Close</button>
+                                data-bs-dismiss="modal">@lang('messages.Close')</button>
                         </div> <!-- end modal footer -->
                     </div> <!-- end modal content-->
                 </div> <!-- end modal dialog-->

@@ -104,43 +104,44 @@ class DriverRegistrationController extends Controller
 
     public function update(Request $request, $id)
     {
-        // dd($request);
         try {
             $driver = DriversModel::findOrFail($id);
 
-            $validator = Validator::make($request->all(), [
-                // 'driver_id' => 'required|uuid|exists:drivers,driver_id',
-                // 'license_number' => 'required|string|max:255',
-                'license_expiry_date' => 'required|date|after:today',
-                // 'license_file' => 'sometimes|required|file|mimes:pdf,jpg,jpeg',
-                // 'notes' => 'nullable|string',
-            ]);
-            dd($validator->fails());
+            $rules = [
+                'driver_id' => 'uuid|exists:drivers,driver_id',
+                'license_number' => 'string|max:255',
+                'license_expiry_date' => 'date|after:today',
+                'license_file' => 'file|mimes:pdf,jpg,jpeg',
+                'notes' => 'nullable|string',
+            ];
+
+            $validator = Validator::make($request->all(), $rules);
 
             if ($validator->fails()) {
-                return redirect()->back()->with('error_message', 'All fields are required',);
+                return redirect()->back()->with('error_message', 'Invalid input.');
             }
 
-            $file = $request->file('license_file');
-            dd($file);
-            $storagePath = storage_path('app/public/Drivers');
-            if (!file_exists($storagePath)) {
-                mkdir($storagePath, 0755, true);
+            $updateData = array_filter($request->only(['driver_id', 'license_number', 'license_expiry_date', 'notes']));
+
+            if ($request->hasFile('license_file')) {
+                $file = $request->file('license_file');
+
+                $storagePath = storage_path('app/public/Drivers');
+                if (!file_exists($storagePath)) {
+                    mkdir($storagePath, 0755, true);
+                }
+
+                $license = time() . '_' . $file->getClientOriginalName();
+                $file->move($storagePath, $license);
+
+                $updateData['license_file'] = $license;
             }
-            $license = time() . '_' . $file->getClientOriginalName();
-            dd($license);
-            $file->move($storagePath, $license);
-            $driver->update([
-                'driver_id' => $request->input('driver_id'),
-                'license_number' => $request->input('license_number'),
-                'license_expiry_date' => $request->input('license_expiry_date'),
-                'status' => $request->input('status', 'active'),
-                'license_file' => $license,
-                'notes' => $request->input('notes'),
-            ]);
-            return redirect()->back()->with('success_message', 'Driver updated successfully.',);
+
+            $driver->update($updateData);
+
+            return redirect()->back()->with('success_message', 'Driver updated successfully.');
         } catch (Exception $e) {
-            return redirect()->back()->with('error_message', 'Driver not found',);
+            return redirect()->back()->with('error_message', 'Driver not found.');
         }
     }
 

@@ -38,11 +38,11 @@
                                         <table class="table dispatcher_datatable table-centered mb-0 table-nowrap" id="inline-editable">
                                             <thead>
                                                 <tr>
-                                                    <th>#</th>
-                                                    <th>Requested By</th>
-                                                    <th>Given Date</th>
-                                                    <th>Status</th>
-                                                    <th>Action</th>
+                                                    <th>{{ __('messages.Roll No.') }}</th>
+                                                    <th>{{ __('messages.Requested By') }}</th>
+                                                    <th>{{ __('messages.Reason') }}</th>
+                                                    <th>{{ __('messages.Date') }}</th>
+                                                    <th>{{ __('messages.Action') }}</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -76,12 +76,12 @@
                             <div class="modal-body">
                                 <div class="col-md-6">
                                     <dl class="row mb-1">
-                                        <dt class="col-sm-5">Position:</dt>
+                                        <dt class="col-sm-5">@lang('messages.position')</dt>
                                         <dd class="col-sm-7" id="ShowPosition"></dd>
                                     </dl>
 
                                     <dl class="row mb-1">
-                                        <dt class="col-sm-5">Request reason:</dt>
+                                        <dt class="col-sm-5">@lang('messages.Request reason')</dt>
                                         <dd class="col-sm-7" id="reason"></dd>
                                     </dl>
                                 </div></br></br>
@@ -90,7 +90,7 @@
                                     <div class="col-md-6">
                                         <div class="card">
                                             <div class="card-header">
-                                                <h5 class="card-title">Position Letter</h5>
+                                                <h5 class="card-title">@lang('messages.Position Letter')</h5>
                                             </div>
                                             <div class="card-body">
                                             <iframe id="image1" class="img-fluid" style="width: 100%; height: 100%;"></iframe>
@@ -102,7 +102,7 @@
                                     <div class="col-md-6">
                                         <div class="card">
                                             <div class="card-header">
-                                                <h5 class="card-title">Driving License</h5>
+                                                <h5 class="card-title">@lang('messages.Driving License')</h5>
                                             </div>
                                             <div class="card-body">
                                                 <iframe id="image2" src="" alt="Driving License" class="img-fluid"></iframe>
@@ -112,7 +112,7 @@
                                 </div>
                             </div>
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
+                                <button type="button" class="btn btn-light" data-bs-dismiss="modal">@lang('messages.Close')</button>
                             </div>
                         </div>
                     </div>
@@ -135,13 +135,13 @@
                                         <div class="form-floating">
                                         <input type="hidden" name="request_id" id="reject_request_id">
                                         <textarea class="form-control" name="reason" style="height: 60px;" required></textarea>
-                                        <label for="floatingTextarea">Reason</label>
+                                        <label for="floatingTextarea">@lang('messages.Reason')</label>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                    <button type="submit" class="btn btn-danger">Reject</button>
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">@lang('messages.Close')</button>
+                                    <button type="submit" class="btn btn-danger">@lang('messages.Reject')</button>
                                 </div> <!-- end modal footer -->
                             </form>                                                                    
                         </div> <!-- end modal content-->
@@ -157,7 +157,7 @@
                                 @csrf   
                                 <div class="modal-header">
                                         <div class="col-lg-6">
-                                            <h5 class="mb-0">Select Vehicle</h5>
+                                            <h5 class="mb-0">@lang('messages.Select Vehicle')</h5>
                                                 <select name="vehicle_id" class="form-select" id="vehicleselection"  required>
                                                     <option value="" selected>Select</option>
                                                     @foreach ($Vehicle as $item)
@@ -168,7 +168,7 @@
                                         </div>                                                               
                                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                 </div> <!-- end modal header -->
-                                <div class="modal-body">Select a Vehicle and check Inspection, Before assigning.
+                                <div class="modal-body">@lang('messages.Select a Vehicle and check Inspection, Before assigning.')
                                     <div class="table-responsive">
                                         <div class="row mt-3" id="inspectionCardsContainer" class="table table-striped"> 
                                         </div>
@@ -176,8 +176,8 @@
                                     
                                 </div>
                                 <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary"  id="assignBtn">Get Inspection</button>
-                                    <button type="submit" class="btn btn-primary">Assign</button>
+                                    <button type="button" class="btn btn-secondary"  id="assignBtn">@lang('messages.Get Inspection')</button>
+                                    <button type="submit" class="btn btn-primary">@lang('messages.Assign')</button>
                                 </div> <!-- end modal footer -->
                             </form>                                                                    
                         </div> <!-- end modal content-->
