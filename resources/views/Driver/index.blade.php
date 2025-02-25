@@ -152,7 +152,7 @@
                                                                 <button type="button" class="btn btn-secondary rounded-pill" title="Edit Driver"
                                                                     data-bs-toggle="modal"
                                                                     data-bs-target="#driver_modal_{{$loop->index}}"
-                                                                    data-driver-name="{{ $item->user->username }}"
+                                                                    data-driver-name="{{ $driver->first_name }} {{ $driver->last_name }}"
                                                                     data-driver-phone="{{ $item->user->phone_number }}"
                                                                     data-license="{{ $item->license_file }}"
                                                                     data-licenseNumber="{{ $item->license_number }}"
@@ -237,7 +237,7 @@
                                                     <div class="modal-body">
                                                         <div class="mb-3">
                                                             <label class="form-label">@lang('messages.Name'):</label>
-                                                            <p>{{ $item->user->username }}</p>
+                                                            <p>{{ $item->user->first_name }} {{ $item->user->middle_name }}</p>
                                                         </div>
                                                         <div class="mb-3">
                                                             <label class="form-label">@lang('messages.Phone Number'):</label>
