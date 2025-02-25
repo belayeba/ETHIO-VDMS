@@ -456,7 +456,7 @@ class MentenanceController extends Controller
            return $elapsedTime;
     } 
     public function end_maintenance(Request $request)
-    {
+    {dd($request);
          $validator = Validator::make($request->all(), [
              'maintenance_id' => 'required|exists:maintenances,maintenance_id',
              'maintenance_records' => 'required|array|min:1',
@@ -502,7 +502,7 @@ class MentenanceController extends Controller
                    $vehicle_id = $maintenance_id -> vehicle_id;
 //   dd($vehicle_id);
                    foreach ($request->maintenance_records as $record) {
-                    $maintained_vehicle = Maintained_vehicle::where('maintenance_id',$id)->first();
+                   // $maintained_vehicle = Maintained_vehicle::where('maintenance_id',$id)->first();
                     $timeElapsed = $this->getElapsedTime($record['maintenance_start_date'], $record['maintenance_end_date']);
                      $maintenance_record = new Maintenance_record;
                      $maintenance_record->maintenance_start_date =  $record['maintenance_start_date'];
