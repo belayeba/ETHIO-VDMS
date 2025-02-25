@@ -422,9 +422,6 @@
                                 </li>
                                 @endcan()
                                 @can('Maintance Request')
-                                <li>
-                                    <a href="{{ route('dailyreport.vehicleReport') }}">@lang('messages.Vehicle')</a>
-                                </li>
                                 @endcan()
                             </ul>
                         </div>
