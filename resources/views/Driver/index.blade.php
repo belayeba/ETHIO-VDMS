@@ -252,7 +252,7 @@
                                                             <p>{{ $item->license_expiry_date }}</p>
                                                         </div>
                                                         <div class="mb-3">
-                                                            <label class="form-label">License File:</label>
+                                                            <label class="form-label">@lang('messages.Driving License')</label>
                                                             @if($item->license_file)
                                                             <p><a href="{{ Storage::url('Drivers/' . $item->license_file) }}" target="_blank">View File</a></p>
                                                             @else
@@ -264,7 +264,7 @@
                                                             <p>{{ $item->notes }}</p>
                                                         </div>
                                                         <div class="modal-footer">
-                                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">@lang('messages.Close')</button>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -285,15 +285,12 @@
                                                                 <i class="ri-alert-line h1 text-warning"></i>
                                                                 <h4 class="mt-2">Warning</h4>
                                                                 <h5 class="mt-3">
-                                                                    Are you sure you want to delete this driver?</br> This action
-                                                                    cannot be
-                                                                    undone.
+                                                                    @lang('messages.Are you sure you want to accept this request?')</br> @lang('messages.This action cannot be undone.')
                                                                 </h5>
                                                                 <button type="button" class="btn btn-secondary"
-                                                                    data-bs-dismiss="modal">Cancel</button>
+                                                                    data-bs-dismiss="modal">@lang('messages.Cancel')</button>
                                                                 <button type="submit" class="btn btn-primary"
-                                                                    id="confirmDelete">Yes,
-                                                                    Accept</button>
+                                                                    id="confirmDelete">@lang('messages.Yes, Accept')</button>
                                                             </div>
                                                         </div>
                                                     </form>
