@@ -404,7 +404,7 @@
                                                         document.getElementById('add-spare').addEventListener('click', function () {
                                                             const container = document.getElementById('replaced-container');
                                                             const newSpare = `
-                                                                <div class="spare col-md-3">
+                                                                <div class="spare row align-items-center g-3">
 
                                                                     <div class="col-md-3">
                                                                     <label>Spare part</label>

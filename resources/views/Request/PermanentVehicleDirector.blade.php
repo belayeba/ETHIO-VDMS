@@ -40,8 +40,8 @@
                                                 <tr>
                                                     <th>#</th>
                                                     <th>Requested By</th>
-                                                    <th>Reason</th>
-                                                    <th>Date</th>
+                                                    <th>Given Date</th>
+                                                    <th>Status</th>
                                                     <th>Action</th>
                                                 </tr>
                                             </thead>

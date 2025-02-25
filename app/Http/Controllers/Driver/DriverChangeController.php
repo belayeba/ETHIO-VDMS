@@ -147,7 +147,7 @@ class DriverChangeController extends Controller
         $get_request = DriverDriverChangeModel::where('new_driver_id', $driver_id)->latest()->get();
         // dd($get_request);
         // return response()->json(['my_request'=>$get_request]);
-        return view('Driver.acceptance', compact('get_request'));
+        return view('Driver.Acceptance', compact('get_request'));
     }
     public function driver_accept(Request $request)
     {
