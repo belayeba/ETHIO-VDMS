@@ -161,12 +161,12 @@
                                             <div class="modal-body">
                                                 <div class="col-md-6">
                                                     <dl class="row mb-1">
-                                                        <dt class="col-sm-5">Position:</dt>
+                                                        <dt class="col-sm-5">@lang('messages.position')</dt>
                                                         <dd class="col-sm-7" id="ShowPosition"></dd>
                                                     </dl>
 
                                                     <dl class="row mb-1">
-                                                        <dt class="col-sm-5">Request reason:</dt>
+                                                        <dt class="col-sm-5">@lang('messages.Request reason'):</dt>
                                                         <dd class="col-sm-7" id="reason"></dd>
                                                     </dl>
                                                 </div></br></br>
@@ -175,7 +175,7 @@
                                                     <div class="col-md-6">
                                                         <div class="card">
                                                             <div class="card-header">
-                                                                <h5 class="card-title">Position Letter</h5>
+                                                                <h5 class="card-title">@lang('messages.Position Letter')</h5>
                                                             </div>
                                                             <div class="card-body">
                                                             <iframe id="image1" class="img-fluid" style="width: 100%; height: 100%;"></iframe>
@@ -187,7 +187,7 @@
                                                     <div class="col-md-6">
                                                         <div class="card">
                                                             <div class="card-header">
-                                                                <h5 class="card-title">Driving License</h5>
+                                                                <h5 class="card-title">@lang('messages.Driving License')</h5>
                                                             </div>
                                                             <div class="card-body">
                                                                 <iframe id="image2" src="" alt="Driving License" class="img-fluid"></iframe>
@@ -197,7 +197,7 @@
                                                 </div>
                                             </div>
                                             <div class="modal-footer">
-                                                <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
+                                                <button type="button" class="btn btn-light" data-bs-dismiss="modal">@lang('messages.Close')</button>
                                             </div>
                                         </div>
                                     </div>
@@ -215,16 +215,14 @@
                                                 <div class="modal-body p-4">
                                                     <div class="text-center">
                                                         <i class="ri-alert-line h1 text-danger"></i>
-                                                        <h4 class="mt-2">Warning</h4>
+                                                        <h4 class="mt-2">@lang('messages.Warning')</h4>
                                                         <h5 class="mt-3">
-                                                            Are you sure you want to delete this Request? This action cannot be
-                                                            undone.
+                                                            @lang('messages.Are you sure you want to accept this request?')</br> @lang('messages.This action cannot be undone.')
                                                         </h5>
                                                         <button type="button" class="btn btn-secondary"
-                                                            data-bs-dismiss="modal">Cancel</button>
+                                                            data-bs-dismiss="modal">@lang('messages.Cancel')</button>
                                                         <button type="submit" class="btn btn-danger"
-                                                            id="confirmDelete">Yes,
-                                                            Delete</button>
+                                                            id="confirmDelete">@lang('messages.Yes, Accept')</button>
                                                     </div>
                                                 </div>
                                             </form>
@@ -252,14 +250,14 @@
                                                         <div class="form-floating">
                                                             <input type="hidden" name="request_id" id="rejected_id">
                                                             <textarea class="form-control" name="reason" style="height: 60px;" required></textarea>
-                                                            <label for="floatingTextarea">Reason</label>
+                                                            <label for="floatingTextarea">@lang('messages.Reason')</label>
                                                         </div>
                                                     </div>
                                                 </div>
                                                 <div class="modal-footer">
                                                     <button type="button" class="btn btn-secondary"
-                                                        data-bs-dismiss="modal">Close</button>
-                                                    <button type="submit" class="btn btn-danger">Reject</button>
+                                                        data-bs-dismiss="modal">@lang('messages.Close')</button>
+                                                    <button type="submit" class="btn btn-danger">@lang('messages.Reject')</button>
                                                 </div> <!-- end modal footer -->
                                             </form>
                                         </div> <!-- end modal content-->
@@ -287,12 +285,12 @@
                                                     <div class="tab-pane" id="account-2">
                                                         <div class="row">
                                                             <div class="mb-3">
-                                                                <label for="nameInput" class="form-label">Position <strong class="text-danger">*</strong></label>
+                                                                <label for="nameInput" class="form-label">@lang('messages.position') <strong class="text-danger">*</strong></label>
                                                                 <input type="text" class="form-control" id="editposition" name="position" placeholder="Enter Your Position">
                                                             </div>
                                                             <div class="position-relative mb-3">
                                                                 <div class="mb-6 position-relative" id="datepicker1">
-                                                                    <label class="form-label">Reason</label>
+                                                                    <label class="form-label">@lang('messages.Reason')</label>
                                                                     <input type="text" name="purpose"
                                                                         id="editrequest_reason" class="form-control" required>
                                                                     <input type="hidden" name="request_id"
@@ -301,18 +299,17 @@
                                                             </div>
 
                                                             <div class="position-relative mb-3">
-                                                                <label class="form-label">Upload Position
-                                                                    Latter</label>
+                                                                <label class="form-label">@lang('messages.Upload Position Letter')</label>
                                                                 <input name="position_letter" class="form-control"
                                                                     type="file" required>
                                                             </div>
                                                             <div class="mb-3">
-                                                        <label for="nameInput" class="form-label">License Number <strong class="text-danger">*</strong></label>
+                                                        <label for="nameInput" class="form-label">@lang('messages.License Number')<strong class="text-danger">*</strong></label>
                                                         <input type="text" class="form-control" id="editlicense_number" name="license_number" placeholder="Enter License Number">
                                                     </div>
                                                     <div class="position-relative mb-3">
                                                         <div class="mb-6 position-relative" id="datepicker1">
-                                                            <label class="form-label">License expiry date </label>
+                                                            <label class="form-label">@lang('messages.License expiry date')</label>
                                                             <input type="text" class="form-control" name="expiry_date"
                                                                 placeholder="Enter license expiry date" id="editexpirydate">
                                                         </div>
@@ -325,8 +322,7 @@
                                                         </script>
                                                     </div>
                                                             <div class="position-relative mb-3">
-                                                                <label class="form-label">Upload Driving
-                                                                    License</label>
+                                                                <label class="form-label">@lang('messages.Upload Driving License')</label>
                                                                 <input name="Driving_license" class="form-control"
                                                                     type="file" required>
                                                             </div>
@@ -335,8 +331,8 @@
                                             </div>
                                             <div class="modal-footer">
                                                 <button type="button" class="btn btn-light"
-                                                    data-bs-dismiss="modal">Close</button>
-                                                <button type="submit" class="btn btn-info">Submit</button>
+                                                    data-bs-dismiss="modal">@lang('messages.Close')</button>
+                                                <button type="submit" class="btn btn-info">@lang('messages.Submit')</button>
                                             </div>
                                             </form>
                                         </div><!-- /.modal-content -->
@@ -349,8 +345,7 @@
                                     <div class="modal-dialog modal-scrollable">
                                         <div class="modal-content">
                                             <div class="modal-header">
-                                                <h4 class="modal-title" id="standard-modalLabel">Inspection
-                                                    Details</h4>
+                                                <h4 class="modal-title" id="standard-modalLabel">@lang('messages.Inspection Details')</h4>
                                                 <button type="button" class="btn-close" data-bs-dismiss="modal"
                                                     aria-label="Close"></button>
                                             </div>
@@ -362,7 +357,7 @@
                                                 </div>
                                                 <div class="modal-footer">
                                                     <button type="button" class="btn btn-light"
-                                                        data-bs-dismiss="modal">Close</button>
+                                                        data-bs-dismiss="modal">@lang('messages.Close')</button>
                                                 </div>
                                             </div><!-- /.modal-content -->
                                         </div><!-- /.modal-dialog -->

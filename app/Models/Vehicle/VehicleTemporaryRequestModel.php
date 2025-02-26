@@ -74,14 +74,18 @@ class VehicleTemporaryRequestModel extends Model
         }
 
     public function requestedBy(): BelongsTo
-    {
-        return $this->belongsTo(User::class, 'requested_by_id','id');
-    }
-
+        {
+            return $this->belongsTo(User::class, 'requested_by_id','id');
+        }
+    public function KM_difference()
+      {
+        $difference = $this->end_km - $this->start_km;
+        return $difference;
+      }
     public function approvedBy(): BelongsTo
-    {
-        return $this->belongsTo(User::class, 'dir_approved_by');
-    }
+        {
+            return $this->belongsTo(User::class, 'dir_approved_by');
+        }
     public function div_approvedBy(): BelongsTo
     {
         return $this->belongsTo(User::class, 'div_approved_by');
@@ -95,13 +99,13 @@ class VehicleTemporaryRequestModel extends Model
         return $this->belongsTo(User::class, 'transport_director_id');
     }
     public function vehicle(): BelongsTo
-    {
-        return $this->belongsTo(VehiclesModel::class, 'vehicle_id');
-    }
+        {
+            return $this->belongsTo(VehiclesModel::class, 'vehicle_id');
+        }
     public function driver(): BelongsTo
-    {
-        return $this->belongsTo(DriversModel::class, 'driver_id');
-    }
+        {
+            return $this->belongsTo(DriversModel::class, 'driver_id');
+        }
     public function assignedBy(): BelongsTo
     {
         return $this->belongsTo(User::class, 'assigned_by');

@@ -38,21 +38,21 @@
                 <div class="col-12 col-lg-5">
                     <div class="card">
                         <div class="card-header">
-                            <h4 class="header-title">Request Vehicle Service</h4>
+                            <h4 class="header-title">@lang('messages.Request Vehicle Service')</h4>
                         </div>
                         <div class="card-body">
                             <!-- Form content -->
 
-                                <form method="POST" id="temporary_request_form" action="{{ route('temp_request_post') }}">
-                                    @csrf
-                                    <ul class="nav nav-pills nav-justified form-wizard-header mb-3">
-                                        <li class="nav-item">
-                                            <a class="nav-link rounded-0 py-2" id="displayprogresive">
-                                                <i class="ri-car-fill fw-normal fs-20 align-middle me-1"></i>
-                                                <span class="d-none d-sm-inline">Request</span>
-                                            </a>
-                                        </li>
-                                    </ul>
+                            <form method="POST" id="temporary_request_form" action="{{ route('temp_request_post') }}">
+                                @csrf
+                                <ul class="nav nav-pills nav-justified form-wizard-header mb-3">
+                                    <li class="nav-item">
+                                        <a class="nav-link rounded-0 py-2" id="displayprogresive">
+                                            <i class="ri-car-fill fw-normal fs-20 align-middle me-1"></i>
+                                            <span class="d-none d-sm-inline">Request</span>
+                                        </a>
+                                    </li>
+                                </ul>
 
                                 <div id="progressbarwizard" style="display: none">
                                     <ul class="nav nav-pills nav-justified form-wizard-header mb-3">
@@ -298,8 +298,7 @@
                                                     <div class="row">
                                                         <div class="col-lg-6">
                                                             <div class="mb-3 position-relative" id="datepicker1">
-                                                                <label for="itemName" class="form-label">Item
-                                                                    Name:</label>
+                                                                <label for="itemName" class="form-label">@lang('messages.Item Name')</label>
                                                                 <input type="text" class="form-control"
                                                                     placeholder="Add Item" id="itemName">
                                                             </div>
@@ -321,34 +320,34 @@
                                                         </div>
                                                     </div>
 
-                                                        <div id="itemList"></div>
-                                                    </div>
+                                                    <div id="itemList"></div>
                                                 </div>
-                                                <ul class="pager wizard mb-0 list-inline mt-1">
-                                                    <li class="previous list-inline-item">
-                                                        <button type="button" class="btn btn-light"><i
-                                                                class="ri-arrow-left-line me-1"></i> Back</button>
-                                                    </li>
-                                                    <li class="next list-inline-item float-end">
-                                                        <button type="submit" id="temporary_request_form_submit" class="btn btn-info">Submit</button>
-                                                    </li>
-                                                </ul>
                                             </div>
+                                            <ul class="pager wizard mb-0 list-inline mt-1">
+                                                <li class="previous list-inline-item">
+                                                    <button type="button" class="btn btn-light"><i
+                                                            class="ri-arrow-left-line me-1"></i> @lang('messages.Back')</button>
+                                                </li>
+                                                <li class="next list-inline-item float-end">
+                                                    <button type="submit" id="temporary_request_form_submit" class="btn btn-info">@lang('messages.Submit')</button>
+                                                </li>
+                                            </ul>
+                                        </div>
 
-                                            <script>
-                                              document.getElementById('temporary_request_form').addEventListener('submit', function() {
-                                                    let button = document.getElementById('temporary_request_form_submit');
-                                                    button.disabled = true;
-                                                    button.innerText = "Processing...";
-                                                });
-                                                
+                                        <script>
+                                            document.getElementById('temporary_request_form').addEventListener('submit', function() {
+                                                let button = document.getElementById('temporary_request_form_submit');
+                                                button.disabled = true;
+                                                button.innerText = "Processing...";
+                                            });
 
-                                                const checkboxes = document.querySelectorAll(
-                                                    'input[name="with_driver"], input[name="in_out_town"], input[name="package"]');
-                                                const packageCheckbox = document.querySelector('input[name="package"]');
-                                                const withdriverCheckbox = document.querySelector('input[name="with_driver"]');
-                                                const divToToggle = document.getElementById('TogglePackage');
-                                                const withDriverToggle = document.getElementById('ToggleWithDriver');
+
+                                            const checkboxes = document.querySelectorAll(
+                                                'input[name="with_driver"], input[name="in_out_town"], input[name="package"]');
+                                            const packageCheckbox = document.querySelector('input[name="package"]');
+                                            const withdriverCheckbox = document.querySelector('input[name="with_driver"]');
+                                            const divToToggle = document.getElementById('TogglePackage');
+                                            const withDriverToggle = document.getElementById('ToggleWithDriver');
 
                                             checkboxes.forEach((checkbox) => {
                                                 checkbox.addEventListener('change', function() {
@@ -447,7 +446,7 @@
 
                                                 <dd class="col-sm-7" data-field="passengers"></dd>
 
-                                                <dt class="col-sm-5">Materials</dt>
+                                                <dt class="col-sm-5">@lang('messages.Materials')</dt>
                                                 <dd class="col-sm-7" data-field="materials"></dd>
 
                                                 <dt class="col-sm-5">Progress</dt>
@@ -456,7 +455,7 @@
                                             </dl>
                                         </div>
                                         <div class="modal-footer">
-                                            <button type="button" class="btn btn-primary" onclick="printModal()">Print</button>
+                                            <button type="button" class="btn btn-primary" onclick="printModal()">@lang('messages.Print')</button>
                                             <button type="button" class="btn btn-light"
                                                 data-bs-dismiss="modal">@lang('messages.Close')</button>
                                         </div>
@@ -476,7 +475,7 @@
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="staticBackdropLabel">Reject reason
+                            <h5 class="modal-title" id="staticBackdropLabel">@lang('messages.Reject reason')
                             </h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal"
                                 aria-label="Close"></button>
@@ -492,7 +491,7 @@
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary"
-                                data-bs-dismiss="modal">Close</button>
+                                data-bs-dismiss="modal">@lang('messages.Close')</button>
                         </div> <!-- end modal footer -->
                     </div> <!-- end modal content-->
                 </div> <!-- end modal dialog-->
@@ -743,67 +742,66 @@
                     function buildProgressMessage(button) {
                         let progressMessages = [];
 
-                     const messages = [
-                        {
-                            condition: button.data('dir_approved_by') && !button.data('director_reject_reason'),
-                            message: '<span style="color: green;">'+ button.data('dir_approved_by')+' (Director)'+'</span>'
-                        },
-                        {
-                            condition: button.data('director_reject_reason') && button.data('dir_approved_by'),
-                            message: '<span style="color: red;">Rejected By '+ button.data('dir_approved_by')+'(Director)</span>'
-                        },
-                        {
-                            condition: button.data('div_approved_by') && !button.data('cluster_director_reject_reason'),
-                            message: '<span style="color: green;">' + button.data('div_approved_by') + ' (Division)' +  '</span>'
-                        },
-                        {
-                            condition: button.data('cluster_director_reject_reason') && button.data('div_approved_by'),
-                            message: '<span style="color: red;">Rejected by ' +button.data('div_approved_by') +' (Division)' +  '</span>'
-                        },
-                        {
-                            condition: button.data('hr_div_approved_by') && !button.data('hr_director_reject_reason'),
-                            message: '<span style="color: green;">' + button.data('hr_div_approved_by') + ' (Division)</span>'
-                        },
-                        {
-                            condition: button.data('hr_director_reject_reason') && button.data('hr_div_approved_by'),
-                            message: '<span style="color: red;">Rejected by '+ button.data('hr_div_approved_by') + ' ( Division)</span>'
-                        },
-                        {
-                            condition: button.data('transport_director_id') && !button.data('vec_director_reject_reason'),
-                            message: '<span style="color: green;">'+button.data('transport_director_id')+' (Transport_Dir)</span>',
-                        },
-                        {
-                            condition: button.data('vec_director_reject_reason') && button.data('transport_director_id'),
-                            message: '<span style="color: red;">Rejected by '+button.data('transport_director_id')+' ( Transport_Dir)</span>',
-                        },
-                        {
-                            condition: button.data('assigned_by') && !button.data('assigned_by_reject_reason'),
-                            message: '<span style="color: green;">'+ button.data('assigned_by') +' (Dispatcher)</span>'
-                        },
-                        {
-                            condition: button.data('assigned_by_reject_reason') && button.data('assigned_by'),
-                            message: '<span style="color: red;">Rejected by '+ button.data('assigned_by') + ' (Dispatcher)</span>'
-                        },
-                        {
-                            condition: button.data('vehicle_id'),
-                            
-                            message: '<span style="color: green;">Assigned Vehicle <u>' + button.data('vehicle_plate') + '</u></span>'
-                        },
-                        {
-                            condition: button.data('start_km'),
-                            message: '<span style="color: green;">Vehicle Request <u>' + button.data('vehicle_plate') + '</u> Dispatched</span>'
-                        },
-                        {
-                            condition: button.data('end_km'),
-                            message: '<span style="color: green;">Request completed</span>'
-                        },
-                    ];
-                    console.log(button.data('vehicle_Driver') )
-                    messages.forEach(item => {
-                        if (item.condition) {
-                            progressMessages.push(item.message);
-                        }
-                    });
+                        const messages = [{
+                                condition: button.data('dir_approved_by') && !button.data('director_reject_reason'),
+                                message: '<span style="color: green;">' + button.data('dir_approved_by') + ' (Director)' + '</span>'
+                            },
+                            {
+                                condition: button.data('director_reject_reason') && button.data('dir_approved_by'),
+                                message: '<span style="color: red;">Rejected By ' + button.data('dir_approved_by') + '(Director)</span>'
+                            },
+                            {
+                                condition: button.data('div_approved_by') && !button.data('cluster_director_reject_reason'),
+                                message: '<span style="color: green;">' + button.data('div_approved_by') + ' (Division)' + '</span>'
+                            },
+                            {
+                                condition: button.data('cluster_director_reject_reason') && button.data('div_approved_by'),
+                                message: '<span style="color: red;">Rejected by ' + button.data('div_approved_by') + ' (Division)' + '</span>'
+                            },
+                            {
+                                condition: button.data('hr_div_approved_by') && !button.data('hr_director_reject_reason'),
+                                message: '<span style="color: green;">' + button.data('hr_div_approved_by') + ' (Division)</span>'
+                            },
+                            {
+                                condition: button.data('hr_director_reject_reason') && button.data('hr_div_approved_by'),
+                                message: '<span style="color: red;">Rejected by ' + button.data('hr_div_approved_by') + ' ( Division)</span>'
+                            },
+                            {
+                                condition: button.data('transport_director_id') && !button.data('vec_director_reject_reason'),
+                                message: '<span style="color: green;">' + button.data('transport_director_id') + ' (Transport_Dir)</span>',
+                            },
+                            {
+                                condition: button.data('vec_director_reject_reason') && button.data('transport_director_id'),
+                                message: '<span style="color: red;">Rejected by ' + button.data('transport_director_id') + ' ( Transport_Dir)</span>',
+                            },
+                            {
+                                condition: button.data('assigned_by') && !button.data('assigned_by_reject_reason'),
+                                message: '<span style="color: green;">' + button.data('assigned_by') + ' (Dispatcher)</span>'
+                            },
+                            {
+                                condition: button.data('assigned_by_reject_reason') && button.data('assigned_by'),
+                                message: '<span style="color: red;">Rejected by ' + button.data('assigned_by') + ' (Dispatcher)</span>'
+                            },
+                            {
+                                condition: button.data('vehicle_id'),
+
+                                message: '<span style="color: green;">Assigned Vehicle <u>' + button.data('vehicle_plate') + '</u></span>'
+                            },
+                            {
+                                condition: button.data('start_km'),
+                                message: '<span style="color: green;">Vehicle Request <u>' + button.data('vehicle_plate') + '</u> Dispatched</span>'
+                            },
+                            {
+                                condition: button.data('end_km'),
+                                message: '<span style="color: green;">Request completed</span>'
+                            },
+                        ];
+                        console.log(button.data('vehicle_Driver'))
+                        messages.forEach(item => {
+                            if (item.condition) {
+                                progressMessages.push(item.message);
+                            }
+                        });
 
                         // If no conditions were met, set progress to 'Pending'
                         let progress = progressMessages.length > 0 ? progressMessages.join('<br>') : 'Pending';

@@ -1457,6 +1457,7 @@ class VehicleTemporaryRequestController extends Controller
         $id = $request->input('request_id');
         $end_km = $request->input('end_km');
         $user_id = Auth::id();
+
         try {
             $Vehicle_Request = VehicleTemporaryRequestModel::findOrFail($id);
             if ($Vehicle_Request->start_km > $end_km) {
@@ -1467,7 +1468,12 @@ class VehicleTemporaryRequestController extends Controller
             }
             $vehicle = VehiclesModel::findOrFail($Vehicle_Request->vehicle_id);
             $inspection = InspectionModel::where('vehicle_id', $Vehicle_Request->vehicle_id)->latest()->first();
-            $latest_inspection = $inspection->inspection_id;
+            $x = null;
+            if($inspection)
+              {
+                $x = $inspection->inspection_id;
+              }
+            $latest_inspection = $x;
             $Vehicle_Request->taken_by = $user_id;
             $Vehicle_Request->end_km = $end_km;
             $vehicle->status = true;
@@ -1483,7 +1489,7 @@ class VehicleTemporaryRequestController extends Controller
             // Handle the case when the vehicle request is not found
             return redirect()->back()->with(
                 'error_message',
-                "Sorry, Something went wrong",
+                "Sorry, Something went wrong".$e,
             );
         }
     }

@@ -27,12 +27,12 @@
                                     id="inline-editable">
                                     <thead>
                                         <tr>
-                                            <th>#</th>
-                                            <th>Requested By</th>
-                                            <th>Vehicle Type</th>
-                                            <th>Requested At</th>
-                                            <th>Status</th>
-                                            <th>Action</th>
+                                            <th>{{ __('messages.Roll No.') }}</th>
+                                            <th>{{ __('messages.Requested By') }}</th>
+                                            <th>{{__('messages.Vehicle Type')}}</th>
+                                            <th>{{ __('messages.Requested At') }}</th>
+                                            <th>{{ __('messages.Status') }}</th>
+                                            <th>{{  __('messages.Action') }}</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -52,25 +52,31 @@
                                             </div>
                                             <div class="modal-body">
                                                 <dl class="row mb-0">
-                                                    <dt class="col-sm-5">Request reason</dt>
+                                                   <dl class="row mb-0">
+                                                        <dt class="col-sm-4">Field Letter:
+                                                        </dt>
+                                                        <dd class="col-sm-8" data-field="Fieldletter">
+                                                        </dd>
+                                                    </dl>
+                                                    <dt class="col-sm-5">@lang('messages.Request reason')</dt>
                                                     <dd class="col-sm-7" data-field="purpose"></dd>
 
-                                                    <dt class="col-sm-5">Requested vehicle</dt>
+                                                    <dt class="col-sm-5">@lang('messages.Requested vehicle')</dt>
                                                     <dd class="col-sm-7" data-field="vehicle_type"></dd>
 
-                                                    <dt class="col-sm-5">Start date and Time</dt>
+                                                    <dt class="col-sm-5">@lang('messages.Start date and Time')</dt>
                                                     <dd class="col-sm-7" data-field="start_date"></dd>
 
-                                                    <dt class="col-sm-5">Return date and Time</dt>
+                                                    <dt class="col-sm-5">@lang('messages.Return date and Time')</dt>
                                                     <dd class="col-sm-7" data-field="end_date"></dd>
 
-                                                    <dt class="col-sm-5">Location From and To</dt>
+                                                    <dt class="col-sm-5">@lang('messages.Location From and To')</dt>
                                                     <dd class="col-sm-7" data-field="start_location"></dd>
 
-                                                    <dt class="col-sm-5">Passengers</dt>
+                                                    <dt class="col-sm-5">@lang('messages.Passengers')</dt>
                                                     <dd class="col-sm-7" data-field="passengers"></dd>
 
-                                                    <dt class="col-sm-5">Materials</dt>
+                                                    <dt class="col-sm-5">@lang('messages.Materials')</dt>
                                                     <dd class="col-sm-7" data-field="materials"></dd>
 
                                                     <dt class="col-sm-5">Progress</dt>
@@ -104,10 +110,9 @@
                                                             undone.
                                                         </h5>
                                                         <button type="button" class="btn btn-secondary"
-                                                            data-bs-dismiss="modal">Cancel</button>
+                                                            data-bs-dismiss="modal">@lang('messages.Cancel')</button>
                                                         <button type="submit" class="btn btn-primary"
-                                                            id="confirmDelete">Yes,
-                                                            Accept</button>
+                                                            id="confirmDelete">@lang('messages.Yes, Accept')</button>
                                                     </div>
                                                 </div>
                                             </form>
@@ -122,7 +127,7 @@
                                     <div class="modal-dialog">
                                         <div class="modal-content">
                                             <div class="modal-header">
-                                                <h5 class="modal-title" id="staticBackdropLabel">Reject reason
+                                                <h5 class="modal-title" id="staticBackdropLabel">@lang('messages.Reject reason')
                                                 </h5>
                                                 <button type="button" class="btn-close" data-bs-dismiss="modal"
                                                     aria-label="Close"></button>
@@ -136,14 +141,14 @@
                                                             <input type="hidden" name="request_id"
                                                                 id="Reject_request_id">
                                                             <textarea class="form-control" name="reason" style="height: 60px;" required></textarea>
-                                                            <label for="floatingTextarea">Reason</label>
+                                                            <label for="floatingTextarea">@lang('messages.Reason')</label>
                                                         </div>
                                                     </div>
                                                 </div>
                                                 <div class="modal-footer">
                                                     <button type="button" class="btn btn-secondary"
                                                         data-bs-dismiss="modal">@lang('messages.Close')</button>
-                                                    <button type="submit" class="btn btn-danger">Reject</button>
+                                                    <button type="submit" class="btn btn-danger">@lang('messages.Reject')</button>
                                                 </div> <!-- end modal footer -->
                                             </form>
                                         </div> <!-- end modal content-->
@@ -211,7 +216,18 @@
         $('#standard-modal').on('show.bs.modal', function(event) {
             var button = $(event.relatedTarget); // Button that triggered the modal
             var modal = $(this); // The modal
-
+            var letterFile = button.data('field_letter');//$(this).data('field_letter');
+            var letterField = modal.find('[data-field="Fieldletter"]');
+            if (letterFile) 
+                    {
+                        var fieldLink = `<a href="app/public/TemporaryVehicle/FieldLetters/${letterFile}" target="_blank">View Letter</a>`;
+                        letterField.html(fieldLink);
+                        //document.getElementById('letter_div').style.display = 'inline-block';
+                    } 
+                else 
+                    {
+                        letterField.text('No file available');
+                    }
             // Populate basic request details
             modal.find('.modal-title').text('Request Details');
             modal.find('[data-field="purpose"]').text(button.data('purpose'));

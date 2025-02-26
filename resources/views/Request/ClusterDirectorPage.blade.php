@@ -75,13 +75,13 @@
                                                 <dt class="col-sm-5">@lang('messages.Return date and Time')</dt>
                                                 <dd class="col-sm-7" data-field="end_date"></dd>
 
-                                                <dt class="col-sm-5">Location From and To</dt>
+                                                <dt class="col-sm-5">@lang('messages.Location From and To')</dt>
                                                 <dd class="col-sm-7" data-field="start_location"></dd>
 
                                                 <dt class="col-sm-5">@lang('messages.Passengers')</dt>
                                                 <dd class="col-sm-7" data-field="passengers"></dd>
 
-                                                <dt class="col-sm-5">Materials</dt>
+                                                <dt class="col-sm-5">@lang('messages.Materials')</dt>
                                                 <dd class="col-sm-7" data-field="materials"></dd>
 
                                                 <dt class="col-sm-5">Progress</dt>

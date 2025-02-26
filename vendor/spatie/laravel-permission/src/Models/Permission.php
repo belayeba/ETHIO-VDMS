@@ -12,7 +12,6 @@ use Spatie\Permission\Guard;
 use Spatie\Permission\PermissionRegistrar;
 use Spatie\Permission\Traits\HasRoles;
 use Spatie\Permission\Traits\RefreshesPermissionCache;
-use App\Models\PermissionGroup;
 
 /**
  * @property ?\Illuminate\Support\Carbon $created_at
@@ -153,9 +152,5 @@ class Permission extends Model implements PermissionContract
     {
         /** @var PermissionContract|null */
         return static::getPermissions($params, true)->first();
-    }
-
-    public function PermissionGroup() {
-        return $this->belongsTo( PermissionGroup::class, 'group_id', 'id' );
     }
 }
