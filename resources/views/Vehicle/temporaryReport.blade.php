@@ -51,7 +51,6 @@
                                             @endforeach
                                         </select>
                                     </div>
-
                                     <div class="col-lg-2">
                                         <label for="selectName" class="form-label">Name</label>
                                         <select id="selectName" name="driver_name" class="form-select">
@@ -142,6 +141,7 @@
                                         <th>Plate_Num</th>
                                         <th>Start KM</th>
                                         <th>End KM</th>
+                                        <th>KM Difference</th>
                                         <th>Start Location</th>
                                         <th>End Location</th>
                                         <th>Action</th>
@@ -263,6 +263,10 @@
                     {
                         data: 'end_km',
                         name: 'end_km'
+                    }, // corrected key
+                    {
+                        data: 'difference',
+                        name: 'difference'
                     }, // corrected key
                     {
                         data: 'start_location',
