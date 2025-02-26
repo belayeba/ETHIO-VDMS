@@ -221,9 +221,9 @@
                     </li>
                     @endif
 
-                    @if(auth()->user()->can('Request Maintenance') || auth()->user()->can('Approve Maintenance') ||
+                    {{-- @if(auth()->user()->can('Request Maintenance') || auth()->user()->can('Approve Maintenance') ||
                     auth()->user()->can('Inspect Maintenance') || auth()->user()->can('Maintenance for Dispatcher')||
-                    auth()->user()->can('Final Maintenance'))
+                    auth()->user()->can('Final Maintenance')) --}}
                     <li class="side-nav-item">
                         <a data-bs-toggle="collapse" href="#sidebarMaintenance" aria-expanded="false"
                             aria-controls="sidebarMaintenance" class="side-nav-link">
@@ -233,35 +233,35 @@
                         </a>
                         <div class="collapse" id="sidebarMaintenance">
                             <ul class="side-nav-second-level">
-                                @can('Request Maintenance')
+                                {{-- @can('Request Maintenance') --}}
                                 <li>
                                     <a href="{{route('maintenance_request')}}">@lang('messages.Request Maintenance') </a>
                                 </li>
-                                @endcan()
-                                @can('Approve Maintenance')
+                                {{-- @endcan() --}}
+                                {{-- @can('Approve Maintenance') --}}
                                 <li>
                                     <a href="{{route('maintenance_approver')}}">Maintenance Approver</a>
                                 </li>
-                                @endcan()
-                                @can('Inspect Maintenance')
+                                {{-- @endcan() --}}
+                                {{-- @can('Inspect Maintenance') --}}
                                 <li>
                                     <a href="{{route('maintenance_inspection')}}">Maintenance Inspection</a>
                                 </li>
-                                @endcan()
-                                @can('Maintenance for Dispatcher')
+                                {{-- @endcan() --}}
+                                {{-- @can('Maintenance for Dispatcher') --}}
                                 <li>
                                     <a href="{{route('simirit_display')}}">Simirit Approve</a>
                                 </li>
-                                @endcan()
-                                @can('Final Maintenance')
+                                {{-- @endcan() --}}
+                                {{-- @can('Final Maintenance') --}}
                                 <li>
                                     <a href="{{route('Final_display')}}">Finalize Maintenance</a>
                                 </li>
-                                @endcan()
+                                {{-- @endcan() --}}
                             </ul>
                         </div>
                     </li>
-                    @endif
+                    {{-- @endif --}}
 
                     @if(auth()->user()->can('Create User') || auth()->user()->can('Create Driver') ||
                     auth()->user()->can('Change Driver') || auth()->user()->can('Accept Driver Change'))
