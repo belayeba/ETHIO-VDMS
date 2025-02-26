@@ -456,7 +456,7 @@ class MentenanceController extends Controller
            return $elapsedTime;
     } 
     public function end_maintenance(Request $request)
-    {dd($request);
+    {
          $validator = Validator::make($request->all(), [
              'maintenance_id' => 'required|exists:maintenances,maintenance_id',
              'maintenance_records' => 'required|array|min:1',
