@@ -98,13 +98,15 @@ class VehicleRegistrationController extends Controller
                         data-vehicle_category="' . $row->vehicle_category . '"
                         data-vehicle_type="' . $row->vehicle_type . '"
                         data-rental_type="' . $row->rental_type . '"
+                        data-rental_person="' . $row->rental_person . '"
+                        data-rental_phone="' . $row->rental_phone . '"
                         data-libre="' . $row->libre . '"
                         data-insurance="' . $row->insurance . '"
                         title="Edit">
                         <i class="ri-pencil-line"></i>
                     </button>';
             })
-            ->rawColumns(['status', 'action']) // ✅ Add 'status' column here to prevent escaping
+            ->rawColumns(['status', 'action'])
             ->make(true);
     }
 

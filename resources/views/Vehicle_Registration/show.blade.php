@@ -124,6 +124,16 @@
                                                                 </div>
                                                             </div>
 
+                                                            <div class="row mb-3">
+                                                                <label class="col-md-3 col-form-label"
+                                                                    for="mileage">@lang('messages.Mileage')</label>
+                                                                <div class="col-md-9">
+                                                                    <input type="number" id="Mileage"
+                                                                        name="mileage" placeholder="Enter the mileage"
+                                                                        class="form-control" required>
+                                                                </div>
+                                                            </div>
+
                                                         </div> <!-- end col -->
                                                     </div> <!-- end row -->
                                                     <ul class="list-inline wizard mb-0">
@@ -140,15 +150,6 @@
                                                     class="form-horizontal">
                                                     <div class="row">
                                                         <div class="col-12">
-                                                            <div class="row mb-3">
-                                                                <label class="col-md-3 col-form-label"
-                                                                    for="mileage">@lang('messages.Mileage')</label>
-                                                                <div class="col-md-9">
-                                                                    <input type="number" id="Mileage"
-                                                                        name="mileage" placeholder="Enter the mileage"
-                                                                        class="form-control" required>
-                                                                </div>
-                                                            </div>
 
                                                             <div class="row mb-3">
                                                                 <label class="col-md-3 col-form-label" for="fuel_type">@lang('messages.Fuel Type')</label>
@@ -385,7 +386,6 @@
                                                             button.disabled = true;
                                                             button.innerText = "Processing..."; // Optional: Change text to indicate processing
                                                         });
-
                                                     </script>
                                                     </form>
                                                 </ul>
@@ -454,6 +454,16 @@
                                                                         </div>
 
                                                                         <div class="mb-3">
+                                                                            <label for="engine_number"
+                                                                                class="form-label">Engine Number</label>
+                                                                            <input type="text"
+                                                                                class="form-control"
+                                                                                id="editEngineNumber" name="Engine"
+                                                                                data-field="engine_number"
+                                                                                required>
+                                                                        </div>
+
+                                                                        <div class="mb-3">
                                                                             <label for="editMake"
                                                                                 class="form-label">Make</label>
                                                                             <input type="text"
@@ -517,10 +527,7 @@
                                                                                 name="fuel_amount"
                                                                                 data-field="fuel_amount" required hidden>
                                                                         </div>
-                                                                    </div>
 
-                                                                    <!-- Second Column -->
-                                                                    <div class="col-md-6">
                                                                         <div class="mb-3">
                                                                             <label for="fuel_type"
                                                                                 class="form-label">@lang('messages.Fuel Type')</label>
@@ -531,6 +538,11 @@
                                                                                 <option value="Diesel" {{ $item->fuel_type == 'Diesel' ? 'selected' : '' }}> Diesel</option>
                                                                             </select>
                                                                         </div>
+
+                                                                    </div>
+
+                                                                    <!-- Second Column -->
+                                                                    <div class="col-md-6">
 
                                                                         <div class="mb-3">
                                                                             <label for="editLastService"
@@ -608,6 +620,30 @@
                                                                                     Rental
                                                                                 </option>
                                                                             </select>
+                                                                        </div>
+
+                                                                        <div class="mb-3">
+                                                                            <div class="mb-3">
+                                                                                <label for="editName"
+                                                                                    class="form-label">Owner Name</label>
+                                                                                <input type="text"
+                                                                                    class="form-control"
+                                                                                    id="editName"
+                                                                                    name="owner_name"
+                                                                                    data-field="rental_person">
+                                                                            </div>
+                                                                        </div>
+
+                                                                        <div class="mb-3">
+                                                                            <div class="mb-3">
+                                                                                <label for="editPhone"
+                                                                                    class="form-label">Owner Phone</label>
+                                                                                <input type="text"
+                                                                                    class="form-control"
+                                                                                    id="editPhone"
+                                                                                    name="owner_phone"
+                                                                                    data-field="rental_phone">
+                                                                            </div>
                                                                         </div>
 
                                                                     </div>
@@ -863,7 +899,7 @@
                             },
                         ],
                         drawCallback: function() {
-                            // ✅ Re-bind event listener to dynamically loaded elements
+
                             $('.status-toggle').off('change').on('change', function() {
                                 var status = $(this).prop('checked') ? '1' : '0';
                                 var itemId = $(this).data('id');
@@ -877,11 +913,10 @@
                                         _token: '{{ csrf_token() }}'
                                     },
                                     success: function(response) {
-                                        // Trigger a page reload to show session messages
+
                                         window.location.reload();
                                     },
                                     error: function(xhr, status, error) {
-                                        // Trigger a page reload to show error message
                                         window.location.reload();
                                     }
                                 });
@@ -942,7 +977,7 @@
                 $(document).on('click', '.edit-btn', function() {
                     var modal = $('#editVehicleModal');
 
-                    console.log($(this).data('libre'));
+                    console.log($(this).data('engine_number'));
 
                     modal.find('.modal-title').text('Edit Vehicle');
 
@@ -957,13 +992,13 @@
                     modal.find('[data-field="fuel_amount"]').val($(this).data('fuel_amount'));
                     modal.find('[data-field="last_service"]').val($(this).data('last_service'));
                     modal.find('[data-field="next_service"]').val($(this).data('next_service'));
-
-                    // ✅ Populate dropdowns correctly
+                    modal.find('[data-field="rental_person"]').val($(this).data('rental_person'));
+                    modal.find('[data-field="rental_phone"]').val($(this).data('rental_phone'));
+                    modal.find('[data-field="engine_number"]').val($(this).data('engine_number'));
                     modal.find('#editVehicleCategory').val($(this).data('vehicle_category'));
                     modal.find('#editVehicleType').val($(this).data('vehicle_type'));
                     modal.find('#fuel_type').val($(this).data('fuel_type'));
 
-                    // Populate text fields
                     modal.find('[data-field="libre"]').text($(this).data('libre'));
                     modal.find('[data-field="insurance"]').text($(this).data('insurance'));
 
@@ -1018,6 +1053,7 @@
                     // Populate the fields with the data
                     document.getElementById('vehicle_id').value = data.id;
                     document.getElementById('editVin').value = data.vin;
+                    document.getElementById('editEngineNumber').value = data.Engine;
                     document.getElementById('editMake').value = data.make;
                     document.getElementById('editModel').value = data.model;
                     document.getElementById('editYear').value = data.year;
@@ -1030,14 +1066,13 @@
                     document.getElementById('editNextService').value = data.next_service;
                     document.getElementById('editNotes').value = data.notes;
                     document.getElementById('editDriver').value = data.driver;
+                    document.getElementById('editName').value = data.name;
+                    document.getElementById('editPhone').value = data.phone;
                     document.getElementById('editVehicleCategory').value = data.vehicle_category;
                     document.getElementById('editVehicleType').value = data.vehicle_type;
 
                 }
             </script>
-
-
-
             <!-- Bootstrap Wizard Form js -->
             <script src="assets/vendor/twitter-bootstrap-wizard/jquery.bootstrap.wizard.min.js"></script>
 
