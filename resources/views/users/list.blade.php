@@ -92,7 +92,7 @@
                                         aria-labelledby="ImportModalLabel"aria-hidden="true">
                                         <div class="modal-dialog modal-sm">
                                             <div class="modal-content">
-                                                <form method="POST" id="importForm" action="{{ route('users.import') }}" enctype="multipart/form-data">
+                                                <form method="POST" id="importForm" action="{{ route('users.list.show') }}" enctype="multipart/form-data">
                                                     @csrf
                                                     <div class="modal-body p-4">
                                                         <div class="text-center">
@@ -121,7 +121,6 @@
                                         </div><!-- /.modal-dialog -->
                                     </div>
                                      <!-- /.modal -->
-
                                 </div>
                             </div>
                         </div>
