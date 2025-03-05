@@ -49,6 +49,8 @@ class VehiclesModel extends Model
         'driver_id',
         'status',
         'notes',
+        'driver_phone',
+        'driver_name',
         'created_at',
     ];
     protected static function boot()

@@ -19,3 +19,5 @@ yarn-error.log
 /.idea
 /.vscode
 .env.example
+composer.lock
+vendor

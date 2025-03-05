@@ -20,49 +20,50 @@ class FeulCostController extends Controller
         $ethiopianDate = new DateTime($today);
 
         // Format the Ethiopian date
-        $formattedDate = $ethiopianDate->format('Y-m-d H:i:s');        
+        $formattedDate = $ethiopianDate->format('Y-m-d H:i:s');
         // Display the Ethiopian date
         return $formattedDate;
     }
 
     // List all fuel quotas
     public function index()
-        {
-            $fuelCosts = FeulCosts::latest()->get();
-            return view( 'Fuelling.cost', compact( 'fuelCosts') );
-        }
+    {
+        $fuelCosts = FeulCosts::latest()->get();
+        return view('Fuelling.cost', compact('fuelCosts'));
+    }
     // Show a single fuel quota
     public function show($id)
-        {
-            $fuelQuata = FeulCosts::findOrFail($id);
-            return response()->json($fuelQuata);
-        }
+    {
+        $fuelQuata = FeulCosts::findOrFail($id);
+        return response()->json($fuelQuata);
+    }
     // Store a new fuel quota record
     public function store(Request $request)
-        {
-            
-            $validation = Validator::make($request->all(),[
-           
-                'Fuel_cost' => 'required|integer|min:0',
-                'fuel_type' => 'required|string|In:Diesel,Benzene',
-            ]);
-            if ($validation->fails()) 
-            {
-               return redirect()->back()->with('error_message',
-                         $validation->errors(),
-                    );
-            }
-            $logged_user = Auth::id();
-            $today = \Carbon\Carbon::now();
-            $ethiopianDate = $this->ConvertToEthiopianDate($today); 
-            FeulCosts::create([
-                'new_cost' => $request->Fuel_cost,        
-                'changed_by' => $logged_user,  
-                'fuel_type' => $request->fuel_type,            
-                'created_at' => $ethiopianDate
-            ]);
-            return redirect()->back()->with('success_message',
-            "The Fuel Cost Changed successfully",
-           );
+    {
+
+        $validation = Validator::make($request->all(), [
+
+            'Fuel_cost' => 'required|number|min:0',
+            'fuel_type' => 'required|string|In:Diesel,Benzene',
+        ]);
+        if ($validation->fails()) {
+            return redirect()->back()->with(
+                'error_message',
+                $validation->errors(),
+            );
         }
+        $logged_user = Auth::id();
+        $today = \Carbon\Carbon::now();
+        $ethiopianDate = $this->ConvertToEthiopianDate($today);
+        FeulCosts::create([
+            'new_cost' => $request->Fuel_cost,
+            'changed_by' => $logged_user,
+            'fuel_type' => $request->fuel_type,
+            'created_at' => $ethiopianDate
+        ]);
+        return redirect()->back()->with(
+            'success_message',
+            "The Fuel Cost Changed successfully",
+        );
+    }
 }

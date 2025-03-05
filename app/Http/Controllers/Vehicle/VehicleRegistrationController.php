@@ -77,8 +77,14 @@ class VehicleRegistrationController extends Controller
                         data-vehicle_category="' . $row->vehicle_category . '"
                         data-vehicle_type="' . $row->vehicle_type . '"
                         data-rental_type="' . $row->rental_type . '"
+                        data-rental_person="' . $row->rental_person . '"
+                        data-rental_phone="' . $row->rental_phone . '"
+                        data-driver_name="' . $row->driver_name . '"
+                        data-driver_phone="' . $row->driver_phone . '"
+                        data-cc="' . $row->cc . '"
                         data-libre="' . $row->libre . '"
                         data-insurance="' . $row->insurance . '"
+                        data-organizational_type="' . $row->organizational_type . '"
                         title="View">
                         <i class="ri-eye-line"></i>
                     </button>
@@ -100,8 +106,12 @@ class VehicleRegistrationController extends Controller
                         data-rental_type="' . $row->rental_type . '"
                         data-rental_person="' . $row->rental_person . '"
                         data-rental_phone="' . $row->rental_phone . '"
+                        data-driver_name="' . $row->driver_name . '"
+                        data-driver_phone="' . $row->driver_phone . '"  
+                        data-cc="' . $row->cc . '"
                         data-libre="' . $row->libre . '"
                         data-insurance="' . $row->insurance . '"
+                        data-organizational_type="' . $row->organizational_type . '"
                         title="Edit">
                         <i class="ri-pencil-line"></i>
                     </button>';
@@ -143,6 +153,8 @@ class VehicleRegistrationController extends Controller
             'rental_type' => 'nullable|string|In:morning_afternoon_minibus,40_60,position,whole_day',
             'libre' => 'required|file|mimes:pdf,jpg,jpeg',
             'insurance' => 'required|file|mimes:pdf,jpg,jpeg',
+            'driver_name' => 'nullable|string',
+            'driver_phone' => 'nullable|string',
         ]);
         // dd($validator);
 
@@ -192,8 +204,8 @@ class VehicleRegistrationController extends Controller
             'plate_number' => $request->plate_number,
             'mileage' => $request->mileage,
             'fuel_amount' => $request->fuel_amount,
-            'owner_name' => $request->owner_name,
-            'owner_phone' => $request->owner_phone,
+            'rental_person' => $request->owner_name,
+            'rental_phone' => $request->owner_phone,
             'cc' => $request->cc,
             'last_service' => $request->Last_Service,
             'next_service' => $request->Next_Service,
@@ -204,6 +216,8 @@ class VehicleRegistrationController extends Controller
             'capacity' => $capacity,
             'vehicle_category' => $request->vehicle_category,
             'rental_type' => $vec_type,
+            'driver_name' => $request->driver_name,
+            'driver_phone' => $request->driver_phone,
             'libre' => $filelibre,
             'insurance' => $fileinsurance,
             'created_at' => $ethiopianDate

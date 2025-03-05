@@ -13,7 +13,6 @@ use App\Http\Controllers\Vehicle\Daily_KM_Calculation;
 
 class DriverRegistrationController extends Controller
 {
-    //Page
     protected $dailyKmCalculation;
 
     public function __construct(Daily_KM_Calculation $dailyKmCalculation)
@@ -27,7 +26,6 @@ class DriverRegistrationController extends Controller
 
         return view('Driver.index', compact('drivers', 'data'));
     }
-    // Create a new driver
 
     public function store(Request $request)
     {
@@ -76,8 +74,6 @@ class DriverRegistrationController extends Controller
         }
     }
 
-    // Get all drivers
-
     public function index()
     {
         try {
@@ -88,8 +84,6 @@ class DriverRegistrationController extends Controller
         }
     }
 
-    // Get a specific driver by ID
-
     public function show($id)
     {
         try {
@@ -99,8 +93,6 @@ class DriverRegistrationController extends Controller
             return redirect()->back()->with('error_message', 'Driver not found',);
         }
     }
-
-    // Update a driver
 
     public function update(Request $request, $id)
     {
@@ -150,26 +142,22 @@ class DriverRegistrationController extends Controller
         $itemId = $request->input('id');
         $status = $request->input('status');
 
-        // Find the item and update the status
+        
         $item = DriversModel::find($itemId);
         if ($item) {
             if ($status == 'active' || $status == 'inactive') {
                 $item->status = $status;
                 $item->save();
 
-                // Set success message in the session
                 session()->flash('success_message', 'Status updated successfully');
                 return response()->json(['message' => 'Status updated successfully']);
             }
         }
 
-        // Set error message in the session if the item is not found
         session()->flash('error_message', 'Item not found');
         return response()->json(['message' => 'Item not found'], 404);
     }
 
-
-    // Delete a driver
     public function destroy($id)
     {
         try {

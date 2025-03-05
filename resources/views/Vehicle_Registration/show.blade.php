@@ -282,39 +282,31 @@
                                                         <!-- Rental Type Dropdown -->
                                                         <div id="rentalDiv" style="display: none;">
                                                             <div class="row mb-3">
-                                                                <div class="row mb-3">
-                                                                    <label class="col-md-3 col-form-label"
-                                                                        for="owner_name">Owner Name</label>
-                                                                    <div class="col-md-9">
-                                                                        <input type="text" id="owner_name"
-                                                                            name="owner_name"
-                                                                            placeholder="Enter the owner person name here"
-                                                                            class="form-control">
-                                                                    </div>
+                                                                <!-- Owner Name -->
+                                                                <label class="col-md-3 col-form-label" for="owner_name">Owner Name</label>
+                                                                <div class="col-md-9">
+                                                                    <input type="text" id="owner_name" name="owner_name" placeholder="Enter the owner person name here" class="form-control">
                                                                 </div>
+                                                            </div>
 
-                                                                <div class="row mb-3">
-                                                                    <label class="col-md-3 col-form-label"
-                                                                        for="owner_phone">Owner Phone</label>
-                                                                    <div class="col-md-9">
-                                                                        <input type="text" id="owner_phone"
-                                                                            name="owner_phone"
-                                                                            placeholder="Enter the owner phone here"
-                                                                            class="form-control">
-                                                                    </div>
+                                                            <div class="row mb-3">
+                                                                <!-- Owner Phone -->
+                                                                <label class="col-md-3 col-form-label" for="owner_phone">Owner Phone</label>
+                                                                <div class="col-md-9">
+                                                                    <input type="text" id="owner_phone" name="owner_phone" placeholder="Enter the owner phone here" class="form-control">
                                                                 </div>
+                                                            </div>
 
-                                                                <div class="row mb-3">
-                                                                    <label class="col-md-3 col-form-label"
-                                                                        for="cc">CC</label>
-                                                                    <div class="col-md-9">
-                                                                        <input type="text" id="cc"
-                                                                            name="cc"
-                                                                            placeholder="Enter the cc here"
-                                                                            class="form-control">
-                                                                    </div>
+                                                            <div class="row mb-3">
+                                                                <!-- CC -->
+                                                                <label class="col-md-3 col-form-label" for="cc">CC</label>
+                                                                <div class="col-md-9">
+                                                                    <input type="text" id="cc" name="cc" placeholder="Enter the cc here" class="form-control">
                                                                 </div>
+                                                            </div>
 
+                                                            <div class="row mb-3">
+                                                                <!-- Rental Type -->
                                                                 <label class="col-md-3 col-form-label" for="rental_type">@lang('messages.Rental Type')</label>
                                                                 <div class="col-md-9">
                                                                     <select id="rentalType" name="rental_type" class="form-select">
@@ -325,7 +317,21 @@
                                                                         <option value="morning_afternoon_minibus">Morning Afternoon Minibus</option>
                                                                     </select>
                                                                 </div>
+                                                            </div>
 
+                                                            <!-- Driver Details (Initially Hidden) -->
+                                                            <div id="driverDetails" class="row mb-3" style="display: none;">
+                                                                <label class="col-md-3 col-form-label" for="driver_name">Driver Name</label>
+                                                                <div class="col-md-9">
+                                                                    <input type="text" id="driver_name" name="driver_name" class="form-control">
+                                                                </div>
+                                                            </div>
+
+                                                            <div id="driverPhoneDetails" class="row mb-3" style="display: none;">
+                                                                <label class="col-md-3 col-form-label" for="driver_phone">Driver Phone</label>
+                                                                <div class="col-md-9">
+                                                                    <input type="text" id="driver_phone" name="driver_phone" class="form-control" placeholder="Start with +251">
+                                                                </div>
                                                             </div>
                                                         </div>
 
@@ -646,6 +652,42 @@
                                                                             </div>
                                                                         </div>
 
+                                                                        <div class="mb-3">
+                                                                            <div class="mb-3">
+                                                                                <label for="editDriverName"
+                                                                                    class="form-label">Driver Name</label>
+                                                                                <input type="text"
+                                                                                    class="form-control"
+                                                                                    id="editDriverName"
+                                                                                    name="driver_name"
+                                                                                    data-field="driver_name">
+                                                                            </div>
+                                                                        </div>
+
+                                                                        <div class="mb-3">
+                                                                            <div class="mb-3">
+                                                                                <label for="editDriverPhone"
+                                                                                    class="form-label">Driver Phone</label>
+                                                                                <input type="text"
+                                                                                    class="form-control"
+                                                                                    id="editDriverPhone"
+                                                                                    name="driver_phone"
+                                                                                    data-field="driver_phone">
+                                                                            </div>
+                                                                        </div>
+
+                                                                        <div class="mb-3">
+                                                                            <div class="mb-3">
+                                                                                <label for="editCc"
+                                                                                    class="form-label">CC</label>
+                                                                                <input type="text"
+                                                                                    class="form-control"
+                                                                                    id="editCc"
+                                                                                    name="cc"
+                                                                                    data-field="cc">
+                                                                            </div>
+                                                                        </div>
+
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -706,14 +748,6 @@
                                                                         <dd class="col-sm-8" data-field="capacity">
                                                                         </dd>
 
-
-                                                                    </dl>
-                                                                </div>
-
-                                                                <!-- Second Column -->
-                                                                <div class="col-md-6">
-                                                                    <dl class="row mb-0">
-
                                                                         <dt class="col-sm-4">@lang('messages.Fuel Amount')</dt>
                                                                         <dd class="col-sm-8" data-field="fuel_amount">
                                                                         </dd>
@@ -721,6 +755,13 @@
                                                                         <dt class="col-sm-4">@lang('messages.Fuel Type')</dt>
                                                                         <dd class="col-sm-8" data-field="fuel_type">
                                                                         </dd>
+
+                                                                    </dl>
+                                                                </div>
+
+                                                                <!-- Second Column -->
+                                                                <div class="col-md-6">
+                                                                    <dl class="row mb-0">
 
                                                                         <dt class="col-sm-4">@lang('messages.Last Service'):</dt>
                                                                         <dd class="col-sm-8"
@@ -741,6 +782,27 @@
                                                                         <dt class="col-sm-4">@lang('messages.Rental Type')</dt>
                                                                         <dd class="col-sm-8" data-field="rental_type">
                                                                         </dd>
+
+                                                                        <dt class="col-sm-4">CC</dt>
+                                                                        <dd class="col-sm-8" data-field="cc">
+                                                                        </dd>
+
+                                                                        <dt class="col-sm-4">Rental Person</dt>
+                                                                        <dd class="col-sm-8" data-field="rental_person">
+                                                                        </dd>
+
+                                                                        <dt class="col-sm-4">Rental Phone</dt>
+                                                                        <dd class="col-sm-8" data-field="rental_phone">
+                                                                        </dd>
+
+                                                                        <dt class="col-sm-4">@lang('messages.Driver Name')</dt>
+                                                                        <dd class="col-sm-8" data-field="driver_name">
+                                                                        </dd>
+
+                                                                        <dt class="col-sm-4">@lang('messages.Driver Phone')</dt>
+                                                                        <dd class="col-sm-8" data-field="driver_phone">
+                                                                        </dd>
+
                                                                     </dl>
                                                                 </div>
                                                             </div>
@@ -947,6 +1009,11 @@
                     modal.find('[data-field="vehicle_category"]').text($(this).data('vehicle_category'));
                     modal.find('[data-field="vehicle_type"]').text($(this).data('vehicle_type'));
                     modal.find('[data-field="rental_type"]').text($(this).data('rental_type'));
+                    modal.find('[data-field="rental_person"]').text($(this).data('rental_person'));
+                    modal.find('[data-field="rental_phone"]').text($(this).data('rental_phone'));
+                    modal.find('[data-field="driver_name"]').text($(this).data('driver_name'));
+                    modal.find('[data-field="driver_phone"]').text($(this).data('driver_phone'));
+                    modal.find('[data-field="cc"]').text($(this).data('cc'));
 
                     // Handling Libre and Insurance Files
                     var libreFile = $(this).data('libre');
@@ -998,6 +1065,9 @@
                     modal.find('#editVehicleCategory').val($(this).data('vehicle_category'));
                     modal.find('#editVehicleType').val($(this).data('vehicle_type'));
                     modal.find('#fuel_type').val($(this).data('fuel_type'));
+                    modal.find('[data-field="driver_name"]').val($(this).data('driver_name'));
+                    modal.find('[data-field="driver_phone"]').val($(this).data('driver_phone'));
+                    modal.find('[data-field="cc"]').val($(this).data('cc'));
 
                     modal.find('[data-field="libre"]').text($(this).data('libre'));
                     modal.find('[data-field="insurance"]').text($(this).data('insurance'));
@@ -1016,6 +1086,21 @@
                     document.getElementById('second').scrollIntoView({
                         behavior: 'smooth'
                     }); // Scroll to the form
+                });
+            </script>
+
+            <script>
+                document.getElementById("rentalType").addEventListener("change", function() {
+                    let driverDetails = document.getElementById("driverDetails");
+                    let driverPhoneDetails = document.getElementById("driverPhoneDetails");
+
+                    if (this.value === "whole_day") {
+                        driverDetails.style.display = "flex";
+                        driverPhoneDetails.style.display = "flex";
+                    } else {
+                        driverDetails.style.display = "none";
+                        driverPhoneDetails.style.display = "none";
+                    }
                 });
             </script>
 
@@ -1070,6 +1155,9 @@
                     document.getElementById('editPhone').value = data.phone;
                     document.getElementById('editVehicleCategory').value = data.vehicle_category;
                     document.getElementById('editVehicleType').value = data.vehicle_type;
+                    document.getElementById('editDriverName').value = data.driver_name;
+                    document.getElementById('editDriverPhone').value = data.driver_phone;
+                    document.getElementById('editCc').value = data.cc;
 
                 }
             </script>

@@ -267,22 +267,21 @@ class Daily_KM_Calculation extends Controller
             ];
         });
 
-
         return view('Vehicle.temporaryReport', compact('vehicles', 'drivers', 'departments', 'clusters', 'dailkms'));
     }
 
     public function list()
     {
-        $report = VehicleTemporaryRequestModel::get();
-
-
+        //dd("coming");
+        $report = VehicleTemporaryRequestModel::whereNotNull('end_km')->get();
+        
         return DataTables::of($report)
             ->addIndexColumn()
             ->addColumn('requested_by', function ($row) {
                 return $row->requestedBy->first_name;
             })
             ->addColumn('plate_number', function ($row) {
-                return $row->vehicle->plate_number;
+                return $row->vehicle ? $row->vehicle->plate_number : "Not assigned";
             })
             ->addColumn('start_km', function ($row) {
                 return $row->start_km;
@@ -293,6 +292,9 @@ class Daily_KM_Calculation extends Controller
             ->addColumn('start_location', function ($row) {
                 return $row->start_location;
             })
+            ->addColumn('difference', function ($row) {
+                return ($row->end_km)-  ($row->start_km);
+            })
             ->addColumn('end_locations', function ($row) {
                 return $row->end_locations;
             })
@@ -300,7 +302,7 @@ class Daily_KM_Calculation extends Controller
                 $inOutValue = ($row->in_out_of_addis_ababa == 1) ? 'In Town' : 'Out of Town';
                 $actions = '<button type="button" class="btn btn-info rounded-pill view-btn" 
                 data-requested_by="' . $row->requestedBy->first_name . '"
-                data-plate_number="' . $row->vehicle->plate_number . '"
+                data-plate_number="' . $row->vehicle->plate_number. '"
                 data-purpose="' . $row->purpose . '"
                 data-start_date="' . $row->start_date . '"
                 data-start_time="' . $row->start_time . '"
@@ -310,6 +312,7 @@ class Daily_KM_Calculation extends Controller
                 data-how_many_days="' . $row->how_many_days . '"
                 data-start_km="' . $row->start_km . '"
                 data-end_km="' . $row->end_km . '"
+                data-difference="' . ($row->end_km)-  ($row->start_km). '"
                 data-start_location="' . $row->start_location . '"
                 data-end_locations="' . $row->end_locations . '"
                 data-department_name="' . $row->requestedBy->department->name . '"
@@ -319,7 +322,7 @@ class Daily_KM_Calculation extends Controller
             </button>';
                 return $actions;
             })
-            ->rawColumns(['Requestor', 'Plate_Num', 'Start KM', 'End KM', 'Start Location', 'End Location', 'action'])
+            //->rawColumns(['Requestor', 'Plate_Num', 'Start KM', 'End KM', 'Start Location', 'End Location', 'action'])
             ->make(true);
     }
 

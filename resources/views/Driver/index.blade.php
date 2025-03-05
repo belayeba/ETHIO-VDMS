@@ -160,10 +160,10 @@
                                                                     <i class="ri-edit-line"></i>
                                                                 </button>
 
-                                                                <button type="button" class="btn btn-danger rounded-pill" title="Delete Driver"
+                                                                <!-- <button type="button" class="btn btn-danger rounded-pill" title="Delete Driver"
                                                                     data-bs-toggle="modal" data-bs-target="#warning_alert">
                                                                     <i class="ri-close-circle-line"></i>
-                                                                </button>
+                                                                </button> -->
                                                             </form>
                                                         </td>
                                                     </tr>
