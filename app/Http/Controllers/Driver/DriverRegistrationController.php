@@ -30,7 +30,7 @@ class DriverRegistrationController extends Controller
     public function store(Request $request)
     {
         try {
-            // dd( $request->input( 'expiry_date' ));
+            // dd($request);
             $validator = Validator::make($request->all(), [
                 'user_id' => 'required|uuid|exists:users,id',
                 'license_number' => 'required|string|max:255',
@@ -142,7 +142,7 @@ class DriverRegistrationController extends Controller
         $itemId = $request->input('id');
         $status = $request->input('status');
 
-        
+
         $item = DriversModel::find($itemId);
         if ($item) {
             if ($status == 'active' || $status == 'inactive') {

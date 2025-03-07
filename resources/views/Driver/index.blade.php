@@ -62,7 +62,7 @@
                                     <div class="card-body">
                                         <form method="POST" action="{{ route('driver.store') }}" accept-charset="UTF-8" name="driver_registration-form" id="driver_registration-form" enctype="multipart/form-data">
                                             @csrf
-                                            <div class="row mb-3">
+                                            {{-- <div class="row mb-3">
                                                 <label class="col-md-3 col-form-label" for="user_id">@lang('messages.Driver')</label>
                                                 <div class="col-md-9">
                                                     <select id="user_id" name="user_id" class="form-select" required>
@@ -73,7 +73,7 @@
                                                     </select>
 
                                                 </div>
-                                            </div>
+                                            </div> --}}
                                             <div class="mb-3">
                                                 <label for="nameInput" class="form-label">@lang('messages.License')<strong class="text-danger">*</strong></label>
                                                 <input type="file" class="form-control" id="license_file" name="license_file" placeholder="">
@@ -96,9 +96,42 @@
                                                     });
                                                 </script>
                                             </div>
-                                            <div class="mb-3">
-                                                <label for="nameInput" class="form-label"> @lang('messages.Notes')<strong class="text-danger">*</strong></label>
-                                                <input type="text" class="form-control" id="notes" name="notes" placeholder="Notes">
+                                            <!-- Employee Selection Table -->
+                                            <div class="row">
+                                                <p class="mb-1 fw-bold text-muted">Select Driver</p>
+                                                <div class="mb-3">
+                                                    <input
+                                                        type="text"
+                                                        id="employeeSearch"
+                                                        class="form-control"
+                                                        placeholder="Search Driver by name"
+                                                    />
+                                                </div>
+                                                <div class="table-responsive">
+                                                    <table class="table" id="employee_table">
+                                                        <thead>
+                                                            <tr>
+                                                                <th><input type="checkbox""></th>
+                                                                <th>Name</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            @foreach($drivers as $user)
+                                                                <tr>
+                                                                    <td>
+                                                                        <input
+                                                                            type="checkbox"
+                                                                            name="user_id"
+                                                                            value="{{ $user->id }}"
+                                                                            class="select_employee"
+                                                                        />
+                                                                    </td>
+                                                                    <td>{{ $user->first_name }} {{ $user->last_name }}</td>
+                                                                </tr>
+                                                            @endforeach
+                                                        </tbody>
+                                                    </table>
+                                                </div>
                                             </div>
                                             <div class="d-flex justify-content-center">
                                                 <button type="submit" class="btn btn-primary">@lang('messages.save')</button>
@@ -152,7 +185,7 @@
                                                                 <button type="button" class="btn btn-secondary rounded-pill" title="Edit Driver"
                                                                     data-bs-toggle="modal"
                                                                     data-bs-target="#driver_modal_{{$loop->index}}"
-                                                                    data-driver-name="{{ $driver->first_name }} {{ $driver->last_name }}"
+                                                                    data-driver-name="{{ $item->first_name }} {{ $item->last_name }}"
                                                                     data-driver-phone="{{ $item->user->phone_number }}"
                                                                     data-license="{{ $item->license_file }}"
                                                                     data-licenseNumber="{{ $item->license_number }}"
@@ -358,6 +391,29 @@
         transform: translateX(14px);
     }
 </style>
+
+<script>
+    document.getElementById('employeeSearch').addEventListener('keyup', function () {
+        const searchValue = this.value.toLowerCase();
+        const tableRows = document.querySelectorAll('#employee_table tbody tr');
+
+        tableRows.forEach((row) => {
+            const name = row.cells[1].textContent.toLowerCase();
+
+            if (name.includes(searchValue)) {
+                row.style.display = '';
+            } else {
+                row.style.display = 'none';
+            }
+        });
+    });
+
+    // Select All Functionality
+    document.getElementById('select_all').addEventListener('change', function () {
+        const checkboxes = document.querySelectorAll('.select_employee');
+        checkboxes.forEach((checkbox) => (checkbox.checked = this.checked));
+    });
+</script>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
