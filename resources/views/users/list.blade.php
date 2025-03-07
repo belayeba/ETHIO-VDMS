@@ -6,12 +6,12 @@
 @extends('layouts.navigation')
 
 @section('content')
-    <!-- DataTables CSS -->
-    {{-- <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css"> --}}
+<!-- DataTables CSS -->
+{{-- <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css"> --}}
 
-    <!-- Content -->
-    <div class="content-page">
-        <div class="content">
+<!-- Content -->
+<div class="content-page">
+    <div class="content">
 
         @if(Session::has('error_message'))
             <div class="alert alert-danger alert-dismissible text-bg-danger border-0 fade show col-lg-5" 
@@ -130,62 +130,61 @@
       
     <!-- END wrapper -->
 
-    <!-- jQuery first -->
-    <script src="{{ asset('assets/vendor/datatables.net/js/jquery.dataTables.min.js') }}"></script>
+        <!-- jQuery first -->
+        <script src="{{ asset('assets/vendor/datatables.net/js/jquery.dataTables.min.js') }}"></script>
 
-    <script>
-        $(function() {
-            var table = $('.user_datatable').DataTable({
+        <script>
+            $(function() {
+                var table = $('.user_datatable').DataTable({
 
-                pageLength: 5,
-                ajax: "{{ route('users.list.show') }}",
-                columns: [{
-                        data: 'first_name',
-                        name: 'first_name'
-                    },
-                    {
-                        data: 'email',
-                        name: 'email'
-                    },
-                    {
-                        data: 'phone_number',
-                        name: 'phone_number'
-                    },
-                    {
-                        data: 'department_id',
-                        name: 'department_id'
-                    },
-                    {
-                        data: 'created_at',
-                        name: 'created_at'
-                    },
-                    {
-                        data: 'action',
-                        name: 'action'
-                    },
+                    pageLength: 5,
+                    ajax: "{{ route('users.list.show') }}",
+                    columns: [{
+                            data: 'first_name',
+                            name: 'first_name'
+                        },
+                        {
+                            data: 'email',
+                            name: 'email'
+                        },
+                        {
+                            data: 'phone_number',
+                            name: 'phone_number'
+                        },
+                        {
+                            data: 'department_id',
+                            name: 'department_id'
+                        },
+                        {
+                            data: 'created_at',
+                            name: 'created_at'
+                        },
+                        {
+                            data: 'action',
+                            name: 'action'
+                        },
 
-                ]
+                    ]
+                });
             });
-        });
 
-        $(document).ready(function() {
-            var RejectedId;
+            $(document).ready(function() {
+                var RejectedId;
 
-            $(document).on('click', '.reject-btn', function() {
-                RejectedId = $(this).data('id');
+                $(document).on('click', '.reject-btn', function() {
+                    RejectedId = $(this).data('id');
 
-                $('#deleted_user_id').val(RejectedId);
-                $('#confirmationModal').modal('toggle');
+                    $('#deleted_user_id').val(RejectedId);
+                    $('#confirmationModal').modal('toggle');
+                });
             });
-        });
+        </script>
 
-    </script>
+        <script>
+            src = "{{ asset('assets/vendor/datatables.net-bs5/js/dataTables.bootstrap5.min.js') }}" >
+        </script>
 
-    <script>
-        src = "{{ asset('assets/vendor/datatables.net-bs5/js/dataTables.bootstrap5.min.js') }}" >
-    </script>
+        <script src="{{ asset('assets/js/app.min.js') }}"></script>
+        @endsection
 
-    <script src="{{ asset('assets/js/app.min.js') }}"></script>
-@endsection
-
-<script src="{{ asset('assets/js/vendor.min.js') }}"></script>
+        <script src="{{ asset('assets/js/vendor.min.js') }}"></script>
