@@ -20,15 +20,16 @@
 
         <h2>Users Data</h2>
         <table>
-            <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>Email</th>
-                    <th>Password</th>
-                </tr>
-            </thead>
+           
             <tbody>
                 @foreach($data as $item)
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Password(Don't forget to change)</th>
+                        </tr>
+                    </thead>
                     <tr>
                         <td>{{ $item->name }}</td>
                         <td>{{ $item->email }}</td>

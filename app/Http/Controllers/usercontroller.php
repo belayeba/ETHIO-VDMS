@@ -291,10 +291,23 @@ class usercontroller extends Controller
    
     public function exportToPdf()
     {
+
+        $from_user_info = userInfo::get();
+        $user = User::all();
+
+        foreach ($from_user_info as $info) {
+            $matchingUser = $user->firstWhere('email', $info->email); // Assuming there's a user_id column
+            if ($matchingUser) {
+                $info->name = trim("{$matchingUser->first_name} {$matchingUser->middle_name} {$matchingUser->last_name}");
+                $info->save();
+            }
+        }
+
         // userInfo::truncate();
         // Fetch data from a table
         $data = userInfo::get();
-
+        //$user = User::all();
+        
         $pdfContent =  view('users.export', compact('data'));
 
         // Set up dompdf options
