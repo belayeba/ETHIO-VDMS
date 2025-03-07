@@ -86,7 +86,7 @@
                                                                         <div class="card"
                                                                             style="box-shadow: 0px 10px 10px 8px rgba(0, 0, 0, 0.1);">
                                                                             <div class="card-header ">
-                                                                                <h4>{{ $groupedPermission->first()->PermissionGroup->name }}
+                                                                                <h4>{{ $groupedPermission->first()->name }}
                                                                                 </h4>
                                                                             </div>
                                                                             <div class="card-body">

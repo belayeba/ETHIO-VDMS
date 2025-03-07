@@ -702,7 +702,7 @@ class VehicleTemporaryRequestController extends Controller
         $validation = Validator::make($request->all(), [
             'field_letter' => 'required|file|mimes:pdf,jpeg,png,jpg', // For PDF and common image types
             'request_id' => 'required|uuid|exists:vehicle_requests_temporary,request_id',
-            'total_km' => 'required|integer',
+           // 'total_km' => 'required|integer',
         ]);
         // Check validation error
         if ($validation->fails()) {
@@ -735,7 +735,7 @@ class VehicleTemporaryRequestController extends Controller
             }
             $Vehicle_Request->div_approved_by = $user_id;
             $Vehicle_Request->field_letter = $field_letterfileName;
-            $Vehicle_Request->allowed_km = $request->input('total_km');
+           // $Vehicle_Request->allowed_km = $request->input('total_km');
             $Vehicle_Request->save();
             return redirect()->back()->with(
                 'success_message',

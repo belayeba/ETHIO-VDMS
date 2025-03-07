@@ -204,7 +204,7 @@ class LetterManagement extends Controller
         })
 
         ->addColumn('preparedBy', function ($row) {
-            return $row->approvedBy->first_name . ' ' . $row->preparedBy->middle_name;
+            return $row->approvedBy ? ($row->approvedBy->first_name . ' ' . $row->preparedBy->middle_name) : "Pending";
         })
 
         ->addColumn('date', function ($row) {

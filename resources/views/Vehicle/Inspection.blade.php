@@ -108,7 +108,7 @@
                                                 <div class="col-3">
                                                     <div class="form-check">
                                                         <input type="checkbox" class="form-check-input ok-checkbox" id="yes_{{ $loop->index }}" name="damaged_parts[{{ $part->id }}]" value="1" data-row="{{ $loop->index }}">
-                                                        <label class="form-check-label" for="yes_{{ $loop->index }}">Ok</label>
+                                                        <label class="form-check-label" for="yes_{{ $loop->index }}">Yes</label>
                                                         <input type="text" name="damage_descriptions[{{ $part->id }}]" id="notes_{{ $loop->index }}" class="d-none damaged-notes" placeholder="Add Description" data-row="{{ $loop->index }}">
                                                     </div>
                                                 </div>
@@ -116,7 +116,7 @@
                                                     <div class="form-check form-checkbox-danger">
                                                         <input type="checkbox" class="form-check-input damaged-checkbox" id="no_{{ $loop->index }}" name="damaged_parts[{{ $part->id }}]" value="0" data-row="{{ $loop->index }}">
                                                         <input type="hidden" name="parts[{{ $part->id }}]" value="{{ $part->vehicle_parts_id }}">
-                                                        <label class="form-check-label" for="no_{{ $loop->index }}">Damaged</label>
+                                                        <label class="form-check-label" for="no_{{ $loop->index }}">No</label>
                                                     </div>
                                                 </div>
                                             </div>
@@ -355,8 +355,8 @@
                                                 <thead>
                                                     <tr>
                                                         <th>Vehicle Part</th>
-                                                        <th>Is Damaged</th>
-                                                        <th>Damage Description</th>
+                                                        <th>Available</th>
+                                                        <th>Description</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -369,7 +369,7 @@
                                                 var row = document.createElement('tr');
                                                 row.innerHTML = `
                                                     <td>${inspection.part_name}</td>
-                                                    <td>${inspection.is_damaged ? 'No' : 'Yes'}</td>
+                                                    <td>${inspection.is_damaged ? 'Yes' : 'No'}</td>
                                                     <td>${inspection.damage_description ? inspection.damage_description : '-'}</td>
                                                 `;
                                                 table.querySelector('tbody').appendChild(row); // Append row to the table body

@@ -108,7 +108,7 @@
                                     </div>
                                 </div>
                          <!-- end show modal -->
-
+                        </div>
                             <!-- this is for the assign  modal -->
                             <div class="modal fade" id="staticaccept" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                                 <div class="modal-dialog modal-lg">                                   
@@ -380,8 +380,8 @@
                                 <thead>
                                     <tr>
                                         <th>Vehicle Part</th>
-                                        <th>Is Damaged</th>
-                                        <th>Damage Description</th>
+                                        <th>Avaialable</th>
+                                        <th>Description</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -394,7 +394,7 @@
                                             var row = document.createElement('tr');
                                             row.innerHTML = `
                                             <td>${inspection.part_name}</td>
-                                            <td>${inspection.is_damaged ? 'No' : 'Yes'}</td>
+                                            <td>${inspection.is_damaged ? 'Yes' : 'No'}</td>
                                             <td>${inspection.damage_description ? inspection.damage_description : '-'}</td>
                                             `;
                                             table.querySelector('tbody').appendChild(
@@ -575,11 +575,11 @@
         });
 
         $(document).ready(function() {
-            var AcceptedId;
+           // var AcceptedId;
 
             $(document).on('click', '.accept-btn', function() {
-                AcceptedId = $(this).data('id');
-
+                var AcceptedId = $(this).data('id');
+                //alert(AcceptedId);
                 $('#request_id').val(AcceptedId);
                 $('#staticaccept').modal('show');
             });

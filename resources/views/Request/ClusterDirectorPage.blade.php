@@ -107,13 +107,13 @@
                                             <input type="hidden" name="request_id" id="request_id">
                                             <div class="modal-body p-4">
                                                 <div class="text-center">
-                                                    <div class="position-relative mb-3">
+                                                    <!-- <div class="position-relative mb-3">
                                                         <div class="mb-6 position-relative" id="datepicker1">
                                                             <label class="form-label">@lang('messages.Total KM')</label>
                                                             <input type="number" class="form-control"
                                                                 name="total_km" placeholder="Enter Total KM ">
                                                         </div>
-                                                    </div>
+                                                    </div> -->
                                                     <div class="position-relative mb-3">
                                                         <label class="form-label">Attach Field Letter</label>
                                                         <input class="form-control"

@@ -26,11 +26,11 @@ class RouteController extends Controller
         $this->dailyKmCalculation = $dailyKmCalculation;
     }
     public function displayAllRoutes()
-    {
-        $routes = Route::get();
-        $vehicles = VehiclesModel::whereIn('rental_type', ['morning_afternoon_minibus', '40_60','service'])->get();
-        return view('Route.index', compact('routes', 'vehicles'));
-    }
+        {
+            $routes = Route::get();
+            $vehicles = VehiclesModel::whereIn('rental_type', ['morning_afternoon_minibus', '40_60','service'])->get();
+            return view('Route.index', compact('routes', 'vehicles'));
+        }
     public function own_route()
         {
             $id = Auth::id();

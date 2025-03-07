@@ -25,7 +25,6 @@ class RoleController extends Controller {
         $roles = Role::orderBy( 'id', 'DESC' )->paginate( 25 );
         $rolePermissions = Permission::join( 'role_has_permissions', 'role_has_permissions.permission_id', '=', 'permissions.id' )->get();
         $permission = Permission::get();
-
         return view( 'roles.index', compact( 'roles', 'rolePermissions', 'permission' ) )
         ->with( 'i', ( $request->input( 'page', 1 ) - 1 ) * 5 );
     }

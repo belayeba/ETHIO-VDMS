@@ -504,8 +504,8 @@
                                 <thead>
                                     <tr>
                                         <th>Vehicle Part</th>
-                                        <th>Is Damaged</th>
-                                        <th>Damage Description</th>
+                                        <th>Available</th>
+                                        <th>Description</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -518,7 +518,7 @@
                                             var row = document.createElement('tr');
                                             row.innerHTML = `
                                             <td>${inspection.part_name}</td>
-                                            <td>${inspection.is_damaged ? 'No' : 'Yes'}</td>
+                                            <td>${inspection.is_damaged ? 'Yes' : 'No'}</td>
                                             <td>${inspection.damage_description ? inspection.damage_description : '-'}</td>
                                             `;
                                             table.querySelector('tbody').appendChild(
