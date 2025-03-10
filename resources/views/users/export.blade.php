@@ -23,13 +23,11 @@
            
             <tbody>
                 @foreach($data as $item)
-                    <thead>
-                        <tr>
-                            <th>Name</th>
-                            <th>Email</th>
-                            <th>Password(Don't forget to change)</th>
-                        </tr>
-                    </thead>
+                    <tr>
+                        <td>Name</td>
+                        <td>Email</td>
+                        <td>Password(Don't forget to change)</td>
+                    </tr>
                     <tr>
                         <td>{{ $item->name }}</td>
                         <td>{{ $item->email }}</td>

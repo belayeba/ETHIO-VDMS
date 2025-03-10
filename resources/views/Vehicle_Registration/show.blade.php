@@ -118,7 +118,6 @@
                                                                 <div class="col-md-9">
                                                                     <input type="text" id="Plate Number"
                                                                         name="plate_number"
-                                                                        pattern="^[A-Z]{2}-\d{1}-\d{5}$"
                                                                         placeholder="AA-1-12345" class="form-control"
                                                                         required>
                                                                 </div>
@@ -504,7 +503,6 @@
                                                                                 id="editPlateNumber"
                                                                                 name="plate_number"
                                                                                 data-field="plate_number"
-                                                                                pattern="^[A-Z]{2}-\d{1}-\d{5}$"
                                                                                 required>
                                                                         </div>
 

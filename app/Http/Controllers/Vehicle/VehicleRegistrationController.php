@@ -216,8 +216,8 @@ class VehicleRegistrationController extends Controller
             'capacity' => $capacity,
             'vehicle_category' => $request->vehicle_category,
             'rental_type' => $vec_type,
-            'driver_name' => $request->driver_name,
-            'driver_phone' => $request->driver_phone,
+           // 'driver_name' => $request->driver_name,
+            //'driver_phone' => $request->driver_phone,
             'libre' => $filelibre,
             'insurance' => $fileinsurance,
             'created_at' => $ethiopianDate
