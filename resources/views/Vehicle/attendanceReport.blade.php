@@ -38,7 +38,7 @@
                                     {{-- <form action="{{ route('dailyreport.filterReport') }}" method="GET"> --}}
                                     <!-- Plate Number Filter -->
                                     <div class="col-lg-4">
-                                        <label for="selectPlateNumber" class="form-label">Vehicle Type</label>
+                                        <label for="selectPlateNumber" class="form-label">@lang('messages.Vehicle Type')</label>
                                         <select id="selectPlateNumber" name="vehicle_type" class="form-select" required>
                                             <option value="">Select Type</option>
                                             <option value="40/60">45/60 vehicle</option>
@@ -73,10 +73,10 @@
                                     </div>
                                   
                                  <div class="col-lg-4 mt-3">
-                                    <button type="submit" class="btn btn-info">Filter <i
+                                    <button type="submit" class="btn btn-info">@lang('messages.Filter') <i
                                         class="ri-arrow-right-line ms-1"></i></button>
                                 
-                                        <button type="submit" class="btn btn-success" onclick="document.getElementById('export').value=1">Export</button>
+                                        <button type="submit" class="btn btn-success" onclick="document.getElementById('export').value=1">@lang('messages.Export')</button>
                                         <input type="hidden" id="export" name="export" value="0">
                                 </div>
                             </div> 
@@ -89,11 +89,11 @@
                                     <table id="basic-datatable" class="table table-striped dt-responsive nowrap w-100">
                                         <thead>
                                             <tr>
-                                                <th>#</th>
-                                                <th>Plate Number</th>
-                                                <th>Type</th>
+                                                <th>{{ __('messages.Roll No.') }}</th>
+                                                <th>{{ __('messages.Plate Number') }}</th>
+                                                <th>{{ __('messages.Type') }}</th>
                                                 <th>Date From - To</th>
-                                                <th>Route</th>
+                                                <th>{{ __('messages.Route') }}</th>
                                                 <th>Total Days</th>
                                             </tr>
                                         </thead>

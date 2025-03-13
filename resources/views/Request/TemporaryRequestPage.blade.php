@@ -418,7 +418,7 @@
                                 <div class="modal-dialog">
                                     <div class="modal-content">
                                         <div class="modal-header">
-                                            <h4 class="modal-title">Request Details</h4>
+                                            <h4 class="modal-title">@lang('messages.Request Details')</h4>
                                             <button type="button" class="btn-close" data-bs-dismiss="modal"
                                                 aria-label="Close"></button>
                                         </div>
@@ -438,7 +438,7 @@
 
                                                 <dd class="col-sm-7" data-field="end_date"></dd>
 
-                                                <dt class="col-sm-5">Location From and To</dt>
+                                                <dt class="col-sm-5">@lang('messages.Location From and To')</dt>
 
                                                 <dd class="col-sm-7" data-field="start_location"></dd>
 
@@ -449,7 +449,7 @@
                                                 <dt class="col-sm-5">@lang('messages.Materials')</dt>
                                                 <dd class="col-sm-7" data-field="materials"></dd>
 
-                                                <dt class="col-sm-5">Progress</dt>
+                                                <dt class="col-sm-5">@lang('messages.Progress')</dt>
 
                                                 <dd class="col-sm-7" data-field="progress"></dd>
                                             </dl>

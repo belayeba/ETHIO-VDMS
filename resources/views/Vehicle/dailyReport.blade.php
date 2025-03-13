@@ -39,7 +39,7 @@
                                     <form action="{{ route('dailyreport.filterReport') }}" method="GET">
                                     <!-- Plate Number Filter -->
                                     <div class="col-lg-4">
-                                        <label for="selectPlateNumber" class="form-label">Plate Number</label>
+                                        <label for="selectPlateNumber" class="form-label">@lang('messages.Plate Number')</label>
                                         <select id="selectPlateNumber" name="plate_number" class="form-select">
                                             <option value="">Select Plate Number</option>
                                             @foreach($vehicles as $vehicle)
@@ -73,10 +73,10 @@
                                     </div>
                                   
                                  <div class="col-lg-4 mt-3">
-                                    <button type="submit" class="btn btn-info">Filter <i
+                                    <button type="submit" class="btn btn-info">@lang('messages.Filter') <i
                                         class="ri-arrow-right-line ms-1"></i></button>
                                 
-                                        <button type="submit" class="btn btn-success" onclick="document.getElementById('export').value=1">Export</button>
+                                        <button type="submit" class="btn btn-success" onclick="document.getElementById('export').value=1">@lang('messages.Export')</button>
                                         <input type="hidden" id="export" name="export" value="0">
                                 </div>
                             </div> 
@@ -89,12 +89,12 @@
                                     <table id="basic-datatable" class="table table-striped dt-responsive nowrap w-100">
                                         <thead>
                                             <tr>
-                                                <th>Date</th>
-                                                <th>Plate Number</th>
-                                                <th>Morning KM</th>
-                                                <th>Night KM Difference </th>
-                                                <th>Afternoon KM</th>
-                                                <th>Day KM Difference </th>
+                                                <th>{{ __('messages.Date') }}</th>
+                                                <th>{{ __('messages.Plate Number') }}</th>
+                                                <th>{{ __('messages.Morning KM') }}</th>
+                                                <th>{{ __('messages.Night KM Difference') }}</th>
+                                                <th>{{ __('messages.Afternoon KM') }}</th>
+                                                <th>{{ __('messages.Day KM Difference') }}</th>
                                             </tr>
                                         </thead>
 

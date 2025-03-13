@@ -58,7 +58,7 @@
                                                 <a href="#account-2" data-bs-toggle="tab" data-toggle="tab"
                                                     class="nav-link rounded-0 py-2">
                                                     <i class="ri-car-fill fw-normal fs-20 align-middle me-1"></i>
-                                                    <span class="d-none d-sm-inline">Reason</span>
+                                                    <span class="d-none d-sm-inline">@lang('messages.Reason')</span>
                                                 </a>
                                             </li>
                                            
@@ -67,7 +67,7 @@
                                                 <a href="#finish-3" data-bs-toggle="tab" data-toggle="tab"
                                                     class="nav-link rounded-0 py-2">
                                                     <i class=" ri-information-fill fw-normal fs-20 align-middle me-1"></i>
-                                                    <span class="d-none d-sm-inline">Info</span>
+                                                    <span class="d-none d-sm-inline">@lang('messages.Info')</span>
                                                 </a>
                                             </li>
 
@@ -85,7 +85,7 @@
 
                                                         <div class="position-relative mb-3">
                                                             <div class="mb-6 position-relative" id="datepicker1">
-                                                                <label class="form-label">Vehicle</label>
+                                                                <label class="form-label">@lang('messages.Vehicle')</label>
                                                                 <select id="vehicl" name="vehicle" class="form-select" required>
                                                                     <option value="">Select</option>
                                                                     @foreach($vehicle as $vehicle)
@@ -97,7 +97,7 @@
 
                                                         <div class="position-relative mb-3">
                                                             <div class="mb-6 position-relative">
-                                                                <label class="form-label">Maintenance Type</label>
+                                                                <label class="form-label">@lang('messages.Maintenance Type')</label>
                                                                 <select id="maintenance" name="maintenance_type" class="form-select" required>
                                                                     <option value="">Select</option>
                                                                     <option value="service">Service</option>
@@ -109,7 +109,7 @@
                                                     </div>
                                                     <ul class="list-inline wizard mb-0">
                                                         <li class="next list-inline-item float-end">
-                                                            <a href="javascript:void(0);" class="btn btn-info">Next <i
+                                                            <a href="javascript:void(0);" class="btn btn-info">@lang('messages.Next') <i
                                                                     class="ri-arrow-right-line ms-1"></i></a>
                                                         </li>
                                                     </ul>
@@ -121,7 +121,7 @@
                                                     <div class="row">
                                                         <div class="position-relative mb-3">
                                                             <div class="mb-6 position-relative">
-                                                                <label class="form-label">Current Mileage</label>
+                                                                <label class="form-label">@lang('messages.Current Mileage')</label>
                                                                 <input type="number" name="milage" class="form-control"
                                                                     placeholder="Enter current vehicle mileage" required>
                                                             </div>
@@ -129,7 +129,7 @@
 
                                                         <div class="position-relative mb-3">
                                                             <div class="mb-6 position-relative">
-                                                                <label class="form-label">Problem</label>
+                                                                <label class="form-label">@lang('messages.Problem')</label>
                                                                 <textarea type="text" name="driver_inspection" class="form-control"
                                                                     rows="4"  style="resize: none;" required> </textarea>
                                                             </div>
@@ -140,10 +140,10 @@
                                                     <ul class="pager wizard mb-0 list-inline mt-1">
                                                         <li class="previous list-inline-item">
                                                             <button type="button" class="btn btn-light"><i
-                                                                    class="ri-arrow-left-line me-1"></i> Back</button>
+                                                                    class="ri-arrow-left-line me-1"></i> @lang('messages.Back')</button>
                                                         </li>
                                                         <li class="next list-inline-item float-end">
-                                                            <button type="submit" class="btn btn-info">Submit</button>
+                                                            <button type="submit" class="btn btn-info">@lang('messages.Submit')</button>
                                                         </li>
                                                     </ul>
                                                 </div>
@@ -163,11 +163,11 @@
                                     <table id="basic-datatable" class="Temporary_datatable table table-centered mb-0 table-nowrap">
                                         <thead>
                                             <tr>
-                                                <th>Roll.no</th>
-                                                <th>Vehicle</th>
-                                                <th>Type</th>
-                                                <th>Status</th>
-                                                <th>Actions</th>
+                                                <th>{{ __('messages.Roll No.') }}</th>
+                                                <th>{{ __('messages.Vehicle') }}</th>
+                                                <th>{{ __('messages.Type') }}</th>
+                                                <th>{{ __('messages.Status') }}</th>
+                                                <th>{{ __('messages.Action') }}</th>
                                             </tr>
                                         </thead>
 
@@ -189,17 +189,14 @@
                                             <div class="modal-body p-4">
                                                 <div class="text-center">
                                                     <i class="ri-alert-line h1 text-danger"></i>
-                                                    <h4 class="mt-2">Warning</h4>
+                                                    <h4 class="mt-2">@lang('messages.Warning')</h4>
                                                     <h5 class="mt-3">
-                                                        Are you sure you want to DELETE this request?</br> This action
-                                                        cannot be
-                                                        undone.
+                                                        @lang('messages.Are you sure you want to accept this request?')</br> @lang('messages.This action cannot be undone.')
                                                     </h5>
                                                     <button type="button" class="btn btn-secondary"
-                                                        data-bs-dismiss="modal">Cancel</button>
+                                                        data-bs-dismiss="modal">@lang('messages.Cancel')</button>
                                                     <button type="submit" class="btn btn-danger"
-                                                        id="confirmDelete">Yes,
-                                                        Delete</button>
+                                                        id="confirmDelete">@lang('messages.Yes, Accept')</button>
                                                 </div>
                                             </div>
                                         </form>

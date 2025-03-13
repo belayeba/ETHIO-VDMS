@@ -40,8 +40,7 @@
                                                 <input type="hidden" name="filter" value="permanent_filter">
                                                 <!-- Plate Number Filter -->
                                                 <div class="col-lg-2">
-                                                    <label for="selectPlateNumber" class="form-label">Plate
-                                                        Number</label>
+                                                    <label for="selectPlateNumber" class="form-label">@lang('messages.Plate Number')</label>
                                                     <select id="selectPlateNumber" name="plate_number"
                                                         class="form-select">
                                                         <option value="">Select Plate Number</option>
@@ -53,7 +52,7 @@
                                                 </div>
 
                                                 <div class="col-lg-2">
-                                                    <label for="selectName" class="form-label">Name</label>
+                                                    <label for="selectName" class="form-label">@lang('messages.Name')</label>
                                                     <select id="selectName" name="driver_name" class="form-select">
                                                         <option value="">Select Driver</option>
                                                         @foreach ($drivers as $driver)
@@ -65,7 +64,7 @@
 
                                                 <div class="col-lg-2">
                                                     <label for="selectDepartment"
-                                                        class="form-label">Departments</label>
+                                                        class="form-label">@lang('messages.Department')</label>
                                                     <select id="selectDepartment" name="department"
                                                         class="form-select">
                                                         <option value="">Department</option>
@@ -77,7 +76,7 @@
                                                 </div>
 
                                                 <div class="col-lg-2">
-                                                    <label for="selectCluster" class="form-label">Clusters</label>
+                                                    <label for="selectCluster" class="form-label">@lang('messages.Cluster')</label>
                                                     <select id="selectCluster" name="cluster" class="form-select">
                                                         <option value="">Cluster</option>
                                                         @foreach ($clusters as $cluster)
@@ -115,10 +114,10 @@
                                                 </div>
 
                                                 <div class="col-lg-2 mt-3">
-                                                    <button type="submit" class="btn btn-info">Filter <i
+                                                    <button type="submit" class="btn btn-info">@lang('messages.Filter') <i
                                                             class="ri-arrow-right-line ms-1"></i></button>
                                                     
-                                                    <button type="submit" class="btn btn-success" onclick="document.getElementById('export').value=1">Export</button>
+                                                    <button type="submit" class="btn btn-success" onclick="document.getElementById('export').value=1">@lang('messages.Export')</button>
                                                     <input type="hidden" id="export" name="export" value="0">
                                                 </div>
 
@@ -138,13 +137,13 @@
                                         <table id="datatable-buttons" class="table table-striped dt-responsive nowrap w-100">
                                             <thead>
                                                 <tr>
-                                                    <th>Given Date</th>
-                                                    <th>Requested By</th>
-                                                    <th>Plate Number</th>
-                                                    <th>Reason</th>
-                                                    <th>Mileage</th>
-                                                    <th>Department</th>
-                                                    <th>Cluster</th>
+                                                    <th>{{ __('messages.Date Given') }}</th>
+                                                    <th>{{ __('messages.Requested By') }}</th>
+                                                    <th>{{ __('messages.Plate Number') }}</th>
+                                                    <th>{{ __('messages.Reason') }}</th>
+                                                    <th>{{ __('messages.Mileage') }}</th>
+                                                    <th>{{ __('messages.Department') }}</th>
+                                                    <th>{{ __('messages.Cluster') }}</th>
 
                                                 </tr>
                                             </thead>

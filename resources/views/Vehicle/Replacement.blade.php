@@ -62,7 +62,7 @@
                                                     </div>
                                                     
                                                     <div class="position-relative mb-3">
-                                                        <label class="form-label" for="validationTooltip02">Select Replacemen</label>
+                                                        <label class="form-label" for="validationTooltip02">Select Replacement</label>
                                                         <select class="form-control" id="routeSelect" name="new_vehicle_id">
                                                             <option value="">Select Replacement</option>
                                                             @foreach ($vehicles as $vec)
@@ -74,7 +74,7 @@
 
                                                 <ul class="list-inline wizard mb-0">
                                                     <li class="next list-inline-item float-end">
-                                                        <button type="submit" class="btn btn-info">Submit</button>
+                                                        <button type="submit" class="btn btn-info">@lang('messages.Submit')</button>
                                                     </li>
                                                 </ul>
 
@@ -95,12 +95,12 @@
                                     <table class="table attendance_datatable table-striped dt-responsive nowrap w-100">
                                         <thead>
                                             <tr>
-                                                <th>#</th>
+                                                <th>{{ __('messages.Roll No.') }}</th>
                                                 <th>Old Car</th>
                                                 <th>New Car</th>
-                                                <th>Registered By</th>
-                                                <th>Date</th>
-                                                <th>Action</th>
+                                                <th>{{ __('messages.Requested By') }}</th>
+                                                <th>{{ __('messages.Date') }}</th>
+                                                <th>{{ __('messages.Action') }}</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -121,16 +121,14 @@
                                                 <div class="modal-body p-4">
                                                     <div class="text-center">
                                                         <i class="ri-alert-line h1 text-warning"></i>
-                                                        <h4 class="mt-2">Warning</h4>
+                                                        <h4 class="mt-2">@lang('messages.Warning')</h4>
                                                         <h5 class="mt-3">
-                                                            Are you sure you want to delete this item? This action cannot be
-                                                            undone.
+                                                            @lang('messages.Are you sure you want to accept this request?')</br> @lang('messages.This action cannot be undone.')
                                                         </h5>
                                                         <button type="button" class="btn btn-secondary"
-                                                            data-bs-dismiss="modal">Cancel</button>
+                                                            data-bs-dismiss="modal">@lang('messages.Cancel')</button>
                                                         <button type="submit" class="btn btn-danger"
-                                                            id="confirmDelete">Yes,
-                                                            Delete</button>
+                                                            id="confirmDelete">@lang('messages.Yes, Accept')</button>
                                                     </div>
                                                 </div>
                                             </form>
@@ -164,7 +162,7 @@
                                                         </div>
                                                         
                                                         <div class="position-relative mb-3">
-                                                            <label class="form-label" for="validationTooltip02">Select Replacemen</label>
+                                                            <label class="form-label" for="validationTooltip02">Select Replacement</label>
                                                             <select class="form-control"  name="new_vehicle_id">
                                                                 <option value="" id="newSelect"></option>
                                                                 @foreach ($vehicles as $vec)
@@ -176,8 +174,8 @@
                                                     </div>                                                        
                                             <div class="modal-footer">
                                                 <button type="button" class="btn btn-light"
-                                                    data-bs-dismiss="modal">Close</button>
-                                                <button type="submit" class="btn btn-info">Submit</button>
+                                                    data-bs-dismiss="modal">@lang('messages.Close')</button>
+                                                <button type="submit" class="btn btn-info">@lang('messages.Submit')</button>
                                             </div>
                                             </form>
                                         </div><!-- /.modal-content -->

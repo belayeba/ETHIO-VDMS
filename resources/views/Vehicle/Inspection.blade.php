@@ -38,7 +38,7 @@
         <div class="col-lg-6">
                 <div class="card">
                     <div class="card-header">
-                        <h4 class="header-title">Vehicle Inspection</h4>
+                        <h4 class="header-title">@lang('messages.Vehicle Inspection')</h4>
                     </div>
                     <div class="card-body"> 
                         <form method="POST" id="vehicle_inspection_form" action="{{route('inspection.store')}}" enctype="multipart/form-data">
@@ -49,7 +49,7 @@
                                     <li class="nav-item">
                                         <a href="#account-2" data-bs-toggle="tab" data-toggle="tab" class="nav-link rounded-0 py-2">
                                             <i class=" ri-list-check-3 fw-normal fs-20 align-middle me-1"></i>
-                                            <span class="d-none d-sm-inline">Inspection Form</span>
+                                            <span class="d-none d-sm-inline">@lang('messages.Inspection Form')</span>
                                         </a>
                                     </li>
                                     <!-- <li class="nav-item">
@@ -76,7 +76,7 @@
                                 <div class="row">
                                     <div class="position-relative ">
                                         <div class="position-relative mb-3">
-                                            <label class="form-label" for="validationTooltip02">Select Vehicle</label>
+                                            <label class="form-label" for="validationTooltip02">@lang('messages.Select Vehicle')</label>
                                             <select class="form-control" id="department_id" name="vehicle_id">
                                                 <option value="">Select Vehicle</option>
                                                     @foreach ($vehicle as $vec )
@@ -95,7 +95,7 @@
                                     {{-- </div> --}}
                                     <div class="text-center mb-4">
                                         <label class="form-label fw-bold fs-4" for="spareParts" style="color: #333;">
-                                            Vehicle Parts
+                                            @lang('messages.Vehicle Parts')
                                         </label>
                                     </div>
                                     @foreach($parts->where('type', 'normal_part') as $part)
@@ -108,7 +108,7 @@
                                                 <div class="col-3">
                                                     <div class="form-check">
                                                         <input type="checkbox" class="form-check-input ok-checkbox" id="yes_{{ $loop->index }}" name="damaged_parts[{{ $part->id }}]" value="1" data-row="{{ $loop->index }}">
-                                                        <label class="form-check-label" for="yes_{{ $loop->index }}">Yes</label>
+                                                        <label class="form-check-label" for="yes_{{ $loop->index }}">@lang('messages.Yes')</label>
                                                         <input type="text" name="damage_descriptions[{{ $part->id }}]" id="notes_{{ $loop->index }}" class="d-none damaged-notes" placeholder="Add Description" data-row="{{ $loop->index }}">
                                                     </div>
                                                 </div>
@@ -116,7 +116,7 @@
                                                     <div class="form-check form-checkbox-danger">
                                                         <input type="checkbox" class="form-check-input damaged-checkbox" id="no_{{ $loop->index }}" name="damaged_parts[{{ $part->id }}]" value="0" data-row="{{ $loop->index }}">
                                                         <input type="hidden" name="parts[{{ $part->id }}]" value="{{ $part->vehicle_parts_id }}">
-                                                        <label class="form-check-label" for="no_{{ $loop->index }}">No</label>
+                                                        <label class="form-check-label" for="no_{{ $loop->index }}">@lang('messages.No')</label>
                                                     </div>
                                                 </div>
                                             </div>
@@ -127,7 +127,6 @@
                                 <div class="text-center mb-4">
                                     <label class="form-label fw-bold fs-4" for="spareParts" style="color: #333;">
                                         Spare Parts
-
                                     </label>
                                 </div>
 
@@ -143,14 +142,14 @@
                                                     <div class="form-check">
                                                         <input type="checkbox" class="form-check-input yes-checkbox" id="ok_{{ $loop->index }}" name="damaged_parts[{{ $part->id }}]" value="1" data-row="{{ $loop->index }}">
                                                         <input type="hidden" name="parts[{{ $part->id }}]" value="{{ $part->vehicle_parts_id }}">
-                                                        <label class="form-check-label" for="ok_{{ $loop->index }}">Yes</label>
+                                                        <label class="form-check-label" for="ok_{{ $loop->index }}">@lang('messages.Yes')</label>
                                                         <input type="text" name="damage_descriptions[{{ $part->id }}]" id="input_{{ $loop->index }}" class="d-none quantity-notes" placeholder="How many" data-row="{{ $loop->index }}">
                                                     </div>
                                                 </div>
                                                 <div class="col-3">
                                                     <div class="form-check form-checkbox-danger">
                                                         <input type="checkbox" class="form-check-input none-checkbox" id="damaged_{{ $loop->index }}" name="damaged_parts[{{ $part->id }}]" value="0" data-row="{{ $loop->index }}">
-                                                        <label class="form-check-label" for="damaged_{{ $loop->index }}">No</label>
+                                                        <label class="form-check-label" for="damaged_{{ $loop->index }}">@lang('messages.No')</label>
                                                     </div>
                                                 </div>
                                             </div>

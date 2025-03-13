@@ -46,7 +46,7 @@
                                             <a href="#account2" data-bs-toggle="tab" data-toggle="tab"
                                                 class="nav-link rounded-0 py-2">
                                                 <i class="ri-settings-5-line fw-normal fs-20 align-middle me-1"></i>
-                                                <span class="d-none d-sm-inline">ADD</span>
+                                                <span class="d-none d-sm-inline">@lang('messages.Add')</span>
                                             </a>
                                         </li>
                                     </ul>
@@ -62,7 +62,7 @@
                                             <div class="row">
                                                 <div class="position-relative mb-3">
                                                     <div class="mb-6 position-relative">
-                                                        <label class="form-label">Select Vehicle</label>
+                                                        <label class="form-label">@lang('messages.Select Vehicle')</label>
                                                         <select class="form-control" id="department_id" name="vehicle_id">
                                                             <option value="" disabled selected>Select</option>
                                                             @foreach ($vehicle as $vec)
@@ -76,7 +76,7 @@
 
                                                 <div class="position-relative mb-3">
                                                     <div class="mb-6 position-relative">
-                                                        <label class="form-label">Select Time</label>
+                                                        <label class="form-label">@lang('messages.Select Time')</label>
                                                         <select class="form-control" id="time" name="Time">
                                                             <option value="" disabled selected>Select</option>
                                                             <option value="morning">Morning</option>
@@ -89,7 +89,7 @@
                                                     @csrf
                                                     <div class="position-relative mb-3" id="morning" style="display:none">
                                                         <div class="mb-6 position-relative">
-                                                            <label class="form-label">Morning KM</label>
+                                                            <label class="form-label">@lang('messages.Morning KM')</label>
                                                             <input type="text" name="morning_km" class="form-control"
                                                                 placeholder="Enter Mornig KM">
                                                             <input type="hidden" id="vehicle_id_hidden" name="vehicle">
@@ -107,7 +107,7 @@
                                                     @csrf
                                                     <div class="position-relative mb-3" id="evening" style="display:none">
                                                         <div class="mb-6 position-relative">
-                                                            <label class="form-label">Evening KM</label>
+                                                            <label class="form-label">@lang('messages.Evening Km')</label>
                                                             <input type="text" name="afternoon_km" class="form-control"
                                                                 placeholder="Enter Evening KM">
                                                             <input type="hidden" id="vehicle_id_hidden_afternoon"
@@ -142,12 +142,12 @@
                                 <table id="basic-datatable" class="table table-striped table-responsive dt-responsive nowrap w-100">
                                     <thead>
                                         <tr>
-                                            <th>Vehicle</th>
-                                            <th>Morning Km</th>
-                                            <th>Night Difference</th>
-                                            <th>Evening km</th>
-                                            <th>Day Difference</th>
-                                            <th>Action</th>
+                                            <th>{{ __('messages.Vehicle') }}</th>
+                                            <th>{{ __('messages.Morning KM') }}</th>
+                                            <th>{{ __('messages.Night KM Difference') }}</th>
+                                            <th>{{ __('messages.Evening Km') }}</th>
+                                            <th>{{ __('messages.Day KM Difference') }}</th>
+                                            <th>{{ __('messages.Action') }}</th>
                                         </tr>
                                     </thead>                                  
                                     @foreach ($TodaysDate as $data)
@@ -186,7 +186,7 @@
                                                                 <div class="position-relative mb-3">
                                                                         <div class="mb-6 position-relative"
                                                                             id="datepicker1">
-                                                                            <label class="form-label">Morning Km</label>
+                                                                            <label class="form-label">@lang('messages.Morning KM')</label>
                                                                             <input type="text" name="morning_km"
                                                                                 class="form-control"
                                                                                 value="{{ $data->morning_km }}">
@@ -195,7 +195,7 @@
                                                                     <div class="position-relative mb-3">
                                                                         <div class="mb-6 position-relative"
                                                                             id="datepicker1">
-                                                                            <label class="form-label">Afternoon Km</label>
+                                                                            <label class="form-label">@lang('messages.Afternoon KM')</label>
                                                                             <input type="text" name="afternoon_km"
                                                                                 class="form-control"
                                                                                 value="{{ $data->afternoon_km }}">
@@ -207,7 +207,7 @@
                                                                     </div>
                                         
                                                                     <div class="position-relative mb-3">
-                                                                        <label class="form-label">Note</label>
+                                                                        <label class="form-label">@lang('messages.Notes')</label>
 
                                                                     </div>
                                                                 </div>
@@ -215,8 +215,8 @@
                                                     </div>
                                                     <div class="modal-footer">
                                                         <button type="button" class="btn btn-light"
-                                                            data-bs-dismiss="modal">Close</button>
-                                                        <button type="submit" class="btn btn-info">Submit</button>
+                                                            data-bs-dismiss="modal">@lang('messages.Close')</button>
+                                                        <button type="submit" class="btn btn-info">@lang('messages.Submit')</button>
                                                     </div>
                                                     </form>
                                                 </div><!-- /.modal-content -->
@@ -244,7 +244,7 @@
                                                         </div>
                                                     </div>
                                                     <div class="modal-footer">
-                                                        <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
+                                                        <button type="button" class="btn btn-light" data-bs-dismiss="modal">@lang('messages.Close')</button>
                                                     </div>
                                                     </div>
                                                 </div>

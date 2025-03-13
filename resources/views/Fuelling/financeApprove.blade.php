@@ -24,19 +24,19 @@
                             <div class="card">
                                 <div class="card-body">
                                     <div class="table-responsive"  id="table1">
-                                        <h4 class="header-title mb-4">NEW REQUEST</h4>
+                                        <h4 class="header-title mb-4">@lang('messages.NEW REQUEST')</h4>
                                        
                                         <table class="table director_datatable table-centered mb-0 table-nowrap" id="inline-editable">
                                             <thead>
                                                 <tr>
-                                                    <th>#</th>
-                                                    <th>Requested By</th>
-                                                    <th>Requested Month</th>
-                                                    <th>Vehicle</th>
-                                                    <th>Approved By</th>
-                                                    <th>Approved Cost</th>
-                                                    <th>Status</th>
-                                                    <th>Action</th>
+                                                    <th>{{ __('messages.Roll No.') }}</th>
+                                                    <th>{{ __('messages.Requested By') }}</th>
+                                                    <th>{{ __('messages.Requested Month') }}</th>
+                                                    <th>{{ __('messages.Vehicle') }}</th>
+                                                    <th>{{ __('messages.Approved By') }}</th>
+                                                    <th>{{ __('messages.Approved Cost') }}</th>
+                                                    <th>{{ __('messages.Status') }}</th>
+                                                    <th>{{ __('messages.Action') }}</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -201,7 +201,7 @@
                                                     <div id="final_accept" style="display: none">
                                                         <button type="submit" class="btn btn-primary rounded-pill view" id="InspectionSubmitButton" title="Submit"><i class="ri-checkbox-circle-line"></i></button>
                                                     </div>
-                                                    <button type="submit" class="btn btn-secondary"  data-bs-dismiss="modal" aria-label="Close">close</button>
+                                                    <button type="submit" class="btn btn-secondary"  data-bs-dismiss="modal" aria-label="Close">@lang('messages.Close')</button>
                                                 </div> <!-- end modal footer -->
                                             </div>                                                              
                                         </div> <!-- end modal content-->
@@ -219,17 +219,14 @@
                                                         <div class="modal-body p-4">
                                                             <div class="text-center">
                                                                 <i class="ri-alert-line h1 text-warning"></i>
-                                                                <h4 class="mt-2">Warning</h4>
+                                                                <h4 class="mt-2">@lang('messages.Warning')</h4>
                                                                 <h5 class="mt-3">
-                                                                    Are you sure you want to approve this request?</br> This action
-                                                                    cannot be
-                                                                    undone.
+                                                                    @lang('messages.Are you sure you want to accept this request?')</br> @lang('messages.This action cannot be undone.')
                                                                 </h5>
                                                                 <button type="button" class="btn btn-secondary"
-                                                                    data-bs-dismiss="modal">Cancel</button>
+                                                                    data-bs-dismiss="modal">@lang('messages.Cancel')</button>
                                                                 <button type="submit" class="btn btn-primary"
-                                                                    id="confirmDelete">Yes,
-                                                                    Accept</button>
+                                                                    id="confirmDelete">@lang('messages.Yes, Accept')</button>
                                                             </div>
                                                         </div>
                                                     </form>
@@ -244,7 +241,7 @@
                                             <div class="modal-dialog">
                                                 <div class="modal-content">
                                                     <div class="modal-header">
-                                                        <h5 class="modal-title" id="staticBackdropLabel">Reject reason
+                                                        <h5 class="modal-title" id="staticBackdropLabel">@lang('messages.Reject reason')
                                                         </h5>
                                                         <button type="button" class="btn-close" data-bs-dismiss="modal"
                                                             aria-label="Close"></button>
@@ -258,14 +255,14 @@
                                                                     <input type="hidden" name="request_id"
                                                                         id="Reject_request_id">
                                                                     <textarea class="form-control" name="reason" style="height: 60px;" required></textarea>
-                                                                    <label for="floatingTextarea">Reason</label>
+                                                                    <label for="floatingTextarea">@lang('messages.Reason')</label>
                                                                 </div>
                                                             </div>
                                                         </div>
                                                         <div class="modal-footer">
                                                             <button type="button" class="btn btn-secondary"
-                                                                data-bs-dismiss="modal">Close</button>
-                                                            <button type="submit" class="btn btn-danger">Reject</button>
+                                                                data-bs-dismiss="modal">@lang('messages.Close')</button>
+                                                            <button type="submit" class="btn btn-danger">@lang('messages.Reject')</button>
                                                         </div> <!-- end modal footer -->
                                                     </form>
                                                 </div> <!-- end modal content-->

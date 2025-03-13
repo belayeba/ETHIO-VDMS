@@ -46,7 +46,7 @@
                                     <div class="modal-dialog">
                                         <div class="modal-content">
                                             <div class="modal-header">
-                                                <h4 class="modal-title">Request Details</h4>
+                                                <h4 class="modal-title">@lang('messages.Request Details')</h4>
                                                 <button type="button" class="btn-close" data-bs-dismiss="modal"
                                                     aria-label="Close"></button>
                                             </div>
@@ -79,7 +79,7 @@
                                                     <dt class="col-sm-5">@lang('messages.Materials')</dt>
                                                     <dd class="col-sm-7" data-field="materials"></dd>
 
-                                                    <dt class="col-sm-5">Progress</dt>
+                                                    <dt class="col-sm-5">@lang('messages.Progress')</dt>
                                                     <dd class="col-sm-7" data-field="progress"></dd>
                                                 </dl>
                                             </div>
@@ -103,11 +103,9 @@
                                                 <div class="modal-body p-4">
                                                     <div class="text-center">
                                                         <i class="ri-alert-line h1 text-warning"></i>
-                                                        <h4 class="mt-2">Warning</h4>
+                                                        <h4 class="mt-2">@lang('messages.Warning')</h4>
                                                         <h5 class="mt-3">
-                                                            Are you sure you want to accept this request?</br> This action
-                                                            cannot be
-                                                            undone.
+                                                            @lang('messages.Are you sure you want to accept this request?')</br> @lang('messages.This action cannot be undone.')
                                                         </h5>
                                                         <button type="button" class="btn btn-secondary"
                                                             data-bs-dismiss="modal">@lang('messages.Cancel')</button>

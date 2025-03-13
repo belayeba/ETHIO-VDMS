@@ -26,12 +26,12 @@
                                 <table class="table director_datatable table-striped dt-responsive nowrap w-100">
                                     <thead>
                                         <tr>
-                                            <th>#</th>
-                                            <th>Requested By</th>
-                                            <th>Vehicle</th>
-                                            <th>Maintenance Type</th>
-                                            <th>Status</th>
-                                            <th>Action</th>
+                                            <th>{{ __('messages.Roll No.') }}</th>
+                                            <th>{{ __('messages.Requested By') }}</th>
+                                            <th>{{ __('messages.Vehicle') }}</th>
+                                            <th>{{ __('messages.Maintenance Type') }}</th>
+                                            <th>{{ __('messages.Status') }}</th>
+                                            <th>{{ __('messages.Action') }}</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -45,7 +45,7 @@
                                     <div class="modal-dialog modal-dialog-scrollable">
                                         <div class="modal-content">
                                             <div class="modal-header">
-                                                <h4 class="modal-title">Request Details</h4>
+                                                <h4 class="modal-title">@lang('messages.Request Details')</h4>
                                                 <button type="button" class="btn-close" data-bs-dismiss="modal"
                                                     aria-label="Close"></button>
                                             </div>
@@ -55,7 +55,7 @@
                                                     <dt class="col-sm-5">Maintenance Purpose</dt>
                                                     <dd class="col-sm-7"><span id="purpose"></span></dd>
 
-                                                    <dt class="col-sm-5">Vehicle's millage</dt>
+                                                    <dt class="col-sm-5">@lang('messages.Current Mileage')</dt>
                                                     <dd class="col-sm-7"><span id="millage"></span></dd>
 
 
@@ -89,17 +89,14 @@
                                                 <div class="modal-body p-4">
                                                     <div class="text-center">
                                                         <i class="ri-alert-line h1 text-warning"></i>
-                                                        <h4 class="mt-2">Warning</h4>
+                                                        <h4 class="mt-2">@lang('messages.Warning')</h4>
                                                         <h5 class="mt-3">
-                                                            Are you sure you want to accept this request?</br> This action
-                                                            cannot be
-                                                            undone.
+                                                            @lang('messages.Are you sure you want to accept this request?')</br> @lang('messages.This action cannot be undone.')
                                                         </h5>
                                                         <button type="button" class="btn btn-secondary"
-                                                            data-bs-dismiss="modal">Cancel</button>
+                                                            data-bs-dismiss="modal">@lang('messages.Cancel')</button>
                                                         <button type="submit" class="btn btn-primary"
-                                                            id="confirmDelete">Yes,
-                                                            Accept</button>
+                                                            id="confirmDelete">@lang('messages.Yes, Accept')</button>
                                                     </div>
                                                 </div>
                                             </form>
@@ -114,7 +111,7 @@
                                     <div class="modal-dialog">
                                         <div class="modal-content">
                                             <div class="modal-header">
-                                                <h5 class="modal-title" id="staticBackdropLabel">Reject reason
+                                                <h5 class="modal-title" id="staticBackdropLabel">@lang('messages.Reject reason')
                                                 </h5>
                                                 <button type="button" class="btn-close" data-bs-dismiss="modal"
                                                     aria-label="Close"></button>
@@ -129,14 +126,14 @@
                                                             <input type="hidden" name="maintenance_status" value="rejected">
 
                                                             <textarea class="form-control" name="approver_rejection_reason" style="height: 60px;" required></textarea>
-                                                            <label for="floatingTextarea">Reason</label>
+                                                            <label for="floatingTextarea">@lang('messages.Reason')</label>
                                                         </div>
                                                     </div>
                                                 </div>
                                                 <div class="modal-footer">
                                                     <button type="button" class="btn btn-secondary"
-                                                        data-bs-dismiss="modal">Close</button>
-                                                    <button type="submit" class="btn btn-danger">Reject</button>
+                                                        data-bs-dismiss="modal">@lang('messages.Close')</button>
+                                                    <button type="submit" class="btn btn-danger">@lang('messages.Reject')</button>
                                                 </div> <!-- end modal footer -->
                                             </form>
                                         </div> <!-- end modal content-->

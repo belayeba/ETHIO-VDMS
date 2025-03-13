@@ -56,17 +56,17 @@
                             <div class="col-md-4">
                                 <div class="card">
                                     <div class="card-header">
-                                        <h4 class="header-title mb-0">Do you want to change Location?</h4>
+                                        <h4 class="header-title mb-0">@lang('messages.Do you want to change Location?')</h4>
                                     </div>
                                     <div class="card-body">
                                         <form method="POST" action="{{ route('location_change_request') }}" accept-charset="UTF-8" name="cluster-form" id="cluster-form" enctype="multipart/form-data">
                                             @csrf
                                             <div class="mb-3">
-                                                <label for="nameInput" class="form-label">Location Name <strong class="text-danger">*</strong></label>
+                                                <label for="nameInput" class="form-label">@lang('messages.Location Name')<strong class="text-danger">*</strong></label>
                                                 <input type="text" class="form-control" id="nameInput" name="location_name" placeholder="Your Location">
                                             </div>
                                             <div class="d-flex justify-content-center">
-                                                <button type="submit" id="cluster-form-submit" class="btn btn-primary">Save</button>
+                                                <button type="submit" id="cluster-form-submit" class="btn btn-primary">@lang('messages.save')</button>
                                             </div>
 
                                             <script>
@@ -94,11 +94,11 @@
                                             <table class="table table-responsive">
                                                 <thead>
                                                     <tr>
-                                                        <th>#</th>
-                                                        <th>Requested At</th>
-                                                        <th>Location</th>
+                                                        <th>{{ __('messages.Roll No.') }}</th>
+                                                        <th>{{ __('messages.Requested At') }}</th>
+                                                        <th>{{ __('messages.Location') }}</th>
                                                         <th>Comment</th>
-                                                        <th>Changed_by</th>
+                                                        <th>{{ __('messages.Changed_by') }}</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -127,7 +127,7 @@
                             <div class="col-md-8">
                                 <div class="card">
                                     <div class="card-header d-flex justify-content-between align-items-center">
-                                        <h4 class="header-title mb-0">My Route</h4>
+                                        <h4 class="header-title mb-0">@lang('messages.My Route')</h4>
                                         <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#progressModal">
                                             <i class="bi bi-bar-chart-line"></i> View Progress
                                         </button>
@@ -137,12 +137,12 @@
                                             <table id="lms_table" class="table">
                                                 <thead>
                                                     <tr>
-                                                        <th>#</th>
-                                                        <th>Route</th>
-                                                        <th>Driver Name</th>
-                                                        <th>Driver Phone</th>
-                                                        <th>Vehicle</th>
-                                                        <th>Service Users</th>
+                                                        <th>{{ __('messages.Roll No.') }}</th>
+                                                        <th>{{ __('messages.Route') }}</th>
+                                                        <th>{{ __('messages.Driver Name') }}</th>
+                                                        <th>{{ __('messages.Driver Phone number') }}</th>
+                                                        <th>{{ __('messages.Vehicle') }}</th>
+                                                        <th>{{ __('messages.Service Users') }}</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -183,10 +183,10 @@
                                             <table class="table table-striped">
                                                 <thead>
                                                     <tr>
-                                                        <th>#</th>
+                                                        <th>{{ __('messages.Roll No.') }}</th>
                                                         <th>Employee</th>
-                                                        <th>Location</th>
-                                                        <th>Action</th>
+                                                        <th>{{ __('messages.Location') }}</th>
+                                                        <th>{{ __('messages.Action') }}</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -233,7 +233,7 @@
                             <div class="modal-body">
                                 <p class="text-center">Are you sure to delete ?</p>
                                 <div class="d-flex justify-content-between">
-                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">@lang('messages.Close')</button>
                                     <a id="delete_link" class="btn btn-danger">Delete</a>
                                 </div>
                             </div>
@@ -258,7 +258,7 @@
                                         <input type="text" class="form-control" id="editLocation" name="location" required>
                                     </div>
 
-                                    <button type="submit" class="btn btn-success">Update</button>
+                                    <button type="submit" class="btn btn-success">@lang('messages.Update')</button>
                                 </form>
                             </div>
                         </div>

@@ -188,6 +188,8 @@ return [
     'Driving License' => 'የመንጃ ፍቃድ',
     'Position Letter' => 'የሹመት ደብዳቤ',
     'Inspection Details' => 'የፍተሻ ዝርዝሮች',
+    'Night' => '',
+    'Morning' => '',
     'Windshield wipers' => 'የንፋስ መከላከያ መጥረጊያዎች',
     'Engine block'  => 'ሞተር ብሎክ',
     'Antenna'  => 'አንቴና',

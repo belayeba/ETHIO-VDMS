@@ -59,8 +59,7 @@
                                                     <input type="hidden" name="filter" value="Vehicle_filter">
                                                     <!-- Plate Number Filter -->
                                                     <div class="col-lg-4">
-                                                        <label for="selectPlateNumber" class="form-label">Plate
-                                                            Number</label>
+                                                        <label for="selectPlateNumber" class="form-label">@lang('messages.Plate Number')</label>
                                                         <select id="selectPlateNumber" name="plate_number"
                                                             class="form-select">
                                                             <option value="">Select Plate Number</option>
@@ -72,7 +71,7 @@
                                                     </div>
 
                                                     <div class="col-lg-4">
-                                                        <label for="selectName" class="form-label">Name</label>
+                                                        <label for="selectName" class="form-label">@lang('messages.Name')</label>
                                                         <select id="selectName" name="driver_name" class="form-select">
                                                             <option value="">Select Driver</option>
                                                             @foreach ($drivers as $driver)
@@ -83,7 +82,7 @@
                                                     </div>
 
                                                     <div class="col-lg-4">
-                                                        <label for="selectVehicleType" class="form-label">Vehicle Type</label>
+                                                        <label for="selectVehicleType" class="form-label">@lang('messages.Vehicle Type')</label>
                                                         <select id="selectVehicleType" name="vehicle_type" class="form-select">
                                                             <option value="">Select Vehicle Type</option>
                                                             <option value="other">Rental</option>
@@ -92,7 +91,7 @@
                                                     </div>
 
                                                     <div class="col-lg-4">
-                                                        <label for="selectStatus" class="form-label">Vehicle Status</label>
+                                                        <label for="selectStatus" class="form-label">@lang('messages.Vehicle Status')</label>
                                                         <select id="selectStatus" name="status" class="form-select">
                                                             <option value="">Select Status</option>
                                                             <option value="Active">Active</option>
@@ -102,7 +101,7 @@
                                                     
                                                     <div class="col-lg-4" id="rentalTypeDiv">
                                                         {{-- <div class="col-md-9"> --}}
-                                                            <label class="col-md-3 col-form-label" for="rental_type">Rental Type</label>
+                                                            <label class="col-md-3 col-form-label" for="rental_type">@lang('messages.Rental Type')</label>
                                                             <select id="rentalType" name="rental_type" class="form-select">
                                                                 <option value="">Select Type</option>
                                                                 <option value="whole_day">Whole Day</option>
@@ -114,13 +113,13 @@
                                                     </div>
 
                                                     <div class="col-lg-4 mt-3">
-                                                        <button type="submit" class="btn btn-info">Filter <i
+                                                        <button type="submit" class="btn btn-info">@lang('messages.Filter') <i
                                                                 class="ri-arrow-right-line ms-1"></i></button>
                                                     </div>
                                                 </div>
                                                 <div class="col-lg-4 mt-3">
                                                     <!-- Set export to 1 when exporting -->
-                                                    <button type="submit" class="btn btn-success" onclick="document.getElementById('export').value=1">Export</button>
+                                                    <button type="submit" class="btn btn-success" onclick="document.getElementById('export').value=1">@lang('messages.Export')</button>
                                                     <input type="hidden" id="export" name="export" value="0">
                                                 </div>
                                             </div>
@@ -131,18 +130,18 @@
                                     <table id="datatable-buttons" class="table table-striped dt-responsive nowrap w-100">
                                         <thead>
                                             <tr>
-                                                <th>Plate Number</th>
-                                                <th>Chassis</th>
-                                                <th>Driver</th>
-                                                <th>Owner</th>
+                                                <th>{{ __('messages.Plate Number') }}</th>
+                                                <th>{{ __('messages.Chassis Number') }}</th>
+                                                <th>{{ __('messages.Driver') }}</th>
+                                                <th>{{ __('messages.Owner') }}</th>
                                                 <th>Services Type</th>
-                                                <th>Rental Type</th>
-                                                <th>Requested By</th>
-                                                <th>Fuel Amount</th>
-                                                <th>Mileage</th>
-                                                <th>Last Service</th>
-                                                <th>Next Service</th>
-                                                <th>Status</th>
+                                                <th>{{ __('messages.Rental Type') }}</th>
+                                                <th>{{ __('messages.Requested By') }}</th>
+                                                <th>{{ __('messages.Fuel Amount') }}</th>
+                                                <th>{{ __('messages.Mileage') }}</th>
+                                                <th>{{ __('messages.Last Service') }}</th>
+                                                <th>{{ __('messages.Next Service') }}</th>
+                                                <th>{{ __('messages.Status') }}</th>
                                             </tr>
                                         </thead>
 

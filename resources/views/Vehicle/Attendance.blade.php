@@ -37,7 +37,7 @@
                                                 <a href="#account-2" data-bs-toggle="tab" data-toggle="tab"
                                                     class="nav-link rounded-0 py-2">
                                                     <i class="ri-car-fill fw-normal fs-20 align-middle me-1"></i>
-                                                    <span class="d-none d-sm-inline">Request</span>
+                                                    <span class="d-none d-sm-inline">@lang('messages.Request')</span>
                                                 </a>
                                             </li>
                                         </ul>
@@ -52,7 +52,7 @@
                                             <div class="tab-pane" id="account-2">
                                                 <div class="row">
                                                     <div class="position-relative mb-3">
-                                                        <label class="form-label" for="validationTooltip02">Select Vehicle</label>
+                                                        <label class="form-label" for="validationTooltip02">@lang('messages.Select Vehicle')</label>
                                                         <select class="form-control" id="vehicleSelect" name="vehicle_id">
                                                             <option value="">Select Vehicle</option>
                                                             @foreach ($vehicles as $vec)
@@ -94,7 +94,7 @@
 
                                                 <ul class="list-inline wizard mb-0">
                                                     <li class="next list-inline-item float-end">
-                                                        <button type="submit" id="vehicle_attendance_form_submit" class="btn btn-info">Submit</button>
+                                                        <button type="submit" id="vehicle_attendance_form_submit" class="btn btn-info">@lang('messages.Submit')</button>
                                                     </li>
                                                 </ul>
 
@@ -124,12 +124,12 @@
                                     <table class="table attendance_datatable table-striped dt-responsive nowrap w-100">
                                         <thead>
                                             <tr>
-                                                <th>#</th>
-                                                <th>Plate Number</th>
+                                                <th>{{ __('messages.Roll No.') }}</th>
+                                                <th>{{ __('messages.Plate Number') }}</th>
                                                 {{-- <th>Route</th> --}}
-                                                <th>Date</th>
-                                                <th>Registered By</th>
-                                                <th>Action</th>
+                                                <th>{{ __('messages.Date') }}</th>
+                                                <th>{{ __('messages.Requested By') }}</th>
+                                                <th>{{ __('messages.Action') }}</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -150,16 +150,14 @@
                                                 <div class="modal-body p-4">
                                                     <div class="text-center">
                                                         <i class="ri-alert-line h1 text-warning"></i>
-                                                        <h4 class="mt-2">Warning</h4>
+                                                        <h4 class="mt-2">@lang('messages.Warning')</h4>
                                                         <h5 class="mt-3">
-                                                            Are you sure you want to delete this item? This action cannot be
-                                                            undone.
+                                                            @lang('messages.Are you sure you want to accept this request?')</br> @lang('messages.This action cannot be undone.')
                                                         </h5>
                                                         <button type="button" class="btn btn-secondary"
-                                                            data-bs-dismiss="modal">Cancel</button>
+                                                            data-bs-dismiss="modal">@lang('messages.Cancel')</button>
                                                         <button type="submit" class="btn btn-danger"
-                                                            id="confirmDelete">Yes,
-                                                            Delete</button>
+                                                            id="confirmDelete">@lang('messages.Yes, Accept')</button>
                                                     </div>
                                                 </div>
                                             </form>
@@ -173,32 +171,32 @@
                                         <div class="modal-dialog">
                                             <div class="modal-content">
                                                 <div class="modal-header">
-                                                    <h4 class="modal-title">Request Details</h4>
+                                                    <h4 class="modal-title">@lang('messages.Request Details')</h4>
                                                     <button type="button" class="btn-close" data-bs-dismiss="modal"
                                                         aria-label="Close"></button>
                                                 </div>
                                                 <div class="modal-body">
                                                     <dl class="row mb-0">
-                                                        <dt class="col-sm-5">Vehicle</dt>
+                                                        <dt class="col-sm-5">@lang('messages.Vehicle')</dt>
                                                         <dd class="col-sm-7" id="vehicle_view"></dd>
 
-                                                        <dt class="col-sm-5">Route</dt>
+                                                        <dt class="col-sm-5">@lang('messages.Route')</dt>
                                                         <dd class="col-sm-7" id="route_view"></dd>
 
-                                                        <dt class="col-sm-5">Morning</dt>
+                                                        <dt class="col-sm-5">@lang('messages.Morning')</dt>
                                                         <dd class="col-sm-7" id="morning_view"></dd>
 
-                                                        <dt class="col-sm-5">Night</dt>
+                                                        <dt class="col-sm-5">@lang('messages.Night')</dt>
                                                         <dd class="col-sm-7" id="night_view"></dd>
 
-                                                        <dt class="col-sm-5">Notes</dt>
+                                                        <dt class="col-sm-5">@lang('messages.Notes')</dt>
                                                         <dd class="col-sm-7" id="notes_view"></dd>
 
                                                     </dl>
                                                 </div>
                                                 <div class="modal-footer">
                                                     <button type="button" class="btn btn-light"
-                                                        data-bs-dismiss="modal">Close</button>
+                                                        data-bs-dismiss="modal">@lang('messages.Close')</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -227,7 +225,7 @@
                                                                         <div class="form-check">
                                                                             <input type="hidden" name="morning" value="0">
                                                                             <input type="checkbox" class="form-check-input ok-checkbox" name="morning" id="morning" value="1" data-row="">
-                                                                            <label class="form-check-label" for="yes_">Morning</label>
+                                                                            <label class="form-check-label" for="yes_">@lang('messages.Morning')</label>
                                                                         </div>
                                                                     </div>
                                                                     <div class="col-3">
@@ -236,7 +234,7 @@
         
                                                                             <input type="checkbox" class="form-check-input damaged-checkbox" name="afternoon" id="afternoon" value="1" data-row="">
                                                                             
-                                                                            <label class="form-check-label" for="no_">Night</label>
+                                                                            <label class="form-check-label" for="no_">@lang('messages.Night')</label>
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -255,8 +253,8 @@
                                                     </div>                                                        
                                             <div class="modal-footer">
                                                 <button type="button" class="btn btn-light"
-                                                    data-bs-dismiss="modal">Close</button>
-                                                <button type="submit" class="btn btn-info">Submit</button>
+                                                    data-bs-dismiss="modal">@lang('messages.Close')</button>
+                                                <button type="submit" class="btn btn-info">@lang('messages.Submit')</button>
                                             </div>
                                             </form>
                                         </div><!-- /.modal-content -->

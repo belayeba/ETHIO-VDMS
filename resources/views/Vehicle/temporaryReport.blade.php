@@ -39,8 +39,7 @@
                                     <input type="hidden" name="filter" value="permanent_filter">
                                     <!-- Plate Number Filter -->
                                     <div class="col-lg-2">
-                                        <label for="selectPlateNumber" class="form-label">Plate
-                                            Number</label>
+                                        <label for="selectPlateNumber" class="form-label">@lang('messages.Plate Number')</label>
                                         <select id="selectPlateNumber" name="plate_number"
                                             class="form-select">
                                             <option value="">Select Plate Number</option>
@@ -52,7 +51,7 @@
                                         </select>
                                     </div>
                                     <div class="col-lg-2">
-                                        <label for="selectName" class="form-label">Name</label>
+                                        <label for="selectName" class="form-label">@lang('messages.Name')</label>
                                         <select id="selectName" name="driver_name" class="form-select">
                                             <option value="">Select Driver</option>
                                             @foreach ($drivers as $driver)
@@ -65,7 +64,7 @@
 
                                     <div class="col-lg-2">
                                         <label for="selectDepartment"
-                                            class="form-label">Departments</label>
+                                            class="form-label">@lang('messages.Department')</label>
                                         <select id="selectDepartment" name="department"
                                             class="form-select">
                                             <option value="">Department</option>
@@ -78,7 +77,7 @@
                                     </div>
 
                                     <div class="col-lg-2">
-                                        <label for="selectCluster" class="form-label">Clusters</label>
+                                        <label for="selectCluster" class="form-label">@lang('messages.Cluster')</label>
                                         <select id="selectCluster" name="cluster" class="form-select">
                                             <option value="">Cluster</option>
                                             @foreach ($clusters as $cluster)
@@ -91,7 +90,7 @@
 
                                     <!-- Date Range Picker -->
                                     <div class="col-lg-1 z-3">
-                                        <label for="daterangetime" class="form-label">Date Range</label>
+                                        <label for="daterangetime" class="form-label">@lang('messages.Date Range')</label>
                                         <input type="text" class="form-control date" id="start_date"
                                             name="start_date">
                                         <script>
@@ -104,7 +103,7 @@
                                     </div>
 
                                     <div class="col-lg-1 z-3">
-                                        <label for="daterangetime" class="form-label">Date Range</label>
+                                        <label for="daterangetime" class="form-label">@lang('messages.Date Range')</label>
                                         <input type="text" class="form-control date" id="end_date"
                                             name="end_date">
                                         <script>
@@ -117,9 +116,9 @@
                                     </div>
 
                                     <div class="col-lg-2 mt-3">
-                                        <button type="submit" class="btn btn-info">Filter <i
+                                        <button type="submit" class="btn btn-info">@lang('messages.Filter') <i
                                                 class="ri-arrow-right-line ms-1"></i></button>
-                                        <button type="submit" class="btn btn-success" onclick="document.getElementById('export').value=1">Export</button>
+                                        <button type="submit" class="btn btn-success" onclick="document.getElementById('export').value=1">@lang('messages.Export')</button>
                                         <input type="hidden" id="export" name="export" value="0">
                                     </div>
                                 </div>
@@ -137,14 +136,14 @@
                             <table id="datatable-buttons" class="table table-striped dt-responsive nowrap w-100  temp_report_datatable">
                                 <thead>
                                     <tr>
-                                        <th>Requestor</th>
-                                        <th>Plate_Num</th>
-                                        <th>Start KM</th>
-                                        <th>End KM</th>
+                                        <th>{{ __('messages.Requestor') }}</th>
+                                        <th>{{ __('messages.Plate Number') }}</th>
+                                        <th>{{ __('messages.Start KM') }}</th>
+                                        <th>{{ __('messages.End KM') }}</th>
                                         <th>KM Difference</th>
-                                        <th>Start Location</th>
-                                        <th>End Location</th>
-                                        <th>Action</th>
+                                        <th>{{ __('messages.Start Location') }}</th>
+                                        <th>{{ __('messages.End Location') }}</th>
+                                        <th>{{ __('messages.Action') }}</th>
                                     </tr>
                                 </thead>
 
@@ -165,30 +164,30 @@
                                                     <!-- First Column -->
                                                     <div class="col-md-6">
                                                         <dl class="row mb-0">
-                                                            <dt class="col-sm-4">Requested By:</dt>
+                                                            <dt class="col-sm-4">@lang('messages.Requested By')</dt>
                                                             <dd class="col-sm-8" data-field="requested_by"></dd>
 
-                                                            <dt class="col-sm-4">Plate Number:</dt>
+                                                            <dt class="col-sm-4">@lang('messages.Plate Number')</dt>
                                                             <dd class="col-sm-8" data-field="plate_number"></dd>
 
-                                                            <dt class="col-sm-4">Purpose:</dt>
+                                                            <dt class="col-sm-4">@lang('messages.Purpose')</dt>
                                                             <dd class="col-sm-8" data-field="purpose"></dd>
 
-                                                            <dt class="col-sm-4">Start Date:</dt>
+                                                            <dt class="col-sm-4">@lang('messages.Start Date')</dt>
                                                             <dd class="col-sm-8" data-field="start_date"></dd>
 
-                                                            <dt class="col-sm-4">Start Time:</dt>
+                                                            <dt class="col-sm-4">@lang('messages.Start Time')</dt>
                                                             <dd class="col-sm-8" data-field="start_time"></dd>
 
-                                                            <dt class="col-sm-4">End Date:</dt>
+                                                            <dt class="col-sm-4">@lang('messages.End Date')</dt>
                                                             <dd class="col-sm-8"
                                                                 data-field="end_date"></dd>
 
-                                                            <dt class="col-sm-4">End Time:</dt>
+                                                            <dt class="col-sm-4">@lang('messages.End Time')</dt>
                                                             <dd class="col-sm-8" data-field="end_time">
                                                             </dd>
 
-                                                            <dt class="col-sm-4">In/Out City:</dt>
+                                                            <dt class="col-sm-4">@lang('messages.In/Out Town')</dt>
                                                             <dd class="col-sm-8" data-field="in_out_of_addis_ababa">
                                                             </dd>
 
@@ -200,25 +199,25 @@
                                                     <div class="col-md-6">
                                                         <dl class="row mb-0">
 
-                                                            <dt class="col-sm-4">Duration:</dt>
+                                                            <dt class="col-sm-4">@lang('messages.Duration')</dt>
                                                             <dd class="col-sm-8" data-field="how_many_days"></dd>
 
-                                                            <dt class="col-sm-4">Start KM:</dt>
+                                                            <dt class="col-sm-4">@lang('messages.Start KM')</dt>
                                                             <dd class="col-sm-8" data-field="start_km"></dd>
 
-                                                            <dt class="col-sm-4">End KM:</dt>
+                                                            <dt class="col-sm-4">@lang('messages.End KM')</dt>
                                                             <dd class="col-sm-8" data-field="end_km"></dd>
 
-                                                            <dt class="col-sm-4">Start Location:</dt>
+                                                            <dt class="col-sm-4">@lang('messages.Start Location')</dt>
                                                             <dd class="col-sm-8" data-field="start_location"></dd>
 
-                                                            <dt class="col-sm-4">End Location:</dt>
+                                                            <dt class="col-sm-4">@lang('messages.End Location')</dt>
                                                             <dd class="col-sm-8" data-field="end_locations">
 
-                                                            <dt class="col-sm-4">Department:</dt>
+                                                            <dt class="col-sm-4">@lang('messages.Department')</dt>
                                                             <dd class="col-sm-8" data-field="department_name"></dd>
 
-                                                            <dt class="col-sm-4">Cluster:</dt>
+                                                            <dt class="col-sm-4">@lang('messages.Cluster')</dt>
                                                             <dd class="col-sm-8" data-field="cluster_name">
                                                             </dd>
                                                         </dl>

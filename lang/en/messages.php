@@ -95,6 +95,8 @@ return [
     'Approval Temporary' => 'Approval Temporary',
     'Temporarily Assign' => 'Temporarily Assign',
     'Approve Permanent' => 'Approve Permanent',
+    'Night' => 'Night',
+    'Morning' => 'Morning',
     'Assign Permanent' => 'Assign Permanent',
     'Return Permanent' => 'Return Permanent',
     'Inspection Details' => 'Inspection Details',

@@ -69,7 +69,7 @@
                     <div class="modal-dialog modal-lg">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h4 class="modal-title">Request Details</h4>
+                                <h4 class="modal-title">@lang('messages.Request Details')</h4>
                                 <button type="button" class="btn-close" data-bs-dismiss="modal"
                                     aria-label="Close"></button>
                             </div>
@@ -124,7 +124,7 @@
                     <div class="modal-dialog">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h5 class="modal-title" id="staticBackdropLabel">Reject reason</h5>
+                                <h5 class="modal-title" id="staticBackdropLabel">@lang('messages.Reject reason')</h5>
                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div> <!-- end modal header -->
                             <form method="POST" action="{{route('perm_vec_simirit_reject')}}">

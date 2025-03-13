@@ -39,7 +39,7 @@
         <div class="col-lg-5">
             <div class="card">
                 <div class="card-header">
-                    <h4 class="header-title">Add vehicle part for inspection</h4>
+                    <h4 class="header-title">@lang('messages.Add vehicle part for inspection')</h4>
                 </div>
                 <div class="card-body"> 
                     <form action="{{route('vehicle_parts.store')}}" id="vehicle_part_form" method="post" enctype="multipart/form-data">
@@ -92,7 +92,7 @@
 
                                     <ul class="list-inline wizard mb-0">
                                         <li class="next list-inline-item float-end">
-                                            <button type="submit" class="btn btn-info" id="vehicle_part_form_submit">Submit</button>
+                                            <button type="submit" class="btn btn-info" id="vehicle_part_form_submit">@lang('messages.Submit')</button>
                                         </li>
                                     </ul>
 
@@ -144,7 +144,7 @@
                                     <div class="modal-dialog">
                                         <div class="modal-content">
                                             <div class="modal-header">
-                                                <h4 class="modal-title" id="standard-modalLabel">Request Details</h4>
+                                                <h4 class="modal-title" id="standard-modalLabel">@lang('messages.Request Details')</h4>
                                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                             </div>
                                             <div class="modal-body">
@@ -199,17 +199,14 @@
                                                 <div class="modal-body p-4">
                                                     <div class="text-center">
                                                         <i class="ri-alert-line h1 text-danger"></i>
-                                                        <h4 class="mt-2">Warning</h4>
+                                                        <h4 class="mt-2">@lang('messages.Warning')</h4>
                                                         <h5 class="mt-3">
-                                                            Are you sure you want to DELETE this Inspection Form?</br> This action
-                                                            cannot be
-                                                            undone.
+                                                            @lang('messages.Are you sure you want to accept this request?')</br> @lang('messages.This action cannot be undone.')
                                                         </h5>
                                                         <button type="button" class="btn btn-secondary"
                                                             data-bs-dismiss="modal">@lang('messages.Cancel')</button>
                                                         <button type="submit" class="btn btn-danger"
-                                                            id="confirmDelete">Yes,
-                                                            DELETE</button>
+                                                            id="confirmDelete">@lang('messages.Yes, Accept')</button>
                                                     </div>
                                                 </div>
                                             </form>

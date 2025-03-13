@@ -38,7 +38,7 @@
         <div class="col-lg-5">
             <div class="card">
                 <div class="card-header">
-                    <h4 class="header-title">Add Fuel Cost</h4>
+                    <h4 class="header-title">@lang('messages.Add Fuel Cost')</h4>
                 </div>
                 <div class="card-body"> 
                     <form action="{{ route('save_cost_change')}}" method="POST" enctype="multipart/form-data">
@@ -49,7 +49,7 @@
                                 <li class="nav-item">
                                     <a href="#account-2" data-bs-toggle="tab" data-toggle="tab" class="nav-link rounded-0 py-2">
                                         <i class="ri-settings-5-line fw-normal fs-20 align-middle me-1"></i>
-                                        <span class="d-none d-sm-inline">ADD</span>
+                                        <span class="d-none d-sm-inline">@lang('messages.Add')</span>
                                     </a>
                                 </li>
                             </ul>
@@ -64,12 +64,12 @@
                                         
                                         <div class="position-relative mb-3">
                                             <div class="mb-6 position-relative" >
-                                                <label class="form-label">Cost of One Litre</label>
+                                                <label class="form-label">@lang('messages.Cost of One Litre')</label>
                                                 <input type="number" name="Fuel_cost" class="form-control" placeholder="Enter cost of 1 Litre Fuel ">
                                             </div>
                                         </div>
                                         <div class="col-mb-3 form-group {{ $errors->has('vehicle') ? 'has-error' : '' }}">
-                                            <label for="vehicle" class=" control-label">Fuel Type</label>
+                                            <label for="vehicle" class=" control-label">@lang('messages.Fuel Type')</label>
                                                 
                                             <select class="form-control select" id="vehicleCategory" name="fuel_type" data-fouc required>
                                                 <option value="">Select Fuel Type</option>
@@ -82,7 +82,7 @@
 
                                     <ul class="list-inline wizard mb-0">
                                         <li class="next list-inline-item float-end">
-                                            <button type="submit" class="btn btn-info">Submit</button>
+                                            <button type="submit" class="btn btn-info">@lang('messages.Submit')</button>
                                         </li>
                                     </ul>
 
@@ -102,11 +102,11 @@
                     <table id="basic-datatable" class="table table-striped dt-responsive nowrap w-100">
                         <thead>
                             <tr>
-                                <th>#</th>
-                                <th>Date</th>
-                                <th>Changed By</th>
+                                <th>{{ __('messages.Roll No.') }}</th>
+                                <th>{{ __('messages.Date') }}</th>
+                                <th>{{ __('messages.Changed_by') }}</th>
                                 <th>Cost</th>
-                                <th>Feul Type</th>
+                                <th>{{ __('messages.Fuel Type') }}</th>
                             </tr>
                         </thead>
                          @foreach($fuelCosts as $fuelCost)
@@ -152,7 +152,7 @@
                                         </div>
                                         <div class="modal-body">
                                             <div class="mb-3">
-                                                <label class="form-label">Fuel Type:</label>
+                                                <label class="form-label">@lang('messages.Fuel Type')</label>
                                                 <p>{{ $fuelCost->fuel_type }}</p>
                                             </div>
                                             <div class="mb-3">
@@ -160,7 +160,7 @@
                                                 <p>{{ $fuelCost->new_cost }}</p>
                                             </div>
                                             <div class="mb-3">
-                                                <label class="form-label">Changed By:</label>
+                                                <label class="form-label">@lang('messages.Changed_by')</label>
                                                 <p>{{ $fuelCost->changer->first_name . ' ' .$fuelCost->changer->last_name }}</p>
                                             </div>
                                             <div class="mb-3">
@@ -168,7 +168,7 @@
                                                 <p>{{ $fuelCost->created_at->format('Y-m-d')  }}</p>
                                             </div>
                                             <div class="modal-footer">
-                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">@lang('messages.Close')</button>
                                             </div>
                                         </div>
                                     </div>
@@ -185,12 +185,12 @@
                                         <div class="modal-body">
                                             <div class="position-relative mb-3">
                                                 <div class="mb-6 position-relative" >
-                                                    <label class="form-label">Cost of One Litre</label>
+                                                    <label class="form-label">@lang('messages.Cost of One Litre')</label>
                                                     <input type="number" name="Fuel_cost" class="form-control" value="{{ $fuelCost->new_cost }}">
                                                 </div>
                                             </div>
                                             <div class="col-mb-3 form-group {{ $errors->has('vehicle') ? 'has-error' : '' }}">
-                                                <label for="vehicle" class=" control-label">Fuel Type</label>
+                                                <label for="vehicle" class=" control-label">@lang('messages.Fuel Type')</label>
                                                     
                                                 <select class="form-control select" id="vehicleCategory" name="fuel_type" value="{{ $fuelCost->fuel_type }}" data-fouc required>
                                                     <option value=""> {{ $fuelCost->fuel_type }}</option>
@@ -199,7 +199,7 @@
                                                 </select>
                                             </div></br>
                                             <div class="mb-3">
-                                                <label class="form-label">Changed By:</label>
+                                                <label class="form-label">@lang('messages.Changed_by')</label>
                                                 <p>{{ $fuelCost->changer->first_name . ' ' .$fuelCost->changer->last_name }}</p>
                                             </div>
                                             <div class="mb-3">
@@ -207,7 +207,7 @@
                                                 <p>{{ $fuelCost->created_at->format('Y-m-d')  }}</p>
                                             </div>
                                             <div class="modal-footer">
-                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">@lang('messages.Close')</button>
                                             </div>
                                         </div>
                                     </div>

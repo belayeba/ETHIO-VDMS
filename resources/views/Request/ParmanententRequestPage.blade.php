@@ -39,7 +39,7 @@
                     <div class="col-12 col-lg-5">
                         <div class="card">
                             <div class="card-header">
-                                <h4 class="header-title">Request Permanent Vehicle</h4>
+                                <h4 class="header-title">@lang('messages.Request Permanent Vehicle')</h4>
                             </div>
                             <div class="card-body">
                                 <form action="{{ route('vec_perm_request_post') }}" id="permanent_request_form" method="post" enctype="multipart/form-data">
@@ -154,7 +154,7 @@
                                     <div class="modal-dialog modal-lg">
                                         <div class="modal-content">
                                             <div class="modal-header">
-                                                <h4 class="modal-title">Request Details</h4>
+                                                <h4 class="modal-title">@lang('messages.Request Details')</h4>
                                                 <button type="button" class="btn-close" data-bs-dismiss="modal"
                                                     aria-label="Close"></button>
                                             </div>

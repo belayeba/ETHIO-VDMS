@@ -37,14 +37,14 @@
                             <div class="col-md-4">
                                 <div class="card">
                                     <div class="card-header">
-                                        <h4 class="header-title mb-0">Route Assignment</h4>
+                                        <h4 class="header-title mb-0">@lang('messages.Route Assignment')</h4>
                                     </div>
                                     <div class="card-body">
                                         <form method="POST" action="{{ route('employeeService.store') }}" id="route_assigning_form">
                                             @csrf
                                             <!-- Route Selection -->
                                             <div class="row mb-3">
-                                                <label class="col-md-3 col-form-label" for="route">Route</label>
+                                                <label class="col-md-3 col-form-label" for="route">@lang('messages.Route')</label>
                                                 <div class="col-md-9">
                                                     <select id="route_id" name="route_id" class="form-select" required>
                                                         <option value="">Select Route</option>
@@ -71,7 +71,7 @@
                                                         <thead>
                                                             <tr>
                                                                 <th><input type="checkbox" id="select_all"></th>
-                                                                <th>Name</th>
+                                                                <th>{{ __('messages.Name') }}</th>
                                                             </tr>
                                                         </thead>
                                                         <tbody>
@@ -94,7 +94,7 @@
                                             </div>
                                             
                                             <div class="d-flex justify-content-center mt-3">
-                                                <button type="submit" id="route_assigning_form_submit" class="btn btn-primary">Save</button>
+                                                <button type="submit" id="route_assigning_form_submit" class="btn btn-primary">@lang('messages.save')</button>
                                             </div>
                                             <script>
                                                 document.getElementById('route_assigning_form').addEventListener('submit', function() {
@@ -113,19 +113,19 @@
                             <div class="col-md-8">
                                 <div class="card">
                                     <div class="card-header">
-                                        <h4 class="header-title mb-0">Route List</h4>
+                                        <h4 class="header-title mb-0">@lang('messages.Route List')</h4>
                                     </div>
                                     <div class="card-body">
                                         <div class="table-responsive">
                                             <table id="route_list_table" class="table">
                                                 <thead>
                                                     <tr>
-                                                        <th>#</th>
-                                                        <th>Route</th>
-                                                        <th>Vehicle</th>
-                                                        <th>Driver Name</th>
-                                                        <th>Driver Phone</th>
-                                                        <th>Action</th>
+                                                        <th>{{ __('messages.Roll No.') }}</th>
+                                                        <th>{{ __('messages.Route') }}</th>
+                                                        <th>{{ __('messages.Vehicle') }}</th>
+                                                        <th>{{ __('messages.Driver Name') }}</th>
+                                                        <th>{{ __('messages.Driver Phone') }}</th>
+                                                        <th>{{ __('messages.Action') }}</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -173,11 +173,11 @@
                                                 <table class="table table-striped">
                                                     <thead>
                                                         <tr>
-                                                            <th>#</th>
+                                                            <th>{{ __('messages.Roll No.') }}</th>
                                                             <th>Employee Name</th>
-                                                            <th>Location</th>
+                                                            <th>{{ __('messages.Location') }}</th>
                                                             <th>Employee Phone</th>
-                                                            <th>Action</th> 
+                                                            <th>{{ __('messages.Action') }}</th> 
                                                         </tr>
                                                     </thead>
                                                     <tbody>
@@ -213,17 +213,14 @@
                                             <div class="modal-body p-4">
                                                 <div class="text-center">
                                                     <i class="ri-alert-line h1 text-warning"></i>
-                                                    <h4 class="mt-2">Warning</h4>
+                                                    <h4 class="mt-2">@lang('messages.Warning')</h4>
                                                     <h5 class="mt-3">
-                                                        Are you sure you want to remove this employee?</br> This action
-                                                        cannot be
-                                                        undone.
+                                                        @lang('messages.Are you sure you want to accept this request?')</br> @lang('messages.This action cannot be undone.')
                                                     </h5>
                                                     <button type="button" class="btn btn-secondary"
-                                                        data-bs-dismiss="modal">Cancel</button>
+                                                        data-bs-dismiss="modal">@lang('messages.Cancel')</button>
                                                     <button type="submit" class="btn btn-primary"
-                                                        id="confirmDelete">Yes,
-                                                        Accept</button>
+                                                        id="confirmDelete">@lang('messages.Yes, Accept')</button>
                                                 </div>
                                             </div>
                                         </form>
